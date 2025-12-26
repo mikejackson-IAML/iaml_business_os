@@ -1,0 +1,149 @@
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      }
+    },
+    "fetch": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"]
+    },
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
+    },
+    "vercel": {
+      "command": "npx",
+      "args": ["-y", "vercel-mcp"],
+      "env": {
+        "VERCEL_API_KEY": "${VERCEL_API_KEY}"
+      }
+    },
+    "smartlead": {
+      "command": "npx",
+      "args": ["-y", "smartlead-mcp-by-leadmagic"],
+      "env": {
+        "SMARTLEAD_API_KEY": "${SMARTLEAD_API_KEY}"
+      }
+    },
+    "zapmail": {
+      "command": "npx",
+      "args": ["-y", "zapmail-mcp"],
+      "env": {
+        "ZAPMAIL_API_KEY": "${ZAPMAIL_API_KEY}"
+      }
+    },
+    "gohighlevel": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://services.leadconnectorhq.com/mcp/",
+        "--header",
+        "Authorization: Bearer ${GHL_API_KEY}",
+        "--header",
+        "locationId: ${GHL_LOCATION_ID}"
+      ]
+    },
+    "notion": {
+      "command": "npx",
+      "args": ["-y", "@notionhq/notion-mcp-server"],
+      "env": {
+        "OPENAPI_MCP_HEADERS": "{\"Authorization\": \"Bearer ${NOTION_API_KEY}\", \"Notion-Version\": \"2022-06-28\"}"
+      }
+    },
+    "google-workspace": {
+      "command": "npx",
+      "args": ["-y", "workspace-mcp"],
+      "env": {
+        "GOOGLE_OAUTH_CLIENT_ID": "${GOOGLE_OAUTH_CLIENT_ID}",
+        "GOOGLE_OAUTH_CLIENT_SECRET": "${GOOGLE_OAUTH_CLIENT_SECRET}"
+      }
+    },
+    "perplexity": {
+      "command": "npx",
+      "args": ["-y", "@perplexity-ai/mcp-server"],
+      "env": {
+        "PERPLEXITY_API_KEY": "${PERPLEXITY_API_KEY}"
+      }
+    },
+    "gemini": {
+      "command": "npx",
+      "args": ["-y", "github:aliargun/mcp-server-gemini"],
+      "env": {
+        "GEMINI_API_KEY": "${GEMINI_API_KEY}"
+      }
+    },
+    "nano-banana": {
+      "command": "uvx",
+      "args": ["nanobanana-mcp-server@latest"],
+      "env": {
+        "GEMINI_API_KEY": "${GEMINI_API_KEY}"
+      }
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+    },
+    "brave-search": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+      "env": {
+        "BRAVE_API_KEY": "${BRAVE_API_KEY}"
+      }
+    },
+    "firecrawl": {
+      "command": "npx",
+      "args": ["-y", "firecrawl-mcp"],
+      "env": {
+        "FIRECRAWL_API_KEY": "${FIRECRAWL_API_KEY}"
+      }
+    },
+    "stripe": {
+      "command": "npx",
+      "args": ["-y", "@stripe/mcp", "--tools=all"],
+      "env": {
+        "STRIPE_SECRET_KEY": "${STRIPE_SECRET_KEY}"
+      }
+    },
+    "semgrep": {
+      "command": "uvx",
+      "args": ["semgrep-mcp"],
+      "env": {
+        "SEMGREP_APP_TOKEN": "${SEMGREP_APP_TOKEN}"
+      }
+    },
+    "apollo": {
+      "command": "npx",
+      "args": ["-y", "@thevgergroup/apollo-io-mcp@latest"],
+      "env": {
+        "APOLLO_API_KEY": "${APOLLO_API_KEY}"
+      }
+    },
+    "elevenlabs": {
+      "command": "uvx",
+      "args": ["elevenlabs-mcp"],
+      "env": {
+        "ELEVENLABS_API_KEY": "${ELEVENLABS_API_KEY}"
+      }
+    },
+    "vapi": {
+      "command": "npx",
+      "args": ["-y", "@vapi-ai/mcp-server"],
+      "env": {
+        "VAPI_TOKEN": "${VAPI_TOKEN}"
+      }
+    },
+    "dataforseo": {
+      "command": "npx",
+      "args": ["-y", "dataforseo-mcp-server"],
+      "env": {
+        "DATAFORSEO_USERNAME": "${DATAFORSEO_USERNAME}",
+        "DATAFORSEO_PASSWORD": "${DATAFORSEO_PASSWORD}"
+      }
+    }
+  }
+}
