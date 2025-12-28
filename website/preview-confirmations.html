@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmation Page Previews</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/1-variables.css">
+  <link rel="stylesheet" href="css/2-base.css">
+  <link rel="stylesheet" href="css/3-components.css">
+  <link rel="stylesheet" href="css/4-layout.css">
+  <link rel="stylesheet" href="css/5-pages.css">
+  <style>
+    body {
+      background: #f5f5f7;
+      padding: 2rem;
+    }
+    .preview-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .preview-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .preview-header h1 {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      color: var(--gray-900);
+      margin-bottom: 0.5rem;
+    }
+    .preview-header p {
+      color: var(--gray-600);
+    }
+    .preview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    .preview-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    .preview-label {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--gray-200);
+    }
+    /* Make confirmation sections visible */
+    .register-step {
+      display: block !important;
+    }
+    @media (max-width: 1024px) {
+      .preview-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="preview-container">
+    <div class="preview-header">
+      <h1>Registration Confirmation Pages</h1>
+      <p>Side-by-side preview of Invoice vs Credit Card confirmation screens</p>
+    </div>
+
+    <div class="preview-grid">
+      <!-- INVOICE CONFIRMATION -->
+      <div class="preview-card">
+        <div class="preview-label">Invoice Registration</div>
+        <section class="register-step" data-step="confirm-invoice">
+          <div class="confirmation-content">
+            <div class="confirmation-icon-success">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h2 class="confirmation-title">You're Registered!</h2>
+            <p class="confirmation-subtitle">Your spot in the <span>Certificate in Employee Relations Law</span> is almost confirmed. See below for next steps.</p>
+
+            <div class="confirmation-summary-box">
+              <div class="confirmation-summary-header">
+                <h3>Registration Summary</h3>
+                <span class="format-badge">IN-PERSON</span>
+              </div>
+              <div class="confirmation-details">
+                <div class="detail-row"><span class="label">Participant:</span><span class="value">John Smith</span></div>
+                <div class="detail-row"><span class="label">Email:</span><span class="value">john.smith@company.com</span></div>
+                <div class="detail-row"><span class="label">Program:</span><span class="value">Certificate in Employee Relations Law</span></div>
+                <div class="detail-row"><span class="label">Dates:</span><span class="value">June 8-12, 2026</span></div>
+                <div class="detail-row"><span class="label">Location:</span><span class="value">San Francisco, CA</span></div>
+                <div class="detail-row"><span class="label">Enrollment Fee:</span><span class="value">$2,375</span></div>
+              </div>
+            </div>
+
+            <div class="confirmation-calendar">
+              <button type="button" class="btn-calendar">Add to Calendar</button>
+            </div>
+
+            <div class="confirmation-next-steps">
+              <h3>What Happens Next</h3>
+              <div class="next-step urgent">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                  <h4>Check Your Email Right Now!</h4>
+                  <p><strong>Your invoice is being sent as you read this.</strong></p>
+                  <div class="check-email-box">
+                    <strong>What to do:</strong><br>
+                    1. Check your email inbox (search for "IAML Invoice")<br>
+                    2. Can't find it? Check your spam/junk folder<br>
+                    3. Click "Pay Now" to complete your registration
+                  </div>
+                </div>
+              </div>
+              <div class="next-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                  <h4>Get Ready to Succeed</h4>
+                  <p>Once your invoice is paid, you'll be able to book your complimentary pre-program consultation.</p>
+                </div>
+              </div>
+              <div class="next-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                  <h4>Prepare for Day 1</h4>
+                  <p>We'll send pre-program information one week before your program starts.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="confirmation-help">
+              <p><strong>Questions about your registration?</strong></p>
+              <p>Contact us at <a href="mailto:info@iaml.com">info@iaml.com</a> or call <a href="tel:+19497601700">(949) 760-1700</a></p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- CREDIT CARD CONFIRMATION -->
+      <div class="preview-card">
+        <div class="preview-label">Credit Card Registration</div>
+        <section class="register-step" data-step="confirm-paid">
+          <div class="confirmation-content">
+            <div class="confirmation-icon-success">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h2 class="confirmation-title">Payment Successful!</h2>
+            <p class="confirmation-subtitle">You're officially enrolled in the <span>Certificate in Employee Relations Law</span>. Welcome to IAML!</p>
+
+            <div class="confirmation-summary-box">
+              <div class="confirmation-summary-header">
+                <h3>Registration Summary</h3>
+                <span class="format-badge">IN-PERSON</span>
+              </div>
+              <div class="confirmation-details">
+                <div class="detail-row"><span class="label">Participant:</span><span class="value">John Smith</span></div>
+                <div class="detail-row"><span class="label">Email:</span><span class="value">john.smith@company.com</span></div>
+                <div class="detail-row"><span class="label">Program:</span><span class="value">Certificate in Employee Relations Law</span></div>
+                <div class="detail-row"><span class="label">Dates:</span><span class="value">June 8-12, 2026</span></div>
+                <div class="detail-row"><span class="label">Location:</span><span class="value">San Francisco, CA</span></div>
+                <div class="detail-row"><span class="label">Amount Paid:</span><span class="value">$2,375</span></div>
+              </div>
+            </div>
+
+            <div class="confirmation-calendar">
+              <button type="button" class="btn-calendar">Add to Calendar</button>
+            </div>
+
+            <div class="confirmation-next-steps">
+              <h3>What Happens Next</h3>
+              <div class="next-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                  <h4>Check Your Email</h4>
+                  <p>You'll receive a confirmation email with your receipt and registration details.</p>
+                </div>
+              </div>
+              <div class="next-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                  <h4>Book Your Consultation</h4>
+                  <p>Schedule your complimentary pre-program consultation to get the most out of your experience.</p>
+                </div>
+              </div>
+              <div class="next-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                  <h4>Prepare for Day 1</h4>
+                  <p>We'll send pre-program information one week before your program starts.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="confirmation-help">
+              <p><strong>Questions about your registration?</strong></p>
+              <p>Contact us at <a href="mailto:info@iaml.com">info@iaml.com</a> or call <a href="tel:+19497601700">(949) 760-1700</a></p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

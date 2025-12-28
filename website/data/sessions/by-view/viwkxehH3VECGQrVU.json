@@ -1,0 +1,133 @@
+{
+  "generated": "2025-12-28T14:59:56.938Z",
+  "viewId": "viwkxehH3VECGQrVU",
+  "usedBy": [
+    {
+      "program": "Comprehensive Labor Relations",
+      "format": "virtual"
+    }
+  ],
+  "recordCount": 3,
+  "records": [
+    {
+      "id": "reclhhizrq2InOwXK",
+      "createdTime": "2025-12-15T19:35:44.000Z",
+      "fields": {
+        "Instance ID": 48,
+        "Instance Name": "Comprehensive Labor Relations - Feb 2026",
+        "Programs": [
+          "recQz06guKmVLZ75d"
+        ],
+        "Start Date": "2026-02-24",
+        "End Date": "2026-02-25",
+        "Duration (Days)": [
+          2
+        ],
+        "Format": "Virtual",
+        "Current Enrolled": 0,
+        "Enrollment Status": "Low Enrollment",
+        "Show on Website": true,
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Last Modified": "2025-12-15T19:42:58.000Z",
+        "Created By": {
+          "id": "usrSAo8TcudAuSfA4",
+          "email": "mike.jackson@re-vitalized.com",
+          "name": "Mike Jackson"
+        },
+        "Price In-Person (from PROGRAMS)": [
+          1375
+        ],
+        "Price Virtual (from PROGRAMS)": [
+          1375
+        ],
+        "Min. Capacity": [
+          6
+        ],
+        "Registration Deadline": "2026-02-24T00:00:00.000Z",
+        "Program Name": [
+          "Comprehensive Labor Relations"
+        ]
+      }
+    },
+    {
+      "id": "rec8aicSb3WW8Oq3A",
+      "createdTime": "2025-12-15T19:35:44.000Z",
+      "fields": {
+        "Instance ID": 49,
+        "Instance Name": "Comprehensive Labor Relations - Jul 2026",
+        "Programs": [
+          "recQz06guKmVLZ75d"
+        ],
+        "Start Date": "2026-07-21",
+        "End Date": "2026-07-22",
+        "Duration (Days)": [
+          2
+        ],
+        "Format": "Virtual",
+        "Current Enrolled": 0,
+        "Enrollment Status": "Low Enrollment",
+        "Show on Website": true,
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Last Modified": "2025-12-15T19:42:58.000Z",
+        "Created By": {
+          "id": "usrSAo8TcudAuSfA4",
+          "email": "mike.jackson@re-vitalized.com",
+          "name": "Mike Jackson"
+        },
+        "Price In-Person (from PROGRAMS)": [
+          1375
+        ],
+        "Price Virtual (from PROGRAMS)": [
+          1375
+        ],
+        "Min. Capacity": [
+          6
+        ],
+        "Registration Deadline": "2026-07-21T00:00:00.000Z",
+        "Program Name": [
+          "Comprehensive Labor Relations"
+        ]
+      }
+    },
+    {
+      "id": "recG1uOzJcD8N8yjB",
+      "createdTime": "2025-12-15T19:35:44.000Z",
+      "fields": {
+        "Instance ID": 50,
+        "Instance Name": "Comprehensive Labor Relations - Oct 2026",
+        "Programs": [
+          "recQz06guKmVLZ75d"
+        ],
+        "Start Date": "2026-10-20",
+        "End Date": "2026-10-21",
+        "Duration (Days)": [
+          2
+        ],
+        "Format": "Virtual",
+        "Current Enrolled": 0,
+        "Enrollment Status": "Low Enrollment",
+        "Show on Website": true,
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Last Modified": "2025-12-15T19:42:59.000Z",
+        "Created By": {
+          "id": "usrSAo8TcudAuSfA4",
+          "email": "mike.jackson@re-vitalized.com",
+          "name": "Mike Jackson"
+        },
+        "Price In-Person (from PROGRAMS)": [
+          1375
+        ],
+        "Price Virtual (from PROGRAMS)": [
+          1375
+        ],
+        "Min. Capacity": [
+          6
+        ],
+        "Registration Deadline": "2026-10-20T00:00:00.000Z",
+        "Program Name": [
+          "Comprehensive Labor Relations"
+        ]
+      }
+    }
+  ]
+}

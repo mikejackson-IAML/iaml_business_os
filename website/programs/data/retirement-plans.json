@@ -1,0 +1,181 @@
+{
+  "programName": "Retirement Plans",
+  "programSlug": "retirement-plans",
+  "registrationUrl": "#registration",
+  "meta": {
+    "title": "Retirement Plans Training | IAML",
+    "description": "Master ERISA fiduciary rules, 401(k) administration, and retirement plan compliance in 2 days. Learn from practicing benefits attorneys. Earn 13 SHRM/HRCI/CLE credits.",
+    "keywords": "retirement plan training, ERISA compliance, 401k administration, fiduciary rules, retirement plan certification, ERISA fiduciary training, plan qualification, nondiscrimination testing, SHRM credits, HRCI credits",
+    "ogImage": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69093f4637c43adac1bc0ab3.png"
+  },
+  "seo": {
+    "canonicalUrl": "https://iaml.com/programs/retirement-plans",
+    "robots": "index, follow",
+    "twitter": {
+      "card": "summary_large_image",
+      "site": "@IAMLaw",
+      "title": "Retirement Plans Training | IAML",
+      "description": "Master ERISA fiduciary rules, 401(k) administration, and retirement plan compliance in 2 days. Earn 13 SHRM/HRCI/CLE credits.",
+      "image": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69093f4637c43adac1bc0ab3.png"
+    },
+    "schema": {
+      "educationalLevel": "intermediate",
+      "timeRequired": "P2D",
+      "teaches": [
+        "ERISA Compliance",
+        "Fiduciary Rules",
+        "401(k) Administration",
+        "Nondiscrimination Testing",
+        "Plan Corrections",
+        "QDRO Processing",
+        "Voluntary Correction Programs"
+      ]
+    },
+    "keywordData": {
+      "primaryKeyword": "retirement plan training",
+      "searchVolume": 210,
+      "competition": "medium",
+      "relatedKeywords": [
+        "ERISA fiduciary training",
+        "401k compliance",
+        "retirement plan administration",
+        "benefits law certification"
+      ]
+    }
+  },
+  "hero": {
+    "title": "Retirement Plans",
+    "description": "Retirement plan administration means navigating ERISA fiduciary rules, prohibited transactions, nondiscrimination testing, and IRS correction programs. In 2 days, you'll master the regulations that keep your 401(k) and pension plans compliant and protected. Real compliance strategies from practicing benefits attorneys.",
+    "price": 1375,
+    "deliveryOptions": ["In Person"],
+    "duration": "2 days"
+  },
+  "testimonials": [
+    {"quote": "IAML once again surpassed my expectations. The seminar was awesome and the degree of information presented to our group was so valuable. I applaud IAML for finding the experts in the various fields and making them available to us. I can hardly wait until the next seminar!", "name": "Bianca Olivarria", "title": "HR Technician & Disability Management Specialist", "company": "Imperial Irrigation District"},
+    {"quote": "It was great learning the information, but also very useful hearing from others attending the class. I learned a wealth of information.", "name": "Brittney Viator", "title": "Benefits Administrator", "company": "FJ Management, Inc."},
+    {"quote": "The instructors did a fantastic job of presenting the information and maintaining participant engagement.", "name": "Sandy Lovett", "title": "Human Resources Generalist", "company": "Thiele Kaolin Company"},
+    {"quote": "All compensation and benefits professionals should consider this seminar. There is a large volume of valuable information presented in an effective, dynamic setting. The speakers are certainly well-equipped and are very attuned to the needs of the class members.", "name": "Todd Hanson", "title": "Corporate Human Resources Manager", "company": "Printpack, Inc."},
+    {"quote": "Instructors were very good and well versed in subject matter. They offered to help and provide materials outside of the seminar.", "name": "Brian Wagner", "title": "Attorney", "company": "Mateer & Harbert"},
+    {"quote": "I absolutely loved the instructors! The course provided so much valuable information.", "name": "Emily Ruelle", "title": "Human Resources Generalist", "company": "Tableau Software Inc."},
+    {"quote": "This was an excellent seminar and covered everything I'd hoped. The instructors were outstanding.", "name": "Kurt Henkel", "title": "Senior Benefits Plan Analyst", "company": "Deere & Company"},
+    {"quote": "I enjoyed the open and casual approach to this training. Everyone appeared comfortable enough to participate and ask questions.", "name": "Deborah Carnelli", "title": "Resolutions and Receivership Specialist", "company": "Federal Deposit Insurance Corporation"},
+    {"quote": "I really enjoyed the class. I appreciated Tom Schendt's teaching styles and how he involved everyone in the class and made it interactive. He certainly succeeded in making a potentially boring subject quite fun.", "name": "S. Greg Robinson", "title": "Human Resources Manager", "company": "Suominen"},
+    {"quote": "I really enjoyed the seminar. I learned a great deal and will definitely be able to apply what I learned once I'm back in the office.", "name": "Alana Tomczyszn", "title": "Human Resources Manager", "company": "CWS Capital Partners LLC"},
+    {"quote": "Great job! The information will assist me and my company in effectively administering our employee benefits.", "name": "Julie O'Dell-Michie", "title": "Sr. Vice President & Chief Administrative Officer", "company": "Blue Ridge Electric Membership Corporation"},
+    {"quote": "The instructors did a great job of keeping the participants engaged while covering material that could have been very dry.", "name": "Steven Pennell", "title": "Human Resources Director, Talent & Technology", "company": "Shurtape Technologies, LLC"},
+    {"quote": "I thoroughly enjoyed the seminar. I really appreciated that the instructors allowed participants to ask questions and work through our issues and concerns.", "name": "Sherry Murphy", "title": "Lead Human Resources Business Partner", "company": "Barrick Mining Corporation"}
+  ],
+  "contentSection": {
+    "headline": "Build Retirement Plan Expertise That Protects Plans and Limits Liability",
+    "description": "Retirement Plans is <span class=\"emphasis\">2 intensive days</span> where you'll master ERISA fiduciary rules, 401(k) administration, nondiscrimination testing, and voluntary correction programs—working through real plan scenarios with experienced benefits attorneys, not checklists and theory.",
+    "benefits": [
+      "<strong>Complete ERISA framework</strong> – Fiduciary obligations, prohibited transactions, 404(c) protection, and cofiduciary liability",
+      "<strong>401(k) administration mastery</strong> – Participant loans, salary deferrals, hardship distributions, and QDRO processing",
+      "<strong>Nondiscrimination testing</strong> – Coverage rules, ADP/ACP testing, safe harbors, and failed test corrections",
+      "<strong>Professional certification</strong> – Earn your certificate plus 13 SHRM/HRCI/CLE continuing education credits"
+    ]
+  },
+  "curriculum": {
+    "header": {
+      "title": "What You'll Master in 2 Days",
+      "description": "A comprehensive retirement plan framework covering ERISA compliance, fiduciary rules, plan administration, nondiscrimination testing, distributions, and audit defense."
+    },
+    "blocks": [
+      {
+        "id": "block1",
+        "label": "Full Program",
+        "title": "Retirement Plans",
+        "description": "Navigate ERISA, fiduciary rules, and plan administration with confidence.",
+        "price": 1375,
+        "availability": "Full program",
+        "competencyGroups": [
+          {
+            "title": "Master the Regulatory Landscape",
+            "description": "Navigate Title I and Title II, understand agency jurisdiction.",
+            "skills": [
+              {"level": "Foundation", "title": "ERISA fundamentals", "description": "Navigate Title I and Title II, understand the division of authority between IRS, DOL, and PBGC."},
+              {"level": "Foundation", "title": "Plan qualification requirements", "description": "Learn what makes plans compliant and what triggers disqualification."},
+              {"level": "Advanced", "title": "The alphabet soup decoded", "description": "Master ERISA, ADA, COBRA, FMLA, HIPAA, and how each impacts your plans."},
+              {"level": "Advanced", "title": "Regulatory agency roadmap", "description": "Know which agency has jurisdiction over what and how to work with each effectively."}
+            ]
+          },
+          {
+            "title": "Protect Yourself and Your Plan",
+            "description": "Identify violations before they happen, understand exemptions and protections.",
+            "skills": [
+              {"level": "Advanced", "title": "Expense management", "description": "Learn what expenses can be paid from plan assets without triggering problems."},
+              {"level": "Expert", "title": "Prohibited transactions", "description": "Identify violations before they happen, understand exemptions and correction procedures."},
+              {"level": "Expert", "title": "Investment liability", "description": "Know who's liable when investments go bad and how to protect yourself."},
+              {"level": "Expert", "title": "404(c) protection", "description": "Determine if participant-directed investment is worth the compliance burden."},
+              {"level": "Expert", "title": "Service provider liability", "description": "Understand cofiduciary rules and when providers share your risk."}
+            ]
+          },
+          {
+            "title": "Handle Daily Operations",
+            "description": "Set up loan programs, process QDROs, and manage contributions properly.",
+            "skills": [
+              {"level": "Advanced", "title": "Participant loans", "description": "Set up loan programs that comply without creating administrative nightmares."},
+              {"level": "Advanced", "title": "Salary deferrals", "description": "Manage contributions and catch-up elections properly."},
+              {"level": "Advanced", "title": "Blackout periods", "description": "Comply with Sarbanes-Oxley notification requirements."},
+              {"level": "Advanced", "title": "Section 204(h) notices", "description": "Provide required notices without triggering participant concerns."},
+              {"level": "Expert", "title": "QDRO processing", "description": "Handle domestic relations orders correctly the first time."}
+            ]
+          },
+          {
+            "title": "Pass Tests Without Headaches",
+            "description": "Navigate Section 410(b) testing and handle ADP/ACP tests effectively.",
+            "skills": [
+              {"level": "Advanced", "title": "HCE identification", "description": "Correctly identify highly compensated employees under current rules."},
+              {"level": "Advanced", "title": "Failed test corrections", "description": "Fix problems quickly using the methods that work."},
+              {"level": "Expert", "title": "Coverage rules mastery", "description": "Navigate Section 410(b) testing including controlled group rules and QSLOB exceptions."},
+              {"level": "Expert", "title": "401(k) and 401(m) testing", "description": "Handle ADP/ACP tests and know your safe harbor options."},
+              {"level": "Expert", "title": "Cross-testing strategies", "description": "Use age-weighted profit sharing to maximize owner benefits legally."}
+            ]
+          },
+          {
+            "title": "Get Money Out Legally",
+            "description": "Know when participants can access funds and handle distributions correctly.",
+            "skills": [
+              {"level": "Advanced", "title": "Distribution triggers", "description": "Know when participants can access funds and what restrictions apply."},
+              {"level": "Advanced", "title": "Withholding and rollovers", "description": "Handle tax withholding correctly and facilitate smooth rollovers."},
+              {"level": "Advanced", "title": "Hardship distributions", "description": "Process hardships that satisfy IRS safe harbors."},
+              {"level": "Expert", "title": "Required minimum distributions", "description": "Calculate and distribute RMDs at age 70½ without errors."},
+              {"level": "Expert", "title": "Anti-cutback rules", "description": "Navigate Section 411(d)(6) when eliminating distribution options."}
+            ]
+          },
+          {
+            "title": "Fix Problems Before They Become Disasters",
+            "description": "Know what triggers audits and how to fix errors before IRS discovers them.",
+            "skills": [
+              {"level": "Advanced", "title": "IRS audit targets", "description": "Know what triggers audits and how to avoid red flags."},
+              {"level": "Advanced", "title": "Late filing solutions", "description": "Handle late 5500 filings and minimize penalties."},
+              {"level": "Expert", "title": "Voluntary correction programs", "description": "Use EPCRS to fix errors before IRS discovers them."},
+              {"level": "Expert", "title": "DOL compliance programs", "description": "Correct fiduciary violations through VFCP."},
+              {"level": "Expert", "title": "Qualification preservation", "description": "Keep plans qualified even when problems arise."}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "faq": [
+    {"question": "What happens after I register?", "answer": "Within minutes, you'll receive an invoice email. Once payment is processed, you can schedule your complimentary pre-program consultation (10-15 minutes) to discuss your specific retirement plan challenges and identify which regulatory topics will have the biggest impact for your organization. Pre-program materials arrive one week before your session starts."},
+    {"question": "What's the difference between in-person and virtual formats?", "answer": "Both formats feature the same practicing benefits attorney instructors, current ERISA content, and professional credits. In-person provides face-to-face networking with other benefits professionals. Virtual delivers the same live instruction via Zoom with full Q&A capability. Choose the format that fits your schedule—the quality and content remain identical."},
+    {"question": "What continuing education credits will I earn?", "answer": "The 2-day program provides 13 SHRM/HRCI/CLE credits. Plus, your enrollment includes 12 months of quarterly employment law updates (4 sessions x 1.5 credits each = 6 additional credits), bringing your total to 19 credits."},
+    {"question": "Is this the same as Block I of the Certificate in Employee Benefits Law?", "answer": "Yes. Retirement Plans is Block I of the full Certificate in Employee Benefits Law program. You can take it as a standalone 2-day program, or combine it with Benefit Plan Claims, Appeals & Litigation (Block II) and Welfare Benefits Plan Issues (Block III) to earn the full certificate."},
+    {"question": "I primarily handle 401(k) plans. Is this program relevant?", "answer": "Absolutely. A significant portion of the program covers 401(k)-specific topics including participant loans, salary deferrals, ADP/ACP testing, safe harbor options, and hardship distributions. You'll also learn fiduciary rules and correction programs that apply to all qualified plans."},
+    {"question": "We're facing an IRS audit. Can this program help?", "answer": "Yes. The program covers IRS audit triggers, voluntary correction programs (EPCRS), and strategies for fixing plan errors. The pre-program consultation is the perfect time to share your audit situation (confidentially) so our team can point you to the most relevant content."},
+    {"question": "Does the $1,375 program fee include everything?", "answer": "Yes. Your enrollment includes all live instruction from practicing ERISA attorneys, complete program materials, 13 continuing education credits, pre-program consultation, 12 months of quarterly employment law updates (4 sessions, $1,588 value), permanent access to updated resources, and alumni benefits for all future programs. The only additional cost would be travel and lodging if you choose in-person format."},
+    {"question": "Can I apply this toward the full Certificate in Employee Benefits Law?", "answer": "Yes. Retirement Plans (Block I) counts toward the full certificate. You can complete the remaining blocks—Benefit Plan Claims, Appeals & Litigation (Block II) and Welfare Benefits Plan Issues (Block III)—at any future session to earn the complete Certificate in Employee Benefits Law."}
+  ],
+  "benefits": {
+    "creditCount": "13 SHRM/HRCI/CLE",
+    "updatePeriod": "12 months",
+    "alumniDiscount": "$300-$500"
+  },
+  "airtable": {
+    "inPersonViewId": "viwuXlg9Lk4I7AeCY",
+    "virtualViewId": null,
+    "onDemandViewId": null
+  }
+}

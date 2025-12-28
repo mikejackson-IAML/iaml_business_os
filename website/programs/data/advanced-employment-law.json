@@ -1,0 +1,434 @@
+{
+  "programName": "Advanced Certificate in Strategic Employment Law",
+  "programSlug": "advanced-employment-law",
+  "registrationUrl": "#",
+  "meta": {
+    "title": "Advanced Certificate in Strategic Employment Law | IAML",
+    "description": "Master advanced employment law strategies in 2 intensive days. Earn SHRM/HRCI credits. Taught by practicing attorneys. Real cases, executive-level frameworks.",
+    "keywords": "advanced employment law, strategic employment law, employment law certification, HR law training, SHRM credits employment law, HRCI recertification, employment law certificate, HR compliance training",
+    "ogImage": "https://iaml.com/images/og-image.jpg"
+  },
+  "seo": {
+    "canonicalUrl": "https://iaml.com/programs/advanced-employment-law",
+    "robots": "index, follow",
+    "twitter": {
+      "card": "summary_large_image",
+      "site": "@IAMLaw",
+      "title": "Advanced Certificate in Strategic Employment Law | IAML",
+      "description": "Master advanced employment law strategies in 2 intensive days. Earn SHRM/HRCI credits. Taught by practicing attorneys.",
+      "image": "https://iaml.com/images/og-image.jpg"
+    },
+    "schema": {
+      "educationalLevel": "advanced",
+      "timeRequired": "P2D",
+      "teaches": [
+        "Advanced employment law strategies",
+        "New administration agenda and enforcement priorities",
+        "Supreme Court impact on HR",
+        "AI in employment compliance",
+        "Political speech and workplace polarization",
+        "Reverse discrimination and DEI challenges",
+        "Title VII post-Bostock developments",
+        "Flexible work litigation",
+        "Non-competes and worker mobility",
+        "Modern harassment prevention",
+        "Retaliation defense strategies",
+        "ADA and FMLA gray areas",
+        "Pregnancy and reproductive health compliance",
+        "Cannabis and psychedelics in the workplace",
+        "FLSA and wage-hour disputes",
+        "Workplace investigations masterclass"
+      ]
+    },
+    "keywordData": {
+      "primaryKeyword": "advanced employment law training",
+      "searchVolume": 720,
+      "competition": "medium",
+      "relatedKeywords": [
+        "employment law certification HR",
+        "strategic employment law",
+        "SHRM credits employment law",
+        "HR law certificate program"
+      ]
+    }
+  },
+  "hero": {
+    "title": "Advanced Certificate in Strategic Employment Law",
+    "description": "While other leaders scramble to understand new court decisions and regulatory changes, you'll walk away knowing exactly how they affect your strategic business operations and what to do about it.",
+    "price": 1575,
+    "deliveryOptions": ["In Person"],
+    "duration": "2 days"
+  },
+  "contentSection": {
+    "headline": "Build Advanced Employment Law Expertise That Drives Strategic Business Decisions",
+    "description": "The Advanced Certificate in Strategic Employment Law is <span class=\"program-duration\">2 intensive days</span> where you'll master sophisticated employment law strategies with practicing attorneys who handle complex, high-stakes matters - working through the challenging scenarios that require executive-level judgment, not basic compliance checklists.",
+    "benefits": [
+      "<strong>Advanced employment law strategies</strong> – Complex discrimination litigation, high-risk terminations, retaliation defense, union campaigns, executive departures, and whistleblower investigations",
+      "<strong>Real-world application</strong> – Work actual cases and scenarios you'll face Monday morning",
+      "<strong>Expert attorney-led instruction</strong> – Learn from practicing employment law specialists",
+      "<strong>Professional certification</strong> – Earn your certificate plus 13 SHRM/HRCI continuing education credits"
+    ]
+  },
+  "testimonials": [
+    {"quote": "The Advanced Certificate in Employment Law presented by Ray Deeny is by far the best conference I have attended. Ray's in-depth knowledge of all aspects of employment law is amazing. I have never walked out of an IAML program without learning something that I could apply immediately. Hands-down the best value for your money. If you can choose only one employment law conference, this is the one!", "name": "Laura Massa", "title": "SVP, Human Resources", "company": "Sun Communities & Sun RV Resorts"},
+    {"quote": "This was my 13th year in a row attending an IAML program. These classes and instructors present real life situations that HR deals with every day. Classes are informative and fun!", "name": "Nancy Myles", "title": "Human Resources Manager", "company": "Kadant Black Clawson LLC"},
+    {"quote": "IAML is my 'go-to' source for continuing education to ensure I am current in employment law. John Wymer consistently provides applicable case studies and 'real life' interpretations of the law. He keeps the class entertained while at the same time providing us with tips we can implement immediately in our own companies.", "name": "Susie White", "title": "Employee Relations and Training Manager", "company": "Alfa Insurance"},
+    {"quote": "Really enjoyed Ray's presentation; particularly the way he shared his viewpoint when describing today's labor and employment law environment!", "name": "Bill Davidson", "title": "Senior Ethics Coordinator", "company": "Georgia Power Company"},
+    {"quote": "The program was very informative, the conversation and informal interaction with other participants was very useful. John was awesome with his delivery of the material and made every effort to address questions and topics that we raised.", "name": "Charlotte Witt", "title": "Senior Employee Relations Specialist", "company": "Christiana Care Health System"},
+    {"quote": "This conference is one of the best methods to stay up-to-date in the ever-changing world of employment law.", "name": "Jeff Herring", "title": "Chief Human Resources Officer", "company": "University of Utah"},
+    {"quote": "John Wymer was, as always, excellent! His knowledge of current case law and ease of interaction with the class is exceptional.", "name": "Mike Reinerth", "title": "Sr. Vice President - Chief Human Resources Officer & Lead Negotiations Advisor", "company": "Sparrow Health System"},
+    {"quote": "John Wymer filled every segment of the conference with practical advice and the legal reasoning to support it.", "name": "Roy Thrash", "title": "Chief Counsel, Labor and Employment", "company": "International Paper"},
+    {"quote": "The Advanced Certificate in Employment Law Conference was simply outstanding! This well-balanced program of case review and discussion adds so much value to any business. I strongly recommend this program to any business wishing to mitigate potential risk.", "name": "Allison Dennis", "title": "Employee Relations Manager", "company": "Santee Cooper"},
+    {"quote": "Great update as always. I get more from these 2 days of interaction than in any other seminar. Will be sending many in my group to IAML offerings this year. Ray has amazing knowledge and his style allows for great interactive discussions and debates.", "name": "David Currie", "title": "Vice President, Human Resources", "company": "Dana Incorporated"},
+    {"quote": "One of the best programs I've been to! Ray has a great sense of humor. Knowledge base of attendees was great and learned a lot from that interaction as well.", "name": "Kris Ellis", "title": "Director of Talent Acquistion & Payroll Administration", "company": "Inpro Corporation"},
+    {"quote": "This was the fifth Advanced Certificate in Employment Law Conference I've attended and, as usual, it was GREAT. I attend other HR related conferences from time to time and I have to say, IAML sets the standard. None of the others come close. Keep up the great work.", "name": "Merle Voigt", "title": "Human Resources Director", "company": "Corporate Systems, Inc."},
+    {"quote": "I try to attend this update annually. It is always informative, entertaining and interesting. The instructors do a wonderful job. I never fail to learn something new.", "name": "Kathy Campolettano", "title": "Human Resources Consultant", "company": "Honeywell International"},
+    {"quote": "This was by far the most informative and educational seminar I have ever attended, everything was fantastic!. Thank you!", "name": "Chris Ricci", "title": "HR Research Specialist", "company": "Wegmans Food Markets"},
+    {"quote": "Great conference as usual. The instructors are terrific and the information they present will definitely help keep our management out of trouble.", "name": "Keith Goto", "title": "Vice President, Human Resources", "company": "Alexander & Baldwin, Inc."},
+    {"quote": "I thought the conference was a great way to get the latest information. I also appreciate the fact that this is an advanced course that doesn't spend time going over the basics of employment law.", "name": "Leslie Shaunty", "title": "General Counsel", "company": "Skyward Specialty Insurance Group"},
+    {"quote": "The old Raiders had a motto – 'Commitment to Excellence'. The same can be said about IAML's seminars. From the HR Essentials to the Advanced Employment Law Conference, you get nothing less than excellence. You can trust and respect the quality of the presenters. Keep up the great work IAML!", "name": "Christopher Lopez", "title": "Labor Relations Director", "company": "Kroger"},
+    {"quote": "This is the third IAML Advanced Conference I have attended and they have all been outstanding. The instructors continue to provide an excellent program with valuable information.", "name": "Michael Nuckles", "title": "Human Resources Generalist", "company": "Rolls-Royce Corporation"},
+    {"quote": "I am a regular and will continue to attend and work with IAML. Material is up-to-date, pertinent and presented in an excellent manner.", "name": "Timothy Taylor", "title": "Human Resources Director", "company": "The Home Depot"},
+    {"quote": "Excellent as usual! The instructors do a great job of covering recent court cases that may impact our decision making.", "name": "Janet Larson", "title": "Corporate Employee Relations Manager", "company": "T-Mobile"},
+    {"quote": "John Wymer is one of the best labor/employment attorneys in the country. It's hard not to learn something from him!", "name": "David Theurich", "title": "Vice President & Human Resource Counsel", "company": "Western & Southern Financial Group"},
+    {"quote": "Frankly, this was one of the most informative continuing legal education seminars that I have attended.", "name": "Julian McQueen", "title": "Director of Employee & Labor Relations", "company": "Stanley Black & Decker, Inc."},
+    {"quote": "Another outstanding conference. IAML and John Wymer continue to provide excellent training; and the information is always current and useful. There is never a doubt about the functional substance in an IAML conference.", "name": "Vicki Vanderpool", "title": "Corporate Employee Relations & Compliance Manager", "company": "Ingram Industries, Inc."},
+    {"quote": "John was absolutely amazing! I learned so much from him – I could have stayed an entire week to listen to him. He is a phenomenal educator.", "name": "Jessica Cognata", "title": "Payroll Manager", "company": "Wegmans Food Markets"},
+    {"quote": "Outstanding conference. One of the best I've been to! John Wymer presenting made the 'could-be dry' tropics into interesting topics and he kept the group going. Great presenter!", "name": "Nicole Zemanek", "title": "Associate Director of Human Resources", "company": "Mark-Taylor, Inc."},
+    {"quote": "This is the third time I've taken this conference in the last five years. John and Ray present very insightful information in an entertaining and enjoyable way. It will keep me coming back for a refresher every few years.", "name": "Leo Allegranza", "title": "Plant Manager", "company": "Edison Mission Energy"},
+    {"quote": "I am so impressed with your organization each time I attend. IAML is very organized and truly a leader in their field. Ray does an outstanding job, he keeps the seminar moving in an exciting and motivational way.", "name": "Stephen Crouchley", "title": "Sr. College Recruiting Specialist", "company": "Delhaize America"}
+  ],
+  "curriculum": {
+    "header": {
+      "title": "What You'll Master in 2 Days",
+      "description": "A comprehensive advanced curriculum covering the most pressing employment law challenges facing HR leaders and in-house counsel today."
+    },
+    "blocks": [
+      {
+        "id": "block1",
+        "label": "Full Program",
+        "title": "Advanced Strategic Employment Law",
+        "description": "Master sophisticated employment law strategies across 23 competency areas with practicing attorneys who handle complex, high-stakes matters.",
+        "price": 1575,
+        "availability": "Complete 2-day program",
+        "competencyGroups": [
+          {
+            "title": "New Administration Agenda",
+            "description": "Prepare for What's Coming - Understand DOL enforcement priorities, NLRB policy shifts, and EEOC initiatives",
+            "skills": [
+              {"level": "Foundation", "title": "DOL enforcement priorities", "description": "Understand the new administration's wage and hour focus areas"},
+              {"level": "Foundation", "title": "EEOC initiatives", "description": "Prepare for scrutiny of algorithmic bias and pay transparency"},
+              {"level": "Advanced", "title": "NLRB policy shifts", "description": "Navigate changes to joint-employer tests, micro-units, and protected activity"},
+              {"level": "Advanced", "title": "Non-compete crackdown", "description": "Know how CFPB and FTC actions affect worker mobility restrictions"},
+              {"level": "Expert", "title": "Contractor classification", "description": "Anticipate rule changes on gig worker status"},
+              {"level": "Expert", "title": "Immigration changes", "description": "Adapt hiring practices to new work authorization requirements"}
+            ]
+          },
+          {
+            "title": "Supreme Court Watch",
+            "description": "Understand Impact on HR - Learn how pending cases affect discrimination claims, DEI challenges, and religious accommodation",
+            "skills": [
+              {"level": "Foundation", "title": "Title VII rulings", "description": "Learn how pending cases will affect discrimination claims"},
+              {"level": "Advanced", "title": "DEI challenges", "description": "Prepare for legal shifts in diversity program defensibility"},
+              {"level": "Advanced", "title": "Religious accommodation", "description": "Navigate conflicts between religious freedom and anti-discrimination laws"},
+              {"level": "Expert", "title": "Agency authority", "description": "Understand post-Chevron effects on regulatory deference"},
+              {"level": "Expert", "title": "Practical implications", "description": "Translate court decisions into policy changes"}
+            ]
+          },
+          {
+            "title": "AI in Employment",
+            "description": "Avoid Algorithmic Liability - Understand EEOC enforcement, comply with state AI laws, and validate AI systems for adverse impact",
+            "skills": [
+              {"level": "Foundation", "title": "EEOC enforcement", "description": "Understand agency position on algorithmic hiring and proxy discrimination"},
+              {"level": "Advanced", "title": "State requirements", "description": "Comply with AI notice and audit laws in NY, CA, and CO"},
+              {"level": "Advanced", "title": "Vendor liability", "description": "Know when you're responsible for third-party AI tools"},
+              {"level": "Expert", "title": "Testing obligations", "description": "Validate AI systems for adverse impact"},
+              {"level": "Expert", "title": "Documentation standards", "description": "Prove your AI decisions are defensible"}
+            ]
+          },
+          {
+            "title": "Political Speech",
+            "description": "Manage Workplace Polarization - Handle off-duty social media, workplace ideology conflicts, and create conduct rules without violating rights",
+            "skills": [
+              {"level": "Foundation", "title": "Off-duty social media", "description": "Know what employee speech you can discipline"},
+              {"level": "Foundation", "title": "First Amendment limits", "description": "Understand what doesn't apply in private employment"},
+              {"level": "Advanced", "title": "Workplace ideology conflicts", "description": "Handle debates about Israel/Palestine, abortion, and elections"},
+              {"level": "Expert", "title": "Policy drafting", "description": "Create conduct rules that reduce conflict without violating rights"},
+              {"level": "Expert", "title": "Investigation techniques", "description": "Address complaints about political speech fairly"}
+            ]
+          },
+          {
+            "title": "Reverse Discrimination",
+            "description": "Navigate the Post-DEI Landscape - Understand the wave of reverse discrimination allegations and build legally durable DEI programs",
+            "skills": [
+              {"level": "Foundation", "title": "Claim surge", "description": "Understand the wave of \"reverse discrimination\" allegations"},
+              {"level": "Advanced", "title": "Harvard spillover", "description": "Apply lessons from 2023 Supreme Court case to private employment"},
+              {"level": "Advanced", "title": "Documentation standards", "description": "Defend decisions with evidence of legitimate business reasons"},
+              {"level": "Expert", "title": "Legally durable DEI", "description": "Build programs that survive challenges in 2026"},
+              {"level": "Expert", "title": "Risk assessment", "description": "Identify which programs face highest legal exposure"}
+            ]
+          },
+          {
+            "title": "Title VII Post-Bostock",
+            "description": "Apply Five Years of Case Law - Know what actually changed with LGBTQ+ protections and handle conflicts over pronouns, bathrooms, and dress codes",
+            "skills": [
+              {"level": "Foundation", "title": "LGBTQ+ protections", "description": "Know what actually changed and what courts are deciding now"},
+              {"level": "Foundation", "title": "Policy updates", "description": "Write policies that reflect current legal requirements"},
+              {"level": "Advanced", "title": "Religion intersections", "description": "Handle conflicts over pronouns, bathrooms, and dress codes"},
+              {"level": "Advanced", "title": "Discipline consistency", "description": "Apply rules fairly across protected characteristics"},
+              {"level": "Expert", "title": "Onboarding practices", "description": "Create inclusive processes that withstand scrutiny"}
+            ]
+          },
+          {
+            "title": "Flexible Work Litigation",
+            "description": "Handle the New Reality - Implement return-to-office mandates, manage telework accommodations, and avoid disparate impact",
+            "skills": [
+              {"level": "Foundation", "title": "Return-to-office mandates", "description": "Implement without triggering discrimination claims"},
+              {"level": "Advanced", "title": "Telework accommodations", "description": "Know when remote work is required under ADA"},
+              {"level": "Advanced", "title": "Time tracking requirements", "description": "Comply with wage-hour rules for remote employees"},
+              {"level": "Expert", "title": "Surveillance tools", "description": "Use monitoring technology without violating privacy or NLRA"},
+              {"level": "Expert", "title": "Disparate impact risks", "description": "Identify when hybrid policies create legal exposure"}
+            ]
+          },
+          {
+            "title": "Non-Competes & Mobility",
+            "description": "Adapt to Changing Rules - Know FTC rule status, comply with state bans, and use non-solicitation agreements that still work",
+            "skills": [
+              {"level": "Foundation", "title": "FTC rule status", "description": "Know whether federal ban is enforced or enjoined"},
+              {"level": "Foundation", "title": "State-level bans", "description": "Comply with California, Colorado, and other restrictive jurisdictions"},
+              {"level": "Advanced", "title": "Non-solicit survival", "description": "Use customer and employee non-solicitation agreements that still work"},
+              {"level": "Expert", "title": "Carve-out exceptions", "description": "Protect legitimate business interests within legal limits"},
+              {"level": "Expert", "title": "Enforcement strategies", "description": "Pursue departing employees without overreaching"}
+            ]
+          },
+          {
+            "title": "Harassment 2.0",
+            "description": "Beyond #MeToo - Handle digital harassment, remote workplace issues, and third-party liability",
+            "skills": [
+              {"level": "Foundation", "title": "Digital harassment", "description": "Handle liability for Slack, Teams, texts, and DMs"},
+              {"level": "Foundation", "title": "Remote workplace issues", "description": "Manage harassment you can't see happening"},
+              {"level": "Advanced", "title": "Third-party liability", "description": "Protect employees from customer, vendor, and patient harassment"},
+              {"level": "Advanced", "title": "Post-Dobbs conflicts", "description": "Address harassment based on reproductive healthcare beliefs"},
+              {"level": "Expert", "title": "Investigation techniques", "description": "Gather evidence in virtual environments"}
+            ]
+          },
+          {
+            "title": "Retaliation Defense",
+            "description": "Protect Against #1 Claim Type - Understand why retaliation claims succeed, document timing, and take action without appearing retaliatory",
+            "skills": [
+              {"level": "Foundation", "title": "Why retaliation claims succeed", "description": "Understand what makes these cases easy for plaintiffs"},
+              {"level": "Foundation", "title": "Protected activity scope", "description": "Know what conduct triggers retaliation protection"},
+              {"level": "Advanced", "title": "Timing documentation", "description": "Create records that defeat retaliation allegations"},
+              {"level": "Expert", "title": "Lookback periods", "description": "Apply the broader timeframes courts are now using"},
+              {"level": "Expert", "title": "Discipline strategies", "description": "Take action without appearing retaliatory"}
+            ]
+          },
+          {
+            "title": "ADA & FMLA Gray Areas",
+            "description": "Navigate Difficult Situations - Handle intermittent leave, mental health accommodations, and define essential functions in remote roles",
+            "skills": [
+              {"level": "Foundation", "title": "Intermittent leave", "description": "Know what courts will tolerate and what they won't"},
+              {"level": "Foundation", "title": "Mental health surge", "description": "Handle accommodation requests for anxiety, depression, and PTSD"},
+              {"level": "Advanced", "title": "Performance vs. disability", "description": "Win cases with proper documentation"},
+              {"level": "Expert", "title": "Essential functions", "description": "Define what's required in remote and hybrid roles"},
+              {"level": "Expert", "title": "Medical documentation", "description": "Request information that actually helps you decide"}
+            ]
+          },
+          {
+            "title": "Pregnancy & Reproductive Health",
+            "description": "Comply with New Protections - Apply PUMP Act and PWFA case law, navigate state law variations, and protect employee privacy",
+            "skills": [
+              {"level": "Foundation", "title": "PUMP Act enforcement", "description": "Provide lactation accommodations that satisfy federal requirements"},
+              {"level": "Foundation", "title": "PWFA case law", "description": "Apply Pregnant Workers Fairness Act based on early court decisions"},
+              {"level": "Advanced", "title": "State law variations", "description": "Navigate the post-Dobbs patchwork of reproductive health laws"},
+              {"level": "Expert", "title": "Travel benefits", "description": "Offer reproductive healthcare travel without retaliation exposure"},
+              {"level": "Expert", "title": "Privacy obligations", "description": "Protect employee information about sensitive healthcare"}
+            ]
+          },
+          {
+            "title": "Cannabis & Psychedelics",
+            "description": "Handle Legalization Issues - Maintain safety-sensitive policies, navigate testing limitations, and handle accommodation battles",
+            "skills": [
+              {"level": "Foundation", "title": "Safety-sensitive positions", "description": "Maintain drug-free workplace policies where it matters"},
+              {"level": "Advanced", "title": "Testing limitations", "description": "Understand when you can and can't test in legal states"},
+              {"level": "Advanced", "title": "State law variations", "description": "Comply with different rules across your locations"},
+              {"level": "Expert", "title": "Accommodation battles", "description": "Navigate disability claims for medical marijuana use"},
+              {"level": "Expert", "title": "Policy updates", "description": "Write drug testing policies that reflect current legal landscape"}
+            ]
+          },
+          {
+            "title": "FLSA Battlefield",
+            "description": "Win Wage and Hour Disputes - Prepare for salary threshold changes, avoid misclassification, and comply with pay transparency",
+            "skills": [
+              {"level": "Foundation", "title": "Salary threshold changes", "description": "Prepare for DOL overtime rule litigation and potential rollbacks"},
+              {"level": "Advanced", "title": "Gig worker classification", "description": "Avoid misclassifying contractors and independent workers"},
+              {"level": "Advanced", "title": "Off-the-clock claims", "description": "Manage remote work time that employees aren't reporting"},
+              {"level": "Expert", "title": "Pay transparency", "description": "Comply with state-level wage scale posting requirements"},
+              {"level": "Expert", "title": "Class action trends", "description": "Understand what's driving collective litigation in 2025-2026"}
+            ]
+          },
+          {
+            "title": "Investigations Masterclass",
+            "description": "Conduct Bulletproof Reviews - Use AI-assisted tools, investigate remote workforces, and protect attorney-client privilege",
+            "skills": [
+              {"level": "Foundation", "title": "Remote workforce challenges", "description": "Investigate across jurisdictions and time zones"},
+              {"level": "Advanced", "title": "AI-assisted investigations", "description": "Use technology tools without compromising evidentiary value"},
+              {"level": "Advanced", "title": "Escalation decisions", "description": "Know when to bring in outside counsel"},
+              {"level": "Expert", "title": "Privilege protection", "description": "Avoid mistakes that waive attorney-client privilege"},
+              {"level": "Expert", "title": "Report writing", "description": "Document findings that withstand legal scrutiny"}
+            ]
+          },
+          {
+            "title": "Modern Investigation Challenges",
+            "description": "2026 Landscape - Navigate remote workplace misconduct, digital harassment, and AI bias allegations",
+            "skills": [
+              {"level": "Foundation", "title": "Remote/hybrid workplace misconduct", "description": "Investigate misconduct in distributed work environments"},
+              {"level": "Foundation", "title": "Digital harassment & text-based abuse", "description": "Handle harassment through digital channels"},
+              {"level": "Advanced", "title": "Social media & off-duty conduct", "description": "Investigate employee behavior outside work hours"},
+              {"level": "Advanced", "title": "Union, DEI, and reverse discrimination complaints", "description": "Navigate politically sensitive investigations"},
+              {"level": "Expert", "title": "Psychological safety as part of process fairness", "description": "Ensure investigations don't cause additional harm"},
+              {"level": "Expert", "title": "AI bias allegations in hiring or discipline decisions", "description": "Investigate claims of algorithmic discrimination"}
+            ]
+          },
+          {
+            "title": "Legal Triggers & Investigation Fundamentals",
+            "description": "Know when an employer must investigate and understand actual vs. constructive notice",
+            "skills": [
+              {"level": "Foundation", "title": "When an employer must investigate", "description": "Understand legal obligations to investigate complaints"},
+              {"level": "Foundation", "title": "Anonymous, digital, and third-party complaints", "description": "Handle complaints from various sources"},
+              {"level": "Advanced", "title": "Internal vs. external investigator selection", "description": "Choose the right investigator for each situation"},
+              {"level": "Advanced", "title": "Planning scope & sequencing of interviews", "description": "Structure investigations for maximum effectiveness"},
+              {"level": "Expert", "title": "Timeliness", "description": "Complete investigations within defensible timeframes"}
+            ]
+          },
+          {
+            "title": "Preparing and Structuring the Investigation",
+            "description": "Develop an investigation roadmap with proper neutrality and bias safeguards",
+            "skills": [
+              {"level": "Foundation", "title": "Developing an investigation roadmap", "description": "Create a structured approach to each investigation"},
+              {"level": "Foundation", "title": "Neutrality and bias safeguards", "description": "Ensure objective fact-finding processes"},
+              {"level": "Advanced", "title": "Confidentiality boundaries", "description": "Protect information while gathering evidence"},
+              {"level": "Advanced", "title": "Role of HR vs. legal vs. management", "description": "Define responsibilities in complex investigations"},
+              {"level": "Expert", "title": "Avoiding pre-judgment or confirmation bias", "description": "Maintain objectivity throughout the process"}
+            ]
+          },
+          {
+            "title": "Evidence Collection & Documentation",
+            "description": "Handle digital evidence, maintain chain of custody, and navigate privilege considerations",
+            "skills": [
+              {"level": "Foundation", "title": "Contemporaneous notes vs. formal summaries", "description": "Document investigations properly"},
+              {"level": "Advanced", "title": "Digital evidence", "description": "Collect and preserve electronic evidence"},
+              {"level": "Advanced", "title": "Authenticity & chain of custody", "description": "Maintain evidence integrity"},
+              {"level": "Expert", "title": "Privilege considerations", "description": "Protect attorney-client and work product privileges"},
+              {"level": "Expert", "title": "Handling sensitive personal data", "description": "Comply with privacy requirements during investigations"}
+            ]
+          },
+          {
+            "title": "Interviewing Techniques & Witness Management",
+            "description": "Master interview approaches for complainants, respondents, and witnesses",
+            "skills": [
+              {"level": "Foundation", "title": "Interview approach for complainant, respondent, and witnesses", "description": "Tailor techniques to each interview type"},
+              {"level": "Advanced", "title": "Trauma-informed interviewing", "description": "Handle sensitive situations appropriately"},
+              {"level": "Advanced", "title": "Cultural and neurodivergent communication considerations", "description": "Adapt to diverse communication styles"},
+              {"level": "Expert", "title": "Dealing with reluctant or fearful witnesses", "description": "Overcome barriers to obtaining information"},
+              {"level": "Expert", "title": "Interview sequencing to prevent contamination", "description": "Order interviews strategically"}
+            ]
+          },
+          {
+            "title": "Credibility Assessment",
+            "description": "Evaluate corroboration, inconsistency, and contextual credibility",
+            "skills": [
+              {"level": "Foundation", "title": "Corroboration vs. inconsistency", "description": "Weigh supporting and contradicting evidence"},
+              {"level": "Advanced", "title": "Demeanor caution", "description": "Avoid over-reliance on demeanor assessments"},
+              {"level": "Advanced", "title": "Contextual credibility", "description": "Consider circumstances affecting witness reliability"},
+              {"level": "Expert", "title": "Multiple-sourced vs. single-sourced allegations", "description": "Evaluate strength of evidence"},
+              {"level": "Expert", "title": "Evaluating partial or fragmented recall", "description": "Assess incomplete memories fairly"}
+            ]
+          },
+          {
+            "title": "Investigation Outcomes & Corrective Action",
+            "description": "Draft defensible reports, communicate outcomes, and protect from retaliation",
+            "skills": [
+              {"level": "Foundation", "title": "What goes in findings vs. recommendations", "description": "Separate facts from conclusions"},
+              {"level": "Advanced", "title": "Drafting a defensible report", "description": "Write reports that withstand legal scrutiny"},
+              {"level": "Advanced", "title": "Communicating outcome without over-disclosure", "description": "Share appropriate information with stakeholders"},
+              {"level": "Expert", "title": "Protecting the process from retaliation", "description": "Prevent adverse actions against participants"},
+              {"level": "Expert", "title": "Monitoring the workplace after resolution", "description": "Ensure lasting resolution of issues"}
+            ]
+          },
+          {
+            "title": "Scenario-Based Application",
+            "description": "Realistic, guided problem-solving using workplace investigation scenarios",
+            "skills": [
+              {"level": "Advanced", "title": "Sexual harassment (in-person & digital)", "description": "Apply investigation principles to harassment cases"},
+              {"level": "Advanced", "title": "Discrimination & hostile work environment", "description": "Investigate discrimination complaints"},
+              {"level": "Advanced", "title": "Retaliation by peers or indirect actors", "description": "Handle complex retaliation scenarios"},
+              {"level": "Expert", "title": "ADA / medical accommodation disputes", "description": "Investigate accommodation-related complaints"},
+              {"level": "Expert", "title": "Safety complaints & whistleblower claims", "description": "Handle protected activity investigations"},
+              {"level": "Expert", "title": "Ethical refusals to participate or fear-based silence", "description": "Navigate difficult witness situations"},
+              {"level": "Expert", "title": "Conflicting witness accounts with no smoking gun", "description": "Resolve he-said/she-said situations"},
+              {"level": "Expert", "title": "Remote-work misconduct without physical witnesses", "description": "Investigate virtual workplace issues"}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "faculty": [],
+  "facultySection": {
+    "headline": "Practicing Attorneys, Not Academics",
+    "subtitle": "Learn from employment law specialists who handle complex matters every day"
+  },
+  "faq": [
+    {
+      "question": "What happens after I register?",
+      "answer": "Within minutes, you'll receive an invoice email. Once payment is processed, you can schedule your complimentary pre-program consultation (10-15 minutes) to discuss the complex employment law challenges you're currently navigating and identify which advanced topics will have the biggest impact for your organization. Pre-program materials arrive one week before your session starts."
+    },
+    {
+      "question": "What's the difference between in-person, virtual, and on-demand formats?",
+      "answer": "All three formats feature the same practicing attorney instructors, current legal analysis, and professional credits. In-person provides face-to-face networking with other senior HR professionals and in-house counsel. Virtual delivers the same live instruction via Zoom with full Q&A capability. On-demand lets you learn at your own pace over 90 days. Choose the format that fits your schedule. The quality and content remain identical."
+    },
+    {
+      "question": "What continuing education credits will I earn?",
+      "answer": "The 2-day program provides 13.75 SHRM/HRCI/CLE credits. Plus, your enrollment includes 12 months of quarterly employment law updates (4 sessions × 1.5 credits each = 6 additional credits), bringing your total to 19.75 credits. That's more than most professionals earn in a year."
+    },
+    {
+      "question": "Do I need to complete the Certificate in Employee Relations Law first?",
+      "answer": "No, but it helps. This program assumes you have working knowledge of employment law fundamentals: Title VII, ADA, FMLA, wage and hour basics. If you're an experienced HR professional, in-house counsel, or have been handling employment matters for a few years, you'll be ready for the advanced content. If you're newer to employment law, consider starting with the foundational Certificate in Employee Relations Law."
+    },
+    {
+      "question": "How is this different from the Certificate in Employee Relations Law?",
+      "answer": "The foundational program teaches you how employment law works. This advanced program focuses on what's changing right now and what's coming next: new administration priorities, recent Supreme Court decisions, AI in employment, reverse discrimination claims, and the strategies experienced practitioners use to navigate complex situations. Think of it as the difference between learning the rules and learning how to win."
+    },
+    {
+      "question": "How current is the content?",
+      "answer": "Very. The 2026 curriculum covers the new administration's enforcement priorities, pending Supreme Court cases, post-Bostock developments five years in, AI hiring compliance, reverse discrimination in the post-DEI landscape, cannabis and psychedelics legalization issues, and non-compete rule changes. Our instructors update content based on cases they're currently handling and regulatory shifts they're tracking."
+    },
+    {
+      "question": "Is this program only for HR professionals, or can in-house counsel attend?",
+      "answer": "Both. Senior HR leaders gain the legal sophistication to partner effectively with counsel and make confident decisions on complex matters. In-house attorneys get practical strategies from peers handling the same high-stakes employment issues. Many organizations send HR directors and employment counsel together. They report better alignment on risk assessment and litigation strategy afterward."
+    },
+    {
+      "question": "Does the $1,575 program fee include everything?",
+      "answer": "Yes. Your enrollment includes all live instruction from practicing attorneys who handle complex employment litigation, complete program materials, 13.75 continuing education credits, pre-program consultation, 12 months of quarterly employment law updates (4 sessions, $1,588 value), permanent access to updated resources, and alumni benefits for all future programs. The only additional cost would be travel and lodging if you choose in-person format."
+    },
+    {
+      "question": "Should I attend this program every year or every other year?",
+      "answer": "Many alumni return on a regular cycle, annually or every other year, because employment law changes that fast. Court decisions create new precedents. Regulations shift with administrations. Workplace challenges evolve. Your alumni pricing ($300 off) makes it practical to maintain cutting-edge expertise throughout your career. The content is updated each cycle, so you're never repeating the same program."
+    },
+    {
+      "question": "Will I be ready to handle complex employment matters after completing this program?",
+      "answer": "Yes. The program is designed for immediate application to sophisticated situations: high-risk terminations, retaliation defense, DEI program challenges, AI compliance, executive departures, and whistleblower investigations. You'll leave with current legal frameworks, strategic decision-making tools, and the confidence to advise leadership on the complex employment matters that keep organizations out of litigation."
+    }
+  ],
+  "benefits": {
+    "creditCount": "13.75 SHRM/HRCI/CLE",
+    "updatePeriod": "12 months",
+    "alumniDiscount": "$300"
+  },
+  "airtable": {
+    "inPersonViewId": "viwqyJc8gx3hOppAu",
+    "virtualViewId": null,
+    "onDemandViewId": null
+  }
+}

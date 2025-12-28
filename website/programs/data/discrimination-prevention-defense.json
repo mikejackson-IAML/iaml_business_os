@@ -1,0 +1,223 @@
+{
+  "programName": "Discrimination Prevention and Defense",
+  "programSlug": "discrimination-prevention-defense",
+  "registrationUrl": "#registration",
+  "meta": {
+    "title": "Discrimination Prevention and Defense Training | IAML",
+    "description": "Master discrimination law in 2 days. Learn Title VII, ADA, FMLA, ADEA compliance & litigation defense. Earn 13 SHRM/HRCI/CLE credits. Taught by practicing attorneys.",
+    "keywords": "discrimination training, Title VII training, ADA compliance, FMLA training, ADEA compliance, employment discrimination, harassment prevention, discrimination defense, HR compliance training, SHRM credits",
+    "ogImage": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69093f4637c43adac1bc0ab3.png"
+  },
+  "seo": {
+    "canonicalUrl": "https://iaml.com/programs/discrimination-prevention-defense",
+    "robots": "index, follow",
+    "twitter": {
+      "card": "summary_large_image",
+      "site": "@IAMLaw",
+      "title": "Discrimination Prevention and Defense Training | IAML",
+      "description": "Master discrimination law in 2 days. Learn Title VII, ADA, FMLA, ADEA compliance & litigation defense. Earn 13 SHRM/HRCI/CLE credits.",
+      "image": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69093f4637c43adac1bc0ab3.png"
+    },
+    "schema": {
+      "educationalLevel": "intermediate",
+      "timeRequired": "P2D",
+      "teaches": [
+        "Title VII Compliance",
+        "ADA Accommodation",
+        "FMLA Administration",
+        "ADEA Compliance",
+        "Harassment Prevention",
+        "Discrimination Defense",
+        "EEOC Process"
+      ]
+    },
+    "keywordData": {
+      "primaryKeyword": "discrimination prevention training",
+      "searchVolume": 280,
+      "competition": "medium",
+      "relatedKeywords": [
+        "Title VII training",
+        "ADA compliance training",
+        "harassment prevention training",
+        "employment discrimination defense"
+      ]
+    }
+  },
+  "hero": {
+    "title": "Discrimination Prevention and Defense",
+    "description": "Master discrimination law fundamentals across all protected classes. Learn how to identify workplace practices that expose your company to liability and implement preventive measures that strengthen your defense. Train with practicing employment attorneys who handle these cases daily.",
+    "price": 1375,
+    "deliveryOptions": ["In Person", "Virtual"],
+    "duration": "2 days"
+  },
+  "testimonials": [
+    {"quote": "With almost 20 years in the field of employment law, this was one of the best, if not the best, seminar I have ever attended.", "name": "Charles Rando", "title": "Personnel Field Manager", "company": "Wyoming Department of Workforce Services"},
+    {"quote": "This is the best course I have ever attended. The instructors are well informed and have a repertoire of stories that emphasize the issues. Course materials are also excellent!", "name": "Debbie Colia", "title": "HR Executive Consultant", "company": "Cedars-Sinai"},
+    {"quote": "The seminar was excellent. The instructors were extremely knowledgeable and made a point of allowing the class to interact. This one week not only provided me with knowledge I did not have, it also gave me a new appreciation for what I do.", "name": "Angelique Anderson", "title": "Executive Director, Strategic HR Business Partnerships - People & Culture", "company": "Catalina Marketing"},
+    {"quote": "My only wish is that I had attended this seminar earlier in my career! The information I learned is invaluable.", "name": "Christina Lipetzky", "title": "Human Resources Manager", "company": "Montana Department of Environmental Quality"},
+    {"quote": "The training both was excellent both in content as well as presentation. I believe the strength of the program lay in the instructors used. All the instructors were fantastic!", "name": "Stephen Santay", "title": "Controller", "company": "KTLA"},
+    {"quote": "The seminar was the best. Faculty did an outstanding job of making legal information understandable for non-lawyer professionals. I am planning to attend the Advanced Conference.", "name": "James Dillard", "title": "Personnel Administrator", "company": "Lubrizol"},
+    {"quote": "I thought the program was excellent. The content and speakers especially were the best I've experienced in my educational and professional career.", "name": "Laurie Clark", "title": "Benefits Paralegal", "company": "The Coca-Cola Company"},
+    {"quote": "All three instructors were wonderful in their own way. Finding attorneys who can teach is a rarity. I found the information current and relevant. It will definitely have an impact on my HR practices. Thank you for a great seminar!", "name": "Heidi Hill", "title": "Director Training, Development and Engagement", "company": "C2 Solutions"},
+    {"quote": "Our instructor was a great presenter with great real life examples. His summaries of significant federal employment law were invaluable.", "name": "Tim Hartman", "title": "Sr. Regional HR Manager & HR Counsel", "company": "Silgan Containers"},
+    {"quote": "Of all the IAML seminars I have attended, this was by far the best and most informative, especially to HR professionals. I was very pleased with the entire program.", "name": "Barbara Ann Bohlman", "title": "Sr Compensation & Benefits Manager", "company": "The Boca Raton"},
+    {"quote": "The information covered in this program was excellent! The speakers were wonderful. They kept the program fresh and interesting.", "name": "Monica Taylor", "title": "Human Resources Manager", "company": "Oak Hall Cap & Gown"},
+    {"quote": "The content was current, relevant and very practical. I appreciated the interactive format and the opportunity to network with other professionals facing similar challenges.", "name": "Michael Chen", "title": "Director of Human Resources", "company": "TechSmart Industries"},
+    {"quote": "The information was extremely valuable and interesting, I learned a great deal. The instructors did an exceptional job presenting; they were helpful, knowledgeable and entertaining.", "name": "Katie Sanders", "title": "Coordinator of Workforce Development", "company": "Northside Hospital"},
+    {"quote": "The seminar offered incredible value for me. The instructors were able to rely on past examples and cases to help illustrate the learning. It was a great learning experience for me.", "name": "Amanda McIvor", "title": "Senior Human Resources Manager", "company": "Gerdau"},
+    {"quote": "I have been in HR for 15 years and attended a lot of seminars, this was my first IAML seminar and you can bet my budget dollars were well-spent. I'll continue to look for your seminars first!", "name": "Ruth Erwert", "title": "Recruiting Manager", "company": "Chelan County PUD"},
+    {"quote": "Brenda was exceptional. She found the right balance of presenting employment law as it is written, while encouraging relevant experience sharing from participants and her own case work.", "name": "Kristen Van Damm", "title": "Director - Trust Specialties People Leader", "company": "PwC"},
+    {"quote": "This was my third IAML seminar and I have been very impressed each time. The information is comprehensive, in-depth, and very relevant. I plan to attend more IAML seminars in the future.", "name": "Gloria Lindsey", "title": "Human Resources Benefits Manager", "company": "Thiele Kaolin Company"},
+    {"quote": "It was an excellent seminar and I learned quite a bit. The speakers were great. The information was relevant, current, helpful and could be immediately applied. All in all, it was an excellent event and I'm already budgeting for the Advanced session next year.", "name": "Kelli Whorton", "title": "Human Resources Director", "company": "RLF"},
+    {"quote": "This was my first seminar with IAML and I was very impressed! The speakers were great and the sessions were very informative. I will definitely attend again!", "name": "Holly Dean", "title": "Employment Manager", "company": "Alfa Insurance Company"},
+    {"quote": "I highly enjoyed this seminar. All of the presenters were extremely knowledgeable and very easy to talk with.", "name": "Jody Ryan", "title": "Human Resources Service Coordinator", "company": "Boeing Company"}
+  ],
+  "contentSection": {
+    "headline": "Master Discrimination Law That Protects Your Organization",
+    "description": "Discrimination Prevention and Defense is <span class=\"emphasis\">2 intensive days</span> where you'll master Title VII, ADA, FMLA, ADEA, and Equal Pay compliance—plus learn how to resolve claims without litigation and defend when it happens—working through realistic scenarios with experienced employment attorneys.",
+    "benefits": [
+      "<strong>Complete discrimination framework</strong> – Title VII harassment, retaliation, LGBTQ+ protections, and compliant DEI programs",
+      "<strong>Accommodation and leave expertise</strong> – ADA essential functions, PWFA/PUMP intersections, mental health accommodations, and FMLA coordination",
+      "<strong>Defense strategies</strong> – Internal resolution, arbitration programs, EEOC process, and summary-judgment positioning",
+      "<strong>Professional certification</strong> – Earn your certificate plus 13 SHRM/HRCI/CLE continuing education credits"
+    ]
+  },
+  "curriculum": {
+    "header": {
+      "title": "What You'll Master in 2 Days",
+      "description": "A comprehensive discrimination law framework covering Title VII, ADA, FMLA, ADEA, claim resolution, litigation defense, and federal contractor compliance."
+    },
+    "blocks": [
+      {
+        "id": "block1",
+        "label": "Full Program",
+        "title": "Discrimination Prevention and Defense",
+        "description": "Master discrimination law fundamentals and defense strategies across all protected classes.",
+        "price": 1375,
+        "availability": "Full program",
+        "competencyGroups": [
+          {
+            "title": "Title VII: Discrimination, Harassment & Retaliation (Still #1)",
+            "description": "Trends, hybrid risks, LGBTQ+ protections, religion, and compliant DEI.",
+            "skills": [
+              {"level": "Foundation", "title": "Charge trends", "description": "Higher filings; retaliation remains most prevalent—action items for intake, interim measures, and documentation."},
+              {"level": "Advanced", "title": "Harassment in hybrid workplaces", "description": "Chats/DMs, meeting recordings, and third-party/customer harassment—practical controls."},
+              {"level": "Advanced", "title": "LGBTQ+ and sex-based claims post-Bostock; religious conflicts after Groff", "description": "Document undue hardship for schedules/duties while ensuring equal treatment."},
+              {"level": "Expert", "title": "Reverse-discrimination / DEI backlash", "description": "Run compliant DEI—widen access, use merit-based selection, and lawful outreach—amid scrutiny."}
+            ]
+          },
+          {
+            "title": "ADA, PWFA, FMLA: Accommodation & Leave in a Hybrid World",
+            "description": "Define essential functions, align performance, and coordinate overlapping laws.",
+            "skills": [
+              {"level": "Foundation", "title": "Defining essential functions with remote options", "description": "Use defensible analyses and documented rationales."},
+              {"level": "Advanced", "title": "Mental-health accommodations and performance alignment", "description": "Balance supports with expectations and safety."},
+              {"level": "Advanced", "title": "PWFA / PUMP intersections", "description": "Scheduling and break implications; coordination with other laws."},
+              {"level": "Expert", "title": "FMLA interference/retaliation traps", "description": "Coordinate ADA/FMLA/Workers' Comp to avoid compounding liability."}
+            ]
+          },
+          {
+            "title": "ADEA & Equal Pay",
+            "description": "RIF documentation and privileged, action-oriented pay audits.",
+            "skills": [
+              {"level": "Foundation", "title": "Disparate impact and RIF selection", "description": "Build selection files that hold up and avoid age bias."},
+              {"level": "Expert", "title": "Pay transparency and equal pay audits", "description": "Structure privileged audits and communications."}
+            ]
+          },
+          {
+            "title": "Resolving Claims Without Litigation",
+            "description": "Internal resolution, arbitration programs, and mediation tactics.",
+            "skills": [
+              {"level": "Foundation", "title": "Internal resolution", "description": "Prompt, impartial investigations; what to share in outcome letters."},
+              {"level": "Advanced", "title": "Arbitration & class/collective waivers", "description": "Enforceability trends; drafting updates for remote workers and electronic consent."},
+              {"level": "Expert", "title": "Pre-charge settlements and mediation", "description": "Best practices to resolve early with durable agreements."}
+            ]
+          },
+          {
+            "title": "Litigation Playbook (When It Happens)",
+            "description": "Administrative responses, ESI preservation, and summary-judgment positioning.",
+            "skills": [
+              {"level": "Foundation", "title": "EEOC process", "description": "Position statements that help—and those that haunt."},
+              {"level": "Advanced", "title": "Preserving ESI", "description": "Chat, personal devices, and cloud docs—issue holds that actually cover the risks."},
+              {"level": "Expert", "title": "Summary-judgment and retaliation defenses", "description": "Build the record early and avoid avoidable admissions."}
+            ]
+          },
+          {
+            "title": "Federal Contractors & Affirmative Action (Hot-Button)",
+            "description": "EO/OFCCP landscape and DEI posture post-SFFA.",
+            "skills": [
+              {"level": "Advanced", "title": "Executive Order / OFCCP shifts", "description": "What contractors should—and shouldn't—do while rules are in flux."},
+              {"level": "Expert", "title": "Post-SFFA compliance posture", "description": "What survives for corporate DEI vs Title VII; where to re-tool."}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "faculty": [
+    {
+      "name": "Ray Deeny, Esq.",
+      "title": "Partner at Taft Stettinius & Hollister LLP",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667eb6947d86fd7edcc6f.svg",
+      "bio": "Ray is widely regarded as a dean of labor and employment law, known for his encyclopedic knowledge and unmatched command of workplace regulations. For over 40 years, he has represented management nationwide, blending a powerhouse advisory practice with a formidable litigation record.",
+      "bioLink": "https://crm.re-vitalized.com/v2/preview/tsCH77tyXdISzhZMCnT5?notrack=true#ray-deeny-esq",
+      "firstName": "Ray"
+    },
+    {
+      "name": "John F. Wymer, III, Esq.",
+      "title": "Partner, Labor & Employment at Thompson Hine LLP",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebba45f28666768ce6.svg",
+      "bio": "John F. Wymer is a nationally recognized labor and employment attorney and partner in Thompson Hine LLP's Labor & Employment group. With decades of experience, he represents public and private sector employers nationwide in employment discrimination, wage-and-hour, labor negotiations, union matters, ERISA claims, and more.",
+      "bioLink": "https://crm.re-vitalized.com/v2/preview/tsCH77tyXdISzhZMCnT5?notrack=true#john-f-wymer-iii-esq",
+      "firstName": "John"
+    },
+    {
+      "name": "Dawn R. Kubik, Esq.",
+      "title": "Of Counsel, Kubik Workplace & Investigative Services",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebe98d665980cb05f7.svg",
+      "bio": "Dawn Kubik is an employment attorney and founder of Kubik Workplace and Investigative Services and Dawn R. Kubik, P.C. With a legal career spanning since 1997, she has represented both plaintiffs and defendants in employment, personal injury, contract, and insurance disputes.",
+      "bioLink": "https://crm.re-vitalized.com/v2/preview/tsCH77tyXdISzhZMCnT5?notrack=true#dawn-r-kubik-esq",
+      "firstName": "Dawn"
+    },
+    {
+      "name": "Rudi S. Turner, Esq.",
+      "title": "Senior Corporate Counsel, White Cap",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690e22920269a38b86c905cb.svg",
+      "bio": "Rudi is Senior In-House Counsel at White Cap, where she counsels and defends the organization as it responds to administrative agency complaints, potential litigation, and employee lawsuits. Drawing on extensive experience in labor and employment law, she supports leaders and HR professionals in navigating complex workplace issues.",
+      "bioLink": "#",
+      "firstName": "Rudi"
+    },
+    {
+      "name": "Jacqueline E. Kalk, Esq.",
+      "title": "Shareholder at Littler Mendelson P.C.",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690e254f27678e7871e709c4.svg",
+      "bio": "Jacqueline E. Kalk represents and advises management across industries including manufacturing, construction, crowd-sourcing, and virtual companies. She focuses on independent contractor classification, wage-and-hour compliance, equal pay, and employment litigation.",
+      "bioLink": "#",
+      "firstName": "Jacqueline"
+    }
+  ],
+  "facultySection": {
+    "headline": "Practicing Attorneys, Not Academics",
+    "subtitle": "Learn from employment law specialists who handle discrimination cases, EEOC charges, and litigation defense every day"
+  },
+  "faq": [
+    {"question": "What happens after I register?", "answer": "Within minutes, you'll receive an invoice email. Once payment is processed, you can schedule your complimentary pre-program consultation (10-15 minutes) to discuss discrimination challenges you're currently facing and identify which scenarios will have the biggest impact for you. Pre-program materials arrive one week before your session starts."},
+    {"question": "What's the difference between in-person and virtual formats?", "answer": "Both formats feature the same practicing attorney instructors, current discrimination law content, and professional credits. In-person provides face-to-face networking with other HR professionals. Virtual delivers the same live instruction via Zoom with full Q&A capability. Choose the format that fits your schedule—the quality and content remain identical."},
+    {"question": "What continuing education credits will I earn?", "answer": "The 2-day program provides 13 SHRM/HRCI/CLE credits. Plus, your enrollment includes 12 months of quarterly employment law updates (4 sessions × 1.5 credits each = 6 additional credits), bringing your total to 19 credits."},
+    {"question": "Is this the same as Block II of the Certificate in Employee Relations Law?", "answer": "Yes. Discrimination Prevention and Defense is Block II of the full Certificate in Employee Relations Law program. You can take it as a standalone 2-day program, or combine it with Comprehensive Labor Relations (Block I) and Special Issues in Employment Law (Block III) to earn the full certificate."},
+    {"question": "We're seeing more accommodation requests. Will this help?", "answer": "Absolutely. The program covers ADA essential function analysis, mental health accommodations, PWFA/PUMP intersections, and how to coordinate ADA/FMLA/Workers' Comp without compounding liability. You'll leave with frameworks for handling the most complex accommodation scenarios."},
+    {"question": "How current is the discrimination content?", "answer": "Very. The curriculum addresses post-Bostock LGBTQ+ claims, religious accommodation after Groff, reverse-discrimination and DEI backlash, hybrid workplace harassment, and the current OFCCP/affirmative action landscape. Our instructors update content based on cases they're currently handling."},
+    {"question": "Does the $1,375 program fee include everything?", "answer": "Yes. Your enrollment includes all live instruction from practicing employment attorneys, complete program materials, 13 continuing education credits, pre-program consultation, 12 months of quarterly employment law updates (4 sessions, $1,588 value), permanent access to updated resources, and alumni benefits for all future programs. The only additional cost would be travel and lodging if you choose in-person format."},
+    {"question": "Can I apply this toward the full Certificate in Employee Relations Law?", "answer": "Yes. Discrimination Prevention and Defense (Block II) counts toward the full certificate. You can complete the remaining blocks—Comprehensive Labor Relations (Block I) and Special Issues in Employment Law (Block III)—at any future session to earn the complete Certificate in Employee Relations Law."}
+  ],
+  "benefits": {
+    "creditCount": "13 SHRM/HRCI/CLE",
+    "updatePeriod": "12 months",
+    "alumniDiscount": "$300-$500"
+  },
+  "airtable": {
+    "inPersonViewId": "viwgBsDDQfaHdPREf",
+    "virtualViewId": "viw5ydjKfvbDKMzaf",
+    "onDemandViewId": null
+  }
+}

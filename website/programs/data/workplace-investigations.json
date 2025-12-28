@@ -1,0 +1,276 @@
+{
+  "programName": "Certificate in Workplace Investigations",
+  "programSlug": "workplace-investigations",
+  "registrationUrl": "#registration",
+  "meta": {
+    "title": "Certificate in Workplace Investigations | IAML Training",
+    "description": "Master workplace investigations in 2 days. Learn interviewing, documentation & legal compliance. Earn SHRM/HRCI credits. Taught by practicing attorneys. Certificate program.",
+    "keywords": "workplace investigations, workplace investigations training, hr investigation, workplace investigations certification, employee complaint investigation, conducting workplace investigations, HR compliance training, SHRM certification",
+    "ogImage": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69093f4637c43adac1bc0ab3.png"
+  },
+  "seo": {
+    "canonicalUrl": "https://iaml.com/programs/workplace-investigations",
+    "robots": "index, follow",
+    "twitter": {
+      "card": "summary_large_image",
+      "site": "@IAMLaw",
+      "title": "Certificate in Workplace Investigations | IAML Training",
+      "description": "Master workplace investigations in 2 days. Learn interviewing, documentation & legal compliance. Earn SHRM/HRCI credits. Taught by practicing attorneys.",
+      "image": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69093f4637c43adac1bc0ab3.png"
+    },
+    "schema": {
+      "educationalLevel": "intermediate",
+      "timeRequired": "P2D",
+      "teaches": [
+        "Workplace Investigations",
+        "Employee Interviews",
+        "Investigation Documentation",
+        "Credibility Assessment",
+        "HR Compliance",
+        "Legal Compliance",
+        "Report Writing"
+      ]
+    },
+    "keywordData": {
+      "primaryKeyword": "workplace investigations training",
+      "searchVolume": 260,
+      "competition": "medium",
+      "relatedKeywords": [
+        "workplace investigation",
+        "hr investigation",
+        "workplace investigations certification",
+        "employee complaint investigation",
+        "conducting workplace investigations"
+      ]
+    }
+  },
+  "hero": {
+    "title": "Certificate in Workplace Investigations",
+    "description": "Stop hoping workplace complaints resolve themselves. Learn the proven investigation frameworks that practicing employment attorneys use to handle sensitive issues while protecting both employees and your organization.",
+    "price": 1575,
+    "deliveryOptions": ["In Person", "Virtual", "On Demand"],
+    "duration": "2 days"
+  },
+  "testimonials": [
+    {
+      "quote": "Having everyone participate and practice was an effective way to work on our interview skills, and at the same time challenge some techniques that are possibly outdated or ineffective.",
+      "name": "Chandra Talerico",
+      "title": "Human Resources Business Partner",
+      "company": "Aerojet Rocketdyne"
+    },
+    {
+      "quote": "I learned so much more from this law seminar than I have ever learned in other seminars.",
+      "name": "Tasha Davis",
+      "title": "Affirmative Action Officer",
+      "company": "City of Racine, Wisconsin"
+    },
+    {
+      "quote": "Engaging and knowledgeable instructor made the class interactive and the learning fun.",
+      "name": "Tammy Fennell",
+      "title": "Human Resources Business Partner",
+      "company": "Tronox Limited"
+    },
+    {
+      "quote": "Excellent course for establishing a foundation in conducting investigations.",
+      "name": "George Vukazich",
+      "title": "Sr. Director, Employee and Labor Relations",
+      "company": "City of Hope"
+    },
+    {
+      "quote": "I thought IAML provided an incredible instructor. The program was engaging, dynamic, and incredibly informative. I'd give him more than 2 thumbs-up if I had more hands.",
+      "name": "Jennifer Dibble",
+      "title": "Director, Employment Counsel",
+      "company": "Edwards Lifesciences LLC"
+    },
+    {
+      "quote": "Fantastic instructor! He was able to keep everyone engaged and the seminar interactive. I feel more confident in my investigation skills after this seminar.",
+      "name": "Nicole Wheeler",
+      "title": "HR Generalist II",
+      "company": "Cititrends"
+    },
+    {
+      "quote": "Your presenter is a great instructor. He made the session fun and relevant to the real world.",
+      "name": "Karina Beltran",
+      "title": "Human Resources Director",
+      "company": "KB Home"
+    },
+    {
+      "quote": "I really liked the presenter and it was definitely worth my time. It was interactive and gave me some really good skills and knowledge to take with me. Felt like the presenter hit on all the important items that really related to what HR does.",
+      "name": "Heidi Nollan",
+      "title": "Sr. Human Resources Generalist",
+      "company": "Anderson Hay"
+    },
+    {
+      "quote": "Gavin was AMAZING. I usually fall asleep in training and it didn't happen in this class. Monday night's reception was a great way to network with other professionals and the second day of class was even more engaging because we all felt more comfortable with each other.",
+      "name": "Layla Lesley",
+      "title": "Finance Department Administrative Specialist",
+      "company": "Matanuska-Susitna Borough"
+    },
+    {
+      "quote": "I thoroughly enjoyed the program. I appreciate the role playing and explanations, as it helps to determine which scenario may work best for a situation, depending on the circumstances. It's always helpful to hear explanations of why one approach may work better than another.",
+      "name": "Tammy Gabard",
+      "title": "Senior Manager – Employee Relations",
+      "company": "RAI Services Company"
+    },
+    {
+      "quote": "Fantastic blend of \"need to know\" information with practical application. I appreciated the role playing and feedback to help us be better interviewers and investigators. The take-away information and tools were also excellent!",
+      "name": "Jami Painter",
+      "title": "Associate Vice President for HR",
+      "company": "University of Illinois System"
+    },
+    {
+      "quote": "I loved the case/scenario review. The small group setting allowed us the ability to ask questions. Although I was hesitant to do the role play I learned a lot from it.",
+      "name": "Andrea Johnson",
+      "title": "School Nutrition Director",
+      "company": "Georgia Department of Education"
+    },
+    {
+      "quote": "I really enjoyed the engaging presence of your faculty. I took away a greater knowledge of conducting investigations by the end of the course and have quite a few things to share with my team.",
+      "name": "Marci Bennett",
+      "title": "Human Resources Generalist",
+      "company": "Burning Man Project"
+    }
+  ],
+  "contentSection": {
+    "headline": "Master Workplace Investigations That Withstand Legal Scrutiny and Protect Your Organization",
+    "description": "The Certificate in Workplace Investigations is <span class=\"emphasis\">2 intensive days</span> where you'll master the investigation techniques that protect employees, find the truth, and defend against retaliation claims—working through realistic scenarios with experienced employment attorneys, not checklists and theory.",
+    "benefits": [
+      "<strong>Complete investigation methodology</strong> – Evidence collection, witness interviewing, credibility assessment, digital harassment, remote workplace misconduct, and defensible report writing",
+      "<strong>Real-world application</strong> – Work through sexual harassment, discrimination, retaliation, whistleblower claims, and scenarios with conflicting witnesses where there's no smoking gun",
+      "<strong>Expert attorney-led instruction</strong> – Learn from practicing employment law specialists who conduct high-stakes investigations and defend them in litigation",
+      "<strong>Professional certification</strong> – Earn your certificate plus 13 SHRM/HRCI continuing education credits"
+    ]
+  },
+  "curriculum": {
+    "header": {
+      "title": "What You'll Master in 2 Days",
+      "description": "A comprehensive investigation framework covering modern challenges, legal fundamentals, evidence collection, interviewing techniques, credibility assessment, and real-world scenario application."
+    },
+    "blocks": [
+      {
+        "id": "block1",
+        "label": "Full Program",
+        "title": "Complete Workplace Investigations Certificate",
+        "description": "Master the complete investigation lifecycle from initial complaint to defensible report.",
+        "price": 1575,
+        "availability": "Full program",
+        "competencyGroups": [
+          {
+            "title": "Modern Investigation Challenges (2026 Landscape)",
+            "description": "Navigate remote workplace misconduct, digital harassment, and AI bias allegations.",
+            "skills": [
+              {"level": "Foundation", "title": "Remote/hybrid workplace misconduct", "description": "Investigate misconduct when employees work remotely or in hybrid arrangements without physical witnesses."},
+              {"level": "Foundation", "title": "Digital harassment & text-based abuse", "description": "Handle investigations involving screenshots, chat logs, social media, and electronic communications."},
+              {"level": "Advanced", "title": "Social media & off-duty conduct", "description": "Navigate the boundaries of employer authority when misconduct occurs outside work hours or on personal accounts."},
+              {"level": "Advanced", "title": "Union, DEI, and \"reverse discrimination\" complaints", "description": "Handle politically sensitive investigations with proper documentation and neutrality."},
+              {"level": "Expert", "title": "Psychological safety as part of process fairness", "description": "Create investigation processes that feel fair to all parties and protect psychological safety."},
+              {"level": "Expert", "title": "AI bias allegations in hiring or discipline decisions", "description": "Investigate claims that AI tools or algorithms produced discriminatory outcomes."}
+            ]
+          },
+          {
+            "title": "Legal Triggers & Investigation Fundamentals",
+            "description": "Know when an employer must investigate and understand actual vs. constructive notice.",
+            "skills": [
+              {"level": "Foundation", "title": "When an employer must investigate", "description": "Identify the legal triggers that create an obligation to investigate complaints."},
+              {"level": "Foundation", "title": "Anonymous, digital, and third-party complaints", "description": "Handle complaints that arrive through non-traditional channels with appropriate seriousness."},
+              {"level": "Advanced", "title": "Internal vs. external investigator selection", "description": "Determine when to handle investigations internally versus bringing in outside counsel or investigators."},
+              {"level": "Advanced", "title": "Planning scope & sequencing of interviews", "description": "Structure your investigation plan to gather evidence efficiently while protecting the process."},
+              {"level": "Expert", "title": "Timeliness", "description": "Balance thoroughness with the legal requirement to investigate promptly and avoid delays that create liability."}
+            ]
+          },
+          {
+            "title": "Preparing and Structuring the Investigation",
+            "description": "Develop an investigation roadmap with proper neutrality and bias safeguards.",
+            "skills": [
+              {"level": "Foundation", "title": "Developing an investigation roadmap", "description": "Create a structured plan that guides your investigation from complaint to conclusion."},
+              {"level": "Foundation", "title": "Neutrality and bias safeguards", "description": "Establish processes that demonstrate and maintain investigator neutrality throughout."},
+              {"level": "Advanced", "title": "Confidentiality boundaries", "description": "Navigate what can and cannot be kept confidential, and how to communicate these limits."},
+              {"level": "Advanced", "title": "Role of HR vs. legal vs. management", "description": "Define clear roles and responsibilities to avoid conflicts and protect privilege where appropriate."},
+              {"level": "Expert", "title": "Avoiding pre-judgment or confirmation bias", "description": "Recognize and counteract cognitive biases that can undermine investigation credibility."}
+            ]
+          },
+          {
+            "title": "Evidence Collection & Documentation",
+            "description": "Handle digital evidence, maintain chain of custody, and navigate privilege considerations.",
+            "skills": [
+              {"level": "Foundation", "title": "Contemporaneous notes vs. formal summaries", "description": "Document investigations with appropriate detail and timing to create defensible records."},
+              {"level": "Advanced", "title": "Digital evidence", "description": "Collect, preserve, and analyze electronic communications, files, and system logs."},
+              {"level": "Advanced", "title": "Authenticity & chain of custody", "description": "Maintain evidence integrity so it remains admissible and credible."},
+              {"level": "Expert", "title": "Privilege considerations", "description": "Protect attorney-client privilege and work product doctrine when legal counsel is involved."},
+              {"level": "Expert", "title": "Handling sensitive personal data", "description": "Navigate privacy laws and employee expectations when accessing personal information."}
+            ]
+          },
+          {
+            "title": "Interviewing Techniques & Witness Management",
+            "description": "Master interview approaches for complainants, respondents, and witnesses.",
+            "skills": [
+              {"level": "Foundation", "title": "Interview approach for complainant, respondent, and witnesses", "description": "Adapt your interview style and questions based on the interviewee's role in the investigation."},
+              {"level": "Advanced", "title": "Trauma-informed interviewing", "description": "Conduct interviews that accommodate trauma responses while still gathering necessary information."},
+              {"level": "Advanced", "title": "Cultural and neurodivergent communication considerations", "description": "Recognize how cultural background and neurodivergence affect communication and credibility assessment."},
+              {"level": "Expert", "title": "Dealing with reluctant or fearful witnesses", "description": "Overcome witness resistance while respecting boundaries and avoiding coercion."},
+              {"level": "Expert", "title": "Interview sequencing to prevent contamination", "description": "Order your interviews strategically to prevent witnesses from coordinating or influencing each other."}
+            ]
+          },
+          {
+            "title": "Credibility Assessment",
+            "description": "Evaluate corroboration, inconsistency, and contextual credibility.",
+            "skills": [
+              {"level": "Foundation", "title": "Corroboration vs. inconsistency", "description": "Weigh evidence that supports or contradicts witness accounts."},
+              {"level": "Advanced", "title": "Demeanor caution", "description": "Understand the limits of demeanor-based credibility assessments and their potential for bias."},
+              {"level": "Advanced", "title": "Contextual credibility", "description": "Consider the broader context, relationships, and motivations when assessing witness credibility."},
+              {"level": "Expert", "title": "Multiple-sourced vs. single-sourced allegations", "description": "Make findings when you have pattern evidence versus isolated complaints."},
+              {"level": "Expert", "title": "Evaluating partial or fragmented recall", "description": "Assess credibility when witnesses have incomplete memories, especially in trauma situations."}
+            ]
+          },
+          {
+            "title": "Investigation Outcomes & Corrective Action",
+            "description": "Draft defensible reports, communicate outcomes, and protect from retaliation.",
+            "skills": [
+              {"level": "Foundation", "title": "What goes in findings vs. recommendations", "description": "Separate factual findings from recommended actions to maintain report integrity."},
+              {"level": "Advanced", "title": "Drafting a defensible report", "description": "Write investigation reports that withstand legal scrutiny and support organizational decisions."},
+              {"level": "Advanced", "title": "Communicating outcome without over-disclosure", "description": "Share appropriate information with complainants and respondents while protecting confidentiality."},
+              {"level": "Expert", "title": "Protecting the process from retaliation", "description": "Implement safeguards to prevent and detect retaliation against investigation participants."},
+              {"level": "Expert", "title": "Monitoring the workplace after resolution", "description": "Follow up after investigations close to ensure corrective actions are effective and retaliation doesn't occur."}
+            ]
+          },
+          {
+            "title": "Scenario-Based Application",
+            "description": "Realistic, guided problem-solving using workplace investigation scenarios.",
+            "skills": [
+              {"level": "Advanced", "title": "Sexual harassment (in-person & digital)", "description": "Apply investigation frameworks to sexual harassment complaints across different formats and contexts."},
+              {"level": "Advanced", "title": "Discrimination & hostile work environment", "description": "Investigate claims of discriminatory treatment and hostile work environment."},
+              {"level": "Advanced", "title": "Retaliation by peers or indirect actors", "description": "Identify and investigate retaliation that comes from coworkers rather than direct supervisors."},
+              {"level": "Expert", "title": "ADA / medical accommodation disputes", "description": "Investigate complaints related to disability accommodation requests and denials."},
+              {"level": "Expert", "title": "Safety complaints & whistleblower claims", "description": "Handle investigations with heightened legal protections for complainants."},
+              {"level": "Expert", "title": "Ethical refusals to participate or fear-based silence", "description": "Navigate situations where witnesses refuse to cooperate or are too afraid to provide information."},
+              {"level": "Expert", "title": "Conflicting witness accounts with no \"smoking gun\"", "description": "Make credibility determinations and findings when evidence is circumstantial or contradictory."},
+              {"level": "Expert", "title": "Remote-work misconduct without physical witnesses", "description": "Investigate allegations when the only evidence is digital and no one else was present."}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "faculty": [],
+  "facultySection": {
+    "headline": "Learn from Practicing Attorneys",
+    "subtitle": "Not academics—practitioners who conduct high-stakes investigations and defend them in litigation"
+  },
+  "faq": [
+    {"question": "What happens after I register?", "answer": "Within minutes, you'll receive an invoice email. Once payment is processed, you can schedule your complimentary pre-program consultation (10-15 minutes) to discuss investigation challenges you're currently facing and identify which scenarios will have the biggest impact for you. Pre-program materials arrive one week before your session starts."},
+    {"question": "What's the difference between in-person, virtual, and on-demand formats?", "answer": "All three formats feature the same practicing attorney instructors, current investigation methodologies, and professional credits. In-person provides face-to-face networking with other HR professionals and investigators. Virtual delivers the same live instruction via Zoom with full Q&A capability. On-demand lets you learn at your own pace over 90 days. Choose the format that fits your schedule—the quality and content remain identical."},
+    {"question": "What continuing education credits will I earn?", "answer": "The 2-day program provides 13 SHRM/HRCI/CLE credits. Plus, your enrollment includes 12 months of quarterly employment law updates (4 sessions × 1.5 credits each = 6 additional credits), bringing your total to 19 credits—enough to make a significant dent in your renewal requirements."},
+    {"question": "Is this program only for HR professionals, or can in-house counsel attend?", "answer": "Both. HR professionals gain the investigation skills to handle matters appropriately before escalating to legal. In-house counsel learn the practical investigation frameworks that produce legally defensible documentation. Many organizations send both HR and legal team members together—they report better coordination on investigations afterward."},
+    {"question": "I've conducted a few investigations already. Is this program too basic for me?", "answer": "No. The program covers everything from foundational concepts to advanced techniques like trauma-informed interviewing, credibility assessment in \"he said/she said\" situations, and investigating AI bias allegations. Even experienced investigators tell us they leave with refined techniques and updated frameworks for 2026 challenges like remote workplace misconduct and digital harassment."},
+    {"question": "How current is the investigation content?", "answer": "Very. The 2026 curriculum addresses challenges most organizations are facing right now: remote workplace misconduct, digital harassment and text-based abuse, social media and off-duty conduct investigations, and even how to investigate AI bias allegations in hiring or discipline decisions. Our instructors update content based on cases they're currently handling."},
+    {"question": "Will I learn how to write an investigation report?", "answer": "Yes. You'll learn what belongs in findings versus recommendations, how to draft defensible reports that withstand legal scrutiny, and how to communicate outcomes without over-disclosure. You'll see examples of reports that held up in litigation—and ones that didn't."},
+    {"question": "Does the $1,575 program fee include everything?", "answer": "Yes. Your enrollment includes all live instruction from practicing attorneys who conduct high-stakes investigations, complete program materials, 13 continuing education credits, pre-program consultation, 12 months of quarterly employment law updates (4 sessions, $1,588 value), permanent access to updated investigation resources, and alumni benefits for all future programs. The only additional cost would be travel and lodging if you choose in-person format."},
+    {"question": "Can I use this training to solve an investigation I'm dealing with right now?", "answer": "Absolutely. That's exactly what the pre-program consultation is for. Share your current challenge (confidentially) so our team can point you to the most relevant content. Many participants arrive with an active investigation and leave with a clear action plan."},
+    {"question": "Will I be ready to conduct investigations immediately after completing this program?", "answer": "Yes. The program is designed for immediate application. You'll leave with investigation planning templates, interview question frameworks, credibility assessment tools, and report writing guides—all ready to use Monday morning."}
+  ],
+  "benefits": {
+    "creditCount": "13 SHRM/HRCI/CLE",
+    "updatePeriod": "12 months",
+    "alumniDiscount": "$100-$300"
+  }
+}

@@ -1,0 +1,213 @@
+{
+  "programName": "Special Issues in Employment Law",
+  "programSlug": "special-issues-employment-law",
+  "registrationUrl": "#registration",
+  "meta": {
+    "title": "Special Issues in Employment Law Training | IAML",
+    "description": "Master advanced employment law in half a day. Learn wage & hour, wrongful discharge, ADR, workplace privacy & more. Earn 3.75 SHRM/HRCI/CLE credits. Taught by practicing attorneys.",
+    "keywords": "wage hour training, FLSA compliance, wrongful discharge, employment torts, ADR training, workplace privacy, non-compete agreements, employment law advanced, SHRM credits",
+    "ogImage": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69093f4637c43adac1bc0ab3.png"
+  },
+  "seo": {
+    "canonicalUrl": "https://iaml.com/programs/special-issues-employment-law",
+    "robots": "index, follow",
+    "twitter": {
+      "card": "summary_large_image",
+      "site": "@IAMLaw",
+      "title": "Special Issues in Employment Law Training | IAML",
+      "description": "Master advanced employment law in half a day. Learn wage & hour, wrongful discharge, ADR, workplace privacy & more. Earn 3.75 SHRM/HRCI/CLE credits.",
+      "image": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69093f4637c43adac1bc0ab3.png"
+    },
+    "schema": {
+      "educationalLevel": "advanced",
+      "timeRequired": "PT4H",
+      "teaches": [
+        "Wage and Hour Compliance",
+        "FLSA Administration",
+        "Wrongful Discharge Prevention",
+        "Employment Torts",
+        "Alternative Dispute Resolution",
+        "Workplace Privacy",
+        "Non-Compete Agreements"
+      ]
+    },
+    "keywordData": {
+      "primaryKeyword": "advanced employment law training",
+      "searchVolume": 180,
+      "competition": "medium",
+      "relatedKeywords": [
+        "wage hour compliance",
+        "FLSA training",
+        "workplace privacy training",
+        "non-compete training"
+      ]
+    }
+  },
+  "hero": {
+    "title": "Special Issues in Employment Law",
+    "description": "Deep dive into complex employment law issues including wage and hour compliance, wrongful discharge, employment torts, ADR program design, and workplace privacy. Master the advanced topics that shape modern HR strategy with practicing attorneys.",
+    "price": 575,
+    "deliveryOptions": ["In Person", "Virtual"],
+    "duration": "Half day"
+  },
+  "testimonials": [
+    {"quote": "With almost 20 years in the field of employment law, this was one of the best, if not the best, seminar I have ever attended.", "name": "Charles Rando", "title": "Personnel Field Manager", "company": "Wyoming Department of Workforce Services"},
+    {"quote": "This is the best course I have ever attended. The instructors are well informed and have a repertoire of stories that emphasize the issues. Course materials are also excellent!", "name": "Debbie Colia", "title": "HR Executive Consultant", "company": "Cedars-Sinai"},
+    {"quote": "The seminar was excellent. The instructors were extremely knowledgeable and made a point of allowing the class to interact.", "name": "Angelique Anderson", "title": "Executive Director, Strategic HR Business Partnerships - People & Culture", "company": "Catalina Marketing"},
+    {"quote": "My only wish is that I had attended this seminar earlier in my career! The information I learned is invaluable.", "name": "Christina Lipetzky", "title": "Human Resources Manager", "company": "Montana Department of Environmental Quality"},
+    {"quote": "The training both was excellent both in content as well as presentation. I believe the strength of the program lay in the instructors used. All the instructors were fantastic!", "name": "Stephen Santay", "title": "Controller", "company": "KTLA"},
+    {"quote": "I thought the program was excellent. The content and speakers especially were the best I've experienced in my educational and professional career.", "name": "Laurie Clark", "title": "Benefits Paralegal", "company": "The Coca-Cola Company"},
+    {"quote": "All three instructors were wonderful in their own way. Finding attorneys who can teach is a rarity. I found the information current and relevant.", "name": "Heidi Hill", "title": "Director Training, Development and Engagement", "company": "C2 Solutions"},
+    {"quote": "Our instructor was a great presenter with great real life examples. His summaries of significant federal employment law were invaluable.", "name": "Tim Hartman", "title": "Sr. Regional HR Manager & HR Counsel", "company": "Silgan Containers"},
+    {"quote": "Of all the IAML seminars I have attended, this was by far the best and most informative, especially to HR professionals.", "name": "Barbara Ann Bohlman", "title": "Sr Compensation & Benefits Manager", "company": "The Boca Raton"},
+    {"quote": "The content was current, relevant and very practical. I appreciated the interactive format and the opportunity to network with other professionals.", "name": "Michael Chen", "title": "Director of Human Resources", "company": "TechSmart Industries"},
+    {"quote": "The information was extremely valuable and interesting, I learned a great deal. The instructors did an exceptional job presenting.", "name": "Katie Sanders", "title": "Coordinator of Workforce Development", "company": "Northside Hospital"},
+    {"quote": "The seminar offered incredible value for me. The instructors were able to rely on past examples and cases to help illustrate the learning.", "name": "Amanda McIvor", "title": "Senior Human Resources Manager", "company": "Gerdau"},
+    {"quote": "I have been in HR for 15 years and attended a lot of seminars, this was my first IAML seminar and you can bet my budget dollars were well-spent.", "name": "Ruth Erwert", "title": "Recruiting Manager", "company": "Chelan County PUD"},
+    {"quote": "This was my first seminar with IAML and I was very impressed! The speakers were great and the sessions were very informative.", "name": "Holly Dean", "title": "Employment Manager", "company": "Alfa Insurance Company"},
+    {"quote": "I highly enjoyed this seminar. All of the presenters were extremely knowledgeable and very easy to talk with.", "name": "Jody Ryan", "title": "Human Resources Service Coordinator", "company": "Boeing Company"}
+  ],
+  "contentSection": {
+    "headline": "Master Advanced Employment Law Topics",
+    "description": "Special Issues in Employment Law is an <span class=\"emphasis\">intensive half-day program</span> covering wage and hour compliance, wrongful discharge, employment torts, ADR, substance use policies, workplace privacy, and post-employment restrictions—the advanced topics that experienced HR professionals need to master.",
+    "benefits": [
+      "<strong>Wage and hour expertise</strong> – Remote work off-the-clock risks, commission/bonus overtime calculations, and FLSA compliance",
+      "<strong>Discharge and tort defense</strong> – At-will documentation, retaliation analysis, defamation, and negligent hiring/retention",
+      "<strong>ADR and workplace policies</strong> – Program design, fitness-for-duty testing, privacy/monitoring, and post-employment restrictions",
+      "<strong>Professional certification</strong> – Earn your certificate plus 3.75 SHRM/HRCI/CLE continuing education credits"
+    ]
+  },
+  "curriculum": {
+    "header": {
+      "title": "What You'll Master in Half a Day",
+      "description": "An advanced employment law framework covering wage and hour, wrongful discharge, torts, ADR, substance use, privacy, and confidentiality protection."
+    },
+    "blocks": [
+      {
+        "id": "block1",
+        "label": "Full Program",
+        "title": "Special Issues in Employment Law",
+        "description": "Deep dive into complex employment law topics that shape modern HR strategy.",
+        "price": 575,
+        "availability": "Full program",
+        "competencyGroups": [
+          {
+            "title": "Wage & Hour (FLSA) Under Remote/Hybrid",
+            "description": "Off-the-clock time, hybrid travel, and complex pay calculations.",
+            "skills": [
+              {"level": "Foundation", "title": "Remote off-the-clock risk", "description": "Email/IM, rounding, device sync; travel time for split/hybrid days; audits for \"player-coach\" roles."},
+              {"level": "Advanced", "title": "Commission/bonus/draw plans", "description": "Overtime calculations without tripping over spiffs and recoveries."}
+            ]
+          },
+          {
+            "title": "Wrongful Discharge & Retaliation",
+            "description": "Documented timelines and protected-activity analysis that defeat pretext.",
+            "skills": [
+              {"level": "Foundation", "title": "\"At-will with evidence\"", "description": "Build the performance notes → PIP → termination timeline that defeats pretext."},
+              {"level": "Advanced", "title": "Protected activity lookback", "description": "Adverse-action timing; manager speech and political/off-duty conduct."}
+            ]
+          },
+          {
+            "title": "Employment-Related Torts",
+            "description": "Defamation, IIED, interference, and misrepresentation risks.",
+            "skills": [
+              {"level": "Foundation", "title": "References and internal comms", "description": "Avoid defamation; understand privilege boundaries."},
+              {"level": "Advanced", "title": "IIED, interference, misrepresentation", "description": "How sloppy recruiting or RIF messaging creates exposure."},
+              {"level": "Expert", "title": "Negligent hiring/retention/supervision", "description": "Avoid vendor and staffing-agency pitfalls with better controls."}
+            ]
+          },
+          {
+            "title": "ADR: Building a Fair, Defensible System",
+            "description": "Design choices, opt-outs, cost-sharing, and remote hearings.",
+            "skills": [
+              {"level": "Foundation", "title": "Program design", "description": "Pros/cons; opt-out windows; class/collective treatment; record retention."},
+              {"level": "Advanced", "title": "Annual audit of agreement & intake flows", "description": "Onboarding portals, e-sign, and off-cycle hires—keep the chain clean."}
+            ]
+          },
+          {
+            "title": "Substance Use & Fitness for Duty",
+            "description": "Cannabis, impairment testing, and prescription meds in hybrid contexts.",
+            "skills": [
+              {"level": "Foundation", "title": "Cannabis laws & safety-sensitive roles", "description": "Impairment vs presence testing; consistent enforcement; accommodation analysis."},
+              {"level": "Advanced", "title": "Prescription meds and fitness-for-duty", "description": "Balancing safety, privacy, and performance in remote/hybrid contexts."}
+            ]
+          },
+          {
+            "title": "Workplace Privacy & Monitoring",
+            "description": "Employee data privacy and productivity monitoring in practice.",
+            "skills": [
+              {"level": "Foundation", "title": "Employee data privacy", "description": "CPRA and state analogs: notices, access requests, retention/deletion, and disciplinary use."},
+              {"level": "Advanced", "title": "Monitoring productivity and keystrokes", "description": "Geolocation, BYOD, and personal-account discovery—practical boundaries."}
+            ]
+          },
+          {
+            "title": "Protecting Confidential Information & Mobility",
+            "description": "Post-employment restrictions after the FTC rule's vacatur.",
+            "skills": [
+              {"level": "Foundation", "title": "What remains enforceable", "description": "NDAs, non-solicits, trade-secret law—how to draft so they stick."},
+              {"level": "Advanced", "title": "Garden leave and TRAPs", "description": "Training-repayment agreements and choice-of-law strategy across states."}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "faculty": [
+    {
+      "name": "John F. Wymer, III, Esq.",
+      "title": "Partner, Labor & Employment at Thompson Hine LLP",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebba45f28666768ce6.svg",
+      "bio": "John F. Wymer is a nationally recognized labor and employment attorney and partner in Thompson Hine LLP's Labor & Employment group. With decades of experience, he represents public and private sector employers nationwide in employment discrimination, wage-and-hour, labor negotiations, union matters, ERISA claims, and more.",
+      "bioLink": "https://crm.re-vitalized.com/v2/preview/tsCH77tyXdISzhZMCnT5?notrack=true#john-f-wymer-iii-esq",
+      "firstName": "John"
+    },
+    {
+      "name": "Wayne W. Williams, Esq.",
+      "title": "Founder, Law Offices of Wayne W. Williams",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebe98d66054ecb05fb.svg",
+      "bio": "Wayne Williams is a distinguished employment and labor law attorney based in Colorado Springs. As the founder of his own firm, he advises and represents employers on a wide range of issues including employment discrimination, harassment, wrongful discharge, wage and hour compliance, and traditional labor law.",
+      "bioLink": "https://crm.re-vitalized.com/v2/preview/tsCH77tyXdISzhZMCnT5?notrack=true#wayne-w-williams-esq",
+      "firstName": "Wayne"
+    },
+    {
+      "name": "Jacqueline E. Kalk, Esq.",
+      "title": "Shareholder at Littler Mendelson P.C.",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690e254f27678e7871e709c4.svg",
+      "bio": "Jacqueline E. Kalk represents and advises management across industries including manufacturing, construction, crowd-sourcing, and virtual companies. She focuses on independent contractor classification, wage-and-hour compliance, equal pay, and employment litigation.",
+      "bioLink": "#",
+      "firstName": "Jacqueline"
+    },
+    {
+      "name": "Grant S. Gibeau",
+      "title": "Partner at Taft Stettinius & Hollister LLP",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690e229c43570019cba3b51f.svg",
+      "bio": "Grant Gibeau is a partner in Taft's Minneapolis Employment and Labor Relations practice group. Grant's practice primarily focuses on helping employers navigate all aspects of the employment relationship, from identifying workplace best practices and policies, drafting employee handbooks, and vigorously defending against claims.",
+      "bioLink": "#",
+      "firstName": "Grant"
+    }
+  ],
+  "facultySection": {
+    "headline": "Practicing Attorneys, Not Academics",
+    "subtitle": "Learn from employment law specialists who handle wage and hour, workplace torts, and privacy cases every day"
+  },
+  "faq": [
+    {"question": "What happens after I register?", "answer": "Within minutes, you'll receive an invoice email. Once payment is processed, you can schedule your complimentary pre-program consultation (10-15 minutes) to discuss employment law challenges you're currently facing. Pre-program materials arrive one week before your session starts."},
+    {"question": "What's the difference between in-person and virtual formats?", "answer": "Both formats feature the same practicing attorney instructors, current employment law content, and professional credits. In-person provides face-to-face networking with other HR professionals. Virtual delivers the same live instruction via Zoom with full Q&A capability. Choose the format that fits your schedule—the quality and content remain identical."},
+    {"question": "What continuing education credits will I earn?", "answer": "The half-day program provides 3.75 SHRM/HRCI/CLE credits. Plus, your enrollment includes 12 months of quarterly employment law updates (4 sessions × 1.5 credits each = 6 additional credits), bringing your total to nearly 10 credits."},
+    {"question": "Is this the same as Block III of the Certificate in Employee Relations Law?", "answer": "Yes. Special Issues in Employment Law is Block III of the full Certificate in Employee Relations Law program. You can take it as a standalone half-day program, or combine it with Comprehensive Labor Relations (Block I) and Discrimination Prevention & Defense (Block II) to earn the full certificate."},
+    {"question": "Why is this program shorter than the other blocks?", "answer": "Special Issues covers advanced topics that build on foundational employment law knowledge. The half-day format delivers concentrated expertise on wage and hour, workplace torts, ADR, privacy, and post-employment restrictions without repeating fundamentals covered elsewhere."},
+    {"question": "How current is the content?", "answer": "Very. The curriculum addresses remote/hybrid wage and hour risks, state cannabis laws, CPRA and state privacy regulations, and post-FTC non-compete enforcement. Our instructors update content based on cases they're currently handling."},
+    {"question": "Does the $575 program fee include everything?", "answer": "Yes. Your enrollment includes all live instruction from practicing employment attorneys, complete program materials, 3.75 continuing education credits, pre-program consultation, 12 months of quarterly employment law updates (4 sessions, $1,588 value), permanent access to updated resources, and alumni benefits for all future programs. The only additional cost would be travel if you choose in-person format."},
+    {"question": "Can I apply this toward the full Certificate in Employee Relations Law?", "answer": "Yes. Special Issues in Employment Law (Block III) counts toward the full certificate. You can complete the remaining blocks—Comprehensive Labor Relations (Block I) and Discrimination Prevention & Defense (Block II)—at any future session to earn the complete Certificate in Employee Relations Law."}
+  ],
+  "benefits": {
+    "creditCount": "3.75 SHRM/HRCI/CLE",
+    "updatePeriod": "12 months",
+    "alumniDiscount": "$300-$500"
+  },
+  "airtable": {
+    "inPersonViewId": "viw2IfjMXttng3xlW",
+    "virtualViewId": "viwYZ6nmdtcjjBA77",
+    "onDemandViewId": null
+  }
+}

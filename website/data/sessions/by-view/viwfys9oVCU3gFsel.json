@@ -1,0 +1,247 @@
+{
+  "generated": "2025-12-28T14:59:56.938Z",
+  "viewId": "viwfys9oVCU3gFsel",
+  "usedBy": [
+    {
+      "program": "Certificate in Employee Relations Law",
+      "format": "in-person"
+    }
+  ],
+  "recordCount": 5,
+  "records": [
+    {
+      "id": "recBFzMowFsTIIhRP",
+      "createdTime": "2025-12-15T19:35:44.000Z",
+      "fields": {
+        "Instance ID": 11,
+        "Instance Name": "Certificate in Employee Relations Law - Apr 2026 - Atlanta",
+        "Programs": [
+          "recpV3zshcKYvwFdB"
+        ],
+        "Start Date": "2026-04-20",
+        "End Date": "2026-04-24",
+        "Duration (Days)": [
+          4.5
+        ],
+        "Format": "In-Person",
+        "City": "Atlanta",
+        "State/Province": "Georgia",
+        "Time Zone": "Eastern (ET)",
+        "Current Enrolled": 0,
+        "Enrollment Status": "Low Enrollment",
+        "Show on Website": true,
+        "Block 1 Title": "Comprehensive Labor Relations",
+        "Block 2 Title": "Discrimination Prevention & Defense",
+        "Block 3 Title": "Special Issues in Employment Law",
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Last Modified": "2025-12-17T15:02:53.000Z",
+        "Created By": {
+          "id": "usrSAo8TcudAuSfA4",
+          "email": "mike.jackson@re-vitalized.com",
+          "name": "Mike Jackson"
+        },
+        "Price In-Person (from PROGRAMS)": [
+          2375
+        ],
+        "Price Virtual (from PROGRAMS)": [
+          2375
+        ],
+        "Min. Capacity": [
+          6
+        ],
+        "Registration Deadline": "2026-04-20T00:00:00.000Z",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c454ca7298b50b678d83.jpg",
+        "Program Name": [
+          "Certificate in Employee Relations Law"
+        ]
+      }
+    },
+    {
+      "id": "recixY4EiubcUpVOL",
+      "createdTime": "2025-12-15T19:35:44.000Z",
+      "fields": {
+        "Instance ID": 12,
+        "Instance Name": "Certificate in Employee Relations Law - Jun 2026 - Austin",
+        "Programs": [
+          "recpV3zshcKYvwFdB"
+        ],
+        "Start Date": "2026-06-08",
+        "End Date": "2026-06-12",
+        "Duration (Days)": [
+          4.5
+        ],
+        "Format": "In-Person",
+        "City": "Austin",
+        "State/Province": "Texas",
+        "Time Zone": "Central (CT)",
+        "Current Enrolled": 0,
+        "Enrollment Status": "Low Enrollment",
+        "Show on Website": true,
+        "Block 1 Title": "Comprehensive Labor Relations",
+        "Block 2 Title": "Discrimination Prevention & Defense",
+        "Block 3 Title": "Special Issues in Employment Law",
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Last Modified": "2025-12-17T15:07:56.000Z",
+        "Created By": {
+          "id": "usrSAo8TcudAuSfA4",
+          "email": "mike.jackson@re-vitalized.com",
+          "name": "Mike Jackson"
+        },
+        "Price In-Person (from PROGRAMS)": [
+          2375
+        ],
+        "Price Virtual (from PROGRAMS)": [
+          2375
+        ],
+        "Min. Capacity": [
+          6
+        ],
+        "Registration Deadline": "2026-06-08T00:00:00.000Z",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4719a634f6065ac7644.jpg",
+        "Program Name": [
+          "Certificate in Employee Relations Law"
+        ]
+      }
+    },
+    {
+      "id": "recIqNJQs2kIZxzZQ",
+      "createdTime": "2025-12-15T19:35:44.000Z",
+      "fields": {
+        "Instance ID": 13,
+        "Instance Name": "Certificate in Employee Relations Law - Oct 2026 - Las Vegas",
+        "Programs": [
+          "recpV3zshcKYvwFdB"
+        ],
+        "Start Date": "2026-10-05",
+        "End Date": "2026-10-09",
+        "Duration (Days)": [
+          4.5
+        ],
+        "Format": "In-Person",
+        "City": "Las Vegas",
+        "State/Province": "Nevada",
+        "Time Zone": "Pacific (PT)",
+        "Current Enrolled": 0,
+        "Enrollment Status": "Low Enrollment",
+        "Show on Website": true,
+        "Block 1 Title": "Comprehensive Labor Relations",
+        "Block 2 Title": "Discrimination Prevention & Defense",
+        "Block 3 Title": "Special Issues in Employment Law",
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Last Modified": "2025-12-17T15:10:08.000Z",
+        "Created By": {
+          "id": "usrSAo8TcudAuSfA4",
+          "email": "mike.jackson@re-vitalized.com",
+          "name": "Mike Jackson"
+        },
+        "Price In-Person (from PROGRAMS)": [
+          2375
+        ],
+        "Price Virtual (from PROGRAMS)": [
+          2375
+        ],
+        "Min. Capacity": [
+          6
+        ],
+        "Registration Deadline": "2026-10-05T00:00:00.000Z",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc3bbe750223056d60.jpg",
+        "Program Name": [
+          "Certificate in Employee Relations Law"
+        ]
+      }
+    },
+    {
+      "id": "recWqOEM5M3ctIhZP",
+      "createdTime": "2025-12-15T19:35:44.000Z",
+      "fields": {
+        "Instance ID": 14,
+        "Instance Name": "Certificate in Employee Relations Law - Jun 2026 - Scottsdale",
+        "Programs": [
+          "recpV3zshcKYvwFdB"
+        ],
+        "Start Date": "2026-06-01",
+        "End Date": "2026-06-05",
+        "Duration (Days)": [
+          4.5
+        ],
+        "Format": "In-Person",
+        "City": "Scottsdale",
+        "State/Province": "Arizona",
+        "Current Enrolled": 0,
+        "Enrollment Status": "Low Enrollment",
+        "Show on Website": true,
+        "Block 1 Title": "Comprehensive Labor Relations",
+        "Block 2 Title": "Discrimination Prevention & Defense",
+        "Block 3 Title": "Special Issues in Employment Law",
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Last Modified": "2025-12-17T15:12:39.000Z",
+        "Created By": {
+          "id": "usrSAo8TcudAuSfA4",
+          "email": "mike.jackson@re-vitalized.com",
+          "name": "Mike Jackson"
+        },
+        "Price In-Person (from PROGRAMS)": [
+          2375
+        ],
+        "Price Virtual (from PROGRAMS)": [
+          2375
+        ],
+        "Min. Capacity": [
+          6
+        ],
+        "Registration Deadline": "2026-06-01T00:00:00.000Z",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c539d7ebf250f264ca1d.jpg",
+        "Program Name": [
+          "Certificate in Employee Relations Law"
+        ]
+      }
+    },
+    {
+      "id": "recy983tSyMrSx1L1",
+      "createdTime": "2025-12-15T19:35:44.000Z",
+      "fields": {
+        "Instance ID": 15,
+        "Instance Name": "Certificate in Employee Relations Law - Aug 2026 - Nashville",
+        "Programs": [
+          "recpV3zshcKYvwFdB"
+        ],
+        "Start Date": "2026-08-10",
+        "End Date": "2026-08-14",
+        "Duration (Days)": [
+          4.5
+        ],
+        "Format": "In-Person",
+        "City": "Nashville",
+        "State/Province": "Tennessee",
+        "Time Zone": "Eastern (ET)",
+        "Current Enrolled": 0,
+        "Enrollment Status": "Low Enrollment",
+        "Show on Website": true,
+        "Block 1 Title": "Comprehensive Labor Relations",
+        "Block 2 Title": "Discrimination Prevention & Defense",
+        "Block 3 Title": "Special Issues in Employment Law",
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Last Modified": "2025-12-17T15:11:04.000Z",
+        "Created By": {
+          "id": "usrSAo8TcudAuSfA4",
+          "email": "mike.jackson@re-vitalized.com",
+          "name": "Mike Jackson"
+        },
+        "Price In-Person (from PROGRAMS)": [
+          2375
+        ],
+        "Price Virtual (from PROGRAMS)": [
+          2375
+        ],
+        "Min. Capacity": [
+          6
+        ],
+        "Registration Deadline": "2026-08-10T00:00:00.000Z",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4d7d7ebf232b964bb15.jpg",
+        "Program Name": [
+          "Certificate in Employee Relations Law"
+        ]
+      }
+    }
+  ]
+}

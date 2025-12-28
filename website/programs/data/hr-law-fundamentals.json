@@ -1,0 +1,213 @@
+{
+  "programName": "HR Law Fundamentals",
+  "programSlug": "hr-law-fundamentals",
+  "registrationUrl": "#registration",
+  "meta": {
+    "title": "HR Law Fundamentals | IAML",
+    "description": "Master employment law essentials in 2 days. Learn discrimination defense, ADA/FMLA compliance, wage-hour law, hiring risk, and termination law. Earn 13 SHRM/HRCI/CLE credits. Taught by practicing attorneys.",
+    "keywords": "HR law fundamentals, employment law training, discrimination law training, ADA compliance, FMLA training, wage hour law, hiring compliance, termination law, HR legal training, SHRM credits",
+    "ogImage": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69093f4637c43adac1bc0ab3.png"
+  },
+  "seo": {
+    "canonicalUrl": "https://iaml.com/programs/hr-law-fundamentals",
+    "robots": "index, follow",
+    "twitter": {
+      "card": "summary_large_image",
+      "site": "@IAMLaw",
+      "title": "HR Law Fundamentals | IAML",
+      "description": "Master employment law essentials in 2 days. Learn discrimination defense, ADA/FMLA compliance, wage-hour law, hiring risk, and termination law. Earn 13 SHRM/HRCI/CLE credits.",
+      "image": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69093f4637c43adac1bc0ab3.png"
+    },
+    "schema": {
+      "educationalLevel": "intermediate",
+      "timeRequired": "P2D",
+      "teaches": [
+        "Discrimination Law",
+        "ADA Compliance",
+        "FMLA Administration",
+        "Wage & Hour Law",
+        "Hiring Compliance",
+        "Termination Law",
+        "Performance Management",
+        "HR Investigations"
+      ]
+    },
+    "keywordData": {
+      "primaryKeyword": "HR law fundamentals",
+      "searchVolume": 280,
+      "competition": "medium",
+      "relatedKeywords": [
+        "employment law training",
+        "HR legal compliance",
+        "discrimination law training",
+        "ADA FMLA training"
+      ]
+    }
+  },
+  "hero": {
+    "title": "HR Law Fundamentals",
+    "description": "Build the legal foundation every HR professional needs. Master discrimination defense, ADA/FMLA compliance, wage-hour law, hiring and termination risk—the essential employment law knowledge that protects your organization and advances your career.",
+    "price": 1375,
+    "deliveryOptions": ["In Person", "Virtual"],
+    "duration": "2 days"
+  },
+  "testimonials": [
+    {"quote": "This was a great program! One of the most useful programs I have attended in a long time. Instructors were awesome!", "name": "Dean C. Goodwin", "title": "Deputy Director, Administration", "company": "Northern Virginia Criminal Justice Training Academy"},
+    {"quote": "The seminar was very good. It covered a lot of pertinent information. I felt I learned quite a bit that will have an immediate impact on my job.", "name": "Bobbi Britton", "title": "Sr. Human Resources Consultant", "company": "Deltic Timber Corporation"},
+    {"quote": "Brenda Heinicke was fantastic! She did an amazing job of presenting the information clearly and concisely. Her high energy level engaged us in thought provoking conversations instead of 'talking at us' like many instructors tend to do.", "name": "Brittany Hepler", "title": "Mobility Supervisor", "company": "Dayle McIntosh Disability Resource"},
+    {"quote": "Thank you for the insight and facilitated discussions. It was beneficial to hear about actual cases and learn how other HR professionals solve problems.", "name": "Olivia Gunter", "title": "Human Resources Analyst", "company": "Hillenbrand, Inc."},
+    {"quote": "The instructors were very knowledgeable. It was a great seminar. I have been in HR for 12 years and still learned a lot!", "name": "Krissy Houston", "title": "Sr. Human Resources Representative", "company": "Newmont Mining Corporation"},
+    {"quote": "Excellent seminar! This is the second IAML class I have attended. As a new manager, the information presented was invaluable! The instructor was amazing! I will definitely be back!", "name": "Holly Dean", "title": "Employment Manager", "company": "Alfa Insurance Company"},
+    {"quote": "It was a great experience, and I am very thankful that I was allowed the opportunity to attend. I will look forward to more opportunities in the future.", "name": "Molly Boyer", "title": "Human Resources Generalist", "company": "Flint Hills Resources"},
+    {"quote": "Both facilitators were excellent! I will be able to use key learning tools from the seminar immediately within my organization. Thank you again for another awesome course!", "name": "Michi Eaton", "title": "Regional Human Resources Manager", "company": "AutoVin"},
+    {"quote": "Overall the material and training was great! The instructor was informative. I will definitely recommend to others!", "name": "Noelle Lees", "title": "Human Resources Business Partner", "company": "Hertz"},
+    {"quote": "Each instructor was extremely knowledgeable in their subject matter. High energy, great class environment.", "name": "Jackie Rudnick", "title": "Senior Human Resources Specialist", "company": "JM Family Enterprises, Inc."}
+  ],
+  "contentSection": {
+    "headline": "Master Employment Law Fundamentals That Protect Your Organization",
+    "description": "HR Law Fundamentals is <span class=\"emphasis\">2 intensive days</span> where you'll master discrimination law, ADA/FMLA compliance, wage-hour requirements, and hiring/termination risk—working through real workplace scenarios with practicing employment attorneys, not theoretical lectures.",
+    "benefits": [
+      "<strong>Complete legal foundation</strong> – Discrimination defense, ADA/FMLA accommodations, wage-hour compliance, hiring risk, termination law, performance management, and HR investigations",
+      "<strong>Real-world application</strong> – Work through discrimination claims, accommodation requests, termination decisions, and the legal challenges you'll face Monday morning",
+      "<strong>Expert attorney instruction</strong> – Learn from practicing employment attorneys who handle these cases and defend employers every day",
+      "<strong>Professional certification</strong> – Earn your certificate plus 13 SHRM/HRCI/CLE continuing education credits"
+    ]
+  },
+  "curriculum": {
+    "header": {
+      "title": "What You'll Master in 2 Days",
+      "description": "A complete employment law foundation covering discrimination defense, ADA/FMLA compliance, wage-hour law, hiring and selection, performance management, termination risk, workplace safety, and HR investigations."
+    },
+    "blocks": [
+      {
+        "id": "block1",
+        "label": "Full Program",
+        "title": "HR Law Fundamentals",
+        "description": "Master the legal foundation every HR professional needs to protect their organization.",
+        "price": 1375,
+        "availability": "Full program",
+        "competencyGroups": [
+          {
+            "title": "The New Landscape of Workplace Discrimination (2026)",
+            "description": "What's changing in discrimination law and how to adapt policies, training, and investigations.",
+            "skills": [
+              {"level": "Foundation", "title": "Expansion of protected characteristics under state law", "description": "Update policies and training to comply with expanding protected classes including gender identity, hairstyles/hygiene, and reproductive decisions."},
+              {"level": "Foundation", "title": "Retaliation remains #1 EEOC claim", "description": "Structure responses so protected activity doesn't convert routine actions into retaliation claims."},
+              {"level": "Advanced", "title": "Religious accommodation conflicts (post-Groff)", "description": "Apply post-Groff standards to balance sincere beliefs with operational and coworker impacts."},
+              {"level": "Advanced", "title": "Harassment outside the four walls", "description": "Address remote misconduct, chat/messaging platforms, and bystander liability with clear rules and prompt action."},
+              {"level": "Expert", "title": "Reverse discrimination and post-DEI backlash claims", "description": "Spot and mitigate risks as DEI programs face reverse-bias and retaliation allegations."}
+            ]
+          },
+          {
+            "title": "ADA, FMLA & Accommodation in a Hybrid Workplace",
+            "description": "Define essential functions, manage mental health accommodations, and avoid overlap traps in hybrid settings.",
+            "skills": [
+              {"level": "Foundation", "title": "Documenting the interactive process", "description": "Create a contemporaneous record that shows good-faith exploration of accommodation options."},
+              {"level": "Advanced", "title": "Determining essential job functions when hybrid/remote is feasible", "description": "Define essential duties defensibly when remote and hybrid options exist."},
+              {"level": "Advanced", "title": "Mental health accommodations and the new expectation of flexibility", "description": "Navigate mental health requests while maintaining performance and fairness."},
+              {"level": "Advanced", "title": "When performance issues are really medical/legal issues", "description": "Differentiate conduct from condition to choose coaching, discipline, or accommodation."},
+              {"level": "Expert", "title": "Overlap traps: FMLA + ADA + workers' comp + pregnancy accommodation", "description": "Coordinate leave and accommodation laws to avoid conflicts and double liability."}
+            ]
+          },
+          {
+            "title": "Hiring & Selection Compliance (Modern Risk Areas)",
+            "description": "Compliant recruiting in 2026—from pay transparency to AI screening risks.",
+            "skills": [
+              {"level": "Foundation", "title": "Pay transparency laws and salary band posting requirements", "description": "Meet posting rules while preserving market competitiveness and internal equity."},
+              {"level": "Foundation", "title": "Salary history bans (still expanding state by state)", "description": "Remove salary-history bias from hiring and compensation decisions."},
+              {"level": "Advanced", "title": "Negligent hiring & social media screening pitfalls", "description": "Use verifiable criteria and documented sources; avoid protected-class data."},
+              {"level": "Advanced", "title": "Inclusive interviewing without increasing risk", "description": "Ask job-related, validated questions that minimize discrimination risk."},
+              {"level": "Expert", "title": "AI/algorithmic recruiting laws (CO, NY, CA, IL emerging models)", "description": "Audit automated tools for bias, disclosures, and candidate opt-outs."}
+            ]
+          },
+          {
+            "title": "Wage & Hour Law in 2026",
+            "description": "Stop off-the-clock risk, handle breaks and commutes, and avoid misclassification crackdowns.",
+            "skills": [
+              {"level": "Foundation", "title": "Remote/off-the-clock time: when quick emails become unpaid work", "description": "Set boundaries and capture all hours for non-exempt remote work."},
+              {"level": "Foundation", "title": "Travel time & hybrid commutes — what must be paid?", "description": "Apply federal and state rules to travel, home office trips, and training."},
+              {"level": "Foundation", "title": "Pay transparency intersects with wage claims", "description": "Align postings, pay practices, and records to withstand claims."},
+              {"level": "Advanced", "title": "Meal/rest break liability under remote tracking", "description": "Ensure compliant break tracking and off-duty controls for remote staff."},
+              {"level": "Advanced", "title": "Misclassification crackdowns (independent contractor & salaried/exempt)", "description": "Reassess roles and duties before audits target grey areas."}
+            ]
+          },
+          {
+            "title": "Managing & Supervising Employees (HR as Risk Gatekeeper)",
+            "description": "Tools managers need to document well, coach correctly, and reduce retaliation risk.",
+            "skills": [
+              {"level": "Foundation", "title": "Coaching vs discipline vs accommodation: knowing which lane you're in", "description": "Pick the right path early to avoid mixed messages and legal exposure."},
+              {"level": "Advanced", "title": "Documentation as legal shield — what juries look for", "description": "Write contemporaneous, behavior-based notes that show fairness and consistency."},
+              {"level": "Advanced", "title": "Digital tone, Teams/Slack as evidence", "description": "Model respectful, concise communication that's safe to print in court."},
+              {"level": "Expert", "title": "The silent plaintiff file — managers' notebooks and emails as discovery exhibits", "description": "Assume side notes and chats will be exhibits; keep them professional."},
+              {"level": "Expert", "title": "Legal do's & don'ts of progressive discipline", "description": "Follow clear steps, timelines, and expectations without rigid traps."}
+            ]
+          },
+          {
+            "title": "Performance Management & Evaluations",
+            "description": "Write defensible evaluations and plans that hold up in litigation.",
+            "skills": [
+              {"level": "Foundation", "title": "Why evaluations are Exhibit A in litigation", "description": "Make ratings match reality; avoid inflated scores that suggest pretext."},
+              {"level": "Foundation", "title": "He was always rated 'exceeds' — until termination = pretext", "description": "Use trend lines and notes to explain performance changes."},
+              {"level": "Advanced", "title": "Writing defensible comments based on behavior not personality", "description": "Anchor comments in observable actions, metrics, and impact."},
+              {"level": "Advanced", "title": "Self-appraisals as risk management tool", "description": "Capture employee input to reduce disputes and surface issues early."},
+              {"level": "Expert", "title": "Corrective action plans that legally protect the company", "description": "Include specific behaviors, supports, deadlines, and consequences."}
+            ]
+          },
+          {
+            "title": "Termination Law & Separation Risk",
+            "description": "Assess retaliation, handle references, and use releases appropriately.",
+            "skills": [
+              {"level": "Foundation", "title": "At-will vs implied contracts (what unintentionally creates one)", "description": "Avoid language and practices that look like job guarantees."},
+              {"level": "Advanced", "title": "Off-duty conduct & political/social issue firings", "description": "Balance brand and policy with lawful off-workplace protections."},
+              {"level": "Advanced", "title": "Retaliation analysis before discharge", "description": "Audit timeline, comparators, and documentation before acting."},
+              {"level": "Advanced", "title": "Requests for references & defamation risk", "description": "Share neutral facts and required verifications only."},
+              {"level": "Expert", "title": "Severance/releases — when HR should recommend counsel", "description": "Use tailored terms and timing to maximize enforceability."}
+            ]
+          },
+          {
+            "title": "Workplace Safety, Leave Laws & Special Compliance Areas",
+            "description": "OSHA 2.0, FMLA documentation, threats, dual-risk areas, and required flags.",
+            "skills": [
+              {"level": "Foundation", "title": "Psychological safety = OSHA 2.0 (emerging enforcement theory)", "description": "Address psychosocial hazards with training, reporting, and response plans."},
+              {"level": "Foundation", "title": "FMLA abuse vs legal protected use — documentation rules", "description": "Tighten certifications, recertifications, and call-in rules lawfully."},
+              {"level": "Advanced", "title": "Workplace threats & duty to act", "description": "Build multidisciplinary response protocols for credible threats."},
+              {"level": "Advanced", "title": "Workers' comp plus ADA = dual risk area", "description": "Coordinate restrictions, RTW, and accommodations across programs."},
+              {"level": "Expert", "title": "WARN, COBRA, ERISA (what HR must flag, even if counsel handles details)", "description": "Know the triggers and timelines HR must escalate immediately."}
+            ]
+          },
+          {
+            "title": "HR Investigations (HR Edition, Non-Legal Version)",
+            "description": "When to investigate, how to stay neutral, and retaliation-proof the aftermath.",
+            "skills": [
+              {"level": "Foundation", "title": "When HR must investigate vs when coaching is sufficient", "description": "Triage complaints quickly to choose the right response path."},
+              {"level": "Advanced", "title": "Neutrality and avoiding confirmation bias", "description": "Use structured questions and corroboration to keep findings objective."},
+              {"level": "Advanced", "title": "What you can/can't promise about confidentiality", "description": "Set realistic privacy expectations while protecting the process."},
+              {"level": "Advanced", "title": "Handling reluctant witnesses or anonymous complaints", "description": "Build participation through safeguards, not pressure."},
+              {"level": "Expert", "title": "Retaliation-proofing the aftermath", "description": "Implement follow-ups and guardrails after findings are delivered."}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "faq": [
+    {"question": "What happens after I register?", "answer": "Within minutes, you'll receive an invoice email. Once payment is processed, you can schedule your complimentary pre-program consultation (10-15 minutes) to discuss your specific HR legal challenges—whether you're dealing with accommodation requests, termination decisions, or compliance issues. Pre-program materials arrive one week before your session starts."},
+    {"question": "What's the difference between in-person and virtual formats?", "answer": "Both formats feature the same practicing attorney instructors, current legal content, and professional credits. In-person provides face-to-face networking with other HR professionals. Virtual delivers the same live instruction via Zoom with full Q&A capability. Choose the format that fits your schedule—the quality and content remain identical."},
+    {"question": "What continuing education credits will I earn?", "answer": "The 2-day program provides 13 SHRM/HRCI/CLE credits. Plus, your enrollment includes 12 months of quarterly employment law updates (4 sessions × 1.5 credits each = 6 additional credits), bringing your total to 19 credits."},
+    {"question": "Is this the same as Block I of the Certificate in Strategic HR Leadership?", "answer": "Yes. HR Law Fundamentals is Block I of the full Certificate in Strategic HR Leadership program. You can take it as a standalone 2-day program, or combine it with Strategic HR Management (Block II) to earn the full certificate and save $575."},
+    {"question": "I already have some HR legal knowledge. Is this too basic for me?", "answer": "Probably not. Employment law has changed significantly—post-Groff religious accommodation standards, AI hiring regulations in multiple states, expanded protected characteristics, new FMLA/ADA intersection traps, and hybrid workplace compliance issues. Many experienced HR professionals find that what they learned 3-5 years ago no longer reflects current legal standards. This program updates your legal foundation with 2026 realities."},
+    {"question": "How current is the legal content?", "answer": "Very. The curriculum addresses the latest employment law developments including 2026 pay transparency laws, AI hiring regulations (CO, NY, CA, IL), post-Groff religious accommodation standards, hybrid workplace wage-hour issues, and evolving discrimination law. Our instructors update content based on cases they're currently handling."},
+    {"question": "Does the $1,375 program fee include everything?", "answer": "Yes. Your enrollment includes all live instruction from practicing employment attorneys, complete program materials, 13 continuing education credits, pre-program consultation, 12 months of quarterly employment law updates (4 sessions, $1,588 value), permanent access to updated resources, and alumni benefits for all future programs. The only additional cost would be travel and lodging if you choose in-person format."},
+    {"question": "Can I apply this toward the full Certificate in Strategic HR Leadership?", "answer": "Yes. HR Law Fundamentals (Block I) counts toward the full certificate. You can complete Strategic HR Management (Block II) at any future session to earn the complete Certificate in Strategic HR Leadership."}
+  ],
+  "benefits": {
+    "creditCount": "13 SHRM/HRCI/CLE",
+    "updatePeriod": "12 months",
+    "alumniDiscount": "$300-$500"
+  },
+  "airtable": {
+    "inPersonViewId": "viwOR51HSgvqnvvtM",
+    "virtualViewId": "viwI0VscueaVxM4Vk",
+    "onDemandViewId": null
+  }
+}

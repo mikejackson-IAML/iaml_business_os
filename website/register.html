@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register | IAML</title>
+  <meta name="description" content="Register for IAML certificate programs in employment law, HR management, and workplace investigations.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/1-variables.css">
+  <link rel="stylesheet" href="css/2-base.css">
+  <link rel="stylesheet" href="css/3-components.css">
+  <link rel="stylesheet" href="css/4-layout.css">
+  <link rel="stylesheet" href="css/5-pages.css">
+
+  <!-- Environment Configuration -->
+  <script src="js/env-config.local.js"></script>
+  <script src="js/env-config.js"></script>
+  <script>
+    if (typeof ENV_CONFIG === 'undefined') {
+      window.ENV_CONFIG = {};
+    }
+  </script>
+
+  <!-- Stripe -->
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body class="register-page">
+  <!-- Skip Link for Accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <main id="main-content" class="register-main">
+    <div class="register-split-container">
+      <!-- LEFT PANEL: Dynamic Messaging -->
+      <div class="register-left-panel" id="registerLeftPanel">
+        <div class="left-panel-content" id="leftPanelContent">
+          <!-- Content injected by JS per step -->
+        </div>
+      </div>
+
+      <!-- RIGHT PANEL: Form Card -->
+      <div class="register-right-panel">
+        <div class="register-form-card">
+          <!-- Progress Stepper -->
+          <nav class="register-stepper" aria-label="Registration progress">
+            <ol class="stepper-list" id="stepperList">
+              <!-- Steps dynamically generated based on format/program -->
+            </ol>
+          </nav>
+
+          <!-- Step Cards -->
+          <div class="register-steps">
+          <!-- Step 1: Format Selection -->
+          <section id="step-format" class="register-step" data-step="format" aria-labelledby="step-format-title">
+            <h2 id="step-format-title" class="step-title">Select Your Program Format</h2>
+            <p class="step-subtitle">Choose how you'd like to attend your program</p>
+            <div class="format-options">
+              <label class="format-option">
+                <input type="radio" name="format" value="in-person">
+                <div class="format-card">
+                  <div class="format-icon">🏛️</div>
+                  <div class="format-info">
+                    <strong>In-Person</strong>
+                    <span>Attend live at a venue near you</span>
+                  </div>
+                </div>
+              </label>
+              <label class="format-option">
+                <input type="radio" name="format" value="virtual">
+                <div class="format-card">
+                  <div class="format-icon">💻</div>
+                  <div class="format-info">
+                    <strong>Virtual</strong>
+                    <span>Join live online via Zoom</span>
+                  </div>
+                </div>
+              </label>
+              <label class="format-option">
+                <input type="radio" name="format" value="on-demand">
+                <div class="format-card">
+                  <div class="format-icon">▶️</div>
+                  <div class="format-info">
+                    <strong>On-Demand</strong>
+                    <span>Learn at your own pace</span>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </section>
+
+          <!-- Step 2: Program Selection -->
+          <section id="step-program" class="register-step hidden" data-step="program" aria-labelledby="step-program-title">
+            <h2 id="step-program-title" class="step-title">Select Your Program</h2>
+            <p class="step-subtitle">Choose the certificate program you'd like to enroll in</p>
+            <div class="program-options" id="programOptions">
+              <!-- Programs populated by JS -->
+            </div>
+          </section>
+
+          <!-- Step 3: Session Selection (skip for On-Demand) -->
+          <section id="step-session" class="register-step hidden" data-step="session" aria-labelledby="step-session-title">
+            <h2 id="step-session-title" class="step-title">Select Your Session</h2>
+            <p class="step-subtitle">Choose a date and location that works for you</p>
+            <div class="session-list" id="sessionList">
+              <!-- Sessions populated by JS -->
+            </div>
+            <div id="sessionsLoading" class="sessions-loading hidden">
+              <div class="spinner"></div>
+              <span>Loading available sessions...</span>
+            </div>
+            <div id="sessionsEmpty" class="sessions-empty hidden">
+              No sessions currently available for this selection.
+            </div>
+          </section>
+
+          <!-- Step 3: Blocks Selection (only for block programs, before session) -->
+          <section id="step-blocks" class="register-step hidden" data-step="blocks" aria-labelledby="step-blocks-title">
+            <h2 id="step-blocks-title" class="step-title">Select Your Blocks</h2>
+            <p class="step-subtitle">Choose to attend the full program or select specific blocks</p>
+            <div class="blocks-options" id="blocksOptions">
+              <!-- Block options populated by JS -->
+            </div>
+          </section>
+
+          <!-- Step 5: Your Information -->
+          <section id="step-contact" class="register-step hidden" data-step="contact" aria-labelledby="step-contact-title">
+            <h2 id="step-contact-title" class="step-title">Your Information</h2>
+            <p class="step-subtitle">Tell us about yourself</p>
+            <form id="contactForm" class="contact-form" novalidate>
+              <div class="form-row">
+                <div class="form-field">
+                  <label for="firstName">First Name <span class="required">*</span></label>
+                  <input type="text" id="firstName" name="firstName" autocomplete="given-name" required>
+                  <span class="field-error" id="firstNameError"></span>
+                </div>
+                <div class="form-field">
+                  <label for="lastName">Last Name <span class="required">*</span></label>
+                  <input type="text" id="lastName" name="lastName" autocomplete="family-name" required>
+                  <span class="field-error" id="lastNameError"></span>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-field">
+                  <label for="email">Email <span class="required">*</span></label>
+                  <input type="email" id="email" name="email" autocomplete="email" required placeholder="your.email@example.com">
+                  <span class="field-error" id="emailError"></span>
+                </div>
+                <div class="form-field">
+                  <label for="phone">Phone <span class="required">*</span></label>
+                  <input type="tel" id="phone" name="phone" autocomplete="tel" required placeholder="(555) 555-5555">
+                  <span class="field-error" id="phoneError"></span>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-field">
+                  <label for="contactTitle">Title <span class="optional">(optional)</span></label>
+                  <input type="text" id="contactTitle" name="title" autocomplete="organization-title" placeholder="Your job title">
+                </div>
+                <div class="form-field">
+                  <label for="company">Company <span class="optional">(optional)</span></label>
+                  <input type="text" id="company" name="company" autocomplete="organization" placeholder="Company name">
+                </div>
+              </div>
+              <div class="form-field coupon-field">
+                <label for="couponCode">Coupon Code <span class="optional">(optional)</span></label>
+                <div class="coupon-input-row">
+                  <input type="text" id="couponCode" name="couponCode" placeholder="Enter code">
+                  <button type="button" id="applyCouponBtn" class="btn-coupon">Apply</button>
+                </div>
+                <span class="coupon-message" id="couponMessage" aria-live="polite"></span>
+              </div>
+            </form>
+          </section>
+
+          <!-- Step 6: Payment Method Selection -->
+          <section id="step-payment-method" class="register-step hidden" data-step="payment-method" aria-labelledby="step-payment-method-title">
+            <!-- Order Summary -->
+            <div class="order-summary" id="orderSummary">
+              <h3 class="order-summary-title">Order Summary</h3>
+              <div class="order-summary-details">
+                <div class="order-summary-row">
+                  <span class="order-label">Program</span>
+                  <span class="order-value" id="summaryProgram">—</span>
+                </div>
+                <div class="order-summary-row">
+                  <span class="order-label">Location</span>
+                  <span class="order-value" id="summaryLocation">—</span>
+                </div>
+                <div class="order-summary-row">
+                  <span class="order-label">Dates</span>
+                  <span class="order-value" id="summaryDates">—</span>
+                </div>
+                <div class="order-summary-divider hidden" id="summaryPriceDivider"></div>
+                <div class="order-summary-row hidden" id="summaryPriceRow">
+                  <span class="order-label">Price</span>
+                  <span class="order-value" id="summaryPrice">—</span>
+                </div>
+                <div class="order-summary-row discount-row hidden" id="summaryDiscountRow">
+                  <span class="order-label">Discount</span>
+                  <span class="order-value discount" id="summaryDiscount">—</span>
+                </div>
+                <div class="order-summary-divider"></div>
+                <div class="order-summary-row total-row">
+                  <span class="order-label">Total</span>
+                  <span class="order-value total" id="summaryTotal">—</span>
+                </div>
+              </div>
+            </div>
+
+            <h2 id="step-payment-method-title" class="step-title">Payment Method</h2>
+            <p class="step-subtitle">Choose how you'd like to pay</p>
+
+            <div class="payment-method-options">
+              <label class="payment-method-option">
+                <input type="radio" name="paymentMethod" value="invoice">
+                <div class="payment-method-card">
+                  <div class="payment-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14 2 14 8 20 8"></polyline>
+                      <line x1="16" y1="13" x2="8" y2="13"></line>
+                      <line x1="16" y1="17" x2="8" y2="17"></line>
+                      <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                  </div>
+                  <strong class="payment-title">Request Invoice</strong>
+                  <span class="payment-description">We'll send you an invoice within 24 hours</span>
+                </div>
+              </label>
+              <label class="payment-method-option">
+                <input type="radio" name="paymentMethod" value="stripe">
+                <div class="payment-method-card">
+                  <div class="payment-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                      <line x1="1" y1="10" x2="23" y2="10"></line>
+                    </svg>
+                  </div>
+                  <strong class="payment-title">Pay Now with Card</strong>
+                  <span class="payment-description">Complete your registration today via secure payment</span>
+                </div>
+              </label>
+            </div>
+
+            <!-- Invoice Form (shown when invoice selected) -->
+            <div id="invoiceForm" class="invoice-form hidden">
+              <h3 class="form-section-title">Billing Information</h3>
+              <div class="form-row">
+                <div class="form-field">
+                  <label for="billingContactName">Billing Contact Name <span class="required">*</span></label>
+                  <input type="text" id="billingContactName" name="billingContactName" required>
+                  <span class="field-error" id="billingContactNameError"></span>
+                </div>
+                <div class="form-field">
+                  <label for="billingContactEmail">Billing Contact Email <span class="required">*</span></label>
+                  <input type="email" id="billingContactEmail" name="billingContactEmail" required>
+                  <span class="field-error" id="billingContactEmailError"></span>
+                </div>
+              </div>
+              <div class="form-field">
+                <label for="billingAddress">Billing Address <span class="required">*</span></label>
+                <input type="text" id="billingAddress" name="billingAddress" autocomplete="street-address" required>
+                <span class="field-error" id="billingAddressError"></span>
+              </div>
+              <div class="form-row form-row-3">
+                <div class="form-field">
+                  <label for="billingCity">City <span class="required">*</span></label>
+                  <input type="text" id="billingCity" name="billingCity" autocomplete="address-level2" required>
+                  <span class="field-error" id="billingCityError"></span>
+                </div>
+                <div class="form-field">
+                  <label for="billingState">State <span class="required">*</span></label>
+                  <input type="text" id="billingState" name="billingState" autocomplete="address-level1" required>
+                  <span class="field-error" id="billingStateError"></span>
+                </div>
+                <div class="form-field">
+                  <label for="billingZip">ZIP Code <span class="required">*</span></label>
+                  <input type="text" id="billingZip" name="billingZip" autocomplete="postal-code" required>
+                  <span class="field-error" id="billingZipError"></span>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-field">
+                  <label for="billingPO">PO Number <span class="optional">(optional)</span></label>
+                  <input type="text" id="billingPO" name="billingPO" placeholder="If required by your company">
+                </div>
+                <div class="form-field">
+                  <label for="billingNotes">Special Instructions <span class="optional">(optional)</span></label>
+                  <input type="text" id="billingNotes" name="billingNotes" placeholder="Any special billing instructions">
+                </div>
+              </div>
+            </div>
+
+            <!-- Stripe Payment Form (shown when pay now selected) -->
+            <div id="stripePaymentForm" class="stripe-payment-form hidden">
+              <h3 class="form-section-title">Card Details</h3>
+              <div id="card-element" class="stripe-card-element">
+                <!-- Stripe Elements will be inserted here -->
+              </div>
+              <div id="card-errors" class="stripe-errors" role="alert"></div>
+            </div>
+          </section>
+
+          <!-- Step 7: Stripe Payment (conditional - integrated into payment method) -->
+          <!-- This step is handled by the payment method selection logic -->
+
+          <!-- Confirmation: Invoice -->
+          <section id="step-confirm-invoice" class="register-step hidden" data-step="confirm-invoice" aria-labelledby="confirm-invoice-title">
+            <div class="confirmation-content">
+              <div class="confirmation-icon-success">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h2 id="confirm-invoice-title" class="confirmation-title">You're Registered!</h2>
+              <p class="confirmation-subtitle">Your spot in the <span id="confInvoiceProgram">program</span> is almost confirmed. See below for next steps.</p>
+
+              <div class="confirmation-summary-box">
+                <div class="confirmation-summary-header">
+                  <h3>Registration Summary</h3>
+                  <span id="confInvoiceFormatBadge" class="format-badge">IN-PERSON</span>
+                </div>
+                <div class="confirmation-details">
+                  <div class="detail-row"><span class="label">Participant:</span><span class="value" id="confInvoiceName">—</span></div>
+                  <div class="detail-row"><span class="label">Email:</span><span class="value" id="confInvoiceEmail">—</span></div>
+                  <div class="detail-row"><span class="label">Program:</span><span class="value" id="confInvoiceProgramName">—</span></div>
+                  <div class="detail-row" id="confInvoiceDatesRow"><span class="label">Dates:</span><span class="value" id="confInvoiceDates">—</span></div>
+                  <div class="detail-row" id="confInvoiceLocationRow"><span class="label">Location:</span><span class="value" id="confInvoiceLocation">—</span></div>
+                  <div class="detail-row"><span class="label">Enrollment Fee:</span><span class="value" id="confInvoicePrice">—</span></div>
+                </div>
+              </div>
+
+              <!-- Calendar Download -->
+              <div class="confirmation-calendar">
+                <button type="button" id="downloadCalendarInvoice" class="btn-calendar">📅 Add to Calendar</button>
+              </div>
+
+              <div class="confirmation-next-steps">
+                <h3>What Happens Next</h3>
+                <div class="next-step urgent">
+                  <div class="step-number">1</div>
+                  <div class="step-content">
+                    <h4>Check Your Email Right Now!</h4>
+                    <p><strong>Your invoice is being sent as you read this.</strong></p>
+                    <div class="check-email-box">
+                      <strong>What to do:</strong><br>
+                      1. Check your email inbox (search for "IAML Invoice")<br>
+                      2. Can't find it? Check your spam/junk folder<br>
+                      3. Click "Pay Now" to complete your registration
+                    </div>
+                  </div>
+                </div>
+                <div class="next-step">
+                  <div class="step-number">2</div>
+                  <div class="step-content">
+                    <h4>Get Ready to Succeed</h4>
+                    <p>Once your invoice is paid, you'll be able to book your complimentary pre-program consultation.</p>
+                  </div>
+                </div>
+                <div class="next-step">
+                  <div class="step-number">3</div>
+                  <div class="step-content">
+                    <h4>Prepare for Day 1</h4>
+                    <p>We'll send pre-program information one week before your program starts.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="confirmation-help">
+                <p><strong>Questions about your registration?</strong></p>
+                <p>Contact us at <a href="mailto:info@iaml.com">info@iaml.com</a> or call <a href="tel:+19497601700">(949) 760-1700</a></p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Confirmation: Paid -->
+          <section id="step-confirm-paid" class="register-step hidden" data-step="confirm-paid" aria-labelledby="confirm-paid-title">
+            <div class="confirmation-content">
+              <div class="confirmation-icon-success">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h2 id="confirm-paid-title" class="confirmation-title">Payment Successful!</h2>
+              <p class="confirmation-subtitle">You're officially enrolled in the <span id="confPaidProgram">program</span>. Welcome to IAML!</p>
+
+              <div class="confirmation-summary-box">
+                <div class="confirmation-summary-header">
+                  <h3>Registration Summary</h3>
+                  <span id="confPaidFormatBadge" class="format-badge">IN-PERSON</span>
+                </div>
+                <div class="confirmation-details">
+                  <div class="detail-row"><span class="label">Participant:</span><span class="value" id="confPaidName">—</span></div>
+                  <div class="detail-row"><span class="label">Email:</span><span class="value" id="confPaidEmail">—</span></div>
+                  <div class="detail-row"><span class="label">Program:</span><span class="value" id="confPaidProgramName">—</span></div>
+                  <div class="detail-row" id="confPaidDatesRow"><span class="label">Dates:</span><span class="value" id="confPaidDates">—</span></div>
+                  <div class="detail-row" id="confPaidLocationRow"><span class="label">Location:</span><span class="value" id="confPaidLocation">—</span></div>
+                  <div class="detail-row"><span class="label">Amount Paid:</span><span class="value" id="confPaidPrice">—</span></div>
+                </div>
+              </div>
+
+              <!-- Calendar Download -->
+              <div class="confirmation-calendar">
+                <button type="button" id="downloadCalendarPaid" class="btn-calendar">📅 Add to Calendar</button>
+              </div>
+
+              <div class="confirmation-next-steps">
+                <h3>What Happens Next</h3>
+                <div class="next-step">
+                  <div class="step-number">1</div>
+                  <div class="step-content">
+                    <h4>Check Your Email</h4>
+                    <p>You'll receive a confirmation email with your receipt and registration details.</p>
+                  </div>
+                </div>
+                <div class="next-step">
+                  <div class="step-number">2</div>
+                  <div class="step-content">
+                    <h4>Book Your Consultation</h4>
+                    <p>Schedule your complimentary pre-program consultation to get the most out of your experience.</p>
+                  </div>
+                </div>
+                <div class="next-step" id="onDemandStep3">
+                  <div class="step-number">3</div>
+                  <div class="step-content">
+                    <h4 id="step3Title">Prepare for Day 1</h4>
+                    <p id="step3Description">We'll send pre-program information one week before your program starts.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="confirmation-help">
+                <p><strong>Questions about your registration?</strong></p>
+                <p>Contact us at <a href="mailto:info@iaml.com">info@iaml.com</a> or call <a href="tel:+19497601700">(949) 760-1700</a></p>
+              </div>
+            </div>
+          </section>
+          </div>
+
+          <!-- Navigation Buttons -->
+          <div class="register-nav">
+            <button type="button" id="backBtn" class="btn btn-secondary">← Back</button>
+            <div class="nav-spacer"></div>
+            <button type="button" id="nextBtn" class="btn btn-primary">Next →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Error Message Banner -->
+  <div id="errorBanner" class="error-banner hidden" role="alert" aria-live="assertive">
+    <span id="errorMessage"></span>
+    <button type="button" class="error-close" aria-label="Close error message">×</button>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" class="loading-overlay hidden">
+    <div class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Processing your registration...</p>
+    </div>
+  </div>
+
+  <!-- UTM Tracking -->
+  <script src="js/utm-tracking.js"></script>
+  <!-- Registration Script -->
+  <script src="js/register.js"></script>
+</body>
+</html>

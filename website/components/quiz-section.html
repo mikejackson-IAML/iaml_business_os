@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Training Benefits & Quiz Section</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Lato:wght@300;400;500;600&display=swap');
+  </style>
+
+  <style>
+    *{box-sizing:border-box}body{margin:0;padding:0;overflow-x:hidden;width:100%}
+    :root{--font-heading:'Playfair Display',Georgia,'Times New Roman',serif;--blue-primary:#3B5998;--dark-blue:#2E4A8A}
+    .benefits-section{padding:80px 0 134px 0}.container{max-width:1200px;margin:0 auto;padding:0 20px;width:100%}
+    .section-header{text-align:center;margin-bottom:60px}
+    .section-title{font-family:var(--font-heading);font-size:48px;font-weight:600;color:#1E293B;margin-bottom:20px;line-height:1.2}
+    .section-subtitle{font-family:'Lato',Arial,Helvetica,sans-serif;font-size:19px;color:#64748B;max-width:850px;margin:0 auto;line-height:1.6}
+    .benefits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px}
+    .benefit-card{background:#fff;border:2px solid #E2E8F0;border-radius:16px;padding:40px 35px;transition:.3s}
+    .benefit-card:hover{transform:translateY(-5px);box-shadow:0 10px 30px rgba(0,0,0,.1)}
+    .benefit-icon{width:56px;height:56px;background:#FEF3C7;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:24px}
+    .benefit-title{font-family:var(--font-heading);font-size:26px;font-weight:600;color:#1E293B;margin-bottom:16px;line-height:1.3}
+    .benefit-text{font-family:'Lato',Arial,Helvetica,sans-serif;font-size:16px;color:#475569;line-height:1.7}
+
+    /* Timeline Section - ZIGZAG ALTERNATING STYLE */
+    .journey-timeline-section{background:#F8F9FA;padding:90px 0 90px 0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);max-width:none;position:relative}
+    .timeline-header{text-align:center;margin-bottom:80px}
+    .timeline-header h2{font-family:var(--font-heading);font-size:48px;font-weight:600;color:#1E293B;margin-bottom:16px;line-height:1.2;margin-top:0}
+    .timeline-header p{font-family:'Lato',Arial,Helvetica,sans-serif;font-size:20px;color:#64748B;max-width:850px;margin:0 auto;line-height:1.6}
+    .timeline-grid{position:relative;max-width:1000px;margin:0 auto;padding:0 20px}
+    .timeline-track{position:absolute;left:50%;top:0;bottom:0;width:4px;background:linear-gradient(180deg, #D1D5DB 0%, #9CA3AF 100%);transform:translateX(-50%);z-index:1}
+    .timeline-circle{width:60px;height:60px;background:#FCD34D;border:4px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:bold;color:#1F2937;box-shadow:0 4px 12px rgba(0,0,0,.15);position:absolute;left:50%;transform:translateX(-50%);z-index:2}
+    .timeline-content{position:relative;padding-top:20px}
+    .timeline-step{display:grid;grid-template-columns:1fr 1fr;gap:80px;margin-bottom:120px;position:relative}
+    .timeline-step:last-child{margin-bottom:0}
+    .timeline-step:nth-child(odd) .step-content{grid-column:1;text-align:right;padding-right:60px}
+    .timeline-step:nth-child(even) .step-content{grid-column:2;text-align:left;padding-left:60px}
+    .timeline-step:nth-child(odd) .step-number{right:calc(50% - 30px)}
+    .timeline-step:nth-child(even) .step-number{left:calc(50% - 30px)}
+    .step-number{position:absolute;top:0;width:60px;height:60px;background:#FCD34D;border:4px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:bold;color:#1F2937;box-shadow:0 4px 12px rgba(0,0,0,.15);z-index:3}
+    .step-content h3{font-family:var(--font-heading);font-size:28px;font-weight:700;color:#111827;margin-bottom:12px;line-height:1.2;margin-top:0}
+    .step-content p{font-family:'Lato',Arial,Helvetica,sans-serif;font-size:18px;line-height:1.6;color:#6B7280;margin:0}
+    
+    /* ANIMATION: Typewriter Sequential */
+    .step-number{opacity:0;transform:scale(0);transition:all 0.4s cubic-bezier(0.4, 0, 0.2, 1)}
+    .timeline-step.animate-in .step-number{opacity:1;transform:scale(1)}
+    .step-content h3,.step-content p{opacity:0}
+    .timeline-step.animate-in .step-content h3{animation:typewriter 0.6s steps(20) 0.3s forwards}
+    .timeline-step.animate-in .step-content p{animation:typewriter 0.8s steps(40) 0.6s forwards}
+    @keyframes typewriter{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
+
+    .quiz-section{padding:180px 0 180px;background:#fff}
+    .quiz-container{max-width:1500px;margin:0 auto;padding:0 0px;display:flex;justify-content:center;width:100%}
+    .quiz-content{
+      background:linear-gradient(135deg,#3B5998 0%,#2E4A8A 50%,#4169B8 100%);
+      backdrop-filter:blur(20px);
+      border:1px solid rgba(255,255,255,.3);
+      border-radius:24px;
+      padding:60px;
+      max-width:1200px;
+      width:100%;
+      display:grid;
+      grid-template-columns:50% 45%;
+      gap:80px;
+      align-items:start;
+      position:relative;
+      min-height:600px;
+    }
+    .quiz-left{
+      color:#fff;
+      opacity:0;
+      transition:opacity 1s ease-in-out;
+    }
+    .quiz-left.revealed{opacity:1}
+    .quiz-headline{font-family:var(--font-heading);font-size:39px;font-weight:700;line-height:1.1;margin-bottom:24px;word-wrap:break-word;overflow-wrap:break-word}
+    .quiz-subheadline{font-family:'Lato',Arial,Helvetica,sans-serif;font-size:18px;line-height:1.6;margin-bottom:30px;opacity:.95}
+    .quiz-bullets{display:flex;flex-direction:column;gap:16px;margin-bottom:24px}
+    .bullet-item{display:flex;align-items:center;gap:12px;font-family:'Lato',Arial,Helvetica,sans-serif;font-size:15px;font-weight:500}
+
+    /* Expanding Circle Animation */
+    .quiz-right{color:#fff}
+    
+    .circle-container{
+      position:absolute;
+      top:0;
+      left:0;
+      right:0;
+      bottom:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:100;
+      opacity:0;
+      transform:scale(0.8);
+      transition:all 0.6s cubic-bezier(.4,0,.2,1);
+      pointer-events:none;
+      grid-column:1 / -1;
+    }
+    .circle-container.visible{opacity:1;transform:scale(1)}
+    
+    .pulse-circle{
+      position:absolute;
+      width:200px;
+      height:200px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,193,7,0.3) 0%, rgba(255,193,7,0.1) 50%, transparent 100%);
+      border:3px solid #FFC107;
+      animation:pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse{
+      0%, 100%{
+        transform:scale(1);
+        opacity:1;
+        box-shadow:0 0 0 0 rgba(255,193,7,0.7);
+      }
+      50%{
+        transform:scale(1.1);
+        opacity:0.8;
+        box-shadow:0 0 40px 20px rgba(255,193,7,0.3);
+      }
+    }
+    
+    .expanding-ring{
+      position:absolute;
+      width:200px;
+      height:200px;
+      border-radius:50%;
+      border:2px solid rgba(255,193,7,0.6);
+      opacity:0;
+    }
+    .expanding-ring.animate{
+      animation:expand 2s ease-out forwards;
+    }
+    @keyframes expand{
+      0%{
+        width:200px;
+        height:200px;
+        opacity:0.8;
+      }
+      100%{
+        width:600px;
+        height:600px;
+        opacity:0;
+      }
+    }
+    
+    .circle-content{
+      position:relative;
+      z-index:10;
+      text-align:center;
+      padding:40px;
+      max-width:500px;
+    }
+    
+    .circle-icon{
+      width:80px;
+      height:80px;
+      margin:0 auto 20px;
+      background:linear-gradient(135deg, #FFC107 0%, #FFD54F 100%);
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 10px 40px rgba(255,193,7,0.4);
+      animation:iconFloat 3s ease-in-out infinite;
+    }
+    @keyframes iconFloat{
+      0%, 100%{transform:translateY(0)}
+      50%{transform:translateY(-10px)}
+    }
+    
+    .circle-text{
+      font-family:'Lato',Arial,Helvetica,sans-serif;
+      font-size:28px;
+      font-weight:700;
+      line-height:1.4;
+      color:#fff;
+      margin-bottom:20px;
+      text-shadow:0 2px 20px rgba(0,0,0,0.3);
+      opacity:0;
+      transform:translateY(20px);
+      transition:all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .circle-text.visible{
+      opacity:1;
+      transform:translateY(0);
+    }
+    
+    .circle-subtext{
+      font-family:'Lato',Arial,Helvetica,sans-serif;
+      font-size:18px;
+      color:rgba(255,255,255,0.9);
+      margin-top:15px;
+      opacity:0;
+    }
+    .circle-subtext.visible{
+      animation:fadeIn 0.8s forwards;
+    }
+    @keyframes fadeIn{
+      to{opacity:1}
+    }
+    
+    .circle-container.expanding{
+      animation:scaleExpand 1s ease-out forwards;
+    }
+    @keyframes scaleExpand{
+      to{
+        transform:scale(3);
+        opacity:0;
+      }
+    }
+    
+    .quiz-preview{
+      background:rgba(255,255,255,.12);
+      backdrop-filter:blur(10px);
+      border:1px solid rgba(255,255,255,.2);
+      border-radius:20px;
+      padding:32px;
+      position:relative;
+      opacity:0;
+      transform:scale(.8);
+      transition:all 0.8s cubic-bezier(.4,0,.2,1);
+    }
+    .quiz-preview.revealed{opacity:1;transform:scale(1)}
+    .quiz-progress{margin-bottom:30px}
+    .progress-text{color:#fff;font-family:'Lato',Arial,Helvetica,sans-serif;font-size:14px;font-weight:600;display:block;margin-bottom:12px}
+    .progress-bar{height:8px;background:rgba(255,255,255,.2);border-radius:4px}
+    .progress-fill{height:100%;background:#FFC107;border-radius:4px;transition:width .3s}
+
+    .quiz-question h3{color:#fff;font-size:14px;font-weight:600;letter-spacing:1px;margin-bottom:12px;font-family:'Lato',Arial,Helvetica,sans-serif}
+    .quiz-question p{color:#fff;font-size:24px;font-weight:600;margin-bottom:30px;font-family:'Lato',Arial,Helvetica,sans-serif}
+    .quiz-options{display:flex;flex-direction:column;gap:16px;margin-bottom:60px}
+    .option-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:12px;padding:20px;text-align:left;cursor:pointer;transition:.3s;color:#fff;font-family:'Lato',Arial,Helvetica,sans-serif}
+    .option-btn:hover{background:rgba(255,255,255,.25);transform:translateY(-2px)}
+    .option-btn.selected{
+      background:rgba(255,255,255,.2);
+      border:2px solid #fff;
+      box-shadow:0 0 15px rgba(255,255,255,.3);
+      color:#fff;
+      transform:scale(1.02);
+    }
+    .option-btn.disabled{opacity:.6;pointer-events:none}
+    .option-title{display:block;color:inherit;font-size:16px;font-weight:600;margin-bottom:6px}
+    .option-desc{display:block;color:rgba(255,255,255,.8);font-size:14px}
+    .option-btn.selected .option-desc{color:rgba(255,255,255,1)}
+
+    .back-button{position:absolute;bottom:20px;left:30px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:8px 16px;color:#fff;cursor:pointer;font-size:14px;transition:.3s;display:none;font-family:'Lato',Arial,Helvetica,sans-serif}
+    .back-button:hover{background:rgba(255,255,255,.2)}
+
+    .thinking-container{text-align:center;color:#fff}
+    .thinking-text{font-size:24px;font-weight:600;margin-bottom:30px;font-family:var(--font-heading)}
+    .thinking-messages{font-size:16px;margin-bottom:30px;min-height:24px;font-family:'Lato',Arial,Helvetica,sans-serif}
+    .thinking-spinner{width:40px;height:40px;border:4px solid rgba(255,255,255,.3);border-left:4px solid #FFC107;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto}
+    @keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+
+    .modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,.7);backdrop-filter:blur(5px)}
+    .modal-content{background:#fff;margin:2% auto;border-radius:20px;width:90%;max-width:800px;max-height:90vh;overflow-y:auto;box-shadow:0 25px 50px rgba(0,0,0,.3)}
+    .modal-header{background:linear-gradient(135deg,var(--blue-primary) 0%,var(--dark-blue) 100%);color:#fff;padding:40px;border-radius:20px 20px 0 0;position:relative}
+    .modal-close{position:absolute;top:20px;right:20px;background:none;border:none;font-size:28px;cursor:pointer;color:#fff;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:.2s;z-index:10}
+    .modal-close:hover{background:rgba(255,255,255,.2);transform:rotate(90deg)}
+    .modal-program-title{font-family:var(--font-heading);font-size:2.2rem;margin-bottom:15px;font-weight:700;padding-right:40px;line-height:1.2}
+    .modal-program-description{font-family:'Lato',Arial,Helvetica,sans-serif;font-size:18px;line-height:1.6;opacity:.95}
+    .modal-body{padding:40px}
+    .modal-section-title{font-family:var(--font-heading);font-size:24px;font-weight:600;color:#1E293B;margin-bottom:20px}
+    .modal-benefits-title{font-family:var(--font-heading);font-size:1.4rem;font-weight:600;color:#1E293B;margin:0 0 20px}
+    .modal-benefit-list,.modal-topics-list{list-style:none;padding:0;margin:0 0 30px}
+    .modal-benefit-list li,.modal-topics-list li{font-family:'Lato',Arial,Helvetica,sans-serif;font-size:16px;color:#475569;line-height:1.6;margin-bottom:12px;padding-left:32px;position:relative}
+    .modal-benefit-list li::before,.modal-topics-list li::before{content:'✓';color:#22C55E;font-weight:bold;position:absolute;left:0;top:0}
+    .modal-cta-section{background:#F8FAFC;padding:30px 40px;border-radius:0 0 20px 20px;text-align:center}
+    .modal-cta-text{font-family:'Lato',Arial,Helvetica,sans-serif;font-size:18px;color:#475569;margin-bottom:25px}
+    .modal-cta-buttons{display:flex;gap:15px;justify-content:center;flex-wrap:wrap}
+    .btn{display:inline-block;padding:14px 28px;border-radius:8px;text-decoration:none;font-weight:600;font-size:16px;transition:.3s;cursor:pointer;border:none;font-family:'Lato',Arial,Helvetica,sans-serif}
+    .btn-primary{background:linear-gradient(135deg,#4F46E5 0%,#6366F1 100%);color:#fff}.btn-primary:hover{transform:translateY(-2px)}
+    .btn-secondary{background:#fff;color:#374151;border:2px solid #D1D5DB}.btn-secondary:hover{background:#F9FAFB;border-color:#9CA3AF;transform:translateY(-2px)}
+    .btn-register{background:#d62828;color:#fff;border:none}.btn-register:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(255,107,53,.4)}
+
+    @media (max-width:1200px){.quiz-content{grid-template-columns:48% 47%;gap:60px}}
+    @media (max-width:1024px){.quiz-content{grid-template-columns:1fr;gap:40px;padding:40px}.quiz-container{padding:0 20px}}
+    @media (max-width:768px){
+      .quiz-helper.typing-started{white-space:normal}
+      .benefits-section{padding:40px 0 80px 0}.container{padding:0 10px}
+      .section-header{margin-bottom:30px}.section-title{font-size:28px}
+      .section-subtitle{font-size:15px}
+      .benefits-grid{grid-template-columns:1fr;gap:15px}.benefit-card{padding:20px 15px}
+      
+      /* Timeline Mobile - Zigzag */
+      .journey-timeline-section{padding:50px 0 50px 0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);max-width:none}
+      .timeline-header h2{font-size:36px}
+      .timeline-header p{font-size:18px;padding:0 10px}
+      .timeline-grid{padding:0 10px}
+      .timeline-track{display:none}
+      .timeline-step{display:flex;margin-bottom:60px;padding-left:0; justify-content: center; align-items: center; flex-direction: column;
+        gap: 30px;}
+
+      .timeline-step:nth-child(odd) .step-content {
+        grid-column: 1;
+        text-align: center;
+        padding-right: 0;
+        }
+        .timeline-step:nth-child(odd) .step-number {
+            right: inherit;
+        }
+        .timeline-step .step-number {
+            position: relative;
+            left: inherit;
+            top: inherit;
+            margin: auto;
+        }
+        .timeline-step .step-content {
+            grid-column: auto;
+            padding: 0;
+            text-align: center !important; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .timeline-step:nth-child(even) .step-number {
+            left: inherit;
+        }
+        .timeline-step:nth-child(even) .step-content {
+            grid-column: 2;
+            text-align: center;
+            padding-left: 0;
+        }
+      .step-content h3{font-size:24px;}
+      .step-content p{font-size:16px}
+      
+      .quiz-section{padding:100px 0 100px;background:#fff}.quiz-container{padding:0 10px}
+      .quiz-content{padding:20px 15px;gap:20px}
+      .quiz-headline{font-size:24px}.quiz-subheadline{font-size:15px}
+      .quiz-bullets{gap:10px}.bullet-item{font-size:13px;gap:8px}
+      .quiz-helper{font-size:12px;margin-top:15px}.quiz-preview{padding:15px}
+      .quiz-question p{font-size:18px;margin-bottom:20px}.quiz-options{gap:10px;margin-bottom:30px}
+      .option-btn{padding:12px}.option-title{font-size:14px}.option-desc{font-size:12px}
+      .modal-content{width:95%;margin:5% auto}.modal-header{padding:20px 25px}.modal-body{padding:25px}
+      .modal-cta-section{padding:20px 25px}.modal-cta-buttons{flex-direction:column;align-items:center}.btn{width:100%;max-width:280px}
+    }
+     @media (max-width:576px){
+        .quiz-container{
+          min-width: 100%;
+          padding: 10px;
+        }
+      }
+  </style>
+</head>
+<body>
+  <!-- Benefits -->
+  <div class="benefits-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">What 45+ Years of <span style="font-style:italic;color:#28528c">Training Excellence</span> Has Taught Us</h2>
+        <p class="section-subtitle">Three factors separate transformative professional development from forgettable seminars. Here's what actually drives lasting impact.</p>
+      </div>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="#F59E0B"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6A4.997 4.997 0 0 1 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/></svg>
+          </div>
+          <h3 class="benefit-title">Current Material That Matters Today</h3>
+          <p class="benefit-text">Stay ahead with content that addresses today’s most pressing challenges and emerging trends.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="#F59E0B"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          </div>
+          <h3 class="benefit-title">Practicing Instructors, Real Experience</h3>
+          <p class="benefit-text">Our instructors are <span style="color:#28528c;font-weight:600">active attorneys teaching from current practice</span>, not retirees teaching outdated concepts.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="#F59E0B"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+          </div>
+          <h3 class="benefit-title">Comprehensive Training Support</h3>
+          <p class="benefit-text">We provide pre-program consultation and post-program support. This is an ongoing professional development partnership.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Journey Timeline Section -->
+  <section class="journey-timeline-section">
+    <div class="container">
+      <!-- Header -->
+      <div class="timeline-header">
+        <h2>From Registration to Career Advancement</h2>
+        <p>We start with understanding your specific goals and continue supporting your growth long after the program ends.</p>
+      </div>
+      
+      <!-- Zigzag Timeline Layout -->
+      <div class="timeline-grid">
+        <div class="timeline-track"></div>
+        
+        <div class="timeline-content">
+                <div class="timeline-step">
+                  <div class="step-number">1</div>
+                  <div class="step-content">
+                    <h3>Discover Your Needs</h3>
+                    <p>Your program includes a complimentary pre-program consultation to discuss your specific challenges, align on priorities, and ensure you're positioned for success from day one.</p>
+                  </div>
+                </div>
+          <div class="timeline-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h3>Attend & Engage</h3>
+              <p>Participate in intensive, interactive sessions with practicing attorneys and HR professionals who use real cases and scenarios to prepare you for the challenges you discussed in your consultation.</p>
+            </div>
+          </div>
+          <div class="timeline-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h3>Equipped for Success</h3>
+              <p>Leave with comprehensive guides, customizable templates, and practical tools that directly address the topics from your consultation and training—ready to implement the day you return to work.</p>
+            </div>
+          </div>
+          <div class="timeline-step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h3>Stay Current & Connected</h3>
+              <p>Access live virtual quarterly employment and benefits law updates, forever access to refreshed materials, continuing education credits, and lifetime discounts for you and your colleagues on future programs.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quiz -->
+  <div class="quiz-section">
+    <div class="quiz-container">
+      <div class="quiz-content" id="quizContent">
+        <!-- Left Content (hidden initially) -->
+        <div class="quiz-left" id="quizLeft">
+          <h2 class="quiz-headline"><span>Your Role. Your Challenges.</span><br/>Your Program.</h2>
+          <p class="quiz-subheadline">Get matched with the program that speaks directly to your daily challenges — not someone else's.</p>
+          <div class="quiz-bullets">
+            <div class="bullet-item">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#FFC107" stroke-width="2"/><path d="M6 10L9 13L14 7" stroke="#FFC107" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>No generic recommendations</span>
+            </div>
+            <div class="bullet-item">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#FFC107" stroke-width="2"/><path d="M6 10L9 13L14 7" stroke="#FFC107" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>Tailored to your specific role</span>
+            </div>
+            <div class="bullet-item">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#FFC107" stroke-width="2"/><path d="M6 10L9 13L14 7" stroke="#FFC107" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>Immediate actionable results</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Content - Quiz (hidden initially) -->
+        <div class="quiz-right">
+          <div class="quiz-preview" id="quizContainer">
+            <div class="quiz-progress">
+              <span class="progress-text" id="progressText">Question 1 of 4</span>
+              <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:25%"></div></div>
+            </div>
+            <div class="quiz-question" id="questionContainer">
+              <p id="questionText">What best describes your current role?</p>
+            </div>
+            <div class="quiz-options" id="optionsContainer"></div>
+            <button class="back-button" id="backButton" onclick="goBack()">← BACK</button>
+          </div>
+        </div>
+
+        <!-- Circle Container - Overlays Entire Content -->
+        <div class="circle-container" id="circleContainer">
+          <div class="pulse-circle"></div>
+          <div class="expanding-ring" id="ring1"></div>
+          <div class="expanding-ring" id="ring2"></div>
+          <div class="expanding-ring" id="ring3"></div>
+          
+          <div class="circle-content">
+            <div class="circle-icon">
+              <svg width="50" height="50" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#2E4A8A"/>
+              </svg>
+            </div>
+            <div class="circle-text" id="circleText">Answer four simple questions. Get your personalized program match in under 30 seconds.</div>
+            <div class="circle-subtext" id="circleSubtext">✨ Let's find your perfect program</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="recommendationModal" class="modal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modalProgramTitle">
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+      <div class="modal-header">
+        <h2 class="modal-program-title" id="modalProgramTitle"></h2>
+        <p class="modal-program-description" id="modalProgramDescription"></p>
+      </div>
+      <div class="modal-body">
+        <div class="modal-benefits">
+          <h3 class="modal-benefits-title" id="modalBenefitsTitle">By the end of this program, you will be able to:</h3>
+          <ul class="modal-benefit-list" id="modalBenefitsList"></ul>
+          <div class="modal-topics-section">
+            <h4 class="modal-section-title">Navigate critical topics, including:</h4>
+            <ul class="modal-topics-list" id="modalTopicsList"></ul>
+          </div>
+        </div>
+        <div class="modal-cta-section">
+          <p class="modal-cta-text">Ready to advance your career with this program?</p>
+          <div class="modal-cta-buttons">
+            <button class="btn btn-register" onclick="submitToGHL('register')">REGISTER NOW →</button>
+            <button class="btn btn-primary" onclick="submitToGHL('info')">GET MORE INFORMATION →</button>
+            <button class="btn btn-secondary" onclick="closeModal()">START OVER →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1) ENGINE (define it once, before any code that uses it) -->
+  <script>
+    if (typeof window !== 'undefined' && !window.ProgramRecommendationEngine) {
+      class ProgramRecommendationEngine {
+        constructor(){
+          this.inPersonPrograms = [
+            'certificate in employee relations law',
+            'advanced certificate in strategic employment law',
+            'certificate in conducting workplace investigations',
+            'certificate in strategic hr management',
+            'certificate in employee benefits law',
+            'advanced certificate in employee benefits law'
+          ];
+          this.virtualPrograms = [
+            'certificate in labor law mastery',
+            'certificate in discrimination prevention & defense',
+            'certificate in conducting workplace investigations',
+            'certificate in hr law fundamentals',
+            'certificate in strategic hr leadership',
+            'certificate in retirement plans',
+            'certificate in benefit plan claims, appeals & litigation',
+            'certificate in welfare benefits plan issues',
+            'advanced certificate in strategic employment law'
+          ];
+          this.challengeKeywords = {
+            compliance:['employment law','compliance','legal','regulations','policy','risk','litigation','discrimination'],
+            benefits:['benefits','erisa','retirement','healthcare','welfare','pension','claims','appeals'],
+            management:['strategic','leadership','management','planning','development','culture','performance'],
+            investigations:['investigations','workplace investigations','complaints','harassment','misconduct','interviews']
+          };
+          this.roleKeywords = {
+            executive:['executive','senior','strategic','leadership','c-suite','advanced'],
+            director:['director','senior','strategic','leadership','advanced'],
+            manager:['manager','management','supervisor','team lead'],
+            specialist:['specialist','professional','practitioner','coordinator']
+          };
+          this.experienceKeywords = {
+            entry:['foundation','basics','fundamentals','introduction','beginner'],
+            developing:['intermediate','developing','building'],
+            experienced:['advanced','experienced','expert','mastery'],
+            senior:['advanced','strategic','expert','mastery','senior']
+          };
+          this.programDescriptions = {
+            'Certificate in Employee Relations Law Seminar':'Master essential employment law fundamentals and compliance strategies.',
+            'Certificate in Strategic HR Management':'Transform your HR leadership skills and drive organizational success.',
+            'Advanced Certificate in Strategic Employment Law':'Navigate complex employment law challenges with expert-level insights.',
+            'Certificate in Conducting Workplace Investigations':'Become your organization\'s trusted expert in workplace investigations.',
+            'Certificate in Employee Benefits Law':'Master ERISA compliance and benefits administration complexities.',
+            'Advanced Certificate in Employee Benefits Law':'Tackle advanced benefits law challenges and regulatory requirements.',
+            'Certificate in Labor Law Mastery':'Build expertise in labor relations and union management strategies.',
+            'Certificate in Discrimination Prevention & Defense':'Prevent workplace discrimination and defend your organization effectively.',
+            'Certificate in HR Law Fundamentals':'Build foundational knowledge in employment law and HR compliance essentials.',
+            'Certificate in Strategic HR Leadership':'Lead strategic HR initiatives that drive workforce performance and business success.',
+            'Certificate in Retirement Plans':'Navigate retirement plan administration and fiduciary responsibilities with confidence.',
+            'Certificate in Benefit Plan Claims, Appeals & Litigation':'Master the complexities of benefits claims management and dispute resolution.',
+            'Certificate in Welfare Benefits Plan Issues':'Ensure compliance and optimize welfare benefits plan administration.'
+          };
+          this.programOutcomes = {
+            'Certificate in Employee Relations Law Seminar':[
+              'Navigate complex employment law requirements with confidence',
+              'Implement compliant hiring and termination practices',
+              'Develop effective workplace policies and procedures',
+              'Handle FMLA, ADA, and leave management issues',
+              'Prevent and address discrimination and harassment claims'
+            ],
+            'Certificate in Strategic HR Management':[
+              'Develop effective workforce planning strategies',
+              'Improve hiring and onboarding processes',
+              'Design competitive compensation and benefits programs',
+              'Implement performance management systems',
+              'Build retention strategies and workplace culture'
+            ],
+            'Advanced Certificate in Strategic Employment Law':[
+              'Master complex employment law strategies for executives',
+              'Navigate sophisticated compliance challenges',
+              'Develop enterprise-level policy frameworks',
+              'Lead legal risk assessment and mitigation',
+              'Advise on strategic workforce decisions with legal implications'
+            ],
+            'Certificate in Conducting Workplace Investigations':[
+              'Conduct thorough and legally compliant workplace investigations',
+              'Master interview techniques for all parties involved',
+              'Document evidence and findings effectively',
+              'Write comprehensive investigation reports',
+              'Handle sensitive complaints with professionalism'
+            ],
+            'Certificate in Employee Benefits Law':[
+              'Master ERISA compliance requirements',
+              'Navigate ACA regulations and reporting',
+              'Administer retirement plans effectively',
+              'Handle benefits claims and appeals',
+              'Coordinate leave laws with benefits programs'
+            ],
+            'Advanced Certificate in Employee Benefits Law':[
+              'Tackle complex benefits law challenges at the executive level',
+              'Navigate advanced ERISA compliance and fiduciary duties',
+              'Handle sophisticated benefits litigation and regulatory matters',
+              'Manage executive compensation and equity plan complexities',
+              'Address merger/acquisition benefits considerations'
+            ],
+            'Certificate in Labor Law Mastery':[
+              'Master collective bargaining and union relations',
+              'Navigate NLRB procedures and labor disputes',
+              'Develop effective labor negotiation strategies',
+              'Handle strikes, picketing, and work stoppages',
+              'Build compliant labor-management partnerships'
+            ],
+            'Certificate in Discrimination Prevention & Defense':[
+              'Prevent discrimination claims through proactive policies',
+              'Conduct effective bias and harassment training',
+              'Investigate discrimination complaints thoroughly',
+              'Develop strong legal defenses when claims arise',
+              'Create inclusive workplace cultures that reduce risk'
+            ],
+            'Certificate in HR Law Fundamentals':[
+              'Build foundational knowledge in employment law',
+              'Understand key federal and state regulations',
+              'Apply legal compliance in daily HR operations',
+              'Recognize and mitigate common legal risks',
+              'Develop legally sound HR policies and practices'
+            ],
+            'Certificate in Strategic HR Leadership':[
+              'Lead strategic HR initiatives that drive business results',
+              'Develop effective workforce planning strategies',
+              'Implement performance systems that promote accountability',
+              'Coach leaders and influence culture change',
+              'Align HR strategy with business objectives'
+            ],
+            'Certificate in Retirement Plans':[
+              'Navigate ERISA fiduciary responsibilities',
+              'Administer 401(k) and pension plans effectively',
+              'Handle plan compliance and regulatory requirements',
+              'Manage plan investments and participant communications',
+              'Address plan corrections and audit requirements'
+            ],
+            'Certificate in Benefit Plan Claims, Appeals & Litigation':[
+              'Master the claims administration process',
+              'Handle benefit appeals and ERISA litigation',
+              'Navigate federal court procedures for benefit disputes',
+              'Develop strong documentation and defense strategies',
+              'Coordinate with legal counsel on complex cases'
+            ],
+            'Certificate in Welfare Benefits Plan Issues':[
+              'Ensure compliance with welfare benefit regulations',
+              'Navigate health plan administration complexities',
+              'Handle disability, life, and medical benefit claims',
+              'Coordinate COBRA and HIPAA requirements',
+              'Manage vendor relationships and plan communications'
+            ]
+          };
+        }
+
+        filterProgramsByFormat(programs, format){
+          let filtered = programs;
+          if(format==='in-person'){
+            filtered = programs.filter(p=>{
+              const n=(p.name||'').toLowerCase();
+              return this.inPersonPrograms.some(t=>n.includes(t));
+            });
+            if(!filtered.length) filtered = programs;
+          }
+          if(format==='virtual'){
+            filtered = programs.filter(p=>{
+              const n=(p.name||'').toLowerCase();
+              return this.virtualPrograms.some(t=>n.includes(t));
+            });
+            if(!filtered.length) filtered = programs;
+          }
+          return filtered;
+        }
+
+        findPriorityMatch(list, role, challenge){
+          if(challenge==='compliance'){
+            if(role==='executive'){
+              const adv=list.find(p=>p.name.toLowerCase().includes('advanced')&&(p.name.toLowerCase().includes('employment law')||p.name.toLowerCase().includes('strategic employment')));
+              if(adv) return adv;
+            }else{
+              const rel=list.find(p=>p.name.toLowerCase().includes('employee relations law')||p.name.toLowerCase().includes('certificate in employee relations'));
+              if(rel) return rel;
+            }
+          }
+          if(challenge==='benefits'){
+            if(role==='executive'){
+              const advB=list.find(p=>p.name.toLowerCase().includes('advanced')&&p.name.toLowerCase().includes('benefits'));
+              if(advB) return advB;
+            }else{
+              const cert=list.find(p=>p.name.toLowerCase().includes('certificate in employee benefits')||(p.name.toLowerCase().includes('employee benefits')&&!p.name.toLowerCase().includes('advanced')));
+              if(cert) return cert;
+            }
+          }
+          return null;
+        }
+
+        scoreAndRankPrograms(list, userAnswers){
+          const {role,challenge,experience}=userAnswers;
+          const scored=list.map(program=>{
+            let score=0;
+            const desc=(program.description||'').toLowerCase();
+            const audience=(program.targetAudience||'').toLowerCase();
+            const name=(program.name||'').toLowerCase();
+
+            (this.challengeKeywords[challenge]||[]).forEach(k=>{ if(desc.includes(k)||name.includes(k)) score+=3; });
+            (this.roleKeywords[role]||[]).forEach(k=>{ if(audience.includes(k)||desc.includes(k)) score+=2; });
+            (this.experienceKeywords[experience]||[]).forEach(k=>{ if(desc.includes(k)||audience.includes(k)||name.includes(k)) score+=1; });
+
+            if(challenge==='investigations'){ if(name.includes('investigations')) score+=20; else score=0; }
+            if(challenge==='benefits' && name.includes('benefits')) score+=5;
+            if(challenge==='compliance' && (name.includes('employment law')||name.includes('legal'))) score+=5;
+            if(challenge==='management' && (name.includes('strategic')||name.includes('hr management')||name.includes('leadership'))) score+=5;
+
+            return {program,score};
+          });
+          scored.sort((a,b)=>b.score-a.score);
+          return scored[0]?.program || null;
+        }
+
+        findBestProgramMatch(programs, userAnswers){
+          const role=userAnswers.role||'manager';
+          const challenge=userAnswers.challenge||'compliance';
+          const experience=userAnswers.experience||'developing';
+          const format=userAnswers.format||'virtual';
+          let filtered=this.filterProgramsByFormat(programs, format);
+          const priority=this.findPriorityMatch(filtered, role, challenge);
+          if(priority) return priority;
+          return this.scoreAndRankPrograms(filtered, {role,challenge,experience,format});
+        }
+
+        formatRecommendation(program, userFormat){
+          if(!program){
+            return { id: undefined, program:'Certificate in Employee Relations Law Seminar', format:'Multiple formats available', description:'Master essential employment law fundamentals and compliance strategies.', learningOutcomes:[] };
+          }
+          let displayFormat=program.format||'Multiple formats available';
+          if(userFormat==='team') displayFormat='Available for corporate on-site training';
+          else if(userFormat==='virtual') displayFormat='Available in live virtual format';
+          else if(userFormat==='in-person') displayFormat='Available in-person with networking opportunities';
+          else if(userFormat==='self-paced') displayFormat='Self-paced learning options available';
+
+          return {
+            id: program.id,
+            program: program.name,
+            format: displayFormat,
+            description: this.programDescriptions[program.name] || 'Professional development program designed to advance your HR expertise.',
+            learningOutcomes: program.learningOutcomes || []
+          };
+        }
+
+        getProgramOutcomes(programName){
+          return this.programOutcomes[programName] || [
+            'Enhanced professional knowledge and skills',
+            'Practical tools and strategies for immediate application',
+            'Industry best practices and compliance guidance',
+            'Confidence to handle complex workplace challenges',
+            'Professional development and career advancement'
+          ];
+        }
+      }
+
+      window.ProgramRecommendationEngine = ProgramRecommendationEngine;
+      if (typeof module !== 'undefined' && module.exports) module.exports = ProgramRecommendationEngine;
+    }
+  </script>
+
+  <!-- 2) APP -->
+  <script>
+    // ===== Airtable table config (API calls now use serverless proxies) =====
+    const AIRTABLE_CONFIG = {
+      tablesById: {
+        quizQuestions: 'tblKESCDfq65dWWHy',
+        answers: 'tbly6vzYhjPbroIIy',
+        recommendations: 'tblp78ibbqFGYFGKb',
+        sessions: 'tblzXcIgwisfko0WC'
+      }
+    };
+
+    // ===== Optional GHL webhook (leave as-is / replace later) =====
+    const GHL_WEBHOOK_URL = 'YOUR_WEBHOOK_URL_HERE';
+    const FALLBACK_EMAIL = 'info@iaml.com';
+    const FALLBACK_PHONE = '1-800-IAML-HELP';
+
+    // ===== State =====
+    let programCatalog = [];
+    let answers = {};
+    let currentRecommendation = null;
+    let currentQuestion = 0;
+    let userAnswers = {};
+    let startTime = new Date();
+    let isTransitioning = false;
+
+    // Session tracking
+    let sessionId = null;           // our readable string
+    let sessionRecordId = null;     // Airtable record id for linked fields
+    let sessionStartTime = null;
+    let quizCompleted = false;
+
+    // ===== Static program fallback (used if Airtable catalog isn’t available) =====
+    const staticPrograms = [
+      { id:'p1', name:'Certificate in Employee Relations Law Seminar', description:'Employment law, compliance, regulations, policy, risk. Foundation to advanced practical application.', targetAudience:'HR professional, manager, director', format:'In-person & Virtual', registerUrl:'#', learnMoreUrl:'#' },
+      { id:'p2', name:'Advanced Certificate in Strategic Employment Law', description:'Executive, strategic, advanced employment law, litigation risk, policy frameworks.', targetAudience:'Executive, C-suite, senior HR', format:'In-person & Virtual', registerUrl:'#', learnMoreUrl:'#' },
+      { id:'p3', name:'Certificate in Conducting Workplace Investigations', description:'Investigations, harassment, misconduct, interviews, reports, defensible process.', targetAudience:'HR professional, manager', format:'In-person & Virtual', registerUrl:'#', learnMoreUrl:'#' },
+      { id:'p4', name:'Certificate in Strategic HR Management', description:'Strategic HR, leadership, culture, performance, planning.', targetAudience:'Manager, director, senior HR', format:'In-person', registerUrl:'#', learnMoreUrl:'#' },
+      { id:'p5', name:'Certificate in Employee Benefits Law', description:'Benefits, ERISA, retirement plans, welfare, claims and appeals.', targetAudience:'Benefits manager, HR professional', format:'In-person & Virtual', registerUrl:'#', learnMoreUrl:'#' },
+      { id:'p6', name:'Advanced Certificate in Employee Benefits Law', description:'Advanced benefits, ERISA litigation, fiduciary duties, executive compensation.', targetAudience:'Executive, senior benefits leaders', format:'In-person & Virtual', registerUrl:'#', learnMoreUrl:'#' },
+      { id:'p7', name:'Certificate in HR Law Fundamentals', description:'Fundamentals, beginner, foundation in employment law & compliance.', targetAudience:'Entry-level HR', format:'Virtual', registerUrl:'#', learnMoreUrl:'#' },
+      { id:'p8', name:'Certificate in Strategic HR Leadership', description:'Strategic leadership, management, culture change, performance systems.', targetAudience:'Director, senior HR, manager', format:'Virtual', registerUrl:'#', learnMoreUrl:'#' }
+    ];
+
+    // ===== Quiz model (fallback). We’ll try Airtable first; if not, use this. =====
+    let quizData = {
+      questions: [
+        { id:'role', title:'What best describes your current role?', options:[
+          { value:'executive', title:'C-Suite/Executive', description:'CEO, CHRO, COO, or other executive leadership' },
+          { value:'director', title:'Director/VP Level', description:'Director of HR, VP of People, or similar' },
+          { value:'manager', title:'HR Manager', description:'HR Manager, Benefits Manager, or team lead' },
+          { value:'specialist', title:'HR Professional', description:'HR Specialist, Coordinator, or Analyst' }
+        ]},
+        { id:'challenge', title:'What’s your biggest workplace challenge right now?', options:[
+          { value:'compliance', title:'Legal Compliance', description:'Staying current with employment laws and regulations' },
+          { value:'leadership', title:'Leadership Development', description:'Building stronger management and leadership skills' },
+          { value:'culture', title:'Workplace Culture', description:'Creating positive, inclusive work environments' },
+          { value:'performance', title:'Performance Management', description:'Improving employee performance and accountability' }
+        ]},
+        { id:'experience', title:'How would you describe your experience level?', options:[
+          { value:'new', title:'New to HR/Management', description:'Less than 2 years in current role' },
+          { value:'developing', title:'Developing Skills', description:'2–5 years, looking to build expertise' },
+          { value:'experienced', title:'Experienced Professional', description:'5+ years, seeking advanced knowledge' },
+          { value:'expert', title:'Senior Expert', description:'10+ years, want cutting-edge insights' }
+        ]},
+        { id:'format', title:'What learning format works best for you?', options:[
+          { value:'in-person', title:'In-Person Events', description:'Face-to-face networking and learning' },
+          { value:'virtual', title:'Virtual Learning', description:'Online sessions I can attend from anywhere' },
+          { value:'self-paced', title:'Self-Paced Study', description:'Materials I can review on my schedule' }
+        ]}
+      ]
+    };
+
+    // ===== Helpers =====
+    function generateSessionId(){
+      return `session_${Date.now()}_${Math.random().toString(36).slice(2,9)}`;
+    }
+
+    function normalizeAnswersForEngine(src){
+      const mapChallenge = { compliance:'compliance', leadership:'management', culture:'management', performance:'management' };
+      const mapExperience = { new:'entry', developing:'developing', experienced:'experienced', expert:'senior' };
+      return {
+        role: src.role,
+        challenge: mapChallenge[src.challenge] || 'management',
+        experience: mapExperience[src.experience] || 'developing',
+        format: src.format
+      };
+    }
+
+    // ===== Airtable: Sessions =====
+    async function createQuizSession(){
+      sessionId = generateSessionId();
+      sessionStartTime = new Date();
+      sessionRecordId = null; // reset
+
+      const payload = {
+        fields: {
+          'Session ID': sessionId,
+          'Start Time': sessionStartTime.toISOString(),
+          'User Agent': navigator.userAgent,
+          'Page URL': window.location.href,
+          'Completion Status': 'Started'
+        }
+      };
+
+      try{
+        const params = new URLSearchParams();
+        params.set('table', AIRTABLE_CONFIG.tablesById.sessions);
+        const endpoint = `/api/airtable-quiz?${params.toString()}`;
+        const resp = await fetch(endpoint, {
+          method:'POST',
+          headers:{ 'Content-Type':'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if(!resp.ok) throw new Error(`Airtable sessions error ${resp.status}`);
+        const data = await resp.json();
+        sessionRecordId = data.id;
+        console.log('[AT] Session created:', { sessionId, sessionRecordId });
+      }catch(err){
+        console.warn('[AT] Could not create session (quiz continues):', err.message);
+      }
+    }
+
+    // Mark abandoned (uses keepalive, not sendBeacon)
+    async function trackAbandonedSession(){
+      try{
+        if(!sessionRecordId || quizCompleted) return;
+        const params = new URLSearchParams();
+        params.set('table', AIRTABLE_CONFIG.tablesById.sessions);
+        params.set('recordId', sessionRecordId);
+        const endpoint = `/api/airtable-quiz?${params.toString()}`;
+        const payload = { fields: { 'Completion Status':'Abandoned', 'Completion Time': new Date().toISOString() } };
+        await fetch(endpoint, {
+          method:'PATCH',
+          headers:{ 'Content-Type':'application/json' },
+          body: JSON.stringify(payload),
+          keepalive: true
+        });
+        console.log('[AT] Abandonment tracked');
+      }catch(err){
+        console.warn('[AT] Abandonment track failed:', err.message);
+      }
+    }
+
+    async function updateSessionCompletion(action = 'None', recommendedProgram = null){
+      if(!sessionRecordId) return;
+      try{
+        const params = new URLSearchParams();
+        params.set('table', AIRTABLE_CONFIG.tablesById.sessions);
+        params.set('recordId', sessionRecordId);
+        const endpoint = `/api/airtable-quiz?${params.toString()}`;
+        const completionTime = new Date();
+        const timeSpent = Math.round((completionTime - sessionStartTime)/1000);
+        const payload = {
+          fields: {
+            'Completion Time': completionTime.toISOString(),
+            'Time Spent (seconds)': timeSpent,
+            'Completion Status':'Completed',
+            'Action Taken': action,
+            ...(recommendedProgram ? { 'Recommended Program': recommendedProgram } : {})
+          }
+        };
+        await fetch(endpoint, {
+          method:'PATCH',
+          headers:{ 'Content-Type':'application/json' },
+          body: JSON.stringify(payload)
+        });
+        console.log('[AT] Session updated:', action);
+      }catch(err){
+        console.warn('[AT] Session completion failed:', err.message);
+      }
+    }
+
+    // ===== Airtable: Quiz Questions (optional; uses your quiz table id) =====
+    async function fetchQuizQuestionsFromAirtable(){
+      try{
+        const tableId = AIRTABLE_CONFIG.tablesById.quizQuestions;
+        if(!tableId) return null;
+        const params = new URLSearchParams();
+        params.set('table', tableId);
+        params.set('sort[0][field]', 'Question Number');
+        params.set('sort[1][field]', 'Option Order');
+        const url = `/api/airtable-quiz?${params.toString()}`;
+        const resp = await fetch(url);
+        if(!resp.ok) throw new Error(`Airtable quiz questions error ${resp.status}`);
+        const data = await resp.json();
+
+        // Expecting one record per option with fields:
+        // 'Question ID' (role/challenge/experience/format)
+        // 'Question Title', 'Option Value', 'Option Title', 'Option Description',
+        // 'Question Number' (1..4), 'Option Order'
+        const byQ = {};
+        (data.records||[]).forEach(r=>{
+          const f = r.fields || {};
+          const qid = f['Question ID'];
+          if(!qid) return;
+          if(!byQ[qid]) byQ[qid] = {
+            id: qid,
+            title: f['Question Title'] || f['Title'] || '',
+            number: f['Question Number'] || 999,
+            options: []
+          };
+          byQ[qid].options.push({
+            value: f['Option Value'],
+            title: f['Option Title'] || f['Option Value'],
+            description: f['Option Description'] || ''
+          });
+        });
+
+        // Sort by Question Number
+        const questions = Object.values(byQ).sort((a,b)=> (a.number||999) - (b.number||999))
+          .map(q=>({ id:q.id, title:q.title || '', options: (q.options||[])}));
+
+        if(questions.length === 4) {
+          console.log('[AT] Loaded quiz questions from Airtable');
+          return { questions };
+        }
+        return null;
+      }catch(err){
+        console.warn('[AT] Could not load quiz questions (using static):', err.message);
+        return null;
+      }
+    }
+
+    // ===== Airtable: Answer Tracking / Recommendation logging (using your table IDs) =====
+    async function trackAnswer(questionId, answerValue, answerText, questionText, questionNumber){
+      try{
+        if(!AIRTABLE_CONFIG.tablesById.answers) return;
+        if(!sessionRecordId) { console.warn('[AT] No session to link; skipping answer track'); return; }
+        const params = new URLSearchParams();
+        params.set('table', AIRTABLE_CONFIG.tablesById.answers);
+        const endpoint = `/api/airtable-quiz?${params.toString()}`;
+        const payload = {
+          fields: {
+            'Session ID': [sessionRecordId], // linked record to Quiz Sessions
+            'Question ID': questionId,
+            'Question Text': questionText,
+            'Answer Value': answerValue,
+            'Answer Text': answerText,
+            'Timestamp': new Date().toISOString(),
+            'Question Number': questionNumber
+          }
+        };
+        const resp = await fetch(endpoint, {
+          method:'POST',
+          headers:{ 'Content-Type':'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if(!resp.ok) throw new Error(`answers ${resp.status}`);
+        console.log('[AT] Answer tracked:', questionId, '=', answerValue);
+      }catch(err){
+        console.warn('[AT] trackAnswer failed:', err.message);
+      }
+    }
+
+    async function trackRecommendation(rec, normalizedAnswers, matchScore = null){
+      try{
+        if(!AIRTABLE_CONFIG.tablesById.recommendations) return;
+        if(!sessionRecordId) { console.warn('[AT] No session to link; skipping recommendation track'); return; }
+        const params = new URLSearchParams();
+        params.set('table', AIRTABLE_CONFIG.tablesById.recommendations);
+        const endpoint = `/api/airtable-quiz?${params.toString()}`;
+        const payload = {
+          fields: {
+            'Session ID': [sessionRecordId],
+            'Program Name': rec.title || rec.program || '',
+            'User Role': normalizedAnswers.role,
+            'User Challenge': normalizedAnswers.challenge,
+            'User Experience': normalizedAnswers.experience,
+            'User Format': normalizedAnswers.format,
+            'Timestamp': new Date().toISOString()
+          }
+        };
+        if(matchScore!==null && !isNaN(matchScore)) payload.fields['Match Score'] = parseFloat(matchScore);
+        const resp = await fetch(endpoint, {
+          method:'POST',
+          headers:{ 'Content-Type':'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if(!resp.ok) throw new Error(`recommendations ${resp.status}`);
+        console.log('[AT] Recommendation tracked:', payload.fields['Program Name']);
+      }catch(err){
+        console.warn('[AT] trackRecommendation failed:', err.message);
+      }
+    }
+
+    // ===== App: quiz UI =====
+    function initQuiz(){
+      currentQuestion = 0;
+      displayQuestion();
+    }
+
+    function displayQuestion(){
+      if(currentQuestion >= quizData.questions.length){ showThinkingAnimation(); return; }
+      const q = quizData.questions[currentQuestion];
+      const pct = ((currentQuestion+1)/quizData.questions.length)*100;
+      document.getElementById('progressText').textContent = `Question ${currentQuestion+1} of ${quizData.questions.length}`;
+      document.getElementById('progressFill').style.width = `${pct}%`;
+      document.getElementById('questionText').textContent = q.title;
+
+      const optionsContainer = document.getElementById('optionsContainer');
+      optionsContainer.innerHTML = '';
+      q.options.forEach(opt=>{
+        const btn = document.createElement('button');
+        btn.className='option-btn';
+        btn.innerHTML = `<span class="option-title">${opt.title}</span><span class="option-desc">${opt.description||''}</span>`;
+        btn.onclick = ()=>selectOption(btn, q.id, opt.value, opt.title, q.title, currentQuestion+1);
+        optionsContainer.appendChild(btn);
+      });
+
+      document.getElementById('backButton').style.display = currentQuestion>0 ? 'block' : 'none';
+    }
+
+    function selectOption(el, qid, val, label, questionText, number){
+      if(isTransitioning) return;
+      isTransitioning = true;
+      el.classList.add('selected');
+      document.querySelectorAll('.option-btn').forEach(o=>{o.classList.add('disabled');o.style.pointerEvents='none';});
+      userAnswers[qid]=val; answers[qid]=val;
+
+      // Track to Airtable (fire and forget)
+      trackAnswer(qid, val, label, questionText, number);
+
+      setTimeout(()=>{ nextQuestion(); }, 600);
+    }
+
+    function nextQuestion(){
+      isTransitioning=false;
+      document.querySelectorAll('.option-btn').forEach(o=>{o.classList.remove('disabled','selected');o.style.pointerEvents='auto';});
+      currentQuestion++;
+      displayQuestion();
+    }
+
+    function goBack(){
+      if(currentQuestion>0){
+        currentQuestion--;
+        const qId = quizData.questions[currentQuestion].id;
+        delete userAnswers[qId]; delete answers[qId];
+        displayQuestion();
+      }
+    }
+
+    function showThinkingAnimation(){
+      const container = document.getElementById('quizContainer');
+      container.innerHTML = `
+        <div class="thinking-container">
+          <div class="thinking-text">Analyzing your answers...</div>
+          <div class="thinking-messages" id="thinkingMessages">Finding your perfect program match</div>
+          <div class="thinking-spinner"></div>
+        </div>`;
+      const msgs=['Finding your perfect program match','Analyzing your role and challenges','Matching experience levels','Personalizing recommendations'];
+      let i=0; const iv = setInterval(()=>{ const el=document.getElementById('thinkingMessages'); if(el){ i=(i+1)%msgs.length; el.textContent=msgs[i]; } },1000);
+      setTimeout(()=>{ clearInterval(iv); showRecommendationModal(); }, 1400); // faster reveal
+    }
+
+    // Get best match using engine
+    async function getRecommendation(){
+      if(!programCatalog || !programCatalog.length){
+        // You can add a real catalog table here later; for now we use staticPrograms
+        programCatalog = staticPrograms;
+      }
+      const engine = new ProgramRecommendationEngine();
+      const normalized = normalizeAnswersForEngine(userAnswers);
+      const best = engine.findBestProgramMatch(programCatalog, normalized);
+      const formatted = engine.formatRecommendation(best, normalized.format);
+      const outcomes = engine.getProgramOutcomes(formatted.program);
+      const rec = {
+        id: formatted.id || best?.id,
+        title: formatted.program,
+        description: formatted.description,
+        topics: [],
+        learningOutcomes: Array.isArray(outcomes)?outcomes:[],
+        registerUrl: best?.registerUrl || '#',
+        learnMoreUrl: best?.learnMoreUrl || '#',
+        formatText: formatted.format
+      };
+
+      // Send to Airtable
+      trackRecommendation(rec, normalized, /*matchScore*/ null);
+
+      return rec;
+    }
+
+    async function showRecommendationModal(){
+      try{
+        const rec = await getRecommendation();
+        currentRecommendation = rec;
+        quizCompleted = true;
+
+        document.getElementById('modalProgramTitle').textContent = rec.title || 'Professional Development Program';
+        document.getElementById('modalProgramDescription').textContent =
+          (rec.description || 'A comprehensive program designed for your professional growth.') +
+          (rec.formatText ? ` — ${rec.formatText}` : '');
+
+        document.getElementById('modalBenefitsTitle').textContent =
+          `By the end of this program, ${answers.format==='team'?'your team':'you'} will be able to:`;
+
+        const benefitsList = document.getElementById('modalBenefitsList');
+        benefitsList.innerHTML = (rec.learningOutcomes && rec.learningOutcomes.length
+          ? rec.learningOutcomes
+          : ['Comprehensive professional development','Industry best practices','Practical application techniques']
+        ).map(x=>`<li>${x}</li>`).join('');
+
+        const topicsList = document.getElementById('modalTopicsList');
+        topicsList.innerHTML = (rec.topics && rec.topics.length
+          ? rec.topics
+          : ['Industry best practices and current trends','Regulatory compliance and legal updates','Professional development strategies']
+        ).map(x=>`<li>${x}</li>`).join('');
+
+        document.getElementById('recommendationModal').style.display='block';
+
+        // Mark completed (no button action yet)
+        updateSessionCompletion('Viewed Recommendation', rec.title || '');
+      }catch(e){
+        console.error(e);
+        showFallbackRecommendation();
+      }
+    }
+
+    function showFallbackRecommendation(){
+      quizCompleted = true;
+      document.getElementById('modalProgramTitle').textContent = 'Professional Development Program';
+      document.getElementById('modalProgramDescription').textContent = 'Based on your responses, we have several programs that would be perfect for your professional development needs.';
+      document.getElementById('modalBenefitsTitle').textContent = 'By the end of this program, you will be able to:';
+      document.getElementById('modalBenefitsList').innerHTML = [
+        'Access to expert-led training programs','Personalized learning path recommendations','Professional development certificates','Networking opportunities with peers','Ongoing support and resources'
+      ].map(x=>`<li>${x}</li>`).join('');
+      document.getElementById('modalTopicsList').innerHTML = [
+        'Industry best practices and current trends','Professional development strategies','Leadership and management techniques','Communication and collaboration skills','Career advancement planning'
+      ].map(x=>`<li>${x}</li>`).join('');
+      document.getElementById('recommendationModal').style.display='block';
+      updateSessionCompletion('Viewed Fallback Recommendation', 'Fallback');
+    }
+
+    async function submitToGHL(action){
+      const completionTime = new Date();
+      const data = {
+        quiz_answers: answers,
+        recommended_program: currentRecommendation?.title || 'Unknown',
+        recommended_program_id: currentRecommendation?.id || 'Unknown',
+        recommended_format: currentRecommendation?.formatText || 'Unknown',
+        action_taken: action,
+        timestamp: completionTime.toISOString(),
+        time_spent_seconds: Math.round((completionTime - startTime)/1000),
+        user_agent: navigator.userAgent,
+        page_url: window.location.href
+      };
+
+      try{
+        if(!GHL_WEBHOOK_URL || GHL_WEBHOOK_URL.includes('YOUR_WEBHOOK_URL_HERE')) throw new Error('Webhook not configured');
+        const resp = await fetch(GHL_WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+        if(!resp.ok) throw new Error(`Submission failed: ${resp.status}`);
+        if(action==='register') alert('Thank you! We will contact you shortly about registration.');
+        if(action==='info') alert('Thank you! We will send you more information about this program.');
+      }catch(err){
+        console.error('Submission error:', err);
+        alert(`Thank you for your interest! Please contact us at ${FALLBACK_EMAIL} or ${FALLBACK_PHONE} for more information.`);
+      }
+
+      // Update session with the action
+      updateSessionCompletion(action === 'register' ? 'Register CTA' : 'Info CTA', currentRecommendation?.title || '');
+
+      // Optional soft nav to program pages
+      try{
+        if(action==='register' && currentRecommendation?.registerUrl && currentRecommendation.registerUrl!=='#'){
+          window.open(currentRecommendation.registerUrl,'_blank');
+        }
+        if(action==='info' && currentRecommendation?.learnMoreUrl && currentRecommendation.learnMoreUrl!=='#'){
+          window.open(currentRecommendation.learnMoreUrl,'_blank');
+        }
+      }catch(e){}
+    }
+
+    function closeModal(){
+      document.getElementById('recommendationModal').style.display='none';
+      setTimeout(()=>{ staticResetQuiz(); }, 400);
+    }
+
+    async function staticResetQuiz(){
+      // Mark "Started Over"
+      updateSessionCompletion('Started Over', currentRecommendation?.title || '');
+
+      currentQuestion=0; userAnswers={}; answers={}; currentRecommendation=null;
+      startTime=new Date(); isTransitioning=false; quizCompleted=false;
+
+      // new session
+      await createQuizSession();
+
+      // Reset the circle animation elements
+      const circleContainer = document.getElementById('circleContainer');
+      const circleText = document.getElementById('circleText');
+      const circleSubtext = document.getElementById('circleSubtext');
+      const quizLeft = document.getElementById('quizLeft');
+      const quizContainer = document.getElementById('quizContainer');
+      
+      if(circleContainer) {
+        circleContainer.style.display = 'flex';
+        circleContainer.classList.remove('visible', 'expanding');
+      }
+      if(circleText) circleText.classList.remove('visible');
+      if(circleSubtext) circleSubtext.classList.remove('visible');
+      if(quizLeft) quizLeft.classList.remove('revealed');
+      if(quizContainer) quizContainer.classList.remove('revealed');
+
+      const container=document.getElementById('quizContainer');
+      container.innerHTML = `
+        <div class="quiz-progress">
+          <span class="progress-text" id="progressText">Question 1 of 4</span>
+          <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:25%"></div></div>
+        </div>
+        <div class="quiz-question" id="questionContainer"><p id="questionText">What best describes your current role?</p></div>
+        <div class="quiz-options" id="optionsContainer"></div>
+        <button class="back-button" id="backButton" onclick="goBack()">← BACK</button>`;
+      initQuiz();
+      
+      // Restart the circle animation
+      startCircleSequence();
+    }
+
+    // ===== Lifecycle =====
+    // Track possible abandonment with keepalive (no sendBeacon)
+    window.addEventListener('beforeunload', () => { trackAbandonedSession(); });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) trackAbandonedSession(); });
+
+    document.addEventListener('DOMContentLoaded', async function(){
+      // 1) Create a session (if "Quiz Sessions" table exists)
+      await createQuizSession();
+
+      // 2) Try loading quiz questions from Airtable; else fallback
+      const airtableQuiz = await fetchQuizQuestionsFromAirtable();
+      if(airtableQuiz && airtableQuiz.questions?.length === 4){
+        quizData = airtableQuiz;
+      }
+
+      // 3) Program catalog (static for now; add Airtable catalog later if desired)
+      programCatalog = staticPrograms;
+
+      // 4) Init UI
+      initQuiz();
+
+      // 5) Circle animation + reveal
+      const observer=new IntersectionObserver(entries=>{
+        entries.forEach(entry=>{
+          if(entry.isIntersecting){
+            startCircleSequence();
+            observer.unobserve(entry.target);
+          }
+        });
+      },{threshold:.3});
+      const quizContent=document.getElementById('quizContent'); if(quizContent) observer.observe(quizContent);
+    });
+
+    function startCircleSequence() {
+      const circleContainer = document.getElementById('circleContainer');
+      const circleText = document.getElementById('circleText');
+      const circleSubtext = document.getElementById('circleSubtext');
+      const quizContainer = document.getElementById('quizContainer');
+      const quizLeft = document.getElementById('quizLeft');
+      const ring1 = document.getElementById('ring1');
+      const ring2 = document.getElementById('ring2');
+      const ring3 = document.getElementById('ring3');
+      
+      // Show container
+      setTimeout(() => {
+        circleContainer.classList.add('visible');
+      }, 200);
+      
+      // Trigger expanding rings periodically
+      setTimeout(() => ring1.classList.add('animate'), 1000);
+      setTimeout(() => ring2.classList.add('animate'), 1500);
+      setTimeout(() => ring3.classList.add('animate'), 2000);
+      
+      // Fade in text with upward slide
+      setTimeout(() => {
+        circleText.classList.add('visible');
+        setTimeout(() => {
+          circleSubtext.classList.add('visible');
+        }, 500);
+      }, 800);
+      
+      // Expand circle and reveal BOTH left content AND quiz simultaneously
+      setTimeout(() => {
+        circleContainer.classList.add('expanding');
+        setTimeout(() => {
+          circleContainer.style.display = 'none';
+          // Reveal both sides at the same time
+          quizLeft.classList.add('revealed');
+          quizContainer.classList.add('revealed');
+        }, 1000);
+      }, 5000);
+    }
+    
+    // Timeline Animation: Typewriter Sequential - Scroll Trigger
+    const timelineSteps = document.querySelectorAll('.timeline-step');
+    const timelineObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in');
+          timelineObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    
+    timelineSteps.forEach(step => timelineObserver.observe(step));
+  </script>
+</body>
+</html>

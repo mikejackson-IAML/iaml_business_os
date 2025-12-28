@@ -1,0 +1,99 @@
+name: Update Airtable Cache
+
+on:
+  schedule:
+    # Run weekly on Sundays at 2 AM UTC (Saturday 6 PM PST)
+    - cron: '0 2 * * 0'
+  workflow_dispatch:
+    inputs:
+      force_rebuild:
+        description: 'Force rebuild all cache files'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: write
+
+jobs:
+  update-cache:
+    name: Fetch and Cache Airtable Data
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch sessions from Airtable
+        env:
+          AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID }}
+          AIRTABLE_PROGRAMS_API_KEY: ${{ secrets.AIRTABLE_PROGRAMS_API_KEY }}
+        run: node scripts/fetch-sessions.js
+
+      - name: Fetch faculty from Airtable
+        env:
+          AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID }}
+          AIRTABLE_PROGRAMS_API_KEY: ${{ secrets.AIRTABLE_PROGRAMS_API_KEY }}
+        run: node scripts/fetch-faculty.js
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git add data/sessions/ data/faculty/
+          git diff --staged --quiet || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push if changed
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: update airtable cache $(date +%Y-%m-%d)"
+          git push
+
+      - name: Summary
+        run: |
+          echo "## Airtable Cache Update Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Sessions summary
+          echo "### Sessions" >> $GITHUB_STEP_SUMMARY
+          if [ -f data/sessions/metadata.json ]; then
+            SESSIONS_GENERATED=$(cat data/sessions/metadata.json | grep -o '"generated": "[^"]*"' | cut -d'"' -f4)
+            TOTAL_SESSIONS=$(cat data/sessions/metadata.json | grep -o '"totalSessions": [0-9]*' | cut -d: -f2 | tr -d ' ')
+            VIEWS=$(cat data/sessions/metadata.json | grep -o '"viewsCount": [0-9]*' | cut -d: -f2 | tr -d ' ')
+
+            echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+            echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+            echo "| Generated | $SESSIONS_GENERATED |" >> $GITHUB_STEP_SUMMARY
+            echo "| Total Sessions | $TOTAL_SESSIONS |" >> $GITHUB_STEP_SUMMARY
+            echo "| Views Cached | $VIEWS |" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # Faculty summary
+          echo "### Faculty" >> $GITHUB_STEP_SUMMARY
+          if [ -f data/faculty/metadata.json ]; then
+            FACULTY_GENERATED=$(cat data/faculty/metadata.json | grep -o '"generated": "[^"]*"' | cut -d'"' -f4)
+            TOTAL_FACULTY=$(cat data/faculty/metadata.json | grep -o '"totalFaculty": [0-9]*' | cut -d: -f2 | tr -d ' ')
+            PROGRAMS=$(cat data/faculty/metadata.json | grep -o '"programsCount": [0-9]*' | cut -d: -f2 | tr -d ' ')
+
+            echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+            echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+            echo "| Generated | $FACULTY_GENERATED |" >> $GITHUB_STEP_SUMMARY
+            echo "| Total Faculty | $TOTAL_FACULTY |" >> $GITHUB_STEP_SUMMARY
+            echo "| Programs Cached | $PROGRAMS |" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "${{ steps.changes.outputs.changed }}" == "true" ]; then
+            echo "✅ Cache updated and committed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "ℹ️ No changes detected - cache is up to date" >> $GITHUB_STEP_SUMMARY
+          fi

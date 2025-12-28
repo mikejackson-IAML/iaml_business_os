@@ -1,0 +1,181 @@
+{
+  "programName": "Welfare Benefits Plan Issues",
+  "programSlug": "welfare-benefits-plan-issues",
+  "registrationUrl": "#registration",
+  "meta": {
+    "title": "Welfare Benefits Plan Issues Training | IAML",
+    "description": "Master ACA, HIPAA, COBRA, and health & welfare plan compliance in 1.5 days. Learn from practicing benefits attorneys. Earn 10.25 SHRM/HRCI/CLE credits.",
+    "keywords": "welfare benefits training, ACA compliance, HIPAA training, COBRA administration, health benefits law, FSA HSA HRA compliance, cafeteria plan testing, mental health parity, SHRM credits, HRCI credits",
+    "ogImage": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69093f4637c43adac1bc0ab3.png"
+  },
+  "seo": {
+    "canonicalUrl": "https://iaml.com/programs/welfare-benefits-plan-issues",
+    "robots": "index, follow",
+    "twitter": {
+      "card": "summary_large_image",
+      "site": "@IAMLaw",
+      "title": "Welfare Benefits Plan Issues Training | IAML",
+      "description": "Master ACA, HIPAA, COBRA, and health & welfare plan compliance in 1.5 days. Earn 10.25 SHRM/HRCI/CLE credits.",
+      "image": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69093f4637c43adac1bc0ab3.png"
+    },
+    "schema": {
+      "educationalLevel": "intermediate",
+      "timeRequired": "P1.5D",
+      "teaches": [
+        "ACA Compliance",
+        "HIPAA Privacy Rules",
+        "COBRA Administration",
+        "HSA/HRA/FSA Administration",
+        "Mental Health Parity",
+        "FMLA Coordination",
+        "Cafeteria Plan Testing"
+      ]
+    },
+    "keywordData": {
+      "primaryKeyword": "welfare benefits training",
+      "searchVolume": 180,
+      "competition": "medium",
+      "relatedKeywords": [
+        "ACA compliance training",
+        "HIPAA training",
+        "COBRA administration",
+        "health benefits certification"
+      ]
+    }
+  },
+  "hero": {
+    "title": "Welfare Benefits Plan Issues",
+    "description": "Health and welfare plan compliance means navigating ACA employer mandates, HIPAA privacy rules, COBRA administration, and the alphabet soup of regulations that apply to your plans. In 1.5 days, you'll master the compliance requirements that keep your organization protected. Real strategies from practicing benefits attorneys.",
+    "price": 975,
+    "deliveryOptions": ["In Person"],
+    "duration": "1.5 days"
+  },
+  "testimonials": [
+    {"quote": "IAML once again surpassed my expectations. The seminar was awesome and the degree of information presented to our group was so valuable. I applaud IAML for finding the experts in the various fields and making them available to us. I can hardly wait until the next seminar!", "name": "Bianca Olivarria", "title": "HR Technician & Disability Management Specialist", "company": "Imperial Irrigation District"},
+    {"quote": "It was great learning the information, but also very useful hearing from others attending the class. I learned a wealth of information.", "name": "Brittney Viator", "title": "Benefits Administrator", "company": "FJ Management, Inc."},
+    {"quote": "The instructors did a fantastic job of presenting the information and maintaining participant engagement.", "name": "Sandy Lovett", "title": "Human Resources Generalist", "company": "Thiele Kaolin Company"},
+    {"quote": "All compensation and benefits professionals should consider this seminar. There is a large volume of valuable information presented in an effective, dynamic setting. The speakers are certainly well-equipped and are very attuned to the needs of the class members.", "name": "Todd Hanson", "title": "Corporate Human Resources Manager", "company": "Printpack, Inc."},
+    {"quote": "Instructors were very good and well versed in subject matter. They offered to help and provide materials outside of the seminar.", "name": "Brian Wagner", "title": "Attorney", "company": "Mateer & Harbert"},
+    {"quote": "I absolutely loved the instructors! The course provided so much valuable information.", "name": "Emily Ruelle", "title": "Human Resources Generalist", "company": "Tableau Software Inc."},
+    {"quote": "This was an excellent seminar and covered everything I'd hoped. The instructors were outstanding.", "name": "Kurt Henkel", "title": "Senior Benefits Plan Analyst", "company": "Deere & Company"},
+    {"quote": "I enjoyed the open and casual approach to this training. Everyone appeared comfortable enough to participate and ask questions.", "name": "Deborah Carnelli", "title": "Resolutions and Receivership Specialist", "company": "Federal Deposit Insurance Corporation"},
+    {"quote": "I really enjoyed the class. I appreciated Tom Schendt's teaching styles and how he involved everyone in the class and made it interactive. He certainly succeeded in making a potentially boring subject quite fun.", "name": "S. Greg Robinson", "title": "Human Resources Manager", "company": "Suominen"},
+    {"quote": "I really enjoyed the seminar. I learned a great deal and will definitely be able to apply what I learned once I'm back in the office.", "name": "Alana Tomczyszn", "title": "Human Resources Manager", "company": "CWS Capital Partners LLC"},
+    {"quote": "Great job! The information will assist me and my company in effectively administering our employee benefits.", "name": "Julie O'Dell-Michie", "title": "Sr. Vice President & Chief Administrative Officer", "company": "Blue Ridge Electric Membership Corporation"},
+    {"quote": "The instructors did a great job of keeping the participants engaged while covering material that could have been very dry.", "name": "Steven Pennell", "title": "Human Resources Director, Talent & Technology", "company": "Shurtape Technologies, LLC"},
+    {"quote": "I thoroughly enjoyed the seminar. I really appreciated that the instructors allowed participants to ask questions and work through our issues and concerns.", "name": "Sherry Murphy", "title": "Lead Human Resources Business Partner", "company": "Barrick Mining Corporation"}
+  ],
+  "contentSection": {
+    "headline": "Master Health & Welfare Compliance That Protects Your Organization",
+    "description": "Welfare Benefits Plan Issues is <span class=\"emphasis\">1.5 intensive days</span> where you'll master ACA employer mandates, HIPAA privacy rules, COBRA administration, and consumer-driven health plan compliance—working through real scenarios with experienced benefits attorneys, not checklists and theory.",
+    "benefits": [
+      "<strong>Complete welfare plan framework</strong> – ERISA reporting, claims procedures, plan funding rules, and fiduciary obligations for welfare plans",
+      "<strong>Healthcare reform mastery</strong> – ACA employer mandate, affordability calculations, Forms 1094/1095, and compliance deadlines",
+      "<strong>Consumer-driven health plans</strong> – HSAs, HRAs, FSAs, and the compliance rules that trip up most administrators",
+      "<strong>Professional certification</strong> – Earn your certificate plus 10.25 SHRM/HRCI/CLE continuing education credits"
+    ]
+  },
+  "curriculum": {
+    "header": {
+      "title": "What You'll Master in 1.5 Days",
+      "description": "A comprehensive welfare plan framework covering ERISA requirements, ACA compliance, HIPAA privacy, consumer-driven health plans, COBRA, and the multiple laws that impact health and welfare benefits."
+    },
+    "blocks": [
+      {
+        "id": "block1",
+        "label": "Full Program",
+        "title": "Welfare Benefits Plan Issues",
+        "description": "Navigate ACA, HIPAA, COBRA, and the alphabet soup of H&W compliance.",
+        "price": 975,
+        "availability": "Full program",
+        "competencyGroups": [
+          {
+            "title": "Get the Basics Right",
+            "description": "Know which welfare plans are subject to ERISA and establish compliant procedures.",
+            "skills": [
+              {"level": "Foundation", "title": "Coverage determination", "description": "Know which welfare plans are subject to ERISA."},
+              {"level": "Advanced", "title": "Reporting and disclosure", "description": "Handle Form 5500, SPD, and SMM requirements for welfare plans."},
+              {"level": "Advanced", "title": "Plan funding rules", "description": "Understand when trusts are required and what constitutes plan assets."},
+              {"level": "Advanced", "title": "Claims procedures", "description": "Establish DOL-compliant claim and appeal processes."},
+              {"level": "Expert", "title": "Fiduciary obligations", "description": "Navigate prohibited transaction rules for welfare plan assets."}
+            ]
+          },
+          {
+            "title": "Navigate Reform Requirements",
+            "description": "Understand play-or-pay rules and handle Forms 1094 and 1095 correctly.",
+            "skills": [
+              {"level": "Advanced", "title": "Employer mandate", "description": "Understand play-or-pay rules and who must offer coverage."},
+              {"level": "Advanced", "title": "Coverage affordability", "description": "Calculate whether your coverage satisfies ACA standards."},
+              {"level": "Advanced", "title": "Reporting requirements", "description": "Handle Forms 1094 and 1095 correctly."},
+              {"level": "Advanced", "title": "Compliance deadlines", "description": "Stay current with ACA implementation dates and requirements."},
+              {"level": "Expert", "title": "Cadillac tax planning", "description": "Strategies to avoid the high-cost plan excise tax."}
+            ]
+          },
+          {
+            "title": "Protect Health Information",
+            "description": "Understand what PHI you can access and structure compliant BAAs.",
+            "skills": [
+              {"level": "Advanced", "title": "Privacy rules for plan sponsors", "description": "Understand what PHI you can access and what's restricted."},
+              {"level": "Advanced", "title": "Business associate agreements", "description": "Structure contracts that satisfy HIPAA requirements."},
+              {"level": "Advanced", "title": "Security standards", "description": "Implement safeguards that protect electronic health information."},
+              {"level": "Expert", "title": "Breach notification", "description": "Know when and how to report privacy violations."}
+            ]
+          },
+          {
+            "title": "Understand New Plan Designs",
+            "description": "Navigate HSAs, HRAs, FSAs, and claim substantiation requirements.",
+            "skills": [
+              {"level": "Advanced", "title": "Health Savings Accounts", "description": "Structure HSA-compatible plans and handle contribution rules."},
+              {"level": "Advanced", "title": "Health Reimbursement Arrangements", "description": "Navigate HRA design and compliance requirements."},
+              {"level": "Advanced", "title": "Flexible Spending Accounts", "description": "Administer health and dependent care FSAs correctly."},
+              {"level": "Advanced", "title": "Private exchanges", "description": "Understand when private exchanges make sense for your organization."},
+              {"level": "Advanced", "title": "Claim substantiation", "description": "Handle FSA and HRA claim documentation requirements."}
+            ]
+          },
+          {
+            "title": "Handle Complex Requirements",
+            "description": "Master COBRA, mental health parity, and Medicare coordination.",
+            "skills": [
+              {"level": "Advanced", "title": "COBRA administration", "description": "Master qualifying events, notices, and election procedures."},
+              {"level": "Advanced", "title": "Cafeteria plan testing", "description": "Avoid discrimination in Section 125 plans."},
+              {"level": "Expert", "title": "Mental health parity", "description": "Ensure behavioral health benefits comply with parity requirements."},
+              {"level": "Expert", "title": "Medicare coordination", "description": "Handle Medicare Secondary Payer rules correctly."},
+              {"level": "Expert", "title": "QMCSO processing", "description": "Administer qualified medical child support orders properly."}
+            ]
+          },
+          {
+            "title": "Master Multiple Laws",
+            "description": "Navigate ADEA, ADA, FMLA, GINA, and USERRA requirements.",
+            "skills": [
+              {"level": "Advanced", "title": "ADEA and age discrimination", "description": "Provide retiree benefits without violating age discrimination rules."},
+              {"level": "Advanced", "title": "ADA accommodations", "description": "Handle disability-related benefit issues correctly."},
+              {"level": "Advanced", "title": "FMLA coordination", "description": "Integrate FMLA leave with health benefit continuation."},
+              {"level": "Advanced", "title": "GINA compliance", "description": "Avoid genetic information discrimination in wellness programs."},
+              {"level": "Advanced", "title": "USERRA requirements", "description": "Handle military leave and benefit continuation properly."}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "faq": [
+    {"question": "What happens after I register?", "answer": "Within minutes, you'll receive an invoice email. Once payment is processed, you can schedule your complimentary pre-program consultation (10-15 minutes) to discuss your specific health and welfare plan challenges and identify which regulatory topics will have the biggest impact for your organization. Pre-program materials arrive one week before your session starts."},
+    {"question": "What's the difference between in-person and virtual formats?", "answer": "Both formats feature the same practicing benefits attorney instructors, current ACA and HIPAA content, and professional credits. In-person provides face-to-face networking with other benefits professionals. Virtual delivers the same live instruction via Zoom with full Q&A capability. Choose the format that fits your schedule—the quality and content remain identical."},
+    {"question": "What continuing education credits will I earn?", "answer": "The 1.5-day program provides 10.25 SHRM/HRCI/CLE credits. Plus, your enrollment includes 12 months of quarterly employment law updates (4 sessions x 1.5 credits each = 6 additional credits), bringing your total to 16.25 credits."},
+    {"question": "Is this the same as Block III of the Certificate in Employee Benefits Law?", "answer": "Yes. Welfare Benefits Plan Issues is Block III of the full Certificate in Employee Benefits Law program. You can take it as a standalone 1.5-day program, or combine it with Retirement Plans (Block I) and Benefit Plan Claims, Appeals & Litigation (Block II) to earn the full certificate."},
+    {"question": "I primarily handle health benefits. Is this program relevant?", "answer": "Absolutely. The program is designed for professionals who administer health plans, self-funded arrangements, and consumer-driven health plans. You'll master ACA compliance, HIPAA privacy rules, COBRA administration, and the multiple laws that impact health and welfare benefits."},
+    {"question": "We're struggling with COBRA compliance. Can this program help?", "answer": "Yes. The program covers COBRA qualifying events, notice requirements, election procedures, and the common pitfalls that trigger lawsuits. The pre-program consultation is the perfect time to share your specific challenges so our team can point you to the most relevant content."},
+    {"question": "Does the $975 program fee include everything?", "answer": "Yes. Your enrollment includes all live instruction from practicing benefits attorneys, complete program materials, 10.25 continuing education credits, pre-program consultation, 12 months of quarterly employment law updates (4 sessions, $1,588 value), permanent access to updated resources, and alumni benefits for all future programs. The only additional cost would be travel and lodging if you choose in-person format."},
+    {"question": "Can I apply this toward the full Certificate in Employee Benefits Law?", "answer": "Yes. Welfare Benefits Plan Issues (Block III) counts toward the full certificate. You can complete the remaining blocks—Retirement Plans (Block I) and Benefit Plan Claims, Appeals & Litigation (Block II)—at any future session to earn the complete Certificate in Employee Benefits Law."}
+  ],
+  "benefits": {
+    "creditCount": "10.25 SHRM/HRCI/CLE",
+    "updatePeriod": "12 months",
+    "alumniDiscount": "$300-$500"
+  },
+  "airtable": {
+    "inPersonViewId": "viwa8yRYP99luXOQc",
+    "virtualViewId": null,
+    "onDemandViewId": null
+  }
+}

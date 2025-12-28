@@ -1,0 +1,166 @@
+{
+  "programName": "Benefit Plan Claims, Appeals & Litigation",
+  "programSlug": "benefit-plan-claims-appeals-litigation",
+  "registrationUrl": "#registration",
+  "meta": {
+    "title": "Benefit Plan Claims, Appeals & Litigation Training | IAML",
+    "description": "Master benefits claims procedures, ERISA appeals, and litigation defense in 1 day. Learn from practicing benefits attorneys. Earn 6.5 SHRM/HRCI/CLE credits.",
+    "keywords": "benefits claims training, ERISA appeals, benefits litigation, claims procedures, ERISA litigation defense, benefits administration, claims denial, administrative record, SHRM credits, HRCI credits",
+    "ogImage": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69093f4637c43adac1bc0ab3.png"
+  },
+  "seo": {
+    "canonicalUrl": "https://iaml.com/programs/benefit-plan-claims-appeals-litigation",
+    "robots": "index, follow",
+    "twitter": {
+      "card": "summary_large_image",
+      "site": "@IAMLaw",
+      "title": "Benefit Plan Claims, Appeals & Litigation Training | IAML",
+      "description": "Master benefits claims procedures, ERISA appeals, and litigation defense in 1 day. Earn 6.5 SHRM/HRCI/CLE credits.",
+      "image": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69093f4637c43adac1bc0ab3.png"
+    },
+    "schema": {
+      "educationalLevel": "intermediate",
+      "timeRequired": "P1D",
+      "teaches": [
+        "ERISA Claims Procedures",
+        "Benefits Appeals",
+        "Litigation Defense",
+        "Administrative Records",
+        "Fiduciary Obligations",
+        "Disability Claims",
+        "Reimbursement Rights"
+      ]
+    },
+    "keywordData": {
+      "primaryKeyword": "benefits claims training",
+      "searchVolume": 140,
+      "competition": "medium",
+      "relatedKeywords": [
+        "ERISA appeals training",
+        "benefits litigation",
+        "claims procedures compliance",
+        "benefits law certification"
+      ]
+    }
+  },
+  "hero": {
+    "title": "Benefit Plan Claims, Appeals & Litigation",
+    "description": "Benefits claims decisions that don't survive court scrutiny cost organizations millions in judgments and attorney fees. In 1 day, you'll master the claims procedures, documentation practices, and litigation defense strategies that protect your plan. Learn from attorneys who handle these cases every day.",
+    "price": 575,
+    "deliveryOptions": ["In Person"],
+    "duration": "1 day"
+  },
+  "testimonials": [
+    {"quote": "IAML once again surpassed my expectations. The seminar was awesome and the degree of information presented to our group was so valuable. I applaud IAML for finding the experts in the various fields and making them available to us. I can hardly wait until the next seminar!", "name": "Bianca Olivarria", "title": "HR Technician & Disability Management Specialist", "company": "Imperial Irrigation District"},
+    {"quote": "It was great learning the information, but also very useful hearing from others attending the class. I learned a wealth of information.", "name": "Brittney Viator", "title": "Benefits Administrator", "company": "FJ Management, Inc."},
+    {"quote": "The instructors did a fantastic job of presenting the information and maintaining participant engagement.", "name": "Sandy Lovett", "title": "Human Resources Generalist", "company": "Thiele Kaolin Company"},
+    {"quote": "All compensation and benefits professionals should consider this seminar. There is a large volume of valuable information presented in an effective, dynamic setting. The speakers are certainly well-equipped and are very attuned to the needs of the class members.", "name": "Todd Hanson", "title": "Corporate Human Resources Manager", "company": "Printpack, Inc."},
+    {"quote": "Instructors were very good and well versed in subject matter. They offered to help and provide materials outside of the seminar.", "name": "Brian Wagner", "title": "Attorney", "company": "Mateer & Harbert"},
+    {"quote": "I absolutely loved the instructors! The course provided so much valuable information.", "name": "Emily Ruelle", "title": "Human Resources Generalist", "company": "Tableau Software Inc."},
+    {"quote": "This was an excellent seminar and covered everything I'd hoped. The instructors were outstanding.", "name": "Kurt Henkel", "title": "Senior Benefits Plan Analyst", "company": "Deere & Company"},
+    {"quote": "I enjoyed the open and casual approach to this training. Everyone appeared comfortable enough to participate and ask questions.", "name": "Deborah Carnelli", "title": "Resolutions and Receivership Specialist", "company": "Federal Deposit Insurance Corporation"},
+    {"quote": "I really enjoyed the class. I appreciated Tom Schendt's teaching styles and how he involved everyone in the class and made it interactive. He certainly succeeded in making a potentially boring subject quite fun.", "name": "S. Greg Robinson", "title": "Human Resources Manager", "company": "Suominen"},
+    {"quote": "I really enjoyed the seminar. I learned a great deal and will definitely be able to apply what I learned once I'm back in the office.", "name": "Alana Tomczyszn", "title": "Human Resources Manager", "company": "CWS Capital Partners LLC"},
+    {"quote": "Great job! The information will assist me and my company in effectively administering our employee benefits.", "name": "Julie O'Dell-Michie", "title": "Sr. Vice President & Chief Administrative Officer", "company": "Blue Ridge Electric Membership Corporation"},
+    {"quote": "The instructors did a great job of keeping the participants engaged while covering material that could have been very dry.", "name": "Steven Pennell", "title": "Human Resources Director, Talent & Technology", "company": "Shurtape Technologies, LLC"},
+    {"quote": "I thoroughly enjoyed the seminar. I really appreciated that the instructors allowed participants to ask questions and work through our issues and concerns.", "name": "Sherry Murphy", "title": "Lead Human Resources Business Partner", "company": "Barrick Mining Corporation"}
+  ],
+  "contentSection": {
+    "headline": "Build Claims Expertise That Wins in Court",
+    "description": "Benefit Plan Claims, Appeals & Litigation is <span class=\"emphasis\">1 intensive day</span> where you'll master DOL-compliant claims procedures, build bulletproof administrative records, and learn the litigation strategies that protect your plan—working through real cases with experienced benefits attorneys.",
+    "benefits": [
+      "<strong>Bulletproof procedures</strong> – DOL-compliant claims processes, documentation requirements, and state law navigation",
+      "<strong>Defensible decisions</strong> – Build administrative records that win in court, handle disability claims, and structure appeals correctly",
+      "<strong>Litigation advantages</strong> – Leverage deferential standards of review, limited discovery, and no jury trial rules",
+      "<strong>Professional certification</strong> – Earn your certificate plus 6.5 SHRM/HRCI/CLE continuing education credits"
+    ]
+  },
+  "curriculum": {
+    "header": {
+      "title": "What You'll Master in 1 Day",
+      "description": "A comprehensive claims and litigation framework covering ERISA procedures, documentation, fiduciary duties, emerging issues, and strategic advantages in benefits litigation."
+    },
+    "blocks": [
+      {
+        "id": "block1",
+        "label": "Full Program",
+        "title": "Claims, Appeals & Litigation",
+        "description": "Handle benefit claims and protect your plan from litigation.",
+        "price": 575,
+        "availability": "Full program",
+        "competencyGroups": [
+          {
+            "title": "Build Bulletproof Procedures",
+            "description": "Know which plans ERISA covers and maintain proper documentation.",
+            "skills": [
+              {"level": "Foundation", "title": "Plan coverage determination", "description": "Know which plans ERISA covers and which are exempt."},
+              {"level": "Advanced", "title": "Documentation requirements", "description": "Maintain SPDs, SMMs, and plan documents that satisfy DOL standards."},
+              {"level": "Advanced", "title": "Reporting obligations", "description": "File Form 5500 correctly and meet disclosure deadlines."},
+              {"level": "Expert", "title": "State law navigation", "description": "Understand when ERISA preempts state requirements and when it doesn't."}
+            ]
+          },
+          {
+            "title": "Make Defensible Decisions",
+            "description": "Establish DOL-compliant procedures and create winning administrative records.",
+            "skills": [
+              {"level": "Advanced", "title": "Claims procedures", "description": "Establish DOL-compliant procedures that protect your appeal rights."},
+              {"level": "Expert", "title": "Decision documentation", "description": "Create the administrative record that wins in court."},
+              {"level": "Expert", "title": "Disability claims", "description": "Navigate the heightened standards for disability benefit claims."},
+              {"level": "Expert", "title": "Appeal processes", "description": "Structure appeals that satisfy regulatory requirements and build your defense."}
+            ]
+          },
+          {
+            "title": "Minimize Your Liability Risk",
+            "description": "Know who the fiduciaries are and protect your plan's rights.",
+            "skills": [
+              {"level": "Advanced", "title": "Fiduciary identification", "description": "Know who the fiduciaries are and what obligations they have."},
+              {"level": "Expert", "title": "Investment duties", "description": "Understand prudent investment requirements and monitoring obligations."},
+              {"level": "Expert", "title": "Reimbursement rights", "description": "Protect your plan's right to recover overpayments and subrogation."},
+              {"level": "Expert", "title": "Anti-cutback compliance", "description": "Avoid benefit reductions that trigger participant lawsuits."}
+            ]
+          },
+          {
+            "title": "Stay Ahead of Emerging Issues",
+            "description": "Learn what appellate courts and regulators are focusing on.",
+            "skills": [
+              {"level": "Advanced", "title": "Recent court decisions", "description": "Learn what appellate courts are saying about claims and appeals."},
+              {"level": "Advanced", "title": "DOL enforcement trends", "description": "Understand where regulators are focusing attention."},
+              {"level": "Advanced", "title": "Best practices evolution", "description": "Stay current with what courts expect from plan administrators."},
+              {"level": "Expert", "title": "Litigation hot topics", "description": "Prepare for the claims issues that are generating lawsuits now."}
+            ]
+          },
+          {
+            "title": "Understand Your Strategic Advantages",
+            "description": "Leverage deferential standards and limited discovery rules.",
+            "skills": [
+              {"level": "Expert", "title": "Arbitrary and capricious standard", "description": "Leverage the deferential standard of review."},
+              {"level": "Expert", "title": "No jury trials", "description": "Understand how bench trials favor plan administrators."},
+              {"level": "Expert", "title": "Limited discovery", "description": "Use the administrative record rule to control litigation scope."},
+              {"level": "Expert", "title": "Attorney fee rules", "description": "Know when courts award fees and how to minimize exposure."}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "faq": [
+    {"question": "What happens after I register?", "answer": "Within minutes, you'll receive an invoice email. Once payment is processed, you can schedule your complimentary pre-program consultation (10-15 minutes) to discuss your specific claims challenges and identify which topics will have the biggest impact for your organization. Pre-program materials arrive one week before your session starts."},
+    {"question": "What's the difference between in-person and virtual formats?", "answer": "Both formats feature the same practicing benefits attorney instructors, current claims and litigation content, and professional credits. In-person provides face-to-face networking with other benefits professionals. Virtual delivers the same live instruction via Zoom with full Q&A capability. Choose the format that fits your schedule—the quality and content remain identical."},
+    {"question": "What continuing education credits will I earn?", "answer": "The 1-day program provides 6.5 SHRM/HRCI/CLE credits. Plus, your enrollment includes 12 months of quarterly employment law updates (4 sessions x 1.5 credits each = 6 additional credits), bringing your total to 12.5 credits."},
+    {"question": "Is this the same as Block II of the Certificate in Employee Benefits Law?", "answer": "Yes. Benefit Plan Claims, Appeals & Litigation is Block II of the full Certificate in Employee Benefits Law program. You can take it as a standalone 1-day program, or combine it with Retirement Plans (Block I) and Welfare Benefits Plan Issues (Block III) to earn the full certificate."},
+    {"question": "We're facing a benefits lawsuit. Can this program help?", "answer": "Absolutely. The program covers litigation strategy, administrative record building, standards of review, and the procedural advantages plan administrators have in ERISA litigation. The pre-program consultation is the perfect time to share your situation (confidentially) so our team can point you to the most relevant content."},
+    {"question": "I handle disability claims. Is this program relevant?", "answer": "Yes. A significant portion covers the heightened standards for disability benefit claims, including the conflict of interest issues that arise when the claim administrator also pays benefits. You'll learn how to structure decisions and build records that survive judicial scrutiny."},
+    {"question": "Does the $575 program fee include everything?", "answer": "Yes. Your enrollment includes all live instruction from practicing ERISA attorneys, complete program materials, 6.5 continuing education credits, pre-program consultation, 12 months of quarterly employment law updates (4 sessions, $1,588 value), permanent access to updated resources, and alumni benefits for all future programs. The only additional cost would be travel and lodging if you choose in-person format."},
+    {"question": "Can I apply this toward the full Certificate in Employee Benefits Law?", "answer": "Yes. Benefit Plan Claims, Appeals & Litigation (Block II) counts toward the full certificate. You can complete the remaining blocks—Retirement Plans (Block I) and Welfare Benefits Plan Issues (Block III)—at any future session to earn the complete Certificate in Employee Benefits Law."}
+  ],
+  "benefits": {
+    "creditCount": "6.5 SHRM/HRCI/CLE",
+    "updatePeriod": "12 months",
+    "alumniDiscount": "$300-$500"
+  },
+  "airtable": {
+    "inPersonViewId": "viw0LjpGuf6lGKLZu",
+    "virtualViewId": null,
+    "onDemandViewId": null
+  }
+}

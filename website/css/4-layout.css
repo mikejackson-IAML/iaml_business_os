@@ -1,0 +1,561 @@
+/* Layout & Structure */
+
+/* ===== CONTAINERS ===== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-xl);
+  width: 100%;
+}
+
+.container-sm {
+  max-width: 768px;
+}
+
+.container-md {
+  max-width: 960px;
+}
+
+.container-lg {
+  max-width: 1400px;
+}
+
+.container-fluid {
+  max-width: 100%;
+  padding: 0 var(--space-lg);
+}
+
+/* ===== SECTIONS ===== */
+section {
+  position: relative;
+  width: 100%;
+}
+
+.section-padding {
+  padding: var(--space-4xl) 0;
+}
+
+.section-padding-lg {
+  padding: 6rem 0;
+}
+
+.section-padding-xl {
+  padding: 8rem 0;
+}
+
+/* Full-width sections */
+.full-width-section {
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  box-sizing: border-box;
+}
+
+/* ===== GRIDS ===== */
+.grid {
+  display: grid;
+  gap: var(--space-xl);
+}
+
+.grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.grid-auto {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+/* Benefits Grid */
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+/* Faculty Grid */
+.faculty-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+/* Timeline Grid */
+.timeline-grid {
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ===== FLEXBOX UTILITIES ===== */
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.items-start {
+  align-items: flex-start;
+}
+
+.items-end {
+  align-items: flex-end;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.gap-sm {
+  gap: var(--space-sm);
+}
+.gap-md {
+  gap: var(--space-md);
+}
+.gap-lg {
+  gap: var(--space-lg);
+}
+.gap-xl {
+  gap: var(--space-xl);
+}
+
+/* ===== TEXT ALIGNMENT ===== */
+.text-left {
+  text-align: left;
+}
+.text-center {
+  text-align: center;
+}
+.text-right {
+  text-align: right;
+}
+
+/* ===== SPACING UTILITIES ===== */
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mt-0 {
+  margin-top: 0;
+}
+.mt-sm {
+  margin-top: var(--space-sm);
+}
+.mt-md {
+  margin-top: var(--space-md);
+}
+.mt-lg {
+  margin-top: var(--space-lg);
+}
+.mt-xl {
+  margin-top: var(--space-xl);
+}
+.mt-2xl {
+  margin-top: var(--space-2xl);
+}
+
+.mb-0 {
+  margin-bottom: 0;
+}
+.mb-sm {
+  margin-bottom: var(--space-sm);
+}
+.mb-md {
+  margin-bottom: var(--space-md);
+}
+.mb-lg {
+  margin-bottom: var(--space-lg);
+}
+.mb-xl {
+  margin-bottom: var(--space-xl);
+}
+.mb-2xl {
+  margin-bottom: var(--space-2xl);
+}
+
+.my-sm {
+  margin-top: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+.my-md {
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+.my-lg {
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.pt-0 {
+  padding-top: 0;
+}
+.pt-sm {
+  padding-top: var(--space-sm);
+}
+.pt-md {
+  padding-top: var(--space-md);
+}
+.pt-lg {
+  padding-top: var(--space-lg);
+}
+.pt-xl {
+  padding-top: var(--space-xl);
+}
+
+.pb-0 {
+  padding-bottom: 0;
+}
+.pb-sm {
+  padding-bottom: var(--space-sm);
+}
+.pb-md {
+  padding-bottom: var(--space-md);
+}
+.pb-lg {
+  padding-bottom: var(--space-lg);
+}
+.pb-xl {
+  padding-bottom: var(--space-xl);
+}
+
+.py-sm {
+  padding-top: var(--space-sm);
+  padding-bottom: var(--space-sm);
+}
+.py-md {
+  padding-top: var(--space-md);
+  padding-bottom: var(--space-md);
+}
+.py-lg {
+  padding-top: var(--space-lg);
+  padding-bottom: var(--space-lg);
+}
+.py-xl {
+  padding-top: var(--space-xl);
+  padding-bottom: var(--space-xl);
+}
+.py-2xl {
+  padding-top: var(--space-2xl);
+  padding-bottom: var(--space-2xl);
+}
+.py-3xl {
+  padding-top: var(--space-3xl);
+  padding-bottom: var(--space-3xl);
+}
+.py-4xl {
+  padding-top: var(--space-4xl);
+  padding-bottom: var(--space-4xl);
+}
+.py-5xl {
+  padding-top: 15rem;
+  padding-bottom: 15rem;
+}
+
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+@media (max-width: 1200px) {
+  .container-lg {
+    max-width: 1140px;
+  }
+
+  .faculty-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid-4 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .container {
+    padding: 0 var(--space-lg);
+  }
+
+  .grid-3,
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .section-padding {
+    padding: var(--space-3xl) 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 var(--space-md);
+  }
+
+  .grid-2,
+  .grid-3,
+  .grid-4,
+  .faculty-grid,
+  .benefits-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-padding {
+    padding: var(--space-2xl) 0;
+  }
+
+  .py-5xl {
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 var(--space-sm);
+  }
+
+  .section-padding {
+    padding: var(--space-xl) 0;
+  }
+}
+
+/* ===== SUPPORT CONTINUUM LAYOUT ===== */
+
+.support-continuum-section {
+  background: var(--white);
+  position: relative;
+}
+
+.support-continuum-grid {
+  display: flex;
+  gap: var(--space-4xl);
+  align-items: start;
+  margin-top: var(--space-4xl);
+  position: relative;
+  z-index: 5;
+}
+
+/* Sticky positioning for timeline nav */
+.support-timeline-nav {
+  flex: 0 0 400px; /* Fixed width, don't grow or shrink */
+  position: sticky;
+  top: 120px;
+  max-height: calc(100vh - 160px);
+  overflow-y: auto;
+  overflow-x: visible;
+  /* Hide scrollbar but keep functionality */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  z-index: 10;
+}
+
+/* Allow panels to grow and fill remaining space */
+.support-panels-container {
+  flex: 1 1 auto;
+  position: relative;
+  height: 100%;
+  min-height: 480vh; /* 5 phases × ~96vh for smoother sticky progression */
+}
+
+/* Hide panels by default (when section is out of view) */
+.support-panels-container .support-panel {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Show active panels when section is visible */
+.support-panels-container.panels-visible .support-panel.active {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+.support-timeline-nav::-webkit-scrollbar {
+  display: none;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1024px) {
+  .support-continuum-grid {
+    flex-direction: column; /* Stack vertically below 1024px */
+    gap: var(--space-xl);
+    margin-top: var(--space-xl); /* Reduced top margin on mobile */
+  }
+
+  /* Remove sticky positioning below 1024px */
+  .support-timeline-nav {
+    flex: 1 1 auto; /* Full width */
+    position: relative !important; /* Force relative, override JS sticky */
+    top: 0 !important;
+    left: auto !important;
+    width: 100% !important;
+    max-height: none;
+    padding-bottom: var(--space-lg);
+    border-bottom: 2px solid var(--gray-200);
+    margin-bottom: var(--space-lg);
+    padding-left: 0; /* Remove left padding for tabs */
+    overflow: visible; /* Allow tabs to scroll */
+  }
+
+  /* Convert timeline to horizontal tabs */
+  .timeline-items {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap; /* Prevent wrapping */
+    gap: var(--space-sm);
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: var(--space-xs) var(--space-sm); /* Reduced padding for mobile */
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    width: 100%;
+  }
+
+  /* Enhanced scrollbar styling for better visibility */
+  .timeline-items::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .timeline-items::-webkit-scrollbar-track {
+    background: var(--gray-100);
+    border-radius: 3px;
+  }
+
+  .timeline-items::-webkit-scrollbar-thumb {
+    background: var(--gray-400);
+    border-radius: 3px;
+  }
+
+  .timeline-items::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-500);
+  }
+
+  /* Panels also full-width */
+  .support-panels-container {
+    flex: 1 1 auto;
+    min-height: auto; /* Remove tall min-height on mobile */
+  }
+
+  /* Hide progress line and track below 1024px */
+  .timeline-progress,
+  .timeline-track {
+    display: none;
+  }
+
+  /* Show all panels in normal flow (no fixed positioning) */
+  .support-panels-container .support-panel {
+    position: relative !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    width: 100%;
+    min-height: 280px;
+    margin-bottom: var(--space-lg);
+    top: auto !important;
+    right: auto !important;
+    height: auto !important;
+  }
+
+  .support-panel.active {
+    display: block;
+  }
+
+  .support-panel:not(.active) {
+    display: none; /* Hide inactive panels */
+  }
+}
+
+@media (max-width: 768px) {
+  .support-continuum-grid {
+    gap: var(--space-lg);
+    margin-top: var(--space-lg);
+  }
+
+  .support-timeline-nav {
+    padding-bottom: var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+
+  .timeline-items {
+    gap: 8px;
+    padding: 8px 12px;
+  }
+
+  .support-panels-container .support-panel {
+    min-height: 250px;
+    margin-bottom: var(--space-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .support-continuum-grid {
+    gap: var(--space-md);
+    margin-top: var(--space-md);
+  }
+
+  .support-timeline-nav {
+    padding-bottom: var(--space-sm);
+    margin-bottom: var(--space-sm);
+  }
+
+  .timeline-items {
+    gap: 6px;
+    padding: 6px 10px;
+  }
+
+  .support-panels-container .support-panel {
+    min-height: 200px;
+    margin-bottom: var(--space-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .support-continuum-grid {
+    gap: var(--space-lg);
+  }
+
+  .support-timeline-nav {
+    padding-left: 30px;
+  }
+
+  .timeline-bullet {
+    left: -22px;
+  }
+
+  .timeline-item.active .timeline-bullet {
+    left: -24px;
+  }
+
+  .timeline-title {
+    font-size: var(--text-lg);
+  }
+
+  .timeline-item.active .timeline-title {
+    font-size: var(--text-xl);
+  }
+
+  .support-panel {
+    min-height: 250px;
+  }
+}

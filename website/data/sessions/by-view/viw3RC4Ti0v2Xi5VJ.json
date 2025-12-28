@@ -1,0 +1,139 @@
+{
+  "generated": "2025-12-28T14:59:56.938Z",
+  "viewId": "viw3RC4Ti0v2Xi5VJ",
+  "usedBy": [
+    {
+      "program": "Strategic HR Management",
+      "format": "virtual"
+    }
+  ],
+  "recordCount": 3,
+  "records": [
+    {
+      "id": "recHs4nhaimFJAla3",
+      "createdTime": "2025-12-15T19:56:06.000Z",
+      "fields": {
+        "Instance ID": 75,
+        "Instance Name": "Strategic HR Management - May 2026",
+        "Programs": [
+          "recU3GZdrPt28Fvev"
+        ],
+        "Start Date": "2026-05-19",
+        "End Date": "2026-05-20",
+        "Duration (Days)": [
+          2.5
+        ],
+        "Format": "Virtual",
+        "Current Enrolled": 0,
+        "Enrollment Status": "Low Enrollment",
+        "Show on Website": true,
+        "Created Date": "2025-12-15T19:56:06.000Z",
+        "Last Modified": "2025-12-17T18:48:59.000Z",
+        "Created By": {
+          "id": "usrSAo8TcudAuSfA4",
+          "email": "mike.jackson@re-vitalized.com",
+          "name": "Mike Jackson"
+        },
+        "Block 1 Instructor": [
+          "recCysOqbmx33qZGA"
+        ],
+        "Full Name with Credentials (from Block 1 Instructor)": [
+          "Dawn Kubik, Esq."
+        ],
+        "Price In-Person (from PROGRAMS)": [
+          1575
+        ],
+        "Price Virtual (from PROGRAMS)": [
+          1575
+        ],
+        "Min. Capacity": [
+          6
+        ],
+        "Registration Deadline": "2026-05-19T00:00:00.000Z",
+        "Program Name": [
+          "Strategic HR Management"
+        ]
+      }
+    },
+    {
+      "id": "recZXDDCbwYZ0tXNQ",
+      "createdTime": "2025-12-15T19:56:06.000Z",
+      "fields": {
+        "Instance ID": 76,
+        "Instance Name": "Strategic HR Management - Aug 2026",
+        "Programs": [
+          "recU3GZdrPt28Fvev"
+        ],
+        "Start Date": "2026-08-25",
+        "End Date": "2026-08-26",
+        "Duration (Days)": [
+          2.5
+        ],
+        "Format": "Virtual",
+        "Current Enrolled": 0,
+        "Enrollment Status": "Low Enrollment",
+        "Show on Website": true,
+        "Created Date": "2025-12-15T19:56:06.000Z",
+        "Last Modified": "2025-12-15T19:59:25.000Z",
+        "Created By": {
+          "id": "usrSAo8TcudAuSfA4",
+          "email": "mike.jackson@re-vitalized.com",
+          "name": "Mike Jackson"
+        },
+        "Price In-Person (from PROGRAMS)": [
+          1575
+        ],
+        "Price Virtual (from PROGRAMS)": [
+          1575
+        ],
+        "Min. Capacity": [
+          6
+        ],
+        "Registration Deadline": "2026-08-25T00:00:00.000Z",
+        "Program Name": [
+          "Strategic HR Management"
+        ]
+      }
+    },
+    {
+      "id": "recbyRzjvsOp52YQf",
+      "createdTime": "2025-12-15T19:57:08.000Z",
+      "fields": {
+        "Instance ID": 78,
+        "Instance Name": "Strategic HR Management - Dec 2026",
+        "Programs": [
+          "recU3GZdrPt28Fvev"
+        ],
+        "Start Date": "2026-12-08",
+        "End Date": "2026-12-09",
+        "Duration (Days)": [
+          2.5
+        ],
+        "Format": "Virtual",
+        "Current Enrolled": 0,
+        "Enrollment Status": "Low Enrollment",
+        "Show on Website": true,
+        "Created Date": "2025-12-15T19:57:08.000Z",
+        "Last Modified": "2025-12-15T19:59:44.000Z",
+        "Created By": {
+          "id": "usrSAo8TcudAuSfA4",
+          "email": "mike.jackson@re-vitalized.com",
+          "name": "Mike Jackson"
+        },
+        "Price In-Person (from PROGRAMS)": [
+          1575
+        ],
+        "Price Virtual (from PROGRAMS)": [
+          1575
+        ],
+        "Min. Capacity": [
+          6
+        ],
+        "Registration Deadline": "2026-12-08T00:00:00.000Z",
+        "Program Name": [
+          "Strategic HR Management"
+        ]
+      }
+    }
+  ]
+}

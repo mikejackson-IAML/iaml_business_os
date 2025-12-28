@@ -1,0 +1,182 @@
+{
+  "generated": "2025-12-28T14:59:56.938Z",
+  "version": "1.0.0",
+  "totalSessions": 70,
+  "viewsCount": 17,
+  "viewStats": [
+    {
+      "viewId": "viwfys9oVCU3gFsel",
+      "count": 5,
+      "usedBy": [
+        {
+          "program": "Certificate in Employee Relations Law",
+          "format": "in-person"
+        }
+      ]
+    },
+    {
+      "viewId": "viwjSrF7oSzlzYuIc",
+      "count": 4,
+      "usedBy": [
+        {
+          "program": "Certificate in Strategic HR Leadership",
+          "format": "in-person"
+        }
+      ]
+    },
+    {
+      "viewId": "viwqyJc8gx3hOppAu",
+      "count": 4,
+      "usedBy": [
+        {
+          "program": "Advanced Certificate in Strategic Employment Law",
+          "format": "in-person"
+        }
+      ]
+    },
+    {
+      "viewId": "viw3l8oabLZC5abrq",
+      "count": 3,
+      "usedBy": [
+        {
+          "program": "Certificate in Workplace Investigations",
+          "format": "in-person"
+        }
+      ]
+    },
+    {
+      "viewId": "viwui1caJxkkGKXiO",
+      "count": 2,
+      "usedBy": [
+        {
+          "program": "Certificate in Employee Benefits Law",
+          "format": "in-person"
+        }
+      ]
+    },
+    {
+      "viewId": "viwlzVMIk78qDmL2W",
+      "count": 1,
+      "usedBy": [
+        {
+          "program": "Advanced Certificate in Employee Benefits Law",
+          "format": "in-person"
+        }
+      ]
+    },
+    {
+      "viewId": "viwfRNxWVMk9nUxCc",
+      "count": 5,
+      "usedBy": [
+        {
+          "program": "Comprehensive Labor Relations",
+          "format": "in-person"
+        },
+        {
+          "program": "Special Issues in Employment Law",
+          "format": "in-person"
+        }
+      ]
+    },
+    {
+      "viewId": "viwkxehH3VECGQrVU",
+      "count": 3,
+      "usedBy": [
+        {
+          "program": "Comprehensive Labor Relations",
+          "format": "virtual"
+        }
+      ]
+    },
+    {
+      "viewId": "viwgBsDDQfaHdPREf",
+      "count": 4,
+      "usedBy": [
+        {
+          "program": "Discrimination Prevention and Defense",
+          "format": "in-person"
+        }
+      ]
+    },
+    {
+      "viewId": "viw5ydjKfvbDKMzaf",
+      "count": 3,
+      "usedBy": [
+        {
+          "program": "Discrimination Prevention and Defense",
+          "format": "virtual"
+        }
+      ]
+    },
+    {
+      "viewId": "viwOR51HSgvqnvvtM",
+      "count": 4,
+      "usedBy": [
+        {
+          "program": "HR Law Fundamentals",
+          "format": "in-person"
+        }
+      ]
+    },
+    {
+      "viewId": "viwI0VscueaVxM4Vk",
+      "count": 3,
+      "usedBy": [
+        {
+          "program": "HR Law Fundamentals",
+          "format": "virtual"
+        }
+      ]
+    },
+    {
+      "viewId": "viwVZQi5IShScOoOP",
+      "count": 4,
+      "usedBy": [
+        {
+          "program": "Strategic HR Management",
+          "format": "in-person"
+        }
+      ]
+    },
+    {
+      "viewId": "viw3RC4Ti0v2Xi5VJ",
+      "count": 3,
+      "usedBy": [
+        {
+          "program": "Strategic HR Management",
+          "format": "virtual"
+        }
+      ]
+    },
+    {
+      "viewId": "viwuXlg9Lk4I7AeCY",
+      "count": 2,
+      "usedBy": [
+        {
+          "program": "Retirement Plans",
+          "format": "in-person"
+        }
+      ]
+    },
+    {
+      "viewId": "viw0LjpGuf6lGKLZu",
+      "count": 2,
+      "usedBy": [
+        {
+          "program": "Benefit Plan Claims, Appeals and Litigation",
+          "format": "in-person"
+        }
+      ]
+    },
+    {
+      "viewId": "viwa8yRYP99luXOQc",
+      "count": 2,
+      "usedBy": [
+        {
+          "program": "Welfare Benefits Plan Issues",
+          "format": "in-person"
+        }
+      ]
+    }
+  ]
+}

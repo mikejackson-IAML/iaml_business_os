@@ -1,0 +1,203 @@
+{
+  "programName": "Strategic HR Management",
+  "programSlug": "strategic-hr-management",
+  "registrationUrl": "#registration",
+  "meta": {
+    "title": "Strategic HR Management | IAML",
+    "description": "Transform from HR administrator to strategic business partner in 2.5 days. Master workforce planning, retention strategy, performance systems, and executive-level HR metrics. Earn 16.75 SHRM/HRCI credits.",
+    "keywords": "strategic HR management, HR business partner training, workforce planning, retention strategy, performance management, HR metrics, talent management, HR leadership, SHRM credits, strategic human resources",
+    "ogImage": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69093f4637c43adac1bc0ab3.png"
+  },
+  "seo": {
+    "canonicalUrl": "https://iaml.com/programs/strategic-hr-management",
+    "robots": "index, follow",
+    "twitter": {
+      "card": "summary_large_image",
+      "site": "@IAMLaw",
+      "title": "Strategic HR Management | IAML",
+      "description": "Transform from HR administrator to strategic business partner in 2.5 days. Master workforce planning, retention strategy, performance systems, and executive-level HR metrics.",
+      "image": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69093f4637c43adac1bc0ab3.png"
+    },
+    "schema": {
+      "educationalLevel": "advanced",
+      "timeRequired": "P2.5D",
+      "teaches": [
+        "Strategic HR Management",
+        "Workforce Planning",
+        "Talent Acquisition Strategy",
+        "Retention & Engagement",
+        "Leadership Development",
+        "Performance Management",
+        "Compensation Strategy",
+        "HR Analytics & Metrics"
+      ]
+    },
+    "keywordData": {
+      "primaryKeyword": "strategic HR management",
+      "searchVolume": 320,
+      "competition": "medium",
+      "relatedKeywords": [
+        "HR business partner training",
+        "strategic human resources",
+        "workforce planning training",
+        "HR leadership certification"
+      ]
+    }
+  },
+  "hero": {
+    "title": "Strategic HR Management",
+    "description": "Stop being seen as just an administrative function. Master the strategic frameworks that position HR as a business partner and competitive advantage—workforce planning, retention strategy, performance systems, and the metrics executives actually care about.",
+    "price": 1775,
+    "deliveryOptions": ["In Person", "Virtual"],
+    "duration": "2.5 days"
+  },
+  "testimonials": [
+    {"quote": "Di Ann Sanchez was truly inspiring. She gave me the energy that I needed to continue in the field of HR. I would recommend her session to entry level HR professionals as well as a refresher for seasoned professionals.", "name": "Patrice Terrell", "title": "Associate Director", "company": "Georgia College"},
+    {"quote": "I am taking away so much more knowledge than what I had walking in to the room on the first day. Di Ann's energy, enthusiasm, and passion made the class interesting and engaging. I am looking forward to sharing some of what I learned with my fellow co-workers, and begin to implement some positive changes.", "name": "Megan Mihelick", "title": "Human Resources Generalist", "company": "Dow Corning Corporation"},
+    {"quote": "This was a great program! One of the most useful programs I have attended in a long time. Instructors were awesome!", "name": "Dean C. Goodwin", "title": "Deputy Director, Administration", "company": "Northern Virginia Criminal Justice Training Academy"},
+    {"quote": "The seminar was very good. It covered a lot of pertinent information. I felt I learned quite a bit that will have an immediate impact on my job.", "name": "Bobbi Britton", "title": "Sr. Human Resources Consultant", "company": "Deltic Timber Corporation"},
+    {"quote": "Brenda Heinicke was fantastic! She did an amazing job of presenting the information clearly and concisely. Her high energy level engaged us in thought provoking conversations instead of 'talking at us' like many instructors tend to do.", "name": "Brittany Hepler", "title": "Mobility Supervisor", "company": "Dayle McIntosh Disability Resource"},
+    {"quote": "Thank you for the insight and facilitated discussions. It was beneficial to hear about actual cases and learn how other HR professionals solve problems.", "name": "Olivia Gunter", "title": "Human Resources Analyst", "company": "Hillenbrand, Inc."},
+    {"quote": "The instructors were very knowledgeable. It was a great seminar. I have been in HR for 12 years and still learned a lot!", "name": "Krissy Houston", "title": "Sr. Human Resources Representative", "company": "Newmont Mining Corporation"},
+    {"quote": "Excellent seminar! This is the second IAML class I have attended. As a new manager, the information presented was invaluable! The instructor was amazing! I will definitely be back!", "name": "Holly Dean", "title": "Employment Manager", "company": "Alfa Insurance Company"},
+    {"quote": "Both facilitators were excellent! I will be able to use key learning tools from the seminar immediately within my organization. Thank you again for another awesome course!", "name": "Michi Eaton", "title": "Regional Human Resources Manager", "company": "AutoVin"},
+    {"quote": "Each instructor was extremely knowledgeable in their subject matter. High energy, great class environment. Most importantly, I want to say that Di Ann Sanchez' real world application of the laws, her best practices advice was great!", "name": "Jackie Rudnick", "title": "Senior Human Resources Specialist", "company": "JM Family Enterprises, Inc."}
+  ],
+  "contentSection": {
+    "headline": "Build Strategic HR Capabilities That Drive Business Results",
+    "description": "Strategic HR Management is <span class=\"emphasis\">2.5 intensive days</span> where you'll master the frameworks that transform HR from administrative function to strategic business partner—workforce planning, retention strategy, performance systems, and the metrics that get you a seat at the leadership table.",
+    "benefits": [
+      "<strong>Complete strategic HR framework</strong> – Workforce planning, talent acquisition strategy, retention & engagement, leadership development, performance management, compensation strategy, and HR analytics",
+      "<strong>Real-world application</strong> – Work through strategic workforce challenges, retention crises, performance system design, and the business problems you'll face as an HR leader",
+      "<strong>Expert instruction</strong> – Learn from senior HR leaders and practitioners who have built high-performing HR functions and earned seats at executive tables",
+      "<strong>Professional certification</strong> – Earn your certificate plus 16.75 SHRM/HRCI continuing education credits"
+    ]
+  },
+  "curriculum": {
+    "header": {
+      "title": "What You'll Master in 2.5 Days",
+      "description": "A comprehensive strategic HR framework covering the strategic role of HR, talent acquisition, retention & engagement, leadership development, performance management, compensation strategy, workplace culture, HR analytics, and strategic case study application."
+    },
+    "blocks": [
+      {
+        "id": "block1",
+        "label": "Full Program",
+        "title": "Strategic HR Management",
+        "description": "Build strategic HR capabilities that position you as a business partner and drive organizational results.",
+        "price": 1775,
+        "availability": "Full program",
+        "competencyGroups": [
+          {
+            "title": "The Strategic Role of HR in 2026",
+            "description": "Elevate HR as a business risk manager and culture architect with metrics leaders trust.",
+            "skills": [
+              {"level": "Foundation", "title": "HR metrics that executives actually listen to", "description": "Report leading indicators tied to revenue, cost, and risk."},
+              {"level": "Advanced", "title": "HR as business risk manager + culture architect", "description": "Integrate legal, financial, and cultural risk into business decisions."},
+              {"level": "Advanced", "title": "Workforce planning in a skills-based economy", "description": "Forecast and build skills portfolios, not just headcount."}
+            ]
+          },
+          {
+            "title": "Talent Acquisition & Workforce Planning",
+            "description": "Design roles for hybrid teams and hire skills-first while protecting the brand.",
+            "skills": [
+              {"level": "Foundation", "title": "Job design for hybrid/distributed teams", "description": "Design roles for clarity, autonomy, and measurable outcomes."},
+              {"level": "Foundation", "title": "Skills-based hiring vs credential-based hiring", "description": "Source and assess by capability evidence, not pedigree."},
+              {"level": "Advanced", "title": "Employment branding in a candidate-skeptical labor market", "description": "Convey proof, not slogans—career growth, flexibility, and impact."},
+              {"level": "Advanced", "title": "Psychological contract in the post-COVID workforce", "description": "Reset expectations on flexibility, trust, and development."}
+            ]
+          },
+          {
+            "title": "Retention & Engagement Strategy",
+            "description": "Prevent disengagement and build mobility that keeps top performers.",
+            "skills": [
+              {"level": "Foundation", "title": "Internal mobility as a retention strategy", "description": "Create pathways and visibility so talent moves before it leaves."},
+              {"level": "Advanced", "title": "Why employees stay (2026 version, not 2016 version)", "description": "Prioritize meaning, growth, flexibility, and manager quality."},
+              {"level": "Advanced", "title": "Preventing disengagement before it becomes turnover", "description": "Detect risk signals early and intervene with targeted actions."},
+              {"level": "Advanced", "title": "Stay interviews > exit interviews", "description": "Use structured conversations to surface fixable issues sooner."}
+            ]
+          },
+          {
+            "title": "Talent & Leadership Development",
+            "description": "Build future-ready skills, succession, and manager capability.",
+            "skills": [
+              {"level": "Foundation", "title": "Career pathways and succession readiness", "description": "Map roles, skills, and readiness with objective criteria."},
+              {"level": "Advanced", "title": "Future-ready skill building (not just training)", "description": "Deliver practice, projects, and coaching that change behavior."},
+              {"level": "Advanced", "title": "Manager capability as retention lever", "description": "Equip managers to set clarity, coach well, and build trust."},
+              {"level": "Advanced", "title": "Realigning underperformers without turnover spikes", "description": "Use fair plans and supports that improve results quickly."}
+            ]
+          },
+          {
+            "title": "Performance Management as a Strategic System",
+            "description": "Shift from activity to value with continuous, fair performance systems.",
+            "skills": [
+              {"level": "Advanced", "title": "Measuring value, not tasks", "description": "Define outputs and impact to replace activity metrics."},
+              {"level": "Advanced", "title": "Continuous feedback vs annual ratings", "description": "Adopt light-weight, frequent touchpoints that drive growth."},
+              {"level": "Advanced", "title": "Performance calibration to ensure fairness", "description": "Compare across teams to remove rater bias and drift."},
+              {"level": "Advanced", "title": "Coaching for development vs coaching for documentation", "description": "Split growth coaching from compliance documentation cleanly."}
+            ]
+          },
+          {
+            "title": "Compensation & Total Rewards Strategy",
+            "description": "Use transparent, market-smart rewards that drive retention.",
+            "skills": [
+              {"level": "Advanced", "title": "Pay transparency as a trust-building tool", "description": "Use ranges, rationales, and progressions to build credibility."},
+              {"level": "Advanced", "title": "Market pricing in unpredictable labor markets", "description": "Blend surveys and real-time signals for resilient ranges."},
+              {"level": "Advanced", "title": "Differentiated rewards for critical roles", "description": "Invest more where scarcity and impact are highest."},
+              {"level": "Expert", "title": "Linking rewards to retention, not just performance", "description": "Tie incentives to staying power and skill criticality."}
+            ]
+          },
+          {
+            "title": "Workplace Culture, Trust, and Organizational Health",
+            "description": "Manage cultural risk, rebuild trust, and handle dissent constructively.",
+            "skills": [
+              {"level": "Foundation", "title": "Psychological safety & leadership credibility", "description": "Leaders earn trust through consistency, clarity, and care."},
+              {"level": "Advanced", "title": "Cultural risk ≠ legal risk (but both must be managed)", "description": "Track culture signals alongside compliance to reduce surprises."},
+              {"level": "Advanced", "title": "Restoring culture after turnover or change", "description": "Rebuild norms with rituals, stories, and visible decisions."},
+              {"level": "Advanced", "title": "Managing dissent, not suppressing it", "description": "Channel disagreement into better choices and stronger buy-in."}
+            ]
+          },
+          {
+            "title": "HR Data, Metrics & Strategic Reporting",
+            "description": "Turn HR data into decisions with predictive, executive-ready reporting.",
+            "skills": [
+              {"level": "Advanced", "title": "Turning metrics into decisions", "description": "Pair data with clear actions, owners, and timelines."},
+              {"level": "Expert", "title": "HR dashboards executives care about", "description": "Show few, high-signal metrics tied to outcomes and risk."},
+              {"level": "Expert", "title": "Cost of turnover & ROI of retention", "description": "Quantify avoidable churn and returns on retention levers."},
+              {"level": "Expert", "title": "Predictive HR (leading indicators, not lagging)", "description": "Build early-warning views of capacity, risk, and demand."}
+            ]
+          },
+          {
+            "title": "Strategic Case Study Application",
+            "description": "Apply it all in a live, structured HR strategy exercise.",
+            "skills": [
+              {"level": "Advanced", "title": "Live structured case: build a simplified HR strategic plan", "description": "Apply the toolkit in a realistic scenario with feedback."},
+              {"level": "Advanced", "title": "Translate legal compliance → workforce strategy", "description": "Turn risk controls into talent, culture, and performance levers."},
+              {"level": "Advanced", "title": "Align HR levers with organizational goals", "description": "Connect hiring, development, rewards, and culture to strategy."}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "faq": [
+    {"question": "What happens after I register?", "answer": "Within minutes, you'll receive an invoice email. Once payment is processed, you can schedule your complimentary pre-program consultation (10-15 minutes) to discuss your specific HR strategic challenges—whether you're building a workforce plan, tackling retention issues, or positioning HR for greater influence in your organization. Pre-program materials arrive one week before your session starts."},
+    {"question": "What's the difference between in-person and virtual formats?", "answer": "Both formats feature the same senior HR leader instructors, current strategic frameworks, and professional credits. In-person provides face-to-face networking with other HR professionals. Virtual delivers the same live instruction via Zoom with full Q&A capability. Choose the format that fits your schedule—the quality and content remain identical."},
+    {"question": "What continuing education credits will I earn?", "answer": "The 2.5-day program provides 16.75 SHRM/HRCI credits. Plus, your enrollment includes 12 months of quarterly employment law updates (4 sessions × 1.5 credits each = 6 additional credits), bringing your total to 22.75 credits."},
+    {"question": "Is this the same as Block II of the Certificate in Strategic HR Leadership?", "answer": "Yes. Strategic HR Management is Block II of the full Certificate in Strategic HR Leadership program. You can take it as a standalone 2.5-day program, or combine it with HR Law Fundamentals (Block I) to earn the full certificate and save $575."},
+    {"question": "Do I need legal HR knowledge before taking this program?", "answer": "Not necessarily, but having a solid legal foundation helps. Strategic HR decisions are more effective when you understand the legal boundaries. If you're unsure about your employment law knowledge, consider taking HR Law Fundamentals (Block I) first, or enrolling in the full Certificate in Strategic HR Leadership to get both components."},
+    {"question": "Will this help me move from HR generalist to HR business partner or director roles?", "answer": "That's exactly who this program is designed for. You'll learn the strategic frameworks that distinguish business partners from administrative support: workforce planning aligned with business goals, retention strategies that reduce costly turnover, performance systems that drive results, and the metrics executives actually care about. You'll walk away speaking leadership's language, not just HR's."},
+    {"question": "How is this different from other HR strategy programs?", "answer": "Most HR strategy programs are theoretical. This one is practical. You'll work through real strategic challenges with senior HR leaders who have built high-performing HR functions. The program culminates in a live case study where you build a simplified HR strategic plan and receive feedback. You leave with frameworks you can implement Monday morning."},
+    {"question": "Does the $1,775 program fee include everything?", "answer": "Yes. Your enrollment includes all live instruction from senior HR leaders and practitioners, complete program materials, 16.75 continuing education credits, pre-program consultation, 12 months of quarterly employment law updates (4 sessions, $1,588 value), permanent access to updated resources, and alumni benefits for all future programs. The only additional cost would be travel and lodging if you choose in-person format."},
+    {"question": "Can I apply this toward the full Certificate in Strategic HR Leadership?", "answer": "Yes. Strategic HR Management (Block II) counts toward the full certificate. You can complete HR Law Fundamentals (Block I) at any future session to earn the complete Certificate in Strategic HR Leadership."}
+  ],
+  "benefits": {
+    "creditCount": "16.75 SHRM/HRCI",
+    "updatePeriod": "12 months",
+    "alumniDiscount": "$300-$500"
+  },
+  "airtable": {
+    "inPersonViewId": "viwVZQi5IShScOoOP",
+    "virtualViewId": "viw3RC4Ti0v2Xi5VJ",
+    "onDemandViewId": null
+  }
+}

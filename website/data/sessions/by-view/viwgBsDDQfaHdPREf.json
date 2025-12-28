@@ -1,0 +1,188 @@
+{
+  "generated": "2025-12-28T14:59:56.938Z",
+  "viewId": "viwgBsDDQfaHdPREf",
+  "usedBy": [
+    {
+      "program": "Discrimination Prevention and Defense",
+      "format": "in-person"
+    }
+  ],
+  "recordCount": 4,
+  "records": [
+    {
+      "id": "rec5p3nEP7H8e1082",
+      "createdTime": "2025-12-15T19:35:44.000Z",
+      "fields": {
+        "Instance ID": 28,
+        "Instance Name": "Discrimination Prevention & Defense - Apr 2026 - Atlanta",
+        "Programs": [
+          "rechzx0zHYQ5mYVWJ"
+        ],
+        "Start Date": "2026-04-22",
+        "End Date": "2026-04-23",
+        "Duration (Days)": [
+          2
+        ],
+        "Format": "In-Person",
+        "City": "Atlanta",
+        "State/Province": "Georgia",
+        "Time Zone": "Eastern (ET)",
+        "Current Enrolled": 0,
+        "Enrollment Status": "Low Enrollment",
+        "Show on Website": true,
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Last Modified": "2025-12-17T15:06:22.000Z",
+        "Created By": {
+          "id": "usrSAo8TcudAuSfA4",
+          "email": "mike.jackson@re-vitalized.com",
+          "name": "Mike Jackson"
+        },
+        "Price In-Person (from PROGRAMS)": [
+          1375
+        ],
+        "Price Virtual (from PROGRAMS)": [
+          1375
+        ],
+        "Min. Capacity": [
+          6
+        ],
+        "Registration Deadline": "2026-04-22T00:00:00.000Z",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c454ca7298b50b678d83.jpg",
+        "Program Name": [
+          "Discrimination Prevention & Defense"
+        ]
+      }
+    },
+    {
+      "id": "recmvIF9Y78c8ejIL",
+      "createdTime": "2025-12-15T19:35:44.000Z",
+      "fields": {
+        "Instance ID": 29,
+        "Instance Name": "Discrimination Prevention & Defense - Jun 2026 - Scottsdale",
+        "Programs": [
+          "rechzx0zHYQ5mYVWJ"
+        ],
+        "Start Date": "2026-06-03",
+        "End Date": "2026-06-04",
+        "Duration (Days)": [
+          2
+        ],
+        "Format": "In-Person",
+        "City": "Scottsdale",
+        "State/Province": "Arizona",
+        "Current Enrolled": 0,
+        "Enrollment Status": "Low Enrollment",
+        "Show on Website": true,
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Last Modified": "2025-12-17T15:12:43.000Z",
+        "Created By": {
+          "id": "usrSAo8TcudAuSfA4",
+          "email": "mike.jackson@re-vitalized.com",
+          "name": "Mike Jackson"
+        },
+        "Price In-Person (from PROGRAMS)": [
+          1375
+        ],
+        "Price Virtual (from PROGRAMS)": [
+          1375
+        ],
+        "Min. Capacity": [
+          6
+        ],
+        "Registration Deadline": "2026-06-03T00:00:00.000Z",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c539d7ebf250f264ca1d.jpg",
+        "Program Name": [
+          "Discrimination Prevention & Defense"
+        ]
+      }
+    },
+    {
+      "id": "recoWMXbMld9SLNq1",
+      "createdTime": "2025-12-15T19:35:44.000Z",
+      "fields": {
+        "Instance ID": 30,
+        "Instance Name": "Discrimination Prevention & Defense - Aug 2026 - Nashville",
+        "Programs": [
+          "rechzx0zHYQ5mYVWJ"
+        ],
+        "Start Date": "2026-08-12",
+        "End Date": "2026-08-13",
+        "Duration (Days)": [
+          2
+        ],
+        "Format": "In-Person",
+        "City": "Nashville",
+        "State/Province": "Tennessee",
+        "Time Zone": "Eastern (ET)",
+        "Current Enrolled": 0,
+        "Enrollment Status": "Low Enrollment",
+        "Show on Website": true,
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Last Modified": "2025-12-17T15:11:02.000Z",
+        "Created By": {
+          "id": "usrSAo8TcudAuSfA4",
+          "email": "mike.jackson@re-vitalized.com",
+          "name": "Mike Jackson"
+        },
+        "Price In-Person (from PROGRAMS)": [
+          1375
+        ],
+        "Price Virtual (from PROGRAMS)": [
+          1375
+        ],
+        "Min. Capacity": [
+          6
+        ],
+        "Registration Deadline": "2026-08-12T00:00:00.000Z",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4d7d7ebf232b964bb15.jpg",
+        "Program Name": [
+          "Discrimination Prevention & Defense"
+        ]
+      }
+    },
+    {
+      "id": "recd62W96Gbss3VIK",
+      "createdTime": "2025-12-15T19:35:44.000Z",
+      "fields": {
+        "Instance ID": 31,
+        "Instance Name": "Discrimination Prevention & Defense - Oct 2026 - Las Vegas",
+        "Programs": [
+          "rechzx0zHYQ5mYVWJ"
+        ],
+        "Start Date": "2026-10-07",
+        "End Date": "2026-10-08",
+        "Duration (Days)": [
+          2
+        ],
+        "Format": "In-Person",
+        "City": "Las Vegas",
+        "State/Province": "Nevada",
+        "Time Zone": "Pacific (PT)",
+        "Current Enrolled": 0,
+        "Enrollment Status": "Low Enrollment",
+        "Show on Website": true,
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Last Modified": "2025-12-17T15:10:11.000Z",
+        "Created By": {
+          "id": "usrSAo8TcudAuSfA4",
+          "email": "mike.jackson@re-vitalized.com",
+          "name": "Mike Jackson"
+        },
+        "Price In-Person (from PROGRAMS)": [
+          1375
+        ],
+        "Price Virtual (from PROGRAMS)": [
+          1375
+        ],
+        "Min. Capacity": [
+          6
+        ],
+        "Registration Deadline": "2026-10-07T00:00:00.000Z",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc3bbe750223056d60.jpg",
+        "Program Name": [
+          "Discrimination Prevention & Defense"
+        ]
+      }
+    }
+  ]
+}

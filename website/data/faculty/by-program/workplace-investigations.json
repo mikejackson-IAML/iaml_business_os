@@ -1,0 +1,38 @@
+{
+  "generated": "2025-12-28T15:00:03.416Z",
+  "programSlug": "workplace-investigations",
+  "programName": "Certificate in Workplace Investigations",
+  "facultyCount": 3,
+  "faculty": [
+    {
+      "id": "rec4rKtRbnn56VCMj",
+      "name": "Brenda Heinicke, Esq.",
+      "firstName": "Brenda",
+      "title": "Director, Global Employment Law",
+      "organization": "Terumo Blood & Cell Technologies",
+      "bio": "",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6911ef6e87254432cbd4b2fe.svg",
+      "bioLink": "www.iaml.com"
+    },
+    {
+      "id": "rec9Q9DHcy6dN2SnD",
+      "name": "Wayne Williams, Esq.",
+      "firstName": "Wayne",
+      "title": "Founder",
+      "organization": "Law Offices of Wayne Williams",
+      "bio": "",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebe98d66054ecb05fb.svg",
+      "bioLink": "www.iaml.com"
+    },
+    {
+      "id": "recCysOqbmx33qZGA",
+      "name": "Dawn Kubik, Esq.",
+      "firstName": "Dawn",
+      "title": "Of Counsel",
+      "organization": "Wymer Employment Law",
+      "bio": "",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebe98d665980cb05f7.svg",
+      "bioLink": "www.iaml.com"
+    }
+  ]
+}

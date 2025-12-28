@@ -1,0 +1,716 @@
+{
+  "program": {
+    "name": "Certificate in Employee Benefits Law",
+    "slug": "employee-benefits-law",
+    "registrationUrl": "#",
+    "price": 2375,
+    "duration": "4½ days",
+    "deliveryOptions": ["In Person"]
+  },
+  "seo": {
+    "title": "Certificate in Employee Benefits Law | IAML",
+    "description": "Master ERISA, HIPAA, COBRA & ACA compliance in this 4½-day certificate program. Earn SHRM & HRCI credits while building practical benefits administration expertise.",
+    "keywords": "employee benefits law, ERISA training, HIPAA compliance, COBRA administration, benefits law certificate, HR benefits certification, employee benefits compliance, welfare benefit plans, retirement plan compliance, SHRM PDC credits",
+    "ogImage": "https://iaml.com/images/og-image.jpg",
+    "canonicalUrl": "https://iaml.com/programs/employee-benefits-law.html",
+    "schema": {
+      "educationalLevel": "intermediate",
+      "timeRequired": "PT36H",
+      "teaches": [
+        "ERISA compliance",
+        "Fiduciary responsibilities",
+        "Retirement plan administration",
+        "Nondiscrimination testing",
+        "Benefits claims procedures",
+        "ACA employer mandate",
+        "HIPAA privacy rules",
+        "COBRA administration",
+        "DOL audit defense"
+      ]
+    }
+  },
+  "hero": {
+    "title": "Certificate in Employee Benefits Law",
+    "description": "Benefits law mistakes cost companies millions in penalties and lawsuits. In 4½ days, you'll master the ERISA, ACA, and fiduciary strategies that keep your organization compliant and protected. Real regulations, practical solutions, immediate confidence."
+  },
+  "content": {
+    "headline": "Build Benefits Law Expertise That Protects Plans and Limits Your Liability",
+    "description": "The Certificate in Employee Benefits Law is 4.5 intensive days where you'll build expertise in ERISA compliance, retirement plan administration, and health care reform requirements with practicing benefits attorneys, working through the complex regulations that govern 401(k) plans, health benefits, and benefits litigation.",
+    "benefits": [
+      {
+        "title": "Complete benefits law coverage",
+        "description": "ERISA fiduciary rules, 401(k) administration, nondiscrimination testing, ACA compliance, claims procedures, and DOL/IRS audit defense"
+      },
+      {
+        "title": "Real-world application",
+        "description": "Work through plan corrections, fiduciary breach scenarios, benefits claims appeals, and the regulatory challenges you'll face Monday morning"
+      },
+      {
+        "title": "Expert benefits attorney instruction",
+        "description": "Learn from practicing ERISA specialists who handle DOL audits, defend fiduciary liability claims, and navigate the regulations daily"
+      },
+      {
+        "title": "Professional certification",
+        "description": "Earn your certificate plus 29.75 SHRM/HRCI continuing education credits"
+      }
+    ]
+  },
+  "testimonials": [
+    {
+      "quote": "IAML once again surpassed my expectations. The seminar was awesome and the degree of information presented to our group was so valuable. I applaud IAML for finding the experts in the various fields and making them available to us. I can hardly wait until the next seminar!",
+      "author": "Bianca Olivarria",
+      "title": "HR Technician & Disability Management Specialist",
+      "company": "Imperial Irrigation District"
+    },
+    {
+      "quote": "It was great learning the information, but also very useful hearing from others attending the class. I learned a wealth of information.",
+      "author": "Brittney Viator",
+      "title": "Benefits Administrator",
+      "company": "FJ Management, Inc."
+    },
+    {
+      "quote": "The instructors did a fantastic job of presenting the information and maintaining participant engagement.",
+      "author": "Sandy Lovett",
+      "title": "Human Resources Generalist",
+      "company": "Thiele Kaolin Company"
+    },
+    {
+      "quote": "All compensation and benefits professionals should consider this seminar. There is a large volume of valuable information presented in an effective, dynamic setting. The speakers are certainly well-equipped and are very attuned to the needs of the class members.",
+      "author": "Todd Hanson",
+      "title": "Corporate Human Resources Manager",
+      "company": "Printpack, Inc."
+    },
+    {
+      "quote": "Instructors were very good and well versed in subject matter. They offered to help and provide materials outside of the seminar.",
+      "author": "Brian Wagner",
+      "title": "Attorney",
+      "company": "Mateer & Harbert"
+    },
+    {
+      "quote": "I absolutely loved the instructors! The course provided so much valuable information.",
+      "author": "Emily Ruelle",
+      "title": "Human Resources Generalist",
+      "company": "Tableau Software Inc."
+    },
+    {
+      "quote": "This was an excellent seminar and covered everything I'd hoped. The instructors were outstanding.",
+      "author": "Kurt Henkel",
+      "title": "Senior Benefits Plan Analyst",
+      "company": "Deere & Company"
+    },
+    {
+      "quote": "I enjoyed the open and casual approach to this training. Everyone appeared comfortable enough to participate and ask questions.",
+      "author": "Deborah Carnelli",
+      "title": "Resolutions and Receivership Specialist",
+      "company": "Federal Deposit Insurance Corporation"
+    },
+    {
+      "quote": "I really enjoyed the class. I appreciated Tom Schendt's teaching styles and how he involved everyone in the class and made it interactive. He certainly succeeded in making a potentially boring subject quite fun.",
+      "author": "S. Greg Robinson",
+      "title": "Human Resources Manager",
+      "company": "Suominen"
+    },
+    {
+      "quote": "I really enjoyed the seminar. I learned a great deal and will definitely be able to apply what I learned once I'm back in the office.",
+      "author": "Alana Tomczyszn",
+      "title": "Human Resources Manager",
+      "company": "CWS Capital Partners LLC"
+    },
+    {
+      "quote": "Great job! The information will assist me and my company in effectively administering our employee benefits.",
+      "author": "Julie O'Dell-Michie",
+      "title": "Sr. Vice President & Chief Administrative Officer",
+      "company": "Blue Ridge Electric Membership Corporation"
+    },
+    {
+      "quote": "The instructors did a great job of keeping the participants engaged while covering material that could have been very dry.",
+      "author": "Steven Pennell",
+      "title": "Human Resources Director, Talent & Technology",
+      "company": "Shurtape Technologies, LLC"
+    },
+    {
+      "quote": "I thoroughly enjoyed the seminar. I really appreciated that the instructors allowed participants to ask questions and work through our issues and concerns.",
+      "author": "Sherry Murphy",
+      "title": "Lead Human Resources Business Partner",
+      "company": "Barrick Mining Corporation"
+    }
+  ],
+  "curriculum": {
+    "blocks": [
+      {
+        "id": "block-1",
+        "label": "Block I",
+        "title": "Retirement Plans Mastery",
+        "description": "Navigate ERISA, fiduciary rules, and plan administration with confidence",
+        "price": 1375,
+        "days": "Monday & Tuesday",
+        "competencyGroups": [
+          {
+            "title": "Master the Regulatory Landscape",
+            "description": "Navigate Title I and Title II, understand agency jurisdiction",
+            "skills": [
+              {
+                "level": "FOUNDATION",
+                "name": "ERISA fundamentals",
+                "description": "Navigate Title I and Title II, understand the division of authority between IRS, DOL, and PBGC"
+              },
+              {
+                "level": "FOUNDATION",
+                "name": "Plan qualification requirements",
+                "description": "Learn what makes plans compliant and what triggers disqualification"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "The alphabet soup decoded",
+                "description": "Master ERISA, ADA, COBRA, FMLA, HIPAA, and how each impacts your plans"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "Regulatory agency roadmap",
+                "description": "Know which agency has jurisdiction over what and how to work with each effectively"
+              }
+            ]
+          },
+          {
+            "title": "Protect Yourself and Your Plan",
+            "description": "Identify violations before they happen, understand exemptions and protections",
+            "skills": [
+              {
+                "level": "ADVANCED",
+                "name": "Expense management",
+                "description": "Learn what expenses can be paid from plan assets without triggering problems"
+              },
+              {
+                "level": "EXPERT",
+                "name": "Prohibited transactions",
+                "description": "Identify violations before they happen, understand exemptions and correction procedures"
+              },
+              {
+                "level": "EXPERT",
+                "name": "Investment liability",
+                "description": "Know who's liable when investments go bad and how to protect yourself"
+              },
+              {
+                "level": "EXPERT",
+                "name": "404(c) protection",
+                "description": "Determine if participant-directed investment is worth the compliance burden"
+              },
+              {
+                "level": "EXPERT",
+                "name": "Service provider liability",
+                "description": "Understand cofiduciary rules and when providers share your risk"
+              }
+            ]
+          },
+          {
+            "title": "Handle Daily Operations",
+            "description": "Set up loan programs, process QDROs, and manage contributions properly",
+            "skills": [
+              {
+                "level": "ADVANCED",
+                "name": "Participant loans",
+                "description": "Set up loan programs that comply without creating administrative nightmares"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "Salary deferrals",
+                "description": "Manage contributions and catch-up elections properly"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "Blackout periods",
+                "description": "Comply with Sarbanes-Oxley notification requirements"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "Section 204(h) notices",
+                "description": "Provide required notices without triggering participant concerns"
+              },
+              {
+                "level": "EXPERT",
+                "name": "QDRO processing",
+                "description": "Handle domestic relations orders correctly the first time"
+              }
+            ]
+          },
+          {
+            "title": "Pass Tests Without Headaches",
+            "description": "Navigate Section 410(b) testing and handle ADP/ACP tests effectively",
+            "skills": [
+              {
+                "level": "ADVANCED",
+                "name": "HCE identification",
+                "description": "Correctly identify highly compensated employees under current rules"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "Failed test corrections",
+                "description": "Fix problems quickly using the methods that work"
+              },
+              {
+                "level": "EXPERT",
+                "name": "Coverage rules mastery",
+                "description": "Navigate Section 410(b) testing including controlled group rules and QSLOB exceptions"
+              },
+              {
+                "level": "EXPERT",
+                "name": "401(k) and 401(m) testing",
+                "description": "Handle ADP/ACP tests and know your safe harbor options"
+              },
+              {
+                "level": "EXPERT",
+                "name": "Cross-testing strategies",
+                "description": "Use age-weighted profit sharing to maximize owner benefits legally"
+              }
+            ]
+          },
+          {
+            "title": "Get Money Out Legally",
+            "description": "Know when participants can access funds and handle distributions correctly",
+            "skills": [
+              {
+                "level": "ADVANCED",
+                "name": "Distribution triggers",
+                "description": "Know when participants can access funds and what restrictions apply"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "Withholding and rollovers",
+                "description": "Handle tax withholding correctly and facilitate smooth rollovers"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "Hardship distributions",
+                "description": "Process hardships that satisfy IRS safe harbors"
+              },
+              {
+                "level": "EXPERT",
+                "name": "Required minimum distributions",
+                "description": "Calculate and distribute RMDs at age 70½ without errors"
+              },
+              {
+                "level": "EXPERT",
+                "name": "Anti-cutback rules",
+                "description": "Navigate Section 411(d)(6) when eliminating distribution options"
+              }
+            ]
+          },
+          {
+            "title": "Fix Problems Before They Become Disasters",
+            "description": "Know what triggers audits and how to fix errors before IRS discovers them",
+            "skills": [
+              {
+                "level": "ADVANCED",
+                "name": "IRS audit targets",
+                "description": "Know what triggers audits and how to avoid red flags"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "Late filing solutions",
+                "description": "Handle late 5500 filings and minimize penalties"
+              },
+              {
+                "level": "EXPERT",
+                "name": "Voluntary correction programs",
+                "description": "Use EPCRS to fix errors before IRS discovers them"
+              },
+              {
+                "level": "EXPERT",
+                "name": "DOL compliance programs",
+                "description": "Correct fiduciary violations through VFCP"
+              },
+              {
+                "level": "EXPERT",
+                "name": "Qualification preservation",
+                "description": "Keep plans qualified even when problems arise"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "block-2",
+        "label": "Block II",
+        "title": "Claims, Appeals & Litigation",
+        "description": "Handle benefit claims and protect your plan from litigation",
+        "price": 575,
+        "days": "Wednesday",
+        "competencyGroups": [
+          {
+            "title": "Build Bulletproof Procedures",
+            "description": "Know which plans ERISA covers and maintain proper documentation",
+            "skills": [
+              {
+                "level": "FOUNDATION",
+                "name": "Plan coverage determination",
+                "description": "Know which plans ERISA covers and which are exempt"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "Documentation requirements",
+                "description": "Maintain SPDs, SMMs, and plan documents that satisfy DOL standards"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "Reporting obligations",
+                "description": "File Form 5500 correctly and meet disclosure deadlines"
+              },
+              {
+                "level": "EXPERT",
+                "name": "State law navigation",
+                "description": "Understand when ERISA preempts state requirements and when it doesn't"
+              }
+            ]
+          },
+          {
+            "title": "Make Defensible Decisions",
+            "description": "Establish DOL-compliant procedures and create winning administrative records",
+            "skills": [
+              {
+                "level": "ADVANCED",
+                "name": "Claims procedures",
+                "description": "Establish DOL-compliant procedures that protect your appeal rights"
+              },
+              {
+                "level": "EXPERT",
+                "name": "Decision documentation",
+                "description": "Create the administrative record that wins in court"
+              },
+              {
+                "level": "EXPERT",
+                "name": "Disability claims",
+                "description": "Navigate the heightened standards for disability benefit claims"
+              },
+              {
+                "level": "EXPERT",
+                "name": "Appeal processes",
+                "description": "Structure appeals that satisfy regulatory requirements and build your defense"
+              }
+            ]
+          },
+          {
+            "title": "Minimize Your Liability Risk",
+            "description": "Know who the fiduciaries are and protect your plan's rights",
+            "skills": [
+              {
+                "level": "ADVANCED",
+                "name": "Fiduciary identification",
+                "description": "Know who the fiduciaries are and what obligations they have"
+              },
+              {
+                "level": "EXPERT",
+                "name": "Investment duties",
+                "description": "Understand prudent investment requirements and monitoring obligations"
+              },
+              {
+                "level": "EXPERT",
+                "name": "Reimbursement rights",
+                "description": "Protect your plan's right to recover overpayments and subrogation"
+              },
+              {
+                "level": "EXPERT",
+                "name": "Anti-cutback compliance",
+                "description": "Avoid benefit reductions that trigger participant lawsuits"
+              }
+            ]
+          },
+          {
+            "title": "Stay Ahead of Emerging Issues",
+            "description": "Learn what appellate courts and regulators are focusing on",
+            "skills": [
+              {
+                "level": "ADVANCED",
+                "name": "Recent court decisions",
+                "description": "Learn what appellate courts are saying about claims and appeals"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "DOL enforcement trends",
+                "description": "Understand where regulators are focusing attention"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "Best practices evolution",
+                "description": "Stay current with what courts expect from plan administrators"
+              },
+              {
+                "level": "EXPERT",
+                "name": "Litigation hot topics",
+                "description": "Prepare for the claims issues that are generating lawsuits now"
+              }
+            ]
+          },
+          {
+            "title": "Understand Your Strategic Advantages",
+            "description": "Leverage deferential standards and limited discovery rules",
+            "skills": [
+              {
+                "level": "EXPERT",
+                "name": "Arbitrary and capricious standard",
+                "description": "Leverage the deferential standard of review"
+              },
+              {
+                "level": "EXPERT",
+                "name": "No jury trials",
+                "description": "Understand how bench trials favor plan administrators"
+              },
+              {
+                "level": "EXPERT",
+                "name": "Limited discovery",
+                "description": "Use the administrative record rule to control litigation scope"
+              },
+              {
+                "level": "EXPERT",
+                "name": "Attorney fee rules",
+                "description": "Know when courts award fees and how to minimize exposure"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "block-3",
+        "label": "Block III",
+        "title": "Welfare Benefits Plan Issues",
+        "description": "Navigate ACA, HIPAA, COBRA, and the alphabet soup of H&W compliance",
+        "price": 975,
+        "days": "Thursday & Friday",
+        "competencyGroups": [
+          {
+            "title": "Get the Basics Right",
+            "description": "Know which welfare plans are subject to ERISA and establish compliant procedures",
+            "skills": [
+              {
+                "level": "FOUNDATION",
+                "name": "Coverage determination",
+                "description": "Know which welfare plans are subject to ERISA"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "Reporting and disclosure",
+                "description": "Handle Form 5500, SPD, and SMM requirements for welfare plans"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "Plan funding rules",
+                "description": "Understand when trusts are required and what constitutes plan assets"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "Claims procedures",
+                "description": "Establish DOL-compliant claim and appeal processes"
+              },
+              {
+                "level": "EXPERT",
+                "name": "Fiduciary obligations",
+                "description": "Navigate prohibited transaction rules for welfare plan assets"
+              }
+            ]
+          },
+          {
+            "title": "Navigate Reform Requirements",
+            "description": "Understand play-or-pay rules and handle Forms 1094 and 1095 correctly",
+            "skills": [
+              {
+                "level": "ADVANCED",
+                "name": "Employer mandate",
+                "description": "Understand play-or-pay rules and who must offer coverage"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "Coverage affordability",
+                "description": "Calculate whether your coverage satisfies ACA standards"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "Reporting requirements",
+                "description": "Handle Forms 1094 and 1095 correctly"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "Compliance deadlines",
+                "description": "Stay current with ACA implementation dates and requirements"
+              },
+              {
+                "level": "EXPERT",
+                "name": "Cadillac tax planning",
+                "description": "Strategies to avoid the high-cost plan excise tax"
+              }
+            ]
+          },
+          {
+            "title": "Protect Health Information",
+            "description": "Understand what PHI you can access and structure compliant BAAs",
+            "skills": [
+              {
+                "level": "ADVANCED",
+                "name": "Privacy rules for plan sponsors",
+                "description": "Understand what PHI you can access and what's restricted"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "Business associate agreements",
+                "description": "Structure contracts that satisfy HIPAA requirements"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "Security standards",
+                "description": "Implement safeguards that protect electronic health information"
+              },
+              {
+                "level": "EXPERT",
+                "name": "Breach notification",
+                "description": "Know when and how to report privacy violations"
+              }
+            ]
+          },
+          {
+            "title": "Understand New Plan Designs",
+            "description": "Navigate HSAs, HRAs, FSAs, and claim substantiation requirements",
+            "skills": [
+              {
+                "level": "ADVANCED",
+                "name": "Health Savings Accounts",
+                "description": "Structure HSA-compatible plans and handle contribution rules"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "Health Reimbursement Arrangements",
+                "description": "Navigate HRA design and compliance requirements"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "Flexible Spending Accounts",
+                "description": "Administer health and dependent care FSAs correctly"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "Private exchanges",
+                "description": "Understand when private exchanges make sense for your organization"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "Claim substantiation",
+                "description": "Handle FSA and HRA claim documentation requirements"
+              }
+            ]
+          },
+          {
+            "title": "Handle Complex Requirements",
+            "description": "Master COBRA, mental health parity, and Medicare coordination",
+            "skills": [
+              {
+                "level": "ADVANCED",
+                "name": "COBRA administration",
+                "description": "Master qualifying events, notices, and election procedures"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "Cafeteria plan testing",
+                "description": "Avoid discrimination in Section 125 plans"
+              },
+              {
+                "level": "EXPERT",
+                "name": "Mental health parity",
+                "description": "Ensure behavioral health benefits comply with parity requirements"
+              },
+              {
+                "level": "EXPERT",
+                "name": "Medicare coordination",
+                "description": "Handle Medicare Secondary Payer rules correctly"
+              },
+              {
+                "level": "EXPERT",
+                "name": "QMCSO processing",
+                "description": "Administer qualified medical child support orders properly"
+              }
+            ]
+          },
+          {
+            "title": "Master Multiple Laws",
+            "description": "Navigate ADEA, ADA, FMLA, GINA, and USERRA requirements",
+            "skills": [
+              {
+                "level": "ADVANCED",
+                "name": "ADEA and age discrimination",
+                "description": "Provide retiree benefits without violating age discrimination rules"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "ADA accommodations",
+                "description": "Handle disability-related benefit issues correctly"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "FMLA coordination",
+                "description": "Integrate FMLA leave with health benefit continuation"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "GINA compliance",
+                "description": "Avoid genetic information discrimination in wellness programs"
+              },
+              {
+                "level": "ADVANCED",
+                "name": "USERRA requirements",
+                "description": "Handle military leave and benefit continuation properly"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "faq": [
+    {
+      "question": "What happens after I register?",
+      "answer": "Within minutes, you'll receive an invoice email. Once payment is processed, you can schedule your complimentary pre-program consultation (10-15 minutes) to discuss your specific benefits administration challenges and identify which regulatory topics will have the biggest impact for your organization. Pre-program materials arrive one week before your session starts."
+    },
+    {
+      "question": "Can I attend individual blocks instead of the full program?",
+      "answer": "Yes. While most participants get the best value from the complete 4½-day program, you can register for individual blocks based on your immediate needs. Block I (Retirement Plans Mastery) is $1,375, Block II (Claims, Appeals & Litigation) is $575, and Block III (Health & Welfare Benefits) is $975. The full program at $2,375 saves you $550 versus purchasing all blocks separately."
+    },
+    {
+      "question": "What's the difference between in-person, virtual, and on-demand formats?",
+      "answer": "All three formats feature the same practicing ERISA attorney instructors, current regulatory content, and professional credits. In-person provides face-to-face networking with other benefits professionals. Virtual delivers the same live instruction via Zoom with full Q&A capability. On-demand lets you learn at your own pace over 90 days. Choose the format that fits your schedule. The quality and content remain identical."
+    },
+    {
+      "question": "What continuing education credits will I earn?",
+      "answer": "The complete program provides 29.75 SHRM/HRCI/CLE credits. Plus, your enrollment includes 12 months of quarterly employment law updates (4 sessions × 1.5 credits each = 6 additional credits), bringing your total to 35.75 credits. That's more than most professionals earn in two years."
+    },
+    {
+      "question": "Is this program for HR professionals or benefits specialists?",
+      "answer": "Both. HR generalists gain the ERISA and ACA compliance knowledge to manage benefits without constantly escalating to outside counsel. Benefits specialists and administrators get deeper expertise in fiduciary rules, nondiscrimination testing, and claims litigation. Many organizations also send in-house counsel who advise on benefits matters. The program is designed to be valuable whether you touch benefits daily or manage them as part of a broader HR role."
+    },
+    {
+      "question": "I manage our 401(k) plan but don't handle health benefits. Should I attend the full program?",
+      "answer": "Consider your exposure. If you only administer retirement plans, Block I (Retirement Plans Mastery) and Block II (Claims, Appeals & Litigation) cover ERISA fiduciary rules, plan corrections, and benefits litigation defense. However, many 401(k) administrators also get questions about health plan issues, and the full program provides context that helps you understand the complete benefits landscape. The pre-program consultation can help you decide which blocks are essential for your situation."
+    },
+    {
+      "question": "How technical is the content? Do I need a legal background?",
+      "answer": "No legal background required. The program is designed for benefits professionals who need practical compliance knowledge, not law school theory. You'll learn how to handle fiduciary obligations, pass nondiscrimination tests, process QDROs, navigate ACA reporting, and defend benefits claims. Our instructors translate complex ERISA regulations into actionable procedures you can implement Monday morning."
+    },
+    {
+      "question": "Does the $2,375 program fee include everything?",
+      "answer": "Yes. Your enrollment includes all live instruction from practicing ERISA attorneys, complete program materials, 29.75 continuing education credits, pre-program consultation, 12 months of quarterly employment law updates (4 sessions, $1,588 value), permanent access to updated benefits resources, and alumni benefits for all future programs. The only additional cost would be travel and lodging if you choose in-person format."
+    },
+    {
+      "question": "We're facing a DOL audit. Can this program help?",
+      "answer": "Absolutely. Block I covers IRS and DOL audit triggers, voluntary correction programs (EPCRS and VFCP), and strategies for fixing plan errors before they become disasters. The pre-program consultation is the perfect time to share your audit situation (confidentially) so our team can point you to the most relevant content. Many participants come with active compliance issues and leave with specific action plans."
+    },
+    {
+      "question": "Will I be ready to handle benefits compliance after completing this program?",
+      "answer": "Yes. The program is designed for immediate application. You'll leave with frameworks for fiduciary decision-making, nondiscrimination testing procedures, claims administration protocols, ACA reporting checklists, and audit defense strategies. Whether you're managing a 401(k), administering health benefits, or handling COBRA and FMLA coordination, you'll have the regulatory knowledge to make confident decisions and avoid the mistakes that trigger penalties and litigation."
+    }
+  ],
+  "benefits": {
+    "credits": "29.75 SHRM/HRCI/CLE",
+    "updatePeriod": "12 months",
+    "alumniDiscount": "$300"
+  },
+  "airtable": {
+    "views": {
+      "inPerson": "viwui1caJxkkGKXiO"
+    }
+  }
+}

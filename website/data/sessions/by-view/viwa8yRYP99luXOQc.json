@@ -1,0 +1,101 @@
+{
+  "generated": "2025-12-28T14:59:56.938Z",
+  "viewId": "viwa8yRYP99luXOQc",
+  "usedBy": [
+    {
+      "program": "Welfare Benefits Plan Issues",
+      "format": "in-person"
+    }
+  ],
+  "recordCount": 2,
+  "records": [
+    {
+      "id": "rectEjQZZj0EnoxkL",
+      "createdTime": "2025-12-15T19:35:44.000Z",
+      "fields": {
+        "Instance ID": 42,
+        "Instance Name": "Welfare Benefits Plan Issues - Apr 2026 - Atlanta",
+        "Programs": [
+          "recB2OKzGP1JWClv4"
+        ],
+        "Start Date": "2026-04-23",
+        "End Date": "2026-04-24",
+        "Duration (Days)": [
+          1.5
+        ],
+        "Format": "In-Person",
+        "City": "Atlanta",
+        "State/Province": "Georgia",
+        "Time Zone": "Eastern (ET)",
+        "Current Enrolled": 0,
+        "Enrollment Status": "Low Enrollment",
+        "Show on Website": true,
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Last Modified": "2025-12-17T15:06:37.000Z",
+        "Created By": {
+          "id": "usrSAo8TcudAuSfA4",
+          "email": "mike.jackson@re-vitalized.com",
+          "name": "Mike Jackson"
+        },
+        "Price In-Person (from PROGRAMS)": [
+          975
+        ],
+        "Price Virtual (from PROGRAMS)": [
+          975
+        ],
+        "Min. Capacity": [
+          4
+        ],
+        "Registration Deadline": "2026-04-23T00:00:00.000Z",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4530190afcbbd821451.jpg",
+        "Program Name": [
+          "Welfare Benefits Plan Issues"
+        ]
+      }
+    },
+    {
+      "id": "receR1mAaflOWiI9G",
+      "createdTime": "2025-12-15T19:35:44.000Z",
+      "fields": {
+        "Instance ID": 43,
+        "Instance Name": "Welfare Benefits Plan Issues - Sep 2026 - Austin",
+        "Programs": [
+          "recB2OKzGP1JWClv4"
+        ],
+        "Start Date": "2026-09-17",
+        "End Date": "2026-09-18",
+        "Duration (Days)": [
+          1.5
+        ],
+        "Format": "In-Person",
+        "City": "Austin",
+        "State/Province": "Texas",
+        "Time Zone": "Central (CT)",
+        "Current Enrolled": 0,
+        "Enrollment Status": "Low Enrollment",
+        "Show on Website": true,
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Last Modified": "2025-12-17T15:07:42.000Z",
+        "Created By": {
+          "id": "usrSAo8TcudAuSfA4",
+          "email": "mike.jackson@re-vitalized.com",
+          "name": "Mike Jackson"
+        },
+        "Price In-Person (from PROGRAMS)": [
+          975
+        ],
+        "Price Virtual (from PROGRAMS)": [
+          975
+        ],
+        "Min. Capacity": [
+          4
+        ],
+        "Registration Deadline": "2026-09-17T00:00:00.000Z",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c471543282821a15bb9e.jpg",
+        "Program Name": [
+          "Welfare Benefits Plan Issues"
+        ]
+      }
+    }
+  ]
+}

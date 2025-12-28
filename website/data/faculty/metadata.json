@@ -1,0 +1,23 @@
+{
+  "generated": "2025-12-28T15:00:03.416Z",
+  "version": "1.0.0",
+  "totalFaculty": 18,
+  "programsCount": 3,
+  "programStats": [
+    {
+      "slug": "strategic-hr-leadership",
+      "count": 10,
+      "name": "Certificate in Strategic HR Leadership"
+    },
+    {
+      "slug": "employee-relations-law",
+      "count": 10,
+      "name": "Certificate in Employee Relations Law"
+    },
+    {
+      "slug": "workplace-investigations",
+      "count": 3,
+      "name": "Certificate in Workplace Investigations"
+    }
+  ]
+}
