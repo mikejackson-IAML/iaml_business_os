@@ -1,0 +1,221 @@
+{
+  "generated": "2025-12-28T14:59:56.938Z",
+  "viewId": "viwfRNxWVMk9nUxCc",
+  "usedBy": [
+    {
+      "program": "Comprehensive Labor Relations",
+      "format": "in-person"
+    },
+    {
+      "program": "Special Issues in Employment Law",
+      "format": "in-person"
+    }
+  ],
+  "recordCount": 5,
+  "records": [
+    {
+      "id": "recW2tUVG70mRPOH1",
+      "createdTime": "2025-12-18T22:33:10.000Z",
+      "fields": {
+        "Instance ID": 85,
+        "Instance Name": "Special Issues in Employment Law - Apr 2026 - Atlanta",
+        "Programs": [
+          "recYXtvOXU1LaSJBl"
+        ],
+        "Start Date": "2026-04-24",
+        "End Date": "2026-04-24",
+        "Duration (Days)": [
+          0.5
+        ],
+        "Format": "In-Person",
+        "City": "Atlanta",
+        "State/Province": "Georgia",
+        "Time Zone": "Eastern (ET)",
+        "Current Enrolled": 0,
+        "Enrollment Status": "Low Enrollment",
+        "Show on Website": true,
+        "Created Date": "2025-12-18T22:33:10.000Z",
+        "Last Modified": "2025-12-18T22:34:38.000Z",
+        "Created By": {
+          "id": "usrSAo8TcudAuSfA4",
+          "email": "mike.jackson@re-vitalized.com",
+          "name": "Mike Jackson"
+        },
+        "Price In-Person (from PROGRAMS)": [
+          575
+        ],
+        "Min. Capacity": [
+          6
+        ],
+        "Registration Deadline": "2026-04-24T00:00:00.000Z",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c454ca7298b50b678d83.jpg",
+        "Program Name": [
+          "Special Issues in Employment Law"
+        ]
+      }
+    },
+    {
+      "id": "recztbhz0aTFZgPvQ",
+      "createdTime": "2025-12-18T22:33:15.000Z",
+      "fields": {
+        "Instance ID": 86,
+        "Instance Name": "Special Issues in Employment Law - Aug 2026 - Nashville",
+        "Programs": [
+          "recYXtvOXU1LaSJBl"
+        ],
+        "Start Date": "2026-08-14",
+        "End Date": "2026-08-14",
+        "Duration (Days)": [
+          0.5
+        ],
+        "Format": "In-Person",
+        "City": "Nashville",
+        "State/Province": "Tennessee",
+        "Time Zone": "Eastern (ET)",
+        "Current Enrolled": 0,
+        "Enrollment Status": "Low Enrollment",
+        "Show on Website": true,
+        "Created Date": "2025-12-18T22:33:15.000Z",
+        "Last Modified": "2025-12-18T22:34:38.000Z",
+        "Created By": {
+          "id": "usrSAo8TcudAuSfA4",
+          "email": "mike.jackson@re-vitalized.com",
+          "name": "Mike Jackson"
+        },
+        "Price In-Person (from PROGRAMS)": [
+          575
+        ],
+        "Min. Capacity": [
+          6
+        ],
+        "Registration Deadline": "2026-08-14T00:00:00.000Z",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4d7d7ebf232b964bb15.jpg",
+        "Program Name": [
+          "Special Issues in Employment Law"
+        ]
+      }
+    },
+    {
+      "id": "recXtTRwoIHVgDJvq",
+      "createdTime": "2025-12-18T22:33:15.000Z",
+      "fields": {
+        "Instance ID": 87,
+        "Instance Name": "Special Issues in Employment Law - Jun 2026 - Austin",
+        "Programs": [
+          "recYXtvOXU1LaSJBl"
+        ],
+        "Start Date": "2026-06-12",
+        "End Date": "2026-06-12",
+        "Duration (Days)": [
+          0.5
+        ],
+        "Format": "In-Person",
+        "City": "Austin",
+        "State/Province": "Texas",
+        "Time Zone": "Central (CT)",
+        "Current Enrolled": 0,
+        "Enrollment Status": "Low Enrollment",
+        "Show on Website": true,
+        "Created Date": "2025-12-18T22:33:15.000Z",
+        "Last Modified": "2025-12-18T22:34:39.000Z",
+        "Created By": {
+          "id": "usrSAo8TcudAuSfA4",
+          "email": "mike.jackson@re-vitalized.com",
+          "name": "Mike Jackson"
+        },
+        "Price In-Person (from PROGRAMS)": [
+          575
+        ],
+        "Min. Capacity": [
+          6
+        ],
+        "Registration Deadline": "2026-06-12T00:00:00.000Z",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4719a634f6065ac7644.jpg",
+        "Program Name": [
+          "Special Issues in Employment Law"
+        ]
+      }
+    },
+    {
+      "id": "recpuUsdMkwED8po3",
+      "createdTime": "2025-12-18T22:33:15.000Z",
+      "fields": {
+        "Instance ID": 88,
+        "Instance Name": "Special Issues in Employment Law - Jun 2026 - Scottsdale",
+        "Programs": [
+          "recYXtvOXU1LaSJBl"
+        ],
+        "Start Date": "2026-06-05",
+        "End Date": "2026-06-05",
+        "Duration (Days)": [
+          0.5
+        ],
+        "Format": "In-Person",
+        "City": "Scottsdale",
+        "State/Province": "Arizona",
+        "Current Enrolled": 0,
+        "Enrollment Status": "Low Enrollment",
+        "Show on Website": true,
+        "Created Date": "2025-12-18T22:33:15.000Z",
+        "Last Modified": "2025-12-18T22:34:39.000Z",
+        "Created By": {
+          "id": "usrSAo8TcudAuSfA4",
+          "email": "mike.jackson@re-vitalized.com",
+          "name": "Mike Jackson"
+        },
+        "Price In-Person (from PROGRAMS)": [
+          575
+        ],
+        "Min. Capacity": [
+          6
+        ],
+        "Registration Deadline": "2026-06-05T00:00:00.000Z",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c539d7ebf250f264ca1d.jpg",
+        "Program Name": [
+          "Special Issues in Employment Law"
+        ]
+      }
+    },
+    {
+      "id": "rec63CBYs1D1yH6kY",
+      "createdTime": "2025-12-18T22:33:15.000Z",
+      "fields": {
+        "Instance ID": 89,
+        "Instance Name": "Special Issues in Employment Law - Oct 2026 - Las Vegas",
+        "Programs": [
+          "recYXtvOXU1LaSJBl"
+        ],
+        "Start Date": "2026-10-09",
+        "End Date": "2026-10-09",
+        "Duration (Days)": [
+          0.5
+        ],
+        "Format": "In-Person",
+        "City": "Las Vegas",
+        "State/Province": "Nevada",
+        "Time Zone": "Pacific (PT)",
+        "Current Enrolled": 0,
+        "Enrollment Status": "Low Enrollment",
+        "Show on Website": true,
+        "Created Date": "2025-12-18T22:33:15.000Z",
+        "Last Modified": "2025-12-18T22:34:40.000Z",
+        "Created By": {
+          "id": "usrSAo8TcudAuSfA4",
+          "email": "mike.jackson@re-vitalized.com",
+          "name": "Mike Jackson"
+        },
+        "Price In-Person (from PROGRAMS)": [
+          575
+        ],
+        "Min. Capacity": [
+          6
+        ],
+        "Registration Deadline": "2026-10-09T00:00:00.000Z",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc3bbe750223056d60.jpg",
+        "Program Name": [
+          "Special Issues in Employment Law"
+        ]
+      }
+    }
+  ]
+}

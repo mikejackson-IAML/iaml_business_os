@@ -1,0 +1,26 @@
+# Vendor and dependencies
+node_modules/
+.vercel/
+
+# Build outputs
+playwright-report/
+.lighthouseci/
+
+# Generated/data files
+qa/reports/
+qa/screenshots/
+programs/data/
+
+# Config files with expected patterns
+.env*
+env-config*.js
+local-proxy.js
+
+# Test files (different rules apply)
+qa/tests/
+
+# Third-party libraries
+js/splide.min.js
+
+# Admin utilities
+admin/

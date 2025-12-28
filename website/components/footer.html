@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>IAML Footer</title>
+
+<!-- Fonts (matches design system) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Lato:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  /* ===== Design System bridge (local vars mirror your DS tokens) ===== */
+  :root{
+    --background-black:#000;            /* matches design-system background */ 
+    --text-primary:#fff;
+    --text-secondary:#5a6c7d;
+    --text-secondary-2:#e5e7eb;
+    --text-muted:#9ca3af;
+    --primary-blue:#188bf6;            /* focus/interactive */
+    --divider:rgba(255,255,255,0.08);
+
+    --space-12:12px; --space-16:16px; --space-24:24px;
+    --space-32:32px; --space-40:40px; --space-48:48px; --space-56:56px;
+    --radius-8:8px;
+  }
+
+  /* Base */
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--background-black);
+    color:var(--text-secondary);
+    font:15px/1.65 "Lato",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  footer a{color:var(--text-secondary-2);text-decoration:none;transition:color .2s ease,opacity .2s ease}
+  footer a:hover{color:#fff}
+  footer a:focus-visible{outline:2px solid var(--primary-blue);outline-offset:3px;border-radius:4px}
+
+  footer.footer{
+    border-top:1px solid var(--divider);
+    padding:var(--space-56) var(--space-16) var(--space-24);
+    background:#000;
+  }
+  .wrap{max-width:1200px;margin:0 auto}
+
+  /* Grid */
+  .grid{
+    display:grid;gap:var(--space-32);
+    grid-template-columns:1fr 1.6fr 0.9fr 0.9fr;
+    align-items:start;
+  }
+
+  /* Brand block */
+  .brand{min-width:260px}
+  .logo{display:flex;align-items:center;gap:14px;margin:0 0 8px}
+  .logo img{height:63px;width:auto;display:block}
+  .brand-name{
+    font-family:"Playfair Display",serif;
+    font-weight:600;color:var(--text-primary);letter-spacing:.2px
+  }
+  .brand-sub{color:var(--text-muted);font-size:14px;margin-top:6px}
+
+  /* Columns */
+  .col h3{
+    margin:2px 0 16px;
+    font:600 14px/1.2 "Lato",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    letter-spacing:.6px;text-transform:uppercase;color:#cfd4dc
+  }
+  .list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+  .list a{opacity:.95;font-weight:300}
+  .list a:hover{opacity:1}
+
+  /* Bottom bar */
+  .bottom{
+    border-top:1px solid var(--divider);
+    margin-top:53px;padding-top:var(--space-16);
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;
+    color:var(--text-muted);font-size:14px
+  }
+
+  /* Accordion behavior on small screens */
+  @media (max-width: 960px){
+    .grid{grid-template-columns:1fr 1fr}
+    .brand{grid-column:1 / -1}
+  }
+  @media (max-width: 640px){
+    .grid{grid-template-columns:1fr}
+    .col{border-top:1px solid var(--divider);padding-top:12px}
+    details.accordion{border-radius:var(--radius-8)}
+    details.accordion summary{
+      list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;
+      padding:10px 0;color:#cfd4dc;font-size:14px;text-transform:uppercase;letter-spacing:.6px
+    }
+    details.accordion summary::-webkit-details-marker{display:none}
+    details.accordion[open] summary{color:#fff}
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  }
+</style>
+</head>
+<body>
+
+<footer class="footer" role="contentinfo">
+  <div class="wrap">
+    <nav class="grid" aria-label="Footer">
+      <!-- Brand -->
+      <section class="brand" aria-label="Organization">
+        <div class="logo">
+          <img src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69042ba0346960d8775fb4a4.svg" alt="IAML logo">
+        </div>
+      </section>
+
+      <!-- Programs -->
+      <section class="col">
+        <h3>Programs</h3>
+        <ul class="list" aria-label="Programs">
+          <li><a href="/programs/employee-relations-law.html">Certificate in Employee Relations Law</a></li>
+          <li><a href="/programs/strategic-hr-leadership.html">Advanced Certificate in Strategic Employment Law</a></li>
+          <li><a href="https://iaml.com/programs/workplace-investigations">Certificate in Workplace Investigations</a></li>
+          <li><a href="/programs/strategic-hr-leadership.html">Certificate in Strategic HR Leadership</a></li>
+          <li><a href="https://iaml.com/programs/employee-benefits-law">Certificate in Employee Benefits Law</a></li>
+          <li><a href="https://iaml.com/programs/employee-benefits-law-advanced">Advanced Certificate in Employee Benefits Law</a></li>
+        </ul>
+      </section>
+
+      <!-- Resources -->
+      <section class="col">
+        <h3>Resources</h3>
+        <ul class="list" aria-label="Resources">
+          <li><a href="https://iaml.com/why-iaml">Why IAML</a></li>
+          <li><a href="https://iaml.com/faculty">Faculty</a></li>
+          <li><a href="https://iaml.com/alumni-benefits">Alumni Benefits</a></li>
+          <li><a href="https://iaml.com/corporate-training">Corporate Training</a></li>
+          <li><a href="https://iaml.com//program-schedule">Schedule &amp; Locations</a></li>
+        </ul>
+      </section>
+
+      <!-- Support -->
+      <section class="col">
+        <h3>Support</h3>
+        <ul class="list" aria-label="Support">
+          <li><a href="https://iaml.com/faq">FAQ</a></li>
+          <li><a href="https://iaml.com/contact-us">Contact</a></li>
+        </ul>
+      </section>
+    </nav>
+
+    <div class="bottom">
+      <div>© 2025 Institute for Applied Management &amp; Law, Inc. All rights reserved.</div>
+      <!-- Optional: badges or tiny links could go here -->
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>

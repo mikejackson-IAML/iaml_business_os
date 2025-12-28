@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IAML Header Component</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Header Container */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 48px;
+            transition: transform 0.8s cubic-bezier(0.33, 0, 0.2, 1),
+                        opacity 0.8s ease-in-out,
+                        background-color 0.7s ease-in-out,
+                        backdrop-filter 0.7s ease-in-out,
+                        border-bottom 0.7s ease-in-out,
+                        box-shadow 0.7s ease-in-out;
+            will-change: transform, opacity;
+            opacity: 1;
+        }
+
+        /* Transparent state (default) */
+        .header {
+            background-color: transparent;
+            border-bottom: 1px solid transparent;
+        }
+
+        /* Glass morphism state (active after 50px scroll) */
+        .header.scrolled {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Hidden state (scrolling down past 80px) */
+        .header.hidden {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Logo */
+        .header-logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            z-index: 1001;
+        }
+
+        .header-logo img {
+            height: 63px;
+            width: auto;
+            transition: height 0.3s ease;
+        }
+
+        /* Right side wrapper for nav + button */
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        /* Navigation */
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            list-style: none;
+        }
+
+        .header-nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: color 0.2s ease, opacity 0.2s ease;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .header-nav a:hover {
+            color: #0066cc;
+        }
+
+        .header-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #0066cc;
+            transform: scaleX(0);
+            transition: transform 0.2s ease;
+        }
+
+        .header-nav a:hover::after {
+            transform: scaleX(1);
+        }
+
+        /* Navigation color when glass effect is active */
+        .header.scrolled .header-nav a {
+            color: #1e293b;
+        }
+
+        .header.scrolled .header-nav a:hover {
+            color: #0066cc;
+        }
+
+        .header.scrolled .header-nav a::after {
+            background: #0066cc;
+        }
+
+        /* Connect Button (Desktop) */
+        .header-cta {
+            padding: 12px 28px;
+            background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 102, 204, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-cta:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+        }
+
+        .header-cta:active {
+            transform: translateY(0);
+        }
+
+        .header-cta svg {
+            width: 18px;
+            height: 18px;
+            fill: #4ade80;
+        }
+
+        /* Hamburger Menu Button */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 32px;
+            height: 32px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1002;
+            position: absolute;
+            right: 24px;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background-color: #ffffff;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: absolute;
+        }
+
+        .hamburger span:nth-child(1) {
+            transform: translateY(-7px);
+        }
+
+        .hamburger span:nth-child(2) {
+            transform: translateY(0);
+        }
+
+        .hamburger span:nth-child(3) {
+            transform: translateY(7px);
+        }
+
+        /* Hamburger Animation (when menu is open) */
+        .hamburger.active span:nth-child(1) {
+            transform: translateY(0) rotate(45deg);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: translateY(0) rotate(-45deg);
+        }
+
+        /* Mobile Menu Overlay */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 280px;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: -4px 0 24px rgba(0, 0, 0, 0.1);
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 999;
+            padding: 100px 32px 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+
+        .mobile-menu a {
+            color: #1a1a1a;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: color 0.2s ease;
+        }
+
+        .mobile-menu a:hover {
+            color: #0066cc;
+        }
+
+        .mobile-menu .header-cta {
+            margin-top: 16px;
+            text-align: center;
+            display: inline-block;
+        }
+
+        /* Mobile Menu Backdrop */
+        .mobile-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 998;
+        }
+
+        .mobile-backdrop.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1024px) {
+            .header-right {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                height: 84px;
+                padding: 0 24px;
+            }
+
+            .header-logo img {
+                height: 54px;
+            }
+
+            .header-nav {
+                gap: 40px;
+            }
+
+            .header-nav a {
+                font-size: 12px;
+            }
+
+            .hamburger {
+                right: 24px;
+            }
+
+            .mobile-menu {
+                width: 260px;
+                padding: 84px 24px 24px;
+                gap: 20px;
+            }
+
+            .mobile-menu a {
+                font-size: 14px;
+                padding: 10px 0;
+            }
+        }
+
+        /* ===== CONNECT MODAL STYLES ===== */
+        #connectPopup_waitText2 {
+            margin-bottom: 30px;
+        }
+        
+        .all-set{
+            background: transparent !important;
+            border: none !important;
+        }
+
+        /* Modal Shell */
+        .connectPopup-overlay{
+            display:none;
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,.6);
+            backdrop-filter:blur(4px);
+            z-index:10000;
+            opacity:0;
+            transition:opacity .3s ease;
+            pointer-events:none;
+        }
+        
+        .connectPopup-overlay.active{
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            opacity:1;
+            pointer-events:auto;
+        }
+        
+        .connectPopup-modal{
+            background:#fff;
+            border-radius:16px;
+            box-shadow:0 24px 48px rgba(0,0,0,.2),0 8px 16px rgba(0,0,0,.1);
+            max-width:560px;
+            width:92%;
+            max-height:90vh;
+            overflow-y:auto;
+            transform:scale(.9) translateY(20px);
+            transition:transform .3s cubic-bezier(.4,0,.2,1);
+        }
+        
+        .connectPopup-overlay.active .connectPopup-modal{
+            transform:scale(1) translateY(0);
+        }
+        
+        .connectPopup-header{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:40px;
+            border-bottom:1px solid #e5e7eb;
+            background:linear-gradient(135deg,#28528c 0%,#222639 100%);
+            color:#fff;
+        }
+        
+        .connectPopup-header h3{
+            font-family:'Lato',sans-serif;
+            font-size:1.3rem;
+            font-weight:700;
+            margin:0;
+            color:#fff!important;
+        }
+        
+        .connectPopup-closeBtn{
+            background:none;
+            border:none;
+            font-size:1.5rem;
+            cursor:pointer;
+            color:#fff;
+            padding:4px;
+            border-radius:4px;
+            transition:all .2s ease;
+            line-height:1;
+        }
+        
+        .connectPopup-closeBtn:hover{
+            background:rgba(255,255,255,.1);
+        }
+        
+        .connectPopup-body{
+            padding:40px;
+        }
+        
+        .connectPopup-body p{
+            font-family:'Lato',sans-serif;
+            font-size:1rem;
+            color:#4b5563;
+            margin-bottom:18px;
+            line-height:1.6;
+        }
+
+        /* Forms */
+        .connectPopup-form{
+            display:flex;
+            flex-direction:column;
+            gap:16px;
+        }
+        
+        .connectPopup-group{
+            display:flex;
+            flex-direction:column;
+        }
+        
+        .connectPopup-group label{
+            font-family:'Lato',sans-serif;
+            font-size:.875rem;
+            font-weight:600;
+            color:#374151;
+            margin-bottom:6px;
+        }
+        
+        .connectPopup-group input, .connectPopup-group textarea{
+            font-family:'Lato',sans-serif;
+            font-size:1rem;
+            padding:12px 16px;
+            border:1px solid #d1d5db;
+            border-radius:8px;
+            background:#fff;
+            color:#1f2937;
+            transition:all .2s ease;
+        }
+        
+        .connectPopup-group input::placeholder, .connectPopup-group textarea::placeholder{
+            color:#9ca3af;
+        }
+        
+        .connectPopup-group input:focus, .connectPopup-group textarea:focus{
+            outline:none;
+            border-color:#3b82f6;
+            box-shadow:0 0 0 3px rgba(59,130,246,.1);
+        }
+        
+        .connectPopup-submitBtn{
+            padding:14px 28px;
+            border-radius:12px;
+            font-family:'Lato',sans-serif;
+            font-size:1rem;
+            font-weight:700;
+            cursor:pointer;
+            transition:all .3s cubic-bezier(.4,0,.2,1);
+            text-transform:uppercase;
+            letter-spacing:.5px;
+            border:none;
+            width:100%;
+            background:linear-gradient(135deg,rgba(59,130,246,.9) 0%,rgba(37,99,235,.95) 100%);
+            color:#fff;
+            box-shadow:0 8px 24px rgba(59,130,246,.25),0 2px 6px rgba(0,0,0,.1);
+        }
+        
+        .connectPopup-submitBtn:hover:not(:disabled){
+            transform:translateY(-2px);
+            background:linear-gradient(135deg,rgba(59,130,246,1) 0%,rgba(37,99,235,1) 100%);
+            box-shadow:0 12px 32px rgba(59,130,246,.35),0 4px 12px rgba(0,0,0,.15);
+        }
+        
+        .connectPopup-submitBtn:disabled{
+            opacity:.6;
+            cursor:not-allowed;
+        }
+
+        /* Connecting animation */
+        .connectPopup-thinking{
+            display:flex;
+            align-items:center;
+            gap:14px;
+            background:#f8fafc;
+            border:1px solid #e5e7eb;
+            border-radius:12px;
+            padding:18px 16px;
+        }
+        
+        .phone-pulse{
+            width:38px;
+            height:38px;
+            border-radius:10px;
+            place-items:center;
+            background:#28528c;
+            position:relative;
+            overflow:visible;
+            display:none!important;
+        }
+        
+        .phone-pulse::after,.phone-pulse::before{
+            content:"";
+            position:absolute;
+            inset:-6px;
+            border-radius:12px;
+            border:2px solid rgba(40,82,140,.35);
+            animation:pulse 1.8s ease-out infinite;
+        }
+        
+        .phone-pulse::before{
+            animation-delay:.9s;
+        }
+        
+        @keyframes pulse{
+            0%{transform:scale(.7);opacity:1}
+            100%{transform:scale(1.5);opacity:0}
+        }
+        
+        .phone-pulse svg{
+            width:20px;
+            height:20px;
+            fill:#fff;
+        }
+
+        .dots{
+            display:inline-flex;
+            gap:6px;
+            align-items:flex-end;
+        }
+        
+        .dots i{
+            width:6px;
+            height:6px;
+            border-radius:50%;
+            background:#28528c;
+            opacity:.35;
+            animation:blink 1.1s infinite;
+        }
+        
+        .dots i:nth-child(2){
+            animation-delay:.15s;
+        }
+        
+        .dots i:nth-child(3){
+            animation-delay:.3s;
+        }
+        
+        @keyframes blink{
+            0%,80%,100%{opacity:.25;transform:translateY(0)}
+            40%{opacity:1;transform:translateY(-4px)}
+        }
+
+        .muted{
+            color:#6b7280;
+            font-size:.95rem;
+        }
+        
+        .small-gap{
+            margin-top:8px;
+        }
+        
+        .divider{
+            margin:18px 0;
+        }
+
+        @media (max-width:600px){
+            .connectPopup-modal{
+                margin:20px;
+                width:calc(100% - 40px);
+            }
+            .connectPopup-header,.connectPopup-body{
+                padding:20px;
+            }
+        }
+
+        /* ===== COUNTDOWN TIMER STYLES (5 OPTIONS) ===== */
+        
+        /* Option 1: Circular Progress Ring */
+        .phone-pulse-with-timer {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .countdown-circle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .countdown-bg {
+            opacity: 0.2;
+        }
+
+        .countdown-progress {
+            stroke-dasharray: 138.23;
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 1s linear;
+        }
+
+        .countdown-number {
+            position: absolute;
+            font-size: 20px;
+            font-weight: 700;
+            color: #28528c;
+            z-index: 2;
+        }
+
+        .phone-icon-small {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            fill: #fff;
+            background: #28528c;
+            border-radius: 6px;
+            padding: 4px;
+            z-index: 1;
+            bottom: 8px;
+            right: 8px;
+        }
+
+        /* Option 2: Horizontal Progress Bar */
+        .countdown-highlight {
+            display: inline-block;
+            min-width: 24px;
+            text-align: center;
+            font-weight: 700;
+            color: #28528c;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .countdown-bar-container {
+            width: 100%;
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            margin: 12px 0 8px 0;
+            overflow: hidden;
+        }
+
+        .countdown-bar {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #28528c 0%, #3b82f6 100%);
+            border-radius: 10px;
+            transition: width 1s linear;
+            box-shadow: 0 0 10px rgba(40, 82, 140, 0.3);
+        }
+
+        /* Option 3: Animated Big Number */
+        .countdown-hero {
+            text-align: center;
+            margin: 20px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, #f8fafc 0%, #e5e7eb 100%);
+            border-radius: 16px;
+        }
+
+        .countdown-big-number {
+            font-size: 72px;
+            font-weight: 700;
+            color: #28528c;
+            line-height: 1;
+            animation: countdown-pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes countdown-pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.08); opacity: 0.85; }
+        }
+
+        .countdown-label {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        /* Option 4: Segmented Dots */
+        .countdown-dots-container {
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 12px;
+            margin: 16px 0;
+            border: 1px solid #e5e7eb;
+        }
+
+        .countdown-dots {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 12px;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .countdown-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #28528c;
+            transition: all 0.4s ease;
+            box-shadow: 0 0 4px rgba(40, 82, 140, 0.3);
+        }
+
+        .countdown-dot.faded {
+            background: #e5e7eb;
+            transform: scale(0.6);
+            box-shadow: none;
+        }
+
+        .countdown-dots-label {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: #4b5563;
+        }
+
+        /* Option 5: Flip Clock Style */
+        .flip-countdown {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .flip-card {
+            width: 80px;
+            height: 90px;
+            perspective: 1000px;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card-front {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #28528c 0%, #1e3a5f 100%);
+            color: white;
+            font-size: 48px;
+            font-weight: 700;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .flip-card-front::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .flip-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #6b7280;
+            letter-spacing: 1.5px;
+        }
+
+        @keyframes flip-down {
+            0% { transform: rotateX(0deg); }
+            100% { transform: rotateX(-180deg); }
+        }
+
+        .flip-card-inner.flipping {
+            animation: flip-down 0.6s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Component -->
+    <header class="header" id="header">
+        <!-- Logo -->
+        <a href="/" class="header-logo">
+            <img src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69042ba0346960d8775fb4a4.svg" alt="IAML Logo">
+        </a>
+
+        <!-- Right side: Nav + Button -->
+        <div class="header-right">
+            <!-- Desktop Navigation -->
+            <nav>
+                <ul class="header-nav">
+                    <li><a href="/featured-programs">Featured Programs</a></li>
+                    <li><a href="/corporate-training">Corporate Training</a></li>
+                    <li><a href="/about-us">Why IAML</a></li>
+                </ul>
+            </nav>
+
+            <!-- Desktop CTA Button -->
+            <a href="#" class="header-cta" onclick="connectPopup_open(); return false;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 0 0-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/>
+                </svg>
+                CONNECT WITH US
+            </a>
+        </div>
+
+        <!-- Mobile Hamburger -->
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-backdrop" id="mobileBackdrop"></div>
+    <nav class="mobile-menu" id="mobileMenu">
+        <a href="/featured-programs">Featured Programs</a>
+        <a href="/corporate-training">Corporate Training</a>
+        <a href="/about-us">Why IAML</a>
+        <a href="#" class="header-cta" onclick="connectPopup_open(); closeMobileMenu(); return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 0 0-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/>
+            </svg>
+            CONNECT WITH US
+        </a>
+    </nav>
+
+    <!-- Connect Modal -->
+    <div class="connectPopup-overlay" id="connectPopup_Modal" onclick="connectPopup_closeOnOverlay(event)">
+        <div class="connectPopup-modal" onclick="event.stopPropagation();">
+            <div class="connectPopup-header">
+                <h3>Connect with us in 20 seconds or less</h3>
+                <button class="connectPopup-closeBtn" onclick="connectPopup_close()" aria-label="Close">&times;</button>
+            </div>
+            <div class="connectPopup-body" id="connectPopup_Content">
+                <!-- dynamic content injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================================
+        // OPTIMIZED HEADER SCROLL BEHAVIOR
+        // ============================================================================
+        //
+        // State Machine:
+        // 1. AT_TOP (0-50px): Visible, transparent background
+        // 2. SCROLLING_UP (>50px, moving up): Visible, glass effect
+        // 3. SCROLLING_DOWN (>70px, moving down): Hidden
+        //
+        // Key Improvements:
+        // - INSTANT response to scroll-up (no threshold)
+        // - Asymmetric thresholds for better UX
+        // - Debounced scroll direction detection
+        // - Handles rapid direction changes
+        // - Accounts for bounce scrolling
+        // ============================================================================
+
+        const header = document.getElementById('header');
+
+        // Scroll state tracking
+        let lastScrollTop = 0;
+        let scrollDirection = 'none'; // 'up', 'down', 'none'
+        let ticking = false;
+
+        // Thresholds
+        const GLASS_EFFECT_THRESHOLD = 50;  // When to apply glass morphism
+        const HIDE_THRESHOLD = 70;           // When to hide header on scroll-down
+        const SCROLL_DELTA_MIN = 1;          // Minimum scroll delta to register (handles jitter)
+
+        // Direction change detection (prevents bounce scroll issues)
+        let scrollDeltaAccumulator = 0;
+        const DIRECTION_CHANGE_THRESHOLD = 5; // Pixels needed to confirm direction change
+
+        /**
+         * Main header update function - handles all state transitions
+         * @param {number} scrollTop - Current scroll position
+         */
+        function updateHeader(scrollTop) {
+            // Calculate scroll delta
+            const scrollDelta = scrollTop - lastScrollTop;
+
+            // Ignore micro-movements (browser jitter, sub-pixel rendering)
+            if (Math.abs(scrollDelta) < SCROLL_DELTA_MIN) {
+                ticking = false;
+                return;
+            }
+
+            // ========================================================================
+            // SCROLL DIRECTION DETECTION with debouncing
+            // ========================================================================
+            // Accumulate scroll delta to prevent false direction changes from
+            // bounce scrolling or rapid micro-scrolls
+            scrollDeltaAccumulator += scrollDelta;
+
+            let newDirection = scrollDirection;
+
+            if (scrollDeltaAccumulator > DIRECTION_CHANGE_THRESHOLD) {
+                newDirection = 'down';
+                scrollDeltaAccumulator = 0; // Reset accumulator
+            } else if (scrollDeltaAccumulator < -DIRECTION_CHANGE_THRESHOLD) {
+                newDirection = 'up';
+                scrollDeltaAccumulator = 0; // Reset accumulator
+            }
+
+            // ========================================================================
+            // STATE MACHINE: Determine header visibility and styling
+            // ========================================================================
+
+            // STATE 1: AT TOP (0-50px)
+            // Always visible, no glass effect, transparent background
+            if (scrollTop <= GLASS_EFFECT_THRESHOLD) {
+                header.classList.remove('hidden');
+                header.classList.remove('scrolled');
+            }
+
+            // STATE 2: SCROLLING DOWN (past hide threshold)
+            // Hide header to maximize content visibility
+            else if (newDirection === 'down' && scrollTop > HIDE_THRESHOLD) {
+                header.classList.add('hidden');
+                // Keep 'scrolled' class so it has glass effect when it reappears
+                header.classList.add('scrolled');
+            }
+
+            // STATE 3: SCROLLING UP (anywhere past glass threshold)
+            // IMMEDIATE appearance with glass effect - no waiting!
+            else if (newDirection === 'up' && scrollTop > GLASS_EFFECT_THRESHOLD) {
+                header.classList.remove('hidden');
+                header.classList.add('scrolled');
+            }
+
+            // STATE 4: IN BETWEEN (50-70px, scrolling down but not past hide threshold)
+            // Keep header visible with glass effect
+            else if (scrollTop > GLASS_EFFECT_THRESHOLD && scrollTop <= HIDE_THRESHOLD) {
+                header.classList.remove('hidden');
+                header.classList.add('scrolled');
+            }
+
+            // Update tracking variables
+            scrollDirection = newDirection;
+            lastScrollTop = scrollTop;
+            ticking = false;
+        }
+
+        /**
+         * RequestAnimationFrame wrapper for scroll handling
+         * Ensures we don't queue multiple animation frames
+         */
+        function requestTick() {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    updateHeader(window.pageYOffset);
+                });
+                ticking = true;
+            }
+        }
+
+        // Initialize scroll listener with passive flag for better performance
+        window.addEventListener('scroll', requestTick, { passive: true });
+
+        // ============================================================================
+        // EDGE CASE HANDLING: Page load state
+        // ============================================================================
+        // Set initial state based on current scroll position
+        // (handles page refresh while scrolled down, or anchor links)
+        window.addEventListener('DOMContentLoaded', () => {
+            const initialScrollTop = window.pageYOffset;
+
+            if (initialScrollTop <= GLASS_EFFECT_THRESHOLD) {
+                header.classList.remove('hidden');
+                header.classList.remove('scrolled');
+            } else {
+                // Page loaded while scrolled - show header with glass effect
+                header.classList.remove('hidden');
+                header.classList.add('scrolled');
+            }
+
+            lastScrollTop = initialScrollTop;
+        });
+
+        // Mobile menu toggle
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileBackdrop = document.getElementById('mobileBackdrop');
+
+        function toggleMobileMenu() {
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            mobileBackdrop.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function closeMobileMenu() {
+            hamburger.classList.remove('active');
+            mobileMenu.classList.remove('active');
+            mobileBackdrop.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        hamburger.addEventListener('click', toggleMobileMenu);
+        mobileBackdrop.addEventListener('click', closeMobileMenu);
+
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', closeMobileMenu);
+        });
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 1024) {
+                closeMobileMenu();
+            }
+        });
+
+        // ===== CONNECT MODAL FUNCTIONALITY =====
+        const GHL_WEBHOOK = ENV_CONFIG?.GHL_CONTACT_WEBHOOK || 'YOUR_CONTACT_WEBHOOK_URL_HERE';
+        const CONNECT_TIMEOUT_MS = 20000;
+
+        // ===== COUNTDOWN TIMER CONFIGURATION =====
+        // ⭐ TO TEST EACH TIMER: Change COUNTDOWN_STYLE between 1-5, save, and refresh the page
+        // Then click "CONNECT WITH US" to see the timer in action
+        const COUNTDOWN_STYLE = 1;
+        // 1 = Circular Progress Ring (modern & clean - recommended ⭐)
+        // 2 = Horizontal Progress Bar (simple & familiar)
+        // 3 = Animated Big Number (bold & attention-grabbing)
+        // 4 = Segmented Dots (playful & visual)
+        // 5 = Flip Clock Style (retro & sophisticated)
+
+        let connectTimeoutHandle = null;
+        let countdownInterval = null;
+        let lastSubmission = { phone: '' };
+
+        function connectPopup_open(){
+            const modal = document.getElementById('connectPopup_Modal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            renderStep('form');
+        }
+        
+        function connectPopup_close(){
+            const modal = document.getElementById('connectPopup_Modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            clearTimeout(connectTimeoutHandle);
+            clearInterval(countdownInterval);
+        }
+        
+        function connectPopup_closeOnOverlay(e){ 
+            if (e.target === e.currentTarget) connectPopup_close(); 
+        }
+        
+        document.addEventListener('keydown', (e)=>{ 
+            if(e.key==='Escape') connectPopup_close(); 
+        });
+
+        function renderStep(step, payload = {}){
+            const root = document.getElementById('connectPopup_Content');
+
+            if(step === 'form'){
+                root.innerHTML = `
+                    <p>Give us your phone number - we'll connect you with one of our program coordinators who can answer your questions and get you exactly what you need.</p>
+                    <form class="connectPopup-form" id="connectPopup_Form">
+                        <div class="connectPopup-group">
+                            <label for="connectPopup_phone">Phone Number *</label>
+                            <input type="tel" id="connectPopup_phone" name="phone" placeholder="(555) 555-5555" required />
+                        </div>
+                        <button type="submit" class="connectPopup-submitBtn">Connect</button>
+                    </form>
+                `;
+                const form = document.getElementById('connectPopup_Form');
+                form.addEventListener('submit', connectPopup_submit);
+                
+                const phoneInput = document.getElementById('connectPopup_phone');
+                phoneInput.addEventListener('input', formatPhoneNumber);
+            }
+
+            if(step === 'connecting'){
+                let timerHTML = '';
+                
+                if(COUNTDOWN_STYLE === 1){
+                    // Option 1: Circular Progress Ring
+                    timerHTML = `
+                        <div class="connectPopup-thinking" role="status" aria-live="polite">
+                            <div class="phone-pulse-with-timer" aria-hidden="true">
+                                <svg class="countdown-circle" viewBox="0 0 50 50">
+                                    <circle class="countdown-bg" cx="25" cy="25" r="22" fill="none" stroke="#28528c" stroke-width="3"/>
+                                    <circle class="countdown-progress" cx="25" cy="25" r="22" fill="none" stroke="#28528c" stroke-width="3" 
+                                            stroke-linecap="round" transform="rotate(-90 25 25)" id="progress-circle"/>
+                                </svg>
+                                <div class="countdown-number" id="countdown-number">20</div>
+                                <svg class="phone-icon-small" viewBox="0 0 24 24">
+                                    <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                                </svg>
+                            </div>
+                            <div class="muted">
+                                <strong>Connecting you in <span id="countdown-text">20</span> seconds...</strong>
+                                <div class="small-gap muted">We're matching you with the specialist who can best answer your questions about our programs, services, or any other support you need.</div>
+                            </div>
+                        </div>
+                    `;
+                } else if(COUNTDOWN_STYLE === 2){
+                    // Option 2: Horizontal Progress Bar
+                    timerHTML = `
+                        <div class="muted">
+                            <strong>Connecting you in <span id="countdown-seconds" class="countdown-highlight">20</span> seconds...</strong>
+                            <div class="countdown-bar-container">
+                                <div class="countdown-bar" id="countdown-bar"></div>
+                            </div>
+                            <div class="small-gap muted">We're matching you with the specialist who can best answer your questions about our programs, services, or any other support you need. <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></div>
+                        </div>
+                    `;
+                } else if(COUNTDOWN_STYLE === 3){
+                    // Option 3: Animated Big Number
+                    timerHTML = `
+                        <div class="countdown-hero">
+                            <div class="countdown-big-number" id="countdown-big">20</div>
+                            <p class="countdown-label">seconds until connected</p>
+                        </div>
+                        <div class="muted">
+                            <strong>Connecting you with one of our program coordinators...</strong>
+                            <div class="small-gap muted">We're matching you with the specialist who can best answer your questions about our programs, services, or any other support you need. <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></div>
+                        </div>
+                    `;
+                } else if(COUNTDOWN_STYLE === 4){
+                    // Option 4: Segmented Dots
+                    timerHTML = `
+                        <div class="muted" style="margin-bottom:16px;">
+                            <strong>Connecting you with one of our program coordinators...</strong>
+                        </div>
+                        <div class="countdown-dots-container">
+                            <div class="countdown-dots" id="countdown-dots"></div>
+                            <p class="countdown-dots-label"><span id="dots-remaining">20</span> seconds remaining</p>
+                        </div>
+                        <div class="muted small-gap">We're matching you with the specialist who can best answer your questions about our programs, services, or any other support you need.</div>
+                    `;
+                } else if(COUNTDOWN_STYLE === 5){
+                    // Option 5: Flip Clock Style
+                    timerHTML = `
+                        <div class="flip-countdown">
+                            <div class="flip-card">
+                                <div class="flip-card-inner" id="flip-card">
+                                    <div class="flip-card-front" id="flip-number">20</div>
+                                </div>
+                            </div>
+                            <span class="flip-label">SECONDS</span>
+                        </div>
+                        <div class="muted">
+                            <strong>Connecting you with one of our program coordinators...</strong>
+                            <div class="small-gap muted">We're matching you with the specialist who can best answer your questions about our programs, services, or any other support you need. <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></div>
+                        </div>
+                    `;
+                }
+                
+                root.innerHTML = timerHTML + `<p class="muted" style="margin-top:24px;">If a coordinator picks up, we'll connect you right away. Please keep this window open.</p>`;
+                
+                // Start the countdown timer
+                startCountdown();
+            }
+
+            if(step === 'email-fallback'){
+                root.innerHTML = `
+                    <div class="muted" id="connectPopup_waitText1"><strong>We're still trying to connect you...</strong></div>
+                    <div class="muted small-gap" id="connectPopup_waitText2" style="opacity:0;">Our coordinators are currently helping other professionals with their program decisions, but we don't want to delay your registration process. Let's get your questions answered via email instead.</div>
+                    <form class="connectPopup-form" id="connectPopup_EmailForm">
+                        <div class="connectPopup-group">
+                            <label for="connectPopup_email">Email *</label>
+                            <input type="email" id="connectPopup_email" name="email" placeholder="you@company.com" required />
+                        </div>
+                        <div class="connectPopup-group">
+                            <label for="connectPopup_question">Question *</label>
+                            <textarea rows="3" id="connectPopup_question" name="question" placeholder="submit your question" required></textarea>
+                        </div>
+                        <button type="submit" class="connectPopup-submitBtn">GET ANSWERS NOW</button>
+                    </form>
+                `;
+                requestAnimationFrame(()=> setTimeout(()=> {
+                    const el = document.getElementById('connectPopup_waitText2');
+                    if(el) el.style.opacity = 1;
+                }, 1300));
+                document.getElementById('connectPopup_EmailForm').addEventListener('submit', connectPopup_submitEmailFallback);
+            }
+
+            if(step === 'success'){
+                root.innerHTML = `
+                    <p><strong>Thanks!</strong> We've received your details and a coordinator will reach out shortly.</p>
+                    <div class="connectPopup-thinking all-set" style="margin-top:10px">
+                        <div class="phone-pulse" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if(step === 'error'){
+                root.innerHTML = `
+                    <p><strong>Hmm, something went wrong.</strong></p>
+                    <p class="muted">${payload.message || 'Please try again, or send your details by email below.'}</p>
+                    <button class="connectPopup-submitBtn" onclick="renderStep('form')">Try Again</button>
+                `;
+            }
+        }
+
+        async function connectPopup_submit(e){
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const phone = (formData.get('phone') || '').toString().trim();
+            lastSubmission = { phone };
+
+            renderStep('connecting');
+
+            clearTimeout(connectTimeoutHandle);
+            connectTimeoutHandle = setTimeout(()=> renderStep('email-fallback'), CONNECT_TIMEOUT_MS);
+
+            try{
+                const res = await fetch(GHL_WEBHOOK, {
+                    method:'POST',
+                    headers:{'Content-Type':'application/json'},
+                    body: JSON.stringify({
+                        phone,
+                        tags:'contact_button_initiated',
+                        source:'Website Contact Form',
+                        contactType:'lead'
+                    })
+                });
+
+                if(!res.ok){
+                    const result = await safeJson(res);
+                    throw new Error(result?.message || `Request failed (${res.status})`);
+                }
+
+                if (typeof gtag !== 'undefined') {
+                    gtag('event','form_submit',{event_category:'Contact',event_label:'Connect Modal Success'});
+                }
+            }catch(err){
+                console.error('GHL error:', err);
+                if (typeof gtag !== 'undefined') {
+                    gtag('event','form_error',{event_category:'Contact',event_label:'Connect Modal Error',error_message:String(err?.message||err)});
+                }
+                clearTimeout(connectTimeoutHandle);
+                renderStep('email-fallback');
+            }
+        }
+
+        async function connectPopup_submitEmailFallback(e){
+            e.preventDefault();
+            const fd = new FormData(e.target);
+            const email = (fd.get('email')||'').toString().trim();
+
+            const btn = e.target.querySelector('.connectPopup-submitBtn');
+            btn.disabled = true; btn.textContent = 'Sending...';
+
+            try{
+                const res = await fetch(GHL_WEBHOOK, {
+                    method:'POST',
+                    headers:{'Content-Type':'application/json'},
+                    body: JSON.stringify({
+                        phone: lastSubmission.phone,
+                        email,
+                        tags:'contact_button_email_fallback',
+                        source:'Website Contact Form',
+                        contactType:'lead'
+                    })
+                });
+                if(!res.ok){
+                    const result = await safeJson(res);
+                    throw new Error(result?.message || `Request failed (${res.status})`);
+                }
+                renderStep('success');
+            }catch(err){
+                console.error('Fallback error:', err);
+                renderStep('error', { message: 'We could not send your email just now. Please try again.' });
+            }
+        }
+
+        function escapeHtml(s){ 
+            return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); 
+        }
+        
+        async function safeJson(res){ 
+            try{ return await res.json(); }catch{ return null; } 
+        }
+
+        function formatPhoneNumber(e) {
+            const input = e.target;
+            const value = input.value.replace(/\D/g, '');
+            let formatted = '';
+            
+            if (value.length > 0) {
+                formatted = '(' + value.substring(0, 3);
+            }
+            if (value.length >= 4) {
+                formatted += ') ' + value.substring(3, 6);
+            }
+            if (value.length >= 7) {
+                formatted += '-' + value.substring(6, 10);
+            }
+            
+            input.value = formatted;
+        }
+
+        // ===== COUNTDOWN TIMER FUNCTION =====
+        function startCountdown(){
+            clearInterval(countdownInterval);
+            let countdownValue = 20;
+
+            // Special initialization for dots timer
+            if(COUNTDOWN_STYLE === 4){
+                const dotsContainer = document.getElementById('countdown-dots');
+                if(dotsContainer){
+                    for (let i = 0; i < 20; i++) {
+                        const dot = document.createElement('div');
+                        dot.className = 'countdown-dot';
+                        dot.id = `dot-${i}`;
+                        dotsContainer.appendChild(dot);
+                    }
+                }
+            }
+
+            countdownInterval = setInterval(() => {
+                countdownValue--;
+
+                // Update based on countdown style
+                if(COUNTDOWN_STYLE === 1){
+                    // Circular Progress Ring
+                    const numEl = document.getElementById('countdown-number');
+                    const textEl = document.getElementById('countdown-text');
+                    const progressEl = document.getElementById('progress-circle');
+                    
+                    if (numEl) numEl.textContent = countdownValue;
+                    if (textEl) textEl.textContent = countdownValue;
+                    if (progressEl) {
+                        const offset = 138.23 * (1 - countdownValue / 20);
+                        progressEl.style.strokeDashoffset = offset;
+                    }
+                } else if(COUNTDOWN_STYLE === 2){
+                    // Horizontal Progress Bar
+                    const secondsEl = document.getElementById('countdown-seconds');
+                    const barEl = document.getElementById('countdown-bar');
+                    
+                    if (secondsEl) secondsEl.textContent = countdownValue;
+                    if (barEl) {
+                        const percentage = (countdownValue / 20) * 100;
+                        barEl.style.width = percentage + '%';
+                    }
+                } else if(COUNTDOWN_STYLE === 3){
+                    // Animated Big Number
+                    const bigEl = document.getElementById('countdown-big');
+                    if (bigEl) bigEl.textContent = countdownValue;
+                } else if(COUNTDOWN_STYLE === 4){
+                    // Segmented Dots
+                    const dotIndex = 20 - countdownValue - 1;
+                    const dot = document.getElementById(`dot-${dotIndex}`);
+                    if (dot) dot.classList.add('faded');
+                    
+                    const remainingEl = document.getElementById('dots-remaining');
+                    if (remainingEl) remainingEl.textContent = countdownValue;
+                } else if(COUNTDOWN_STYLE === 5){
+                    // Flip Clock Style
+                    const flipNumber = document.getElementById('flip-number');
+                    const flipCard = document.getElementById('flip-card');
+                    
+                    if (flipCard) {
+                        flipCard.classList.add('flipping');
+                        setTimeout(() => {
+                            if (flipNumber) flipNumber.textContent = countdownValue;
+                            flipCard.classList.remove('flipping');
+                        }, 300);
+                    }
+                }
+
+                if (countdownValue <= 0) {
+                    clearInterval(countdownInterval);
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
+
+

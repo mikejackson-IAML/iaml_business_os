@@ -1,0 +1,238 @@
+{
+  "programName": "Comprehensive Labor Relations",
+  "programSlug": "comprehensive-labor-relations",
+  "registrationUrl": "#registration",
+  "meta": {
+    "title": "Comprehensive Labor Relations Training | IAML",
+    "description": "Master labor relations law in 2 days. Learn NLRB compliance, union avoidance, collective bargaining & election readiness. Earn 13 SHRM/HRCI/CLE credits. Taught by practicing attorneys.",
+    "keywords": "labor relations training, NLRB compliance, union avoidance, collective bargaining training, labor law certification, union election, employee relations, labor relations certification, SHRM credits",
+    "ogImage": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69093f4637c43adac1bc0ab3.png"
+  },
+  "seo": {
+    "canonicalUrl": "https://iaml.com/programs/comprehensive-labor-relations",
+    "robots": "index, follow",
+    "twitter": {
+      "card": "summary_large_image",
+      "site": "@IAMLaw",
+      "title": "Comprehensive Labor Relations Training | IAML",
+      "description": "Master labor relations law in 2 days. Learn NLRB compliance, union avoidance, collective bargaining & election readiness. Earn 13 SHRM/HRCI/CLE credits.",
+      "image": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69093f4637c43adac1bc0ab3.png"
+    },
+    "schema": {
+      "educationalLevel": "intermediate",
+      "timeRequired": "P2D",
+      "teaches": [
+        "NLRB Compliance",
+        "Union Avoidance",
+        "Collective Bargaining",
+        "Election Readiness",
+        "Labor Relations Strategy",
+        "Strikes and Pickets",
+        "CBA Administration"
+      ]
+    },
+    "keywordData": {
+      "primaryKeyword": "labor relations training",
+      "searchVolume": 320,
+      "competition": "medium",
+      "relatedKeywords": [
+        "union avoidance training",
+        "NLRB compliance",
+        "collective bargaining training",
+        "labor law certification"
+      ]
+    }
+  },
+  "hero": {
+    "title": "Comprehensive Labor Relations",
+    "description": "Navigate the complex terrain of organizing risk, employee handbooks, union elections, and collective bargaining with proven strategies that protect your workforce while maintaining compliance. Learn from practicing labor attorneys who handle these issues every day.",
+    "price": 1375,
+    "deliveryOptions": ["In Person", "Virtual"],
+    "duration": "2 days"
+  },
+  "testimonials": [
+    {"quote": "With almost 20 years in the field of employment law, this was one of the best, if not the best, seminar I have ever attended.", "name": "Charles Rando", "title": "Personnel Field Manager", "company": "Wyoming Department of Workforce Services"},
+    {"quote": "This is the best course I have ever attended. The instructors are well informed and have a repertoire of stories that emphasize the issues. Course materials are also excellent!", "name": "Debbie Colia", "title": "HR Executive Consultant", "company": "Cedars-Sinai"},
+    {"quote": "The seminar was excellent. The instructors were extremely knowledgeable and made a point of allowing the class to interact. This one week not only provided me with knowledge I did not have, it also gave me a new appreciation for what I do.", "name": "Angelique Anderson", "title": "Executive Director, Strategic HR Business Partnerships - People & Culture", "company": "Catalina Marketing"},
+    {"quote": "My only wish is that I had attended this seminar earlier in my career! The information I learned is invaluable.", "name": "Christina Lipetzky", "title": "Human Resources Manager", "company": "Montana Department of Environmental Quality"},
+    {"quote": "The training both was excellent both in content as well as presentation. I believe the strength of the program lay in the instructors used. All the instructors were fantastic!", "name": "Stephen Santay", "title": "Controller", "company": "KTLA"},
+    {"quote": "The seminar was the best. Faculty did an outstanding job of making legal information understandable for non-lawyer professionals. I am planning to attend the Advanced Conference.", "name": "James Dillard", "title": "Personnel Administrator", "company": "Lubrizol"},
+    {"quote": "I thought the program was excellent. The content and speakers especially were the best I've experienced in my educational and professional career.", "name": "Laurie Clark", "title": "Benefits Paralegal", "company": "The Coca-Cola Company"},
+    {"quote": "All three instructors were wonderful in their own way. Finding attorneys who can teach is a rarity. I found the information current and relevant. It will definitely have an impact on my HR practices. Thank you for a great seminar!", "name": "Heidi Hill", "title": "Director Training, Development and Engagement", "company": "C2 Solutions"},
+    {"quote": "Our instructor was a great presenter with great real life examples. His summaries of significant federal employment law were invaluable.", "name": "Tim Hartman", "title": "Sr. Regional HR Manager & HR Counsel", "company": "Silgan Containers"},
+    {"quote": "Of all the IAML seminars I have attended, this was by far the best and most informative, especially to HR professionals. I was very pleased with the entire program.", "name": "Barbara Ann Bohlman", "title": "Sr Compensation & Benefits Manager", "company": "The Boca Raton"},
+    {"quote": "The information covered in this program was excellent! The speakers were wonderful. They kept the program fresh and interesting.", "name": "Monica Taylor", "title": "Human Resources Manager", "company": "Oak Hall Cap & Gown"},
+    {"quote": "The content was current, relevant and very practical. I appreciated the interactive format and the opportunity to network with other professionals facing similar challenges.", "name": "Michael Chen", "title": "Director of Human Resources", "company": "TechSmart Industries"},
+    {"quote": "The information was extremely valuable and interesting, I learned a great deal. The instructors did an exceptional job presenting; they were helpful, knowledgeable and entertaining.", "name": "Katie Sanders", "title": "Coordinator of Workforce Development", "company": "Northside Hospital"},
+    {"quote": "The seminar offered incredible value for me. The instructors were able to rely on past examples and cases to help illustrate the learning. It was a great learning experience for me.", "name": "Amanda McIvor", "title": "Senior Human Resources Manager", "company": "Gerdau"},
+    {"quote": "I have been in HR for 15 years and attended a lot of seminars, this was my first IAML seminar and you can bet my budget dollars were well-spent. I'll continue to look for your seminars first!", "name": "Ruth Erwert", "title": "Recruiting Manager", "company": "Chelan County PUD"},
+    {"quote": "Wayne Williams' intellect and energy truly made this an interactive session which is paramount for all adult learning. Kudos to him and to IAML!", "name": "Michael Cook", "title": "Corporate Employee Relations Manager", "company": "MillerCoors"},
+    {"quote": "Both of the presenters were fantastic! The personal experiences shared by Patrick Scully of working for the NLRB (labor vs. employer) were fascinating.", "name": "Kelly Stiles", "title": "Human Resources Manager", "company": "City of Unalaska, Alaska"},
+    {"quote": "Thank you for all of the information that was given. I am very excited to apply the knowledge that has been given. I would very much like to continue to work with the IAML team to continue my education.", "name": "David Deem", "title": "Continuous Improvement Manager", "company": "Lear Corporation"},
+    {"quote": "The vast knowledge and experience of the instructors; entertaining and dynamic presentation style; discussion method of training was well received; linkage of legal facts to actual cases was enlightening.", "name": "Jose Martinez", "title": "Facilities Maintenance Program Manager", "company": "Sandia National Laboratories"},
+    {"quote": "Amy is an extremely knowledgeable professional with years of labor relations experience. This is invaluable to have as an instructor. She gained immediate credibility with the group with her extensive knowledge, experience and life anecdotes.", "name": "Christine Galicho", "title": "Regional Human Resource Manager", "company": "Linens 'N Things"}
+  ],
+  "contentSection": {
+    "headline": "Master Labor Relations Strategies That Protect Your Organization",
+    "description": "Comprehensive Labor Relations is <span class=\"emphasis\">2 intensive days</span> where you'll master the NLRB landscape, union avoidance strategies, election readiness, and collective bargaining techniques—working through realistic scenarios with experienced labor attorneys, not checklists and theory.",
+    "benefits": [
+      "<strong>Complete labor relations framework</strong> – NLRB compliance, handbook policies after Stericycle, joint-employer rules, and organizing risk assessment",
+      "<strong>Union avoidance strategies</strong> – Lawful hiring practices, supervisor training for §7 compliance, and proactive employee relations",
+      "<strong>Election and bargaining expertise</strong> – Campaign playbooks, good-faith bargaining, and CBA administration",
+      "<strong>Professional certification</strong> – Earn your certificate plus 13 SHRM/HRCI/CLE continuing education credits"
+    ]
+  },
+  "curriculum": {
+    "header": {
+      "title": "What You'll Master in 2 Days",
+      "description": "A comprehensive labor relations framework covering NLRB compliance, union avoidance, election readiness, collective bargaining, and advanced topics that protect your organization."
+    },
+    "blocks": [
+      {
+        "id": "block1",
+        "label": "Full Program",
+        "title": "Comprehensive Labor Relations",
+        "description": "Navigate the complex terrain of organizing risk, employee handbooks, union elections, and collective bargaining with proven strategies.",
+        "price": 1375,
+        "availability": "Full program",
+        "competencyGroups": [
+          {
+            "title": "The Current NLRB & Organizing Landscape",
+            "description": "Key shifts in elections, handbooks, and joint-employer liability.",
+            "skills": [
+              {"level": "Foundation", "title": "Elections & recognition after NLRB Cemex decision", "description": "Faster elections; higher risk of bargaining orders for ULPs; what \"card-check-adjacent\" and new GC guidance mean in practice."},
+              {"level": "Advanced", "title": "Handbooks after NLRB Stericycle decision", "description": "Why neutral rules (civility, confidentiality, social media, devices) can still violate §7; how to rewrite with context-specific justifications."},
+              {"level": "Expert", "title": "Joint-employer status (where it stands now)", "description": "2023 rule invalidated; prior standard effectively back—implications for franchise/contracting models and vendor oversight."}
+            ]
+          },
+          {
+            "title": "Practical Guidance for Non-Union Workplaces",
+            "description": "Reduce organizing heat with lawful hiring, onboarding, and training.",
+            "skills": [
+              {"level": "Foundation", "title": "Hiring & onboarding practices", "description": "Lower ULP risk; orientation scripts that avoid \"captive audience\" pitfalls."},
+              {"level": "Advanced", "title": "The three big sparks for organizing", "description": "Scheduling/fairness, safety (including psychological safety), and transparency (wages/career paths)—how HR cools them with credible channels and swift fixes."},
+              {"level": "Expert", "title": "Manager training for §7 in non-union settings", "description": "Protected concerted activity on Slack/Teams and group chats; where discipline goes wrong under Stericycle."}
+            ]
+          },
+          {
+            "title": "Election Readiness & Campaign Law",
+            "description": "Operate within accelerated timelines while preserving laboratory conditions.",
+            "skills": [
+              {"level": "Foundation", "title": "Campaign playbook: Do / Don't", "description": "Practical rules for message discipline under accelerated timelines; maintaining true laboratory conditions."},
+              {"level": "Advanced", "title": "Access, equal time, and solicitation rules", "description": "Apply solicitation/distribution and email/Teams policies—updated for hybrid work."},
+              {"level": "Expert", "title": "Post-election objections and reruns", "description": "Prevent and defend against objections to avoid costly reruns."}
+            ]
+          },
+          {
+            "title": "Collective Bargaining",
+            "description": "Proposals that matter, documentation, and aligning handbooks with CBAs.",
+            "skills": [
+              {"level": "Foundation", "title": "Setting the table", "description": "Management rights, grievance/arbitration, zipper, information requests, technology/data clauses, and safety."},
+              {"level": "Advanced", "title": "Good-faith bargaining", "description": "Information requests, surface bargaining risks, and documenting proposals/counterproposals."},
+              {"level": "Expert", "title": "Handbook ↔ CBA alignment", "description": "Avoid conflicts and unintended past-practice creation."}
+            ]
+          },
+          {
+            "title": "Strikes, Pickets, and Employer Response",
+            "description": "Protected vs unprotected actions, lawful responses, and contingency planning.",
+            "skills": [
+              {"level": "Foundation", "title": "Types of strikes and lockouts", "description": "Intermittent/partial strike pitfalls; replacements and lawful lockout strategy."},
+              {"level": "Advanced", "title": "Picketing & social media amplification", "description": "What changes in a viral era and how to respond lawfully."},
+              {"level": "Expert", "title": "Contingency planning", "description": "Checklists and communication protocols that minimize disruption."}
+            ]
+          },
+          {
+            "title": "Operating Under a CBA",
+            "description": "Grievance handling, settlements, records, and change management.",
+            "skills": [
+              {"level": "Foundation", "title": "Grievances to arbitration", "description": "Intake triage, settlement tools, record-building, arbitrator selection, and \"just cause\" proofs."},
+              {"level": "Advanced", "title": "Past practice, side letters, zipper clauses", "description": "How to manage change mid-term without creating legal traps."}
+            ]
+          },
+          {
+            "title": "Successorship, Acquisitions & Restructuring",
+            "description": "When buyers must recognize a union and how to diligence LR risks.",
+            "skills": [
+              {"level": "Foundation", "title": "Successor obligations", "description": "When a buyer must recognize a union; hiring decisions that trigger duty to bargain."},
+              {"level": "Advanced", "title": "Alter-ego/single-employer risks", "description": "ER/LR due diligence checklists including wage/hour and privacy/data issues."}
+            ]
+          },
+          {
+            "title": "Special Watch-Items for LR Professionals",
+            "description": "Transparency, privacy/monitoring, and cross-law impacts to watch.",
+            "skills": [
+              {"level": "Foundation", "title": "Pay transparency (multi-state)", "description": "Job-post salary ranges, internal equity communications, and how transparency interacts with CBA wage grids."},
+              {"level": "Advanced", "title": "State privacy & monitoring", "description": "CPRA employee data and beyond—impacts on investigations, monitoring, and CBA data requests."}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "faculty": [
+    {
+      "name": "Ray Deeny, Esq.",
+      "title": "Partner at Taft Stettinius & Hollister LLP",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667eb6947d86fd7edcc6f.svg",
+      "bio": "Ray is widely regarded as a dean of labor and employment law, known for his encyclopedic knowledge and unmatched command of workplace regulations. For over 40 years, he has represented management nationwide, blending a powerhouse advisory practice with a formidable litigation record.",
+      "bioLink": "https://crm.re-vitalized.com/v2/preview/tsCH77tyXdISzhZMCnT5?notrack=true#ray-deeny-esq",
+      "firstName": "Ray"
+    },
+    {
+      "name": "John F. Wymer, III, Esq.",
+      "title": "Partner, Labor & Employment at Thompson Hine LLP",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebba45f28666768ce6.svg",
+      "bio": "John F. Wymer is a nationally recognized labor and employment attorney and partner in Thompson Hine LLP's Labor & Employment group. With decades of experience, he represents public and private sector employers nationwide in employment discrimination, wage-and-hour, labor negotiations, union matters, ERISA claims, and more.",
+      "bioLink": "https://crm.re-vitalized.com/v2/preview/tsCH77tyXdISzhZMCnT5?notrack=true#john-f-wymer-iii-esq",
+      "firstName": "John"
+    },
+    {
+      "name": "Wayne W. Williams, Esq.",
+      "title": "Founder, Law Offices of Wayne W. Williams",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebe98d66054ecb05fb.svg",
+      "bio": "Wayne Williams is a distinguished employment and labor law attorney based in Colorado Springs. As the founder of his own firm, he advises and represents employers on a wide range of issues including employment discrimination, harassment, wrongful discharge, wage and hour compliance, and traditional labor law.",
+      "bioLink": "https://crm.re-vitalized.com/v2/preview/tsCH77tyXdISzhZMCnT5?notrack=true#wayne-w-williams-esq",
+      "firstName": "Wayne"
+    },
+    {
+      "name": "Patrick Scully, Esq.",
+      "title": "Partner at Foley Hoag",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebd086b27752e18e31.svg",
+      "bio": "Patrick Scully primarily focuses on labor law issues and helps clients successfully navigate complex and persistent claims from international and local labor unions. Patrick's work includes unfair labor practice charges and representation cases as well as federal and state court litigation.",
+      "bioLink": "https://crm.re-vitalized.com/v2/preview/tsCH77tyXdISzhZMCnT5?notrack=true#patrick-scully",
+      "firstName": "Patrick"
+    },
+    {
+      "name": "Amy J. Zdravecky, Esq.",
+      "title": "Partner at Barnes & Thornburg LLP",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690e22acc87c0f45146d61fd.svg",
+      "bio": "Amy represents employers across industries including retail, hospitality, manufacturing, transportation, and healthcare. She advises on employee relations, union avoidance, collective bargaining, harassment prevention, and compliance with key employment laws like Title VII, ADA, ADEA, FMLA, and FCRA.",
+      "bioLink": "#",
+      "firstName": "Amy"
+    }
+  ],
+  "facultySection": {
+    "headline": "Practicing Attorneys, Not Academics",
+    "subtitle": "Learn from labor law specialists who handle NLRB matters, union campaigns, and collective bargaining every day"
+  },
+  "faq": [
+    {"question": "What happens after I register?", "answer": "Within minutes, you'll receive an invoice email. Once payment is processed, you can schedule your complimentary pre-program consultation (10-15 minutes) to discuss labor relations challenges you're currently facing and identify which scenarios will have the biggest impact for you. Pre-program materials arrive one week before your session starts."},
+    {"question": "What's the difference between in-person and virtual formats?", "answer": "Both formats feature the same practicing attorney instructors, current labor relations methodologies, and professional credits. In-person provides face-to-face networking with other HR and LR professionals. Virtual delivers the same live instruction via Zoom with full Q&A capability. Choose the format that fits your schedule—the quality and content remain identical."},
+    {"question": "What continuing education credits will I earn?", "answer": "The 2-day program provides 13 SHRM/HRCI/CLE credits. Plus, your enrollment includes 12 months of quarterly employment law updates (4 sessions × 1.5 credits each = 6 additional credits), bringing your total to 19 credits."},
+    {"question": "Is this the same as Block I of the Certificate in Employee Relations Law?", "answer": "Yes. Comprehensive Labor Relations is Block I of the full Certificate in Employee Relations Law program. You can take it as a standalone 2-day program, or combine it with Discrimination Prevention & Defense (Block II) and Special Issues in Employment Law (Block III) to earn the full certificate."},
+    {"question": "I work in a non-union environment. Is this program relevant for me?", "answer": "Absolutely. A significant portion of the program covers union avoidance strategies, recognizing organizing risks, and maintaining compliance in non-union settings. You'll learn how to reduce organizing heat through lawful hiring, onboarding, and supervisor training—critical knowledge even if you've never faced a union campaign."},
+    {"question": "How current is the labor relations content?", "answer": "Very. The curriculum addresses the latest NLRB developments including the Cemex decision's impact on elections, Stericycle's effect on handbook policies, and the current joint-employer standard. Our instructors update content based on cases they're currently handling."},
+    {"question": "Does the $1,375 program fee include everything?", "answer": "Yes. Your enrollment includes all live instruction from practicing labor attorneys, complete program materials, 13 continuing education credits, pre-program consultation, 12 months of quarterly employment law updates (4 sessions, $1,588 value), permanent access to updated resources, and alumni benefits for all future programs. The only additional cost would be travel and lodging if you choose in-person format."},
+    {"question": "Can I apply this toward the full Certificate in Employee Relations Law?", "answer": "Yes. Comprehensive Labor Relations (Block I) counts toward the full certificate. You can complete the remaining blocks—Discrimination Prevention & Defense (Block II) and Special Issues in Employment Law (Block III)—at any future session to earn the complete Certificate in Employee Relations Law."}
+  ],
+  "benefits": {
+    "creditCount": "13 SHRM/HRCI/CLE",
+    "updatePeriod": "12 months",
+    "alumniDiscount": "$300-$500"
+  },
+  "airtable": {
+    "inPersonViewId": "viwfRNxWVMk9nUxCc",
+    "virtualViewId": "viwkxehH3VECGQrVU",
+    "onDemandViewId": null
+  }
+}

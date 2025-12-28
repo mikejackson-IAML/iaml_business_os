@@ -1,0 +1,6 @@
+.env.local
+.env.production
+.git
+.gitignore
+README.md
+node_modules

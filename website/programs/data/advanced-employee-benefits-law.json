@@ -1,0 +1,307 @@
+{
+  "programName": "Advanced Certificate in Employee Benefits Law",
+  "programSlug": "advanced-employee-benefits-law",
+  "registrationUrl": "#",
+  "meta": {
+    "title": "Advanced Certificate in Employee Benefits Law | IAML",
+    "description": "Master advanced ERISA fiduciary defense, DOL audit strategies, and SECURE 2.0 compliance in this 2-day expert program. Earn 13 SHRM/HRCI credits with practicing benefits attorneys.",
+    "keywords": "advanced ERISA training, DOL audit defense, fiduciary liability, SECURE 2.0 compliance, employee benefits law advanced, ERISA fiduciary training, benefits litigation defense, mental health parity MHPAEA, plan error correction EPCRS, advanced benefits certification",
+    "ogImage": "https://iaml.com/images/og-image.jpg"
+  },
+  "seo": {
+    "canonicalUrl": "https://iaml.com/programs/advanced-employee-benefits-law",
+    "schema": {
+      "educationalLevel": "advanced",
+      "timeRequired": "PT16H",
+      "teaches": [
+        "DOL audit defense",
+        "SECURE 2.0 implementation",
+        "Fiduciary litigation defense",
+        "Plan error correction (EPCRS/VFCP)",
+        "Mental health parity compliance",
+        "Cybersecurity for benefit plans",
+        "Reproductive health benefits post-Dobbs",
+        "Excessive fee litigation",
+        "ACA enforcement defense",
+        "Government audit preparation"
+      ]
+    }
+  },
+  "hero": {
+    "title": "Advanced Certificate in Employee Benefits Law",
+    "description": "DOL audits, fiduciary liability, and complex ERISA compliance keep you up at night. In 2 days, master the advanced strategies that protect your organization from catastrophic penalties. Real audit scenarios, expert-level solutions, immediate confidence.",
+    "price": 1575,
+    "duration": "2 days",
+    "deliveryOptions": ["In Person"]
+  },
+  "contentSection": {
+    "headline": "Defend Fiduciary Decisions and Protect Plans From Costly Liability",
+    "description": "The Advanced Certificate in Employee Benefits Law is <span style=\"color: #FF6A00; font-weight: 700;\">2 intensive days</span> where you'll build advanced expertise in ERISA fiduciary defense, retirement plan corrections, health care reform, and emerging benefits compliance with practicing benefits attorneys who handle DOL audits, litigation, and the complex regulatory matters that require sophisticated judgment, not basic plan administration.",
+    "benefits": [
+      "<strong>Advanced benefits compliance and defense</strong> – SECURE 2.0 implementation, fiduciary litigation trends, DOL/IRS audit management, MHPAEA comparative analysis, ACA enforcement defense, and emerging health plan risks",
+      "<strong>Advanced problem-solving</strong> – Navigate plan error corrections, fiduciary breach scenarios, DOL audit responses, mental health parity compliance, and the complex regulatory issues where mistakes cost millions",
+      "<strong>Expert benefits attorney instruction</strong> – Learn from ERISA specialists who defend fiduciary litigation, manage government audits, and handle the sophisticated benefits matters most professionals never encounter",
+      "<strong>Professional certification</strong> – Earn your certificate plus <span style=\"color: #FF6A00; font-weight: 600;\">13 SHRM/HRCI/CLE</span> continuing education credits",
+      "<strong>Benefits beyond the classroom</strong> – Your investment includes quarterly legal updates, faculty access, and alumni resources that keep you current year-round. <a href=\"#benefitSteps\" style=\"text-decoration: underline;\">View participant benefits →</a>"
+    ]
+  },
+  "testimonials": [
+    {
+      "quote": "Always enjoy this seminar. It really means a lot to fully trust the information that I receive from these wonderful instructors. We, as HR professionals, are very fortunate for their participation in your program.",
+      "name": "Sharon Moran",
+      "title": "Senior Benefits Administrator",
+      "company": "Salt River Materials Group"
+    },
+    {
+      "quote": "The content and presenters were fabulous, as always!",
+      "name": "Katy Grachek",
+      "title": "Human Resource Benefits Manager",
+      "company": "Kentucky Employers' Mutual Insurance"
+    },
+    {
+      "quote": "This is the first time I've attended this Advanced Benefits seminar and I plan to attend again.",
+      "name": "Brenda Heck",
+      "title": "Compensation and Benefits Manager",
+      "company": "Plastic Omnium Auto Inergy"
+    },
+    {
+      "quote": "The instructors did an excellent job with health care reform and their practical experience was enlightening.",
+      "name": "Barbara Naples",
+      "title": "Executive Director, Benefits",
+      "company": "Baylor College of Medicine"
+    },
+    {
+      "quote": "Instructors were all first-rate. The presentations were well-crafted and extremely informative. I will highly recommend this seminar to my professional colleagues.",
+      "name": "Kathryn Buettner",
+      "title": "Attorney",
+      "company": "Maryland Court of Special Appeals"
+    },
+    {
+      "quote": "Different subject matter, different instructors, different style of instructors, all complement the overall experience.",
+      "name": "Darlene Adams",
+      "title": "Comptroller",
+      "company": "Crescent River Port Pilots Association"
+    }
+  ],
+  "curriculum": {
+    "header": {
+      "title": "What You'll Master in 2 Days",
+      "description": "Master the advanced regulatory landscape of employee benefits. Learn the sophisticated strategies our instructor attorneys use to defend fiduciary decisions, manage government audits, and navigate emerging compliance requirements that generate costly penalties and litigation."
+    },
+    "blocks": [
+      {
+        "id": "block-1",
+        "label": null,
+        "title": "Advanced Employee Benefits Compliance",
+        "description": "Master advanced ERISA fiduciary defense, audit strategies, and emerging compliance requirements",
+        "price": null,
+        "days": "2 Days",
+        "competencyGroups": [
+          {
+            "title": "Plan Governance",
+            "description": "Prevent Problems Through Better Processes",
+            "skills": [
+              {"level": "FOUNDATION", "title": "Committee structure", "description": "Establish retirement plan committees with proper charters and oversight"},
+              {"level": "FOUNDATION", "title": "Fiduciary checklists", "description": "Implement compliance calendars for all required filings and notices"},
+              {"level": "ADVANCED", "title": "Service provider oversight", "description": "Use prudent processes for selecting and monitoring vendors"},
+              {"level": "ADVANCED", "title": "Investment monitoring", "description": "Fulfill fiduciary duties through documented review procedures"},
+              {"level": "EXPERT", "title": "Plan expense management", "description": "Know which costs can be paid from plan assets versus employer funds"}
+            ]
+          },
+          {
+            "title": "Legislative & Regulatory Update",
+            "description": "Stay Ahead of Changes",
+            "skills": [
+              {"level": "FOUNDATION", "title": "SECURE 2.0 implementation", "description": "Navigate the retirement plan changes that took effect and understand what's coming next"},
+              {"level": "ADVANCED", "title": "SECURE 3.0 proposals", "description": "Prepare for potential new legislation lowering plan participation age to 18"},
+              {"level": "ADVANCED", "title": "DOL fiduciary rule saga", "description": "Understand the latest investment advice regulations and who's treated as an ERISA fiduciary"},
+              {"level": "EXPERT", "title": "Recent court decisions", "description": "Learn how Supreme Court cases are impacting employee benefit plans"},
+              {"level": "EXPERT", "title": "Agency guidance updates", "description": "Get the latest from IRS, PBGC, and DOL that affects your plans"}
+            ]
+          },
+          {
+            "title": "Fiduciary Duties & Liability",
+            "description": "Protect Yourself from Personal Risk",
+            "skills": [
+              {"level": "FOUNDATION", "title": "Who is a fiduciary", "description": "Identify all plan fiduciaries (often more people than you realize)"},
+              {"level": "FOUNDATION", "title": "Core duties update", "description": "Apply loyalty, prudence, diversification, and plan document adherence in 2026"},
+              {"level": "ADVANCED", "title": "Excessive fee litigation", "description": "Understand the 401(k) and 403(b) lawsuit trends post-Hughes v. Northwestern"},
+              {"level": "ADVANCED", "title": "Health plan fee lawsuits", "description": "Learn about emerging class actions targeting pharmacy benefit manager costs"},
+              {"level": "EXPERT", "title": "Liability minimization", "description": "Use diligent oversight, documentation, and insurance to reduce personal exposure"}
+            ]
+          },
+          {
+            "title": "Managing Expenses & Vendors",
+            "description": "Control Costs Without Breaching Duties",
+            "skills": [
+              {"level": "FOUNDATION", "title": "Allowable plan expenses", "description": "Know what can be charged to plan assets versus paid by the employer"},
+              {"level": "FOUNDATION", "title": "Fee transparency", "description": "Comply with broker and consultant compensation disclosure requirements"},
+              {"level": "ADVANCED", "title": "Provider RFPs", "description": "Conduct competitive bidding that documents prudent fiduciary process"},
+              {"level": "ADVANCED", "title": "Fee benchmarking", "description": "Monitor vendor fees for reasonableness against market standards"},
+              {"level": "EXPERT", "title": "Contract management", "description": "Leverage contractual rights to ensure you receive services paid for"}
+            ]
+          },
+          {
+            "title": "HIPAA Privacy & Cybersecurity",
+            "description": "Protect Sensitive Data",
+            "skills": [
+              {"level": "FOUNDATION", "title": "Security risk assessments", "description": "Conduct regular evaluations of health plan vulnerabilities"},
+              {"level": "ADVANCED", "title": "DOL cybersecurity guidance", "description": "Treat data protection as a fiduciary duty of prudence"},
+              {"level": "ADVANCED", "title": "Breach notification obligations", "description": "Respond effectively when breaches occur"},
+              {"level": "EXPERT", "title": "Vendor contract provisions", "description": "Require encryption, multi-factor authentication, and incident response plans"},
+              {"level": "EXPERT", "title": "Cyber insurance", "description": "Use coverage to limit exposure from increasingly frequent attacks"}
+            ]
+          },
+          {
+            "title": "Reproductive Health Benefits",
+            "description": "Navigate Post-Dobbs Landscape",
+            "skills": [
+              {"level": "FOUNDATION", "title": "ERISA preemption strategy", "description": "Understand how self-funded plans can offer abortion benefits"},
+              {"level": "ADVANCED", "title": "Travel benefit design", "description": "Structure reimbursement for out-of-state care without tax complications"},
+              {"level": "ADVANCED", "title": "Privacy protections", "description": "Safeguard employee information related to sensitive benefits"},
+              {"level": "EXPERT", "title": "Fertility and contraception", "description": "Handle coverage in states with varying legal stances"},
+              {"level": "EXPERT", "title": "Communication strategies", "description": "Clearly explain benefits while respecting employee privacy"}
+            ]
+          },
+          {
+            "title": "Mental Health Parity & Wellness Programs",
+            "description": "Stay Compliant",
+            "skills": [
+              {"level": "FOUNDATION", "title": "NQTL comparative analysis", "description": "Prepare written documentation required upon DOL request"},
+              {"level": "ADVANCED", "title": "2024 final regulations", "description": "Understand rules under non-enforcement review and existing parity law"},
+              {"level": "ADVANCED", "title": "Common parity violations", "description": "Avoid restrictive precertification and network reimbursement issues"},
+              {"level": "EXPERT", "title": "Wellness program rules", "description": "Navigate overlapping ACA/HIPAA, ADA, and GINA requirements"},
+              {"level": "EXPERT", "title": "Incentive limitations", "description": "Structure health-contingent programs within legal limits"}
+            ]
+          },
+          {
+            "title": "Health Plan Compliance Traps",
+            "description": "Avoid the Top 10 Pitfalls",
+            "skills": [
+              {"level": "FOUNDATION", "title": "ACA coverage mandates", "description": "Ensure preventive services are covered without cost-sharing"},
+              {"level": "ADVANCED", "title": "Mental health parity NQTLs", "description": "Produce comparative analyses showing limitations aren't more restrictive"},
+              {"level": "ADVANCED", "title": "Wellness program violations", "description": "Design incentives that comply with HIPAA, ACA, and ADA requirements"},
+              {"level": "EXPERT", "title": "COBRA timing errors", "description": "Handle notices correctly now that COVID outbreak extensions have ended"},
+              {"level": "EXPERT", "title": "HIPAA security gaps", "description": "Close vulnerabilities that lead to costly data breaches"}
+            ]
+          },
+          {
+            "title": "ACA Compliance Boot Camp",
+            "description": "Master Ongoing Requirements",
+            "skills": [
+              {"level": "FOUNDATION", "title": "Employer mandate", "description": "Make compliant coverage offers to full-time employees at affordable rates"},
+              {"level": "ADVANCED", "title": "Measurement periods", "description": "Manage variable-hour workers to minimize penalty exposure"},
+              {"level": "ADVANCED", "title": "Family glitch fix", "description": "Understand how 2023 regulations affect Exchange subsidy eligibility"},
+              {"level": "EXPERT", "title": "Electronic reporting", "description": "File Forms 1094-C/1095-C correctly under lowered IRS thresholds"},
+              {"level": "EXPERT", "title": "Affordability calculations", "description": "Adjust strategies as IRS percentages shift annually"}
+            ]
+          },
+          {
+            "title": "Nondiscrimination Testing",
+            "description": "Pass Tests for Welfare Plans",
+            "skills": [
+              {"level": "FOUNDATION", "title": "Section 105(h) testing", "description": "Ensure self-insured medical plans don't favor highly compensated employees"},
+              {"level": "ADVANCED", "title": "Section 125 cafeteria plans", "description": "Apply average benefits tests and eligibility requirements"},
+              {"level": "ADVANCED", "title": "Group life insurance", "description": "Handle Section 79 nondiscrimination for excess coverage"},
+              {"level": "EXPERT", "title": "Dependent care programs", "description": "Test assistance benefits properly"},
+              {"level": "EXPERT", "title": "Failure consequences", "description": "Understand tax impacts and correction options"}
+            ]
+          },
+          {
+            "title": "Defined Contribution Health Benefits",
+            "description": "Explore Modern Alternatives",
+            "skills": [
+              {"level": "FOUNDATION", "title": "ICHRA fundamentals", "description": "Structure Individual Coverage HRAs to satisfy the ACA employer mandate"},
+              {"level": "ADVANCED", "title": "Class-based eligibility", "description": "Design ICHRA offerings that comply with nondiscrimination rules"},
+              {"level": "ADVANCED", "title": "Affordability requirements", "description": "Calculate properly so employees aren't left with unaffordable coverage"},
+              {"level": "EXPERT", "title": "Integration issues", "description": "Handle ICHRA interaction with Medicare, HSAs, and COBRA"},
+              {"level": "EXPERT", "title": "Private exchanges", "description": "Compare group plans versus exchange models for controlling costs"}
+            ]
+          },
+          {
+            "title": "Onsite Clinics",
+            "description": "Navigate Compliance Complexities",
+            "skills": [
+              {"level": "FOUNDATION", "title": "Excepted benefit status", "description": "Determine when clinics are exempt from ACA market reforms"},
+              {"level": "ADVANCED", "title": "HSA eligibility preservation", "description": "Structure services to avoid disqualifying HSA participants"},
+              {"level": "ADVANCED", "title": "HIPAA privacy concerns", "description": "Handle clinic records that may be subject to privacy rules"},
+              {"level": "EXPERT", "title": "De minimis service limits", "description": "Provide first aid and preventive care without creating group health plan"},
+              {"level": "EXPERT", "title": "Cost containment strategies", "description": "Reduce expenses while maintaining compliance"}
+            ]
+          },
+          {
+            "title": "Plan Error Correction",
+            "description": "Fix Problems Before They Become Disasters",
+            "skills": [
+              {"level": "FOUNDATION", "title": "EPCRS enhancements", "description": "Self-correct a wider range of failures without IRS approval under expanded programs"},
+              {"level": "FOUNDATION", "title": "Eligible inadvertent failures", "description": "Use Notice 2023-43 guidance for flexible self-correction options"},
+              {"level": "ADVANCED", "title": "DOL's updated VFCP", "description": "Navigate the new self-correction component for delinquent contributions and loan errors"},
+              {"level": "EXPERT", "title": "Choosing the right venue", "description": "Know when to self-correct versus submitting to IRS or DOL programs"},
+              {"level": "EXPERT", "title": "Case study applications", "description": "Learn correction methods through real-world examples"}
+            ]
+          },
+          {
+            "title": "Government Audits",
+            "description": "Survive IRS and DOL Examinations",
+            "skills": [
+              {"level": "FOUNDATION", "title": "Audit triggers", "description": "Understand what flags plans for government scrutiny"},
+              {"level": "ADVANCED", "title": "DOL focus areas", "description": "Prepare for examinations of late deposits, missing participants, and cybersecurity"},
+              {"level": "ADVANCED", "title": "IRS priorities", "description": "Handle operational compliance reviews, testing failures, and required amendments"},
+              {"level": "EXPERT", "title": "Self-audit procedures", "description": "Spot and fix issues before regulators discover them"},
+              {"level": "EXPERT", "title": "Negotiation strategies", "description": "Minimize penalties if violations are found during examination"}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "faq": [
+    {
+      "question": "What happens after I register?",
+      "answer": "Within minutes, you'll receive an invoice email. Once payment is processed, you can schedule your complimentary pre-program consultation (10-15 minutes) to discuss the specific benefits compliance challenges keeping you up at night and identify which advanced topics will have the biggest impact for your organization. Pre-program materials arrive one week before your session starts."
+    },
+    {
+      "question": "Do I need to complete the Certificate in Employee Benefits Law first?",
+      "answer": "No, but it helps. This program assumes you have working knowledge of ERISA fundamentals, retirement plan administration basics, and health plan compliance requirements. If you've been managing benefits for a few years, handling fiduciary responsibilities, or advising on ERISA matters, you're ready for the advanced content. If you're newer to benefits administration, consider starting with the foundational Certificate in Employee Benefits Law."
+    },
+    {
+      "question": "How is this different from the Certificate in Employee Benefits Law?",
+      "answer": "The foundational program teaches you how benefits law works. This advanced program focuses on what's changing right now and the sophisticated issues that generate DOL audits, fiduciary litigation, and costly penalties: SECURE 2.0/3.0 implementation, plan error correction strategies, excessive fee lawsuit trends, mental health parity compliance, post-Dobbs reproductive health benefits, and cybersecurity obligations. Think of it as the difference between plan administration and plan defense."
+    },
+    {
+      "question": "What continuing education credits will I earn?",
+      "answer": "The 2-day program provides 13 SHRM/HRCI/CLE credits. Plus, your enrollment includes 12 months of quarterly employment law updates (4 sessions × 1.5 credits each = 6 additional credits), bringing your total to 19 credits. That's more than most professionals earn in a year."
+    },
+    {
+      "question": "How current is the content?",
+      "answer": "Very. The 2026 curriculum covers SECURE 2.0 implementation deadlines, DOL fiduciary rule developments, Hughes v. Northwestern excessive fee litigation fallout, mental health parity NQTL comparative analysis requirements, ACA affordability adjustments, HIPAA cybersecurity obligations, and post-Dobbs reproductive health benefit strategies. Our instructors update content based on audits they're managing and litigation they're defending right now."
+    },
+    {
+      "question": "Is this program only for benefits specialists, or can HR generalists and in-house counsel attend?",
+      "answer": "All three. Benefits specialists and plan administrators gain advanced compliance and audit defense strategies. HR generalists who oversee benefits as part of a broader role learn how to spot risks before they become problems. In-house counsel get practical frameworks from peers handling ERISA litigation and DOL audits. Many organizations send benefits and legal team members together. They report better coordination on fiduciary decisions and plan governance afterward."
+    },
+    {
+      "question": "We're facing a DOL audit. Can this program help?",
+      "answer": "Absolutely. The program covers audit triggers, DOL focus areas (late deposits, missing participants, cybersecurity), self-audit procedures to spot issues before regulators do, and negotiation strategies to minimize penalties when violations are found. The pre-program consultation is the perfect time to share your audit situation (confidentially) so our team can point you to the most relevant content."
+    },
+    {
+      "question": "Does the $1,575 program fee include everything?",
+      "answer": "Yes. Your enrollment includes all live instruction from practicing ERISA attorneys who defend fiduciary litigation and manage government audits, complete program materials, 13 continuing education credits, pre-program consultation, 12 months of quarterly employment law updates (4 sessions, $1,588 value), permanent access to updated benefits resources, and alumni benefits for all future programs. The only additional cost would be travel and lodging for in-person format."
+    },
+    {
+      "question": "Should I attend this program every year or every other year?",
+      "answer": "Many alumni return on a regular cycle because benefits law changes that fast. SECURE 2.0 implementation deadlines roll out through 2027. DOL fiduciary rules keep shifting. Mental health parity enforcement is ramping up. Excessive fee litigation continues expanding to new plan types. Your alumni pricing ($300 off) makes it practical to maintain cutting-edge expertise as regulations evolve. The content is updated each cycle, so you're never repeating the same program."
+    },
+    {
+      "question": "Will I be ready to handle advanced benefits compliance after completing this program?",
+      "answer": "Yes. The program is designed for immediate application to sophisticated situations: plan error corrections using EPCRS and VFCP, fiduciary breach defense, excessive fee litigation responses, mental health parity documentation, ACA audit defense, and cybersecurity incident response. You'll leave with frameworks for fiduciary decision-making, audit preparation checklists, and the confidence to navigate the complex benefits matters that keep senior leaders out of personal liability."
+    }
+  ],
+  "benefits": {
+    "creditCount": "19 SHRM/HRCI/CLE",
+    "alumniDiscount": "$300"
+  },
+  "airtable": {
+    "inPersonViewId": "viwlzVMIk78qDmL2W"
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "generated": "2025-12-28T14:59:56.938Z",
+  "viewId": "viw5ydjKfvbDKMzaf",
+  "usedBy": [
+    {
+      "program": "Discrimination Prevention and Defense",
+      "format": "virtual"
+    }
+  ],
+  "recordCount": 3,
+  "records": [
+    {
+      "id": "recBRI5xcqKfu2gcW",
+      "createdTime": "2025-12-15T19:35:44.000Z",
+      "fields": {
+        "Instance ID": 51,
+        "Instance Name": "Discrimination Prevention & Defense - Mar 2026",
+        "Programs": [
+          "rechzx0zHYQ5mYVWJ"
+        ],
+        "Start Date": "2026-03-03",
+        "End Date": "2026-03-04",
+        "Duration (Days)": [
+          2
+        ],
+        "Format": "Virtual",
+        "Current Enrolled": 0,
+        "Enrollment Status": "Low Enrollment",
+        "Show on Website": true,
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Last Modified": "2025-12-15T19:42:59.000Z",
+        "Created By": {
+          "id": "usrSAo8TcudAuSfA4",
+          "email": "mike.jackson@re-vitalized.com",
+          "name": "Mike Jackson"
+        },
+        "Price In-Person (from PROGRAMS)": [
+          1375
+        ],
+        "Price Virtual (from PROGRAMS)": [
+          1375
+        ],
+        "Min. Capacity": [
+          6
+        ],
+        "Registration Deadline": "2026-03-03T00:00:00.000Z",
+        "Program Name": [
+          "Discrimination Prevention & Defense"
+        ]
+      }
+    },
+    {
+      "id": "recqory4hEsh6LtJK",
+      "createdTime": "2025-12-15T19:35:44.000Z",
+      "fields": {
+        "Instance ID": 52,
+        "Instance Name": "Discrimination Prevention & Defense - Jul 2026",
+        "Programs": [
+          "rechzx0zHYQ5mYVWJ"
+        ],
+        "Start Date": "2026-07-28",
+        "End Date": "2026-07-29",
+        "Duration (Days)": [
+          2
+        ],
+        "Format": "Virtual",
+        "Current Enrolled": 0,
+        "Enrollment Status": "Low Enrollment",
+        "Show on Website": true,
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Last Modified": "2025-12-15T19:43:00.000Z",
+        "Created By": {
+          "id": "usrSAo8TcudAuSfA4",
+          "email": "mike.jackson@re-vitalized.com",
+          "name": "Mike Jackson"
+        },
+        "Price In-Person (from PROGRAMS)": [
+          1375
+        ],
+        "Price Virtual (from PROGRAMS)": [
+          1375
+        ],
+        "Min. Capacity": [
+          6
+        ],
+        "Registration Deadline": "2026-07-28T00:00:00.000Z",
+        "Program Name": [
+          "Discrimination Prevention & Defense"
+        ]
+      }
+    },
+    {
+      "id": "reczgd60n4j5KkuKH",
+      "createdTime": "2025-12-15T19:35:44.000Z",
+      "fields": {
+        "Instance ID": 53,
+        "Instance Name": "Discrimination Prevention & Defense - Oct 2026",
+        "Programs": [
+          "rechzx0zHYQ5mYVWJ"
+        ],
+        "Start Date": "2026-10-27",
+        "End Date": "2026-10-28",
+        "Duration (Days)": [
+          2
+        ],
+        "Format": "Virtual",
+        "Current Enrolled": 0,
+        "Enrollment Status": "Low Enrollment",
+        "Show on Website": true,
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Last Modified": "2025-12-15T19:43:00.000Z",
+        "Created By": {
+          "id": "usrSAo8TcudAuSfA4",
+          "email": "mike.jackson@re-vitalized.com",
+          "name": "Mike Jackson"
+        },
+        "Price In-Person (from PROGRAMS)": [
+          1375
+        ],
+        "Price Virtual (from PROGRAMS)": [
+          1375
+        ],
+        "Min. Capacity": [
+          6
+        ],
+        "Registration Deadline": "2026-10-27T00:00:00.000Z",
+        "Program Name": [
+          "Discrimination Prevention & Defense"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,147 @@
+/* CSS Reset & Base Styles */
+
+/* Skip Link - Hidden until focused (accessibility) */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--blue-primary);
+  color: var(--white);
+  padding: var(--space-sm) var(--space-md);
+  z-index: 1000;
+  text-decoration: none;
+  font-weight: 600;
+  transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Box sizing reset */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Base HTML & Body */
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+  
+  body {
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    line-height: 1.6;
+    color: var(--gray-800);
+    background: var(--gray-50);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  
+  /* Typography Base */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0 0 var(--space-md) 0;
+    color: var(--gray-900);
+  }
+  
+  h1 { font-size: var(--text-5xl); }
+  h2 { font-size: var(--text-4xl); }
+  h3 { font-size: var(--text-3xl); }
+  h4 { font-size: var(--text-2xl); }
+  h5 { font-size: var(--text-xl); }
+  h6 { font-size: var(--text-lg); }
+  
+  p {
+    margin: 0 0 var(--space-md) 0;
+  }
+  
+  /* Links */
+  a {
+    color: var(--blue-primary);
+    text-decoration: none;
+    transition: color var(--transition-base);
+  }
+  
+  a:hover {
+    color: var(--blue-dark);
+  }
+  
+  /* Lists */
+  ul, ol {
+    margin: 0 0 var(--space-md) 0;
+    padding-left: var(--space-xl);
+  }
+  
+  li {
+    margin-bottom: var(--space-xs);
+  }
+  
+  /* Images */
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  /* Buttons */
+  button {
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+  }
+  
+  /* Forms */
+  input, textarea, select {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+  }
+  
+  /* Remove default focus outline and add our own */
+  :focus {
+    outline: 2px solid var(--blue-primary);
+    outline-offset: 2px;
+  }
+  
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+  
+  /* Screen reader only utility */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  
+  /* Smooth scrolling for reduced motion users */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }

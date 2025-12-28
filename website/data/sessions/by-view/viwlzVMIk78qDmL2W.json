@@ -1,0 +1,57 @@
+{
+  "generated": "2025-12-28T14:59:56.938Z",
+  "viewId": "viwlzVMIk78qDmL2W",
+  "usedBy": [
+    {
+      "program": "Advanced Certificate in Employee Benefits Law",
+      "format": "in-person"
+    }
+  ],
+  "recordCount": 1,
+  "records": [
+    {
+      "id": "recn7pTeLe9wkMeqr",
+      "createdTime": "2025-12-15T19:35:27.000Z",
+      "fields": {
+        "Instance ID": 2,
+        "Instance Name": "Advanced Certificate in Employee Benefits Law - Oct 2026 - Las Vegas",
+        "Programs": [
+          "recG7N84DEwcrXPex"
+        ],
+        "Start Date": "2026-10-05",
+        "End Date": "2026-10-06",
+        "Duration (Days)": [
+          2
+        ],
+        "Format": "In-Person",
+        "City": "Las Vegas",
+        "State/Province": "Nevada",
+        "Time Zone": "Pacific (PT)",
+        "Current Enrolled": 0,
+        "Enrollment Status": "Low Enrollment",
+        "Show on Website": true,
+        "Created Date": "2025-12-15T19:35:27.000Z",
+        "Last Modified": "2025-12-17T15:10:27.000Z",
+        "Created By": {
+          "id": "usrSAo8TcudAuSfA4",
+          "email": "mike.jackson@re-vitalized.com",
+          "name": "Mike Jackson"
+        },
+        "Price In-Person (from PROGRAMS)": [
+          1575
+        ],
+        "Price Virtual (from PROGRAMS)": [
+          1575
+        ],
+        "Min. Capacity": [
+          4
+        ],
+        "Registration Deadline": "2026-10-05T00:00:00.000Z",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc2c8abeb190c41d25.jpeg",
+        "Program Name": [
+          "Advanced Certificate in Employee Benefits Law"
+        ]
+      }
+    }
+  ]
+}
