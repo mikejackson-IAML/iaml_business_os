@@ -1,0 +1,319 @@
+{
+  "meta": {
+    "version": "2025.1",
+    "lastUpdated": "2025-12-29",
+    "note": "Pricing reference for meeting prep and sales tools"
+  },
+  "programs": [
+    {
+      "name": "Certificate in Employee Relations Law",
+      "shortName": "Employee Relations Law",
+      "code": "ER",
+      "duration": {
+        "days": 4.5,
+        "display": "4.5 days"
+      },
+      "pricing": {
+        "individual": 2375,
+        "perPersonPerDay": 528,
+        "onSiteEstimates": {
+          "10-15": { "daily": "5,000-7,500", "perPerson": "500-750" },
+          "16-25": { "daily": "7,500-10,000", "perPerson": "375-625" },
+          "26-40": { "daily": "10,000-15,000", "perPerson": "385-575" },
+          "40+": { "daily": "Custom", "perPerson": "Custom" }
+        }
+      },
+      "credits": "29.75 SHRM/HRCI/CLE",
+      "formats": ["In-Person", "Virtual"],
+      "blocks": {
+        "in-person": [
+          { "name": "Comprehensive Labor Relations", "price": 1375, "days": 2 },
+          { "name": "Discrimination Prevention and Defense", "price": 1375, "days": 2 },
+          { "name": "Special Issues in Employment Law", "price": 575, "days": 0.5 }
+        ],
+        "virtual": [
+          { "name": "Comprehensive Labor Relations", "price": 1375, "days": 2 },
+          { "name": "Discrimination Prevention and Defense", "price": 1375, "days": 2 }
+        ]
+      },
+      "bestFor": [
+        "HR generalists",
+        "HR managers",
+        "Employee relations specialists",
+        "In-house counsel"
+      ],
+      "topicsInclude": [
+        "Labor relations",
+        "Discrimination prevention",
+        "FMLA/ADA compliance",
+        "Terminations and discipline",
+        "Wage and hour law",
+        "Employment agreements"
+      ],
+      "industryFit": {
+        "strong": ["Healthcare", "Manufacturing", "Government", "Education", "Retail"],
+        "moderate": ["Technology", "Finance", "Professional Services"],
+        "considerations": "Multi-state employers benefit most"
+      }
+    },
+    {
+      "name": "Certificate in Workplace Investigations",
+      "shortName": "Workplace Investigations",
+      "code": "WI",
+      "duration": {
+        "days": 2,
+        "display": "2 days"
+      },
+      "pricing": {
+        "individual": 1575,
+        "perPersonPerDay": 788,
+        "onSiteEstimates": {
+          "10-15": { "daily": "4,000-6,000", "perPerson": "400-600" },
+          "16-25": { "daily": "6,000-8,000", "perPerson": "320-500" },
+          "26-40": { "daily": "8,000-12,000", "perPerson": "300-460" },
+          "40+": { "daily": "Custom", "perPerson": "Custom" }
+        }
+      },
+      "credits": "13 SHRM/HRCI/CLE",
+      "formats": ["In-Person", "Virtual", "On-Demand"],
+      "blocks": null,
+      "bestFor": [
+        "HR professionals conducting investigations",
+        "Employee relations specialists",
+        "Compliance officers",
+        "In-house employment counsel"
+      ],
+      "topicsInclude": [
+        "Investigation methodology",
+        "Interviewing techniques",
+        "Credibility assessment",
+        "Evidence collection",
+        "Report writing",
+        "Retaliation prevention"
+      ],
+      "industryFit": {
+        "strong": ["Healthcare", "Government", "Education", "Large Enterprises"],
+        "moderate": ["Manufacturing", "Retail", "Technology"],
+        "considerations": "Essential for any organization with 100+ employees"
+      }
+    },
+    {
+      "name": "Certificate in Employee Benefits Law",
+      "shortName": "Employee Benefits Law",
+      "code": "EB",
+      "duration": {
+        "days": 4.5,
+        "display": "4.5 days"
+      },
+      "pricing": {
+        "individual": 2375,
+        "perPersonPerDay": 528,
+        "onSiteEstimates": {
+          "10-15": { "daily": "5,000-7,500", "perPerson": "500-750" },
+          "16-25": { "daily": "7,500-10,000", "perPerson": "375-625" },
+          "26-40": { "daily": "10,000-15,000", "perPerson": "385-575" },
+          "40+": { "daily": "Custom", "perPerson": "Custom" }
+        }
+      },
+      "credits": "29.75 SHRM/HRCI/CLE",
+      "formats": ["In-Person"],
+      "blocks": {
+        "in-person": [
+          { "name": "Retirement Plans", "price": 1375, "days": 2 },
+          { "name": "Benefit Plan Claims, Appeals and Litigation", "price": 575, "days": 1 },
+          { "name": "Welfare Benefits Plan Issues", "price": 975, "days": 1.5 }
+        ]
+      },
+      "bestFor": [
+        "Benefits specialists",
+        "Benefits administrators",
+        "HR managers with benefits oversight",
+        "ERISA counsel"
+      ],
+      "topicsInclude": [
+        "ERISA compliance",
+        "401(k) administration",
+        "Fiduciary responsibilities",
+        "Nondiscrimination testing",
+        "ACA employer mandate",
+        "HIPAA/COBRA"
+      ],
+      "industryFit": {
+        "strong": ["Large Enterprises", "Healthcare", "Finance", "Government"],
+        "moderate": ["Manufacturing", "Technology"],
+        "considerations": "Essential for self-insured health plans, large 401(k) plans"
+      }
+    },
+    {
+      "name": "Certificate in Strategic HR Leadership",
+      "shortName": "Strategic HR Leadership",
+      "code": "SH",
+      "duration": {
+        "days": 4.5,
+        "display": "4.5 days"
+      },
+      "pricing": {
+        "individual": 2375,
+        "perPersonPerDay": 528,
+        "onSiteEstimates": {
+          "10-15": { "daily": "5,000-7,500", "perPerson": "500-750" },
+          "16-25": { "daily": "7,500-10,000", "perPerson": "375-625" },
+          "26-40": { "daily": "10,000-15,000", "perPerson": "385-575" },
+          "40+": { "daily": "Custom", "perPerson": "Custom" }
+        }
+      },
+      "credits": "29.75 SHRM/HRCI/CLE",
+      "formats": ["In-Person", "Virtual"],
+      "blocks": {
+        "in-person": [
+          { "name": "HR Law Fundamentals", "price": 1375, "days": 2 },
+          { "name": "Strategic HR Management", "price": 1575, "days": 2.5 }
+        ],
+        "virtual": [
+          { "name": "HR Law Fundamentals", "price": 1375, "days": 2 },
+          { "name": "Strategic HR Management", "price": 1575, "days": 2.5 }
+        ]
+      },
+      "bestFor": [
+        "HR managers moving to director roles",
+        "New HR directors",
+        "HR business partners",
+        "Aspiring CHROs"
+      ],
+      "topicsInclude": [
+        "HR strategy",
+        "Legal fundamentals for leaders",
+        "Business partnership",
+        "Talent management",
+        "Organizational development"
+      ],
+      "industryFit": {
+        "strong": ["All industries"],
+        "moderate": [],
+        "considerations": "Best for organizations investing in HR leadership development"
+      }
+    },
+    {
+      "name": "Advanced Certificate in Strategic Employment Law",
+      "shortName": "Advanced Employment Law",
+      "code": "SE",
+      "duration": {
+        "days": 2,
+        "display": "2 days"
+      },
+      "pricing": {
+        "individual": 1575,
+        "perPersonPerDay": 788,
+        "onSiteEstimates": {
+          "10-15": { "daily": "4,000-6,000", "perPerson": "400-600" },
+          "16-25": { "daily": "6,000-8,000", "perPerson": "320-500" },
+          "26-40": { "daily": "8,000-12,000", "perPerson": "300-460" },
+          "40+": { "daily": "Custom", "perPerson": "Custom" }
+        }
+      },
+      "credits": "13 SHRM/HRCI/CLE",
+      "formats": ["In-Person"],
+      "blocks": null,
+      "bestFor": [
+        "Experienced HR professionals",
+        "Senior employee relations specialists",
+        "Employment law practitioners"
+      ],
+      "topicsInclude": [
+        "Advanced employment law topics",
+        "Complex compliance issues",
+        "Current case law updates",
+        "Emerging regulations"
+      ],
+      "industryFit": {
+        "strong": ["Organizations with mature HR functions"],
+        "moderate": ["All industries with experienced HR staff"],
+        "considerations": "Prerequisite: Strong employment law foundation"
+      }
+    },
+    {
+      "name": "Advanced Certificate in Employee Benefits Law",
+      "shortName": "Advanced Benefits Law",
+      "code": "AB",
+      "duration": {
+        "days": 2,
+        "display": "2 days"
+      },
+      "pricing": {
+        "individual": 1575,
+        "perPersonPerDay": 788,
+        "onSiteEstimates": {
+          "10-15": { "daily": "4,000-6,000", "perPerson": "400-600" },
+          "16-25": { "daily": "6,000-8,000", "perPerson": "320-500" },
+          "26-40": { "daily": "8,000-12,000", "perPerson": "300-460" },
+          "40+": { "daily": "Custom", "perPerson": "Custom" }
+        }
+      },
+      "credits": "13 SHRM/HRCI/CLE",
+      "formats": ["In-Person"],
+      "blocks": null,
+      "bestFor": [
+        "Experienced benefits professionals",
+        "Senior benefits administrators",
+        "ERISA specialists"
+      ],
+      "topicsInclude": [
+        "Advanced ERISA topics",
+        "Complex compliance issues",
+        "Current regulatory updates",
+        "Emerging benefits challenges"
+      ],
+      "industryFit": {
+        "strong": ["Organizations with complex benefits programs"],
+        "moderate": ["Large employers with in-house benefits staff"],
+        "considerations": "Prerequisite: Strong benefits law foundation"
+      }
+    }
+  ],
+  "onSitePricing": {
+    "note": "On-site pricing is typically negotiated based on group size, location, and customization needs",
+    "generalGuidelines": {
+      "minimumGroupSize": 10,
+      "sweetSpotGroupSize": "16-25",
+      "maximumGroupSize": "40 per cohort",
+      "multiCohortDiscounts": "Available for 2+ cohorts"
+    },
+    "includedInOnSite": [
+      "All program materials",
+      "Certificates of completion",
+      "SHRM/HRCI/CLE credits",
+      "Pre-program consultation",
+      "Post-program resources",
+      "12 months of quarterly updates"
+    ],
+    "notIncluded": [
+      "Instructor travel (negotiable)",
+      "Venue rental (client provides)",
+      "Catering (client provides)",
+      "Participant travel (if applicable)"
+    ],
+    "customizationOptions": [
+      "Industry-specific case studies",
+      "Company policy review",
+      "Custom scenarios",
+      "Executive sessions",
+      "Follow-up coaching"
+    ]
+  },
+  "competitorComparison": {
+    "vs_LawFirms": "Law firm CLEs cost $500-1,000/hour. IAML provides structured learning at a fraction of the cost with ongoing support.",
+    "vs_Consultants": "Consultants charge $3,000-5,000/day for custom training with limited curriculum. IAML offers proven, comprehensive programs.",
+    "vs_OnlineCourses": "Online courses lack interactivity and attorney instruction. IAML provides live, practicing attorney instruction.",
+    "vs_Universities": "University programs take months and cost $5,000-15,000. IAML delivers practical skills in days."
+  },
+  "valueProposition": {
+    "perPersonROI": {
+      "avoidedLawsuit": "$150,000-500,000 average settlement",
+      "avoidedPenalty": "$10,000-100,000 per violation",
+      "reducedOutsideCounsel": "$500-1,000/hour saved",
+      "improvedCompliance": "Immeasurable risk reduction"
+    },
+    "included12MonthValue": "$1,588 in quarterly updates",
+    "alumniDiscount": "$100-300 on future programs"
+  }
+}
