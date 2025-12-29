@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /components/
+Disallow: /preview-confirmations.html
+Disallow: /api/
+
+Sitemap: https://iaml.com/sitemap.xml

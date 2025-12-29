@@ -1,0 +1,1 @@
+../../website/.claude/commands/setup-mcp.md

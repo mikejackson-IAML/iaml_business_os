@@ -1,0 +1,209 @@
+{
+  "name": "IAML Daily Content Insights Aggregation",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 24,
+              "triggerAtHour": 6
+            }
+          ]
+        }
+      },
+      "name": "Daily Trigger (6 AM)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://api.airtable.com/v0/{{$env.AIRTABLE_BASE_ID}}/Quiz%20Sessions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "name": "Fetch Quiz Sessions",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [450, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "name": "Airtable API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Aggregate quiz response statistics\nconst sessions = items[0].json.records || [];\n\nconst distributions = {\n  role: {},\n  challenge: {},\n  experience: {},\n  format: {}\n};\n\nsessions.forEach(session => {\n  const fields = session.fields || {};\n  \n  const role = fields['Role Answer'] || 'unknown';\n  const challenge = fields['Challenge Answer'] || 'unknown';\n  const experience = fields['Experience Answer'] || 'unknown';\n  const format = fields['Format Answer'] || 'unknown';\n  \n  distributions.role[role] = (distributions.role[role] || 0) + 1;\n  distributions.challenge[challenge] = (distributions.challenge[challenge] || 0) + 1;\n  distributions.experience[experience] = (distributions.experience[experience] || 0) + 1;\n  distributions.format[format] = (distributions.format[format] || 0) + 1;\n});\n\nconst total = sessions.length;\n\n// Calculate percentages and find top values\nconst getTopValue = (dist) => {\n  const sorted = Object.entries(dist).sort((a, b) => b[1] - a[1]);\n  return sorted[0]?.[0] || 'unknown';\n};\n\nconst topChallenge = getTopValue(distributions.challenge);\nconst topChallengeCount = distributions.challenge[topChallenge] || 0;\nconst topChallengePercent = total > 0 ? Math.round((topChallengeCount / total) * 100) : 0;\n\nreturn [{\n  json: {\n    total_responses: total,\n    distributions: distributions,\n    top_values: {\n      role: getTopValue(distributions.role),\n      challenge: topChallenge,\n      experience: getTopValue(distributions.experience),\n      format: getTopValue(distributions.format)\n    },\n    top_challenge_percent: topChallengePercent,\n    aggregated_at: new Date().toISOString()\n  }\n}];"
+      },
+      "name": "Aggregate Statistics",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://{{$env.SUPABASE_PROJECT_REF}}.supabase.co/rest/v1/content_insights",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.SUPABASE_TOKEN}}"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"insight_type\": \"quiz_aggregate\",\n  \"source\": \"quiz\",\n  \"data\": {{ JSON.stringify($json) }},\n  \"period\": \"daily\",\n  \"aggregated_at\": \"{{ $json.aggregated_at }}\"\n}",
+        "options": {}
+      },
+      "name": "Store in Supabase",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [850, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "name": "Supabase Auth"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.top_challenge_percent }}",
+              "rightValue": 60,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "name": "Check for Significant Changes",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1050, 300]
+    },
+    {
+      "parameters": {
+        "channel": "#content-alerts",
+        "text": "=:chart_with_upwards_trend: *Quiz Insights Alert*\n\n{{ $json.top_challenge_percent }}% of visitors cite *{{ $json.top_values.challenge }}* as their primary challenge.\n\nThis is above the 60% threshold - consider updating homepage messaging.\n\n*Total responses analyzed:* {{ $json.total_responses }}",
+        "otherOptions": {}
+      },
+      "name": "Send Slack Alert",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2,
+      "position": [1250, 200],
+      "credentials": {
+        "slackApi": {
+          "name": "Slack Account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "name": "No Alert Needed",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [1250, 400]
+    }
+  ],
+  "connections": {
+    "Daily Trigger (6 AM)": {
+      "main": [
+        [
+          {
+            "node": "Fetch Quiz Sessions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Quiz Sessions": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Statistics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate Statistics": {
+      "main": [
+        [
+          {
+            "node": "Store in Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store in Supabase": {
+      "main": [
+        [
+          {
+            "node": "Check for Significant Changes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check for Significant Changes": {
+      "main": [
+        [
+          {
+            "node": "Send Slack Alert",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Alert Needed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "content-optimization"
+    }
+  ]
+}

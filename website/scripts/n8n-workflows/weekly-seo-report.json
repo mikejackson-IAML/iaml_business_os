@@ -1,0 +1,252 @@
+{
+  "name": "IAML Weekly SEO Performance Report",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDayOfWeek": 1,
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "name": "Weekly Trigger (Monday 8 AM)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://searchconsole.googleapis.com/webmasters/v3/sites/https%3A%2F%2Fiaml.com/searchAnalytics/query",
+        "authentication": "oAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"startDate\": \"{{ $now.minus({days: 7}).toFormat('yyyy-MM-dd') }}\",\n  \"endDate\": \"{{ $now.minus({days: 1}).toFormat('yyyy-MM-dd') }}\",\n  \"dimensions\": [\"page\"],\n  \"rowLimit\": 50\n}",
+        "options": {}
+      },
+      "name": "Fetch Search Console Data",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [450, 300],
+      "credentials": {
+        "oAuth2Api": {
+          "name": "Google Search Console OAuth"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://searchconsole.googleapis.com/webmasters/v3/sites/https%3A%2F%2Fiaml.com/searchAnalytics/query",
+        "authentication": "oAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"startDate\": \"{{ $now.minus({days: 14}).toFormat('yyyy-MM-dd') }}\",\n  \"endDate\": \"{{ $now.minus({days: 8}).toFormat('yyyy-MM-dd') }}\",\n  \"dimensions\": [\"page\"],\n  \"rowLimit\": 50\n}",
+        "options": {}
+      },
+      "name": "Fetch Previous Week Data",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [450, 500],
+      "credentials": {
+        "oAuth2Api": {
+          "name": "Google Search Console OAuth"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Compare this week vs last week\nconst thisWeek = items[0].json.rows || [];\nconst lastWeek = items[1].json.rows || [];\n\n// Create lookup for last week\nconst lastWeekMap = {};\nlastWeek.forEach(row => {\n  const page = row.keys[0];\n  lastWeekMap[page] = row;\n});\n\n// Calculate changes\nconst pageAnalysis = thisWeek.map(row => {\n  const page = row.keys[0];\n  const previous = lastWeekMap[page] || { clicks: 0, impressions: 0, ctr: 0, position: 100 };\n  \n  const clicksChange = row.clicks - (previous.clicks || 0);\n  const impressionsChange = row.impressions - (previous.impressions || 0);\n  const ctrChange = (row.ctr - (previous.ctr || 0)) * 100; // Convert to percentage points\n  const positionChange = (previous.position || 100) - row.position; // Positive = improved\n  \n  return {\n    page: page.replace('https://iaml.com', ''),\n    clicks: row.clicks,\n    impressions: row.impressions,\n    ctr: (row.ctr * 100).toFixed(2) + '%',\n    position: row.position.toFixed(1),\n    clicks_change: clicksChange,\n    impressions_change: impressionsChange,\n    ctr_change: ctrChange.toFixed(2),\n    position_change: positionChange.toFixed(1),\n    status: positionChange > 0 ? 'improved' : positionChange < 0 ? 'declined' : 'stable'\n  };\n});\n\n// Find significant changes\nconst improved = pageAnalysis.filter(p => parseFloat(p.position_change) > 2);\nconst declined = pageAnalysis.filter(p => parseFloat(p.position_change) < -2);\nconst highImpressionLowCTR = pageAnalysis.filter(p => \n  p.impressions > 100 && parseFloat(p.ctr) < 2\n);\n\n// Summary stats\nconst totalClicks = thisWeek.reduce((sum, r) => sum + r.clicks, 0);\nconst totalImpressions = thisWeek.reduce((sum, r) => sum + r.impressions, 0);\nconst avgPosition = thisWeek.reduce((sum, r) => sum + r.position, 0) / thisWeek.length;\n\nreturn [{\n  json: {\n    period: {\n      start: $now.minus({days: 7}).toFormat('yyyy-MM-dd'),\n      end: $now.minus({days: 1}).toFormat('yyyy-MM-dd')\n    },\n    summary: {\n      total_clicks: totalClicks,\n      total_impressions: totalImpressions,\n      avg_position: avgPosition.toFixed(1),\n      pages_analyzed: thisWeek.length\n    },\n    opportunities: {\n      improved_pages: improved.length,\n      declined_pages: declined.length,\n      ctr_opportunities: highImpressionLowCTR.length\n    },\n    top_improved: improved.slice(0, 5),\n    top_declined: declined.slice(0, 5),\n    ctr_opportunities: highImpressionLowCTR.slice(0, 5),\n    all_pages: pageAnalysis\n  }\n}];"
+      },
+      "name": "Calculate Week-over-Week Changes",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [650, 400]
+    },
+    {
+      "parameters": {
+        "url": "=https://{{$env.SUPABASE_PROJECT_REF}}.supabase.co/rest/v1/content_insights",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.SUPABASE_TOKEN}}"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"insight_type\": \"seo\",\n  \"source\": \"search_console\",\n  \"data\": {{ JSON.stringify($json) }},\n  \"period\": \"weekly\"\n}",
+        "options": {}
+      },
+      "name": "Store SEO Report",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [850, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "name": "Supabase Auth"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.opportunities.declined_pages }}",
+              "rightValue": 3,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "or"
+        }
+      },
+      "name": "Check for Alerts",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1050, 400]
+    },
+    {
+      "parameters": {
+        "channel": "#seo-alerts",
+        "text": "=:warning: *Weekly SEO Report - Action Needed*\n\n*Period:* {{ $json.period.start }} to {{ $json.period.end }}\n\n*Summary:*\n- Total Clicks: {{ $json.summary.total_clicks }}\n- Total Impressions: {{ $json.summary.total_impressions }}\n- Avg Position: {{ $json.summary.avg_position }}\n\n*Opportunities:*\n- :chart_with_upwards_trend: {{ $json.opportunities.improved_pages }} pages improved\n- :chart_with_downwards_trend: {{ $json.opportunities.declined_pages }} pages declined\n- :eyes: {{ $json.opportunities.ctr_opportunities }} CTR opportunities\n\n*Action Required:* {{ $json.opportunities.declined_pages }} pages have dropped in rankings. Consider running `/content-optimize` on these pages.",
+        "otherOptions": {}
+      },
+      "name": "Send Alert",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2,
+      "position": [1250, 300],
+      "credentials": {
+        "slackApi": {
+          "name": "Slack Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "channel": "#seo-reports",
+        "text": "=:chart_with_upwards_trend: *Weekly SEO Report*\n\n*Period:* {{ $json.period.start }} to {{ $json.period.end }}\n\n*Summary:*\n- Total Clicks: {{ $json.summary.total_clicks }}\n- Total Impressions: {{ $json.summary.total_impressions }}\n- Avg Position: {{ $json.summary.avg_position }}\n\n*Performance:*\n- :arrow_up: {{ $json.opportunities.improved_pages }} pages improved\n- :arrow_down: {{ $json.opportunities.declined_pages }} pages declined\n- :mag: {{ $json.opportunities.ctr_opportunities }} CTR opportunities identified",
+        "otherOptions": {}
+      },
+      "name": "Send Weekly Report",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2,
+      "position": [1250, 500],
+      "credentials": {
+        "slackApi": {
+          "name": "Slack Account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Weekly Trigger (Monday 8 AM)": {
+      "main": [
+        [
+          {
+            "node": "Fetch Search Console Data",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fetch Previous Week Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Search Console Data": {
+      "main": [
+        [
+          {
+            "node": "Calculate Week-over-Week Changes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Previous Week Data": {
+      "main": [
+        [
+          {
+            "node": "Calculate Week-over-Week Changes",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Calculate Week-over-Week Changes": {
+      "main": [
+        [
+          {
+            "node": "Store SEO Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store SEO Report": {
+      "main": [
+        [
+          {
+            "node": "Check for Alerts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check for Alerts": {
+      "main": [
+        [
+          {
+            "node": "Send Alert",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Weekly Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "content-optimization"
+    },
+    {
+      "name": "seo"
+    }
+  ]
+}
