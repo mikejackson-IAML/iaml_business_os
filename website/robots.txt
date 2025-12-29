@@ -6,3 +6,5 @@ Disallow: /preview-confirmations.html
 Disallow: /api/
 
 Sitemap: https://iaml.com/sitemap.xml
+
+# Updated: 2025-12-29
