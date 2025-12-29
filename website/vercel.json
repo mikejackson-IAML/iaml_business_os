@@ -8,14 +8,5 @@
         { "key": "Cache-Control", "value": "public, max-age=3600, stale-while-revalidate=86400" }
       ]
     }
-  ],
-  "rewrites": [
-    { "source": "/featured-programs", "destination": "/pages/featured-programs.html" },
-    { "source": "/corporate-training", "destination": "/pages/corporate-training.html" },
-    { "source": "/about-us", "destination": "/pages/about-us.html" },
-    { "source": "/faculty", "destination": "/pages/faculty.html" },
-    { "source": "/program-schedule", "destination": "/pages/program-schedule.html" },
-    { "source": "/pre-program-consultation-phone", "destination": "/pages/pre-program-consultation-phone.html" },
-    { "source": "/pre-program-consultation-virtual", "destination": "/pages/pre-program-consultation-virtual.html" }
   ]
 }
