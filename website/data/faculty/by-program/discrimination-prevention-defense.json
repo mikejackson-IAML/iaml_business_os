@@ -1,19 +1,9 @@
 {
   "generated": "2025-12-30T23:52:32.516Z",
-  "programSlug": "strategic-hr-leadership",
-  "programName": "Certificate in Strategic HR Leadership",
-  "facultyCount": 11,
+  "programSlug": "discrimination-prevention-defense",
+  "programName": "Discrimination Prevention & Defense",
+  "facultyCount": 9,
   "faculty": [
-    {
-      "id": "rec0meucobcVjMYXW",
-      "name": "Di Ann Sanchez",
-      "firstName": "Di Ann",
-      "title": "Human Resources Chief Exceptional Officer",
-      "organization": "DAS HR Consulting & Sanchez Associates",
-      "bio": "Di Ann helps organizations align people strategies with business performance—specializing in generational dynamics, pay equity, and IDEA initiatives. A nationally recognized HR strategist, she advises across industries from healthcare to manufacturing on building inclusive, high-performing workplaces.",
-      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667eb6947d88a87edcc70.svg",
-      "bioLink": "https://iaml.com/faculty#di-ann-sanchez"
-    },
     {
       "id": "rec151X9izCWMb6J0",
       "name": "Sara Hamilton, Esq.",
@@ -103,16 +93,6 @@
       "bio": "Ray has represented management in labor and employment disputes for over 40 years, winning the vast majority of his federal and state jury trials. He arbitrates 50+ cases annually and is twice named Best Lawyers \"Lawyer of the Year\" for Labor Law in Denver.",
       "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667eb6947d86fd7edcc6f.svg",
       "bioLink": "https://iaml.com/faculty#ray-deeny-esq"
-    },
-    {
-      "id": "rectoEby18SQxEqmO",
-      "name": "Cyndi Ramirez Ryan",
-      "firstName": "Cyndi",
-      "title": "Founder & Chief Executive Officer",
-      "organization": "Más Talent HR",
-      "bio": "Cyndi drives organizational change, talent strategy, and D&I initiatives for companies nationwide through her firm Más Talent. A former HR executive at Baylor Scott & White and Philips Medical, she was named one of Texas' Most Powerful & Influential Women.",
-      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6954050dedb8a275cad4fdbe.svg",
-      "bioLink": "https://iaml.com/faculty#cyndi-ramirez-ryan"
     }
   ]
 }

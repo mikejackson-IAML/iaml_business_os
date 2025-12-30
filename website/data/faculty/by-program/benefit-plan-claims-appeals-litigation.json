@@ -1,0 +1,28 @@
+{
+  "generated": "2025-12-30T23:52:32.516Z",
+  "programSlug": "benefit-plan-claims-appeals-litigation",
+  "programName": "Benefit Plan Claims, Appeals & Litigation",
+  "facultyCount": 2,
+  "faculty": [
+    {
+      "id": "rec7eX5uXoWOg6wHc",
+      "name": "George Cicotte, Esq.",
+      "firstName": "George",
+      "title": "Founder",
+      "organization": "Cicotte Law Firm",
+      "bio": "George brings a rare combination to ERISA work: he started as a pension actuary before becoming an attorney. For over 30 years, he has guided employers through retirement plan design, fiduciary duties, HIPAA/COBRA compliance, and ERISA litigation defense.",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69540411ec06c541fda83724.svg",
+      "bioLink": "https://iaml.com/faculty#george-cicotte-esq"
+    },
+    {
+      "id": "rec7kuWXpBRWV8qvL",
+      "name": "Dominic DeMatties, Esq.",
+      "firstName": "Dominic",
+      "title": "Partner",
+      "organization": "Thompson Hine LLP",
+      "bio": "Dominic advises on ESOPs, 401(k) plans, cash balance designs, and multiemployer plans—representing clients before the DOL, IRS, and PBGC. A former U.S. Treasury attorney-advisor, he shaped national policy on hybrid pensions and deferred compensation before returning to private practice.",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebe98d66862dcb05f6.svg",
+      "bioLink": "https://iaml.com/faculty#dominic-dematties-esq"
+    }
+  ]
+}

@@ -1,19 +1,9 @@
 {
   "generated": "2025-12-30T23:52:32.516Z",
-  "programSlug": "workplace-investigations",
-  "programName": "Certificate in Workplace Investigations",
+  "programSlug": "advanced-employment-law",
+  "programName": "Advanced Certificate in Strategic Employment Law",
   "facultyCount": 4,
   "faculty": [
-    {
-      "id": "rec151X9izCWMb6J0",
-      "name": "Sara Hamilton, Esq.",
-      "firstName": "Sara",
-      "title": "Senior Director & Associate General Counsel",
-      "organization": "United Parcel Service, Inc.",
-      "bio": "Sara defends UPS against employment litigation while building programs that prevent disputes before they start. She brings 12+ years of experience from both in-house and BigLaw, plus a track record of community leadership—including founding Georgia's Korean American Bar Association during the rise of anti-AAPI hate.",
-      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6954554b74830396d5415841.svg",
-      "bioLink": ""
-    },
     {
       "id": "rec4rKtRbnn56VCMj",
       "name": "Brenda Heinicke, Esq.",
@@ -35,14 +25,24 @@
       "bioLink": "https://iaml.com/faculty#wayne-williams-esq"
     },
     {
-      "id": "recCysOqbmx33qZGA",
-      "name": "Dawn Kubik, Esq.",
-      "firstName": "Dawn",
-      "title": "Of Counsel",
-      "organization": "Wymer Employment Law",
-      "bio": "Dawn represents employers in employment, contract, and insurance disputes—with experience on both the plaintiff and defense sides. She champions a proactive approach to workplace issues, helping businesses prevent conflicts before they escalate into costly crises.",
-      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebe98d665980cb05f7.svg",
-      "bioLink": "https://iaml.com/faculty#dawn-kubik-esq"
+      "id": "rech00qD2rjunIoGX",
+      "name": "John Wymer, Esq.",
+      "firstName": "John",
+      "title": "Partner",
+      "organization": "Thompson Hine LLP",
+      "bio": "John represents public and private sector employers in discrimination, wage-and-hour, labor negotiations, and ERISA disputes. He regularly appears before federal courts, the NLRB, EEOC, and Department of Labor—and co-authors The Developing Labor Law.",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebba45f28666768ce6.svg",
+      "bioLink": "https://iaml.com/faculty#john-wymer-esq"
+    },
+    {
+      "id": "recrHAK0n4YDIMthb",
+      "name": "Ray Deeny, Esq.",
+      "firstName": "Ray",
+      "title": "Partner",
+      "organization": "Taft Stettinius & Hollister LLP",
+      "bio": "Ray has represented management in labor and employment disputes for over 40 years, winning the vast majority of his federal and state jury trials. He arbitrates 50+ cases annually and is twice named Best Lawyers \"Lawyer of the Year\" for Labor Law in Denver.",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667eb6947d86fd7edcc6f.svg",
+      "bioLink": "https://iaml.com/faculty#ray-deeny-esq"
     }
   ]
 }

@@ -1,0 +1,58 @@
+{
+  "generated": "2025-12-30T23:52:32.516Z",
+  "programSlug": "advanced-employee-benefits-law",
+  "programName": "Advanced Certificate in Employee Benefits Law",
+  "facultyCount": 5,
+  "faculty": [
+    {
+      "id": "rec7eX5uXoWOg6wHc",
+      "name": "George Cicotte, Esq.",
+      "firstName": "George",
+      "title": "Founder",
+      "organization": "Cicotte Law Firm",
+      "bio": "George brings a rare combination to ERISA work: he started as a pension actuary before becoming an attorney. For over 30 years, he has guided employers through retirement plan design, fiduciary duties, HIPAA/COBRA compliance, and ERISA litigation defense.",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69540411ec06c541fda83724.svg",
+      "bioLink": "https://iaml.com/faculty#george-cicotte-esq"
+    },
+    {
+      "id": "rec7kuWXpBRWV8qvL",
+      "name": "Dominic DeMatties, Esq.",
+      "firstName": "Dominic",
+      "title": "Partner",
+      "organization": "Thompson Hine LLP",
+      "bio": "Dominic advises on ESOPs, 401(k) plans, cash balance designs, and multiemployer plans—representing clients before the DOL, IRS, and PBGC. A former U.S. Treasury attorney-advisor, he shaped national policy on hybrid pensions and deferred compensation before returning to private practice.",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebe98d66862dcb05f6.svg",
+      "bioLink": "https://iaml.com/faculty#dominic-dematties-esq"
+    },
+    {
+      "id": "recBSj5kd0Z6KWGgU",
+      "name": "Doug Hinson, Esq.",
+      "firstName": "Doug",
+      "title": "Senior Counsel",
+      "organization": "Alston & Bird LLP",
+      "bio": "Doug defends Fortune 500 companies, government entities, and nonprofits in high-stakes ERISA class actions—401(k) fee disputes, employer stock cases, and pension litigation. A seasoned mediator and arbitrator, he brings decades of courtroom experience to the most complex benefits battles.",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69534adfee104702d744785a.svg",
+      "bioLink": "https://iaml.com/faculty#doug-hinson-esq"
+    },
+    {
+      "id": "recMbHQtDKRCqBkvZ",
+      "name": "John Hickman, Esq.",
+      "firstName": "John",
+      "title": "Partner",
+      "organization": "Alston & Bird LLP",
+      "bio": "John leads Alston & Bird's Health Benefits Practice, guiding clients through ACA compliance, HIPAA, HSAs, and consumer-driven health care. A Chambers Band 1 attorney and Best Lawyers \"Lawyer of the Year,\" he shapes policy as head of ECFC's Technical Advisory Committee.",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667eb6947d83db0edcc6b.svg",
+      "bioLink": "https://iaml.com/faculty#john-hickman-esq"
+    },
+    {
+      "id": "recu2bleWSmRJTwoa",
+      "name": "Ashley Gillihan, Esq.",
+      "firstName": "Ashley",
+      "title": "Partner",
+      "organization": "Alston & Bird LLP",
+      "bio": "Ashley advises employers, plan administrators, and financial institutions on health and welfare plan compliance and ERISA litigation. A recognized authority on benefits law, he serves on the ECFC Technical Advisory Council and is listed in Best Lawyers in America® for ERISA.",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebd086b239c1e18e30.svg",
+      "bioLink": "https://iaml.com/faculty#ashley-gillihan-esq"
+    }
+  ]
+}

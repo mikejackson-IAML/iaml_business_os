@@ -1,23 +1,83 @@
 {
-  "generated": "2025-12-28T15:00:03.416Z",
+  "generated": "2025-12-30T23:52:32.516Z",
   "version": "1.0.0",
-  "totalFaculty": 18,
-  "programsCount": 3,
+  "totalFaculty": 21,
+  "programsCount": 15,
   "programStats": [
     {
       "slug": "strategic-hr-leadership",
-      "count": 10,
+      "count": 11,
       "name": "Certificate in Strategic HR Leadership"
     },
     {
+      "slug": "strategic-hr-management",
+      "count": 2,
+      "name": "Strategic HR Management"
+    },
+    {
       "slug": "employee-relations-law",
-      "count": 10,
+      "count": 11,
       "name": "Certificate in Employee Relations Law"
     },
     {
+      "slug": "comprehensive-labor-relations",
+      "count": 11,
+      "name": "Comprehensive Labor Relations"
+    },
+    {
+      "slug": "special-issues-employment-law",
+      "count": 9,
+      "name": "Special Issues in Employment Law"
+    },
+    {
+      "slug": "employment-law-update",
+      "count": 9,
+      "name": "Employment Law Update"
+    },
+    {
+      "slug": "hr-law-fundamentals",
+      "count": 9,
+      "name": "HR Law Fundamentals"
+    },
+    {
       "slug": "workplace-investigations",
-      "count": 3,
+      "count": 4,
       "name": "Certificate in Workplace Investigations"
+    },
+    {
+      "slug": "discrimination-prevention-defense",
+      "count": 9,
+      "name": "Discrimination Prevention & Defense"
+    },
+    {
+      "slug": "advanced-employment-law",
+      "count": 4,
+      "name": "Advanced Certificate in Strategic Employment Law"
+    },
+    {
+      "slug": "employee-benefits-law",
+      "count": 7,
+      "name": "Certificate in Employee Benefits Law"
+    },
+    {
+      "slug": "advanced-employee-benefits-law",
+      "count": 5,
+      "name": "Advanced Certificate in Employee Benefits Law"
+    },
+    {
+      "slug": "benefit-plan-claims-appeals-litigation",
+      "count": 2,
+      "name": "Benefit Plan Claims, Appeals & Litigation"
+    },
+    {
+      "slug": "welfare-benefits-plan-issues",
+      "count": 2,
+      "name": "Welfare Benefits Plan Issues"
+    },
+    {
+      "slug": "retirement-plans",
+      "count": 3,
+      "name": "Retirement Plans"
     }
   ]
 }

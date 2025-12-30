@@ -1,18 +1,28 @@
 {
-  "generated": "2025-12-28T15:00:03.416Z",
+  "generated": "2025-12-30T23:52:32.516Z",
   "programSlug": "employee-relations-law",
   "programName": "Certificate in Employee Relations Law",
-  "facultyCount": 10,
+  "facultyCount": 11,
   "faculty": [
+    {
+      "id": "rec151X9izCWMb6J0",
+      "name": "Sara Hamilton, Esq.",
+      "firstName": "Sara",
+      "title": "Senior Director & Associate General Counsel",
+      "organization": "United Parcel Service, Inc.",
+      "bio": "Sara defends UPS against employment litigation while building programs that prevent disputes before they start. She brings 12+ years of experience from both in-house and BigLaw, plus a track record of community leadership—including founding Georgia's Korean American Bar Association during the rise of anti-AAPI hate.",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6954554b74830396d5415841.svg",
+      "bioLink": ""
+    },
     {
       "id": "rec4rKtRbnn56VCMj",
       "name": "Brenda Heinicke, Esq.",
       "firstName": "Brenda",
       "title": "Director, Global Employment Law",
       "organization": "Terumo Blood & Cell Technologies",
-      "bio": "",
+      "bio": "Brenda represents employers on discrimination, wage-and-hour compliance, workplace privacy, and wrongful termination disputes. She partners with HR professionals to prevent problems before they become lawsuits—and has delivered dynamic, practical IAML training for over 15 years.",
       "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6911ef6e87254432cbd4b2fe.svg",
-      "bioLink": "www.iaml.com"
+      "bioLink": "https://iaml.com/faculty#brenda-heinicke-esq"
     },
     {
       "id": "rec9Q9DHcy6dN2SnD",
@@ -20,9 +30,9 @@
       "firstName": "Wayne",
       "title": "Founder",
       "organization": "Law Offices of Wayne Williams",
-      "bio": "",
+      "bio": "Wayne advises employers on discrimination, harassment, wrongful discharge, wage-and-hour compliance, and traditional labor law. A former University of Colorado professor and IAML faculty member for over 20 years, he brings both courtroom experience and classroom clarity to every issue.",
       "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebe98d66054ecb05fb.svg",
-      "bioLink": "www.iaml.com"
+      "bioLink": "https://iaml.com/faculty#wayne-williams-esq"
     },
     {
       "id": "recCysOqbmx33qZGA",
@@ -30,9 +40,9 @@
       "firstName": "Dawn",
       "title": "Of Counsel",
       "organization": "Wymer Employment Law",
-      "bio": "",
+      "bio": "Dawn represents employers in employment, contract, and insurance disputes—with experience on both the plaintiff and defense sides. She champions a proactive approach to workplace issues, helping businesses prevent conflicts before they escalate into costly crises.",
       "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebe98d665980cb05f7.svg",
-      "bioLink": "www.iaml.com"
+      "bioLink": "https://iaml.com/faculty#dawn-kubik-esq"
     },
     {
       "id": "recDOeTl32nzCbWxH",
@@ -40,9 +50,9 @@
       "firstName": "Patrick",
       "title": "Partner",
       "organization": "Foley Hoag LLP",
-      "bio": "",
+      "bio": "Patrick navigates complex labor disputes, from unfair labor practice charges to federal court litigation. He advises employers through collective bargaining, union organizing drives, strikes, and corporate campaigns—turning persistent union challenges into resolved outcomes.",
       "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667eb6947d87c78edcc71.svg",
-      "bioLink": "www.iaml.com"
+      "bioLink": "https://iaml.com/faculty#patrick-scully-esq"
     },
     {
       "id": "recE209WG3XRLBwqB",
@@ -50,9 +60,9 @@
       "firstName": "Jacqueline",
       "title": "Shareholder at Littler Mendelson P.C.",
       "organization": "Wymer Employment Law",
-      "bio": "Jacqueline E. Kalk represents and advises management across industries including manufacturing, construction, crowd-sourcing, and virtual companies. She focuses on independent contractor classification, wage-and-hour compliance, equal pay, and employment litigation, defending clients in state and federal courts as well as before administrative agencies.\n\nJacqueline helps employers avoid litigation by designing compliant policies, conducting worker classification analyses, and delivering training programs on employment law and litigation prevention. A frequent national speaker and published author on employment law and wage-and-hour issues, she is known for translating complex legal concepts into practical, actionable guidance for HR professionals and business leaders.",
+      "bio": "Jacqueline advises employers on independent contractor classification, wage-and-hour compliance, and equal pay—defending clients in state and federal courts. She helps organizations avoid litigation through compliant policies, worker classification analyses, and practical training programs.",
       "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690e254f27678e7871e709c4.svg",
-      "bioLink": "www.iaml.com"
+      "bioLink": "https://iaml.com/faculty#jacqueline-kalk-esq"
     },
     {
       "id": "recNZZAA7eSH4kub4",
@@ -60,9 +70,9 @@
       "firstName": "Rudi",
       "title": "Senior Corporate Counsel",
       "organization": "White Cap",
-      "bio": "Rudi is counsel in the firm’s Labor & Employment group, representing employers in a wide range of employment disputes in state and federal courts and before administrative agencies. She has deep experience defending claims of discrimination, harassment, retaliation, wrongful termination, and other labor code violations, as well as guiding clients through mediation, arbitration, and litigation.\n\nBeyond litigation, Rudi partners with employers to develop, implement, and audit workplace policies, offering practical strategies to reduce risk and ensure compliance. Known for her clear, solutions-focused counsel, she helps organizations navigate complex employment challenges with confidence.",
+      "bio": "Rudi represents employers in discrimination, harassment, and wrongful termination disputes across state and federal courts. Beyond litigation, she helps organizations build policies that reduce risk before problems start.",
       "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690e22920269a38b86c905cb.svg",
-      "bioLink": "www.iaml.com"
+      "bioLink": "https://iaml.com/faculty#rudi-turner-esq"
     },
     {
       "id": "recSGAvUdF4678gA9",
@@ -70,9 +80,9 @@
       "firstName": "Amy",
       "title": "Partner",
       "organization": "Barnes & Thornburg LLP",
-      "bio": "",
+      "bio": "Amy advises employers in retail, hospitality, manufacturing, and healthcare on union avoidance, collective bargaining, and harassment prevention. A former chair of the ABA NLRA Law Development Subcommittee, she brings sharp legal analysis to complex labor challenges.",
       "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690e22acc87c0f45146d61fd.svg",
-      "bioLink": "www.iaml.com"
+      "bioLink": "https://iaml.com/faculty#amy-zdravecky-esq"
     },
     {
       "id": "recdn3uoqPDiICi9a",
@@ -82,7 +92,7 @@
       "organization": "Taft Stettinius & Hollister LLP",
       "bio": "Grant Gibeau defends employers against discrimination claims, wage-hour lawsuits, union challenges, and NLRB disputes. As a Taft partner in Minneapolis, he prevents workplace problems before they escalate and wins the battles that can't be avoided.",
       "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690e229c43570019cba3b51f.svg",
-      "bioLink": "www.iaml.com"
+      "bioLink": "https://iaml.com/faculty#grant-gibeau-esq"
     },
     {
       "id": "rech00qD2rjunIoGX",
@@ -90,9 +100,9 @@
       "firstName": "John",
       "title": "Partner",
       "organization": "Thompson Hine LLP",
-      "bio": "",
+      "bio": "John represents public and private sector employers in discrimination, wage-and-hour, labor negotiations, and ERISA disputes. He regularly appears before federal courts, the NLRB, EEOC, and Department of Labor—and co-authors The Developing Labor Law.",
       "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebba45f28666768ce6.svg",
-      "bioLink": "www.iaml.com"
+      "bioLink": "https://iaml.com/faculty#john-wymer-esq"
     },
     {
       "id": "recrHAK0n4YDIMthb",
@@ -100,9 +110,9 @@
       "firstName": "Ray",
       "title": "Partner",
       "organization": "Taft Stettinius & Hollister LLP",
-      "bio": "",
+      "bio": "Ray has represented management in labor and employment disputes for over 40 years, winning the vast majority of his federal and state jury trials. He arbitrates 50+ cases annually and is twice named Best Lawyers \"Lawyer of the Year\" for Labor Law in Denver.",
       "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667eb6947d86fd7edcc6f.svg",
-      "bioLink": "www.iaml.com"
+      "bioLink": "https://iaml.com/faculty#ray-deeny-esq"
     }
   ]
 }

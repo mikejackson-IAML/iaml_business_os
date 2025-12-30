@@ -1,0 +1,28 @@
+{
+  "generated": "2025-12-30T23:52:32.516Z",
+  "programSlug": "welfare-benefits-plan-issues",
+  "programName": "Welfare Benefits Plan Issues",
+  "facultyCount": 2,
+  "faculty": [
+    {
+      "id": "rec7eX5uXoWOg6wHc",
+      "name": "George Cicotte, Esq.",
+      "firstName": "George",
+      "title": "Founder",
+      "organization": "Cicotte Law Firm",
+      "bio": "George brings a rare combination to ERISA work: he started as a pension actuary before becoming an attorney. For over 30 years, he has guided employers through retirement plan design, fiduciary duties, HIPAA/COBRA compliance, and ERISA litigation defense.",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69540411ec06c541fda83724.svg",
+      "bioLink": "https://iaml.com/faculty#george-cicotte-esq"
+    },
+    {
+      "id": "recCLLeqJoitUFFqe",
+      "name": "Carolyn Trenda, Esq.",
+      "firstName": "Carolyn",
+      "title": "Partner",
+      "organization": "McGuireWoods",
+      "bio": "Carolyn designs and administers retirement plans—401(k), 403(b), pensions, and ESOPs—while advising on health plan compliance, COBRA, and HIPAA. She guides employers through IRS and DOL audits, M&A benefits issues, and ERISA fiduciary obligations.",
+      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69545ef3035c3a3e7cecf141.svg",
+      "bioLink": ""
+    }
+  ]
+}

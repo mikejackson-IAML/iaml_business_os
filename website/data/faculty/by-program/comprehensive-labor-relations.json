@@ -1,19 +1,9 @@
 {
   "generated": "2025-12-30T23:52:32.516Z",
-  "version": "1.0.0",
-  "source": "airtable",
-  "recordCount": 21,
+  "programSlug": "comprehensive-labor-relations",
+  "programName": "Comprehensive Labor Relations",
+  "facultyCount": 11,
   "faculty": [
-    {
-      "id": "rec0meucobcVjMYXW",
-      "name": "Di Ann Sanchez",
-      "firstName": "Di Ann",
-      "title": "Human Resources Chief Exceptional Officer",
-      "organization": "DAS HR Consulting & Sanchez Associates",
-      "bio": "Di Ann helps organizations align people strategies with business performance—specializing in generational dynamics, pay equity, and IDEA initiatives. A nationally recognized HR strategist, she advises across industries from healthcare to manufacturing on building inclusive, high-performing workplaces.",
-      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667eb6947d88a87edcc70.svg",
-      "bioLink": "https://iaml.com/faculty#di-ann-sanchez"
-    },
     {
       "id": "rec151X9izCWMb6J0",
       "name": "Sara Hamilton, Esq.",
@@ -35,26 +25,6 @@
       "bioLink": "https://iaml.com/faculty#brenda-heinicke-esq"
     },
     {
-      "id": "rec7eX5uXoWOg6wHc",
-      "name": "George Cicotte, Esq.",
-      "firstName": "George",
-      "title": "Founder",
-      "organization": "Cicotte Law Firm",
-      "bio": "George brings a rare combination to ERISA work: he started as a pension actuary before becoming an attorney. For over 30 years, he has guided employers through retirement plan design, fiduciary duties, HIPAA/COBRA compliance, and ERISA litigation defense.",
-      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69540411ec06c541fda83724.svg",
-      "bioLink": "https://iaml.com/faculty#george-cicotte-esq"
-    },
-    {
-      "id": "rec7kuWXpBRWV8qvL",
-      "name": "Dominic DeMatties, Esq.",
-      "firstName": "Dominic",
-      "title": "Partner",
-      "organization": "Thompson Hine LLP",
-      "bio": "Dominic advises on ESOPs, 401(k) plans, cash balance designs, and multiemployer plans—representing clients before the DOL, IRS, and PBGC. A former U.S. Treasury attorney-advisor, he shaped national policy on hybrid pensions and deferred compensation before returning to private practice.",
-      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebe98d66862dcb05f6.svg",
-      "bioLink": "https://iaml.com/faculty#dominic-dematties-esq"
-    },
-    {
       "id": "rec9Q9DHcy6dN2SnD",
       "name": "Wayne Williams, Esq.",
       "firstName": "Wayne",
@@ -63,26 +33,6 @@
       "bio": "Wayne advises employers on discrimination, harassment, wrongful discharge, wage-and-hour compliance, and traditional labor law. A former University of Colorado professor and IAML faculty member for over 20 years, he brings both courtroom experience and classroom clarity to every issue.",
       "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebe98d66054ecb05fb.svg",
       "bioLink": "https://iaml.com/faculty#wayne-williams-esq"
-    },
-    {
-      "id": "recBSj5kd0Z6KWGgU",
-      "name": "Doug Hinson, Esq.",
-      "firstName": "Doug",
-      "title": "Senior Counsel",
-      "organization": "Alston & Bird LLP",
-      "bio": "Doug defends Fortune 500 companies, government entities, and nonprofits in high-stakes ERISA class actions—401(k) fee disputes, employer stock cases, and pension litigation. A seasoned mediator and arbitrator, he brings decades of courtroom experience to the most complex benefits battles.",
-      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69534adfee104702d744785a.svg",
-      "bioLink": "https://iaml.com/faculty#doug-hinson-esq"
-    },
-    {
-      "id": "recCLLeqJoitUFFqe",
-      "name": "Carolyn Trenda, Esq.",
-      "firstName": "Carolyn",
-      "title": "Partner",
-      "organization": "McGuireWoods",
-      "bio": "Carolyn designs and administers retirement plans—401(k), 403(b), pensions, and ESOPs—while advising on health plan compliance, COBRA, and HIPAA. She guides employers through IRS and DOL audits, M&A benefits issues, and ERISA fiduciary obligations.",
-      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69545ef3035c3a3e7cecf141.svg",
-      "bioLink": ""
     },
     {
       "id": "recCysOqbmx33qZGA",
@@ -115,16 +65,6 @@
       "bioLink": "https://iaml.com/faculty#jacqueline-kalk-esq"
     },
     {
-      "id": "recMbHQtDKRCqBkvZ",
-      "name": "John Hickman, Esq.",
-      "firstName": "John",
-      "title": "Partner",
-      "organization": "Alston & Bird LLP",
-      "bio": "John leads Alston & Bird's Health Benefits Practice, guiding clients through ACA compliance, HIPAA, HSAs, and consumer-driven health care. A Chambers Band 1 attorney and Best Lawyers \"Lawyer of the Year,\" he shapes policy as head of ECFC's Technical Advisory Committee.",
-      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667eb6947d83db0edcc6b.svg",
-      "bioLink": "https://iaml.com/faculty#john-hickman-esq"
-    },
-    {
       "id": "recNZZAA7eSH4kub4",
       "name": "Rudi Turner, Esq.",
       "firstName": "Rudi",
@@ -143,16 +83,6 @@
       "bio": "Amy advises employers in retail, hospitality, manufacturing, and healthcare on union avoidance, collective bargaining, and harassment prevention. A former chair of the ABA NLRA Law Development Subcommittee, she brings sharp legal analysis to complex labor challenges.",
       "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690e22acc87c0f45146d61fd.svg",
       "bioLink": "https://iaml.com/faculty#amy-zdravecky-esq"
-    },
-    {
-      "id": "recbL3cYq9RfH8nkS",
-      "name": "Leah Morgan Singleton, Esq.",
-      "firstName": "Leah",
-      "title": "Assistant Secretary & Corporate Counsel",
-      "organization": "NCR Atleos",
-      "bio": "Leah advises on executive compensation, ERISA plans, and Section 409A compliance—including stock options, deferred compensation, and change-in-control arrangements. At NCR Atleos, she guides the design and governance of retirement, health, and equity-based incentive programs.",
-      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/695453a7ec06c50324b2cbe2.svg",
-      "bioLink": ""
     },
     {
       "id": "recdn3uoqPDiICi9a",
@@ -175,16 +105,6 @@
       "bioLink": "https://iaml.com/faculty#john-wymer-esq"
     },
     {
-      "id": "recjQKD6kupvQez7x",
-      "name": "Ethan Ware, Esq.",
-      "firstName": "Ethan",
-      "title": "Partner at Williams Mullen",
-      "organization": "Wymer Employment Law",
-      "bio": "Ethan defends companies in environmental class actions, enforcement matters, and EPA investigations under the Clean Water Act, Clean Air Act, RCRA, and CERCLA. With a biology background and two Best Lawyers \"Lawyer of the Year\" honors, he brings scientific insight to complex environmental disputes.",
-      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69544fe72c7108ac62fbd619.svg",
-      "bioLink": ""
-    },
-    {
       "id": "recrHAK0n4YDIMthb",
       "name": "Ray Deeny, Esq.",
       "firstName": "Ray",
@@ -193,26 +113,6 @@
       "bio": "Ray has represented management in labor and employment disputes for over 40 years, winning the vast majority of his federal and state jury trials. He arbitrates 50+ cases annually and is twice named Best Lawyers \"Lawyer of the Year\" for Labor Law in Denver.",
       "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667eb6947d86fd7edcc6f.svg",
       "bioLink": "https://iaml.com/faculty#ray-deeny-esq"
-    },
-    {
-      "id": "rectoEby18SQxEqmO",
-      "name": "Cyndi Ramirez Ryan",
-      "firstName": "Cyndi",
-      "title": "Founder & Chief Executive Officer",
-      "organization": "Más Talent HR",
-      "bio": "Cyndi drives organizational change, talent strategy, and D&I initiatives for companies nationwide through her firm Más Talent. A former HR executive at Baylor Scott & White and Philips Medical, she was named one of Texas' Most Powerful & Influential Women.",
-      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6954050dedb8a275cad4fdbe.svg",
-      "bioLink": "https://iaml.com/faculty#cyndi-ramirez-ryan"
-    },
-    {
-      "id": "recu2bleWSmRJTwoa",
-      "name": "Ashley Gillihan, Esq.",
-      "firstName": "Ashley",
-      "title": "Partner",
-      "organization": "Alston & Bird LLP",
-      "bio": "Ashley advises employers, plan administrators, and financial institutions on health and welfare plan compliance and ERISA litigation. A recognized authority on benefits law, he serves on the ECFC Technical Advisory Council and is listed in Best Lawyers in America® for ERISA.",
-      "imageUrl": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebd086b239c1e18e30.svg",
-      "bioLink": "https://iaml.com/faculty#ashley-gillihan-esq"
     }
   ]
 }
