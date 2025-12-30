@@ -74,7 +74,7 @@ async function fetchAllFaculty(baseId, apiKey) {
     'Current Firm/Organization',
     'Short Bio (250-300 characters)',
     'Headshot Photo',
-    'Full Bio URL',
+    'Faculty URL',
     'PROGRAMS (Faculty)'
   ];
 
@@ -95,7 +95,7 @@ function mapFacultyRecord(record) {
     organization: record.fields['Current Firm/Organization'] || '',
     bio: record.fields['Short Bio (250-300 characters)'] || '',
     imageUrl: record.fields['Headshot Photo'] || '',
-    bioLink: record.fields['Full Bio URL'] || '',
+    bioLink: record.fields['Faculty URL'] || '',
     programRecordIds: record.fields['PROGRAMS (Faculty)'] || []
   };
 }
