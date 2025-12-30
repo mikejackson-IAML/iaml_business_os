@@ -2,8 +2,8 @@ name: Update Airtable Cache
 
 on:
   schedule:
-    # Run weekly on Sundays at 2 AM UTC (Saturday 6 PM PST)
-    - cron: '0 2 * * 0'
+    # Run daily at 2 AM UTC (6 PM PST)
+    - cron: '0 2 * * *'
   workflow_dispatch:
     inputs:
       force_rebuild:
@@ -19,6 +19,9 @@ jobs:
     name: Fetch and Cache Airtable Data
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: website
 
     steps:
       - name: Checkout repository
@@ -51,6 +54,7 @@ jobs:
 
       - name: Commit and push if changed
         if: steps.changes.outputs.changed == 'true'
+        working-directory: .
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
