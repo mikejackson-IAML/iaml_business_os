@@ -1,0 +1,339 @@
+{
+  "name": "YouTube Video Alert - Nate B Jones",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 6,
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "name": "Check Every 6 Hours",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/youtube/v3/search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "part",
+              "value": "snippet"
+            },
+            {
+              "name": "channelId",
+              "value": "={{$env.YOUTUBE_CHANNEL_ID}}"
+            },
+            {
+              "name": "order",
+              "value": "date"
+            },
+            {
+              "name": "maxResults",
+              "value": "5"
+            },
+            {
+              "name": "type",
+              "value": "video"
+            },
+            {
+              "name": "key",
+              "value": "={{$env.YOUTUBE_API_KEY}}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "name": "Fetch Latest Videos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://{{$env.SUPABASE_PROJECT_REF}}.supabase.co/rest/v1/youtube_videos?order=published_at.desc&limit=5",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.SUPABASE_TOKEN}}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "name": "Get Cached Videos",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [450, 500]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Compare fetched videos with cached to find new ones\nconst fetchedVideos = $('Fetch Latest Videos').first().json.items || [];\nconst cachedVideos = $('Get Cached Videos').first().json || [];\n\nconst cachedIds = new Set(cachedVideos.map(v => v.video_id));\n\nconst newVideos = fetchedVideos.filter(video => {\n  const videoId = video.id?.videoId || video.id;\n  return !cachedIds.has(videoId);\n});\n\nreturn [{\n  json: {\n    hasNewVideos: newVideos.length > 0,\n    newCount: newVideos.length,\n    newVideos: newVideos.map(v => ({\n      video_id: v.id?.videoId || v.id,\n      title: v.snippet?.title,\n      description: v.snippet?.description,\n      published_at: v.snippet?.publishedAt,\n      thumbnail: v.snippet?.thumbnails?.high?.url || v.snippet?.thumbnails?.default?.url,\n      url: `https://www.youtube.com/watch?v=${v.id?.videoId || v.id}`\n    })),\n    checked_at: new Date().toISOString()\n  }\n}];"
+      },
+      "name": "Detect New Videos",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [650, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.hasNewVideos }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "name": "Has New Videos?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [850, 400]
+    },
+    {
+      "parameters": {
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "={{$env.ANTHROPIC_API_KEY}}"
+            },
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"claude-3-haiku-20240307\",\n  \"max_tokens\": 1500,\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Generate a concise synopsis of this YouTube video. Focus on actionable insights.\\n\\nTitle: {{ $json.newVideos[0].title }}\\n\\nDescription: {{ $json.newVideos[0].description }}\\n\\nProvide:\\n1. Core Message (1-2 sentences)\\n2. Key Insights (3-5 bullet points)\\n3. Actionable Takeaways (what to do with this info)\\n4. Why This Matters (relevance)\"\n    }\n  ]\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "name": "Generate AI Synopsis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1050, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://{{$env.SUPABASE_PROJECT_REF}}.supabase.co/rest/v1/youtube_videos",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$env.SUPABASE_TOKEN}}"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"video_id\": \"{{ $('Detect New Videos').item.json.newVideos[0].video_id }}\",\n  \"title\": \"{{ $('Detect New Videos').item.json.newVideos[0].title }}\",\n  \"description\": \"{{ $('Detect New Videos').item.json.newVideos[0].description }}\",\n  \"url\": \"{{ $('Detect New Videos').item.json.newVideos[0].url }}\",\n  \"thumbnail\": \"{{ $('Detect New Videos').item.json.newVideos[0].thumbnail }}\",\n  \"published_at\": \"{{ $('Detect New Videos').item.json.newVideos[0].published_at }}\",\n  \"synopsis\": {{ JSON.stringify($json.content[0].text) }},\n  \"created_at\": \"{{ new Date().toISOString() }}\"\n}",
+        "options": {}
+      },
+      "name": "Store Video & Synopsis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1250, 300]
+    },
+    {
+      "parameters": {
+        "channel": "#content-alerts",
+        "text": "=:movie_camera: *New Video from Nate B Jones!*\n\n*{{ $('Detect New Videos').item.json.newVideos[0].title }}*\n\n:link: {{ $('Detect New Videos').item.json.newVideos[0].url }}\n\n---\n*AI Synopsis:*\n{{ $('Generate AI Synopsis').item.json.content[0].text }}\n\n---\n:clock3: Published: {{ $('Detect New Videos').item.json.newVideos[0].published_at }}",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "name": "Send Slack Notification",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2,
+      "position": [1450, 300],
+      "credentials": {
+        "slackApi": {
+          "name": "Slack Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "alerts@yourdomain.com",
+        "toEmail": "={{$env.ALERT_EMAIL}}",
+        "subject": "=New Video: {{ $('Detect New Videos').item.json.newVideos[0].title }}",
+        "emailType": "text",
+        "message": "=New video from Nate B Jones!\n\nTitle: {{ $('Detect New Videos').item.json.newVideos[0].title }}\n\nURL: {{ $('Detect New Videos').item.json.newVideos[0].url }}\n\n---\nSYNOPSIS:\n{{ $('Generate AI Synopsis').item.json.content[0].text }}\n\n---\nPublished: {{ $('Detect New Videos').item.json.newVideos[0].published_at }}"
+      },
+      "name": "Send Email Alert",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [1450, 500]
+    },
+    {
+      "parameters": {},
+      "name": "No New Videos",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [1050, 500]
+    }
+  ],
+  "connections": {
+    "Check Every 6 Hours": {
+      "main": [
+        [
+          {
+            "node": "Fetch Latest Videos",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Cached Videos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Latest Videos": {
+      "main": [
+        [
+          {
+            "node": "Detect New Videos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Cached Videos": {
+      "main": [
+        [
+          {
+            "node": "Detect New Videos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Detect New Videos": {
+      "main": [
+        [
+          {
+            "node": "Has New Videos?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has New Videos?": {
+      "main": [
+        [
+          {
+            "node": "Generate AI Synopsis",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No New Videos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate AI Synopsis": {
+      "main": [
+        [
+          {
+            "node": "Store Video & Synopsis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Video & Synopsis": {
+      "main": [
+        [
+          {
+            "node": "Send Slack Notification",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Email Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "youtube-monitoring"
+    },
+    {
+      "name": "content-alerts"
+    }
+  ]
+}

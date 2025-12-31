@@ -1,0 +1,8 @@
+# YouTube Channel Monitor Data Directory
+# This directory stores cached video data and synopses from monitored YouTube channels.
+#
+# Structure:
+# - all-videos.json: All cached videos with metadata
+# - new-videos.json: Videos detected as new on last check
+# - metadata.json: Cache metadata and last check info
+# - synopses/: Individual video synopsis files
