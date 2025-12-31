@@ -31,7 +31,8 @@ The Design Specialist owns the design system and ensures all UI work follows est
 
 | Skill | Purpose | Status |
 |-------|---------|--------|
-| [design-system](./skills/design-system/SKILL.md) | Comprehensive design guidelines | Active |
+| [design-system](./skills/design-system/SKILL.md) | Comprehensive design guidelines | Planned |
+| [frontend-design](./skills/frontend-design/SKILL.md) | Distinctive, production-grade frontend interfaces | Active |
 
 ---
 
