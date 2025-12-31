@@ -4223,32 +4223,47 @@ button#prev-btn {
        =========================== */
     async function fetchProgramsData(){
       let allRecords = [];
-      let offset = null;
 
-      do {
-        const params = {
-          'pageSize': 100 // Maximum records per request
-        };
-
-        if (offset) {
-          params.offset = offset;
+      // Try cache first for faster loading
+      try {
+        const cacheResponse = await fetch('/data/sessions/all-sessions.json');
+        if (cacheResponse.ok) {
+          const cacheData = await cacheResponse.json();
+          console.log('Sessions loaded from cache, generated:', cacheData.generated);
+          allRecords = cacheData.records || [];
         }
-
-        const url = buildAirtableUrl(CONFIG.AIRTABLE.PROGRAMS_ENDPOINT, params);
-
-      const response = await fetch(url);
-      if(!response.ok) {
-        console.error('API Response Error:', response.status, response.statusText);
-        const errorText = await response.text();
-        console.error('Error details:', errorText);
-        throw new Error(`Airtable API error: ${response.status}`);
+      } catch (cacheError) {
+        console.warn('Session cache unavailable, falling back to API:', cacheError);
       }
-      const data = await response.json();
-      console.log('API Response received, records count:', data.records?.length || 0);
 
-        allRecords = allRecords.concat(data.records);
-        offset = data.offset; // Airtable provides offset for next page
-      } while (offset); // Continue until no more pages
+      // Fall back to API if cache failed or was empty
+      if (allRecords.length === 0) {
+        let offset = null;
+        do {
+          const params = {
+            'pageSize': 100 // Maximum records per request
+          };
+
+          if (offset) {
+            params.offset = offset;
+          }
+
+          const url = buildAirtableUrl(CONFIG.AIRTABLE.PROGRAMS_ENDPOINT, params);
+
+          const response = await fetch(url);
+          if(!response.ok) {
+            console.error('API Response Error:', response.status, response.statusText);
+            const errorText = await response.text();
+            console.error('Error details:', errorText);
+            throw new Error(`Airtable API error: ${response.status}`);
+          }
+          const data = await response.json();
+          console.log('API Response received, records count:', data.records?.length || 0);
+
+          allRecords = allRecords.concat(data.records);
+          offset = data.offset; // Airtable provides offset for next page
+        } while (offset); // Continue until no more pages
+      }
 
 
       // Get current date to filter out past programs

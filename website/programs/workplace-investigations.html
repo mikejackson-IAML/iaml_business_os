@@ -3938,36 +3938,52 @@ button#prev-btn {
        =========================== */
     async function fetchProgramsData(format = null){
       let allRecords = [];
-      let offset = null;
 
-      // Use format-specific view if available
-      const viewId = format && CONFIG.AIRTABLE.VIEWS[format] ? CONFIG.AIRTABLE.VIEWS[format] : null;
-
-      do {
-        const params = {
-          'pageSize': 100
-        };
-
-        // Add view parameter if we have a format-specific view
-        if (viewId) {
-          params.view = viewId;
+      // Try cache first for faster loading
+      try {
+        const cacheResponse = await fetch('/data/sessions/all-sessions.json');
+        if (cacheResponse.ok) {
+          const cacheData = await cacheResponse.json();
+          console.log('Sessions loaded from cache, generated:', cacheData.generated);
+          allRecords = cacheData.records || [];
         }
-
-        if (offset) {
-          params.offset = offset;
-        }
-
-        const url = buildAirtableUrl(CONFIG.AIRTABLE.PROGRAMS_ENDPOINT, params);
-
-      const response = await fetch(url);
-      if(!response.ok) {
-        throw new Error(`Airtable API error: ${response.status}`);
+      } catch (cacheError) {
+        console.warn('Session cache unavailable, falling back to API:', cacheError);
       }
-      const data = await response.json();
 
-        allRecords = allRecords.concat(data.records);
-        offset = data.offset; // Airtable provides offset for next page
-      } while (offset); // Continue until no more pages
+      // Fall back to API if cache failed or was empty
+      if (allRecords.length === 0) {
+        let offset = null;
+
+        // Use format-specific view if available
+        const viewId = format && CONFIG.AIRTABLE.VIEWS[format] ? CONFIG.AIRTABLE.VIEWS[format] : null;
+
+        do {
+          const params = {
+            'pageSize': 100
+          };
+
+          // Add view parameter if we have a format-specific view
+          if (viewId) {
+            params.view = viewId;
+          }
+
+          if (offset) {
+            params.offset = offset;
+          }
+
+          const url = buildAirtableUrl(CONFIG.AIRTABLE.PROGRAMS_ENDPOINT, params);
+
+        const response = await fetch(url);
+        if(!response.ok) {
+          throw new Error(`Airtable API error: ${response.status}`);
+        }
+        const data = await response.json();
+
+          allRecords = allRecords.concat(data.records);
+          offset = data.offset; // Airtable provides offset for next page
+        } while (offset); // Continue until no more pages
+      }
 
 
       // Get current date to filter out past programs
