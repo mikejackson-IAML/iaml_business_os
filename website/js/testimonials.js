@@ -383,7 +383,7 @@ const testimonialsData = [
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(updateSpotlight, 150);
-    });
+    }, { passive: true });
 
     // Click any slide to move it to the spotlight position
     const testimonialsList = document.getElementById('testimonials-list');

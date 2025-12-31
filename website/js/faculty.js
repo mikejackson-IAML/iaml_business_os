@@ -41,10 +41,10 @@ const fetchFacultyFromCache = async (programSlug) => {
     }
 
     const data = await response.json();
-    console.log(`Faculty loaded from cache, generated: ${data.generated}`);
+    // console.log(`Faculty loaded from cache, generated: ${data.generated}`);
     return data.faculty || [];
   } catch (error) {
-    console.log('Faculty cache unavailable:', error.message);
+    // console.log('Faculty cache unavailable:', error.message);
     return null;
   }
 };
@@ -121,7 +121,7 @@ const fetchFacultyByProgram = async (programRecordId) => {
  * Fetch faculty from Airtable API (fallback method)
  */
 const fetchFacultyFromAPI = async (programSlug) => {
-  console.log('Falling back to Airtable API for faculty...');
+  // console.log('Falling back to Airtable API for faculty...');
 
   const programId = await fetchProgramBySlug(programSlug);
   if (!programId) {
@@ -233,10 +233,10 @@ const initializeFaculty = async () => {
     // Render faculty cards
     renderFacultyCards(faculty);
 
-    console.log(`Loaded ${faculty.length} faculty members for ${programSlug}`);
+    // console.log(`Loaded ${faculty.length} faculty members for ${programSlug}`);
   } catch (error) {
     console.error('Faculty initialization failed:', error);
-    console.log('Falling back to static HTML faculty content');
+    // console.log('Falling back to static HTML faculty content');
     // Progressive enhancement: let static HTML remain visible on error
   }
 };

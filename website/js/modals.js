@@ -457,7 +457,8 @@ document.addEventListener('keydown', (e) => {
 function resetFirstVisitPopup() {
   try {
     localStorage.removeItem(FIRST_VISIT_STORAGE_KEY);
-    console.log('First visit popup reset - will show on next page load');
+    // Debug function - keep log for developer use
+    // console.log('First visit popup reset - will show on next page load');
   } catch (e) {
     console.error('Could not reset popup:', e);
   }

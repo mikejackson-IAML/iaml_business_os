@@ -4,7 +4,7 @@
 (function() {
     'use strict';
     
-    console.log('🚀 IAML Website Initialized');
+    // console.log('🚀 IAML Website Initialized');
     
     // ===== GLOBAL CONFIGURATION =====
     const SITE_CONFIG = {
@@ -159,9 +159,10 @@
         'text-shadow: 2px 2px 0px rgba(0,0,0,0.2)'
       ].join(';');
       
-      console.log('%cIAML', styles);
-      console.log('%cInstitute for Applied Management & Law', 'color: #64748B; font-size: 12px;');
-      console.log('%c🚀 Site built with care by Re-Vitalized Properties', 'color: #9ca3af; font-size: 11px; font-style: italic;');
+      // Branding console logs - disabled for production
+      // console.log('%cIAML', styles);
+      // console.log('%cInstitute for Applied Management & Law', 'color: #64748B; font-size: 12px;');
+      // console.log('%c🚀 Site built with care by Re-Vitalized Properties', 'color: #9ca3af; font-size: 11px; font-style: italic;');
     }
     
     // ===== MAIN INITIALIZATION =====

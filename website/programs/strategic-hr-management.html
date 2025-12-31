@@ -37,10 +37,17 @@
     window.API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:3001' : '';
   </script>
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts - Preconnect -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Lato:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Preload critical fonts for faster text rendering -->
+  <link rel="preload" href="https://fonts.gstatic.com/s/lato/v24/S6uyw4BMUTPHjx4wXg.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="https://fonts.gstatic.com/s/lato/v24/S6u9w4BMUTPHh6UVSwiPGQ.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="https://fonts.gstatic.com/s/playfairdisplay/v37/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvXDXbtM.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- Google Fonts CSS -->
+
 
   <!-- CDN & External Service Preconnects (High Priority) -->
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
@@ -8781,7 +8788,7 @@ button#prev-btn {
       </section>
 
     <!-- Load Support Continuum JavaScript -->
-    <script src="../js/supportContinuum.js"></script>
+    <script src="../js/supportContinuum.js" defer></script>
 
     <!-- FAQ Section -->
     <section class="faq-section full-width-section">
@@ -8949,7 +8956,7 @@ button#prev-btn {
     </section>
 
     <!-- Load FAQ JavaScript -->
-    <script src="../js/faq.js"></script>
+    <script src="../js/faq.js" defer></script>
 
     <!-- Final CTA Section -->
     <section id="iaml-cta" class="theme-light py-5xl">
@@ -9310,7 +9317,7 @@ button#prev-btn {
   </script>
 
   <!-- Benefit Steps Animation (scroll-triggered) -->
-  <script src="../js/benefitSteps.js"></script>
+  <script src="../js/benefitSteps.js" defer></script>
 
   <!-- Curriculum Section JavaScript -->
   <script src="../js/curriculum.js" defer></script>
@@ -9325,6 +9332,6 @@ button#prev-btn {
     }
   </style>
 
-  <script src="/js/faculty.js"></script>
+  <script src="/js/faculty.js" defer></script>
 </body>
 </html>

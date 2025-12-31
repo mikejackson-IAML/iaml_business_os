@@ -92,7 +92,7 @@
       const offset = Math.random() * duration;
       track.style.animationDelay = '-' + offset + 's';
       
-      console.log('Logo carousel initialized with ' + logos.length + ' logos');
+      // console.log('Logo carousel initialized with ' + logos.length + ' logos');
     }
   }
 

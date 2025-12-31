@@ -57,7 +57,7 @@
       if (window.innerWidth > 1024) {
         closeMobileMenu();
       }
-    });
+    }, { passive: true });
 
     // Expose globally (needed by header CTA onclick: "closeMobileMenu()")
     window.closeMobileMenu = closeMobileMenu;

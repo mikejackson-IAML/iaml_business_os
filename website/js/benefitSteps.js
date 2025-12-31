@@ -206,7 +206,7 @@ function initBenefitSteps() {
       resetAnimation();
       setActiveItem(currentActiveIndex, true);
     }, 250);
-  });
+  }, { passive: true });
 }
 
 // Initialize when DOM is ready

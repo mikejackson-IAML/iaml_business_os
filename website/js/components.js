@@ -9,7 +9,7 @@ const getHeaderHTML = () => `
   <header class="header" id="header">
     <!-- Logo -->
     <a href="/" class="header-logo">
-        <img src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69042ba0346960d8775fb4a4.svg" alt="IAML Logo">
+        <img src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69042ba0346960d8775fb4a4.svg" alt="IAML Logo" fetchpriority="high" decoding="async">
     </a>
 
     <!-- Right side: Nav + Button -->

@@ -1444,7 +1444,7 @@
         const cacheResponse = await fetch(`${SESSION_CACHE_BASE}/${viewId}.json`);
         if (cacheResponse.ok) {
           data = await cacheResponse.json();
-          console.log('Sessions loaded from cache, generated:', data.generated);
+          // console.log('Sessions loaded from cache, generated:', data.generated);
         }
       } catch (cacheError) {
         console.warn('Session cache unavailable, falling back to API');

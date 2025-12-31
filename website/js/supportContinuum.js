@@ -33,13 +33,13 @@ class SupportContinuum {
       return;
     }
 
-    // Debug: Log initialization
-    console.log("[SupportContinuum] Initializing...", {
-      section: !!this.section,
-      timelineNav: !!this.timelineNav,
-      timelineItems: this.timelineItems.length,
-      panels: this.panels.length,
-    });
+    // Debug: Log initialization (disabled for production)
+    // console.log("[SupportContinuum] Initializing...", {
+    //   section: !!this.section,
+    //   timelineNav: !!this.timelineNav,
+    //   timelineItems: this.timelineItems.length,
+    //   panels: this.panels.length,
+    // });
 
     // Initialize
     this.init();
@@ -90,7 +90,7 @@ class SupportContinuum {
     this.measure();
 
     // Initialize first phase
-    console.log("[SupportContinuum] Setup complete, activating phase 1");
+    // console.log("[SupportContinuum] Setup complete, activating phase 1");
     this.lastPassedIndex = -1; // Start before first bullet
     this.updateActivePhase(1, false);
     if (this.progressLine) {
@@ -125,10 +125,10 @@ class SupportContinuum {
       return bulletRect.top + bulletRect.height / 2 - navRect.top;
     });
 
-    console.log("[SupportContinuum] Measured:", {
-      railHeight: this.railHeight,
-      bulletCenters: this.bulletCenters,
-    });
+    // console.log("[SupportContinuum] Measured:", {
+    //   railHeight: this.railHeight,
+    //   bulletCenters: this.bulletCenters,
+    // });
   }
 
   /**
@@ -359,30 +359,12 @@ class SupportContinuum {
       if (shouldShow) {
         if (!panelsContainer.classList.contains("panels-visible")) {
           panelsContainer.classList.add("panels-visible");
-          console.log(
-            "[SupportContinuum] ✅ Panels shown - section in active view",
-            {
-              sectionTop: sectionRect.top.toFixed(2),
-              sectionBottom: sectionRect.bottom.toFixed(2),
-              sectionInViewport,
-              activePhase: this.activePhase,
-              isPhase5AndPastEnd,
-            }
-          );
+          // console.log("[SupportContinuum] ✅ Panels shown");
         }
       } else {
         if (panelsContainer.classList.contains("panels-visible")) {
           panelsContainer.classList.remove("panels-visible");
-          console.log(
-            "[SupportContinuum] ❌ Panels hidden - section not in active view",
-            {
-              sectionTop: sectionRect.top.toFixed(2),
-              sectionBottom: sectionRect.bottom.toFixed(2),
-              sectionInViewport,
-              activePhase: this.activePhase,
-              isPhase5AndPastEnd,
-            }
-          );
+          // console.log("[SupportContinuum] ❌ Panels hidden");
         }
       }
     };
@@ -402,7 +384,7 @@ class SupportContinuum {
   updateActivePhase(phase, animate = true) {
     if (this.activePhase === phase) return;
 
-    console.log("[SupportContinuum] Updating active phase to:", phase);
+    // console.log("[SupportContinuum] Updating active phase to:", phase);
     this.activePhase = phase;
 
     // Update timeline items
@@ -638,7 +620,7 @@ class SupportContinuum {
         this.timelineNav.style.zIndex = "10";
 
         isFixed = true;
-        console.log("[SupportContinuum] Timeline nav switched to FIXED");
+        // console.log("[SupportContinuum] Timeline nav switched to FIXED");
       } else if (!shouldBeFixed && isFixed) {
         // Switch back to relative
         this.timelineNav.style.position = "relative";
@@ -647,7 +629,7 @@ class SupportContinuum {
         this.timelineNav.style.width = "auto";
 
         isFixed = false;
-        console.log("[SupportContinuum] Timeline nav switched to RELATIVE");
+        // console.log("[SupportContinuum] Timeline nav switched to RELATIVE");
       }
     };
 
@@ -712,14 +694,14 @@ class SupportContinuum {
       // Final panel position = sticky position + title offset within nav
       const panelTopValue = Math.round(stickyTop + titleOffsetInNav);
 
-      console.log("[SupportContinuum] Aligning panels:", {
-        stickyTop,
-        navTop: navRect.top,
-        navHeight,
-        titleTop: titleRect.top,
-        titleOffsetInNav,
-        panelTopValue,
-      });
+      // console.log("[SupportContinuum] Aligning panels:", {
+      //   stickyTop,
+      //   navTop: navRect.top,
+      //   navHeight,
+      //   titleTop: titleRect.top,
+      //   titleOffsetInNav,
+      //   panelTopValue,
+      // });
 
       // Apply top position and height to all panels
       this.panels.forEach((panel) => {
