@@ -860,10 +860,27 @@
      */
     async function loadFacultyPrograms() {
       try {
-        // Fetch all program instances (no filter - we'll filter in JS)
-        const records = await fetchAllAirtableRecords(
-          AIRTABLE_CONFIG.programInstancesTableId
-        );
+        let records = [];
+
+        // Try cache first for faster loading
+        try {
+          const cacheResponse = await fetch('/data/sessions/all-sessions.json');
+          if (cacheResponse.ok) {
+            const cacheData = await cacheResponse.json();
+            console.log('Sessions loaded from cache for faculty programs, generated:', cacheData.generated);
+            records = cacheData.records || [];
+          }
+        } catch (cacheError) {
+          console.warn('Session cache unavailable, falling back to API:', cacheError);
+        }
+
+        // Fall back to API if cache failed or was empty
+        if (records.length === 0) {
+          records = await fetchAllAirtableRecords(
+            AIRTABLE_CONFIG.programInstancesTableId
+          );
+        }
+
         // Filter in JavaScript: Show on Website = true, Start Date >= today, AND is allowed program
         const today = new Date();
         today.setHours(0, 0, 0, 0);
@@ -996,7 +1013,35 @@
      */
     async function loadTestimonials() {
       try {
-        const records = await fetchAllAirtableRecords(AIRTABLE_CONFIG.testimonialsTableId);
+        let records = [];
+
+        // Try cache first for faster loading
+        try {
+          const cacheResponse = await fetch('/data/testimonials/all-testimonials.json');
+          if (cacheResponse.ok) {
+            const cacheData = await cacheResponse.json();
+            console.log('Testimonials loaded from cache, generated:', cacheData.generated);
+            // Transform cached format back to Airtable record format for populateTestimonials
+            records = (cacheData.testimonials || []).map(t => ({
+              id: t.id,
+              fields: {
+                'Testimonial Text': t.quote,
+                'Author Name': t.authorName,
+                'Author Title': t.authorTitle,
+                'Company Name': t.company,
+                'FACULTY': t.facultyRecordIds
+              }
+            }));
+          }
+        } catch (cacheError) {
+          console.warn('Testimonials cache unavailable, falling back to API:', cacheError);
+        }
+
+        // Fall back to API if cache failed or was empty
+        if (records.length === 0) {
+          records = await fetchAllAirtableRecords(AIRTABLE_CONFIG.testimonialsTableId);
+        }
+
         populateTestimonials(records);
       } catch (error) {
         console.error('Error loading testimonials:', error);

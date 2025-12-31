@@ -46,10 +46,16 @@ jobs:
           AIRTABLE_PROGRAMS_API_KEY: ${{ secrets.AIRTABLE_PROGRAMS_API_KEY }}
         run: node scripts/fetch-faculty.js
 
+      - name: Fetch testimonials from Airtable
+        env:
+          AIRTABLE_BASE_ID: ${{ secrets.AIRTABLE_BASE_ID }}
+          AIRTABLE_PROGRAMS_API_KEY: ${{ secrets.AIRTABLE_PROGRAMS_API_KEY }}
+        run: node scripts/fetch-testimonials.js
+
       - name: Check for changes
         id: changes
         run: |
-          git add data/sessions/ data/faculty/
+          git add data/sessions/ data/faculty/ data/testimonials/
           git diff --staged --quiet || echo "changed=true" >> $GITHUB_OUTPUT
 
       - name: Commit and push if changed
@@ -93,6 +99,21 @@ jobs:
             echo "| Generated | $FACULTY_GENERATED |" >> $GITHUB_STEP_SUMMARY
             echo "| Total Faculty | $TOTAL_FACULTY |" >> $GITHUB_STEP_SUMMARY
             echo "| Programs Cached | $PROGRAMS |" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # Testimonials summary
+          echo "### Testimonials" >> $GITHUB_STEP_SUMMARY
+          if [ -f data/testimonials/metadata.json ]; then
+            TESTIMONIALS_GENERATED=$(cat data/testimonials/metadata.json | grep -o '"generated": "[^"]*"' | cut -d'"' -f4)
+            TOTAL_TESTIMONIALS=$(cat data/testimonials/metadata.json | grep -o '"totalTestimonials": [0-9]*' | cut -d: -f2 | tr -d ' ')
+            FACULTY_WITH=$(cat data/testimonials/metadata.json | grep -o '"facultyWithTestimonials": [0-9]*' | cut -d: -f2 | tr -d ' ')
+
+            echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+            echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+            echo "| Generated | $TESTIMONIALS_GENERATED |" >> $GITHUB_STEP_SUMMARY
+            echo "| Total Testimonials | $TOTAL_TESTIMONIALS |" >> $GITHUB_STEP_SUMMARY
+            echo "| Faculty with Testimonials | $FACULTY_WITH |" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
           fi
 

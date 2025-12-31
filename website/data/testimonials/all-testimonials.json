@@ -1,0 +1,1401 @@
+{
+  "generated": "2025-12-31T01:22:27.572Z",
+  "version": "1.0.0",
+  "source": "airtable",
+  "recordCount": 166,
+  "facultyCount": 8,
+  "testimonials": [
+    {
+      "id": "rec0bnab3KhjYz5tm",
+      "quote": "The content and presenters were fabulous, as always!",
+      "authorName": "Katy Grachek",
+      "authorTitle": "Human Resource Benefits Manager",
+      "company": "Kentucky Employers' Mutual Insurance",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "rec1FLLOrXaPNaCN9",
+      "quote": "This is my second IAML seminar in as many years. The quality of the content covered is unmatched for the HR training industry. Your instructors are top-notch and your seminars draw HR professionals from some of the largest and most innovative organizations. Keep up the good work!",
+      "authorName": "Brandon Minner",
+      "authorTitle": "Human Resources Manager",
+      "company": "General Dynamics Mission Systems",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "rec1d8Sq0RJuglDan",
+      "quote": "The class was delivered creatively and exceptionally well. I added to my knowledge and learned new facts to help me feel better prepared to take the PHR exam.",
+      "authorName": "Laurie Edwards",
+      "authorTitle": "Global Human Resources Business Partner",
+      "company": "Kerry",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "rec20zkzifNTWawlH",
+      "quote": "The classroom participation was excellent and allowed us to share situations and get other perspectives in a safe space. This was the best employee relations seminar that I've ever attended.",
+      "authorName": "JoAnne Guerrant",
+      "authorTitle": "Employee Relations Manager",
+      "company": "Delta Community Credit Union",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "rec23ig7HCCPNi8LP",
+      "quote": "The presenters made a rather intensive 5 days not only educational and instructional but interesting and enjoyable as well. Best seminar in HR I've ever attended.",
+      "authorName": "Diane Altaffer",
+      "authorTitle": "Director of Human Resources",
+      "company": "Blackstone",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "rec2OS1ySzuc9O8dB",
+      "quote": "Both of the presenters were fantastic!  Brenda Heinicke’s ‘Friday Free for All’ was a terrific way for us to discuss specific topics affecting our individual workplaces.  The personal experiences shared by Patrick Scully of working for the NLRB (labor vs. employer) were fascinating.",
+      "authorName": "Kelly Stiles",
+      "authorTitle": "Human Resources Manager",
+      "company": "City of Unalaska, Alaska",
+      "facultyRecordIds": [
+        "recDOeTl32nzCbWxH",
+        "recSGAvUdF4678gA9"
+      ]
+    },
+    {
+      "id": "rec2ZJfVpjKotn9A9",
+      "quote": "The instructors did a fantastic job of presenting the information and maintaining participant engagement.",
+      "authorName": "Sandy Lovett",
+      "authorTitle": "Human Resources Generalist",
+      "company": "Thiele Kaolin Company",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "rec2ySj6hfZZRSSRY",
+      "quote": "The instructor's presentation skills were top notch; and her ability to convey the importance of both the employee's point of view, while not losing sight of effective business management decisions was good to see. Her presentation was worth the travel and expense.",
+      "authorName": "Susan Wiesert",
+      "authorTitle": "Staffing Specialist",
+      "company": "Crown Castle",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "rec3DWag0ipnxTnse",
+      "quote": "I have been in HR for 15 years and attended a lot of seminars, this was my first IAML seminar and you can bet my budget dollars were well-spent. I'll continue to look for your seminars first! ",
+      "authorName": "Ruth Erwert",
+      "authorTitle": "Recruiting Manager",
+      "company": "Chelan County PUD",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "rec4Gm38gdqZu5Pa3",
+      "quote": "I would highly recommend the Certificate in Employee Relations Law Program to my colleagues in the public sector. The speakers presented each legal theory covered in the program with practical examples of how they apply to the workplace of today.",
+      "authorName": "Michael Dalton",
+      "authorTitle": "Assistant Chief of the Fire Department",
+      "company": "Baltimore City Fire Department",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "rec4hQSluvuBnK8Dd",
+      "quote": "This was by far the most informative and educational seminar I have ever attended, everything was fantastic!. Thank you!",
+      "authorName": "Chris Ricci",
+      "authorTitle": "HR Research Specialist",
+      "company": "Wegmans Food Markets",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "rec5D2MqlRXKqpFYi",
+      "quote": "I absolutely loved the instructors! The course provided so much valuable information.",
+      "authorName": "Emily Ruelle",
+      "authorTitle": "Human Resources Generalist",
+      "company": "Tableau Software Inc.",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "rec5Ox0HkX3eG70m9",
+      "quote": "I am so impressed with your organization each time I attend. IAML is very organized and truly a leader in their field. Ray does an outstanding job, he keeps the seminar moving in an exciting and motivational way.",
+      "authorName": "Stephen Crouchley",
+      "authorTitle": "Sr. College Recruiting Specialist",
+      "company": "Delhaize America",
+      "facultyRecordIds": [
+        "recrHAK0n4YDIMthb"
+      ]
+    },
+    {
+      "id": "rec5QEXwiHtK7QbqL",
+      "quote": "Great job! The information will assist me and my company in effectively administering our employee benefits.",
+      "authorName": "Julie O’Dell-Michie",
+      "authorTitle": "Sr. Vice President & Chief Administrative Officer",
+      "company": "Blue Ridge Electric Membership Corporation",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "rec5nAeuBn4UPsNEE",
+      "quote": "Excellent seminar! This is the second IAML class I have attended. As a new manager, the information presented was invaluable! The instructor was amazing!  I will definitely be back!",
+      "authorName": "Holly Dean",
+      "authorTitle": "Employment Manager",
+      "company": "Alfa Insurance Company",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "rec5nfkkWJ8okY3qe",
+      "quote": "Both speakers were excellent. Their real life experiences and examples helped me to relate. The interaction in/within class was very helpful. Very informative!",
+      "authorName": "Kristin Stinson",
+      "authorTitle": "HR Training and Compliance Officer",
+      "company": "SOC Nevada, LLC",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "rec67JJp3Dt6PgXMu",
+      "quote": "I thoroughly enjoyed the program. I appreciate the role playing and explanations, as it helps to determine which scenario may work best for a situation, depending on the circumstances. It’s always helpful to hear explanations of why one approach may work better than another.",
+      "authorName": "Tammy Gabard",
+      "authorTitle": "Senior Manager – Employee Relations",
+      "company": "RAI Services Company",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "rec6Bwu0YMh7mrD5b",
+      "quote": "The training both was excellent both in content as well as presentation. I believe the strength of the program lay in the instructors used. All the instructors were fantastic!",
+      "authorName": "Stephen Santay",
+      "authorTitle": "Controller",
+      "company": "KTLA",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "rec7FAQ4UNr4XzFiu",
+      "quote": "This was the most enjoyable seminar I have ever attended. Wonderful instructors, excellent location and great materials.",
+      "authorName": "Kathleen Via",
+      "authorTitle": "EEO Administrator",
+      "company": "Mason & Hanger Corporation",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "rec7IbXnmiQJi0YnI",
+      "quote": "Our instructor was a great presenter with great real life examples. His summaries of significant federal employment law were invaluable.",
+      "authorName": "Tim Hartman",
+      "authorTitle": "Sr. Regional HR Manager & HR Counsel",
+      "company": "Silgan Containers",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "rec7r5fqpENVRYILH",
+      "quote": "The course allowed me to review the items I already knew and learn the latest and greatest in employment law. Brenda did an outstanding job of ensuring we understood the materials and paced the class appropriately. She brought real-life experience to this course.",
+      "authorName": "Paul Calloway",
+      "authorTitle": "Sr. Human Resource Consultant",
+      "company": "WellPoint",
+      "facultyRecordIds": [
+        "rec4rKtRbnn56VCMj"
+      ]
+    },
+    {
+      "id": "rec8xj3CjIaaePj38",
+      "quote": "I thought the program was excellent. The content and speakers especially were the best I've experienced in my educational and professional career.",
+      "authorName": "Laurie Clark",
+      "authorTitle": "Benefits Paralegal",
+      "company": "The Coca-Cola Company",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "rec9V9gww0cMW1age",
+      "quote": "The instructors were outstanding. They know the law and they understand the day-to-day implications for managers and HR professionals. The cases were fascinating, the implications were clear and all of the speakers had a wonderful sense of humor.",
+      "authorName": "Wesley Masters",
+      "authorTitle": "Human Resources Director",
+      "company": "MONY Group, PLC",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "rec9YYZjd0F4xFq0B",
+      "quote": "Brenda Heinicke was fantastic! She did an amazing job of presenting the information clearly and concisely. Her high energy level engaged us in thought provoking conversations instead of ‘talking at us’ like many instructors tend to do.",
+      "authorName": "Brittany Hepler",
+      "authorTitle": "Mobility Supervisor",
+      "company": "Dayle McIntosh Disability Resource",
+      "facultyRecordIds": [
+        "rec4rKtRbnn56VCMj"
+      ]
+    },
+    {
+      "id": "rec9oZ73x4RsoRPip",
+      "quote": "I think that this program is one of the best that you could ever attend as a human resource professional. It is comprehensive and thorough. I left this training with the human resource equipment I need.",
+      "authorName": "Dennis Scott",
+      "authorTitle": "Personnel Officer",
+      "company": "Office of Regulation Policy and Management, Department of Veterans Affairs",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recAQQiZftg5Yan9Y",
+      "quote": "Great update as always. I get more from these 2 days of interaction than in any other seminar. Will be sending many in my group to IAML offerings this year. Ray has amazing knowledge and his style allows for great interactive discussions and debates.",
+      "authorName": "David Currie",
+      "authorTitle": "Vice President, Human Resources",
+      "company": "Dana Incorporated",
+      "facultyRecordIds": [
+        "recrHAK0n4YDIMthb"
+      ]
+    },
+    {
+      "id": "recAiHrzDdwoFYFTI",
+      "quote": "I enjoyed the seminar, particularly how the instructors tied case law to various issues. It taught me that even 'rock solid' cases can end up being a nightmare, especially when juries get involved.",
+      "authorName": "David Hoak",
+      "authorTitle": "Executive Team Leader - Human Resources",
+      "company": "Target",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recAoBLkwyhpm8VCv",
+      "quote": "I felt these classes were very helpful and I have already implemented at least five things that I learned.",
+      "authorName": "Elaine Micucci",
+      "authorTitle": "Human Resources",
+      "company": "Axway, Inc.",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recBJOhlwJLeqJBJx",
+      "quote": "The content was current, relevant and very practical. I appreciated the interactive format and the opportunity to network with other professionals facing similar challenges.",
+      "authorName": "Michael Chen",
+      "authorTitle": "Director of Human Resources",
+      "company": "TechSmart Industries",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recBUV8BfJfYMdndo",
+      "quote": "Frankly, this was one of the most informative continuing legal education seminars that I have attended.",
+      "authorName": "Julian McQueen",
+      "authorTitle": "Director of Employee & Labor Relations",
+      "company": "Stanley Black & Decker, Inc.",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recBoJhCvaiIQ97bv",
+      "quote": "Of all the IAML seminars I have attended, this was by far the best and most informative, especially to HR professionals. I was very pleased with the entire program.",
+      "authorName": "Barbara Bohlman",
+      "authorTitle": "Sr Compensation & Benefits Manager",
+      "company": "The Boca Raton",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recCxNhg1tpZJnzNI",
+      "quote": "I really liked the presenter and it was definitely worth my time. It was interactive and gave me some really good skills and knowledge to take with me. Felt like the presenter hit on all the important items that really related to what HR does.",
+      "authorName": "Heidi Nollan",
+      "authorTitle": "Sr. Human Resources Generalist",
+      "company": "Anderson Hay",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recDHnKGte5Uxfqh1",
+      "quote": "I loved that it was a refresh of the laws and we discusses real life examples that had already happened... plus, classmates shared their current situations that we talked through. Instructors were very interesting, which made the class much more enjoyable than I was expecting.",
+      "authorName": "Stephanie Valdez",
+      "authorTitle": "Head of People",
+      "company": "Cerebral",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recDMSJxLeahZ08se",
+      "quote": "Very good seminar; one that I would highly recommend to all HR professionals. I will attend more IAML sessions… worth every penny. Even the $60 I lost playing blackjack!",
+      "authorName": "Hjordi Churchill",
+      "authorTitle": "Human Resources Manager",
+      "company": "Federated Mutual Insurance Co.",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recDrhpyWKTg9wl1z",
+      "quote": "I found this to be the most interesting and helpful seminar that I have ever attended. The instructors were phenomenal and did an incredible job of providing real life examples to illustrate the information they were conveying.",
+      "authorName": "Kristen Kropp",
+      "authorTitle": "Senior HRD Specialist",
+      "company": "Cape Cod Healthcare",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recE1QwXT2QTfgGMj",
+      "quote": "Your presenter is a great instructor.  He made the session fun and relevant to the real world.",
+      "authorName": "Karina Beltran",
+      "authorTitle": "Human Resources Director",
+      "company": "KB Home",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recEIK21syurygojy",
+      "quote": "The Advanced Certificate in Employment Law Conference was simply outstanding! This well-balanced program of case review and discussion adds so much value to any business.  I strongly recommend this program to any business wishing to mitigate potential risk.",
+      "authorName": "Allison Dennis",
+      "authorTitle": "Employee Relations Manager",
+      "company": "Santee Cooper",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recELsAM68Uh9edE7",
+      "quote": "Really enjoyed Ray's presentation; particularly the way he shared his viewpoint when describing today's labor and employment law environment!",
+      "authorName": "Bill Davidson",
+      "authorTitle": "Senior Ethics Coordinator",
+      "company": "Georgia Power Company",
+      "facultyRecordIds": [
+        "recrHAK0n4YDIMthb"
+      ]
+    },
+    {
+      "id": "recERAE4Yvqo2KqCN",
+      "quote": "The old Raiders had a motto – 'Commitment to Excellence'. The same can be said about IAML's seminars. From the HR Essentials to the Advanced Employment Law Conference, you get nothing less than excellence. You can trust and respect the quality of the presenters. Keep up the great work IAML!",
+      "authorName": "Christopher Lopez",
+      "authorTitle": "Labor Relations Director",
+      "company": "Kroger",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recEtxbxhapj2eJTl",
+      "quote": "It was great learning the information, but also very useful hearing from others attending the class. I learned a wealth of information.",
+      "authorName": "Brittney Viator",
+      "authorTitle": "Benefits Administrator",
+      "company": "FJ Management, Inc.",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recGCVQrGjvHnzY9H",
+      "quote": "Both blocks provided information I needed. Both presenters were very knowledgeable and presented the material in a very interesting format. The hands-on segments were most helpful because it made me stop, think and apply the information.",
+      "authorName": "Marilyn Sauls",
+      "authorTitle": "Human Resources Director",
+      "company": "Mississippi College",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recH6esvUC6IXIyTU",
+      "quote": "I learned so much more from this law seminar than I have ever learned in other seminars.",
+      "authorName": "Tasha Davis",
+      "authorTitle": "Affirmative Action Officer",
+      "company": "City of Racine, Wisconsin",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recHtAlJWhyFKSdMn",
+      "quote": "I really enjoyed the seminar. I learned a great deal and will definitely be able to apply what I learned once I’m back in the office.",
+      "authorName": "Alana Tomczyszn",
+      "authorTitle": "Human Resources Manager",
+      "company": "CWS Capital Partners LLC",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recI6LIuehYZdRJPv",
+      "quote": "I was extremely happy with the presenters. The information exceeded my expectations and the other participants were very helpful in sharing their experiences. I signed up for this course after researching ‘human resources training’ on the internet. I reviewed a lot of different training programs and determined the information on your website was the most thorough and comprehensive.",
+      "authorName": "Teresa Malekzadeh",
+      "authorTitle": "Executive Director",
+      "company": "Beacon School",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recIos28rOloqB99R",
+      "quote": "I thought the conference was a great way to get the latest information. I also appreciate the fact that this is an advanced course that doesn't spend time going over the basics of employment law.",
+      "authorName": "Leslie Shaunty",
+      "authorTitle": "General Counsel",
+      "company": "Skyward Specialty Insurance Group",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recItW8Py3XjOEgtx",
+      "quote": "I thought the seminar was very informative! I will definitely utilize my new skills I have acquired during the training. I would highly recommend others to use IAML as their training/learning tool. I cannot wait for the next conference!",
+      "authorName": "Stephanie Banach",
+      "authorTitle": "Shareholder Relations Manager",
+      "company": "Akhiok-Kaguyak, Inc.",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recIvpELHGMIiBhsP",
+      "quote": "I truly enjoyed this class. This is one of the best courses I have taken. Thank you!",
+      "authorName": "Debbie Chavez",
+      "authorTitle": "Center Business Administrator",
+      "company": "Sandia National Laboratories",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recIyuQR2EZBjOGbD",
+      "quote": "This is the third IAML Advanced Conference I have attended and they have all been outstanding. The instructors continue to provide an excellent program with valuable information.",
+      "authorName": "Michael Nuckles",
+      "authorTitle": "Human Resources Generalist",
+      "company": "Rolls-Royce Corporation",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recJD6CqLAT0LwxR7",
+      "quote": "This is the first time I’ve attended this Advanced Benefits seminar and I plan to attend again.",
+      "authorName": "Brenda Heck",
+      "authorTitle": "Compensation and Benefits Manager",
+      "company": "Plastic Omnium Auto Inergy",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recJd6zOkTMk11IgR",
+      "quote": "This was my first seminar with IAML and I was very impressed! The speakers were great and the sessions were very informative. I will definitely attend again!",
+      "authorName": "Holly Dean",
+      "authorTitle": "Employment Manager",
+      "company": "Alfa Insurance Company",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recJdZmMX6irVXLFE",
+      "quote": "The class was very useful to me, I was able to take what I learned and apply it back at my job. A lot of times training seminars only cover the basics – this seminar really got down to the detail of things which was great.",
+      "authorName": "Stephanie Calhoun",
+      "authorTitle": "Vice President People Strategist and Global Culture Transformation",
+      "company": "Lumen Technologies",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recJpof4wVY3AUVNI",
+      "quote": "The instructors did an excellent job of keeping everyone engaged and focused. The information was very practically oriented.",
+      "authorName": "Shannon Ross",
+      "authorTitle": "Sr. Labor Relations Representative",
+      "company": "Kaiser-Hill Company",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recKfVtOCyr83XoWM",
+      "quote": "The instructors were most excellent, the course materials were solid, the on-site administration was very effective, the facilities (classroom, hotel, food, atmosphere, weather) were wonderful. I can think of nothing that needed improvement.  I hope to attend another of your seminars. Keep up the good work!",
+      "authorName": "Eric Burkhead",
+      "authorTitle": "Sr. Human Resources Generalist",
+      "company": "Emerald Queen Hotel & Casinos",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recKvHevHYAc6BWLe",
+      "quote": "It’s always good to come back to IAML to get updated on the newest rulings as well as to refresh my knowledge of employment law.  The instructors were very good and their presentation skills were excellent.  Sometimes just reading ‘the law’ can be so boring.  IAML’s courses are far from boring!  Thanks again for a great class!",
+      "authorName": "Denise Teuscher",
+      "authorTitle": "Lead Labor Relations Specialist",
+      "company": "Battelle Energy Alliance",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recLFuGJbBXJSzS52",
+      "quote": "I highly enjoyed this seminar. All of the presenters were extremely knowledgeable and very easy to talk with.",
+      "authorName": "Jody Ryan",
+      "authorTitle": "Human Resources Service Coordinator",
+      "company": "Boeing Company",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recLcJpx3lt50Zf2B",
+      "quote": "The seminar was very insightful and the content well organized. The facilitators are to be commended for such an exceptionally delivered seminar!",
+      "authorName": "Susan Shettles",
+      "authorTitle": "Manager, HR Projects & Analysis",
+      "company": "FedEx",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recMPc7obOTKFRaze",
+      "quote": "The information covered in this program was excellent! The speakers were wonderful. They kept the program fresh and interesting. It just seems it's never enough time to go over all the changed in this ever-changing field.",
+      "authorName": "Monica Taylor",
+      "authorTitle": "Human Resources Manager",
+      "company": "Oak Hall Cap & Gown",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recMYQDfj35pV1gkr",
+      "quote": "The instructors were very knowledgeable and presented the information in a way that everyone could understand. I also enjoyed being able to network.",
+      "authorName": "Sandy Jorgensen",
+      "authorTitle": "Human Resources Assistant",
+      "company": "Bank of Commerce",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recMjV9R5GHtkW7cy",
+      "quote": "I rated Brenda Heinicke 'excellent', only because 'super' is not an option on your form!",
+      "authorName": "Greg Sut",
+      "authorTitle": "Human Resources Manager",
+      "company": "McKinley Packaging",
+      "facultyRecordIds": [
+        "rec4rKtRbnn56VCMj"
+      ]
+    },
+    {
+      "id": "recMuKyahu9R6z7BU",
+      "quote": "Gavin was AMAZING. I usually fall asleep in training and it didn’t happen in this class. Monday night’s reception was a great way to network with other professionals and the second day of class was even more engaging because we all felt more comfortable with each other.",
+      "authorName": "Layla Lesley",
+      "authorTitle": "Finance Department Administrative Specialist",
+      "company": "Matanuska-Susitna Borough",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recN1CV9H6wD33l8f",
+      "quote": "This was my 13th year in a row attending an IAML program. These classes and instructors present real life situations that HR deals with every day. Classes are informative and fun!",
+      "authorName": "Nancy Myles",
+      "authorTitle": "Human Resources Manager",
+      "company": "Kadant Black Clawson LLC",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recN3UkIfGLnTnn7W",
+      "quote": "The examples used and interactive nature of the course was very helpful. Excellent choice of facilitators - they knew the material and were very engaging.",
+      "authorName": "Paul Carney",
+      "authorTitle": "EVP, Chief Human Resources Officer",
+      "company": "Carter Bank & Trust",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recN6bq0KZqT0whjY",
+      "quote": "IAML once again surpassed my expectations. The seminar was awesome and the degree of information presented to our group was so valuable.  I applaud IAML for finding the experts in the various fields and making them available to us. I can hardly wait until the next seminar!",
+      "authorName": "Bianca Olivarria",
+      "authorTitle": "HR Technician & Disability Management Specialist",
+      "company": "Imperial Irrigation District",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recNU3tkVI2QvXBev",
+      "quote": "I try to attend this update annually. It is always informative, entertaining and interesting. The instructors do a wonderful job. I never fail to learn something new.",
+      "authorName": "Kathy Campolettano",
+      "authorTitle": "Human Resources Consultant",
+      "company": "Honeywell International",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recNla1wIWsIp8eQl",
+      "quote": "The seminar was excellent. The instructors were extremely knowledgeable and made a point of allowing the class to interact. This one week not only provided me with knowledge I did not have, it also gave me a new appreciation for what I do.",
+      "authorName": "Angelique Anderson",
+      "authorTitle": "Executive Director, Strategic HR Business Partnerships - People & Culture",
+      "company": "Catalina Marketing",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recO6lgWQxjS57xpG",
+      "quote": "The seminar, in my opinion, was second to none. All of the information was very well delivered and explained in detail so that everyone, from the least to the most experienced, was able to understand. IAML did an outstanding job and I will be sure to highly recommend your seminars to anyone who inquires.",
+      "authorName": "Laurie Keenan",
+      "authorTitle": "Director of Human Resources",
+      "company": "Mohegan Sun",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recOHExaUSPK4pR6l",
+      "quote": "I found the seminar extremely educational. The instructors related the subject matter to each class attendant very well. They were very well spoken and allowed for great interaction with the group as well. The instructors knowledge and practical use of the subject matter translated into the class",
+      "authorName": "Sean O'Brien",
+      "authorTitle": "Operations Manager",
+      "company": "Raymond Corporation",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recOT8qDO1nvVJKnc",
+      "quote": "Brenda was the best presenter/facilitator I have ever had in a classroom/conference. She was upbeat, entertaining and used real-world examples to help the students learn! She was fantastic! I look forward to attending another one of her seminars!",
+      "authorName": "Erica Bekemeier",
+      "authorTitle": "Manager, Labor & Employee Relations",
+      "company": "NetJets Inc.",
+      "facultyRecordIds": [
+        "rec4rKtRbnn56VCMj"
+      ]
+    },
+    {
+      "id": "recOlxtccAO60bw0q",
+      "quote": "This was an excellent seminar and well worth the time and money invested. The instructors were very knowledgeable and interesting and their different styles were effective. The materials will be a great reference tool. This seminar was recommended by previous IAML participants and I will recommend it to others.",
+      "authorName": "James Dengler",
+      "authorTitle": "Staff Training & Development Manager",
+      "company": "ENSCO",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recP6ZSi7Mf5CBLwO",
+      "quote": "The program was very informative, the conversation and informal interaction with other participants was very useful. John was awesome with his delivery of the material and made every effort to address questions and topics that we raised.",
+      "authorName": "Charlotte Witt",
+      "authorTitle": "Senior Employee Relations Specialist",
+      "company": "Christiana Care Health System",
+      "facultyRecordIds": [
+        "rech00qD2rjunIoGX"
+      ]
+    },
+    {
+      "id": "recPPQbS44kuG1soE",
+      "quote": "Di Ann Sanchez was truly inspiring. She gave me the energy that I needed to continue in the field of HR. I would recommend her session to entry level HR professionals as well as a refresher for seasoned professionals.",
+      "authorName": "Patrice Terrell",
+      "authorTitle": "Associate Director",
+      "company": "Georgia College",
+      "facultyRecordIds": [
+        "rec0meucobcVjMYXW"
+      ]
+    },
+    {
+      "id": "recPPmSgsPd6pKpIy",
+      "quote": "Thank you for the insight and facilitated discussions. It was beneficial to hear about actual cases and learn how other HR professionals solve problems.",
+      "authorName": "Olivia Gunter",
+      "authorTitle": "Human Resources Analyst",
+      "company": "Hillenbrand, Inc.",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recPgtp5eef6XM5c1",
+      "quote": "GREAT training. I hope to attend more IAML courses in the future.",
+      "authorName": "Earl Byrd",
+      "authorTitle": "Human Resources Generalist",
+      "company": "P & H MinePro",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recPq4XdNxy1soNv0",
+      "quote": "This was my third IAML seminar and I have been very impressed each time. The information is comprehensive, in-depth, and very relevant. I plan to attend more IAML seminars in the future.",
+      "authorName": "Gloria Lindsey",
+      "authorTitle": "Human Resources Benefits Manager",
+      "company": "Thiele Kaolin Company",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recQ0kVKEDxMelesF",
+      "quote": "Very well done; an outstanding and interesting refresher. The IAML staff is also outstanding.",
+      "authorName": "Jeffrey Myers",
+      "authorTitle": "Associate General Counsel",
+      "company": "Lake Erie College of Osteopathic Medicine",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recQ4Hjio2kPyxzeF",
+      "quote": "All compensation and benefits professionals should consider this seminar. There is a large volume of valuable information presented in an effective, dynamic setting. The speakers are certainly well-equipped and are very attuned to the needs of the class members.",
+      "authorName": "Todd Hanson",
+      "authorTitle": "Corporate Human Resources Manager",
+      "company": "Printpack, Inc.",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recQDxYJcPu9ltLg9",
+      "quote": "Very good class with high quality instructors. The instructors were able to share many ‘real world’ examples from their own experiences which helped enhance the overall learning experience.",
+      "authorName": "Marcia Childers",
+      "authorTitle": "HR Organizational Development Specialist",
+      "company": "CITGO Petroleum Corporation",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recQFdzCdvmprPbH9",
+      "quote": "I have been to other seminars in the past but none compare to walking away from the IAML seminar with such a feeling of accomplishment. It was well worth the time and money. Thank you again!",
+      "authorName": "Kathy Potter",
+      "authorTitle": "Human Resources Coordinator",
+      "company": "Alliance Community",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recQNDb9UC6PUOYDC",
+      "quote": "My company regularly uses techniques that were discussed in the training seminar. It’s nice to see where these practices came from and that we are moving in the right direction!",
+      "authorName": "Shannon Geraci",
+      "authorTitle": "Human Resources Generalist",
+      "company": "T-Mobile",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recQdgZgvnSsfdacq",
+      "quote": "The seminar offered incredible value for me. The instructors were able to rely on past examples and cases to help illustrate the learning. It was a great learning experience for me.",
+      "authorName": "Amanda McIvor",
+      "authorTitle": "Senior Human Resources Manager",
+      "company": "Gerdau",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recRTkGelNIAzYWar",
+      "quote": "Information and materials were excellent, but the experiences shared by the facilitators was fantastic! Sam's interactive facilitation style really made the course very interesting and memorable. Thanks for a great course!",
+      "authorName": "Yvette Klepper",
+      "authorTitle": "Chief Human Resources Officer",
+      "company": "Palm Beach County Tax Collector's Office",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recRskIjFK6jIe7DT",
+      "quote": "One of the best programs I've been to! Ray has a great sense of humor. Knowledge base of attendees was great and learned a lot from that interaction as well.",
+      "authorName": "Kris Ellis",
+      "authorTitle": "Director of Talent Acquistion & Payroll Administration",
+      "company": "Inpro Corporation",
+      "facultyRecordIds": [
+        "recrHAK0n4YDIMthb"
+      ]
+    },
+    {
+      "id": "recSDiPyP4tOj62Bk",
+      "quote": "This conference is one of the best methods to stay up-to-date in the ever-changing world of employment law.",
+      "authorName": "Jeff Herring",
+      "authorTitle": "Chief Human Resources Officer",
+      "company": "University of Utah",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recTGTLy2xOzG9JWL",
+      "quote": "I enjoyed the open and casual approach to this training. Everyone appeared comfortable enough to participate and ask questions.",
+      "authorName": "Deborah Carnelli",
+      "authorTitle": "Resolutions and Receivership Specialist",
+      "company": "Federal Deposit Insurance Corporation",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recTLtDRm1Mb4wtBz",
+      "quote": "Perfect!  Exactly what I hoped to gain. Delivery in such a fashion that kept everyone's attention. Already referring to materials, you have a lifelong customer!",
+      "authorName": "Kelly McNamara",
+      "authorTitle": "Manager, College Relations-Employment",
+      "company": "WestRock",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recTpoJMCY3f9kmLO",
+      "quote": "Instructors did a great job and I enjoyed it so much. I liked their teaching styles, which made it so interesting and fun. I really wasn't ready to leave at the end of the week. Awesome team!",
+      "authorName": "Savarda Snell",
+      "authorTitle": "Assistant Human Resources Manager",
+      "company": "Kroger Vandervoort Dairy",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recUDDtWDBwEKOppX",
+      "quote": "Thank you for all of the information that was given. I am very excited to apply the knowledge that has been given. I would very much like to continue to work with the IAML team to continue my education.",
+      "authorName": "David Deem",
+      "authorTitle": "Continuous Improvement Manager",
+      "company": "Lear Corporation",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recULK0iz0ikIeUhe",
+      "quote": "All three instructors were wonderful in their own way. Finding attorneys who can teach is a rarity.  I found the information current and relevant.  It will definitely have an impact on my HR practices.  Thank you for a great seminar!",
+      "authorName": "Heidi Hill",
+      "authorTitle": "Director Training, Development and Engagement",
+      "company": "C2 Solutions",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recUiQA68rTI3cKGo",
+      "quote": "Overall the material and training was great!  The instructor was informative. I will definitely recommend to others!",
+      "authorName": "Noelle Lees",
+      "authorTitle": "Human Resources Business Partner",
+      "company": "Hertz",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recUtAi2BNxiknCMJ",
+      "quote": "This was the best HR seminar that I have ever attended. It provided a thorough overview of critical HR information and was very well organized. The attorneys were humorous and understood the HR challenges that we face, they gave good advice.",
+      "authorName": "Tracy Gee",
+      "authorTitle": "Chief People Officer",
+      "company": "National Association of Corporate Directors",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recVZlq8LfI0YPKa9",
+      "quote": "Both facilitators were excellent! I will be able to use key learning tools from the seminar immediately within my organization. Thank you again for another awesome course!",
+      "authorName": "Michi Eaton",
+      "authorTitle": "Regional Human Resources Manager",
+      "company": "AutoVin",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recW4L1GB7ditRoFr",
+      "quote": "Both instructors were very informative and presented very well. The knowledge I gained was great and the interaction was outstanding. Well worth the time and money.",
+      "authorName": "Alan Rasmussen",
+      "authorTitle": "Regional Association Relations Manager",
+      "company": "Big Lots, Inc.",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recWHoR7pMMNjllJ8",
+      "quote": "I thoroughly enjoyed the seminar. I really appreciated that the instructors allowed participants to ask questions and work through our issues and concerns.",
+      "authorName": "Sherry Murphy",
+      "authorTitle": "Lead Human Resources Business Partner",
+      "company": "Barrick Mining Corporation",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recWLnAneSpEPaUV8",
+      "quote": "This is the best course I have ever attended. The instructors are well informed and have a repertoire of stories that emphasize the issues. Course materials are also excellent!",
+      "authorName": "Debbie Colia",
+      "authorTitle": "HR Executive Consultant",
+      "company": "Cedars-Sinai",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recYRE9qXXU2CzWii",
+      "quote": "Excellent as usual! The instructors do a great job of covering recent court cases that may impact our decision making.",
+      "authorName": "Janet Larson",
+      "authorTitle": "Corporate Employee Relations Manager",
+      "company": "T-Mobile",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recYnWdVmuBADaVbA",
+      "quote": "I thoroughly enjoyed the seminar. Thank you for so much valuable information and for great case examples.",
+      "authorName": "Amelia Gowdy",
+      "authorTitle": "Human Resources Business Associate",
+      "company": "Miami-Dade County Housing Finance Authority",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recZDbZz74YsfreUo",
+      "quote": "The information was extremely valuable and interesting, I learned a great deal. The instructors did an exceptional job presenting; they were helpful, knowledgeable and entertaining.",
+      "authorName": "Katie Sanders",
+      "authorTitle": "Coordinator of Workforce Development",
+      "company": "Northside Hospital",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recZnl9Eb2C4BJYdo",
+      "quote": "I cannot emphasize enough how impressed I was with this seminar, especially the presenters, who were knowledgeable, interesting and effective. Their styles kept our attention, they encouraged discussion and answered questions definitively.",
+      "authorName": "Timothy Price",
+      "authorTitle": "Associate Corporate Counsel",
+      "company": "Kentucky Employers Mutual Insurance",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recaS28F5h6o7r1g1",
+      "quote": "Fantastic instructor! He was able to keep everyone engaged and the seminar interactive. I feel more confident in my investigation skills after this seminar.",
+      "authorName": "Nicole Wheeler",
+      "authorTitle": "HR Generalist II",
+      "company": "Cititrends",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recaZs5t4AUUYadOX",
+      "quote": "My only wish is that I had attended this seminar earlier in my career! The information I learned is invaluable.",
+      "authorName": "Christina Lipetzky",
+      "authorTitle": "Human Resources Manager",
+      "company": "Montana Department of Environmental Quality",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recaeSEO8RztJCNb5",
+      "quote": "This was an excellent seminar and covered everything I’d hoped. The instructors were outstanding.",
+      "authorName": "Kurt Henkel",
+      "authorTitle": "Senior Benefits Plan Analyst",
+      "company": "Deere & Company",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recahgjhBhAb6guzp",
+      "quote": "Instructors were both knowledgeable, witty at times yet professional always! They naturally complement each other's teaching styles. Refreshed and learned a lot.",
+      "authorName": "Catherine Maratita",
+      "authorTitle": "Assistant Vice President & HR Officer",
+      "company": "Bank of Guam",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recaodrDBIeHNdGMu",
+      "quote": "This is one of the best seminars I have ever attended. Our instructor was thoroughly engaging and his energy, enthusiasm and enjoyment of his subjects was infectious. I was sorry for it to end on Friday.",
+      "authorName": "John Livingston",
+      "authorTitle": "Assistant General Counsel & Human Resources Director",
+      "company": "Liberty National Life Insurance Company",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recaz4TTRDWLrK9lL",
+      "quote": "I am a regular and will continue to attend and work with IAML. Material is up-to-date, pertinent and presented in an excellent manner.",
+      "authorName": "Timothy Taylor",
+      "authorTitle": "Human Resources Director",
+      "company": "The Home Depot",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recbzd42ZY67FQVMW",
+      "quote": "This was a great program! One of the most useful programs I have attended in a long time. Instructors were awesome!",
+      "authorName": "Dean Goodwin",
+      "authorTitle": "Deputy Director, Administration",
+      "company": "Northern Virginia Criminal Justice Training Academy",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "reccUEmnK57KD8e3L",
+      "quote": "Wayne Williams' intellect and energy truly made this an interactive session which is paramount for all adult learning. Kudos to him and to IAML!",
+      "authorName": "Michael Cook",
+      "authorTitle": "Corporate Employee Relations Manager",
+      "company": "MillerCoors",
+      "facultyRecordIds": [
+        "rec9Q9DHcy6dN2SnD"
+      ]
+    },
+    {
+      "id": "reccli2Ez22QMVa2d",
+      "quote": "Instructors were all first-rate. The presentations were well-crafted and extremely informative. I will highly recommend this seminar to my professional colleagues.",
+      "authorName": "Kathryn Buettner",
+      "authorTitle": "Attorney",
+      "company": "Maryland Court of Special Appeals",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recd22ftfgl1NQdJJ",
+      "quote": "The instructor was excellent and did a great job at making materials exciting. She definitely deserves a raise! Great job Brenda!",
+      "authorName": "Jonathan Sherwood",
+      "authorTitle": "Human Resources Analyst",
+      "company": "POOL/PACT Human Resources",
+      "facultyRecordIds": [
+        "rec4rKtRbnn56VCMj"
+      ]
+    },
+    {
+      "id": "receEsHHoIsUZnWJz",
+      "quote": "Instructors were very good and well versed in subject matter. They offered to help and provide materials outside of the seminar.",
+      "authorName": "Brian Wagner",
+      "authorTitle": "Attorney",
+      "company": "Mateer & Harbert",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "receSr8tYbuoG34HJ",
+      "quote": "Another outstanding conference. IAML and John Wymer continue to provide excellent training; and the information is always current and useful. There is never a doubt about the functional substance in an IAML conference.",
+      "authorName": "Vicki Vanderpool",
+      "authorTitle": "Corporate Employee Relations & Compliance Manager",
+      "company": "Ingram Industries, Inc.",
+      "facultyRecordIds": [
+        "rech00qD2rjunIoGX"
+      ]
+    },
+    {
+      "id": "recfMuyLK7N1dfuZH",
+      "quote": "Very difficult to find fault with this program. Both instructors were very passionate about their subjects and wanted us to learn.",
+      "authorName": "Eric Laine",
+      "authorTitle": "Accountant I",
+      "company": "Catholic Charities",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recfO7Br8eR2YUEnw",
+      "quote": "I loved the case/scenario review. The small group setting allowed us the ability to ask questions. Although I was hesitant to do the role play I learned a lot from it.",
+      "authorName": "Andrea Johnson",
+      "authorTitle": "School Nutrition Director",
+      "company": "Georgia Department of Education",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recg7aw6T2ug6Ea5A",
+      "quote": "The instructors did an excellent job with health care reform and their practical experience was enlightening.",
+      "authorName": "Barbara Naples",
+      "authorTitle": "Executive Director, Benefits",
+      "company": "Baylor College of Medicine",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recgwDlI52jbsDUtj",
+      "quote": "I really enjoyed everything! I am new to HR and benefited so much from this seminar! IAML has an awesome staff! The instructors were excellent!",
+      "authorName": "Jennifer Brady",
+      "authorTitle": "Human Resource Coordinator",
+      "company": "St. Francis Health",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "rech62AKY8jU4PgWZ",
+      "quote": "I am taking away so much more knowledge than what I had walking in to the room on the first day. Di Ann’s energy, enthusiasm, and passion made the class interesting and engaging. I am looking forward to sharing some of what I learned with my fellow co-workers, and begin to implement some positive changes.",
+      "authorName": "Megan Mihelick",
+      "authorTitle": "Human Resources Generalist",
+      "company": "Dow Corning Corporation",
+      "facultyRecordIds": [
+        "rec0meucobcVjMYXW"
+      ]
+    },
+    {
+      "id": "rech9XbYtIigYSZkn",
+      "quote": "Completely reversed my mindset on employment law. I was fascinated with the topic and would have enjoyed a couple of more days of the subject matter!",
+      "authorName": "Connie Carlin",
+      "authorTitle": "Staffing Specialist",
+      "company": "Mayo Clinic",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "rechEX6XVKh7eJmJV",
+      "quote": "Both instructors were excellent! I liked the flexibility to discuss real issues and deviate from the planned topics to address questions. We then got back on track to cover all of the topics.",
+      "authorName": "Heather Hornback",
+      "authorTitle": "Human Resources",
+      "company": "Farm Credit Services of Mid-America",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "reci7PVuwJUz4z1SZ",
+      "quote": "Presenter's extensive knowledge of the applicable law was evidenced throughout. They were able to give pertinent comments and recommendations, which should be highly effective upon implementation. All in all, wonderfully done seminar.",
+      "authorName": "Michael Brown",
+      "authorTitle": "Assistant General Counsel",
+      "company": "Oklahoma Tax Commission",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "reciGLUOmySI0wuKf",
+      "quote": "John Wymer filled every segment of the conference with practical advice and the legal reasoning to support it.",
+      "authorName": "Roy Thrash",
+      "authorTitle": "Chief Counsel, Labor and Employment",
+      "company": "International Paper",
+      "facultyRecordIds": [
+        "rech00qD2rjunIoGX"
+      ]
+    },
+    {
+      "id": "recikNF58TlQ2V71E",
+      "quote": "DiAnn Sanchez was extremely dynamic in her presentation skills and seemed to take a vested interest in our learning the information. I was very impressed with her background and appreciated hearing her personal experiences which help to bring the information to life!",
+      "authorName": "Ashley Heird",
+      "authorTitle": "Senior Human Resources Manager",
+      "company": "Bloomin’ Brands",
+      "facultyRecordIds": [
+        "rec0meucobcVjMYXW"
+      ]
+    },
+    {
+      "id": "recinlKLs5vKN8S31",
+      "quote": "Brenda was exceptional. She found the right balance of presenting employment law as it is written, while encouraging relevant experience sharing from participants and her own case work.",
+      "authorName": "Kristen Van Damm",
+      "authorTitle": "Director - Trust Specialties People Leader",
+      "company": "PwC",
+      "facultyRecordIds": [
+        "rec4rKtRbnn56VCMj"
+      ]
+    },
+    {
+      "id": "recjeyZHluKkztzdP",
+      "quote": "I thoroughly enjoyed the seminar and learned a great deal. Great networking environment.",
+      "authorName": "Raymond Stephens",
+      "authorTitle": "Labor Relations and Employee Consultant",
+      "company": "Dow",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recjlxw6oY5DlyAEI",
+      "quote": "This was by far, the best seminar I've ever attended! The materials provided are a great resource and the instructors did a great job of presenting the information.",
+      "authorName": "Sylvia Ayala",
+      "authorTitle": "Vice President, Human Resources",
+      "company": "Gladney Center for Adoption",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recjuhSYI9VblmE77",
+      "quote": "The seminar was very good. It covered a lot of pertinent information. I felt I learned quite a bit that will have an immediate impact on my job.",
+      "authorName": "Bobbi Britton",
+      "authorTitle": "Sr. Human Resources Consultant",
+      "company": "Deltic Timber Corporation",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recjyLiipooN7CBvJ",
+      "quote": "Fantastic blend of “need to know” information with practical application. I appreciated the role playing and feedback to help us be better interviewers and investigators. The take-away information and tools were also excellent!",
+      "authorName": "Jami Painter",
+      "authorTitle": "Associate Vice President for HR",
+      "company": "University of Illinois System",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "reckF97FLH00sxwi8",
+      "quote": "I found the seminar to be very informative and relevant. You certainly have two gems in Gavin and Wayne. Their knowledge of the subject matter and the ease in which they interact with the attendees made the seminar a true success. I have stated as much to the powers that be here in a formal memo, and have recommended the seminar to other managers.",
+      "authorName": "Robert Smith",
+      "authorTitle": "Director",
+      "company": "Philadelphia Gas Works",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "reckP7qMVJMlfkpp3",
+      "quote": "The instructors did a great job of keeping the participants engaged while covering material that could have been very dry.",
+      "authorName": "Steven Pennell",
+      "authorTitle": "Human Resources Director, Talent & Technology",
+      "company": "Shurtape Technologies, LLC",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "reckThtsinadzEEcH",
+      "quote": "I really enjoyed the class. I appreciated Tom Schendt’s teaching styles and how he involved everyone in the class and made it interactive. He certainly succeeded in making a potentially boring subject quite fun.",
+      "authorName": "S. Greg Robinson",
+      "authorTitle": "Human Resources Manager",
+      "company": "Suominen",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "reckkFwRbLK6gzvRA",
+      "quote": "Excellent experience! The seminar was very enlightening and I highly recommend it to anyone trying to learn more about employment law and how it applies to their everyday experiences working with employees.",
+      "authorName": "Stacy Ramsey",
+      "authorTitle": "Human Resources Generalist",
+      "company": "PGT Custom Windows and Doors",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "reckurjBqPCofgclx",
+      "quote": "The instructors were very knowledgeable. It was a great seminar. I have been in HR for 12 years and still learned a lot!",
+      "authorName": "Krissy Houston",
+      "authorTitle": "Sr. Human Resources Representative",
+      "company": "Newmont Mining Corporation",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recl37wVFjIba5OCF",
+      "quote": "It was an excellent seminar and I learned quite a bit. The speakers were great.  The information was relevant, current, helpful and could be immediately applied. All in all, it was an excellent event and I'm already budgeting for the Advanced session next year.",
+      "authorName": "Kelli Whorton",
+      "authorTitle": "Human Resources Director",
+      "company": "RLF",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "reclJLtbWuu0lt3gr",
+      "quote": "This program was so much more than I expected it to be. Never have I left a seminar so fulfilled and eager to put my new knowledge to work at the office. Thanks IAML!",
+      "authorName": "Holly Barrett",
+      "authorTitle": "Administrative Assistant",
+      "company": "IBM",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "reclWr4V3PCMIhD9U",
+      "quote": "Both instructors were amazing and talented women. They kept the entire class engaged and eager to learn the entire time. I highly recommend them!",
+      "authorName": "Danielle Tucci",
+      "authorTitle": "Human Resources Manager",
+      "company": "City of Bethel, Alaska",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "reclgbDrru3O2j5QU",
+      "quote": "John Wymer was, as always, excellent! His knowledge of current case law and ease of interaction with the class is exceptional.",
+      "authorName": "Mike Reinerth",
+      "authorTitle": "Sr. Vice President - Chief Human Resources Officer & Lead Negotiations Advisor",
+      "company": "Sparrow Health System",
+      "facultyRecordIds": [
+        "rech00qD2rjunIoGX"
+      ]
+    },
+    {
+      "id": "recmKNMSJKidOMFaM",
+      "quote": "Engaging and knowledgeable instructor made the class interactive and the learning fun.",
+      "authorName": "Tammy Fennell",
+      "authorTitle": "Human Resources Business Partner",
+      "company": "Tronox Limited",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recmOk9UP8DJTGaIu",
+      "quote": "This seminar is fantastic for both novice and seasoned HR folks. I would strongly recommend that this program be mandatory for non-HR employees as well. General supervisors and managers will see a huge benefit in understanding human resources.",
+      "authorName": "Christopher Lopez",
+      "authorTitle": "Project Manager, Labor Relations",
+      "company": "Southern California Edison",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recnHQQgxU6GC4c8f",
+      "quote": "Each instructor was extremely knowledgeable in their subject matter. High energy, great class environment. Most importantly, I want to say that Di Ann Sanchez’ real world application of the laws, her best practices advice was great!",
+      "authorName": "Jackie Rudnick",
+      "authorTitle": "Senior Human Resources Specialist",
+      "company": "JM Family Enterprises, Inc.",
+      "facultyRecordIds": [
+        "rec0meucobcVjMYXW"
+      ]
+    },
+    {
+      "id": "recnNt72EGl61brDR",
+      "quote": "The seminar was the best. Faculty did an outstanding job of making legal information understandable for non-lawyer professionals. I am planning to attend the Advanced Conference.",
+      "authorName": "James Dillard",
+      "authorTitle": "Personnel Administrator",
+      "company": "Lubrizol",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recnXMvXoreZ8DrQf",
+      "quote": "Wayne turned what I dreaded to be five days of boring lecture into insightful and lively discussions.",
+      "authorName": "Nikki Soares",
+      "authorTitle": "Global Talent Acquisition Leader, Biotechnology Group",
+      "company": "Cytiva",
+      "facultyRecordIds": [
+        "rec9Q9DHcy6dN2SnD"
+      ]
+    },
+    {
+      "id": "recnoeUtBICOYribr",
+      "quote": "Amy is an extremely knowledgeable professional with years of labor relations experience. This is invaluable to have as an instructor.  She gained immediate credibility with the group with her extensive knowledge, experience and life anecdotes.",
+      "authorName": "Christine Galicho",
+      "authorTitle": "Regional Human Resource Manager",
+      "company": "Linens 'N Things",
+      "facultyRecordIds": [
+        "recSGAvUdF4678gA9"
+      ]
+    },
+    {
+      "id": "reco4zI8TgiTA63O1",
+      "quote": "Having everyone participate and practice was an effective way to work on our interview skills, and at the same time challenge some techniques that are possibly outdated or ineffective.",
+      "authorName": "Chandra Talerico",
+      "authorTitle": "Human Resources Business Partner",
+      "company": "Aerojet Rocketdyne",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recox5EuQ8mr98VIn",
+      "quote": "John Wymer is one of the best labor/employment attorneys in the country. It’s hard not to learn something from him!",
+      "authorName": "David Theurich",
+      "authorTitle": "Vice President & Human Resource Counsel",
+      "company": "Western & Southern Financial Group",
+      "facultyRecordIds": [
+        "rech00qD2rjunIoGX"
+      ]
+    },
+    {
+      "id": "recpN6yeuHUF89udi",
+      "quote": "One of the best training seminars I’ve attended! Very valuable to what I do every day, especially in reviewing litigation cases. There was much value in the interaction with other HR peers. Thank you for the valued experience!",
+      "authorName": "Jennifer Capozziello",
+      "authorTitle": "AVP, Human Resources",
+      "company": "Travelers",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recqHgtY2jixz6g8F",
+      "quote": "This seminar provided a 'big bang for the buck'.  Well worth the time and energy. Information that was presented was timely and relevant.",
+      "authorName": "Hank Kohler",
+      "authorTitle": "Human Resource Development Specialist",
+      "company": "Intel",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recqJ7AydQ83tMB3w",
+      "quote": "Brenda Heinicke was outstanding! Energetic, informative, informal, interesting and easy to understand. Outstanding use of examples, scenarios and hypothetical situations. I highly recommend her.",
+      "authorName": "Jace Hunter",
+      "authorTitle": "Training Manager",
+      "company": "Hornbeck Offshore Services",
+      "facultyRecordIds": [
+        "rec4rKtRbnn56VCMj"
+      ]
+    },
+    {
+      "id": "recqYMIdiZF8WKfdq",
+      "quote": "Outstanding conference. One of the best I've been to!  John Wymer presenting made the 'could-be dry' tropics into interesting topics and he kept the group going. Great presenter!",
+      "authorName": "Nicole Zemanek",
+      "authorTitle": "Associate Director of Human Resources",
+      "company": "Mark-Taylor, Inc.",
+      "facultyRecordIds": [
+        "rech00qD2rjunIoGX"
+      ]
+    },
+    {
+      "id": "recqvLFVlFm0fF6Yy",
+      "quote": "The Advanced Certificate in Employment Law presented by Ray Deeny is by far the best conference I have attended. Ray’s in-depth knowledge of all aspects of employment law is amazing. I have never walked out of an IAML program without learning something that I could apply immediately. Hands-down the best value for your money. If you can choose only one employment law conference, this is the one!",
+      "authorName": "Laura Massa",
+      "authorTitle": "SVP, Human Resources",
+      "company": "Sun Communities & Sun RV Resorts",
+      "facultyRecordIds": [
+        "recrHAK0n4YDIMthb"
+      ]
+    },
+    {
+      "id": "recr2gcoCkoau5Wqt",
+      "quote": "Great conference as usual. The instructors are terrific and the information they present will definitely help keep our management out of trouble.",
+      "authorName": "Keith Goto",
+      "authorTitle": "Vice President, Human Resources",
+      "company": "Alexander & Baldwin, Inc.",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recr8OVhPA1a5004G",
+      "quote": "Just what I needed – ‘real world’ legal examples from someone on the employers side.",
+      "authorName": "Katie Parsons",
+      "authorTitle": "Human Resources & Safety",
+      "company": "Ralcorp Holdings, Inc.",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recs0XDZVwjKwN7z8",
+      "quote": "I thought IAML provided an incredible instructor. The program was engaging, dynamic, and incredibly informative. I’d give him more than 2 thumbs-up if I had more hands.",
+      "authorName": "Jennifer Dibble",
+      "authorTitle": "Director, Employment Counsel",
+      "company": "Edwards Lifesciences LLC",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recspJQs7BCFzDalC",
+      "quote": "This is the third time I've taken this conference in the last five years. John and Ray present very insightful information in an entertaining and enjoyable way. It will keep me coming back for a refresher every few years.",
+      "authorName": "Leo Allegranza",
+      "authorTitle": "Plant Manager",
+      "company": "Edison Mission Energy",
+      "facultyRecordIds": [
+        "rech00qD2rjunIoGX",
+        "recrHAK0n4YDIMthb"
+      ]
+    },
+    {
+      "id": "recsuUvueFKe1itcn",
+      "quote": "The vast knowledge and experience of the instructors; entertaining and dynamic presentation style; discussion method of training was well received; linkage of legal facts to actual cases was enlightening.",
+      "authorName": "Jose Martinez",
+      "authorTitle": "Facilities Maintenance Program Manager",
+      "company": "Sandia National Laboratories",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "rectOOQqbkFE3OT6e",
+      "quote": "Both instructors were extremely knowledgeable and well versed in their content matter. I enjoyed Jackie Kalk's pithy approach to instruction and gained much knowledge from the examples that she included during discussion. She utilized varied teaching strategies in order to actively engage all participants and promoted an interactive learning environment and advocated open discussion. Overall, I really enjoyed the seminar.  It was very beneficial to my career as well as my personal development.",
+      "authorName": "Melissa Persofsky",
+      "authorTitle": "Human Resources Supervisor",
+      "company": "Northtec LLC",
+      "facultyRecordIds": [
+        "recE209WG3XRLBwqB"
+      ]
+    },
+    {
+      "id": "rectnzaGxQJNRwIUK",
+      "quote": "I really enjoyed the engaging presence of your faculty. I took away a greater knowledge of conducting investigations by the end of the course and have quite a few things to share with my team.",
+      "authorName": "Marci Bennett",
+      "authorTitle": "Human Resources Generalist",
+      "company": "Burning Man Project",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recuGc0kALkGSoFb8",
+      "quote": "It was a great experience, and I am very thankful that I was allowed the opportunity to attend. I will look forward to more opportunities in the future.",
+      "authorName": "Molly Boyer",
+      "authorTitle": "Human Resources Generalist",
+      "company": "Flint Hills Resources",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recvOnrUxmIpY5iZb",
+      "quote": "What a wonderful experience. Great instructors and information. The materials provided are invaluable.",
+      "authorName": "Vickie Page",
+      "authorTitle": "Vice President, Administration",
+      "company": "National Field Representatives",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recvYCojmXgZa6Hbw",
+      "quote": "Brenda Heinicke was fantastic. She used a very common sense approach to communicate best HR practices.",
+      "authorName": "Jon Flowers",
+      "authorTitle": "Employee Relations Supervisor",
+      "company": "Fred Hutchinson Cancer Research Center",
+      "facultyRecordIds": [
+        "rec4rKtRbnn56VCMj"
+      ]
+    },
+    {
+      "id": "recvp6MitKwrbaJBX",
+      "quote": "Excellent course for establishing a foundation in conducting investigations.",
+      "authorName": "George Vukazich",
+      "authorTitle": "Sr. Director, Employee and Labor Relations",
+      "company": "City of Hope",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recvrmsjULOQfMFZR",
+      "quote": "Always enjoy this seminar. It really means a lot to fully trust the information that I receive from these wonderful instructors. We, as HR professionals, are very fortunate for their participation in your program.",
+      "authorName": "Sharon Moran",
+      "authorTitle": "Senior Benefits Administrator",
+      "company": "Salt River Materials Group",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recwhPssaLdi8cRru",
+      "quote": "John was absolutely amazing! I learned so much from him – I could have stayed an entire week to listen to him. He is a phenomenal educator.",
+      "authorName": "Jessica Cognata",
+      "authorTitle": "Payroll Manager",
+      "company": "Wegmans Food Markets",
+      "facultyRecordIds": [
+        "rech00qD2rjunIoGX"
+      ]
+    },
+    {
+      "id": "recy3yPruCPVRaVbd",
+      "quote": "Different subject matter, different instructors, different style of instructors, all complement the overall experience.",
+      "authorName": "Darlene Adams",
+      "authorTitle": "Comptroller",
+      "company": "Crescent River Port Pilots Association",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recyk9pQogZSrePI8",
+      "quote": "You all conveyed an excitement about the topics that carried through all the presentations. Having presenters with a lot of experience was great. Life experiences are always best.",
+      "authorName": "Jackie Schmellmyer",
+      "authorTitle": "Benefits Coordinator",
+      "company": "Southern Illinois Healthcare",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "recyy025ofwIxdmZ9",
+      "quote": "This was the fifth Advanced Certificate in Employment Law Conference I've attended and, as usual, it was GREAT. I attend other HR related conferences from time to time and I have to say, IAML sets the standard. None of the others come close. Keep up the great work.",
+      "authorName": "Merle Voigt",
+      "authorTitle": "Human Resources Director",
+      "company": "Corporate Systems, Inc.",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "reczcrH3jIwnXRDbN",
+      "quote": "With almost 20 years in the field of employment law, this was one of the best, if not the best, seminar I have ever attended.",
+      "authorName": "Charles Rando",
+      "authorTitle": "Personnel Field Manager",
+      "company": "Wyoming Department of Workforce Services",
+      "facultyRecordIds": []
+    },
+    {
+      "id": "reczdaNO8Oysi8mCm",
+      "quote": "IAML is my ‘go-to’ source for continuing education to ensure I am current in employment law. John Wymer consistently provides applicable case studies and ‘real life’ interpretations of the law. He keeps the class entertained while at the same time providing us with tips we can implement immediately in our own companies.",
+      "authorName": "Susie White",
+      "authorTitle": "Employee Relations and Training Manager",
+      "company": "Alfa Insurance",
+      "facultyRecordIds": [
+        "rech00qD2rjunIoGX"
+      ]
+    },
+    {
+      "id": "reczjbOuXt1dfoNvm",
+      "quote": "Another excellent course! The instructor managed to make what could be considered rather 'dry' material interesting, humorous and thought-provoking!",
+      "authorName": "Judith Hall",
+      "authorTitle": "Human Resources Coordinator",
+      "company": "Purdue Research Foundation",
+      "facultyRecordIds": []
+    }
+  ]
+}
