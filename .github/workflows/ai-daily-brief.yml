@@ -1,0 +1,119 @@
+name: AI Daily Brief
+
+on:
+  schedule:
+    # Run daily at 6 AM UTC (1 AM EST, 10 PM PST previous day)
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    inputs:
+      include_youtube:
+        description: 'Also fetch YouTube videos'
+        required: false
+        default: 'true'
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-ai-news:
+    name: Fetch AI News & Generate Brief
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: website
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch AI Daily Brief content
+        id: brief
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          node scripts/ai-daily-brief.js 2>&1 | tee brief-output.log
+
+          # Extract counts from pending brief
+          if [ -f data/ai-brief/pending-brief.json ]; then
+            PENDING=$(cat data/ai-brief/pending-brief.json | grep -o '"count": [0-9]*' | head -1 | cut -d: -f2 | tr -d ' ')
+            echo "pending=${PENDING:-0}" >> $GITHUB_OUTPUT
+          else
+            echo "pending=0" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Fetch YouTube videos (optional)
+        if: ${{ github.event.inputs.include_youtube != 'false' }}
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          YOUTUBE_CHANNEL_NATE: ${{ secrets.YOUTUBE_CHANNEL_NATE }}
+        run: |
+          node scripts/fetch-youtube-videos.js 2>&1 | tee youtube-output.log
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git add data/ai-brief/ data/youtube/ || true
+          git diff --staged --quiet || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push if changed
+        if: steps.changes.outputs.changed == 'true'
+        working-directory: .
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: update AI daily brief $(date +%Y-%m-%d)"
+          git push
+
+      - name: Generate Summary
+        run: |
+          echo "## 📰 AI Daily Brief" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Generated:** $(date -u '+%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "### Source Categories" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Category | Sources |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|---------|" >> $GITHUB_STEP_SUMMARY
+          echo "| 📺 YouTube | 16 AI channels |" >> $GITHUB_STEP_SUMMARY
+          echo "| 📰 News Sites | TechCrunch, Verge, MIT Tech Review, + 11 more |" >> $GITHUB_STEP_SUMMARY
+          echo "| 📧 Newsletters | Ben's Bites, TLDR AI, TheSequence, + 3 more |" >> $GITHUB_STEP_SUMMARY
+          echo "| 💰 Funding | Crunchbase, VC News Daily, TechCrunch Venture |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🚀 Products | Product Hunt AI, There's An AI For That |" >> $GITHUB_STEP_SUMMARY
+          echo "| 📋 Policy | Brookings AI, Georgetown CSET |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ -f data/ai-brief/pending-brief.json ]; then
+            PENDING=$(cat data/ai-brief/pending-brief.json | grep -o '"count": [0-9]*' | head -1 | cut -d: -f2 | tr -d ' ')
+            echo "### Items Pending Review: $PENDING" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+
+            if [ "$PENDING" -gt "0" ]; then
+              echo "**Top items:**" >> $GITHUB_STEP_SUMMARY
+              cat data/ai-brief/pending-brief.json | grep -o '"title": "[^"]*"' | head -5 | cut -d'"' -f4 | while read title; do
+                echo "- ${title:0:80}..." >> $GITHUB_STEP_SUMMARY
+              done
+            fi
+          else
+            echo "ℹ️ First run - building cache" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "Run \`/ai-brief\` to review the full brief with quick synopses" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ steps.changes.outputs.changed }}" == "true" ]; then
+            echo "✅ Brief updated and committed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "ℹ️ No new content found" >> $GITHUB_STEP_SUMMARY
+          fi

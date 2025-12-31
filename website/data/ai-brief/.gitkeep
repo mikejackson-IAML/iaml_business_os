@@ -1,0 +1,8 @@
+# AI Daily Brief Data Directory
+#
+# This directory stores cached content from AI news sources.
+#
+# Structure:
+# - ai-brief-cache.json: All fetched items with metadata
+# - pending-brief.json: Items pending your review
+# - synopses/: Deep-dive synopsis files for individual items

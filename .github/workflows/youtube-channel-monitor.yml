@@ -11,19 +11,15 @@ on:
         description: 'Force regenerate synopses for all videos'
         required: false
         default: 'false'
-      notify:
-        description: 'Send notification even if no new videos'
-        required: false
-        default: 'false'
 
 permissions:
   contents: write
 
 jobs:
   monitor-youtube:
-    name: Check for New Videos
+    name: Monitor AI YouTube Channels
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     defaults:
       run:
         working-directory: website
@@ -39,21 +35,29 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Fetch YouTube videos
+      - name: Fetch YouTube videos from all channels
         id: fetch
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
-          YOUTUBE_CHANNEL_ID: ${{ secrets.YOUTUBE_CHANNEL_ID }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Channel IDs (auto-discovered if not set)
+          YOUTUBE_CHANNEL_NATE: ${{ secrets.YOUTUBE_CHANNEL_NATE }}
+          YOUTUBE_CHANNEL_AIEXPLAINED: ${{ secrets.YOUTUBE_CHANNEL_AIEXPLAINED }}
+          YOUTUBE_CHANNEL_MATTWOLFE: ${{ secrets.YOUTUBE_CHANNEL_MATTWOLFE }}
+          YOUTUBE_CHANNEL_WESROTH: ${{ secrets.YOUTUBE_CHANNEL_WESROTH }}
+          YOUTUBE_CHANNEL_TWOMINUTEPAPERS: ${{ secrets.YOUTUBE_CHANNEL_TWOMINUTEPAPERS }}
         run: |
           node scripts/fetch-youtube-videos.js 2>&1 | tee youtube-output.log
 
-          # Extract new video count from metadata
+          # Extract counts from metadata
           if [ -f data/youtube/metadata.json ]; then
             NEW_COUNT=$(cat data/youtube/metadata.json | grep -o '"newVideosCount": [0-9]*' | cut -d: -f2 | tr -d ' ')
+            PENDING=$(cat data/youtube/metadata.json | grep -o '"pendingReviewCount": [0-9]*' | cut -d: -f2 | tr -d ' ')
             echo "new_videos=${NEW_COUNT:-0}" >> $GITHUB_OUTPUT
+            echo "pending=${PENDING:-0}" >> $GITHUB_OUTPUT
           else
             echo "new_videos=0" >> $GITHUB_OUTPUT
+            echo "pending=0" >> $GITHUB_OUTPUT
           fi
 
       - name: Check for changes
@@ -70,7 +74,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           if [ "${{ steps.fetch.outputs.new_videos }}" -gt "0" ]; then
-            git commit -m "feat: new video detected from Nate B Jones $(date +%Y-%m-%d)"
+            git commit -m "feat: ${{ steps.fetch.outputs.new_videos }} new AI video(s) detected $(date +%Y-%m-%d)"
           else
             git commit -m "chore: update youtube cache $(date +%Y-%m-%d)"
           fi
@@ -79,41 +83,54 @@ jobs:
 
       - name: Generate Summary
         run: |
-          echo "## 📺 YouTube Channel Monitor" >> $GITHUB_STEP_SUMMARY
+          echo "## 📺 AI YouTube Channel Monitor" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Monitored Channel:** Nate B Jones" >> $GITHUB_STEP_SUMMARY
           echo "**Check Time:** $(date -u '+%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
           if [ -f data/youtube/metadata.json ]; then
-            CHANNEL=$(cat data/youtube/metadata.json | grep -o '"name": "[^"]*"' | head -1 | cut -d'"' -f4)
             TOTAL=$(cat data/youtube/metadata.json | grep -o '"totalVideosCached": [0-9]*' | cut -d: -f2 | tr -d ' ')
             NEW=$(cat data/youtube/metadata.json | grep -o '"newVideosCount": [0-9]*' | cut -d: -f2 | tr -d ' ')
+            PENDING=$(cat data/youtube/metadata.json | grep -o '"pendingReviewCount": [0-9]*' | cut -d: -f2 | tr -d ' ')
 
+            echo "### Channels Monitored" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "| Channel | Focus |" >> $GITHUB_STEP_SUMMARY
+            echo "|---------|-------|" >> $GITHUB_STEP_SUMMARY
+            echo "| Nate B Jones | AI Business, Productivity |" >> $GITHUB_STEP_SUMMARY
+            echo "| AI Explained | AI News, Analysis |" >> $GITHUB_STEP_SUMMARY
+            echo "| Matt Wolfe | AI Tools, Tutorials |" >> $GITHUB_STEP_SUMMARY
+            echo "| Wes Roth | Breaking News, Commentary |" >> $GITHUB_STEP_SUMMARY
+            echo "| Two Minute Papers | Research, Breakthroughs |" >> $GITHUB_STEP_SUMMARY
+            echo "| + 11 more | Various AI topics |" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+
+            echo "### Summary" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
             echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
             echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
-            echo "| Channel | $CHANNEL |" >> $GITHUB_STEP_SUMMARY
             echo "| Videos Cached | $TOTAL |" >> $GITHUB_STEP_SUMMARY
-            echo "| New Videos | $NEW |" >> $GITHUB_STEP_SUMMARY
+            echo "| New This Check | $NEW |" >> $GITHUB_STEP_SUMMARY
+            echo "| Pending Review | $PENDING |" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
 
             if [ "$NEW" -gt "0" ]; then
               echo "### 🎉 New Videos Detected!" >> $GITHUB_STEP_SUMMARY
               echo "" >> $GITHUB_STEP_SUMMARY
+              echo "Run \`/ai-brief\` or check \`website/data/youtube/pending-review.json\` to review." >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
 
-              if [ -f data/youtube/new-videos.json ]; then
-                # List new video titles
-                echo "| Video | Published |" >> $GITHUB_STEP_SUMMARY
-                echo "|-------|-----------|" >> $GITHUB_STEP_SUMMARY
-                cat data/youtube/new-videos.json | grep -o '"title": "[^"]*"' | cut -d'"' -f4 | while read title; do
-                  echo "| $title | Recent |" >> $GITHUB_STEP_SUMMARY
+              if [ -f data/youtube/pending-review.json ]; then
+                echo "**Recent additions:**" >> $GITHUB_STEP_SUMMARY
+                cat data/youtube/pending-review.json | grep -o '"title": "[^"]*"' | head -5 | cut -d'"' -f4 | while read title; do
+                  echo "- $title" >> $GITHUB_STEP_SUMMARY
                 done
               fi
             else
               echo "ℹ️ No new videos since last check" >> $GITHUB_STEP_SUMMARY
             fi
           else
-            echo "⚠️ No metadata file found - this may be the first run" >> $GITHUB_STEP_SUMMARY
+            echo "⚠️ First run - building initial cache" >> $GITHUB_STEP_SUMMARY
           fi
 
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -123,25 +140,6 @@ jobs:
             echo "ℹ️ No changes to commit" >> $GITHUB_STEP_SUMMARY
           fi
 
-      # Optional: Send notification for new videos
-      # Uncomment and configure if you want Slack/Discord/Email notifications
-      #
-      # - name: Send Slack notification
-      #   if: steps.fetch.outputs.new_videos > 0
-      #   uses: slackapi/slack-github-action@v1.24.0
-      #   with:
-      #     payload: |
-      #       {
-      #         "text": "🎬 New video from Nate B Jones!",
-      #         "blocks": [
-      #           {
-      #             "type": "section",
-      #             "text": {
-      #               "type": "mrkdwn",
-      #               "text": "📺 *New YouTube Video Alert*\n${{ steps.fetch.outputs.new_videos }} new video(s) detected"
-      #             }
-      #           }
-      #         ]
-      #       }
-      #   env:
-      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "*Two-tier synopsis system: Quick synopses auto-generated, full synopses on-demand*" >> $GITHUB_STEP_SUMMARY
