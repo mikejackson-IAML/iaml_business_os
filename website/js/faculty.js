@@ -109,7 +109,7 @@ const fetchFacultyByProgram = async (programRecordId) => {
       organization: record.fields['Current Firm/Organization'] || '',
       bio: record.fields['Short Bio (250-300 characters)'] || '',
       imageUrl: record.fields['Headshot Photo'] || '',
-      bioLink: record.fields['Full Bio URL'] || ''
+      bioLink: record.fields['Faculty URL'] || ''
     }));
   } catch (error) {
     console.error('Error fetching faculty:', error);
@@ -155,6 +155,11 @@ const createFacultyCardHTML = (faculty) => {
     .filter(Boolean)  // Remove empty values
     .join(', ');      // Join with comma and space
 
+  // Only render bio link if Faculty URL exists
+  const bioLinkHTML = faculty.bioLink
+    ? `<a href="${faculty.bioLink}" class="faculty-link" target="_blank" rel="noopener noreferrer">Read ${faculty.firstName}'s full bio →</a>`
+    : '';
+
   return `
     <article class="faculty-card">
       <div class="faculty-card-inner">
@@ -165,7 +170,7 @@ const createFacultyCardHTML = (faculty) => {
           <h3 class="faculty-name">${faculty.name}</h3>
           <p class="faculty-title">${titleLine}</p>
           <p class="faculty-bio">${faculty.bio}</p>
-          <a href="${faculty.bioLink}" class="faculty-link">Read ${faculty.firstName}'s full bio →</a>
+          ${bioLinkHTML}
         </div>
       </div>
     </article>

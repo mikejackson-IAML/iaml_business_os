@@ -292,38 +292,176 @@ function closeModal() {
 }
 
 // ===== FIRST VISIT POPUP MODAL =====
-function initFirstVisitPopup() {
+const FIRST_VISIT_STORAGE_KEY = 'iaml_firstvisit_seen';
+const FIRST_VISIT_AUTO_CLOSE_MS = 9000;
+let firstVisitTimeoutHandle = null;
+
+/**
+ * Creates and injects the first visit popup HTML into the DOM
+ */
+function createFirstVisitPopupHTML() {
+  // Don't create if already exists
+  if (document.getElementById('firstVisitPopup')) return;
+
+  const popupHTML = `
+    <div class="firstVisit-overlay" id="firstVisitPopup">
+      <div class="firstVisit-modal" onclick="event.stopPropagation()">
+        <div class="firstVisit-content">
+          <!-- Act 1: Quote + Attribution -->
+          <div class="firstVisit-act1" id="firstVisitAct1">
+            <div class="firstVisit-quote-container">
+              <span class="firstVisit-quotemark firstVisit-quotemark--open">"</span>
+              <blockquote class="firstVisit-quote">
+                My only wish is that I had attended this seminar earlier in my career!
+              </blockquote>
+              <span class="firstVisit-quotemark firstVisit-quotemark--close">"</span>
+            </div>
+
+            <div class="firstVisit-attribution">
+              <span class="firstVisit-author-name">Christina Lipetzky</span>
+              <span class="firstVisit-author-line"></span>
+              <span class="firstVisit-author-title">Human Resources Manager</span>
+              <span class="firstVisit-author-company">Montana Department of Environmental Quality</span>
+            </div>
+          </div>
+
+          <!-- Act 2: Tagline + Progress (same position as Act 1) -->
+          <div class="firstVisit-act2" id="firstVisitAct2">
+            <p class="firstVisit-subtitle">
+              Where professional advancement meets business impact
+            </p>
+            <div class="firstVisit-divider"></div>
+
+            <div class="firstVisit-progress" id="firstVisitProgress">
+              <div class="firstVisit-progress-bar">
+                <div class="firstVisit-progress-fill" id="firstVisitProgressFill"></div>
+              </div>
+              <div class="firstVisit-progress-text">Preparing your customized training experience...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Insert at end of body
+  document.body.insertAdjacentHTML('beforeend', popupHTML);
+
+  // Add click listener to overlay
   const popup = document.getElementById('firstVisitPopup');
-  if (!popup) return;
-  
-  // Check if user has seen popup before
-  const hasSeenPopup = localStorage.getItem('iaml_popup_seen');
-  
-  if (!hasSeenPopup) {
-    // Show popup after 3 seconds
-    setTimeout(() => {
-      popup.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-    }, 3000);
+  if (popup) {
+    popup.addEventListener('click', closeFirstVisitPopupOnOverlay);
   }
 }
 
+/**
+ * Initialize and show the first visit popup if user hasn't seen it
+ */
+function initFirstVisitPopup() {
+  // Check if user has seen popup before
+  try {
+    if (localStorage.getItem(FIRST_VISIT_STORAGE_KEY)) {
+      return; // Already seen, don't show
+    }
+  } catch (e) {
+    // localStorage not available, show popup anyway
+    console.warn('localStorage not available for first visit tracking');
+  }
+
+  // Create popup HTML
+  createFirstVisitPopupHTML();
+
+  const popup = document.getElementById('firstVisitPopup');
+  if (!popup) return;
+
+  // Mark as seen immediately
+  try {
+    localStorage.setItem(FIRST_VISIT_STORAGE_KEY, 'true');
+  } catch (e) {
+    // Ignore storage errors
+  }
+
+  // Show popup immediately
+  popup.classList.add('active');
+  document.body.style.overflow = 'hidden';
+
+  // ===== TWO-ACT REVEAL TIMING =====
+
+  // Act 1: Quote + Attribution (0-4s) - visible by default
+
+  // At 4s: Fade out Act 1, show Act 2 (at same position)
+  setTimeout(() => {
+    const act1 = document.getElementById('firstVisitAct1');
+    const act2 = document.getElementById('firstVisitAct2');
+    if (act1) act1.classList.add('fade-out');
+    if (act2) act2.classList.add('show');
+  }, 4000);
+
+  // At 5.5s: Show progress bar animation
+  setTimeout(() => {
+    const progress = document.getElementById('firstVisitProgress');
+    const progressFill = document.getElementById('firstVisitProgressFill');
+    if (progress) {
+      progress.classList.add('show');
+    }
+    if (progressFill) {
+      // Force reflow before starting animation
+      void progressFill.offsetWidth;
+      requestAnimationFrame(() => {
+        progressFill.classList.add('animate');
+      });
+    }
+  }, 5500);
+
+  // Auto-close after 9 seconds
+  firstVisitTimeoutHandle = setTimeout(() => {
+    closeFirstVisitPopup();
+  }, FIRST_VISIT_AUTO_CLOSE_MS);
+}
+
+/**
+ * Close the first visit popup
+ */
 function closeFirstVisitPopup() {
   const popup = document.getElementById('firstVisitPopup');
   if (popup) {
-    popup.style.display = 'none';
+    popup.classList.remove('active');
     document.body.style.overflow = 'auto';
-    localStorage.setItem('iaml_popup_seen', 'true');
+    clearTimeout(firstVisitTimeoutHandle);
   }
 }
 
-// Close on overlay click
-document.addEventListener('click', (e) => {
-  const popup = document.getElementById('firstVisitPopup');
-  if (popup && e.target === popup) {
+/**
+ * Close popup when clicking on overlay (not modal content)
+ */
+function closeFirstVisitPopupOnOverlay(e) {
+  if (e.target === e.currentTarget) {
     closeFirstVisitPopup();
   }
+}
+
+// Add Escape key support for first visit popup
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    const popup = document.getElementById('firstVisitPopup');
+    if (popup && popup.classList.contains('active')) {
+      closeFirstVisitPopup();
+    }
+  }
 });
+
+/**
+ * Debug helper: Reset popup state for testing
+ * Call resetFirstVisitPopup() from browser console to test again
+ */
+function resetFirstVisitPopup() {
+  try {
+    localStorage.removeItem(FIRST_VISIT_STORAGE_KEY);
+    console.log('First visit popup reset - will show on next page load');
+  } catch (e) {
+    console.error('Could not reset popup:', e);
+  }
+}
 
 // ===== CTA BUTTON WIRING =====
 document.addEventListener('DOMContentLoaded', function() {
@@ -352,4 +490,6 @@ if (typeof window !== 'undefined') {
   window.renderStep = renderStep;
   window.closeModal = closeModal;
   window.closeFirstVisitPopup = closeFirstVisitPopup;
+  window.closeFirstVisitPopupOnOverlay = closeFirstVisitPopupOnOverlay;
+  window.resetFirstVisitPopup = resetFirstVisitPopup;
 }

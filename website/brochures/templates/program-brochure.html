@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{PROGRAM_NAME}} - IAML Program Brochure</title>
+    <link rel="stylesheet" href="brochure-styles.css">
+</head>
+<body>
+    <!-- Page 1: Cover -->
+    <div class="page cover-page">
+        <div class="logo">
+            <img src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69541d517483036e7b3a3c24.svg" alt="IAML Logo" />
+        </div>
+        <h1>{{PROGRAM_NAME}}</h1>
+        <p class="tagline">{{HERO_DESCRIPTION}}</p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-value">{{DURATION}}</div>
+                <div class="hero-stat-label">Duration</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value">${{PRICE}}</div>
+                <div class="hero-stat-label">Investment</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value">{{CREDITS}} credits</div>
+                <div class="hero-stat-label">SHRM/HRCI/CLE</div>
+            </div>
+        </div>
+        <div class="delivery-options">
+            {{DELIVERY_OPTIONS}}
+        </div>
+    </div>
+
+    <!-- Page 2: Program Overview -->
+    <div class="page overview-page">
+        <h2>Program Overview</h2>
+        <div class="overview-content">
+            {{OVERVIEW_CONTENT}}
+        </div>
+        <h3>What You'll Gain</h3>
+        <div class="benefits-list">
+            {{BENEFITS_LIST}}
+        </div>
+        <div class="page-footer">
+            <span>IAML | Institute for Applied Management & Law</span>
+            <span class="page-number">2</span>
+        </div>
+    </div>
+
+    <!-- Page 3: Curriculum -->
+    <div class="page curriculum-page">
+        <h2>{{CURRICULUM_TITLE}}</h2>
+        <p class="curriculum-intro">{{CURRICULUM_DESCRIPTION}}</p>
+        <div class="curriculum-content">
+            {{CURRICULUM_BLOCKS_1}}
+        </div>
+        <div class="page-footer">
+            <span>IAML | Institute for Applied Management & Law</span>
+            <span class="page-number">3</span>
+        </div>
+    </div>
+
+    <!-- Page 4: Curriculum Continued -->
+    <div class="page curriculum-page">
+        <h2>Curriculum (Continued)</h2>
+        <div class="curriculum-content">
+            {{CURRICULUM_BLOCKS_2}}
+        </div>
+        <div class="page-footer">
+            <span>IAML | Institute for Applied Management & Law</span>
+            <span class="page-number">4</span>
+        </div>
+    </div>
+
+    <!-- Page 5: Faculty -->
+    <div class="page faculty-page">
+        <h2>Your Expert Instructors</h2>
+        <p>Learn from practicing attorneys and industry experts who bring real-world experience to every session.</p>
+        <div class="faculty-grid">
+            {{FACULTY_CARDS}}
+        </div>
+        <div class="page-footer">
+            <span>IAML | Institute for Applied Management & Law</span>
+            <span class="page-number">5</span>
+        </div>
+    </div>
+
+    <!-- Page 6: Testimonials -->
+    <div class="page testimonials-page">
+        <h2>What Participants Say</h2>
+        <div class="testimonials-grid">
+            {{TESTIMONIALS}}
+        </div>
+        <div class="page-footer">
+            <span>IAML | Institute for Applied Management & Law</span>
+            <span class="page-number">6</span>
+        </div>
+    </div>
+
+    <!-- Page 7: Program Details -->
+    <div class="page details-page">
+        <h2>Program Details</h2>
+        <div class="details-grid">
+            <div class="detail-card">
+                <h3>Investment</h3>
+                <p class="price-highlight">${{PRICE}}</p>
+                <p class="text-small mt-1">Includes all instruction, materials, and continuing education credits</p>
+            </div>
+            <div class="detail-card">
+                <h3>Professional Credits</h3>
+                <p><span class="credits-badge">{{CREDITS}}</span></p>
+                <p class="text-small mt-1">SHRM, HRCI, and CLE credits included</p>
+            </div>
+            <div class="detail-card">
+                <h3>Delivery Options</h3>
+                <ul>
+                    {{DELIVERY_OPTIONS_LIST}}
+                </ul>
+            </div>
+            <div class="detail-card">
+                <h3>What's Included</h3>
+                <ul>
+                    <li>Live instruction from practicing attorneys</li>
+                    <li>Complete program materials</li>
+                    <li>{{UPDATE_PERIOD}} of quarterly updates</li>
+                    <li>{{ALUMNI_DISCOUNT}} alumni discount on future programs</li>
+                </ul>
+            </div>
+        </div>
+        <div class="faq-section">
+            <h3>Frequently Asked Questions</h3>
+            {{FAQ_ITEMS}}
+        </div>
+        <div class="page-footer">
+            <span>IAML | Institute for Applied Management & Law</span>
+            <span class="page-number">7</span>
+        </div>
+    </div>
+
+    <!-- Page 8: CTA -->
+    <div class="page cta-page">
+        <h2>Take the Next Step</h2>
+        <div class="cta-content">
+            <p>{{CTA_CONTENT}}</p>
+        </div>
+        <div class="cta-button">Reserve Your Spot</div>
+        <p style="font-size: 14pt; margin-top: 0.3in;">Visit <strong style="color: #af9232; font-size: 18pt;">iaml.com</strong> to view upcoming sessions and register</p>
+        <div class="contact-info">
+            <p><strong>Questions?</strong></p>
+            <p>Email: info@iaml.com</p>
+            <p>Phone: (949) 760-1700</p>
+            <p>Web: www.iaml.com</p>
+        </div>
+        <div class="page-footer" style="border-top-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.6);">
+            <span>IAML | Institute for Applied Management & Law</span>
+            <span class="page-number">8</span>
+        </div>
+    </div>
+</body>
+</html>

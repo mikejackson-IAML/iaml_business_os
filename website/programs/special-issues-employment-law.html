@@ -113,6 +113,116 @@
   ]
 }
   </script>
+
+  <!-- Schema.org FAQPage Structured Data -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is this the same as Block III of the Certificate in Employee Relations Law?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Special Issues in Employment Law is Block III of the full Certificate in Employee Relations Law program. You can take it as a standalone half-day program, or combine it with Comprehensive Labor Relations (Block I) and Discrimination Prevention & Defense (Block II) to earn the full certificate."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What's the difference between in-person, virtual, and on-demand formats?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "All three formats feature the same practicing attorney instructors, current content, and professional credits. In-person provides face-to-face networking and immediate interaction. Virtual delivers the same live instruction via Zoom with full Q&A capability. On-demand lets you learn at your own pace over 90 days with the ability to pause and revisit complex topics. Choose the format that fits your schedule and learning style—the quality and content remain identical."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens after I register?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Within minutes, you'll receive an invoice email. Once payment is processed, you can schedule your complimentary pre-program consultation (10-15 minutes) to discuss your specific workplace challenges and identify which program content will have the biggest impact for you. Pre-program materials arrive one week before your session starts."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What continuing education credits will I earn?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The half-day program provides 3.75 SHRM/HRCI/CLE credits. Plus, your enrollment includes 12 months of quarterly employment law updates (4 sessions × 1.5 credits each = 6 additional credits), bringing your total to nearly 10 credits."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I claim my credits with SHRM or HRCI?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "IAML is an approved provider for both SHRM and HRCI. We provide you with documentation at the end of your program that includes all information needed to self-report your credits. For SHRM, you'll receive a completion certificate with our provider ID. For HRCI, you'll get the documentation to submit credits directly to HRCI. We walk you through the process during the program."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How current is the content? When was it last updated?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Your materials are living resources that update continuously as employment law changes. Unlike static textbooks that become outdated immediately after publication, our content reflects current court decisions, regulatory changes, and compliance requirements. Recent updates include the NLRB's Cemex decision on organizing, the Stericycle handbook standards, post-Bostock LGBTQ+ protections, and state-specific AI hiring regulations."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why do you emphasize practicing attorneys, not academics?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Your instructors handle employment law cases, defend discrimination charges, and advise employers on these exact issues daily. They're not teaching from textbooks—they're sharing strategies that work in actual courtrooms and real workplaces. When you ask what do I do about a specific situation, they answer from direct experience, not theory."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What are the quarterly employment law updates, and how long do I have access?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Every program enrollment includes FREE access to all four quarterly 90-minute update sessions for 12 months (valued at $1,588). These instructor-led sessions cover new regulations, court decisions, and compliance changes—delivered mid-January, April, July, and October. Each session is recorded and available within 24 hours. After your first year, you can continue receiving updates at alumni pricing."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does the $2,375 program fee include everything?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Your enrollment includes all live instruction, complete program materials, 29.75 continuing education credits, pre-program consultation, 12 months of quarterly employment law updates (4 sessions, $1,588 value), permanent access to living resources, and alumni benefits for all future programs. There are no hidden fees or additional charges."
+      }
+    }
+  ]
+}
+  </script>
+
+  <!-- Schema.org BreadcrumbList Structured Data -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://iaml.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Programs",
+      "item": "https://iaml.com/featured-programs"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Special Issues in Employment Law",
+      "item": "https://iaml.com/programs/special-issues-employment-law"
+    }
+  ]
+}
+  </script>
 </head>
 <body>
 
@@ -182,7 +292,7 @@
         <div class="proof-divider">|</div>
 
         <div class="proof-item">
-          <div class="proof-number">15,000+</div>
+          <div class="proof-number">80,000+</div>
           <div class="proof-label">Certificates Earned</div>
         </div>
 
@@ -884,6 +994,8 @@
         box-shadow: 0 4px 6px rgba(0,0,0,.3);
         text-align: center;
         text-decoration: none;
+        align-items: center;
+        justify-content: center;
     }
     .program-sessions-widget .reserve-btn:hover { background: #ff4c4c; transform: translateY(-2px); box-shadow: 0 6px 10px rgba(0,0,0,.4); }
 
@@ -4516,6 +4628,10 @@ button#prev-btn {
       const s=new Date(startStr+'T00:00:00'), e=new Date(endStr+'T00:00:00');
       const sm=s.toLocaleDateString('en-US',{month:'long'}), em=e.toLocaleDateString('en-US',{month:'long'});
       const sd=s.getDate(), ed=e.getDate(), y=s.getFullYear();
+      // Same day: just show single date
+      if (sd === ed && sm === em) {
+        return `${sm} ${sd}, ${y}`;
+      }
       return sm===em ? `${sm} ${sd}-${ed}, ${y}` : `${sm} ${sd} - ${em} ${ed}, ${y}`;
     }
 
@@ -4713,7 +4829,7 @@ button#prev-btn {
       const selected=cards[i]; if(!selected) return;
       selected.classList.add('expanded'); selected.setAttribute('aria-expanded','true');
       const f=selected.querySelector('.session-faculty'), b=selected.querySelector('.reserve-btn');
-      if(f) f.style.display='block'; if(b) b.style.display='block';
+      if(f) f.style.display='block'; if(b) b.style.display='flex';
       currentExpandedCard=i;
     }
     function collapseCard(i){
@@ -4811,7 +4927,7 @@ button#prev-btn {
       if(nowVisible[0]){
         nowVisible[0].classList.add('expanded'); nowVisible[0].setAttribute('aria-expanded','true');
         const f=nowVisible[0].querySelector('.session-faculty'), b=nowVisible[0].querySelector('.reserve-btn');
-        if(f) f.style.display='block'; if(b) b.style.display='block';
+        if(f) f.style.display='block'; if(b) b.style.display='flex';
         currentExpandedCard = parseInt(nowVisible[0].dataset.index,10);
       }
     }
@@ -4889,7 +5005,7 @@ button#prev-btn {
       if(firstVisible){
         firstVisible.classList.add('expanded'); firstVisible.setAttribute('aria-expanded','true');
         const f=firstVisible.querySelector('.session-faculty'), b=firstVisible.querySelector('.reserve-btn');
-        if(f) f.style.display='block'; if(b) b.style.display='block';
+        if(f) f.style.display='block'; if(b) b.style.display='flex';
         currentExpandedCard = parseInt(firstVisible.dataset.index,10);
       }else{
         currentExpandedCard = null;
@@ -8123,9 +8239,10 @@ button#prev-btn {
 
         .faculty-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(300px, 380px));
             gap: 40px;
             margin-top: 29px;
+            justify-content: center;
         }
 
         /* Faculty Card Styles */
@@ -8232,7 +8349,7 @@ button#prev-btn {
         /* Responsive Breakpoints */
         @media (max-width: 1024px) {
             .faculty-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(auto-fit, minmax(280px, 350px));
                 gap: 32px;
             }
 
@@ -8877,6 +8994,13 @@ button#prev-btn {
 
     // Format date range for display
     function formatDateRange(startDate, endDate) {
+      // Same day: "September 16, 2026"
+      if (startDate.getDate() === endDate.getDate() &&
+          startDate.getMonth() === endDate.getMonth() &&
+          startDate.getFullYear() === endDate.getFullYear()) {
+        return `${startDate.toLocaleDateString('en-US', { month: 'long' })} ${startDate.getDate()}, ${startDate.getFullYear()}`;
+      }
+
       if (startDate.getMonth() === endDate.getMonth() && startDate.getFullYear() === endDate.getFullYear()) {
         // Same month: "October 6-10, 2025"
         return `${startDate.toLocaleDateString('en-US', { month: 'long' })} ${startDate.getDate()}-${endDate.getDate()}, ${startDate.getFullYear()}`;

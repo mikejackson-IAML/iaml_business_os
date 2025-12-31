@@ -7,14 +7,14 @@
   <meta name="description" content="Meet IAML's faculty of practicing employment law attorneys and HR professionals. Expert instructors delivering employment law training, HR management courses, and workplace law education since 1979.">
   <meta name="keywords" content="employment law training, labor and employment law, HR management training, employment law CLE, workplace law attorneys, SHRM certification, HR professional development, employment law instructors, benefits law faculty">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://iaml.com/pages/faculty">
+  <link rel="canonical" href="https://iaml.com/faculty">
   <meta name="author" content="Institute for Applied Management & Law">
 
   <!-- Open Graph / Social Media -->
   <meta property="og:title" content="Employment Law & HR Training Faculty | Practicing Attorneys Who Teach">
   <meta property="og:description" content="Learn employment law and HR management from practicing attorneys and Fortune 500 HR executives. IAML faculty bring real courtroom and boardroom experience to every training program.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://iaml.com/pages/faculty">
+  <meta property="og:url" content="https://iaml.com/faculty">
   <meta property="og:image" content="https://iaml.com/images/og-faculty.jpg">
   <meta property="og:site_name" content="IAML - Institute for Applied Management & Law">
 
@@ -91,7 +91,7 @@
     "@type": "CollectionPage",
     "name": "Employment Law & HR Training Faculty",
     "description": "Meet IAML's faculty of practicing employment law attorneys and HR professionals delivering expert training in labor law, HR management, and workplace compliance.",
-    "url": "https://iaml.com/pages/faculty",
+    "url": "https://iaml.com/faculty",
     "isPartOf": {
       "@type": "WebSite",
       "name": "IAML",
@@ -163,7 +163,7 @@
         "@type": "ListItem",
         "position": 2,
         "name": "Faculty",
-        "item": "https://iaml.com/pages/faculty"
+        "item": "https://iaml.com/faculty"
       }
     ]
   }
@@ -653,7 +653,7 @@
           education: record.fields['Education'] || '',
           barAdmissions: record.fields['Bar Admissions'] || '',
           headshot: getInstructorHeadshot(record),
-          facultyId: (fullName || instructorName).toLowerCase()
+          facultyId: (instructorName || fullName).toLowerCase()
             .replace(/[^a-z0-9\s]/g, '')
             .replace(/\s+/g, '-')
             .replace(/^-+|-+$/g, '')

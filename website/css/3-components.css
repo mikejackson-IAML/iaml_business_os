@@ -392,6 +392,312 @@
   padding: 40px;
 }
 
+/* ===== FIRST VISIT POPUP ===== */
+.firstVisit-overlay {
+  position: fixed;
+  inset: 0;
+  height: 100vh;
+  width: 100vw;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(8px);
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+  pointer-events: none;
+}
+
+.firstVisit-overlay.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.firstVisit-modal {
+  border-radius: 16px;
+  max-width: 100%;
+  width: 100%;
+  padding: 40px 20px;
+  transform: scale(0.9) translateY(20px);
+  transition: transform 0.3s ease;
+  color: white;
+  text-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+}
+
+.firstVisit-overlay.active .firstVisit-modal {
+  transform: scale(1) translateY(0);
+}
+
+/* Content container - holds both acts */
+.firstVisit-content {
+  position: relative;
+  width: 100%;
+  min-height: 200px;
+}
+
+/* Act 1 & Act 2 - positioned at same location */
+.firstVisit-act1,
+.firstVisit-act2 {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.firstVisit-act1 {
+  opacity: 1;
+  transition: opacity 0.6s ease;
+}
+
+.firstVisit-act1.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.firstVisit-act2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+}
+
+.firstVisit-act2.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Quote container */
+.firstVisit-quote-container {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto var(--space-lg);
+}
+
+/* Decorative quote marks */
+.firstVisit-quotemark {
+  font-family: var(--font-heading);
+  font-size: 6rem;
+  color: rgba(255, 255, 255, 0.2);
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  line-height: 1;
+}
+
+.firstVisit-quotemark--open {
+  top: -2rem;
+  left: -1rem;
+}
+
+.firstVisit-quotemark--close {
+  bottom: -3rem;
+  right: -1rem;
+}
+
+/* Quote text */
+.firstVisit-quote {
+  font-family: var(--font-heading);
+  font-size: clamp(1.875rem, 5vw, 3rem);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--white);
+  line-height: 1.2;
+  position: relative;
+  z-index: 10;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.firstVisit-overlay.active .firstVisit-quote {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.2s;
+}
+
+/* Attribution - Signature Style */
+.firstVisit-attribution {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  margin-top: var(--space-lg);
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.firstVisit-overlay.active .firstVisit-attribution {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 1s;
+}
+
+.firstVisit-author-name {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 300;
+  color: var(--white);
+  letter-spacing: 0.5px;
+}
+
+.firstVisit-author-line {
+  width: 120px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  margin: 8px 0 10px;
+}
+
+.firstVisit-author-title {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.3px;
+}
+
+.firstVisit-author-company {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 2px;
+}
+
+/* Act 2: Tagline - Now the star of the show */
+.firstVisit-subtitle {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  font-weight: 300;
+  color: var(--white);
+  margin: 0 auto var(--space-lg);
+  line-height: 1.3;
+  max-width: 600px;
+  text-align: center;
+  text-shadow: 0 0 40px rgba(24, 139, 246, 0.3);
+}
+
+.firstVisit-divider {
+  width: 50px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--blue-primary), transparent);
+  margin: 0 auto var(--space-md);
+  animation: breathingLine 2s ease-in-out infinite;
+}
+
+/* Breathing animation for the blue line */
+@keyframes breathingLine {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Progress bar container */
+.firstVisit-progress {
+  width: 100%;
+  max-width: 300px;
+  margin: var(--space-xl) auto 0;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.firstVisit-progress.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.firstVisit-progress-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: var(--space-sm);
+}
+
+.firstVisit-progress-fill {
+  height: 100%;
+  background: #FFC107;
+  width: 0%;
+  box-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
+  will-change: width;
+}
+
+.firstVisit-progress-fill.animate {
+  width: 100%;
+  transition: width 3s linear;
+}
+
+.firstVisit-progress-text {
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+/* Responsive adjustments */
+@media (min-width: 640px) {
+  .firstVisit-quotemark {
+    font-size: 6rem;
+  }
+  .firstVisit-quotemark--open {
+    top: -3rem;
+    left: -2rem;
+  }
+  .firstVisit-quotemark--close {
+    bottom: -4rem;
+    right: -2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .firstVisit-quotemark {
+    font-size: 8rem;
+  }
+  .firstVisit-quotemark--open {
+    top: -4rem;
+    left: -3rem;
+  }
+  .firstVisit-quotemark--close {
+    bottom: -5rem;
+    right: -3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .firstVisit-modal {
+    padding: 30px 15px;
+  }
+  .firstVisit-quotemark {
+    font-size: 4rem;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .firstVisit-overlay,
+  .firstVisit-modal,
+  .firstVisit-quote,
+  .firstVisit-subtitle,
+  .firstVisit-progress,
+  .firstVisit-progress-fill {
+    transition: none;
+  }
+}
+
 /* ===== FORMS ===== */
 .field {
   display: flex;

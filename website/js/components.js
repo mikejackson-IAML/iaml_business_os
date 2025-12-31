@@ -84,10 +84,10 @@ const getFooterHTML = () => `
                 <h3>Resources</h3>
                 <ul class="list" aria-label="Resources">
                     <li><a href="/about-us">Why IAML</a></li>
-                    <li><a href="/pages/faculty">Faculty</a></li>
+                    <li><a href="/faculty">Faculty</a></li>
                     <li><a href="https://iaml.com/alumni-benefits" target="_blank">Alumni Benefits</a></li>
-                    <li><a href="/pages/corporate-training">Corporate Training</a></li>
-                    <li><a href="/pages/program-schedule">Schedule &amp; Locations</a></li>
+                    <li><a href="/corporate-training">Corporate Training</a></li>
+                    <li><a href="/program-schedule">Schedule &amp; Locations</a></li>
                 </ul>
             </section>
 

@@ -112,6 +112,100 @@
   ]
 }
   </script>
+
+  <!-- Schema.org FAQPage Structured Data -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What happens after I register?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Within minutes, you'll receive an invoice email. Once payment is processed, you can schedule your complimentary pre-program consultation (10-15 minutes) to discuss your specific health and welfare plan challenges and identify which regulatory topics will have the biggest impact for your organization. Pre-program materials arrive one week before your session starts."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What continuing education credits will I earn?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The 1.5-day program provides 10.25 SHRM/HRCI/CLE credits. Plus, your enrollment includes 12 months of quarterly employment law updates (4 sessions x 1.5 credits each = 6 additional credits), bringing your total to 16.25 credits."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this the same as Block III of the Certificate in Employee Benefits Law?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Welfare Benefits Plan Issues is Block III of the full Certificate in Employee Benefits Law program. You can take it as a standalone 1.5-day program, or combine it with Retirement Plans (Block I) and Benefit Plan Claims, Appeals & Litigation (Block II) to earn the full certificate."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "I primarily handle health benefits. Is this program relevant?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Absolutely. The program is designed for professionals who administer health plans, self-funded arrangements, and consumer-driven health plans. You'll master ACA compliance, HIPAA privacy rules, COBRA administration, and the multiple laws that impact health and welfare benefits."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "We're struggling with COBRA compliance. Can this program help?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The program covers COBRA qualifying events, notice requirements, election procedures, and the common pitfalls that trigger lawsuits. The pre-program consultation is the perfect time to share your specific challenges so our team can point you to the most relevant content."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does the $975 program fee include everything?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Your enrollment includes all live instruction from practicing benefits attorneys, complete program materials, 10.25 continuing education credits, pre-program consultation, 12 months of quarterly employment law updates (4 sessions, $1,588 value), permanent access to updated resources, and alumni benefits for all future programs. The only additional cost would be travel and lodging if you choose in-person format."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I apply this toward the full Certificate in Employee Benefits Law?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Welfare Benefits Plan Issues (Block III) counts toward the full certificate. You can complete the remaining blocks—Retirement Plans (Block I) and Benefit Plan Claims, Appeals & Litigation (Block II)—at any future session to earn the complete Certificate in Employee Benefits Law."
+      }
+    }
+  ]
+}
+  </script>
+
+  <!-- Schema.org BreadcrumbList Structured Data -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://iaml.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Programs",
+      "item": "https://iaml.com/featured-programs"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Welfare Benefits Plan Issues",
+      "item": "https://iaml.com/programs/welfare-benefits-plan-issues"
+    }
+  ]
+}
+  </script>
 </head>
 <body>
 
@@ -180,7 +274,7 @@
         <div class="proof-divider">|</div>
 
         <div class="proof-item">
-          <div class="proof-number">15,000+</div>
+          <div class="proof-number">80,000+</div>
           <div class="proof-label">Certificates Earned</div>
         </div>
 
@@ -967,6 +1061,8 @@
         box-shadow: 0 4px 6px rgba(0,0,0,.3);
         text-align: center;
         text-decoration: none;
+        align-items: center;
+        justify-content: center;
     }
     .program-sessions-widget .reserve-btn:hover { background: #ff4c4c; transform: translateY(-2px); box-shadow: 0 6px 10px rgba(0,0,0,.4); }
 
@@ -2808,8 +2904,6 @@ button#prev-btn {
           <!-- Toggle -->
           <div class="format-toggle">
             <button class="toggle-option active" data-format="In-Person">In-Person</button>
-            <button class="toggle-option" data-format="Virtual">Virtual</button>
-            <button class="toggle-option" data-format="On-Demand">On-Demand</button>
           </div>
 
           <!-- Sessions -->
@@ -4599,6 +4693,10 @@ button#prev-btn {
       const s=new Date(startStr+'T00:00:00'), e=new Date(endStr+'T00:00:00');
       const sm=s.toLocaleDateString('en-US',{month:'long'}), em=e.toLocaleDateString('en-US',{month:'long'});
       const sd=s.getDate(), ed=e.getDate(), y=s.getFullYear();
+      // Same day: just show single date
+      if (sd === ed && sm === em) {
+        return `${sm} ${sd}, ${y}`;
+      }
       return sm===em ? `${sm} ${sd}-${ed}, ${y}` : `${sm} ${sd} - ${em} ${ed}, ${y}`;
     }
 
@@ -4796,7 +4894,7 @@ button#prev-btn {
       const selected=cards[i]; if(!selected) return;
       selected.classList.add('expanded'); selected.setAttribute('aria-expanded','true');
       const f=selected.querySelector('.session-faculty'), b=selected.querySelector('.reserve-btn');
-      if(f) f.style.display='block'; if(b) b.style.display='block';
+      if(f) f.style.display='block'; if(b) b.style.display='flex';
       currentExpandedCard=i;
     }
     function collapseCard(i){
@@ -4894,7 +4992,7 @@ button#prev-btn {
       if(nowVisible[0]){
         nowVisible[0].classList.add('expanded'); nowVisible[0].setAttribute('aria-expanded','true');
         const f=nowVisible[0].querySelector('.session-faculty'), b=nowVisible[0].querySelector('.reserve-btn');
-        if(f) f.style.display='block'; if(b) b.style.display='block';
+        if(f) f.style.display='block'; if(b) b.style.display='flex';
         currentExpandedCard = parseInt(nowVisible[0].dataset.index,10);
       }
     }
@@ -4972,7 +5070,7 @@ button#prev-btn {
       if(firstVisible){
         firstVisible.classList.add('expanded'); firstVisible.setAttribute('aria-expanded','true');
         const f=firstVisible.querySelector('.session-faculty'), b=firstVisible.querySelector('.reserve-btn');
-        if(f) f.style.display='block'; if(b) b.style.display='block';
+        if(f) f.style.display='block'; if(b) b.style.display='flex';
         currentExpandedCard = parseInt(firstVisible.dataset.index,10);
       }else{
         currentExpandedCard = null;
@@ -8206,9 +8304,10 @@ button#prev-btn {
 
         .faculty-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(300px, 380px));
             gap: 40px;
             margin-top: 29px;
+            justify-content: center;
         }
 
         /* Faculty Card Styles */
@@ -8315,7 +8414,7 @@ button#prev-btn {
         /* Responsive Breakpoints */
         @media (max-width: 1024px) {
             .faculty-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(auto-fit, minmax(280px, 350px));
                 gap: 32px;
             }
 
@@ -8931,6 +9030,13 @@ button#prev-btn {
 
     // Format date range for display
     function formatDateRange(startDate, endDate) {
+      // Same day: "September 16, 2026"
+      if (startDate.getDate() === endDate.getDate() &&
+          startDate.getMonth() === endDate.getMonth() &&
+          startDate.getFullYear() === endDate.getFullYear()) {
+        return `${startDate.toLocaleDateString('en-US', { month: 'long' })} ${startDate.getDate()}, ${startDate.getFullYear()}`;
+      }
+
       if (startDate.getMonth() === endDate.getMonth() && startDate.getFullYear() === endDate.getFullYear()) {
         // Same month: "October 6-10, 2025"
         return `${startDate.toLocaleDateString('en-US', { month: 'long' })} ${startDate.getDate()}-${endDate.getDate()}, ${startDate.getFullYear()}`;

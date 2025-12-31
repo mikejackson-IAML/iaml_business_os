@@ -4387,14 +4387,16 @@
 
 .faculty-grid {
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 380px));
   gap: 3rem;
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 1.5rem;
+  justify-content: center;
 }
 
 .faculty-grid-4 {
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 320px));
 }
 
 .faculty-card {
@@ -5225,7 +5227,7 @@
   }
 
   .faculty-grid-4 {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(250px, 300px));
   }
 }
 

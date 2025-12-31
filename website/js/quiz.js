@@ -219,11 +219,12 @@ class ProgramRecommendationEngine {
   
   // Static program fallback
   const staticPrograms = [
-    { id: 'p1', name: 'Certificate in Employee Relations Law Seminar', description: 'Employment law, compliance, regulations, policy, risk.', targetAudience: 'HR professional, manager, director', format: 'In-person & Virtual' },
-    { id: 'p2', name: 'Advanced Certificate in Strategic Employment Law', description: 'Executive, strategic, advanced employment law.', targetAudience: 'Executive, C-suite, senior HR', format: 'In-person & Virtual' },
-    { id: 'p3', name: 'Certificate in Conducting Workplace Investigations', description: 'Investigations, harassment, misconduct, interviews.', targetAudience: 'HR professional, manager', format: 'In-person & Virtual' },
-    { id: 'p4', name: 'Certificate in Strategic HR Management', description: 'Strategic HR, leadership, culture, performance.', targetAudience: 'Manager, director, senior HR', format: 'In-person' },
-    { id: 'p5', name: 'Certificate in Employee Benefits Law', description: 'Benefits, ERISA, retirement plans, welfare.', targetAudience: 'Benefits manager, HR professional', format: 'In-person & Virtual' }
+    { id: 'p1', name: 'Certificate in Employee Relations Law Seminar', description: 'Employment law, compliance, regulations, policy, risk.', targetAudience: 'HR professional, manager, director', format: 'In-person & Virtual', pageUrl: '/programs/employee-relations-law.html' },
+    { id: 'p2', name: 'Advanced Certificate in Strategic Employment Law', description: 'Executive, strategic, advanced employment law.', targetAudience: 'Executive, C-suite, senior HR', format: 'In-person & Virtual', pageUrl: '/programs/advanced-employment-law.html' },
+    { id: 'p3', name: 'Certificate in Conducting Workplace Investigations', description: 'Investigations, harassment, misconduct, interviews.', targetAudience: 'HR professional, manager', format: 'In-person & Virtual', pageUrl: '/programs/workplace-investigations.html' },
+    { id: 'p4', name: 'Certificate in Strategic HR Management', description: 'Strategic HR, leadership, culture, performance.', targetAudience: 'Manager, director, senior HR', format: 'In-person', pageUrl: '/programs/strategic-hr-management.html' },
+    { id: 'p5', name: 'Certificate in Employee Benefits Law', description: 'Benefits, ERISA, retirement plans, welfare.', targetAudience: 'Benefits manager, HR professional', format: 'In-person & Virtual', pageUrl: '/programs/employee-benefits-law.html' },
+    { id: 'p6', name: 'Advanced Certificate in Employee Benefits Law', description: 'Advanced benefits, ERISA, executive, strategic benefits law.', targetAudience: 'Executive, C-suite, senior benefits', format: 'In-person & Virtual', pageUrl: '/programs/advanced-employee-benefits-law.html' }
   ];
   
   // Show/hide circle animation
@@ -244,8 +245,13 @@ class ProgramRecommendationEngine {
   function startQuiz() {
     hideCircleAnimation();
     const quizPreview = document.getElementById('quizContainer');
+    const quizLeft = document.getElementById('quizLeft');
     if (quizPreview) {
       quizPreview.style.display = 'flex';
+      quizPreview.classList.add('revealed');
+    }
+    if (quizLeft) {
+      quizLeft.classList.add('revealed');
     }
     initQuiz();
   }
@@ -426,6 +432,7 @@ class ProgramRecommendationEngine {
       learningOutcomes: Array.isArray(outcomes) ? outcomes : [],
       registerUrl: best?.registerUrl || '#',
       learnMoreUrl: best?.learnMoreUrl || '#',
+      pageUrl: best?.pageUrl || '/programs.html',
       formatText: formatted.format
     };
   }
@@ -520,6 +527,14 @@ class ProgramRecommendationEngine {
       resetQuiz();
     }, 400);
   }
+
+  function goToRecommendedProgram() {
+    if (currentRecommendation && currentRecommendation.pageUrl) {
+      window.location.href = currentRecommendation.pageUrl;
+    } else {
+      window.location.href = '/programs.html';
+    }
+  }
   
   function resetQuiz() {
     currentQuestion = 0;
@@ -575,4 +590,5 @@ class ProgramRecommendationEngine {
     window.goBack = goBack;
     window.closeModal = closeModal;
     window.resetQuiz = resetQuiz;
+    window.goToRecommendedProgram = goToRecommendedProgram;
   }
