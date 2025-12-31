@@ -1,9 +1,11 @@
 ---
-name: meeting-prep-builder
-description: Interactive questionnaire to configure customized meeting prep based on meeting type, goals, and information needs. Use when you need to build a meeting prep template for a new type of meeting or customize prep for specific situations.
+name: meeting-prep
+description: Interactive questionnaire to configure customized meeting prep based on meeting type, goals, and information needs. Use when you need to build a meeting prep template for a new type of meeting or customize prep for specific situations. (project)
 ---
 
-# Meeting Prep Builder: Configuration Wizard
+# Meeting Prep: Configuration Wizard
+
+**Owner:** Research Analyst (Sales Department)
 
 This skill guides you through questions to build the best, most comprehensive meeting prep tailored to your specific needs, meeting type, and goals.
 
@@ -16,6 +18,8 @@ Use this skill when:
 - You want to customize meeting prep for a specific situation
 - You're unsure what information you need before a meeting
 - You want to optimize your prep process for recurring meeting types
+
+For quick discovery call prep, use the `/meeting-prep` command instead.
 
 ---
 
@@ -318,11 +322,12 @@ After configuration, offer these options:
 
 For common meeting types, offer pre-configured templates:
 
-### Template A: Sales Discovery Call
+### Template A: Sales Discovery Call (Default)
 - Focus: Qualification, needs assessment
 - Research: Company + contact + prior relationship
 - Output: Standard brief with qualification questions
 - Sections: Company, Contact, Questions, Red Flags, Next Steps
+- **Command:** `/meeting-prep "Company Name"`
 
 ### Template B: Client QBR
 - Focus: Health check, upsell opportunities
@@ -350,13 +355,17 @@ For common meeting types, offer pre-configured templates:
 
 ---
 
-## INTEGRATION WITH EXISTING COMMANDS
+## INTEGRATION WITH RESEARCH ANALYST ROLE
 
-This skill can be used to:
-1. Customize the existing `/meeting-prep` command
-2. Create new specialized meeting prep commands
-3. Build a library of meeting prep templates
-4. Train better meeting preparation habits
+This skill is owned by the Research Analyst in the Sales Department.
+
+**Related Skills:**
+- `company-research` - Deep company analysis (planned)
+- `competitive-intel` - Competitor analysis (planned)
+- `lead-enrichment` - Lead data augmentation (planned)
+
+**Related Commands:**
+- `/meeting-prep` - Quick discovery call brief
 
 ---
 
