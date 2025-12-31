@@ -2,8 +2,8 @@ name: Update Airtable Cache
 
 on:
   schedule:
-    # Run daily at 2 AM UTC (6 PM PST)
-    - cron: '0 2 * * *'
+    # Run daily at 2 AM CST (8 AM UTC)
+    - cron: '0 8 * * *'
   workflow_dispatch:
     inputs:
       force_rebuild:
