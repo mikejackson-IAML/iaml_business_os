@@ -1662,7 +1662,14 @@
       // Sum of individual block prices
       const totalBlockPrice = selectedBlocks.reduce((sum, block) =>
         sum + (blockPrices[block] || 0), 0);
-      state.listPrice = totalBlockPrice;
+
+      // Auto-upgrade: if partial blocks cost >= full certificate, use certificate price
+      if (totalBlockPrice >= programData.price) {
+        state.listPrice = programData.price;
+        console.log(`Auto-upgrade: Partial blocks ($${totalBlockPrice}) >= certificate ($${programData.price}), using certificate price`);
+      } else {
+        state.listPrice = totalBlockPrice;
+      }
     }
     state.finalPrice = state.listPrice - state.couponDiscount;
 
@@ -1971,17 +1978,15 @@
       // Generate registration code
       state.registrationCode = generateRegistrationCode();
 
-      // Get the appropriate Stripe Price ID based on selection
-      const priceId = getStripePriceId();
+      // Build line items for Checkout (handles full program and partial blocks)
+      const lineItems = buildCheckoutLineItems();
 
-      if (!priceId) {
-        // Fallback to legacy PaymentIntent flow if no Price ID found
+      // Only fall back to legacy if STRIPE_PRODUCTS isn't available at all
+      if (!lineItems || lineItems.length === 0) {
+        // Fallback to legacy PaymentIntent flow if no line items could be built
         await submitStripeRegistrationLegacy();
         return;
       }
-
-      // Build line items for Checkout
-      const lineItems = buildCheckoutLineItems();
 
       // Build session details for metadata
       const sessionDetails = state.sessionRecord || {};
@@ -2108,28 +2113,6 @@
     } finally {
       qs('#loadingOverlay').classList.add('hidden');
     }
-  }
-
-  // Get Stripe Price ID based on current selection
-  function getStripePriceId() {
-    // Check if STRIPE_PRODUCTS is available
-    if (typeof window.STRIPE_PRODUCTS === 'undefined') {
-      return null;
-    }
-
-    const programData = PROGRAM_DATA[state.program];
-    if (!programData) return null;
-
-    const programCode = programData.code;
-
-    // If full program (not partial blocks), return certificate price
-    if (state.blockSelectionType === 'Full' || !state.selectedBlocks.length) {
-      const product = window.STRIPE_PRODUCTS[programCode];
-      return product ? product.priceId : null;
-    }
-
-    // For partial blocks, we'll return null to use line items instead
-    return null;
   }
 
   // Build line items for Checkout (handles multiple blocks)
