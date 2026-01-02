@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Successful | IAML</title>
+  <meta name="description" content="Your payment has been processed successfully. Welcome to IAML!">
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/1-variables.css">
+  <link rel="stylesheet" href="css/2-base.css">
+  <link rel="stylesheet" href="css/3-components.css">
+  <link rel="stylesheet" href="css/4-layout.css">
+  <link rel="stylesheet" href="css/5-pages.css">
+
+  <!-- Environment Configuration -->
+  <script src="js/env-config.local.js"></script>
+  <script src="js/env-config.js"></script>
+
+  <style>
+    .checkout-success-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    }
+
+    .success-container {
+      max-width: 600px;
+      width: 100%;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+      padding: 3rem;
+      text-align: center;
+    }
+
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: #22c55e;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+    }
+
+    .success-icon svg {
+      width: 40px;
+      height: 40px;
+      color: white;
+    }
+
+    .success-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: #1a1a2e;
+      margin-bottom: 0.5rem;
+    }
+
+    .success-subtitle {
+      color: #6b7280;
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+
+    .success-details {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      text-align: left;
+    }
+
+    .success-details h3 {
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #6b7280;
+      margin-bottom: 1rem;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .detail-row:last-child {
+      border-bottom: none;
+    }
+
+    .detail-label {
+      color: #6b7280;
+    }
+
+    .detail-value {
+      font-weight: 600;
+      color: #1a1a2e;
+    }
+
+    .detail-value.amount {
+      color: #22c55e;
+    }
+
+    .next-steps {
+      text-align: left;
+      margin-bottom: 2rem;
+    }
+
+    .next-steps h3 {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      color: #1a1a2e;
+    }
+
+    .next-steps ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .next-steps li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.5rem 0;
+    }
+
+    .next-steps li::before {
+      content: "✓";
+      color: #22c55e;
+      font-weight: bold;
+    }
+
+    .success-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .success-actions .btn {
+      padding: 0.875rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: #1a1a2e;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #2d2d4a;
+    }
+
+    .btn-secondary {
+      background: #f3f4f6;
+      color: #1a1a2e;
+    }
+
+    .btn-secondary:hover {
+      background: #e5e7eb;
+    }
+
+    .loading-state {
+      padding: 3rem;
+    }
+
+    .loading-spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid #e5e7eb;
+      border-top-color: #1a1a2e;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .error-state {
+      color: #dc2626;
+    }
+
+    .error-icon {
+      width: 80px;
+      height: 80px;
+      background: #fee2e2;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      color: #dc2626;
+      font-size: 2rem;
+    }
+  </style>
+</head>
+<body class="checkout-success-page">
+  <div class="success-container" id="successContainer">
+    <!-- Loading State -->
+    <div id="loadingState" class="loading-state">
+      <div class="loading-spinner"></div>
+      <p>Verifying your payment...</p>
+    </div>
+
+    <!-- Success State (hidden initially) -->
+    <div id="successState" style="display: none;">
+      <div class="success-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+
+      <h1 class="success-title">Payment Successful!</h1>
+      <p class="success-subtitle">You're officially enrolled. Welcome to IAML!</p>
+
+      <div class="success-details">
+        <h3>Registration Details</h3>
+        <div class="detail-row">
+          <span class="detail-label">Program</span>
+          <span class="detail-value" id="detailProgram">-</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Email</span>
+          <span class="detail-value" id="detailEmail">-</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Amount Paid</span>
+          <span class="detail-value amount" id="detailAmount">-</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Confirmation #</span>
+          <span class="detail-value" id="detailConfirmation">-</span>
+        </div>
+      </div>
+
+      <div class="next-steps">
+        <h3>What's Next?</h3>
+        <ul>
+          <li>Check your email for a receipt and confirmation details</li>
+          <li>You'll receive program materials 1 week before your session</li>
+          <li>Mark your calendar for your program dates</li>
+        </ul>
+      </div>
+
+      <div class="success-actions">
+        <a href="/" class="btn btn-primary">Return to Homepage</a>
+        <a href="/programs.html" class="btn btn-secondary">Browse More Programs</a>
+      </div>
+    </div>
+
+    <!-- Error State (hidden initially) -->
+    <div id="errorState" style="display: none;" class="error-state">
+      <div class="error-icon">!</div>
+      <h1 class="success-title">Verification Failed</h1>
+      <p class="success-subtitle" id="errorMessage">We couldn't verify your payment. Please contact support.</p>
+      <div class="success-actions" style="margin-top: 2rem;">
+        <a href="/register.html" class="btn btn-primary">Try Again</a>
+        <a href="mailto:info@iaml.com" class="btn btn-secondary">Contact Support</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (async function() {
+      const loadingState = document.getElementById('loadingState');
+      const successState = document.getElementById('successState');
+      const errorState = document.getElementById('errorState');
+
+      // Get session_id from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const sessionId = urlParams.get('session_id');
+
+      if (!sessionId) {
+        showError('No session ID provided');
+        return;
+      }
+
+      try {
+        // Verify the checkout session
+        const response = await fetch(`/api/verify-checkout-session?session_id=${encodeURIComponent(sessionId)}`);
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          showError(data.error || 'Payment verification failed');
+          return;
+        }
+
+        // Update the UI with payment details
+        document.getElementById('detailProgram').textContent =
+          data.lineItems?.[0]?.description || data.metadata?.program || 'IAML Program';
+        document.getElementById('detailEmail').textContent = data.customer?.email || '-';
+        document.getElementById('detailAmount').textContent =
+          new Intl.NumberFormat('en-US', { style: 'currency', currency: data.currency || 'USD' }).format(data.amountTotal);
+        document.getElementById('detailConfirmation').textContent =
+          data.metadata?.registrationCode || data.paymentIntentId?.slice(-8).toUpperCase() || '-';
+
+        // Create registration in Airtable if we have the metadata
+        if (data.metadata && data.customer) {
+          await createRegistration(data);
+        }
+
+        // Show success state
+        loadingState.style.display = 'none';
+        successState.style.display = 'block';
+
+      } catch (error) {
+        console.error('Verification error:', error);
+        showError('An error occurred while verifying your payment');
+      }
+
+      function showError(message) {
+        loadingState.style.display = 'none';
+        errorState.style.display = 'block';
+        document.getElementById('errorMessage').textContent = message;
+      }
+
+      async function createRegistration(sessionData) {
+        try {
+          // Parse customer name
+          const nameParts = (sessionData.customer.name || '').split(' ');
+          const firstName = nameParts[0] || '';
+          const lastName = nameParts.slice(1).join(' ') || '';
+
+          // Find or create contact
+          const contactId = await findOrCreateContact({
+            firstName,
+            lastName,
+            email: sessionData.customer.email,
+            phone: sessionData.customer.phone
+          });
+
+          // Find or create company if provided
+          let companyId = null;
+          if (sessionData.metadata?.company) {
+            companyId = await findOrCreateCompany(sessionData.metadata.company);
+          }
+
+          // Create registration
+          const regResponse = await fetch('/api/airtable-registrations', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              fields: {
+                'Contact': [contactId],
+                'Company': companyId ? [companyId] : [],
+                'Program Instance': sessionData.metadata?.sessionId ? [sessionData.metadata.sessionId] : [],
+                'Registration Date': new Date().toISOString(),
+                'Registration Source': 'Website - Stripe Checkout',
+                'List Price': sessionData.amountTotal,
+                'Discount Amount': 0,
+                'Final Price': sessionData.amountTotal,
+                'Payment Status': 'Paid',
+                'Payment Method': 'Credit Card',
+                'Registration Status': 'Confirmed',
+                'Stripe Payment Intent': sessionData.paymentIntentId
+              }
+            })
+          });
+
+          if (!regResponse.ok) {
+            console.error('Failed to create registration');
+          }
+
+          // Submit to GoHighLevel
+          await submitToGHL(sessionData, firstName, lastName);
+
+        } catch (error) {
+          console.error('Error creating registration:', error);
+          // Don't show error to user - payment was successful
+        }
+      }
+
+      async function findOrCreateContact({ firstName, lastName, email, phone }) {
+        const filter = `{Email}='${email.replace(/'/g, "\\'")}'`;
+        const response = await fetch(`/api/airtable-contacts?filterByFormula=${encodeURIComponent(filter)}`);
+        const data = await response.json();
+
+        if (data.records?.length > 0) {
+          return data.records[0].id;
+        }
+
+        const createResponse = await fetch('/api/airtable-contacts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fields: {
+              'First Name': firstName,
+              'Last Name': lastName,
+              'Email': email,
+              'Phone': phone || ''
+            }
+          })
+        });
+
+        const newContact = await createResponse.json();
+        return newContact.id;
+      }
+
+      async function findOrCreateCompany(companyName) {
+        const filter = `LOWER({Company Name})=LOWER('${companyName.replace(/'/g, "\\'")}')`
+        const response = await fetch(`/api/airtable-companies?filterByFormula=${encodeURIComponent(filter)}`);
+        const data = await response.json();
+
+        if (data.records?.length > 0) {
+          return data.records[0].id;
+        }
+
+        const createResponse = await fetch('/api/airtable-companies', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fields: { 'Company Name': companyName }
+          })
+        });
+
+        const newCompany = await createResponse.json();
+        return newCompany.id;
+      }
+
+      async function submitToGHL(sessionData, firstName, lastName) {
+        const webhookUrl = window.ENV_CONFIG?.GHL_REGISTRATION_WEBHOOK;
+        if (!webhookUrl) return;
+
+        try {
+          await fetch('/api/ghl-webhook', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              type: 'registration',
+              data: {
+                first_name: firstName,
+                last_name: lastName,
+                email: sessionData.customer.email,
+                phone: sessionData.customer.phone,
+                selected_program: sessionData.metadata?.program || sessionData.lineItems?.[0]?.description,
+                amount_due: sessionData.amountTotal,
+                payment_method: 'stripe_checkout',
+                tags: ['new_registration', 'stripe_checkout']
+              }
+            })
+          });
+        } catch (error) {
+          console.error('GHL webhook error:', error);
+        }
+      }
+    })();
+  </script>
+</body>
+</html>

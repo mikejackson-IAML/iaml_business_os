@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Cancelled | IAML</title>
+  <meta name="description" content="Your payment was cancelled. You can try again or contact us for assistance.">
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/1-variables.css">
+  <link rel="stylesheet" href="css/2-base.css">
+  <link rel="stylesheet" href="css/3-components.css">
+  <link rel="stylesheet" href="css/4-layout.css">
+  <link rel="stylesheet" href="css/5-pages.css">
+
+  <style>
+    .checkout-cancel-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    }
+
+    .cancel-container {
+      max-width: 500px;
+      width: 100%;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+      padding: 3rem;
+      text-align: center;
+    }
+
+    .cancel-icon {
+      width: 80px;
+      height: 80px;
+      background: #fef3c7;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      color: #d97706;
+      font-size: 2.5rem;
+    }
+
+    .cancel-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      color: #1a1a2e;
+      margin-bottom: 0.5rem;
+    }
+
+    .cancel-subtitle {
+      color: #6b7280;
+      font-size: 1rem;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .cancel-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .cancel-actions .btn {
+      padding: 0.875rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: #1a1a2e;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #2d2d4a;
+    }
+
+    .btn-secondary {
+      background: #f3f4f6;
+      color: #1a1a2e;
+    }
+
+    .btn-secondary:hover {
+      background: #e5e7eb;
+    }
+
+    .help-text {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e5e7eb;
+      color: #6b7280;
+      font-size: 0.875rem;
+    }
+
+    .help-text a {
+      color: #1a1a2e;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body class="checkout-cancel-page">
+  <div class="cancel-container">
+    <div class="cancel-icon">!</div>
+
+    <h1 class="cancel-title">Payment Cancelled</h1>
+    <p class="cancel-subtitle">
+      No worries! Your payment was not processed and you haven't been charged.
+      You can return to complete your registration whenever you're ready.
+    </p>
+
+    <div class="cancel-actions">
+      <a href="/register.html" class="btn btn-primary">Return to Registration</a>
+      <a href="/" class="btn btn-secondary">Go to Homepage</a>
+    </div>
+
+    <div class="help-text">
+      <p>Have questions? <a href="mailto:info@iaml.com">Contact us</a> or call (312) 348-4265</p>
+    </div>
+  </div>
+</body>
+</html>

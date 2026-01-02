@@ -1262,13 +1262,10 @@
         const invoiceForm = qs('#invoiceForm');
         const stripeForm = qs('#stripePaymentForm');
 
-        if (e.target.value === 'invoice') {
-          invoiceForm.classList.add('hidden');  // No billing form for invoice
-          stripeForm.classList.add('hidden');
-        } else {
-          invoiceForm.classList.add('hidden');
-          stripeForm.classList.remove('hidden');
-        }
+        // Hide both forms - Stripe Checkout redirects to external page
+        // Invoice option shows billing form if needed in future
+        invoiceForm.classList.add('hidden');
+        stripeForm.classList.add('hidden');
 
         saveStateToSessionStorage();
       });
@@ -1810,6 +1807,11 @@
       }
       state.companyRecordId = companyId;
 
+      // Create Stripe Invoice
+      const invoiceResult = await createStripeInvoice();
+      state.stripeInvoiceId = invoiceResult?.invoiceId;
+      state.stripeInvoiceUrl = invoiceResult?.invoiceUrl;
+
       // Create registration in Airtable
       await createAirtableRegistration('Pending Payment');
 
@@ -1827,6 +1829,140 @@
     }
   }
 
+  // Create Stripe Invoice for invoice payment method
+  async function createStripeInvoice() {
+    // Build line items based on selection
+    const lineItems = buildInvoiceLineItems();
+
+    if (!lineItems || lineItems.length === 0) {
+      console.warn('No line items for invoice, skipping Stripe invoice creation');
+      return null;
+    }
+
+    try {
+      const response = await fetch('/api/create-invoice', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customerEmail: state.contactEmail,
+          customerName: `${state.contactFirstName} ${state.contactLastName}`,
+          customerPhone: state.contactPhone,
+          customerCompany: state.contactCompany,
+          lineItems: lineItems,
+          metadata: {
+            program: state.program,
+            format: state.format,
+            sessionId: state.sessionId,
+            registrationCode: state.registrationCode,
+            blocks: state.selectedBlocks.join(',')
+          },
+          dueDate: 30,
+          sendInvoice: true,
+          memo: `Registration for ${state.program} - ${FORMAT_MAP[state.format] || state.format}`
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Failed to create Stripe invoice:', errorData);
+        // Don't throw - continue with registration even if invoice fails
+        return null;
+      }
+
+      const result = await response.json();
+      console.log('Stripe invoice created:', result.invoiceId);
+      return result;
+
+    } catch (error) {
+      console.error('Stripe invoice error:', error);
+      // Don't throw - continue with registration even if invoice fails
+      return null;
+    }
+  }
+
+  // Build line items for Stripe Invoice
+  function buildInvoiceLineItems() {
+    if (typeof window.STRIPE_PRODUCTS === 'undefined') {
+      // Fallback to custom line item
+      return [{
+        description: `${state.program} - ${FORMAT_MAP[state.format] || state.format}`,
+        amount: state.finalPrice
+      }];
+    }
+
+    const programData = PROGRAM_DATA[state.program];
+    if (!programData) {
+      return [{
+        description: `${state.program} - ${FORMAT_MAP[state.format] || state.format}`,
+        amount: state.finalPrice
+      }];
+    }
+
+    const programCode = programData.code;
+    const lineItems = [];
+
+    // Full program purchase
+    if (state.blockSelectionType === 'Full' || !state.selectedBlocks.length) {
+      const product = window.STRIPE_PRODUCTS[programCode];
+      if (product) {
+        lineItems.push({ priceId: product.priceId, quantity: 1 });
+      } else {
+        lineItems.push({
+          description: `${state.program} - ${FORMAT_MAP[state.format] || state.format}`,
+          amount: state.finalPrice
+        });
+      }
+      return lineItems;
+    }
+
+    // Partial block purchase - map selected blocks to Stripe products
+    const blockNameToKey = {
+      'Comprehensive Labor Relations': 'ER_BLOCK_1',
+      'Discrimination Prevention and Defense': 'ER_BLOCK_2',
+      'Special Issues in Employment Law': 'ER_BLOCK_3',
+      'HR Law Fundamentals': 'SH_BLOCK_1',
+      'Strategic HR Management': 'SH_BLOCK_2',
+      'Retirement Plans': 'EB_BLOCK_1',
+      'Benefit Plan Claims, Appeals and Litigation': 'EB_BLOCK_2',
+      'Welfare Benefits Plan Issues': 'EB_BLOCK_3'
+    };
+
+    // Calculate total cost of selected blocks
+    let blockTotal = 0;
+    const blockLineItems = [];
+
+    state.selectedBlocks.forEach(blockName => {
+      const key = blockNameToKey[blockName];
+      if (key) {
+        const product = window.STRIPE_PRODUCTS[key];
+        if (product) {
+          blockLineItems.push({ priceId: product.priceId, quantity: 1 });
+          blockTotal += product.price;
+        }
+      }
+    });
+
+    // Get full certificate price
+    const certificateProduct = window.STRIPE_PRODUCTS[programCode];
+    const certificatePrice = certificateProduct ? certificateProduct.price : Infinity;
+
+    // If partial blocks cost more than full certificate, use full certificate price
+    if (blockTotal >= certificatePrice && certificateProduct) {
+      console.log(`Invoice: Partial blocks ($${blockTotal}) >= full certificate ($${certificatePrice}), using certificate price`);
+      return [{ priceId: certificateProduct.priceId, quantity: 1 }];
+    }
+
+    // Fallback if no products found
+    if (blockLineItems.length === 0) {
+      return [{
+        description: `${state.program} - ${state.selectedBlocks.join(', ')}`,
+        amount: state.finalPrice
+      }];
+    }
+
+    return blockLineItems;
+  }
+
   async function submitStripeRegistration() {
     hideErrorMessage();
     qs('#loadingOverlay').classList.remove('hidden');
@@ -1835,6 +1971,59 @@
       // Generate registration code
       state.registrationCode = generateRegistrationCode();
 
+      // Get the appropriate Stripe Price ID based on selection
+      const priceId = getStripePriceId();
+
+      if (!priceId) {
+        // Fallback to legacy PaymentIntent flow if no Price ID found
+        await submitStripeRegistrationLegacy();
+        return;
+      }
+
+      // Build line items for Checkout
+      const lineItems = buildCheckoutLineItems();
+
+      // Create Checkout Session
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          lineItems: lineItems,
+          customerEmail: state.contactEmail,
+          successUrl: `${window.location.origin}/checkout-success.html?session_id={CHECKOUT_SESSION_ID}`,
+          cancelUrl: `${window.location.origin}/checkout-cancel.html`,
+          metadata: {
+            program: state.program,
+            format: state.format,
+            sessionId: state.sessionId,
+            registrationCode: state.registrationCode,
+            company: state.contactCompany,
+            blocks: state.selectedBlocks.join(','),
+            couponCode: state.couponCode
+          }
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to create checkout session');
+      }
+
+      const { url } = await response.json();
+
+      // Redirect to Stripe Checkout
+      window.location.href = url;
+
+    } catch (error) {
+      console.error('Stripe Checkout error:', error);
+      showErrorMessage(`Payment failed: ${error.message}`);
+      qs('#loadingOverlay').classList.add('hidden');
+    }
+  }
+
+  // Legacy embedded card payment (fallback)
+  async function submitStripeRegistrationLegacy() {
+    try {
       // Create PaymentIntent
       const intentResponse = await fetch('/api/create-payment-intent', {
         method: 'POST',
@@ -1904,6 +2093,89 @@
     } finally {
       qs('#loadingOverlay').classList.add('hidden');
     }
+  }
+
+  // Get Stripe Price ID based on current selection
+  function getStripePriceId() {
+    // Check if STRIPE_PRODUCTS is available
+    if (typeof window.STRIPE_PRODUCTS === 'undefined') {
+      return null;
+    }
+
+    const programData = PROGRAM_DATA[state.program];
+    if (!programData) return null;
+
+    const programCode = programData.code;
+
+    // If full program (not partial blocks), return certificate price
+    if (state.blockSelectionType === 'Full' || !state.selectedBlocks.length) {
+      const product = window.STRIPE_PRODUCTS[programCode];
+      return product ? product.priceId : null;
+    }
+
+    // For partial blocks, we'll return null to use line items instead
+    return null;
+  }
+
+  // Build line items for Checkout (handles multiple blocks)
+  function buildCheckoutLineItems() {
+    if (typeof window.STRIPE_PRODUCTS === 'undefined') {
+      return null;
+    }
+
+    const programData = PROGRAM_DATA[state.program];
+    if (!programData) return null;
+
+    const programCode = programData.code;
+    const lineItems = [];
+
+    // Full program purchase
+    if (state.blockSelectionType === 'Full' || !state.selectedBlocks.length) {
+      const product = window.STRIPE_PRODUCTS[programCode];
+      if (product) {
+        lineItems.push({ priceId: product.priceId, quantity: 1 });
+      }
+      return lineItems.length > 0 ? lineItems : null;
+    }
+
+    // Partial block purchase - map selected blocks to Stripe products
+    const blockNameToKey = {
+      'Comprehensive Labor Relations': 'ER_BLOCK_1',
+      'Discrimination Prevention and Defense': 'ER_BLOCK_2',
+      'Special Issues in Employment Law': 'ER_BLOCK_3',
+      'HR Law Fundamentals': 'SH_BLOCK_1',
+      'Strategic HR Management': 'SH_BLOCK_2',
+      'Retirement Plans': 'EB_BLOCK_1',
+      'Benefit Plan Claims, Appeals and Litigation': 'EB_BLOCK_2',
+      'Welfare Benefits Plan Issues': 'EB_BLOCK_3'
+    };
+
+    // Calculate total cost of selected blocks
+    let blockTotal = 0;
+    const blockLineItems = [];
+
+    state.selectedBlocks.forEach(blockName => {
+      const key = blockNameToKey[blockName];
+      if (key) {
+        const product = window.STRIPE_PRODUCTS[key];
+        if (product) {
+          blockLineItems.push({ priceId: product.priceId, quantity: 1 });
+          blockTotal += product.price;
+        }
+      }
+    });
+
+    // Get full certificate price
+    const certificateProduct = window.STRIPE_PRODUCTS[programCode];
+    const certificatePrice = certificateProduct ? certificateProduct.price : Infinity;
+
+    // If partial blocks cost more than full certificate, use full certificate price
+    if (blockTotal >= certificatePrice && certificateProduct) {
+      console.log(`Partial blocks ($${blockTotal}) >= full certificate ($${certificatePrice}), using certificate price`);
+      return [{ priceId: certificateProduct.priceId, quantity: 1 }];
+    }
+
+    return blockLineItems.length > 0 ? blockLineItems : null;
   }
 
   async function findOrCreateContact() {
