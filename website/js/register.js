@@ -2446,6 +2446,39 @@
   }
 
   // ============================================
+  // CONSULTATION BOOKING TOGGLE
+  // ============================================
+
+  const CONSULTATION_URLS = {
+    virtual: 'https://api.leadconnectorhq.com/widget/booking/zBJ211mW8uCGgYmWrqES',
+    phone: 'https://api.leadconnectorhq.com/widget/booking/pTSlCgHHYHI2l3Vw2ARx'
+  };
+
+  // Expose to global scope for onclick handlers
+  window.setConsultationType = function(type, context) {
+    const iframe = qs(`#consultationWidget${context === 'paid' ? 'Paid' : ''}`);
+    const container = qs(`#consultationBooking${context === 'paid' ? 'Paid' : ''}`);
+
+    if (!container) return;
+
+    const buttons = container.querySelectorAll('.consultation-type-btn');
+
+    // Update iframe src
+    if (iframe) {
+      iframe.src = CONSULTATION_URLS[type];
+    }
+
+    // Update button states
+    buttons.forEach(btn => {
+      if (btn.dataset.type === type) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+  };
+
+  // ============================================
   // URL PRE-SELECTION (Deep Linking)
   // ============================================
 

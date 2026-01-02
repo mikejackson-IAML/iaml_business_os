@@ -7792,6 +7792,99 @@ input[type="radio"].session-radio {
   text-decoration: underline;
 }
 
+/* Consultation Booking Section */
+.consultation-booking-section {
+  background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  padding: var(--space-lg);
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.consultation-booking-section h3 {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: var(--color-dark);
+  margin-bottom: var(--space-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.consultation-booking-section h3::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: #22c55e;
+  border-radius: 50%;
+}
+
+.consultation-booking-section .consultation-description {
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-md);
+  line-height: 1.5;
+}
+
+.consultation-type-toggle {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.consultation-type-btn {
+  flex: 1;
+  padding: var(--space-sm) var(--space-md);
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-muted);
+}
+
+.consultation-type-btn:hover {
+  border-color: var(--color-dark);
+  color: var(--color-dark);
+}
+
+.consultation-type-btn.active {
+  border-color: var(--color-dark);
+  background: var(--color-dark);
+  color: white;
+}
+
+.consultation-type-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.consultation-widget-container {
+  border-radius: 8px;
+  overflow: hidden;
+  background: white;
+}
+
+.consultation-widget-container iframe {
+  width: 100%;
+  min-height: 500px;
+  border: none;
+}
+
+@media (max-width: 480px) {
+  .consultation-type-toggle {
+    flex-direction: column;
+  }
+}
+
 /* ========================================
    SIDEBAR STYLES
    ======================================== */

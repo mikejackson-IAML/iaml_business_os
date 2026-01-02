@@ -359,8 +359,8 @@
                 <div class="next-step">
                   <div class="step-number">2</div>
                   <div class="step-content">
-                    <h4>Get Ready to Succeed</h4>
-                    <p>Once your invoice is paid, you'll be able to book your complimentary pre-program consultation.</p>
+                    <h4>Book Your Consultation</h4>
+                    <p>Once your invoice is paid, you'll receive a link to book your complimentary pre-program consultation. This 15-minute call helps you identify which topics will be most relevant to your specific workplace challenges.</p>
                   </div>
                 </div>
                 <div class="next-step">
@@ -423,7 +423,7 @@
                   <div class="step-number">2</div>
                   <div class="step-content">
                     <h4>Book Your Consultation</h4>
-                    <p>Schedule your complimentary pre-program consultation to get the most out of your experience.</p>
+                    <p>Schedule your complimentary pre-program consultation below.</p>
                   </div>
                 </div>
                 <div class="next-step" id="onDemandStep3">
@@ -432,6 +432,36 @@
                     <h4 id="step3Title">Prepare for Day 1</h4>
                     <p id="step3Description">We'll send pre-program information one week before your program starts.</p>
                   </div>
+                </div>
+              </div>
+
+              <!-- Consultation Booking (Paid) -->
+              <div class="consultation-booking-section" id="consultationBookingPaid">
+                <h3>Book Your Pre-Program Consultation</h3>
+                <p class="consultation-description">This complimentary 15-minute call helps you identify which topics will be most relevant to your specific workplace challenges.</p>
+
+                <div class="consultation-type-toggle">
+                  <button type="button" class="consultation-type-btn active" data-type="virtual" onclick="setConsultationType('virtual', 'paid')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                    Virtual Meeting
+                  </button>
+                  <button type="button" class="consultation-type-btn" data-type="phone" onclick="setConsultationType('phone', 'paid')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                    Phone Call
+                  </button>
+                </div>
+
+                <div class="consultation-widget-container">
+                  <iframe
+                    id="consultationWidgetPaid"
+                    src="https://api.leadconnectorhq.com/widget/booking/zBJ211mW8uCGgYmWrqES"
+                    scrolling="no"
+                    style="width: 100%; min-height: 500px; border: none;">
+                  </iframe>
                 </div>
               </div>
 
@@ -472,5 +502,7 @@
   <script src="js/utm-tracking.js" defer></script>
   <!-- Registration Script -->
   <script src="js/register.js" defer></script>
+  <!-- GoHighLevel Booking Widget Script -->
+  <script src="https://link.msgsndr.com/js/form_embed.js" type="text/javascript"></script>
 </body>
 </html>
