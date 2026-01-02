@@ -34,7 +34,7 @@
     }
 
     .success-container {
-      max-width: 600px;
+      max-width: 650px;
       width: 100%;
       background: white;
       border-radius: 16px;
@@ -73,27 +73,123 @@
       margin-bottom: 2rem;
     }
 
-    .success-details {
-      background: #f8f9fa;
+    /* Program Details Card */
+    .program-card {
+      background: #1a1a2e;
+      color: white;
       border-radius: 12px;
       padding: 1.5rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       text-align: left;
     }
 
-    .success-details h3 {
+    .program-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      margin-bottom: 0.25rem;
+      color: white;
+    }
+
+    .program-format {
       font-size: 0.875rem;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .format-badge {
+      background: rgba(255,255,255,0.15);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .program-info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .program-info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .program-info-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .program-info-value {
+      font-weight: 600;
+      color: white;
+      font-size: 0.95rem;
+    }
+
+    .program-info-item.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .calendar-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .calendar-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      background: rgba(255,255,255,0.1);
+      border-radius: 6px;
+      color: white;
+      text-decoration: none;
+      font-size: 0.8rem;
+      transition: background 0.2s;
+    }
+
+    .calendar-btn:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .calendar-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Registration Details */
+    .registration-details {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+
+    .registration-details h4 {
+      font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: #6b7280;
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
     }
 
     .detail-row {
       display: flex;
       justify-content: space-between;
-      padding: 0.5rem 0;
+      padding: 0.4rem 0;
       border-bottom: 1px solid #e5e7eb;
+      font-size: 0.9rem;
     }
 
     .detail-row:last-child {
@@ -113,35 +209,53 @@
       color: #22c55e;
     }
 
+    /* Next Steps */
     .next-steps {
       text-align: left;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
 
     .next-steps h3 {
-      font-size: 1.1rem;
-      margin-bottom: 1rem;
+      font-size: 1rem;
+      margin-bottom: 0.75rem;
       color: #1a1a2e;
     }
 
     .next-steps ul {
       list-style: none;
       padding: 0;
+      margin: 0;
     }
 
     .next-steps li {
       display: flex;
       align-items: flex-start;
       gap: 0.75rem;
-      padding: 0.5rem 0;
+      padding: 0.4rem 0;
+      font-size: 0.9rem;
+      color: #4b5563;
     }
 
     .next-steps li::before {
-      content: "✓";
-      color: #22c55e;
-      font-weight: bold;
+      content: "1";
+      background: #22c55e;
+      color: white;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 600;
+      flex-shrink: 0;
     }
 
+    .next-steps li:nth-child(2)::before { content: "2"; }
+    .next-steps li:nth-child(3)::before { content: "3"; }
+    .next-steps li:nth-child(4)::before { content: "4"; }
+
+    /* Actions */
     .success-actions {
       display: flex;
       gap: 1rem;
@@ -175,6 +289,7 @@
       background: #e5e7eb;
     }
 
+    /* Loading State */
     .loading-state {
       padding: 3rem;
     }
@@ -193,6 +308,7 @@
       to { transform: rotate(360deg); }
     }
 
+    /* Error State */
     .error-state {
       color: #dc2626;
     }
@@ -208,6 +324,19 @@
       margin: 0 auto 1.5rem;
       color: #dc2626;
       font-size: 2rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .success-container {
+        padding: 2rem 1.5rem;
+      }
+      .program-info-grid {
+        grid-template-columns: 1fr;
+      }
+      .calendar-actions {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
@@ -230,11 +359,47 @@
       <h1 class="success-title">Payment Successful!</h1>
       <p class="success-subtitle">You're officially enrolled. Welcome to IAML!</p>
 
-      <div class="success-details">
-        <h3>Registration Details</h3>
+      <!-- Program Details Card -->
+      <div class="program-card">
+        <h3 id="programName">-</h3>
+        <div class="program-format">
+          <span class="format-badge" id="programFormat">-</span>
+          <span id="programBlocks" style="display: none;"></span>
+        </div>
+
+        <div class="program-info-grid">
+          <div class="program-info-item">
+            <span class="program-info-label">Dates</span>
+            <span class="program-info-value" id="programDates">-</span>
+          </div>
+          <div class="program-info-item">
+            <span class="program-info-label">Location</span>
+            <span class="program-info-value" id="programLocation">-</span>
+          </div>
+          <div class="program-info-item full-width" id="venueRow" style="display: none;">
+            <span class="program-info-label">Venue</span>
+            <span class="program-info-value" id="programVenue">-</span>
+          </div>
+        </div>
+
+        <div class="calendar-actions" id="calendarActions">
+          <a href="#" class="calendar-btn" id="googleCalendarLink" target="_blank">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm-8 4H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z"/></svg>
+            Add to Google Calendar
+          </a>
+          <a href="#" class="calendar-btn" id="icsDownload" download="iaml-program.ics">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            Download .ics
+          </a>
+        </div>
+      </div>
+
+      <!-- Registration Details -->
+      <div class="registration-details">
+        <h4>Payment Details</h4>
         <div class="detail-row">
-          <span class="detail-label">Program</span>
-          <span class="detail-value" id="detailProgram">-</span>
+          <span class="detail-label">Registrant</span>
+          <span class="detail-value" id="detailName">-</span>
         </div>
         <div class="detail-row">
           <span class="detail-label">Email</span>
@@ -250,12 +415,14 @@
         </div>
       </div>
 
+      <!-- Next Steps -->
       <div class="next-steps">
         <h3>What's Next?</h3>
         <ul>
           <li>Check your email for a receipt and confirmation details</li>
           <li>You'll receive program materials 1 week before your session</li>
-          <li>Mark your calendar for your program dates</li>
+          <li>Add the dates to your calendar using the buttons above</li>
+          <li>Questions? Contact us at info@iaml.com</li>
         </ul>
       </div>
 
@@ -303,13 +470,7 @@
         }
 
         // Update the UI with payment details
-        document.getElementById('detailProgram').textContent =
-          data.lineItems?.[0]?.description || data.metadata?.program || 'IAML Program';
-        document.getElementById('detailEmail').textContent = data.customer?.email || '-';
-        document.getElementById('detailAmount').textContent =
-          new Intl.NumberFormat('en-US', { style: 'currency', currency: data.currency || 'USD' }).format(data.amountTotal);
-        document.getElementById('detailConfirmation').textContent =
-          data.metadata?.registrationCode || data.paymentIntentId?.slice(-8).toUpperCase() || '-';
+        updateUI(data);
 
         // Create registration in Airtable if we have the metadata
         if (data.metadata && data.customer) {
@@ -325,6 +486,133 @@
         showError('An error occurred while verifying your payment');
       }
 
+      function updateUI(data) {
+        const metadata = data.metadata || {};
+
+        // Program name
+        document.getElementById('programName').textContent =
+          metadata.program || data.lineItems?.[0]?.description || 'IAML Program';
+
+        // Format
+        const formatName = metadata.formatName || metadata.format || 'Program';
+        document.getElementById('programFormat').textContent = formatName;
+
+        // Blocks (if partial)
+        if (metadata.blocks) {
+          const blocksEl = document.getElementById('programBlocks');
+          blocksEl.textContent = metadata.blocks;
+          blocksEl.style.display = 'inline';
+        }
+
+        // Dates
+        const startDate = metadata.startDate;
+        const endDate = metadata.endDate;
+        if (startDate) {
+          const dateStr = formatDateRange(startDate, endDate);
+          document.getElementById('programDates').textContent = dateStr;
+        } else {
+          document.getElementById('programDates').textContent = 'See confirmation email';
+        }
+
+        // Location
+        const city = metadata.city;
+        const formatType = metadata.format;
+        if (formatType === 'virtual') {
+          document.getElementById('programLocation').textContent = 'Virtual (Zoom)';
+        } else if (formatType === 'on-demand') {
+          document.getElementById('programLocation').textContent = 'On-Demand';
+          document.getElementById('calendarActions').style.display = 'none';
+        } else if (city) {
+          document.getElementById('programLocation').textContent = city;
+        } else {
+          document.getElementById('programLocation').textContent = 'See confirmation email';
+        }
+
+        // Venue
+        if (metadata.venue && formatType === 'in-person') {
+          document.getElementById('programVenue').textContent = metadata.venue;
+          document.getElementById('venueRow').style.display = 'block';
+        }
+
+        // Registrant name
+        const customerName = metadata.customerName || data.customer?.name || '-';
+        document.getElementById('detailName').textContent = customerName;
+
+        // Email
+        document.getElementById('detailEmail').textContent = data.customer?.email || '-';
+
+        // Amount
+        document.getElementById('detailAmount').textContent =
+          new Intl.NumberFormat('en-US', { style: 'currency', currency: data.currency || 'USD' }).format(data.amountTotal);
+
+        // Confirmation number
+        document.getElementById('detailConfirmation').textContent =
+          metadata.registrationCode || data.paymentIntentId?.slice(-8).toUpperCase() || '-';
+
+        // Calendar links
+        if (startDate) {
+          setupCalendarLinks(metadata, data);
+        } else {
+          document.getElementById('calendarActions').style.display = 'none';
+        }
+      }
+
+      function formatDateRange(start, end) {
+        const options = { month: 'short', day: 'numeric', year: 'numeric' };
+        const startDate = new Date(start);
+
+        if (!end || start === end) {
+          return startDate.toLocaleDateString('en-US', options);
+        }
+
+        const endDate = new Date(end);
+
+        // Same month
+        if (startDate.getMonth() === endDate.getMonth() && startDate.getFullYear() === endDate.getFullYear()) {
+          return `${startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${endDate.getDate()}, ${endDate.getFullYear()}`;
+        }
+
+        return `${startDate.toLocaleDateString('en-US', options)} - ${endDate.toLocaleDateString('en-US', options)}`;
+      }
+
+      function setupCalendarLinks(metadata, data) {
+        const programName = metadata.program || 'IAML Program';
+        const startDate = metadata.startDate;
+        const endDate = metadata.endDate || startDate;
+        const location = metadata.format === 'virtual' ? 'Virtual (Zoom)' :
+                        (metadata.venue ? `${metadata.venue}, ${metadata.city}` : metadata.city || '');
+
+        // Google Calendar link
+        const gcalStart = startDate.replace(/-/g, '');
+        const gcalEnd = new Date(new Date(endDate).getTime() + 86400000).toISOString().split('T')[0].replace(/-/g, '');
+        const gcalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(programName)}&dates=${gcalStart}/${gcalEnd}&location=${encodeURIComponent(location)}&details=${encodeURIComponent('IAML Certificate Program - Confirmation #' + (metadata.registrationCode || ''))}`;
+        document.getElementById('googleCalendarLink').href = gcalUrl;
+
+        // ICS file
+        const icsContent = generateICS(programName, startDate, endDate, location, metadata.registrationCode);
+        const blob = new Blob([icsContent], { type: 'text/calendar' });
+        document.getElementById('icsDownload').href = URL.createObjectURL(blob);
+      }
+
+      function generateICS(title, startDate, endDate, location, confirmationCode) {
+        const formatDate = (date) => new Date(date).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+        const start = formatDate(startDate);
+        const end = formatDate(new Date(new Date(endDate).getTime() + 86400000)); // Add 1 day for all-day event
+
+        return `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//IAML//Program Registration//EN
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:${startDate.replace(/-/g, '')}
+DTEND;VALUE=DATE:${endDate.replace(/-/g, '')}
+SUMMARY:${title}
+LOCATION:${location}
+DESCRIPTION:IAML Certificate Program\\nConfirmation #${confirmationCode || 'N/A'}\\n\\nQuestions? Contact info@iaml.com
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR`;
+      }
+
       function showError(message) {
         loadingState.style.display = 'none';
         errorState.style.display = 'block';
@@ -333,17 +621,24 @@
 
       async function createRegistration(sessionData) {
         try {
-          // Parse customer name
-          const nameParts = (sessionData.customer.name || '').split(' ');
-          const firstName = nameParts[0] || '';
-          const lastName = nameParts.slice(1).join(' ') || '';
+          // Use metadata name if available, otherwise parse from Stripe
+          let firstName, lastName;
+          if (sessionData.metadata?.customerName) {
+            const nameParts = sessionData.metadata.customerName.split(' ');
+            firstName = nameParts[0] || '';
+            lastName = nameParts.slice(1).join(' ') || '';
+          } else {
+            const nameParts = (sessionData.customer.name || '').split(' ');
+            firstName = nameParts[0] || '';
+            lastName = nameParts.slice(1).join(' ') || '';
+          }
 
           // Find or create contact
           const contactId = await findOrCreateContact({
             firstName,
             lastName,
             email: sessionData.customer.email,
-            phone: sessionData.customer.phone
+            phone: sessionData.metadata?.customerPhone || sessionData.customer.phone
           });
 
           // Find or create company if provided
@@ -448,11 +743,15 @@
                 first_name: firstName,
                 last_name: lastName,
                 email: sessionData.customer.email,
-                phone: sessionData.customer.phone,
+                phone: sessionData.metadata?.customerPhone || sessionData.customer.phone,
                 selected_program: sessionData.metadata?.program || sessionData.lineItems?.[0]?.description,
+                program_format: sessionData.metadata?.formatName,
+                program_start_date: sessionData.metadata?.startDate,
+                program_end_date: sessionData.metadata?.endDate,
+                selected_location: sessionData.metadata?.city,
                 amount_due: sessionData.amountTotal,
                 payment_method: 'stripe_checkout',
-                tags: ['new_registration', 'stripe_checkout']
+                tags: ['new_registration', 'stripe_checkout', 'paid']
               }
             })
           });

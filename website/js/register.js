@@ -1983,6 +1983,14 @@
       // Build line items for Checkout
       const lineItems = buildCheckoutLineItems();
 
+      // Build session details for metadata
+      const sessionDetails = state.sessionRecord || {};
+      const formatName = FORMAT_MAP[state.format] || state.format;
+      const startDate = state.dynamicStartDate || sessionDetails['Start Date'] || '';
+      const endDate = state.dynamicEndDate || sessionDetails['End Date'] || '';
+      const city = sessionDetails['City'] || '';
+      const venue = sessionDetails['Venue Name'] || '';
+
       // Create Checkout Session
       const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
@@ -1995,11 +2003,18 @@
           metadata: {
             program: state.program,
             format: state.format,
+            formatName: formatName,
             sessionId: state.sessionId,
             registrationCode: state.registrationCode,
             company: state.contactCompany,
             blocks: state.selectedBlocks.join(','),
-            couponCode: state.couponCode
+            couponCode: state.couponCode,
+            startDate: startDate,
+            endDate: endDate,
+            city: city,
+            venue: venue,
+            customerName: `${state.contactFirstName} ${state.contactLastName}`,
+            customerPhone: state.contactPhone
           }
         })
       });
