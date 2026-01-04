@@ -1,161 +1,148 @@
 /**
  * Stripe Product and Price IDs for IAML Programs
- * Generated: 2026-01-02
+ * Generated: 2026-01-02 (TEST MODE)
  *
  * These IDs are used for Checkout Sessions, Payment Links, and Invoices.
  * All prices are in USD.
+ *
+ * NOTE: These are TEST MODE IDs. For production, use the live mode IDs.
  */
 
 window.STRIPE_PRODUCTS = {
   // Certificate Programs (Full)
   'ER': {
     name: 'Certificate in Employee Relations Law',
-    productId: 'prod_TicDicbTZg1zFK',
-    priceId: 'price_1SlAywLD9MaHSRjsCBYiiVXU',
+    productId: 'prod_TigBqQgrpGy3A1',
+    priceId: 'price_1SlEp9Poa77sAKKyLUnV3pAv',
     price: 2375,
     type: 'certificate',
-    blocks: 3,
-    paymentLink: 'https://buy.stripe.com/bJeeVe71K5bL1B6gfkds40Y'
+    blocks: 3
   },
   'SH': {
     name: 'Certificate in Strategic HR Leadership',
-    productId: 'prod_TicD6kbgesBPFY',
-    priceId: 'price_1SlAywLD9MaHSRjsg2S1UZHs',
+    productId: 'prod_TigBnkP5mk58ec',
+    priceId: 'price_1SlEp9Poa77sAKKym3AGDKrn',
     price: 2375,
     type: 'certificate',
-    blocks: 2,
-    paymentLink: 'https://buy.stripe.com/bJedRa2LugUtgw0gfkds40Z'
+    blocks: 2
   },
   'EB': {
     name: 'Certificate in Employee Benefits Law',
-    productId: 'prod_TicDGR0w8STBkb',
-    priceId: 'price_1SlAyxLD9MaHSRjsACFZeAAv',
+    productId: 'prod_TigBHaKjAMlCuP',
+    priceId: 'price_1SlEpAPoa77sAKKy997FKykY',
     price: 2375,
     type: 'certificate',
-    blocks: 3,
-    paymentLink: 'https://buy.stripe.com/28E9AU71K5bLcfK0gmds410'
+    blocks: 3
   },
 
   // Employee Relations Law Blocks
   'ER_BLOCK_1': {
     name: 'Comprehensive Labor Relations',
-    productId: 'prod_TicDzSpqfISsd3',
-    priceId: 'price_1SlAyxLD9MaHSRjsgwJ1CNld',
+    productId: 'prod_TigBxcdQ2lWw7t',
+    priceId: 'price_1SlEpAPoa77sAKKyc0thbWIr',
     price: 1375,
     type: 'block',
     blockOf: 'ER',
-    blockNum: 1,
-    paymentLink: 'https://buy.stripe.com/fZu4gA71Kaw50x23syds411'
+    blockNum: 1
   },
   'ER_BLOCK_2': {
     name: 'Discrimination Prevention & Defense',
-    productId: 'prod_TicDjtBkZX8kfg',
-    priceId: 'price_1SlAyyLD9MaHSRjs1y2e0As0',
+    productId: 'prod_TigBfwVDvmIBKn',
+    priceId: 'price_1SlEpBPoa77sAKKyKNyDfJjo',
     price: 1375,
     type: 'block',
     blockOf: 'ER',
-    blockNum: 2,
-    paymentLink: 'https://buy.stripe.com/14AaEY2Lu1Zz3Jed38ds412'
+    blockNum: 2
   },
   'ER_BLOCK_3': {
     name: 'Special Issues in Employment Law',
-    productId: 'prod_TicDHSceQjlztK',
-    priceId: 'price_1SlAyyLD9MaHSRjst7SDuMmA',
+    productId: 'prod_TigB310ObnmLDK',
+    priceId: 'price_1SlEpBPoa77sAKKynx0DvyZX',
     price: 575,
     type: 'block',
     blockOf: 'ER',
-    blockNum: 3,
-    paymentLink: 'https://buy.stripe.com/6oUfZi99SeMl2Fa9QWds413'
+    blockNum: 3
   },
 
   // Strategic HR Leadership Blocks
   'SH_BLOCK_1': {
     name: 'HR Law Fundamentals',
-    productId: 'prod_TicDniKqANHO0Y',
-    priceId: 'price_1SlAyzLD9MaHSRjszH4laoWd',
+    productId: 'prod_TigBfylFrUeGiH',
+    priceId: 'price_1SlEpCPoa77sAKKyIqnjclHn',
     price: 1375,
     type: 'block',
     blockOf: 'SH',
-    blockNum: 1,
-    paymentLink: 'https://buy.stripe.com/cNi00k1Hq5bL4Nigfkds414'
+    blockNum: 1
   },
   'SH_BLOCK_2': {
     name: 'Strategic HR Management',
-    productId: 'prod_TicDVZ6OukHYY9',
-    priceId: 'price_1SlAyzLD9MaHSRjstPQ8UNi4',
+    productId: 'prod_TigBH8xhChAeBe',
+    priceId: 'price_1SlEpCPoa77sAKKyJnHARBDh',
     price: 1775,
     type: 'block',
     blockOf: 'SH',
-    blockNum: 2,
-    paymentLink: 'https://buy.stripe.com/cNieVe2Lu1Zz4Ni9QWds415'
+    blockNum: 2
   },
 
   // Employee Benefits Law Blocks
   'EB_BLOCK_1': {
     name: 'Retirement Plans',
-    productId: 'prod_TicDwVLTRUqyPR',
-    priceId: 'price_1SlAz0LD9MaHSRjsDjnAFmEq',
+    productId: 'prod_TigB5yl5jggjSl',
+    priceId: 'price_1SlEpDPoa77sAKKyRtZQjj5I',
     price: 1375,
     type: 'block',
     blockOf: 'EB',
-    blockNum: 1,
-    paymentLink: 'https://buy.stripe.com/4gM6oIbi06fPdjOe7cds416'
+    blockNum: 1
   },
   'EB_BLOCK_2': {
     name: 'Benefit Plan Claims, Appeals & Litigation',
-    productId: 'prod_TicDcZkzU2pOEd',
-    priceId: 'price_1SlAz0LD9MaHSRjs54pUnUNq',
+    productId: 'prod_TigB7EIakKFOxl',
+    priceId: 'price_1SlEpDPoa77sAKKyMXIbBDRw',
     price: 575,
     type: 'block',
     blockOf: 'EB',
-    blockNum: 2,
-    paymentLink: 'https://buy.stripe.com/8x2dRa71KfQp6Vq5AGds417'
+    blockNum: 2
   },
   'EB_BLOCK_3': {
     name: 'Welfare Benefits Plan Issues',
-    productId: 'prod_TicDivrViW5tEa',
-    priceId: 'price_1SlAz1LD9MaHSRjsur88v8JQ',
+    productId: 'prod_TigBVl4qXAivlL',
+    priceId: 'price_1SlEpEPoa77sAKKyhirIPYNH',
     price: 975,
     type: 'block',
     blockOf: 'EB',
-    blockNum: 3,
-    paymentLink: 'https://buy.stripe.com/9B600k2Lu1Zz7Zu7IOds418'
+    blockNum: 3
   },
 
   // Advanced Certificates (No Blocks)
   'SE': {
     name: 'Advanced Certificate in Strategic Employment Law',
-    productId: 'prod_TicDGW2ltCW5VM',
-    priceId: 'price_1SlAz1LD9MaHSRjstppbhHaH',
+    productId: 'prod_TigBi0FndXzJAG',
+    priceId: 'price_1SlEpEPoa77sAKKy8dTSBC2R',
     price: 1575,
-    type: 'advanced_certificate',
-    paymentLink: 'https://buy.stripe.com/7sYfZi2Lu8nXcfKgfkds419'
+    type: 'advanced_certificate'
   },
   'WI': {
     name: 'Certificate in Workplace Investigations',
-    productId: 'prod_TicDf9Xmlq5ezg',
-    priceId: 'price_1SlAz2LD9MaHSRjs9sIiDw03',
+    productId: 'prod_TigBA3k9JXmxck',
+    priceId: 'price_1SlEpFPoa77sAKKyhyq1S57P',
     price: 1575,
-    type: 'certificate',
-    paymentLink: 'https://buy.stripe.com/cNi9AUeuc5bL6Vqgfkds41a'
+    type: 'certificate'
   },
   'AB': {
     name: 'Advanced Certificate in Employee Benefits Law',
-    productId: 'prod_TicDg3KlCBXuR5',
-    priceId: 'price_1SlAz2LD9MaHSRjsBSsbWwF1',
+    productId: 'prod_TigBqfyJblg5tU',
+    priceId: 'price_1SlEpFPoa77sAKKy6fWaVHlc',
     price: 1575,
-    type: 'advanced_certificate',
-    paymentLink: 'https://buy.stripe.com/00wfZicm48nX5RmbZ4ds41b'
+    type: 'advanced_certificate'
   },
 
   // Standalone Programs
   'QELU': {
     name: 'Quarterly Employment Law Update',
-    productId: 'prod_TicDNl62knkpR6',
-    priceId: 'price_1SlAz3LD9MaHSRjs7THNy2H4',
+    productId: 'prod_TigBo6rzm4x1Pe',
+    priceId: 'price_1SlEpGPoa77sAKKyH6vDL58d',
     price: 397,
-    type: 'standalone',
-    paymentLink: 'https://buy.stripe.com/8x2aEY71KeMlenS8MSds41c'
+    type: 'standalone'
   }
 };
 

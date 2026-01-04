@@ -11,7 +11,7 @@
 window.ENV_CONFIG = {
     // ===== STRIPE CONFIGURATION =====
     // Publishable key is safe to expose in frontend code (it's public by design)
-    STRIPE_PUBLISHABLE_KEY: 'pk_test_51Rm0oDLD9MaHSRjsQahsZns3p9JW1U38hM5r0WEDIl6j7U2XL1f3zsMKEcQhZ71DO53BgA3TGFbzQW1Gvuz3Ec9s00JgVCzA9C',
+    STRIPE_PUBLISHABLE_KEY: 'pk_test_51Rm0oJPoa77sAKKyI3lSf4uFwI5ZjP5fEoUHTkUKHAzGMIWJrKuVjMajNBXPO5OrV2WKgxbGmxKq1PY9RhDRDLol00bbYjOWWf',
 
     // ===== GOHIGHLEVEL WEBHOOKS =====
     // Webhook URL (no authentication needed, obscured URL is the security mechanism)
