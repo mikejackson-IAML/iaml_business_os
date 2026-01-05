@@ -12816,7 +12816,7 @@ input[type="radio"].session-radio {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 150px 20px 80px;
+  padding: 96px 20px 80px;
 }
 
 .ct-hero {
@@ -12832,6 +12832,7 @@ input[type="radio"].session-radio {
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
+  margin-top: 80px;
   margin-bottom: 30px;
 }
 
@@ -13414,7 +13415,7 @@ input[type="radio"].session-radio {
 @media (max-width: 768px) {
   .ct-hero-wrapper {
     min-height: auto;
-    padding: 120px 16px 60px;
+    padding: 96px 16px 60px;
   }
 
   .ct-headline {
