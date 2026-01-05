@@ -1,0 +1,98 @@
+{
+  "department": "marketing",
+  "version": "1.0.0",
+  "director": {
+    "name": "Marketing Director",
+    "model": "claude-sonnet-4-20250514",
+    "context_includes": [
+      "DEPARTMENT.md",
+      "employees/*/ROLE.md",
+      "workers/*/*.md"
+    ]
+  },
+  "health_score": {
+    "weights": {
+      "email_deliverability": 0.25,
+      "list_health": 0.20,
+      "campaign_performance": 0.20,
+      "automation_status": 0.15,
+      "social_engagement": 0.10,
+      "no_critical_blockers": 0.10
+    },
+    "thresholds": {
+      "healthy": 80,
+      "warning": 60,
+      "critical": 40
+    }
+  },
+  "alerts": {
+    "channels": ["dashboard", "email"],
+    "escalation_delay_minutes": 30
+  },
+  "integrations": {
+    "smartlead": {
+      "enabled": true,
+      "purpose": "Cold email campaigns, list management",
+      "sync_frequency": "hourly",
+      "credentials_key": "SMARTLEAD_API_KEY"
+    },
+    "gohighlevel": {
+      "enabled": true,
+      "purpose": "Past participant outreach, CRM",
+      "sync_frequency": "hourly",
+      "credentials_key": "GHL_PIT_TOKEN"
+    },
+    "supabase": {
+      "enabled": true,
+      "purpose": "Contact database, analytics storage",
+      "sync_frequency": "real-time",
+      "credentials_key": "SUPABASE_TOKEN"
+    },
+    "airtable": {
+      "enabled": true,
+      "purpose": "Program data, registrations",
+      "sync_frequency": "hourly",
+      "credentials_key": "AIRTABLE_API_KEY"
+    },
+    "zapmail": {
+      "enabled": true,
+      "purpose": "Domain management",
+      "sync_frequency": "daily",
+      "credentials_key": "ZAPMAIL_API_KEY"
+    }
+  },
+  "employees": {
+    "email-campaign-specialist": {
+      "commands": [
+        "cold-outreach-sequence",
+        "alumni-campaign",
+        "ab-test-analysis"
+      ]
+    }
+  },
+  "workers": {
+    "email": {
+      "list-health-monitor": {
+        "type": "monitor",
+        "schedule": "0 6 * * *",
+        "enabled": false
+      },
+      "campaign-analyst": {
+        "type": "monitor",
+        "trigger": "post-send",
+        "delay_hours": 48,
+        "enabled": false
+      },
+      "deliverability-monitor": {
+        "type": "monitor",
+        "schedule": "0 7 * * *",
+        "enabled": false
+      },
+      "ab-test-manager": {
+        "type": "hybrid",
+        "trigger": "threshold",
+        "enabled": false
+      }
+    }
+  }
+}

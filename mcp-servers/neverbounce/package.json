@@ -1,0 +1,27 @@
+{
+  "name": "neverbounce-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for NeverBounce email verification API",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "neverbounce-mcp": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "mcp",
+    "neverbounce",
+    "email-verification",
+    "model-context-protocol"
+  ],
+  "author": "IAML",
+  "license": "MIT"
+}

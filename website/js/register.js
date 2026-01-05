@@ -11,6 +11,13 @@
   // CONFIGURATION & CONSTANTS
   // ============================================
 
+  // Calculate years since founding (auto-increments every January 1st)
+  function getYearsOfExcellence() {
+    const foundingYear = 1979;
+    const currentYear = new Date().getFullYear();
+    return currentYear - foundingYear;
+  }
+
   const PROGRAM_DATA = {
     'Certificate in Employee Relations Law': {
       code: 'ER',
@@ -175,10 +182,10 @@
     'program': {
       type: 'stats',
       headline: 'Practicing Attorneys, Not Academics',
-      subtext: '45 years of training HR professionals who need answers they can use Monday morning.',
+      subtext: getYearsOfExcellence() + ' years of training HR professionals who need answers they can use Monday morning.',
       stats: [
-        { number: '45+', label: 'Years of Excellence' },
-        { number: '7,000+', label: 'HR Professionals Trained' },
+        { number: getYearsOfExcellence() + '+', label: 'Years of Excellence' },
+        { number: '80,000+', label: 'HR Professionals Trained' },
         { number: '9', label: 'Cities Nationwide' }
       ]
     },
@@ -193,7 +200,7 @@
     },
     'contact': {
       type: 'standard',
-      headline: 'Join 7,000+ HR Professionals',
+      headline: 'Join 80,000+ HR Professionals',
       subtext: 'Who have advanced their careers with IAML certification programs. You\'re in good company.'
     },
     'payment-method': {
@@ -1239,7 +1246,6 @@
         loadPrograms();
         saveStateToSessionStorage();
         updateNextButtonVisibility();
-        showStep('program');
       });
     });
 

@@ -54,12 +54,52 @@ Copy the entire contents of the "MCP Credentials" LastPass note and paste it int
 | vapi | `VAPI_API_KEY` |
 | google-search-console | `GOOGLE_SERVICE_ACCOUNT_KEY` |
 | google-workspace | `GOOGLE_SERVICE_ACCOUNT_KEY` |
+| **pagespeed-insights** | `PAGESPEED_API_KEY` |
+| **cloudinary** | `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` |
+| **sentry** | `SENTRY_AUTH_TOKEN`, `SENTRY_ORG` |
 
 **Servers that don't need credentials:**
 - playwright (no auth needed)
 - context7 (no auth needed)
 - n8n-docs (no auth needed)
 - lighthouse (no auth needed)
+
+---
+
+## Speed Optimizer Employee - New MCP Servers
+
+The `/speed-optimize` command uses these additional MCP servers for performance analysis:
+
+### PageSpeed Insights API
+Get your API key from Google Cloud Console:
+1. Go to https://console.cloud.google.com/apis/credentials
+2. Create a new API key or use existing
+3. Enable the "PageSpeed Insights API"
+
+```bash
+export PAGESPEED_API_KEY="your-api-key"
+```
+
+### Cloudinary (Optional - for image optimization)
+Get credentials from Cloudinary Console:
+1. Go to https://console.cloudinary.com/settings/api-keys
+2. Copy your Cloud Name, API Key, and API Secret
+
+```bash
+export CLOUDINARY_CLOUD_NAME="your-cloud-name"
+export CLOUDINARY_API_KEY="your-api-key"
+export CLOUDINARY_API_SECRET="your-api-secret"
+```
+
+### Sentry (Optional - for error tracking)
+Get auth token from Sentry:
+1. Go to https://sentry.io/settings/account/api/auth-tokens/
+2. Create a new auth token with `project:read` scope
+
+```bash
+export SENTRY_AUTH_TOKEN="your-auth-token"
+export SENTRY_ORG="your-org-slug"
+```
 
 ### Step 3: Setup Google Service Account Key
 
@@ -92,7 +132,8 @@ for var in SUPABASE_URL SUPABASE_SERVICE_ROLE_KEY N8N_API_URL N8N_API_KEY \
   DATAFORSEO_LOGIN DATAFORSEO_PASSWORD VERCEL_TOKEN VERCEL_TEAM_ID \
   NOTION_API_KEY PERPLEXITY_API_KEY GEMINI_API_KEY BRAVE_API_KEY \
   FIRECRAWL_API_KEY STRIPE_SECRET_KEY ELEVENLABS_API_KEY VAPI_API_KEY \
-  GOOGLE_SERVICE_ACCOUNT_KEY; do \
+  GOOGLE_SERVICE_ACCOUNT_KEY PAGESPEED_API_KEY CLOUDINARY_CLOUD_NAME \
+  CLOUDINARY_API_KEY CLOUDINARY_API_SECRET SENTRY_AUTH_TOKEN SENTRY_ORG; do \
   if [ -n "${!var}" ]; then \
     echo "✓ $var is set"; \
   else \
@@ -175,6 +216,18 @@ export ELEVENLABS_API_KEY=""
 
 # Vapi
 export VAPI_API_KEY=""
+
+# PageSpeed Insights (Speed Optimizer)
+export PAGESPEED_API_KEY="AIzaSyCY5Q46dQcUeXdp251niJGZFXsBxHgLZ34"
+
+# Cloudinary (Speed Optimizer - Image Optimization)
+export CLOUDINARY_CLOUD_NAME="detrhojvo"
+export CLOUDINARY_API_KEY="647898349169165"
+export CLOUDINARY_API_SECRET="EF-5IpOWns0jJleXNc7vvirGsBM"
+
+# Sentry (Speed Optimizer - Error Tracking)
+export SENTRY_AUTH_TOKEN="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"
+export SENTRY_ORG="iaml"
 
 # Google (path to service account JSON)
 export GOOGLE_SERVICE_ACCOUNT_KEY="$HOME/.config/gcloud/mcp-service-account.json"
