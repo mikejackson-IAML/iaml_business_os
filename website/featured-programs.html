@@ -404,6 +404,7 @@
         </p>
 
         <div class="fp-button-container">
+          <a href="#quiz-section" class="btn btn-primary btn-lg" onclick="scrollToQuiz(event)">Get Your Recommendation</a>
           <a href="https://iaml.com/register" class="btn btn-register btn-lg">Reserve Your Seat</a>
         </div>
       </div>
@@ -1241,7 +1242,7 @@
     </section>
 
     <!-- Quiz Section -->
-    <section class="quiz-section">
+    <section class="quiz-section" id="quiz-section">
       <div class="quiz-container">
         <div class="quiz-content" id="quizContent">
           <!-- Left Content -->
@@ -1530,6 +1531,17 @@
   <script src="js/mobileMenu.js" defer></script>
 
   <script>
+
+    // ============================================================================
+    // SCROLL TO QUIZ FUNCTION
+    // ============================================================================
+    function scrollToQuiz(event) {
+      event.preventDefault();
+      const quizSection = document.getElementById('quiz-section');
+      if (quizSection) {
+        quizSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
 
     // ============================================================================
     // TAB NAVIGATION
