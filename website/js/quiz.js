@@ -8,7 +8,7 @@ class ProgramRecommendationEngine {
         'certificate in employee relations law',
         'advanced certificate in strategic employment law',
         'certificate in conducting workplace investigations',
-        'certificate in strategic hr management',
+        'certificate in strategic hr leadership',
         'certificate in employee benefits law',
         'advanced certificate in employee benefits law'
       ];
@@ -48,7 +48,7 @@ class ProgramRecommendationEngine {
       
       this.programDescriptions = {
         'Certificate in Employee Relations Law Seminar': 'Master essential employment law fundamentals and compliance strategies.',
-        'Certificate in Strategic HR Management': 'Transform your HR leadership skills and drive organizational success.',
+        'Certificate in Strategic HR Leadership': 'Lead strategic HR initiatives that drive workforce performance and business success.',
         'Advanced Certificate in Strategic Employment Law': 'Navigate complex employment law challenges with expert-level insights.',
         'Certificate in Conducting Workplace Investigations': 'Become your organization\'s trusted expert in workplace investigations.',
         'Certificate in Employee Benefits Law': 'Master ERISA compliance and benefits administration complexities.',
@@ -222,7 +222,7 @@ class ProgramRecommendationEngine {
     { id: 'p1', name: 'Certificate in Employee Relations Law Seminar', description: 'Employment law, compliance, regulations, policy, risk.', targetAudience: 'HR professional, manager, director', format: 'In-person & Virtual', pageUrl: '/programs/employee-relations-law.html' },
     { id: 'p2', name: 'Advanced Certificate in Strategic Employment Law', description: 'Executive, strategic, advanced employment law.', targetAudience: 'Executive, C-suite, senior HR', format: 'In-person & Virtual', pageUrl: '/programs/advanced-employment-law.html' },
     { id: 'p3', name: 'Certificate in Conducting Workplace Investigations', description: 'Investigations, harassment, misconduct, interviews.', targetAudience: 'HR professional, manager', format: 'In-person & Virtual', pageUrl: '/programs/workplace-investigations.html' },
-    { id: 'p4', name: 'Certificate in Strategic HR Management', description: 'Strategic HR, leadership, culture, performance.', targetAudience: 'Manager, director, senior HR', format: 'In-person', pageUrl: '/programs/strategic-hr-management.html' },
+    { id: 'p4', name: 'Certificate in Strategic HR Leadership', description: 'Strategic HR, leadership, culture, performance.', targetAudience: 'Manager, director, senior HR', format: 'Virtual', pageUrl: '/programs/strategic-hr-leadership.html' },
     { id: 'p5', name: 'Certificate in Employee Benefits Law', description: 'Benefits, ERISA, retirement plans, welfare.', targetAudience: 'Benefits manager, HR professional', format: 'In-person & Virtual', pageUrl: '/programs/employee-benefits-law.html' },
     { id: 'p6', name: 'Advanced Certificate in Employee Benefits Law', description: 'Advanced benefits, ERISA, executive, strategic benefits law.', targetAudience: 'Executive, C-suite, senior benefits', format: 'In-person & Virtual', pageUrl: '/programs/advanced-employee-benefits-law.html' }
   ];

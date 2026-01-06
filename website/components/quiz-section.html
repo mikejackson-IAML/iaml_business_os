@@ -509,7 +509,7 @@
           <p class="modal-cta-text">Ready to advance your career with this program?</p>
           <div class="modal-cta-buttons">
             <button class="btn btn-register" onclick="submitToGHL('register')">REGISTER NOW →</button>
-            <button class="btn btn-primary" onclick="submitToGHL('info')">GET MORE INFORMATION →</button>
+            <button class="btn btn-primary" onclick="goToRecommendedProgram()">GET MORE INFORMATION →</button>
             <button class="btn btn-secondary" onclick="closeModal()">START OVER →</button>
           </div>
         </div>
@@ -526,7 +526,7 @@
             'certificate in employee relations law',
             'advanced certificate in strategic employment law',
             'certificate in conducting workplace investigations',
-            'certificate in strategic hr management',
+            'certificate in strategic hr leadership',
             'certificate in employee benefits law',
             'advanced certificate in employee benefits law'
           ];
@@ -561,7 +561,7 @@
           };
           this.programDescriptions = {
             'Certificate in Employee Relations Law Seminar':'Master essential employment law fundamentals and compliance strategies.',
-            'Certificate in Strategic HR Management':'Transform your HR leadership skills and drive organizational success.',
+            'Certificate in Strategic HR Leadership':'Lead strategic HR initiatives that drive workforce performance and business success.',
             'Advanced Certificate in Strategic Employment Law':'Navigate complex employment law challenges with expert-level insights.',
             'Certificate in Conducting Workplace Investigations':'Become your organization\'s trusted expert in workplace investigations.',
             'Certificate in Employee Benefits Law':'Master ERISA compliance and benefits administration complexities.',
@@ -582,12 +582,12 @@
               'Handle FMLA, ADA, and leave management issues',
               'Prevent and address discrimination and harassment claims'
             ],
-            'Certificate in Strategic HR Management':[
+            'Certificate in Strategic HR Leadership':[
+              'Lead strategic HR initiatives that drive business results',
               'Develop effective workforce planning strategies',
-              'Improve hiring and onboarding processes',
-              'Design competitive compensation and benefits programs',
-              'Implement performance management systems',
-              'Build retention strategies and workplace culture'
+              'Implement performance systems that promote accountability',
+              'Coach leaders and influence culture change',
+              'Align HR strategy with business objectives'
             ],
             'Advanced Certificate in Strategic Employment Law':[
               'Master complex employment law strategies for executives',
@@ -811,16 +811,16 @@
     let sessionStartTime = null;
     let quizCompleted = false;
 
-    // ===== Static program fallback (used if Airtable catalog isn’t available) =====
+    // ===== Static program fallback (used if Airtable catalog isn't available) =====
     const staticPrograms = [
-      { id:'p1', name:'Certificate in Employee Relations Law Seminar', description:'Employment law, compliance, regulations, policy, risk. Foundation to advanced practical application.', targetAudience:'HR professional, manager, director', format:'In-person & Virtual', registerUrl:'#', learnMoreUrl:'#' },
-      { id:'p2', name:'Advanced Certificate in Strategic Employment Law', description:'Executive, strategic, advanced employment law, litigation risk, policy frameworks.', targetAudience:'Executive, C-suite, senior HR', format:'In-person & Virtual', registerUrl:'#', learnMoreUrl:'#' },
-      { id:'p3', name:'Certificate in Conducting Workplace Investigations', description:'Investigations, harassment, misconduct, interviews, reports, defensible process.', targetAudience:'HR professional, manager', format:'In-person & Virtual', registerUrl:'#', learnMoreUrl:'#' },
-      { id:'p4', name:'Certificate in Strategic HR Management', description:'Strategic HR, leadership, culture, performance, planning.', targetAudience:'Manager, director, senior HR', format:'In-person', registerUrl:'#', learnMoreUrl:'#' },
-      { id:'p5', name:'Certificate in Employee Benefits Law', description:'Benefits, ERISA, retirement plans, welfare, claims and appeals.', targetAudience:'Benefits manager, HR professional', format:'In-person & Virtual', registerUrl:'#', learnMoreUrl:'#' },
-      { id:'p6', name:'Advanced Certificate in Employee Benefits Law', description:'Advanced benefits, ERISA litigation, fiduciary duties, executive compensation.', targetAudience:'Executive, senior benefits leaders', format:'In-person & Virtual', registerUrl:'#', learnMoreUrl:'#' },
-      { id:'p7', name:'Certificate in HR Law Fundamentals', description:'Fundamentals, beginner, foundation in employment law & compliance.', targetAudience:'Entry-level HR', format:'Virtual', registerUrl:'#', learnMoreUrl:'#' },
-      { id:'p8', name:'Certificate in Strategic HR Leadership', description:'Strategic leadership, management, culture change, performance systems.', targetAudience:'Director, senior HR, manager', format:'Virtual', registerUrl:'#', learnMoreUrl:'#' }
+      { id:'p1', name:'Certificate in Employee Relations Law Seminar', description:'Employment law, compliance, regulations, policy, risk. Foundation to advanced practical application.', targetAudience:'HR professional, manager, director', format:'In-person & Virtual', pageUrl:'/programs/employee-relations-law.html', registerUrl:'#', learnMoreUrl:'#' },
+      { id:'p2', name:'Advanced Certificate in Strategic Employment Law', description:'Executive, strategic, advanced employment law, litigation risk, policy frameworks.', targetAudience:'Executive, C-suite, senior HR', format:'In-person & Virtual', pageUrl:'/programs/advanced-employment-law.html', registerUrl:'#', learnMoreUrl:'#' },
+      { id:'p3', name:'Certificate in Conducting Workplace Investigations', description:'Investigations, harassment, misconduct, interviews, reports, defensible process.', targetAudience:'HR professional, manager', format:'In-person & Virtual', pageUrl:'/programs/workplace-investigations.html', registerUrl:'#', learnMoreUrl:'#' },
+      { id:'p4', name:'Certificate in Strategic HR Leadership', description:'Strategic HR, leadership, culture, performance, planning.', targetAudience:'Manager, director, senior HR', format:'Virtual', pageUrl:'/programs/strategic-hr-leadership.html', registerUrl:'#', learnMoreUrl:'#' },
+      { id:'p5', name:'Certificate in Employee Benefits Law', description:'Benefits, ERISA, retirement plans, welfare, claims and appeals.', targetAudience:'Benefits manager, HR professional', format:'In-person & Virtual', pageUrl:'/programs/employee-benefits-law.html', registerUrl:'#', learnMoreUrl:'#' },
+      { id:'p6', name:'Advanced Certificate in Employee Benefits Law', description:'Advanced benefits, ERISA litigation, fiduciary duties, executive compensation.', targetAudience:'Executive, senior benefits leaders', format:'In-person & Virtual', pageUrl:'/programs/advanced-employee-benefits-law.html', registerUrl:'#', learnMoreUrl:'#' },
+      { id:'p7', name:'Certificate in HR Law Fundamentals', description:'Fundamentals, beginner, foundation in employment law & compliance.', targetAudience:'Entry-level HR', format:'Virtual', pageUrl:'/programs/hr-law-fundamentals.html', registerUrl:'#', learnMoreUrl:'#' },
+      { id:'p8', name:'Certificate in Strategic HR Leadership', description:'Strategic leadership, management, culture change, performance systems.', targetAudience:'Director, senior HR, manager', format:'Virtual', pageUrl:'/programs/strategic-hr-leadership.html', registerUrl:'#', learnMoreUrl:'#' }
     ];
 
     // ===== Quiz model (fallback). We’ll try Airtable first; if not, use this. =====
@@ -1153,6 +1153,7 @@
         learningOutcomes: Array.isArray(outcomes)?outcomes:[],
         registerUrl: best?.registerUrl || '#',
         learnMoreUrl: best?.learnMoreUrl || '#',
+        pageUrl: best?.pageUrl || '/programs.html',
         formatText: formatted.format
       };
 
@@ -1255,6 +1256,14 @@
     function closeModal(){
       document.getElementById('recommendationModal').style.display='none';
       setTimeout(()=>{ staticResetQuiz(); }, 400);
+    }
+
+    function goToRecommendedProgram(){
+      if(currentRecommendation && currentRecommendation.pageUrl){
+        window.location.href = currentRecommendation.pageUrl;
+      } else {
+        window.location.href = '/programs.html';
+      }
     }
 
     async function staticResetQuiz(){
