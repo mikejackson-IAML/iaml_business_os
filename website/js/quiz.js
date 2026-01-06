@@ -426,7 +426,7 @@ class ProgramRecommendationEngine {
     
     return {
       id: formatted.id || best?.id,
-      title: formatted.program,
+      title: formatted.program.replace(/\s+Seminar\s*$/i, ''),
       description: formatted.description,
       topics: [],
       learningOutcomes: Array.isArray(outcomes) ? outcomes : [],
