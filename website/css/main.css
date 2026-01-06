@@ -14209,7 +14209,7 @@ input[type="radio"].session-radio {
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #188bf6;
+  color: #28528c;
   margin-bottom: 12px;
 }
 
@@ -14238,7 +14238,7 @@ input[type="radio"].session-radio {
 
 .pp-consultation-step {
   background: white;
-  border-left: 3px solid #188bf6;
+  border-left: 3px solid #28528c;
   border-radius: 0 12px 12px 0;
   padding: 20px 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
@@ -14254,7 +14254,7 @@ input[type="radio"].session-radio {
   font-family: 'Lato', sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
-  color: #188bf6;
+  color: #28528c;
   margin-bottom: 4px;
 }
 
@@ -14291,5 +14291,248 @@ input[type="radio"].session-radio {
 
   .pp-consultation-step {
     padding: 16px 20px;
+  }
+}
+
+/* ===== CERTIFICATE PATHWAY SECTION ===== */
+/* Reusable section for block pages that are part of a certificate program */
+
+.certificate-pathway {
+  background: var(--white);
+  padding: var(--space-4xl) 0;
+  border-top: 1px solid var(--gray-100);
+}
+
+.pathway-header {
+  text-align: center;
+  margin-bottom: var(--space-2xl);
+}
+
+.pathway-eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--blue-primary);
+  margin: 0 0 var(--space-sm);
+}
+
+.pathway-headline {
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 600;
+  color: var(--gray-900);
+  margin: 0;
+}
+
+/* Pathway Track - Horizontal Layout */
+.pathway-track {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: var(--space-2xl);
+  padding: 0 var(--space-md);
+}
+
+/* Block Pills */
+.pathway-block {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-lg) var(--space-xl);
+  background: var(--gray-50);
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  min-width: 200px;
+  max-width: 260px;
+  flex: 1;
+  text-align: center;
+  transition: all var(--transition-base);
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.pathway-block:hover {
+  border-color: var(--gray-300);
+  background: var(--gray-100);
+}
+
+.pathway-block.block-current {
+  background: var(--white);
+  border-color: var(--blue-primary);
+  box-shadow: 0 4px 20px rgba(24, 139, 246, 0.15);
+}
+
+.pathway-block.block-current:hover {
+  background: var(--white);
+  border-color: var(--blue-primary);
+}
+
+/* "You're Here" Indicator */
+.block-indicator {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--blue-primary);
+  color: var(--white);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+/* Only show indicator on current block */
+.pathway-block:not(.block-current) .block-indicator {
+  display: none;
+}
+
+.block-number {
+  font-family: var(--font-heading);
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  color: var(--gray-400);
+  margin-bottom: var(--space-xs);
+  line-height: 1;
+}
+
+.pathway-block.block-current .block-number {
+  color: var(--blue-primary);
+}
+
+.block-name {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--gray-900);
+  margin-bottom: var(--space-xs);
+  line-height: 1.3;
+}
+
+.block-meta {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--gray-500);
+  line-height: 1.4;
+}
+
+/* Connectors between blocks */
+.pathway-connector {
+  width: 32px;
+  height: 2px;
+  background: var(--gray-300);
+  align-self: center;
+  flex-shrink: 0;
+}
+
+/* Pathway Info Section */
+.pathway-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+.pathway-facts {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space-xl);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-sm) var(--space-2xl);
+}
+
+.pathway-facts li {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--gray-600);
+  position: relative;
+  padding-left: 28px;
+  text-align: left;
+}
+
+.pathway-facts li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23188bf6' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.pathway-cta {
+  min-width: 280px;
+}
+
+/* Certificate Pathway Responsive */
+@media (max-width: 900px) {
+  .certificate-pathway {
+    padding: var(--space-3xl) 0;
+  }
+
+  .pathway-track {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .pathway-connector {
+    width: 2px;
+    height: 20px;
+  }
+
+  .pathway-block {
+    width: 100%;
+    max-width: 320px;
+    min-width: auto;
+  }
+
+  .pathway-facts {
+    flex-direction: column;
+    gap: var(--space-sm);
+    align-items: flex-start;
+  }
+
+  .pathway-facts li {
+    text-align: left;
+  }
+}
+
+@media (max-width: 480px) {
+  .pathway-header {
+    margin-bottom: var(--space-xl);
+  }
+
+  .pathway-block {
+    padding: var(--space-md) var(--space-lg);
+  }
+
+  .block-name {
+    font-size: var(--text-sm);
+  }
+
+  .block-meta {
+    font-size: var(--text-xs);
+  }
+
+  .pathway-cta {
+    width: 100%;
+    min-width: auto;
   }
 }
