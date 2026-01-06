@@ -416,6 +416,11 @@
   pointer-events: auto;
 }
 
+.firstVisit-overlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .firstVisit-modal {
   border-radius: 16px;
   max-width: 100%;
@@ -437,45 +442,12 @@
   transform: scale(1) translateY(0);
 }
 
-/* Content container - holds both acts */
+/* Content container */
 .firstVisit-content {
-  position: relative;
-  width: 100%;
-  min-height: 200px;
-}
-
-/* Act 1 & Act 2 - positioned at same location */
-.firstVisit-act1,
-.firstVisit-act2 {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.firstVisit-act1 {
-  opacity: 1;
-  transition: opacity 0.6s ease;
-}
-
-.firstVisit-act1.fade-out {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.firstVisit-act2 {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.8s ease;
-}
-
-.firstVisit-act2.show {
-  opacity: 1;
-  pointer-events: auto;
 }
 
 /* Quote container */
@@ -572,81 +544,6 @@
   margin-top: 2px;
 }
 
-/* Act 2: Tagline - Now the star of the show */
-.firstVisit-subtitle {
-  font-family: var(--font-heading);
-  font-size: clamp(1.5rem, 4vw, 2.25rem);
-  font-weight: 300;
-  color: var(--white);
-  margin: 0 auto var(--space-lg);
-  line-height: 1.3;
-  max-width: 600px;
-  text-align: center;
-  text-shadow: 0 0 40px rgba(24, 139, 246, 0.3);
-}
-
-.firstVisit-divider {
-  width: 50px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--blue-primary), transparent);
-  margin: 0 auto var(--space-md);
-  animation: breathingLine 2s ease-in-out infinite;
-}
-
-/* Breathing animation for the blue line */
-@keyframes breathingLine {
-  0%, 100% {
-    opacity: 0.4;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-/* Progress bar container */
-.firstVisit-progress {
-  width: 100%;
-  max-width: 300px;
-  margin: var(--space-xl) auto 0;
-  text-align: center;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-.firstVisit-progress.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.firstVisit-progress-bar {
-  width: 100%;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 2px;
-  overflow: hidden;
-  margin-bottom: var(--space-sm);
-}
-
-.firstVisit-progress-fill {
-  height: 100%;
-  background: #FFC107;
-  width: 0%;
-  box-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
-  will-change: width;
-}
-
-.firstVisit-progress-fill.animate {
-  width: 100%;
-  transition: width 3s linear;
-}
-
-.firstVisit-progress-text {
-  font-size: var(--text-sm);
-  color: rgba(255, 255, 255, 0.6);
-  letter-spacing: 0.5px;
-  white-space: nowrap;
-}
 
 /* Responsive adjustments */
 @media (min-width: 640px) {
@@ -691,9 +588,7 @@
   .firstVisit-overlay,
   .firstVisit-modal,
   .firstVisit-quote,
-  .firstVisit-subtitle,
-  .firstVisit-progress,
-  .firstVisit-progress-fill {
+  .firstVisit-attribution {
     transition: none;
   }
 }

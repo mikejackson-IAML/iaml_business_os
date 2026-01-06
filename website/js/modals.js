@@ -293,7 +293,8 @@ function closeModal() {
 
 // ===== FIRST VISIT POPUP MODAL =====
 const FIRST_VISIT_STORAGE_KEY = 'iaml_firstvisit_seen';
-const FIRST_VISIT_AUTO_CLOSE_MS = 9000;
+const FIRST_VISIT_DISPLAY_MS = 4000; // Show quote for 4 seconds
+const FIRST_VISIT_FADE_MS = 500; // Fade transition duration
 let firstVisitTimeoutHandle = null;
 
 /**
@@ -307,37 +308,19 @@ function createFirstVisitPopupHTML() {
     <div class="firstVisit-overlay" id="firstVisitPopup">
       <div class="firstVisit-modal" onclick="event.stopPropagation()">
         <div class="firstVisit-content">
-          <!-- Act 1: Quote + Attribution -->
-          <div class="firstVisit-act1" id="firstVisitAct1">
-            <div class="firstVisit-quote-container">
-              <span class="firstVisit-quotemark firstVisit-quotemark--open">"</span>
-              <blockquote class="firstVisit-quote">
-                My only wish is that I had attended this seminar earlier in my career!
-              </blockquote>
-              <span class="firstVisit-quotemark firstVisit-quotemark--close">"</span>
-            </div>
-
-            <div class="firstVisit-attribution">
-              <span class="firstVisit-author-name">Christina Lipetzky</span>
-              <span class="firstVisit-author-line"></span>
-              <span class="firstVisit-author-title">Human Resources Manager</span>
-              <span class="firstVisit-author-company">Montana Department of Environmental Quality</span>
-            </div>
+          <div class="firstVisit-quote-container">
+            <span class="firstVisit-quotemark firstVisit-quotemark--open">"</span>
+            <blockquote class="firstVisit-quote">
+              My only wish is that I had attended this seminar earlier in my career!
+            </blockquote>
+            <span class="firstVisit-quotemark firstVisit-quotemark--close">"</span>
           </div>
 
-          <!-- Act 2: Tagline + Progress (same position as Act 1) -->
-          <div class="firstVisit-act2" id="firstVisitAct2">
-            <p class="firstVisit-subtitle">
-              Where professional advancement meets business impact
-            </p>
-            <div class="firstVisit-divider"></div>
-
-            <div class="firstVisit-progress" id="firstVisitProgress">
-              <div class="firstVisit-progress-bar">
-                <div class="firstVisit-progress-fill" id="firstVisitProgressFill"></div>
-              </div>
-              <div class="firstVisit-progress-text">Preparing your customized training experience...</div>
-            </div>
+          <div class="firstVisit-attribution">
+            <span class="firstVisit-author-name">Christina Lipetzky</span>
+            <span class="firstVisit-author-line"></span>
+            <span class="firstVisit-author-title">Human Resources Manager</span>
+            <span class="firstVisit-author-company">Montana Department of Environmental Quality</span>
           </div>
         </div>
       </div>
@@ -385,49 +368,26 @@ function initFirstVisitPopup() {
   popup.classList.add('active');
   document.body.style.overflow = 'hidden';
 
-  // ===== TWO-ACT REVEAL TIMING =====
-
-  // Act 1: Quote + Attribution (0-4s) - visible by default
-
-  // At 4s: Fade out Act 1, show Act 2 (at same position)
-  setTimeout(() => {
-    const act1 = document.getElementById('firstVisitAct1');
-    const act2 = document.getElementById('firstVisitAct2');
-    if (act1) act1.classList.add('fade-out');
-    if (act2) act2.classList.add('show');
-  }, 4000);
-
-  // At 5.5s: Show progress bar animation
-  setTimeout(() => {
-    const progress = document.getElementById('firstVisitProgress');
-    const progressFill = document.getElementById('firstVisitProgressFill');
-    if (progress) {
-      progress.classList.add('show');
-    }
-    if (progressFill) {
-      // Force reflow before starting animation
-      void progressFill.offsetWidth;
-      requestAnimationFrame(() => {
-        progressFill.classList.add('animate');
-      });
-    }
-  }, 5500);
-
-  // Auto-close after 9 seconds
+  // After 4 seconds, fade out and close
   firstVisitTimeoutHandle = setTimeout(() => {
     closeFirstVisitPopup();
-  }, FIRST_VISIT_AUTO_CLOSE_MS);
+  }, FIRST_VISIT_DISPLAY_MS);
 }
 
 /**
- * Close the first visit popup
+ * Close the first visit popup with fade transition
  */
 function closeFirstVisitPopup() {
   const popup = document.getElementById('firstVisitPopup');
   if (popup) {
-    popup.classList.remove('active');
-    document.body.style.overflow = 'auto';
+    popup.classList.add('fade-out');
     clearTimeout(firstVisitTimeoutHandle);
+
+    // Remove after fade transition completes
+    setTimeout(() => {
+      popup.classList.remove('active', 'fade-out');
+      document.body.style.overflow = 'auto';
+    }, FIRST_VISIT_FADE_MS);
   }
 }
 
