@@ -12395,6 +12395,7 @@ input[type="radio"].session-radio {
 .schedule-v2b-learn-btn:hover {
   transform: scale(1.05);
   box-shadow: 0 8px 20px rgba(40, 82, 140, 0.4);
+  color: var(--white);
 }
 
 /* Version B Mobile */
