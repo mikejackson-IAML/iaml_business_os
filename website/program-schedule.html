@@ -3001,6 +3001,7 @@
               <option value="">All Formats</option>
               <option value="in-person">In-Person</option>
               <option value="virtual">Virtual</option>
+              <option value="on-demand">On-Demand</option>
             </select>
             <select class="unified-nav-select" id="programFilter" aria-label="Filter by program">
               <option value="">All Programs</option>
@@ -3423,9 +3424,9 @@
         // Transform all records
         const allTransformed = records.map(transformRecord);
 
-        // Filter regular certificate programs (in-person and virtual non-component)
+        // Filter regular certificate programs (all formats including on-demand)
         allPrograms = allTransformed
-          .filter(p => ALLOWED_PROGRAMS.includes(p.title) && p.format !== 'on-demand');
+          .filter(p => ALLOWED_PROGRAMS.includes(p.title));
 
         // Get virtual component sessions for building virtual certificate pairs
         const virtualComponents = allTransformed
@@ -3444,6 +3445,7 @@
 
         populateFilters(allPrograms);
         renderPrograms(allPrograms);
+        applyUrlFilters();
 
       } catch (error) {
         console.error('Error loading programs:', error);
@@ -3648,6 +3650,30 @@
       });
 
       renderPrograms(filtered);
+    }
+
+    // Apply filters from URL parameters (e.g., ?format=virtual&type=employment-law)
+    function applyUrlFilters() {
+      const params = new URLSearchParams(window.location.search);
+
+      const format = params.get('format');
+      const programType = params.get('type');
+      const program = params.get('program');
+
+      if (format) {
+        document.getElementById('formatFilter').value = format;
+      }
+      if (programType) {
+        document.getElementById('programTypeFilter').value = programType;
+      }
+      if (program) {
+        document.getElementById('programFilter').value = program;
+      }
+
+      // Apply filters if any URL params were set
+      if (format || programType || program) {
+        filterPrograms();
+      }
     }
 
     // ============================================================================
