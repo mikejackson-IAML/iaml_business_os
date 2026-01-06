@@ -2107,6 +2107,755 @@
         width: 100%;
       }
     }
+
+    /* ===== QUIZ MODAL STYLES ===== */
+    :root {
+      --quizModal-blue-primary: #3B5998;
+      --quizModal-dark-blue: #2E4A8A;
+      --quizModal-font-heading: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    }
+
+    .quizModal-overlay {
+      display: none;
+      position: fixed;
+      z-index: 10001;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .quizModal-overlay.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .quizModal-container {
+      background: linear-gradient(135deg, #3B5998 0%, #2E4A8A 50%, #4169B8 100%);
+      border-radius: 24px;
+      padding: 60px;
+      max-width: 1200px;
+      width: 100%;
+      position: relative;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+      animation: quizModalSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes quizModalSlideIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .quizModal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+      color: #fff;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.2s;
+      z-index: 10;
+    }
+
+    .quizModal-close:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: rotate(90deg);
+    }
+
+    .quizModal-content {
+      display: grid;
+      grid-template-columns: 50% 45%;
+      gap: 80px;
+      align-items: start;
+      position: relative;
+      min-height: 500px;
+    }
+
+    /* Left Content */
+    .quizModal-left {
+      color: #fff;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .quizModal-left.revealed {
+      opacity: 1;
+    }
+
+    .quizModal-headline {
+      font-family: var(--quizModal-font-heading);
+      font-size: 39px;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      margin-top: 0;
+      color: #fff;
+    }
+
+    .quizModal-subheadline {
+      font-family: 'Lato', Arial, Helvetica, sans-serif;
+      font-size: 18px;
+      line-height: 1.6;
+      margin-bottom: 30px;
+      opacity: 0.95;
+    }
+
+    .quizModal-bullets {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .quizModal-bullet-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Lato', Arial, Helvetica, sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    /* Right Content - Quiz */
+    .quizModal-right {
+      color: #fff;
+    }
+
+    .quizModal-preview {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 32px;
+      position: relative;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .quizModal-preview.revealed {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .quizModal-progress {
+      margin-bottom: 30px;
+    }
+
+    .quizModal-progress-text {
+      color: #fff;
+      font-family: 'Lato', Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .quizModal-progress-bar {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+    }
+
+    .quizModal-progress-fill {
+      height: 100%;
+      background: #FFC107;
+      border-radius: 4px;
+      transition: width 0.3s;
+    }
+
+    .quizModal-question p {
+      color: #fff;
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 30px;
+      font-family: 'Lato', Arial, Helvetica, sans-serif;
+      margin-top: 0;
+    }
+
+    .quizModal-options {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 60px;
+    }
+
+    .quizModal-option-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.3s;
+      color: #fff;
+      font-family: 'Lato', Arial, Helvetica, sans-serif;
+    }
+
+    .quizModal-option-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .quizModal-option-btn.selected {
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid #fff;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+      color: #fff;
+      transform: scale(1.02);
+    }
+
+    .quizModal-option-btn.disabled {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .quizModal-option-title {
+      display: block;
+      color: inherit;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .quizModal-option-desc {
+      display: block;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 14px;
+    }
+
+    .quizModal-option-btn.selected .quizModal-option-desc {
+      color: rgba(255, 255, 255, 1);
+    }
+
+    .quizModal-back-button {
+      position: absolute;
+      bottom: 20px;
+      left: 30px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      padding: 8px 16px;
+      color: #fff;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+      display: none;
+      font-family: 'Lato', Arial, Helvetica, sans-serif;
+    }
+
+    .quizModal-back-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Circle Animation */
+    .quizModal-circle-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+      grid-column: 1 / -1;
+    }
+
+    .quizModal-circle-container.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .quizModal-pulse-circle {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 193, 7, 0.3) 0%, rgba(255, 193, 7, 0.1) 50%, transparent 100%);
+      border: 3px solid #FFC107;
+      animation: quizModalPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes quizModalPulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+        box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7);
+      }
+      50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+        box-shadow: 0 0 40px 20px rgba(255, 193, 7, 0.3);
+      }
+    }
+
+    .quizModal-expanding-ring {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 193, 7, 0.6);
+      opacity: 0;
+    }
+
+    .quizModal-expanding-ring.animate {
+      animation: quizModalExpand 2s ease-out forwards;
+    }
+
+    @keyframes quizModalExpand {
+      0% {
+        width: 200px;
+        height: 200px;
+        opacity: 0.8;
+      }
+      100% {
+        width: 600px;
+        height: 600px;
+        opacity: 0;
+      }
+    }
+
+    .quizModal-circle-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 40px;
+      max-width: 500px;
+    }
+
+    .quizModal-circle-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 20px;
+      background: linear-gradient(135deg, #FFC107 0%, #FFD54F 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 40px rgba(255, 193, 7, 0.4);
+      animation: quizModalIconFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes quizModalIconFloat {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .quizModal-circle-text {
+      font-family: 'Lato', Arial, Helvetica, sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.4;
+      color: #fff;
+      margin-bottom: 20px;
+      text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .quizModal-circle-text.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .quizModal-circle-subtext {
+      font-family: 'Lato', Arial, Helvetica, sans-serif;
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.9);
+      margin-top: 15px;
+      opacity: 0;
+    }
+
+    .quizModal-circle-subtext.visible {
+      animation: quizModalFadeIn 0.8s forwards;
+    }
+
+    @keyframes quizModalFadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .quizModal-circle-container.expanding {
+      animation: quizModalScaleExpand 1s ease-out forwards;
+    }
+
+    @keyframes quizModalScaleExpand {
+      to {
+        transform: scale(3);
+        opacity: 0;
+      }
+    }
+
+    /* Thinking Animation */
+    .quizModal-thinking-container {
+      text-align: center;
+      color: #fff;
+      padding: 60px 20px;
+    }
+
+    .quizModal-thinking-text {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 30px;
+      font-family: var(--quizModal-font-heading);
+    }
+
+    .quizModal-thinking-messages {
+      font-size: 16px;
+      margin-bottom: 30px;
+      min-height: 24px;
+      font-family: 'Lato', Arial, Helvetica, sans-serif;
+    }
+
+    .quizModal-thinking-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-left: 4px solid #FFC107;
+      border-radius: 50%;
+      animation: quizModalSpin 1s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes quizModalSpin {
+      0% {
+        transform: rotate(0);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Recommendation Result Modal */
+    .quizModal-result {
+      display: none;
+      position: fixed;
+      z-index: 10002;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(5px);
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .quizModal-result.active {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 40px;
+    }
+
+    .quizModal-result-content {
+      background: #fff;
+      margin: 0 auto;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 800px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+      animation: quizModalSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .quizModal-result-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+      color: #fff;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.2s;
+      z-index: 10;
+    }
+
+    .quizModal-result-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: rotate(90deg);
+    }
+
+    .quizModal-result-header {
+      background: linear-gradient(135deg, var(--quizModal-blue-primary) 0%, var(--quizModal-dark-blue) 100%);
+      color: #fff;
+      padding: 40px;
+      border-radius: 20px 20px 0 0;
+      position: relative;
+    }
+
+    .quizModal-result-title {
+      font-family: var(--quizModal-font-heading);
+      font-size: 2.2rem;
+      margin-bottom: 15px;
+      font-weight: 700;
+      padding-right: 40px;
+      line-height: 1.2;
+      margin-top: 0;
+      color: #fff;
+    }
+
+    .quizModal-result-description {
+      font-family: 'Lato', Arial, Helvetica, sans-serif;
+      font-size: 18px;
+      line-height: 1.6;
+      opacity: 0.95;
+      margin: 0;
+    }
+
+    .quizModal-result-body {
+      padding: 40px;
+    }
+
+    .quizModal-result-benefits-title {
+      font-family: var(--quizModal-font-heading);
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #1E293B;
+      margin: 0 0 20px;
+    }
+
+    .quizModal-result-section-title {
+      font-family: var(--quizModal-font-heading);
+      font-size: 24px;
+      font-weight: 600;
+      color: #1E293B;
+      margin-bottom: 20px;
+      margin-top: 30px;
+    }
+
+    .quizModal-result-benefit-list,
+    .quizModal-result-topics-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 30px;
+    }
+
+    .quizModal-result-benefit-list li,
+    .quizModal-result-topics-list li {
+      font-family: 'Lato', Arial, Helvetica, sans-serif;
+      font-size: 16px;
+      color: #475569;
+      line-height: 1.6;
+      margin-bottom: 12px;
+      padding-left: 32px;
+      position: relative;
+    }
+
+    .quizModal-result-benefit-list li::before,
+    .quizModal-result-topics-list li::before {
+      content: '✓';
+      color: #22C55E;
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    .quizModal-result-cta-section {
+      background: #F8FAFC;
+      padding: 30px 40px;
+      border-radius: 0 0 20px 20px;
+      text-align: center;
+      margin: 0 -40px -40px -40px;
+    }
+
+    .quizModal-result-cta-text {
+      font-family: 'Lato', Arial, Helvetica, sans-serif;
+      font-size: 18px;
+      color: #475569;
+      margin-bottom: 25px;
+    }
+
+    .quizModal-result-cta-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .quizModal-btn {
+      display: inline-block;
+      padding: 14px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      transition: all 0.3s;
+      cursor: pointer;
+      border: none;
+      font-family: 'Lato', Arial, Helvetica, sans-serif;
+    }
+
+    .quizModal-btn-primary {
+      background: linear-gradient(135deg, #4F46E5 0%, #6366F1 100%);
+      color: #fff;
+    }
+
+    .quizModal-btn-primary:hover {
+      transform: translateY(-2px);
+    }
+
+    .quizModal-btn-secondary {
+      background: #fff;
+      color: #374151;
+      border: 2px solid #D1D5DB;
+    }
+
+    .quizModal-btn-secondary:hover {
+      background: #F9FAFB;
+      border-color: #9CA3AF;
+      transform: translateY(-2px);
+    }
+
+    .quizModal-btn-register {
+      background: #d62828;
+      color: #fff;
+      border: none;
+    }
+
+    .quizModal-btn-register:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+    }
+
+    /* Quiz Modal Responsive */
+    @media (max-width: 1200px) {
+      .quizModal-content {
+        grid-template-columns: 48% 47%;
+        gap: 60px;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .quizModal-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .quizModal-container {
+        padding: 40px 20px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .quizModal-container {
+        padding: 20px 15px;
+      }
+
+      .quizModal-content {
+        gap: 20px;
+      }
+
+      .quizModal-headline {
+        font-size: 24px;
+      }
+
+      .quizModal-subheadline {
+        font-size: 15px;
+      }
+
+      .quizModal-bullets {
+        gap: 10px;
+      }
+
+      .quizModal-bullet-item {
+        font-size: 13px;
+        gap: 8px;
+      }
+
+      .quizModal-preview {
+        padding: 15px;
+      }
+
+      .quizModal-question p {
+        font-size: 18px;
+        margin-bottom: 20px;
+      }
+
+      .quizModal-options {
+        gap: 10px;
+        margin-bottom: 30px;
+      }
+
+      .quizModal-option-btn {
+        padding: 12px;
+      }
+
+      .quizModal-option-title {
+        font-size: 14px;
+      }
+
+      .quizModal-option-desc {
+        font-size: 12px;
+      }
+
+      .quizModal-result-content {
+        width: 95%;
+        margin: 5% auto;
+      }
+
+      .quizModal-result-header {
+        padding: 20px 25px;
+      }
+
+      .quizModal-result-body {
+        padding: 25px;
+      }
+
+      .quizModal-result-cta-section {
+        padding: 20px 25px;
+        margin: 0 -25px -25px -25px;
+      }
+
+      .quizModal-result-cta-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .quizModal-btn {
+        width: 100%;
+        max-width: 280px;
+      }
+    }
   </style>
 
   <!-- Schema.org Structured Data -->
@@ -2230,6 +2979,7 @@
         </p>
 
         <div class="button-container">
+          <button class="btn btn-primary btn-lg" onclick="openQuizModal()">Get Your Recommendation</button>
           <a href="#" class="btn btn-register btn-lg">Register Now</a>
         </div>
       </div>
@@ -2339,6 +3089,116 @@
         <div class="programModal-actions">
           <a href="#" class="programModal-btn programModal-btn-primary" id="programModal-register">Register Now</a>
           <a href="#" class="programModal-btn programModal-btn-secondary" id="programModal-details">View Full Details</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quiz Modal -->
+  <div class="quizModal-overlay" id="quizModal" onclick="closeQuizModal(event)" aria-hidden="true">
+    <div class="quizModal-container" onclick="event.stopPropagation();" role="dialog" aria-modal="true" aria-labelledby="quizModal-headline">
+      <button class="quizModal-close" onclick="closeQuizModal()" aria-label="Close quiz">&times;</button>
+
+      <div class="quizModal-content" id="quizModal-content">
+        <!-- Left Content -->
+        <div class="quizModal-left" id="quizModal-left">
+          <h2 class="quizModal-headline" id="quizModal-headline">
+            <span>Your Role. Your Challenges.</span><br/>Your Program.
+          </h2>
+          <p class="quizModal-subheadline">
+            Find the program built for your specific role and challenges, not a generic session designed for everyone.
+          </p>
+          <div class="quizModal-bullets">
+            <div class="quizModal-bullet-item">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <circle cx="10" cy="10" r="9" stroke="#FFC107" stroke-width="2"/>
+                <path d="M6 10L9 13L14 7" stroke="#FFC107" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>No generic recommendations</span>
+            </div>
+            <div class="quizModal-bullet-item">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <circle cx="10" cy="10" r="9" stroke="#FFC107" stroke-width="2"/>
+                <path d="M6 10L9 13L14 7" stroke="#FFC107" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>Tailored to your specific role</span>
+            </div>
+            <div class="quizModal-bullet-item">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <circle cx="10" cy="10" r="9" stroke="#FFC107" stroke-width="2"/>
+                <path d="M6 10L9 13L14 7" stroke="#FFC107" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>Immediate actionable results</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Content - Quiz -->
+        <div class="quizModal-right">
+          <div class="quizModal-preview" id="quizModal-container">
+            <div class="quizModal-progress">
+              <span class="quizModal-progress-text" id="quizModal-progressText">Question 1 of 4</span>
+              <div class="quizModal-progress-bar">
+                <div class="quizModal-progress-fill" id="quizModal-progressFill" style="width:25%"></div>
+              </div>
+            </div>
+            <div class="quizModal-question" id="quizModal-questionContainer">
+              <p id="quizModal-questionText">What best describes your current role?</p>
+            </div>
+            <div class="quizModal-options" id="quizModal-optionsContainer"></div>
+            <button class="quizModal-back-button" id="quizModal-backButton" onclick="quizModal_goBack()">← BACK</button>
+          </div>
+        </div>
+
+        <!-- Circle Animation Overlay -->
+        <div class="quizModal-circle-container" id="quizModal-circleContainer">
+          <div class="quizModal-pulse-circle"></div>
+          <div class="quizModal-expanding-ring" id="quizModal-ring1"></div>
+          <div class="quizModal-expanding-ring" id="quizModal-ring2"></div>
+          <div class="quizModal-expanding-ring" id="quizModal-ring3"></div>
+
+          <div class="quizModal-circle-content">
+            <div class="quizModal-circle-icon">
+              <svg width="50" height="50" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#2E4A8A"/>
+              </svg>
+            </div>
+            <div class="quizModal-circle-text" id="quizModal-circleText">
+              Answer four simple questions. Get your personalized program match in under 30 seconds.
+            </div>
+            <div class="quizModal-circle-subtext" id="quizModal-circleSubtext">
+              ✨ Let's find your perfect program
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quiz Recommendation Modal -->
+  <div id="quizModal-recommendationModal" class="quizModal-result" aria-hidden="true">
+    <div class="quizModal-result-content" role="dialog" aria-modal="true" aria-labelledby="quizModal-programTitle">
+      <button class="quizModal-result-close" onclick="quizModal_closeRecommendation()" aria-label="Close">&times;</button>
+      <div class="quizModal-result-header">
+        <h2 class="quizModal-result-title" id="quizModal-programTitle"></h2>
+        <p class="quizModal-result-description" id="quizModal-programDescription"></p>
+      </div>
+      <div class="quizModal-result-body">
+        <div class="quizModal-result-benefits">
+          <h3 class="quizModal-result-benefits-title" id="quizModal-benefitsTitle">By the end of this program, you will be able to:</h3>
+          <ul class="quizModal-result-benefit-list" id="quizModal-benefitsList"></ul>
+          <div class="quizModal-result-topics-section">
+            <h4 class="quizModal-result-section-title">Navigate critical topics, including:</h4>
+            <ul class="quizModal-result-topics-list" id="quizModal-topicsList"></ul>
+          </div>
+        </div>
+        <div class="quizModal-result-cta-section">
+          <p class="quizModal-result-cta-text">Ready to advance your career with this program?</p>
+          <div class="quizModal-result-cta-buttons">
+            <button class="quizModal-btn quizModal-btn-register" onclick="quizModal_submitAction('register')">REGISTER NOW →</button>
+            <button class="quizModal-btn quizModal-btn-primary" onclick="quizModal_submitAction('info')">GET MORE INFORMATION →</button>
+            <button class="quizModal-btn quizModal-btn-secondary" onclick="quizModal_startOver()">START OVER →</button>
+          </div>
         </div>
       </div>
     </div>
@@ -3219,6 +4079,671 @@
     });
 
     document.addEventListener('DOMContentLoaded', loadProgramsFromAirtable);
+
+    // ============================================================================
+    // QUIZ MODAL
+    // ============================================================================
+
+    // Program Recommendation Engine
+    class QuizModalProgramRecommendationEngine {
+      constructor() {
+        this.inPersonPrograms = [
+          'certificate in employee relations law',
+          'advanced certificate in strategic employment law',
+          'certificate in conducting workplace investigations',
+          'certificate in strategic hr management',
+          'certificate in employee benefits law',
+          'advanced certificate in employee benefits law'
+        ];
+        this.virtualPrograms = [
+          'certificate in labor law mastery',
+          'certificate in discrimination prevention & defense',
+          'certificate in conducting workplace investigations',
+          'certificate in hr law fundamentals',
+          'certificate in strategic hr leadership',
+          'certificate in retirement plans',
+          'certificate in benefit plan claims, appeals & litigation',
+          'certificate in welfare benefits plan issues',
+          'advanced certificate in strategic employment law'
+        ];
+        this.challengeKeywords = {
+          compliance: ['employment law', 'compliance', 'legal', 'regulations', 'policy', 'risk', 'litigation', 'discrimination'],
+          benefits: ['benefits', 'erisa', 'retirement', 'healthcare', 'welfare', 'pension', 'claims', 'appeals'],
+          management: ['strategic', 'leadership', 'management', 'planning', 'development', 'culture', 'performance'],
+          investigations: ['investigations', 'workplace investigations', 'complaints', 'harassment', 'misconduct', 'interviews']
+        };
+        this.roleKeywords = {
+          executive: ['executive', 'senior', 'strategic', 'leadership', 'c-suite', 'advanced'],
+          director: ['director', 'senior', 'strategic', 'leadership', 'advanced'],
+          manager: ['manager', 'management', 'supervisor', 'team lead'],
+          specialist: ['specialist', 'professional', 'practitioner', 'coordinator']
+        };
+        this.experienceKeywords = {
+          entry: ['foundation', 'basics', 'fundamentals', 'introduction', 'beginner'],
+          developing: ['intermediate', 'developing', 'building'],
+          experienced: ['advanced', 'experienced', 'expert', 'mastery'],
+          senior: ['advanced', 'strategic', 'expert', 'mastery', 'senior']
+        };
+        this.programDescriptions = {
+          'Certificate in Employee Relations Law Seminar': 'Master essential employment law fundamentals and compliance strategies.',
+          'Certificate in Strategic HR Management': 'Transform your HR leadership skills and drive organizational success.',
+          'Advanced Certificate in Strategic Employment Law': 'Navigate complex employment law challenges with expert-level insights.',
+          'Certificate in Conducting Workplace Investigations': 'Become your organization\'s trusted expert in workplace investigations.',
+          'Certificate in Employee Benefits Law': 'Master ERISA compliance and benefits administration complexities.',
+          'Advanced Certificate in Employee Benefits Law': 'Tackle advanced benefits law challenges and regulatory requirements.',
+          'Certificate in Labor Law Mastery': 'Build expertise in labor relations and union management strategies.',
+          'Certificate in Discrimination Prevention & Defense': 'Prevent workplace discrimination and defend your organization effectively.',
+          'Certificate in HR Law Fundamentals': 'Build foundational knowledge in employment law and HR compliance essentials.',
+          'Certificate in Strategic HR Leadership': 'Lead strategic HR initiatives that drive workforce performance and business success.',
+          'Certificate in Retirement Plans': 'Navigate retirement plan administration and fiduciary responsibilities with confidence.',
+          'Certificate in Benefit Plan Claims, Appeals & Litigation': 'Master the complexities of benefits claims management and dispute resolution.',
+          'Certificate in Welfare Benefits Plan Issues': 'Ensure compliance and optimize welfare benefits plan administration.'
+        };
+        this.programOutcomes = {
+          'Certificate in Employee Relations Law Seminar': [
+            'Navigate complex employment law requirements with confidence',
+            'Implement compliant hiring and termination practices',
+            'Develop effective workplace policies and procedures',
+            'Handle FMLA, ADA, and leave management issues',
+            'Prevent and address discrimination and harassment claims'
+          ],
+          'Certificate in Strategic HR Management': [
+            'Develop effective workforce planning strategies',
+            'Improve hiring and onboarding processes',
+            'Design competitive compensation and benefits programs',
+            'Implement performance management systems',
+            'Build retention strategies and workplace culture'
+          ],
+          'Advanced Certificate in Strategic Employment Law': [
+            'Master complex employment law strategies for executives',
+            'Navigate sophisticated compliance challenges',
+            'Develop enterprise-level policy frameworks',
+            'Lead legal risk assessment and mitigation',
+            'Advise on strategic workforce decisions with legal implications'
+          ],
+          'Certificate in Conducting Workplace Investigations': [
+            'Conduct thorough and legally compliant workplace investigations',
+            'Master interview techniques for all parties involved',
+            'Document evidence and findings effectively',
+            'Write comprehensive investigation reports',
+            'Handle sensitive complaints with professionalism'
+          ],
+          'Certificate in Employee Benefits Law': [
+            'Master ERISA compliance requirements',
+            'Navigate ACA regulations and reporting',
+            'Administer retirement plans effectively',
+            'Handle benefits claims and appeals',
+            'Coordinate leave laws with benefits programs'
+          ],
+          'Advanced Certificate in Employee Benefits Law': [
+            'Tackle complex benefits law challenges at the executive level',
+            'Navigate advanced ERISA compliance and fiduciary duties',
+            'Handle sophisticated benefits litigation and regulatory matters',
+            'Manage executive compensation and equity plan complexities',
+            'Address merger/acquisition benefits considerations'
+          ],
+          'Certificate in Labor Law Mastery': [
+            'Master collective bargaining and union relations',
+            'Navigate NLRB procedures and labor disputes',
+            'Develop effective labor negotiation strategies',
+            'Handle strikes, picketing, and work stoppages',
+            'Build compliant labor-management partnerships'
+          ],
+          'Certificate in Discrimination Prevention & Defense': [
+            'Prevent discrimination claims through proactive policies',
+            'Conduct effective bias and harassment training',
+            'Investigate discrimination complaints thoroughly',
+            'Develop strong legal defenses when claims arise',
+            'Create inclusive workplace cultures that reduce risk'
+          ],
+          'Certificate in HR Law Fundamentals': [
+            'Build foundational knowledge in employment law',
+            'Understand key federal and state regulations',
+            'Apply legal compliance in daily HR operations',
+            'Recognize and mitigate common legal risks',
+            'Develop legally sound HR policies and practices'
+          ],
+          'Certificate in Strategic HR Leadership': [
+            'Lead strategic HR initiatives that drive business results',
+            'Develop effective workforce planning strategies',
+            'Implement performance systems that promote accountability',
+            'Coach leaders and influence culture change',
+            'Align HR strategy with business objectives'
+          ],
+          'Certificate in Retirement Plans': [
+            'Navigate ERISA fiduciary responsibilities',
+            'Administer 401(k) and pension plans effectively',
+            'Handle plan compliance and regulatory requirements',
+            'Manage plan investments and participant communications',
+            'Address plan corrections and audit requirements'
+          ],
+          'Certificate in Benefit Plan Claims, Appeals & Litigation': [
+            'Master the claims administration process',
+            'Handle benefit appeals and ERISA litigation',
+            'Navigate federal court procedures for benefit disputes',
+            'Develop strong documentation and defense strategies',
+            'Coordinate with legal counsel on complex cases'
+          ],
+          'Certificate in Welfare Benefits Plan Issues': [
+            'Ensure compliance with welfare benefit regulations',
+            'Navigate health plan administration complexities',
+            'Handle disability, life, and medical benefit claims',
+            'Coordinate COBRA and HIPAA requirements',
+            'Manage vendor relationships and plan communications'
+          ]
+        };
+      }
+
+      filterProgramsByFormat(programs, format) {
+        let filtered = programs;
+        if (format === 'in-person') {
+          filtered = programs.filter(p => {
+            const n = (p.name || '').toLowerCase();
+            return this.inPersonPrograms.some(t => n.includes(t));
+          });
+          if (!filtered.length) filtered = programs;
+        }
+        if (format === 'virtual') {
+          filtered = programs.filter(p => {
+            const n = (p.name || '').toLowerCase();
+            return this.virtualPrograms.some(t => n.includes(t));
+          });
+          if (!filtered.length) filtered = programs;
+        }
+        return filtered;
+      }
+
+      findPriorityMatch(list, role, challenge) {
+        if (challenge === 'compliance') {
+          if (role === 'executive') {
+            const adv = list.find(p => p.name.toLowerCase().includes('advanced') && (p.name.toLowerCase().includes('employment law') || p.name.toLowerCase().includes('strategic employment')));
+            if (adv) return adv;
+          } else {
+            const rel = list.find(p => p.name.toLowerCase().includes('employee relations law') || p.name.toLowerCase().includes('certificate in employee relations'));
+            if (rel) return rel;
+          }
+        }
+        if (challenge === 'benefits') {
+          if (role === 'executive') {
+            const advB = list.find(p => p.name.toLowerCase().includes('advanced') && p.name.toLowerCase().includes('benefits'));
+            if (advB) return advB;
+          } else {
+            const cert = list.find(p => p.name.toLowerCase().includes('certificate in employee benefits') || (p.name.toLowerCase().includes('employee benefits') && !p.name.toLowerCase().includes('advanced')));
+            if (cert) return cert;
+          }
+        }
+        return null;
+      }
+
+      scoreAndRankPrograms(list, userAnswers) {
+        const { role, challenge, experience } = userAnswers;
+        const scored = list.map(program => {
+          let score = 0;
+          const desc = (program.description || '').toLowerCase();
+          const audience = (program.targetAudience || '').toLowerCase();
+          const name = (program.name || '').toLowerCase();
+
+          (this.challengeKeywords[challenge] || []).forEach(k => { if (desc.includes(k) || name.includes(k)) score += 3; });
+          (this.roleKeywords[role] || []).forEach(k => { if (audience.includes(k) || desc.includes(k)) score += 2; });
+          (this.experienceKeywords[experience] || []).forEach(k => { if (desc.includes(k) || audience.includes(k) || name.includes(k)) score += 1; });
+
+          if (challenge === 'investigations') { if (name.includes('investigations')) score += 20; else score = 0; }
+          if (challenge === 'benefits' && name.includes('benefits')) score += 5;
+          if (challenge === 'compliance' && (name.includes('employment law') || name.includes('legal'))) score += 5;
+          if (challenge === 'management' && (name.includes('strategic') || name.includes('hr management') || name.includes('leadership'))) score += 5;
+
+          return { program, score };
+        });
+        scored.sort((a, b) => b.score - a.score);
+        return scored[0]?.program || null;
+      }
+
+      findBestProgramMatch(programs, userAnswers) {
+        const role = userAnswers.role || 'manager';
+        const challenge = userAnswers.challenge || 'compliance';
+        const experience = userAnswers.experience || 'developing';
+        const format = userAnswers.format || 'virtual';
+        let filtered = this.filterProgramsByFormat(programs, format);
+        const priority = this.findPriorityMatch(filtered, role, challenge);
+        if (priority) return priority;
+        return this.scoreAndRankPrograms(filtered, { role, challenge, experience, format });
+      }
+
+      formatRecommendation(program, userFormat) {
+        if (!program) {
+          return { id: undefined, program: 'Certificate in Employee Relations Law Seminar', format: 'Multiple formats available', description: 'Master essential employment law fundamentals and compliance strategies.', learningOutcomes: [] };
+        }
+        let displayFormat = program.format || 'Multiple formats available';
+        if (userFormat === 'team') displayFormat = 'Available for corporate on-site training';
+        else if (userFormat === 'virtual') displayFormat = 'Available in live virtual format';
+        else if (userFormat === 'in-person') displayFormat = 'Available in-person with networking opportunities';
+        else if (userFormat === 'self-paced') displayFormat = 'Self-paced learning options available';
+
+        return {
+          id: program.id,
+          program: program.name,
+          format: displayFormat,
+          description: this.programDescriptions[program.name] || 'Professional development program designed to advance your HR expertise.',
+          learningOutcomes: program.learningOutcomes || []
+        };
+      }
+
+      getProgramOutcomes(programName) {
+        return this.programOutcomes[programName] || [
+          'Enhanced professional knowledge and skills',
+          'Practical tools and strategies for immediate application',
+          'Industry best practices and compliance guidance',
+          'Confidence to handle complex workplace challenges',
+          'Professional development and career advancement'
+        ];
+      }
+    }
+
+    // Quiz Modal State
+    let quizModal_currentQuestion = 0;
+    let quizModal_userAnswers = {};
+    let quizModal_isTransitioning = false;
+    let quizModal_currentRecommendation = null;
+    let quizModal_startTime = null;
+
+    // Static programs catalog
+    const quizModal_staticPrograms = [
+      { id: 'p1', name: 'Certificate in Employee Relations Law Seminar', description: 'Employment law, compliance, regulations, policy, risk. Foundation to advanced practical application.', targetAudience: 'HR professional, manager, director', format: 'In-person & Virtual', registerUrl: '#', learnMoreUrl: '#' },
+      { id: 'p2', name: 'Advanced Certificate in Strategic Employment Law', description: 'Executive, strategic, advanced employment law, litigation risk, policy frameworks.', targetAudience: 'Executive, C-suite, senior HR', format: 'In-person & Virtual', registerUrl: '#', learnMoreUrl: '#' },
+      { id: 'p3', name: 'Certificate in Conducting Workplace Investigations', description: 'Investigations, harassment, misconduct, interviews, reports, defensible process.', targetAudience: 'HR professional, manager', format: 'In-person & Virtual', registerUrl: '#', learnMoreUrl: '#' },
+      { id: 'p4', name: 'Certificate in Strategic HR Management', description: 'Strategic HR, leadership, culture, performance, planning.', targetAudience: 'Manager, director, senior HR', format: 'In-person', registerUrl: '#', learnMoreUrl: '#' },
+      { id: 'p5', name: 'Certificate in Employee Benefits Law', description: 'Benefits, ERISA, retirement plans, welfare, claims and appeals.', targetAudience: 'Benefits manager, HR professional', format: 'In-person & Virtual', registerUrl: '#', learnMoreUrl: '#' },
+      { id: 'p6', name: 'Advanced Certificate in Employee Benefits Law', description: 'Advanced benefits, ERISA litigation, fiduciary duties, executive compensation.', targetAudience: 'Executive, senior benefits leaders', format: 'In-person & Virtual', registerUrl: '#', learnMoreUrl: '#' },
+      { id: 'p7', name: 'Certificate in HR Law Fundamentals', description: 'Fundamentals, beginner, foundation in employment law & compliance.', targetAudience: 'Entry-level HR', format: 'Virtual', registerUrl: '#', learnMoreUrl: '#' },
+      { id: 'p8', name: 'Certificate in Strategic HR Leadership', description: 'Strategic leadership, management, culture change, performance systems.', targetAudience: 'Director, senior HR, manager', format: 'Virtual', registerUrl: '#', learnMoreUrl: '#' }
+    ];
+
+    // Quiz questions
+    const quizModal_quizData = {
+      questions: [
+        {
+          id: 'role',
+          title: 'What best describes your current role?',
+          options: [
+            { value: 'executive', title: 'C-Suite/Executive', description: 'CEO, CHRO, COO, or other executive leadership' },
+            { value: 'director', title: 'Director/VP Level', description: 'Director of HR, VP of People, or similar' },
+            { value: 'manager', title: 'HR Manager', description: 'HR Manager, Benefits Manager, or team lead' },
+            { value: 'specialist', title: 'HR Professional', description: 'HR Specialist, Coordinator, or Analyst' }
+          ]
+        },
+        {
+          id: 'challenge',
+          title: 'What\'s your biggest workplace challenge right now?',
+          options: [
+            { value: 'compliance', title: 'Legal Compliance', description: 'Staying current with employment laws and regulations' },
+            { value: 'leadership', title: 'Leadership Development', description: 'Building stronger management and leadership skills' },
+            { value: 'culture', title: 'Workplace Culture', description: 'Creating positive, inclusive work environments' },
+            { value: 'performance', title: 'Performance Management', description: 'Improving employee performance and accountability' }
+          ]
+        },
+        {
+          id: 'experience',
+          title: 'How would you describe your experience level?',
+          options: [
+            { value: 'new', title: 'New to HR/Management', description: 'Less than 2 years in current role' },
+            { value: 'developing', title: 'Developing Skills', description: '2–5 years, looking to build expertise' },
+            { value: 'experienced', title: 'Experienced Professional', description: '5+ years, seeking advanced knowledge' },
+            { value: 'expert', title: 'Senior Expert', description: '10+ years, want cutting-edge insights' }
+          ]
+        },
+        {
+          id: 'format',
+          title: 'What learning format works best for you?',
+          options: [
+            { value: 'in-person', title: 'In-Person Events', description: 'Face-to-face networking and learning' },
+            { value: 'virtual', title: 'Virtual Learning', description: 'Online sessions I can attend from anywhere' },
+            { value: 'self-paced', title: 'Self-Paced Study', description: 'Materials I can review on my schedule' }
+          ]
+        }
+      ]
+    };
+
+    // Open Quiz Modal
+    function openQuizModal() {
+      const modal = document.getElementById('quizModal');
+      modal.classList.add('active');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+
+      // Reset state
+      quizModal_currentQuestion = 0;
+      quizModal_userAnswers = {};
+      quizModal_isTransitioning = false;
+      quizModal_currentRecommendation = null;
+      quizModal_startTime = new Date();
+
+      // Reset UI elements
+      const circleContainer = document.getElementById('quizModal-circleContainer');
+      const circleText = document.getElementById('quizModal-circleText');
+      const circleSubtext = document.getElementById('quizModal-circleSubtext');
+      const quizLeft = document.getElementById('quizModal-left');
+      const quizContainer = document.getElementById('quizModal-container');
+      const ring1 = document.getElementById('quizModal-ring1');
+      const ring2 = document.getElementById('quizModal-ring2');
+      const ring3 = document.getElementById('quizModal-ring3');
+
+      // Reset classes
+      if (circleContainer) {
+        circleContainer.style.display = 'flex';
+        circleContainer.classList.remove('visible', 'expanding');
+      }
+      if (circleText) circleText.classList.remove('visible');
+      if (circleSubtext) circleSubtext.classList.remove('visible');
+      if (quizLeft) quizLeft.classList.remove('revealed');
+      if (quizContainer) quizContainer.classList.remove('revealed');
+      if (ring1) ring1.classList.remove('animate');
+      if (ring2) ring2.classList.remove('animate');
+      if (ring3) ring3.classList.remove('animate');
+
+      // Reset quiz container HTML
+      quizModal_resetQuizContainer();
+
+      // Initialize quiz
+      quizModal_initQuiz();
+
+      // Start circle animation sequence
+      quizModal_startCircleSequence();
+    }
+
+    // Close Quiz Modal
+    function closeQuizModal(event) {
+      if (event && event.target !== event.currentTarget) return;
+      const modal = document.getElementById('quizModal');
+      modal.classList.remove('active');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Reset quiz container HTML
+    function quizModal_resetQuizContainer() {
+      const container = document.getElementById('quizModal-container');
+      container.innerHTML = `
+        <div class="quizModal-progress">
+          <span class="quizModal-progress-text" id="quizModal-progressText">Question 1 of 4</span>
+          <div class="quizModal-progress-bar">
+            <div class="quizModal-progress-fill" id="quizModal-progressFill" style="width:25%"></div>
+          </div>
+        </div>
+        <div class="quizModal-question" id="quizModal-questionContainer">
+          <p id="quizModal-questionText">What best describes your current role?</p>
+        </div>
+        <div class="quizModal-options" id="quizModal-optionsContainer"></div>
+        <button class="quizModal-back-button" id="quizModal-backButton" onclick="quizModal_goBack()">← BACK</button>
+      `;
+    }
+
+    // Initialize quiz
+    function quizModal_initQuiz() {
+      quizModal_currentQuestion = 0;
+      quizModal_displayQuestion();
+    }
+
+    // Display current question
+    function quizModal_displayQuestion() {
+      if (quizModal_currentQuestion >= quizModal_quizData.questions.length) {
+        quizModal_showThinkingAnimation();
+        return;
+      }
+
+      const q = quizModal_quizData.questions[quizModal_currentQuestion];
+      const pct = ((quizModal_currentQuestion + 1) / quizModal_quizData.questions.length) * 100;
+
+      document.getElementById('quizModal-progressText').textContent = `Question ${quizModal_currentQuestion + 1} of ${quizModal_quizData.questions.length}`;
+      document.getElementById('quizModal-progressFill').style.width = `${pct}%`;
+      document.getElementById('quizModal-questionText').textContent = q.title;
+
+      const optionsContainer = document.getElementById('quizModal-optionsContainer');
+      optionsContainer.innerHTML = '';
+
+      q.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'quizModal-option-btn';
+        btn.innerHTML = `<span class="quizModal-option-title">${opt.title}</span><span class="quizModal-option-desc">${opt.description || ''}</span>`;
+        btn.onclick = () => quizModal_selectOption(btn, q.id, opt.value, opt.title, q.title, quizModal_currentQuestion + 1);
+        optionsContainer.appendChild(btn);
+      });
+
+      document.getElementById('quizModal-backButton').style.display = quizModal_currentQuestion > 0 ? 'block' : 'none';
+    }
+
+    // Select option
+    function quizModal_selectOption(el, qid, val, label, questionText, number) {
+      if (quizModal_isTransitioning) return;
+      quizModal_isTransitioning = true;
+
+      el.classList.add('selected');
+      document.querySelectorAll('#quizModal-optionsContainer .quizModal-option-btn').forEach(o => {
+        o.classList.add('disabled');
+        o.style.pointerEvents = 'none';
+      });
+
+      quizModal_userAnswers[qid] = val;
+
+      setTimeout(() => {
+        quizModal_nextQuestion();
+      }, 600);
+    }
+
+    // Next question
+    function quizModal_nextQuestion() {
+      quizModal_isTransitioning = false;
+      document.querySelectorAll('#quizModal-optionsContainer .quizModal-option-btn').forEach(o => {
+        o.classList.remove('disabled', 'selected');
+        o.style.pointerEvents = 'auto';
+      });
+      quizModal_currentQuestion++;
+      quizModal_displayQuestion();
+    }
+
+    // Go back
+    function quizModal_goBack() {
+      if (quizModal_currentQuestion > 0) {
+        quizModal_currentQuestion--;
+        const qId = quizModal_quizData.questions[quizModal_currentQuestion].id;
+        delete quizModal_userAnswers[qId];
+        quizModal_displayQuestion();
+      }
+    }
+
+    // Show thinking animation
+    function quizModal_showThinkingAnimation() {
+      const container = document.getElementById('quizModal-container');
+      container.innerHTML = `
+        <div class="quizModal-thinking-container">
+          <div class="quizModal-thinking-text">Analyzing your answers...</div>
+          <div class="quizModal-thinking-messages" id="quizModal-thinkingMessages">Finding your perfect program match</div>
+          <div class="quizModal-thinking-spinner"></div>
+        </div>
+      `;
+
+      const msgs = ['Finding your perfect program match', 'Analyzing your role and challenges', 'Matching experience levels', 'Personalizing recommendations'];
+      let i = 0;
+      const iv = setInterval(() => {
+        const el = document.getElementById('quizModal-thinkingMessages');
+        if (el) {
+          i = (i + 1) % msgs.length;
+          el.textContent = msgs[i];
+        }
+      }, 1000);
+
+      setTimeout(() => {
+        clearInterval(iv);
+        quizModal_showRecommendation();
+      }, 1400);
+    }
+
+    // Normalize answers for engine
+    function quizModal_normalizeAnswers(src) {
+      const mapChallenge = { compliance: 'compliance', leadership: 'management', culture: 'management', performance: 'management' };
+      const mapExperience = { new: 'entry', developing: 'developing', experienced: 'experienced', expert: 'senior' };
+      return {
+        role: src.role,
+        challenge: mapChallenge[src.challenge] || 'management',
+        experience: mapExperience[src.experience] || 'developing',
+        format: src.format
+      };
+    }
+
+    // Get recommendation
+    function quizModal_getRecommendation() {
+      const engine = new QuizModalProgramRecommendationEngine();
+      const normalized = quizModal_normalizeAnswers(quizModal_userAnswers);
+      const best = engine.findBestProgramMatch(quizModal_staticPrograms, normalized);
+      const formatted = engine.formatRecommendation(best, normalized.format);
+      const outcomes = engine.getProgramOutcomes(formatted.program);
+
+      return {
+        id: formatted.id || best?.id,
+        title: formatted.program,
+        description: formatted.description,
+        topics: [],
+        learningOutcomes: Array.isArray(outcomes) ? outcomes : [],
+        registerUrl: best?.registerUrl || '#',
+        learnMoreUrl: best?.learnMoreUrl || '#',
+        formatText: formatted.format
+      };
+    }
+
+    // Show recommendation
+    function quizModal_showRecommendation() {
+      const rec = quizModal_getRecommendation();
+      quizModal_currentRecommendation = rec;
+
+      // Close the quiz modal
+      closeQuizModal();
+
+      // Populate recommendation modal
+      document.getElementById('quizModal-programTitle').textContent = rec.title || 'Professional Development Program';
+      document.getElementById('quizModal-programDescription').textContent =
+        (rec.description || 'A comprehensive program designed for your professional growth.') +
+        (rec.formatText ? ` — ${rec.formatText}` : '');
+
+      document.getElementById('quizModal-benefitsTitle').textContent =
+        `By the end of this program, ${quizModal_userAnswers.format === 'team' ? 'your team' : 'you'} will be able to:`;
+
+      const benefitsList = document.getElementById('quizModal-benefitsList');
+      benefitsList.innerHTML = (rec.learningOutcomes && rec.learningOutcomes.length
+        ? rec.learningOutcomes
+        : ['Comprehensive professional development', 'Industry best practices', 'Practical application techniques']
+      ).map(x => `<li>${x}</li>`).join('');
+
+      const topicsList = document.getElementById('quizModal-topicsList');
+      topicsList.innerHTML = (rec.topics && rec.topics.length
+        ? rec.topics
+        : ['Industry best practices and current trends', 'Regulatory compliance and legal updates', 'Professional development strategies']
+      ).map(x => `<li>${x}</li>`).join('');
+
+      // Show recommendation modal
+      const resultModal = document.getElementById('quizModal-recommendationModal');
+      resultModal.classList.add('active');
+      resultModal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Close recommendation modal
+    function quizModal_closeRecommendation() {
+      const resultModal = document.getElementById('quizModal-recommendationModal');
+      resultModal.classList.remove('active');
+      resultModal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Program URL mapping
+    const quizModal_programUrls = {
+      'Certificate in Employee Relations Law Seminar': '/programs/employee-relations-law.html',
+      'Advanced Certificate in Strategic Employment Law': '/programs/advanced-employment-law.html',
+      'Certificate in Conducting Workplace Investigations': '/programs/workplace-investigations.html',
+      'Certificate in Strategic HR Leadership': '/programs/strategic-hr-leadership.html',
+      'Certificate in Strategic HR Management': '/programs/strategic-hr-leadership.html',
+      'Certificate in Employee Benefits Law': '/programs/employee-benefits-law.html',
+      'Advanced Certificate in Employee Benefits Law': '/programs/advanced-employee-benefits-law.html',
+      'Certificate in HR Law Fundamentals': '/programs/employee-relations-law.html',
+      'Certificate in Labor Law Mastery': '/programs/employee-relations-law.html',
+      'Certificate in Discrimination Prevention & Defense': '/programs/employee-relations-law.html'
+    };
+
+    // Submit action (register or info)
+    function quizModal_submitAction(action) {
+      const rec = quizModal_currentRecommendation;
+      const programUrl = quizModal_programUrls[rec?.title] || '/programs/employee-relations-law.html';
+
+      if (action === 'register') {
+        // Navigate to the program page for registration
+        window.location.href = programUrl;
+      } else if (action === 'info') {
+        // Navigate to the program page for more information
+        window.location.href = programUrl;
+      }
+
+      quizModal_closeRecommendation();
+    }
+
+    // Start over
+    function quizModal_startOver() {
+      quizModal_closeRecommendation();
+      setTimeout(() => {
+        openQuizModal();
+      }, 300);
+    }
+
+    // Circle animation sequence
+    function quizModal_startCircleSequence() {
+      const circleContainer = document.getElementById('quizModal-circleContainer');
+      const circleText = document.getElementById('quizModal-circleText');
+      const circleSubtext = document.getElementById('quizModal-circleSubtext');
+      const quizContainer = document.getElementById('quizModal-container');
+      const quizLeft = document.getElementById('quizModal-left');
+      const ring1 = document.getElementById('quizModal-ring1');
+      const ring2 = document.getElementById('quizModal-ring2');
+      const ring3 = document.getElementById('quizModal-ring3');
+
+      // Show container
+      setTimeout(() => {
+        circleContainer.classList.add('visible');
+      }, 200);
+
+      // Trigger expanding rings periodically
+      setTimeout(() => ring1.classList.add('animate'), 1000);
+      setTimeout(() => ring2.classList.add('animate'), 1500);
+      setTimeout(() => ring3.classList.add('animate'), 2000);
+
+      // Fade in text with upward slide
+      setTimeout(() => {
+        circleText.classList.add('visible');
+        setTimeout(() => {
+          circleSubtext.classList.add('visible');
+        }, 500);
+      }, 800);
+
+      // Expand circle and reveal BOTH left content AND quiz simultaneously
+      setTimeout(() => {
+        circleContainer.classList.add('expanding');
+        setTimeout(() => {
+          circleContainer.style.display = 'none';
+          // Reveal both sides at the same time
+          quizLeft.classList.add('revealed');
+          quizContainer.classList.add('revealed');
+        }, 1000);
+      }, 5000);
+    }
+
+    // ESC key handler for quiz modals
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const quizModal = document.getElementById('quizModal');
+        const resultModal = document.getElementById('quizModal-recommendationModal');
+        if (resultModal && resultModal.classList.contains('active')) {
+          quizModal_closeRecommendation();
+        } else if (quizModal && quizModal.classList.contains('active')) {
+          closeQuizModal();
+        }
+      }
+    });
   </script>
 
 </body>
