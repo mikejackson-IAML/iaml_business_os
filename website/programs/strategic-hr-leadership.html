@@ -1270,55 +1270,8 @@
 </head>
 <body>
 
-  <!-- ===== HEADER ===== -->
-  <!-- Header Component -->
-<header class="header" id="header">
-    <!-- Logo -->
-    <a href="/" class="header-logo">
-        <img src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69042ba0346960d8775fb4a4.svg" alt="IAML Logo">
-    </a>
-
-    <!-- Right side: Nav + Button -->
-    <div class="header-right">
-        <!-- Desktop Navigation -->
-        <nav>
-            <ul class="header-nav">
-                <li><a href="https://iaml.com/featured-programs">Featured Programs</a></li>
-                <li><a href="https://iaml.com/corporate-training">Corporate Training</a></li>
-                <li><a href="https://iaml.com/about-us">Why IAML</a></li>
-            </ul>
-        </nav>
-
-        <!-- Desktop CTA Button -->
-        <a href="#" class="header-cta" onclick="connectPopup_open(); return false;">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 0 0-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/>
-            </svg>
-            CONNECT WITH US
-        </a>
-    </div>
-
-    <!-- Mobile Hamburger -->
-    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
-        <span></span>
-        <span></span>
-        <span></span>
-    </button>
-</header>
-
-<!-- Mobile Menu -->
-<div class="mobile-backdrop" id="mobileBackdrop"></div>
-<nav class="mobile-menu" id="mobileMenu">
-    <a href="https://iaml.com/featured-programs">Featured Programs</a>
-    <a href="https://iaml.com/corporate-training">Corporate Training</a>
-    <a href="https://iaml.com/about-us">Why IAML</a>
-    <a href="#" class="header-cta" onclick="connectPopup_open(); closeMobileMenu(); return false;">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 0 0-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/>
-        </svg>
-        CONNECT WITH US
-    </a>
-</nav>
+  <!-- Header (loaded by components.js) -->
+  <div id="header-placeholder"></div>
 
   <!-- ===== MAIN CONTENT ===== -->
   <main>
@@ -10846,93 +10799,6 @@ button#prev-btn {
 
     // Optional: Refresh data every 5 minutes
     setInterval(fetchNextProgram, 5 * 60 * 1000);
-  </script>
-
-  <!-- Header Scroll Behavior -->
-  <script>
-    // ============================================================================
-    // OPTIMIZED HEADER SCROLL BEHAVIOR
-    // ============================================================================
-    //
-    // State Machine:
-    // 1. AT_TOP (0-50px): Visible, transparent background
-    // 2. SCROLLING_UP (>50px, moving up): Visible, glass effect
-    // 3. SCROLLING_DOWN (>70px, moving down): Hidden
-    //
-    // Key Improvements:
-    // - INSTANT response to scroll-up (no threshold)
-    // - Asymmetric thresholds for better UX
-    // - Debounced scroll direction detection
-    // - Handles rapid direction changes
-    // - Accounts for bounce scrolling
-    // ============================================================================
-
-    const header = document.getElementById('header');
-
-    // Scroll state tracking
-    let lastScrollTop = 0;
-    let scrollDirection = 'none'; // 'up', 'down', 'none'
-    let ticking = false;
-
-    // Thresholds
-    const GLASS_EFFECT_THRESHOLD = 50;  // When to apply glass morphism
-    const HIDE_THRESHOLD = 70;           // When to hide header on scroll-down
-    const SCROLL_DELTA_MIN = 1;          // Minimum scroll delta to register (handles jitter)
-
-    // Direction change detection (prevents bounce scroll issues)
-    let scrollDeltaAccumulator = 0;
-    const DIRECTION_CHANGE_THRESHOLD = 5; // Pixels needed to confirm direction change
-
-    /**
-     * Main header update function - handles all state transitions
-     * @param {number} scrollTop - Current scroll position
-     */
-    function updateHeaderState(scrollTop) {
-      const scrollDelta = scrollTop - lastScrollTop;
-
-      // Direction detection with accumulation (prevents jitter)
-      if (Math.abs(scrollDelta) >= SCROLL_DELTA_MIN) {
-        scrollDeltaAccumulator += scrollDelta;
-        lastScrollTop = scrollTop;
-      }
-
-      const isDeltaSignificant = Math.abs(scrollDeltaAccumulator) >= DIRECTION_CHANGE_THRESHOLD;
-      const isMovingUp = scrollDeltaAccumulator < 0;
-      const isMovingDown = scrollDeltaAccumulator > 0;
-
-      // State: AT_TOP (0-50px) - transparent, no glass effect
-      if (scrollTop < GLASS_EFFECT_THRESHOLD) {
-        header.classList.remove('scrolled', 'hidden');
-        scrollDeltaAccumulator = 0;
-      }
-      // State: Moving up at any scroll position
-      else if (isDeltaSignificant && isMovingUp) {
-        header.classList.remove('hidden');
-        header.classList.add('scrolled');
-        scrollDeltaAccumulator = 0;
-      }
-      // State: Moving down and past HIDE_THRESHOLD
-      else if (isDeltaSignificant && isMovingDown && scrollTop > HIDE_THRESHOLD) {
-        header.classList.add('hidden');
-        scrollDeltaAccumulator = 0;
-      }
-    }
-
-    // Debounced scroll handler
-    function onScroll() {
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          updateHeaderState(scrollTop);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    }
-
-    // Event listener
-    window.addEventListener('scroll', onScroll, { passive: true });
   </script>
 
   <!-- Benefit Steps Animation (scroll-triggered) -->

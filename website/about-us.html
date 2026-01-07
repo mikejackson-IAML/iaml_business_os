@@ -117,64 +117,8 @@
 </head>
 <body class="about-us-page">
 
-  <!-- ===== HEADER ===== -->
-  <header class="header" id="header">
-    <!-- Logo -->
-    <a href="/" class="header-logo">
-      <img src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69042ba0346960d8775fb4a4.svg" alt="IAML Logo">
-    </a>
-
-    <!-- Right side: Nav + Button -->
-    <div class="header-right">
-      <!-- Desktop Navigation -->
-      <nav>
-        <ul class="header-nav">
-          <li><a href="/featured-programs">Featured Programs</a></li>
-          <li><a href="/corporate-training">Corporate Training</a></li>
-          <li><a href="/about-us">Why IAML</a></li>
-        </ul>
-      </nav>
-
-      <!-- Desktop CTA Button -->
-      <a href="#" class="header-cta" onclick="connectPopup_open(); return false;">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 0 0-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/>
-        </svg>
-        CONNECT WITH US
-      </a>
-    </div>
-
-    <!-- Mobile Hamburger -->
-    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </header>
-
-  <!-- Mobile Menu -->
-  <div class="mobile-backdrop" id="mobileBackdrop"></div>
-  <nav class="mobile-menu" id="mobileMenu">
-    <a href="/featured-programs">Featured Programs</a>
-    <a href="/corporate-training">Corporate Training</a>
-    <a href="/about-us">Why IAML</a>
-    <a href="#" class="header-cta" onclick="connectPopup_open(); closeMobileMenu(); return false;">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 0 0-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/>
-      </svg>
-      CONNECT WITH US
-    </a>
-  </nav>
-
-  <!-- NoScript fallback for progressive enhancement -->
-  <noscript>
-    <nav style="position: fixed; top: 0; width: 100%; background: white; padding: 16px; text-align: center; z-index: 1000; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-      <a href="/">Home</a> |
-      <a href="/featured-programs">Programs</a> |
-      <a href="/corporate-training">Corporate</a> |
-      <a href="/about-us">Why IAML</a>
-    </nav>
-  </noscript>
+  <!-- Header (loaded by components.js) -->
+  <div id="header-placeholder"></div>
 
   <!-- ===== MAIN CONTENT ===== -->
   <main>
@@ -534,89 +478,6 @@
   <script src="../js/modals.js" defer></script>
   <script src="../js/main.js" defer></script>
 
-  <!-- Header Scroll Behavior -->
-  <script>
-    // ============================================================================
-    // OPTIMIZED HEADER SCROLL BEHAVIOR
-    // ============================================================================
-    const header = document.getElementById('header');
-
-    let lastScrollTop = 0;
-    let scrollDirection = 'none';
-    let ticking = false;
-
-    const GLASS_EFFECT_THRESHOLD = 50;
-    const HIDE_THRESHOLD = 70;
-    const SCROLL_DELTA_MIN = 1;
-
-    let scrollDeltaAccumulator = 0;
-    const DIRECTION_CHANGE_THRESHOLD = 5;
-
-    function updateHeader(scrollTop) {
-      const scrollDelta = scrollTop - lastScrollTop;
-
-      if (Math.abs(scrollDelta) < SCROLL_DELTA_MIN) {
-        ticking = false;
-        return;
-      }
-
-      scrollDeltaAccumulator += scrollDelta;
-
-      let newDirection = scrollDirection;
-
-      if (scrollDeltaAccumulator > DIRECTION_CHANGE_THRESHOLD) {
-        newDirection = 'down';
-        scrollDeltaAccumulator = 0;
-      } else if (scrollDeltaAccumulator < -DIRECTION_CHANGE_THRESHOLD) {
-        newDirection = 'up';
-        scrollDeltaAccumulator = 0;
-      }
-
-      if (scrollTop <= GLASS_EFFECT_THRESHOLD) {
-        header.classList.remove('hidden');
-        header.classList.remove('scrolled');
-      } else if (newDirection === 'down' && scrollTop > HIDE_THRESHOLD) {
-        header.classList.add('hidden');
-        header.classList.add('scrolled');
-      } else if (newDirection === 'up' && scrollTop > GLASS_EFFECT_THRESHOLD) {
-        header.classList.remove('hidden');
-        header.classList.add('scrolled');
-      } else if (scrollTop > GLASS_EFFECT_THRESHOLD && scrollTop <= HIDE_THRESHOLD) {
-        header.classList.remove('hidden');
-        header.classList.add('scrolled');
-      }
-
-      scrollDirection = newDirection;
-      lastScrollTop = scrollTop;
-      ticking = false;
-    }
-
-    function requestTick() {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          updateHeader(window.pageYOffset);
-        });
-        ticking = true;
-      }
-    }
-
-    window.addEventListener('scroll', requestTick, { passive: true });
-
-    window.addEventListener('DOMContentLoaded', () => {
-      const initialScrollTop = window.pageYOffset;
-
-      if (initialScrollTop <= GLASS_EFFECT_THRESHOLD) {
-        header.classList.remove('hidden');
-        header.classList.remove('scrolled');
-      } else {
-        header.classList.remove('hidden');
-        header.classList.add('scrolled');
-      }
-
-      lastScrollTop = initialScrollTop;
-    });
-  </script>
-
   <!-- Page-Specific JavaScript: Testimonial Carousel -->
   <script>
     // ============================================================================
@@ -782,40 +643,6 @@
 
       observer.observe(typewriterContent);
     });
-  </script>
-
-  <!-- Mobile Menu Toggle -->
-  <script>
-    // ============================================================================
-    // MOBILE MENU
-    // ============================================================================
-    const hamburger = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const mobileBackdrop = document.getElementById('mobileBackdrop');
-
-    function openMobileMenu() {
-      hamburger.classList.add('active');
-      mobileMenu.classList.add('active');
-      mobileBackdrop.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeMobileMenu() {
-      hamburger.classList.remove('active');
-      mobileMenu.classList.remove('active');
-      mobileBackdrop.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-
-    hamburger.addEventListener('click', () => {
-      if (mobileMenu.classList.contains('active')) {
-        closeMobileMenu();
-      } else {
-        openMobileMenu();
-      }
-    });
-
-    mobileBackdrop.addEventListener('click', closeMobileMenu);
   </script>
 
   <!-- Page-Specific JavaScript: Logo Marquee -->
