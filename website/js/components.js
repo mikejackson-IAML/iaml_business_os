@@ -247,6 +247,28 @@ const loadComponents = () => {
   }
 };
 
+// Booking Modal Functions
+function openBookingModal() {
+  const modal = document.getElementById('bookingModal');
+  if (modal) {
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeBookingModal(e) {
+  if (e && e.target !== e.currentTarget) return;
+  const modal = document.getElementById('bookingModal');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+  }
+}
+
+// Make globally available for onclick handlers
+window.openBookingModal = openBookingModal;
+window.closeBookingModal = closeBookingModal;
+
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', loadComponents);
 } else {
