@@ -613,6 +613,16 @@ Before committing, ensure:
 
 ---
 
+## Design Anti-Patterns (Never Use)
+
+**Visual styles to avoid:**
+- ❌ **Left border accents on cards** - Looks dated, use subtle shadows or borders instead
+- ❌ Heavy drop shadows - Use subtle, diffused shadows
+- ❌ Bright/saturated accent colors for large areas
+- ❌ Gradients on text (except hero headings with care)
+
+---
+
 ## Anti-Patterns to Prevent
 
 **If Mike's request sounds like it needs a framework, translate to vanilla:**
