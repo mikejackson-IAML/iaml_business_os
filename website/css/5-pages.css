@@ -11786,3 +11786,365 @@ input[type="radio"].session-radio {
     animation-duration: 0s;
   }
 }
+
+/* ============================================================================
+   TESTIMONIALS PAGE (tp-)
+   ============================================================================ */
+
+/* ===== HERO SECTION ===== */
+.tp-hero-section {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--black);
+  color: var(--white);
+  padding: var(--space-4xl) 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.tp-hero-content {
+  text-align: center;
+  max-width: 1000px;
+  margin: 0 auto;
+  z-index: 2;
+  padding-top: 80px;
+}
+
+.tp-hero-label {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--blue-primary);
+  margin-bottom: 32px;
+}
+
+.tp-hero-headline {
+  font-family: var(--font-heading);
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  font-weight: 400;
+  line-height: 1.1;
+  margin-bottom: var(--space-lg);
+  color: var(--white);
+}
+
+.tp-hero-subheadline {
+  font-family: var(--font-body);
+  font-size: clamp(1.0625rem, 1.7vw, 1.25rem);
+  line-height: 1.6;
+  margin-bottom: var(--space-2xl);
+  color: var(--gray-300);
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tp-hero-cta-group {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ===== TESTIMONIALS SCROLL SECTION ===== */
+.tp-scroll-section {
+  padding: 100px 0 120px;
+  background: var(--gray-50);
+  overflow: hidden;
+}
+
+.tp-section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.tp-section-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 500;
+  color: var(--gray-900);
+  margin-bottom: 16px;
+}
+
+.tp-section-subtitle {
+  font-family: var(--font-body);
+  font-size: 18px;
+  color: var(--gray-500);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ===== THREE-COLUMN GRID ===== */
+.tp-columns-wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-height: 800px;
+  overflow: hidden;
+  position: relative;
+
+  /* Fade mask for infinite illusion */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 1) 8%,
+    rgba(0, 0, 0, 1) 92%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 1) 8%,
+    rgba(0, 0, 0, 1) 92%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+/* Individual Column */
+.tp-column {
+  overflow: hidden;
+  position: relative;
+}
+
+.tp-column-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  will-change: transform;
+}
+
+/* Scroll Animation */
+@keyframes tp-scroll-up {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+/* Column-specific speeds */
+.tp-column-1 .tp-column-inner {
+  animation: tp-scroll-up 18s linear infinite;
+}
+
+.tp-column-2 .tp-column-inner {
+  animation: tp-scroll-up 22s linear infinite;
+}
+
+.tp-column-3 .tp-column-inner {
+  animation: tp-scroll-up 20s linear infinite;
+}
+
+/* Pause on hover */
+.tp-columns-wrapper:hover .tp-column-inner {
+  animation-play-state: paused;
+}
+
+/* ===== TESTIMONIAL CARD ===== */
+.tp-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 24px;
+  padding: 28px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+              0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.tp-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--blue-primary);
+  transform: scaleY(0);
+  transition: transform 0.3s ease;
+}
+
+.tp-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.12),
+              0 10px 20px -5px rgba(0, 0, 0, 0.08);
+}
+
+/* Quote styling */
+.tp-quote {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--gray-700);
+  margin-bottom: 20px;
+  position: relative;
+  padding-left: 0;
+}
+
+/* Large decorative quote mark */
+.tp-quote-mark {
+  font-family: var(--font-heading);
+  font-size: 4rem;
+  color: var(--blue-primary);
+  opacity: 0.1;
+  position: absolute;
+  top: -20px;
+  left: -5px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* Author info */
+.tp-author {
+  border-top: 1px solid var(--gray-100);
+  padding-top: 16px;
+}
+
+.tp-author-name {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--blue-primary);
+  margin-bottom: 4px;
+}
+
+.tp-author-title {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--gray-600);
+  line-height: 1.4;
+}
+
+.tp-author-company {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  color: var(--gray-400);
+  margin-top: 2px;
+}
+
+/* ===== CTA SECTION OVERRIDES FOR TESTIMONIALS PAGE ===== */
+.tp-scroll-section + #iaml-cta {
+  background: var(--white);
+}
+
+/* ===== RESPONSIVE: TABLET (2 COLUMNS) ===== */
+@media (max-width: 1024px) {
+  .tp-columns-wrapper {
+    grid-template-columns: repeat(2, 1fr);
+    max-height: 700px;
+  }
+
+  .tp-column-3 {
+    display: none;
+  }
+
+  .tp-hero-content {
+    padding-top: 60px;
+  }
+
+  .tp-scroll-section {
+    padding: 80px 0 100px;
+  }
+}
+
+/* ===== RESPONSIVE: MOBILE (1 COLUMN) ===== */
+@media (max-width: 768px) {
+  .tp-columns-wrapper {
+    grid-template-columns: 1fr;
+    max-height: 600px;
+    gap: 16px;
+  }
+
+  .tp-column-2,
+  .tp-column-3 {
+    display: none;
+  }
+
+  .tp-scroll-section {
+    padding: 60px 0 80px;
+  }
+
+  .tp-section-header {
+    margin-bottom: 40px;
+  }
+
+  .tp-card {
+    padding: 24px;
+    border-radius: 20px;
+  }
+
+  .tp-hero-section {
+    min-height: 60vh;
+    padding: var(--space-2xl) 0;
+  }
+
+  .tp-hero-cta-group {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tp-hero-cta-group .btn {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .tp-section-subtitle {
+    font-size: 16px;
+    padding: 0 16px;
+  }
+}
+
+/* ===== RESPONSIVE: SMALL MOBILE ===== */
+@media (max-width: 480px) {
+  .tp-columns-wrapper {
+    max-height: 500px;
+  }
+
+  .tp-card {
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  .tp-quote {
+    font-size: 0.9375rem;
+  }
+
+  .tp-quote-mark {
+    font-size: 3rem;
+    top: -15px;
+  }
+
+  .tp-hero-label {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+  }
+}
+
+/* ===== REDUCED MOTION: TESTIMONIALS PAGE ===== */
+@media (prefers-reduced-motion: reduce) {
+  .tp-column-inner {
+    animation: none !important;
+  }
+
+  .tp-columns-wrapper {
+    overflow-y: auto;
+    max-height: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .tp-card {
+    transition: none;
+  }
+
+  .tp-card::before {
+    transition: none;
+  }
+}
