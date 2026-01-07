@@ -38,16 +38,20 @@ This file provides guidance to Claude Code when working on the IAML website. For
 - **Splide.js v4.1.4** - carousels/sliders only (no other JS libraries)
 
 ### CSS Architecture
-HTML pages link to `main.css`, which imports from the 5-file system:
 
-| File | Purpose |
-|------|---------|
-| `1-variables.css` | Design tokens (--color-*, --spacing-*, --font-*) |
-| `2-base.css` | CSS reset, typography defaults |
-| `3-components.css` | Buttons, cards, modals, forms |
-| `4-layout.css` | Containers, grids, spacing utilities |
-| `5-pages.css` | Page-specific styles (use prefixes: `.ct-`, `.about-`, etc.) |
-| `mega-menu.css` | Navigation mega menu styles |
+**CRITICAL:** HTML pages load `main.css` directly. When adding new component styles, **add them to `main.css`** (not the numbered files).
+
+| File | Purpose | When to Edit |
+|------|---------|--------------|
+| `main.css` | **Primary stylesheet - all pages load this** | Add new component CSS here |
+| `1-variables.css` | Design tokens (--color-*, --spacing-*, --font-*) | Reference only |
+| `2-base.css` | CSS reset, typography defaults | Reference only |
+| `3-components.css` | Buttons, cards, modals, forms | Reference only |
+| `4-layout.css` | Containers, grids, spacing utilities | Reference only |
+| `5-pages.css` | Page-specific styles | Reference only |
+| `mega-menu.css` | Navigation mega menu styles | Mega menu only |
+
+**Why?** The numbered files (1-5) exist for organizational reference but are not imported by `main.css`. Program pages only load `main.css`, so styles added to numbered files won't appear.
 
 ### Backend/APIs
 - **Airtable API** - via `/api/` serverless proxies
@@ -174,13 +178,9 @@ If a request sounds like it needs a framework, translate to vanilla:
 - "npm package" → Vanilla JS or Splide.js only
 
 ### CSS Placement
-| Type | File |
-|------|------|
-| Colors/spacing tokens | `1-variables.css` |
-| Element defaults | `2-base.css` |
-| Reusable components | `3-components.css` |
-| Grids/containers | `4-layout.css` |
-| Page-specific | `5-pages.css` (with prefix) |
+**Always add new styles to `main.css`** - it's the only CSS file loaded by HTML pages.
+
+The numbered files (1-5) are for reference/organization only and are NOT imported.
 
 ---
 

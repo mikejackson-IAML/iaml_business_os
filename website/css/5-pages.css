@@ -1785,6 +1785,72 @@
   transform: scale(1.02);
 }
 
+/* ===== CTA CARD COMPONENT ===== */
+/* Dark card with brochure download link */
+.cta-card-wrapper {
+  padding: 4rem 0;
+}
+
+.cta-card-outer {
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  background: #fafafa;
+}
+
+.cta-card-inner {
+  background: var(--blue-darker, #222639);
+  border-radius: 1.25rem;
+  padding: 3rem 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.cta-card-headline {
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.2;
+}
+
+.cta-card-subtext {
+  color: #9ca3af;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 500px;
+}
+
+.cta-card-actions {
+  flex-shrink: 0;
+}
+
+.cta-card-link {
+  color: var(--blue-primary, #188bf6);
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.cta-card-link:hover {
+  text-decoration: underline;
+  color: #4da3f7;
+}
+
+@media (max-width: 768px) {
+  .cta-card-inner {
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem;
+  }
+}
+
 /* ===== RESPONSIVE ADJUSTMENTS ===== */
 @media (max-width: 1024px) {
   .quiz-content {
