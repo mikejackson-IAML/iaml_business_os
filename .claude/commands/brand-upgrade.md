@@ -397,6 +397,7 @@ Primary Audience: [ICP segment(s)]
 10. **Number all changes** - Use [1], [2], [3] for easy selection
 11. **Cite knowledge docs** - Each recommendation should reference which doc it's from
 12. **Prioritize high-impact** - Tier 1 changes should come first in review
+13. **NEVER modify bottom CTA sections** - Skip any CTA section at the bottom of the page (typically the final call-to-action before the footer). These sections are standardized across the site and should not be changed.
 
 ---
 
