@@ -436,12 +436,12 @@
      * @param {Object} fields - Airtable record fields
      * @returns {string} Registration URL
      */
-    function buildRegistrationUrl(fields) {
+    function buildProgramUrl(fields) {
         const programName = Array.isArray(fields['Program Name'])
             ? fields['Program Name'][0]
             : fields['Program Name'];
         const slug = programNameToSlug(programName);
-        return `/programs/${slug}#register`;
+        return `/programs/${slug}`;
     }
 
     /**
@@ -521,7 +521,7 @@
                 image: f['Hero Image URL'] || 'https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/695de01eb75f6ff8ea6a1242.svg',
                 duration: formatDuration(duration),
                 price: price,
-                registrationUrl: buildRegistrationUrl(f)
+                programUrl: buildProgramUrl(f)
             };
 
         } catch (error) {
@@ -570,8 +570,8 @@
             const price = program.price ? `$${program.price.toLocaleString()}` : '';
             details.textContent = [duration, price].filter(Boolean).join(' · ');
         }
-        if (cta && program.registrationUrl) {
-            cta.href = program.registrationUrl;
+        if (cta && program.programUrl) {
+            cta.href = program.programUrl;
         }
         if (formatBadge && program.format) {
             formatBadge.textContent = program.format;
