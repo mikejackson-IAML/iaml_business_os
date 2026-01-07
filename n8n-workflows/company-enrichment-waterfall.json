@@ -1,0 +1,463 @@
+{
+  "name": "Company Enrichment Waterfall",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "applWPVmMkgMWoZIC",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl90HikZUp0GEkKZ",
+          "mode": "id"
+        },
+        "filterByFormula": "OR({Enrichment Status} = '', {Enrichment Status} = 'pending')",
+        "options": {}
+      },
+      "id": "airtable-trigger",
+      "name": "Get Companies to Enrich",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [250, 300],
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "YOUR_AIRTABLE_CREDENTIAL_ID",
+          "name": "Airtable API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "split-batches",
+      "name": "Process One at a Time",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [470, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apollo.io/api/v1/organizations/search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"q_organization_name\": \"{{ $json['Company Name'] }}\",\n  \"per_page\": 1\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "apollo-search",
+      "name": "Apollo - Search Company",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [690, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "YOUR_APOLLO_CREDENTIAL_ID",
+          "name": "Apollo API"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "apollo-has-data",
+              "leftValue": "={{ $json.organizations?.length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-apollo-found",
+      "name": "Apollo Found Data?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [910, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract Apollo data\nconst org = $input.first().json.organizations?.[0] || {};\nconst originalRecord = $('Process One at a Time').first().json;\n\nreturn [{\n  json: {\n    recordId: originalRecord.id,\n    companyName: originalRecord['Company Name'],\n    // Apollo enrichment data\n    enrichedData: {\n      'Company Domain': org.primary_domain || '',\n      'Industry': org.industry || '',\n      'Company Size': org.estimated_num_employees ? \n        (org.estimated_num_employees < 50 ? 'Small (1-50)' :\n         org.estimated_num_employees < 200 ? 'Medium (51-200)' :\n         org.estimated_num_employees < 1000 ? 'Large (201-1000)' : 'Enterprise (1000+)') : '',\n      'Employee Count': org.estimated_num_employees || '',\n      'Employee Count (Numeric)': org.estimated_num_employees || null,\n      'Main Phone': org.phone || '',\n      'Address': org.street_address || '',\n      'City': org.city || '',\n      'State': org.state || '',\n      'Country': org.country || '',\n      'HQ City': org.city || '',\n      'HQ State': org.state || '',\n      'HQ Zip': org.postal_code || '',\n      'LinkedIn URL': org.linkedin_url || '',\n      'Website': org.website_url || org.primary_domain ? `https://${org.primary_domain}` : '',\n      'NAICS Code': org.naics_codes?.[0] || ''\n    },\n    source: 'apollo',\n    apolloRaw: org\n  }\n}];"
+      },
+      "id": "transform-apollo",
+      "name": "Transform Apollo Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1130, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.exa.ai/search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"query\": \"{{ $('Process One at a Time').first().json['Company Name'] }} company official website headquarters\",\n  \"num_results\": 5,\n  \"use_autoprompt\": true,\n  \"type\": \"neural\"\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "exa-search",
+      "name": "Exa - Semantic Search",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1130, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "YOUR_EXA_CREDENTIAL_ID",
+          "name": "Exa API"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "exa-has-results",
+              "leftValue": "={{ $json.results?.length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-exa-found",
+      "name": "Exa Found Data?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1350, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract Exa data - try to find company website from search results\nconst results = $input.first().json.results || [];\nconst originalRecord = $('Process One at a Time').first().json;\nconst companyName = originalRecord['Company Name'].toLowerCase();\n\n// Find the most likely company website\nlet bestMatch = null;\nfor (const result of results) {\n  const url = result.url || '';\n  const title = (result.title || '').toLowerCase();\n  \n  // Skip social media, news sites, directories\n  if (url.includes('linkedin.com') || \n      url.includes('facebook.com') || \n      url.includes('twitter.com') ||\n      url.includes('wikipedia.org') ||\n      url.includes('bloomberg.com') ||\n      url.includes('crunchbase.com') ||\n      url.includes('zoominfo.com')) {\n    continue;\n  }\n  \n  // Prefer if company name appears in domain or title\n  const domain = new URL(url).hostname.replace('www.', '');\n  if (title.includes(companyName) || domain.includes(companyName.split(' ')[0].toLowerCase())) {\n    bestMatch = result;\n    break;\n  }\n  \n  if (!bestMatch) bestMatch = result;\n}\n\nlet domain = '';\nlet linkedIn = '';\n\nif (bestMatch) {\n  try {\n    domain = new URL(bestMatch.url).hostname.replace('www.', '');\n  } catch (e) {}\n}\n\n// Also look for LinkedIn in results\nconst linkedInResult = results.find(r => r.url?.includes('linkedin.com/company'));\nif (linkedInResult) {\n  linkedIn = linkedInResult.url;\n}\n\nreturn [{\n  json: {\n    recordId: originalRecord.id,\n    companyName: originalRecord['Company Name'],\n    enrichedData: {\n      'Company Domain': domain,\n      'Website': bestMatch ? bestMatch.url : '',\n      'LinkedIn URL': linkedIn\n    },\n    source: 'exa',\n    exaRaw: bestMatch\n  }\n}];"
+      },
+      "id": "transform-exa",
+      "name": "Transform Exa Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1570, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// No enrichment data found from any source\nconst originalRecord = $('Process One at a Time').first().json;\n\nreturn [{\n  json: {\n    recordId: originalRecord.id,\n    companyName: originalRecord['Company Name'],\n    enrichedData: {},\n    source: 'none',\n    status: 'failed',\n    notes: 'No data found from Apollo or Exa'\n  }\n}];"
+      },
+      "id": "no-data-found",
+      "name": "No Data Found",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1570, 500]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Merge enrichment data and determine completeness\nconst input = $input.first().json;\nconst enrichedData = input.enrichedData || {};\n\n// Define required fields for \"complete\" status\nconst requiredFields = ['Company Domain', 'Industry', 'Employee Count'];\nconst contactFields = ['Main Phone', 'Main Email', 'Address'];\n\n// Count how many required fields are filled\nconst filledRequired = requiredFields.filter(f => enrichedData[f] && enrichedData[f] !== '').length;\nconst filledContact = contactFields.filter(f => enrichedData[f] && enrichedData[f] !== '').length;\n\nlet status = 'failed';\nif (filledRequired >= 2 || (filledRequired >= 1 && filledContact >= 1)) {\n  status = 'complete';\n} else if (filledRequired >= 1 || Object.keys(enrichedData).some(k => enrichedData[k])) {\n  status = 'partial';\n}\n\n// Build notes\nlet notes = [];\nif (input.source !== 'none') {\n  notes.push(`Primary source: ${input.source}`);\n}\nif (status === 'partial') {\n  const missing = requiredFields.filter(f => !enrichedData[f] || enrichedData[f] === '');\n  if (missing.length > 0) {\n    notes.push(`Missing: ${missing.join(', ')}`);\n  }\n}\nif (input.notes) {\n  notes.push(input.notes);\n}\n\nreturn [{\n  json: {\n    recordId: input.recordId,\n    companyName: input.companyName,\n    fieldsToUpdate: {\n      ...enrichedData,\n      'Enrichment Source': input.source === 'none' ? '' : input.source,\n      'Enrichment Status': status,\n      'Enriched Date': new Date().toISOString(),\n      'Enrichment Notes': notes.join('. ') || null\n    }\n  }\n}];"
+      },
+      "id": "prepare-update",
+      "name": "Prepare Airtable Update",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1790, 300]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "applWPVmMkgMWoZIC",
+          "mode": "id"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl90HikZUp0GEkKZ",
+          "mode": "id"
+        },
+        "id": "={{ $json.recordId }}",
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {
+          "bulkSize": 10
+        }
+      },
+      "id": "airtable-update",
+      "name": "Update Airtable Record",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [2010, 300],
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "YOUR_AIRTABLE_CREDENTIAL_ID",
+          "name": "Airtable API"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "loop-done",
+      "name": "Loop Done",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [2230, 300]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "workflow-trigger",
+      "name": "Workflow Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [50, 300]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Run Every Hour",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [50, 500],
+      "disabled": true
+    }
+  ],
+  "connections": {
+    "Get Companies to Enrich": {
+      "main": [
+        [
+          {
+            "node": "Process One at a Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process One at a Time": {
+      "main": [
+        [
+          {
+            "node": "Apollo - Search Company",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Done",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Apollo - Search Company": {
+      "main": [
+        [
+          {
+            "node": "Apollo Found Data?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Apollo Found Data?": {
+      "main": [
+        [
+          {
+            "node": "Transform Apollo Data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Exa - Semantic Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transform Apollo Data": {
+      "main": [
+        [
+          {
+            "node": "Prepare Airtable Update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Exa - Semantic Search": {
+      "main": [
+        [
+          {
+            "node": "Exa Found Data?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Exa Found Data?": {
+      "main": [
+        [
+          {
+            "node": "Transform Exa Data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Data Found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transform Exa Data": {
+      "main": [
+        [
+          {
+            "node": "Prepare Airtable Update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Data Found": {
+      "main": [
+        [
+          {
+            "node": "Prepare Airtable Update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Airtable Update": {
+      "main": [
+        [
+          {
+            "node": "Update Airtable Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Airtable Record": {
+      "main": [
+        [
+          {
+            "node": "Process One at a Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Workflow Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Companies to Enrich",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run Every Hour": {
+      "main": [
+        [
+          {
+            "node": "Get Companies to Enrich",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "instanceId": "IAML-Business-OS"
+  },
+  "pinData": {},
+  "versionId": "1.0.0",
+  "triggerCount": 1,
+  "tags": [
+    {
+      "name": "enrichment",
+      "createdAt": "2025-01-06T00:00:00.000Z",
+      "updatedAt": "2025-01-06T00:00:00.000Z"
+    },
+    {
+      "name": "airtable",
+      "createdAt": "2025-01-06T00:00:00.000Z",
+      "updatedAt": "2025-01-06T00:00:00.000Z"
+    }
+  ]
+}
