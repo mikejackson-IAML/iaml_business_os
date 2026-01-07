@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IAML Header Component with Mega Menu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header Component with Mega Menu -->
+    <header class="header" id="header">
+        <!-- Logo -->
+        <a href="/" class="header-logo">
+            <img src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69042ba0346960d8775fb4a4.svg" alt="IAML Logo">
+        </a>
+
+        <!-- Right side: Nav + Button -->
+        <div class="header-right">
+            <!-- Desktop Navigation with Mega Menu -->
+            <nav class="mega-nav">
+                <ul class="header-nav">
+                    <!-- Programs Dropdown -->
+                    <li class="mega-nav-item" data-menu="programs">
+                        <button class="mega-nav-trigger" aria-expanded="false" aria-haspopup="true">
+                            Programs
+                            <svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none">
+                                <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </li>
+
+                    <!-- Corporate Training Dropdown -->
+                    <li class="mega-nav-item" data-menu="corporate">
+                        <button class="mega-nav-trigger" aria-expanded="false" aria-haspopup="true">
+                            Corporate Training
+                            <svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none">
+                                <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </li>
+
+                    <!-- Why IAML Dropdown -->
+                    <li class="mega-nav-item" data-menu="why-iaml">
+                        <button class="mega-nav-trigger" aria-expanded="false" aria-haspopup="true">
+                            Why IAML
+                            <svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none">
+                                <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Desktop CTA Button -->
+            <a href="#" class="header-cta" onclick="connectPopup_open(); return false;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 0 0-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/>
+                </svg>
+                CONNECT WITH US
+            </a>
+        </div>
+
+        <!-- Mobile Hamburger -->
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <!-- Mega Menu Backdrop -->
+    <div class="mega-menu-backdrop" id="megaMenuBackdrop"></div>
+
+    <!-- ========================================== -->
+    <!-- MEGA MENU PANELS -->
+    <!-- ========================================== -->
+
+    <!-- Programs Mega Menu -->
+    <div class="mega-menu" id="mega-menu-programs" role="menu" aria-label="Programs menu">
+        <div class="mega-menu-container">
+            <!-- Column 1: Foundation Certificates -->
+            <div class="mega-menu-column">
+                <h3 class="mega-menu-heading">Foundation Certificates</h3>
+                <ul class="mega-menu-list">
+                    <li>
+                        <a href="/programs/employee-relations-law" class="mega-menu-link">
+                            <span class="mega-menu-link-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
+                                </svg>
+                            </span>
+                            <span>Employee Relations Law</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/programs/workplace-investigations" class="mega-menu-link">
+                            <span class="mega-menu-link-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
+                                </svg>
+                            </span>
+                            <span>Workplace Investigations</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/programs/strategic-hr-leadership" class="mega-menu-link">
+                            <span class="mega-menu-link-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
+                                </svg>
+                            </span>
+                            <span>Strategic HR Leadership</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/programs/employee-benefits-law" class="mega-menu-link">
+                            <span class="mega-menu-link-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
+                                </svg>
+                            </span>
+                            <span>Employee Benefits Law</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Column 2: Advanced + Formats + Credits -->
+            <div class="mega-menu-column">
+                <h3 class="mega-menu-heading">Advanced Certificates</h3>
+                <ul class="mega-menu-list">
+                    <li>
+                        <a href="/programs/advanced-employment-law" class="mega-menu-link">
+                            <span class="mega-menu-link-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                    <path d="M2 17l10 5 10-5"/>
+                                    <path d="M2 12l10 5 10-5"/>
+                                </svg>
+                            </span>
+                            <span>Advanced Employment Law</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/programs/advanced-employee-benefits-law" class="mega-menu-link">
+                            <span class="mega-menu-link-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                    <path d="M2 17l10 5 10-5"/>
+                                    <path d="M2 12l10 5 10-5"/>
+                                </svg>
+                            </span>
+                            <span>Advanced Benefits Law</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <h3 class="mega-menu-heading" style="margin-top: 24px;">Format</h3>
+                <div class="mega-menu-formats">
+                    <a href="/program-schedule?format=in-person" class="format-pill">In-Person</a>
+                    <a href="/program-schedule?format=virtual" class="format-pill">Virtual</a>
+                    <a href="/program-schedule?format=on-demand" class="format-pill">On-Demand</a>
+                </div>
+
+            </div>
+
+            <!-- Column 3: Spotlight Panel -->
+            <div class="mega-menu-column mega-menu-spotlight">
+                <div class="spotlight-label">
+                    Upcoming
+                    <span class="spotlight-format-badge" id="spotlight-format">In-Person</span>
+                </div>
+                <div class="spotlight-card" id="programs-spotlight">
+                    <div class="spotlight-image">
+                        <img src="/images/programs/employee-relations-law-hero.jpg" alt="Program" loading="lazy">
+                    </div>
+                    <div class="spotlight-content">
+                        <h4 class="spotlight-title">Employee Relations Law</h4>
+                        <p class="spotlight-location">Atlanta, Georgia</p>
+                        <p class="spotlight-date">Apr 20-21, 2026</p>
+                        <p class="spotlight-details">2 days · $1,575</p>
+                        <a href="/programs/employee-relations-law" class="spotlight-cta">
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Promotional Boxes Row (spans columns 1-2) -->
+            <div class="mega-menu-promo-row">
+                <!-- Box 1: Quarterly Employment Law Update -->
+                <a href="/program-schedule?program=employment-law-update" class="promo-box">
+                    <svg class="promo-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                    <div class="promo-icon promo-icon--gold">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                    </div>
+                    <h4 class="promo-title">Quarterly Employment Law Update</h4>
+                    <p class="promo-description">90-minute sessions covering the latest NLRB rulings, discrimination law, ADA/FMLA updates, and compliance issues. Taught by practicing attorneys.</p>
+                    <p class="promo-date" id="elu-promo-date"></p>
+                </a>
+
+                <!-- Box 2: Program Schedule -->
+                <a href="/program-schedule" class="promo-box">
+                    <svg class="promo-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                    <div class="promo-icon promo-icon--blue">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                            <polyline points="10 9 9 9 8 9"/>
+                        </svg>
+                    </div>
+                    <h4 class="promo-title">View Upcoming Programs</h4>
+                    <p class="promo-description">Find your perfect session. Browse dates, locations, and formats for all certificate programs taught by practicing attorneys.</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Corporate Training Mega Menu -->
+    <div class="mega-menu" id="mega-menu-corporate" role="menu" aria-label="Corporate Training menu">
+        <div class="mega-menu-container">
+            <!-- Column 1: Training Solutions -->
+            <div class="mega-menu-column">
+                <h3 class="mega-menu-heading">Training Solutions</h3>
+                <ul class="mega-menu-list mega-menu-list-detailed">
+                    <li>
+                        <a href="/corporate-training" class="mega-menu-link">
+                            <span class="mega-menu-link-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                                </svg>
+                            </span>
+                            <div>
+                                <span class="mega-menu-link-title">Custom Programs</span>
+                                <span class="mega-menu-link-desc">Tailored to your policies</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/corporate-training" class="mega-menu-link">
+                            <span class="mega-menu-link-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                                    <polyline points="9 22 9 12 15 12 15 22"/>
+                                </svg>
+                            </span>
+                            <div>
+                                <span class="mega-menu-link-title">On-Site Training</span>
+                                <span class="mega-menu-link-desc">We come to you</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/corporate-training" class="mega-menu-link">
+                            <span class="mega-menu-link-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                                    <line x1="8" y1="21" x2="16" y2="21"/>
+                                    <line x1="12" y1="17" x2="12" y2="21"/>
+                                </svg>
+                            </span>
+                            <div>
+                                <span class="mega-menu-link-title">Virtual Group Training</span>
+                                <span class="mega-menu-link-desc">Live online for distributed teams</span>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Column 2: Popular + Why Teams -->
+            <div class="mega-menu-column">
+                <h3 class="mega-menu-heading">Popular for Teams</h3>
+                <ul class="mega-menu-list">
+                    <li>
+                        <a href="/corporate-training" class="mega-menu-link">
+                            <span class="mega-menu-link-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
+                                </svg>
+                            </span>
+                            <span>Employee Relations Law</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/corporate-training" class="mega-menu-link">
+                            <span class="mega-menu-link-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
+                                </svg>
+                            </span>
+                            <span>Workplace Investigations</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/corporate-training" class="mega-menu-link">
+                            <span class="mega-menu-link-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
+                                </svg>
+                            </span>
+                            <span>Strategic HR Leadership</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <h3 class="mega-menu-heading" style="margin-top: 24px;">Why Teams Choose Us</h3>
+                <ul class="mega-menu-benefits">
+                    <li>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        Same content, your location
+                    </li>
+                    <li>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        Customize for your industry
+                    </li>
+                    <li>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        Confidential Q&A
+                    </li>
+                    <li>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        Group pricing available
+                    </li>
+                </ul>
+
+                <a href="/corporate-training" class="mega-menu-text-link">
+                    View Case Studies
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+
+            <!-- Column 3: CTA Panel -->
+            <div class="mega-menu-column mega-menu-cta-panel">
+                <div class="cta-panel-image">
+                    <img src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/695d44c4a8a91c0bb970611d.svg" alt="Corporate training session" loading="lazy">
+                </div>
+                <div class="cta-panel-content">
+                    <p class="cta-panel-headline">Build your team's employment law expertise with on-site training</p>
+                    <a href="#" class="cta-panel-button" onclick="openBookingModal(); closeMegaMenu(); return false;">
+                        Schedule a Consultation
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+                <blockquote class="testimonial-panel-quote">
+                    <p>"The opportunity to interact through role playing and to ask questions specific to our business was very helpful to better understand my role in conducting investigations."</p>
+                    <cite>
+                        <strong>Coreen Oradee</strong>
+                        <span>Employee Relations Specialist</span>
+                        <span>American Family Mutual Insurance Co. Inc.</span>
+                    </cite>
+                </blockquote>
+            </div>
+        </div>
+    </div>
+
+    <!-- Why IAML Mega Menu -->
+    <div class="mega-menu" id="mega-menu-why-iaml" role="menu" aria-label="Why IAML menu">
+        <div class="mega-menu-container">
+            <!-- Column 1: About + Resources -->
+            <div class="mega-menu-column">
+                <h3 class="mega-menu-heading">About</h3>
+                <ul class="mega-menu-list mega-menu-list-detailed">
+                    <li>
+                        <a href="/about-us" class="mega-menu-link">
+                            <span class="mega-menu-link-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M12 16v-4M12 8h.01"/>
+                                </svg>
+                            </span>
+                            <div>
+                                <span class="mega-menu-link-title">Why IAML</span>
+                                <span class="mega-menu-link-desc">45 years of trusted expertise</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/faculty" class="mega-menu-link">
+                            <span class="mega-menu-link-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="9" cy="7" r="4"/>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                </svg>
+                            </span>
+                            <div>
+                                <span class="mega-menu-link-title">Our Faculty</span>
+                                <span class="mega-menu-link-desc">Practicing attorneys from top firms</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/testimonials" class="mega-menu-link">
+                            <span class="mega-menu-link-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                </svg>
+                            </span>
+                            <div>
+                                <span class="mega-menu-link-title">Testimonials</span>
+                                <span class="mega-menu-link-desc">Hear from our alumni</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/participating-organizations" class="mega-menu-link">
+                            <span class="mega-menu-link-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                                </svg>
+                            </span>
+                            <div>
+                                <span class="mega-menu-link-title">Participating Organizations</span>
+                                <span class="mega-menu-link-desc">Companies who trust IAML</span>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+
+                <h3 class="mega-menu-heading" style="margin-top: 24px;">Resources</h3>
+                <ul class="mega-menu-list">
+                    <li>
+                        <a href="/faq" class="mega-menu-link">
+                            <span class="mega-menu-link-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                                    <line x1="12" y1="17" x2="12.01" y2="17"/>
+                                </svg>
+                            </span>
+                            <span>FAQ</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Column 2: Benefits + Credentials -->
+            <div class="mega-menu-column">
+                <h3 class="mega-menu-heading">Included With Every Program</h3>
+                <ul class="mega-menu-benefits-detailed">
+                    <li>
+                        <div class="benefit-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <strong>Pre-Program Consultation</strong>
+                            <span>We customize training to YOUR questions</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="benefit-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <strong>12 Months of Legal Updates</strong>
+                            <span>Free quarterly webinars to keep you current</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="benefit-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <strong>Lifetime Alumni Discounts</strong>
+                            <span>For you and your colleagues on all future programs</span>
+                        </div>
+                    </li>
+                </ul>
+
+                <h3 class="mega-menu-heading" style="margin-top: 24px;">Credentials</h3>
+                <ul class="mega-menu-list">
+                    <li>
+                        <span class="mega-menu-link mega-menu-link-disabled">
+                            <span class="mega-menu-link-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="8" r="7"/>
+                                    <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>
+                                </svg>
+                            </span>
+                            <span>SHRM & HRCI Credits</span>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="mega-menu-link mega-menu-link-disabled">
+                            <span class="mega-menu-link-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                                </svg>
+                            </span>
+                            <span>CLE Credits by State</span>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Column 3: Testimonial Panel -->
+            <div class="mega-menu-column mega-menu-testimonial-panel">
+                <div class="testimonial-panel-image">
+                    <img src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/695d3e12d5b4831a4fc4c08a.png" alt="IAML faculty member teaching" loading="lazy">
+                </div>
+                <blockquote class="testimonial-panel-quote">
+                    <p>"I have never walked out of an IAML program without learning something that I could apply immediately. Hands-down the best value for your money. If you can choose only one program to attend, this is the one!"</p>
+                    <cite>
+                        <strong>Laura Massa</strong>
+                        <span>SVP, Human Resources</span>
+                        <span>Sun Communities & Sun RV Resorts</span>
+                    </cite>
+                </blockquote>
+                <a href="/testimonials" class="testimonial-panel-link">
+                    Read More Testimonials
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-backdrop" id="mobileBackdrop"></div>
+    <nav class="mobile-menu" id="mobileMenu">
+        <!-- Programs Accordion -->
+        <div class="mobile-accordion">
+            <button class="mobile-accordion-trigger" aria-expanded="false">
+                Programs
+                <svg class="accordion-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"/>
+                </svg>
+            </button>
+            <div class="mobile-accordion-content">
+                <div class="mobile-accordion-section">
+                    <span class="mobile-section-label">Foundation</span>
+                    <a href="/programs/employee-relations-law">Employee Relations Law</a>
+                    <a href="/programs/strategic-hr-leadership">Strategic HR Leadership</a>
+                    <a href="/programs/employee-benefits-law">Employee Benefits Law</a>
+                    <a href="/programs/workplace-investigations">Workplace Investigations</a>
+                </div>
+                <div class="mobile-accordion-section">
+                    <span class="mobile-section-label">Advanced</span>
+                    <a href="/programs/advanced-employment-law">Advanced Employment Law</a>
+                    <a href="/programs/advanced-employee-benefits-law">Advanced Benefits Law</a>
+                </div>
+                <a href="/program-schedule" class="mobile-view-all">View Full Schedule →</a>
+            </div>
+        </div>
+
+        <!-- Corporate Training Accordion -->
+        <div class="mobile-accordion">
+            <button class="mobile-accordion-trigger" aria-expanded="false">
+                Corporate Training
+                <svg class="accordion-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"/>
+                </svg>
+            </button>
+            <div class="mobile-accordion-content">
+                <a href="/corporate-training#custom">Custom Programs</a>
+                <a href="/corporate-training#on-site">On-Site Training</a>
+                <a href="/corporate-training#virtual">Virtual Group Training</a>
+                <a href="/corporate-training/case-studies">Case Studies</a>
+            </div>
+        </div>
+
+        <!-- Why IAML Accordion -->
+        <div class="mobile-accordion">
+            <button class="mobile-accordion-trigger" aria-expanded="false">
+                Why IAML
+                <svg class="accordion-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"/>
+                </svg>
+            </button>
+            <div class="mobile-accordion-content">
+                <a href="/about-us">Why IAML</a>
+                <a href="/faculty">Our Faculty</a>
+                <a href="/about-us#history">Our History</a>
+                <a href="/testimonials">Testimonials</a>
+                <a href="/participating-organizations">Participating Organizations</a>
+                <a href="/faq">FAQ</a>
+                <a href="/credits">Credits & Credentials</a>
+            </div>
+        </div>
+
+        <!-- Mobile CTA -->
+        <a href="#" class="header-cta mobile-cta" onclick="connectPopup_open(); closeMobileMenu(); return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 0 0-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/>
+            </svg>
+            CONNECT WITH US
+        </a>
+    </nav>
+
+    <!-- Connect Modal (same as original header.html) -->
+    <div class="connectPopup-overlay" id="connectPopup_Modal" onclick="connectPopup_closeOnOverlay(event)">
+        <div class="connectPopup-modal" onclick="event.stopPropagation();">
+            <div class="connectPopup-header">
+                <h3>Connect with us in 20 seconds or less</h3>
+                <button class="connectPopup-closeBtn" onclick="connectPopup_close()" aria-label="Close">&times;</button>
+            </div>
+            <div class="connectPopup-body" id="connectPopup_Content">
+                <!-- dynamic content injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Modal for Corporate Training Consultation -->
+    <div class="booking-modal-overlay" id="bookingModal" onclick="closeBookingModal(event)">
+        <div class="booking-modal" onclick="event.stopPropagation();">
+            <button class="booking-modal-close" onclick="closeBookingModal()" aria-label="Close">&times;</button>
+            <iframe
+                src="https://api.leadconnectorhq.com/widget/booking/ulFTqVEuHLZH1iuq3XSt"
+                style="width: 100%; height: 100%; border: none;"
+                scrolling="yes"
+                id="bookingIframe"
+            ></iframe>
+        </div>
+    </div>
+
+    <script>
+    // Booking Modal Functions
+    function openBookingModal() {
+        const modal = document.getElementById('bookingModal');
+        if (modal) {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeBookingModal(e) {
+        if (e && e.target !== e.currentTarget) return;
+        const modal = document.getElementById('bookingModal');
+        if (modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    // Make globally available
+    window.openBookingModal = openBookingModal;
+    window.closeBookingModal = closeBookingModal;
+    </script>
+</body>
+</html>
