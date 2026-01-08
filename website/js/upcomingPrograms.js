@@ -51,6 +51,18 @@ const UpcomingPrograms = (() => {
     'Advanced Certificate in Employee Benefits Law': 'advanced-benefits-law'
   };
 
+  // Component program slug mapping (for linking block/session topics to their pages)
+  const COMPONENT_SLUG_MAP = {
+    'Comprehensive Labor Relations': 'comprehensive-labor-relations',
+    'Discrimination Prevention & Defense': 'discrimination-prevention-defense',
+    'Special Issues in Employment Law': 'special-issues-employment-law',
+    'HR Law Fundamentals': 'hr-law-fundamentals',
+    'Strategic HR Management': 'strategic-hr-management',
+    'Welfare Benefits Plan Issues': 'welfare-benefits-plan-issues',
+    'Benefit Plan Claims, Appeals & Litigation': 'benefit-plan-claims-appeals-litigation',
+    'Retirement Plans': 'retirement-plans'
+  };
+
   // In-person program block definitions
   const BLOCK_DEFS = {
     'Certificate in Employee Relations Law': [
@@ -313,7 +325,7 @@ const UpcomingPrograms = (() => {
             ${program.virtualComponents.map(comp => `
               <tr>
                 <td><span class="hp-upcoming-session-num">${comp.number}</span></td>
-                <td>${comp.title}</td>
+                <td><a href="/programs/${COMPONENT_SLUG_MAP[comp.title] || '#'}">${comp.title}</a></td>
                 <td>${comp.dates}</td>
               </tr>
             `).join('')}
@@ -338,7 +350,7 @@ const UpcomingPrograms = (() => {
             ${program.blocks.map(block => `
               <tr>
                 <td><span class="hp-upcoming-session-num">${block.number}</span></td>
-                <td>${block.title}</td>
+                <td><a href="/programs/${COMPONENT_SLUG_MAP[block.title] || '#'}">${block.title}</a></td>
                 <td>${block.days}</td>
               </tr>
             `).join('')}
@@ -361,7 +373,7 @@ const UpcomingPrograms = (() => {
           </div>
         </div>
         <div class="hp-upcoming-info-col">
-          <h3 class="hp-upcoming-program-title">${program.title}</h3>
+          <h3 class="hp-upcoming-program-title"><a href="/programs/${program.slug}">${program.title}</a></h3>
           <div class="hp-upcoming-dates-location">
             <time datetime="${program.rawStartDate}">${formatDateRange(program.rawStartDate, program.rawEndDate)}</time>
             <span class="hp-upcoming-location">

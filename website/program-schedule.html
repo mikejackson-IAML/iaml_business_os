@@ -3307,6 +3307,18 @@
       'Advanced Certificate in Employee Benefits Law': 'advanced-employee-benefits-law'
     };
 
+    // Component program slug mapping (for linking block/session topics to their pages)
+    const COMPONENT_SLUG_MAP = {
+      'Comprehensive Labor Relations': 'comprehensive-labor-relations',
+      'Discrimination Prevention & Defense': 'discrimination-prevention-defense',
+      'Special Issues in Employment Law': 'special-issues-employment-law',
+      'HR Law Fundamentals': 'hr-law-fundamentals',
+      'Strategic HR Management': 'strategic-hr-management',
+      'Welfare Benefits Plan Issues': 'welfare-benefits-plan-issues',
+      'Benefit Plan Claims, Appeals & Litigation': 'benefit-plan-claims-appeals-litigation',
+      'Retirement Plans': 'retirement-plans'
+    };
+
     const BLOCK_DAYS_MAP = {
       'Certificate in Employee Relations Law': {
         1: 'Monday - Tuesday',
@@ -3710,7 +3722,7 @@
                 ${program.virtualComponents.map(comp => `
                   <tr>
                     <td data-label="Session"><span class="schedule-v2c-block-num">${comp.number}</span></td>
-                    <td data-label="Topic">${comp.title}</td>
+                    <td data-label="Topic"><a href="/programs/${COMPONENT_SLUG_MAP[comp.title] || '#'}">${comp.title}</a></td>
                     <td data-label="Dates">${comp.dates}</td>
                   </tr>
                 `).join('')}
@@ -3735,7 +3747,7 @@
                   return `
                     <tr>
                       <td data-label="Block"><span class="schedule-v2c-block-num">${block.number}</span></td>
-                      <td data-label="Topic">${block.title}</td>
+                      <td data-label="Topic"><a href="/programs/${COMPONENT_SLUG_MAP[block.title] || '#'}">${block.title}</a></td>
                       <td data-label="Days">${blockDays}</td>
                     </tr>
                   `;
@@ -3760,7 +3772,7 @@
             </div>
             <div class="schedule-v2b-info-col">
               <header class="schedule-v2b-header">
-                <h3 class="schedule-v2b-program-title">${program.title}</h3>
+                <h3 class="schedule-v2b-program-title"><a href="/programs/${program.slug}">${program.title}</a></h3>
                 <div class="schedule-v2b-dates-location">
                   <time datetime="${program.rawStartDate}">${formatDateRange(program.rawStartDate, program.rawEndDate)}</time>
                   <span class="schedule-v2b-location-venue">
