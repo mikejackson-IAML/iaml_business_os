@@ -508,9 +508,27 @@
           }, 150);
         });
 
+        // Auto-scroll configuration
+        const autoScrollSpeed = 0.5; // pixels per frame
+        let isPaused = false;
+
+        function autoScroll() {
+          if (!isPaused) {
+            track.scrollTop += autoScrollSpeed;
+          }
+          requestAnimationFrame(autoScroll);
+        }
+
+        // Pause on hover/touch
+        track.addEventListener('mouseenter', () => { isPaused = true; });
+        track.addEventListener('mouseleave', () => { isPaused = false; });
+        track.addEventListener('touchstart', () => { isPaused = true; }, {passive: true});
+        track.addEventListener('touchend', () => { isPaused = false; }, {passive: true});
+
         buildLoop();
         requestAnimationFrame(() => {
           syncHeights();
+          autoScroll(); // Start auto-scroll after heights are synced
         });
         track.addEventListener("scroll", onScroll, {passive: true});
       })();

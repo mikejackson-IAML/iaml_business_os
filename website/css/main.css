@@ -1639,16 +1639,9 @@
   z-index: 1;
 }
 
-/* Scroll Hint */
+/* Scroll Hint - hidden since testimonials auto-scroll */
 .scroll-hint {
-  position: relative;
-  z-index: 15;
-  font-size: 0.875rem;
-  color: var(--gray-800);
-  margin-top: calc(0.5rem + 15px);
-  text-align: center;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  font-weight: 500;
+  display: none;
 }
 
 /* Content Section (Right Column) */
