@@ -1129,7 +1129,8 @@
 
         // Build mapping of Airtable record IDs to faculty IDs
         records.forEach(record => {
-          let instructorName = record.fields['Full Name'] || '';
+          // Use 'Full Name with Credentials' to match populateFacultyCards() ID generation
+          let instructorName = record.fields['Full Name with Credentials'] || record.fields['Full Name'] || '';
 
           // Handle case where name is in title field
           if (!instructorName && record.fields['Current Title']) {
