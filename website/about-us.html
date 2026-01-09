@@ -750,67 +750,78 @@
           name: 'John F. Wymer, III, Esq.',
           title: 'Partner, Labor & Employment',
           company: 'Thompson Hine LLP',
-          image: 'https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebba45f28666768ce6.svg'
+          image: 'https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebba45f28666768ce6.svg',
+          bioLink: '/faculty#john-f-wymer-iii-esq'
         },
         {
           name: 'Brenda K. Heinicke, Esq.',
           title: 'Director, Global Employment Law',
           company: 'Terumo',
-          image: 'https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6911ef6e87254432cbd4b2fe.svg'
+          image: 'https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6911ef6e87254432cbd4b2fe.svg',
+          bioLink: '/faculty#brenda-k-heinicke-esq'
         },
         {
           name: 'Ray Deeny, Esq.',
           title: 'Partner',
           company: 'Taft Stettinius & Hollister LLP',
-          image: 'https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667eb6947d86fd7edcc6f.svg'
+          image: 'https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667eb6947d86fd7edcc6f.svg',
+          bioLink: '/faculty#ray-deeny-esq'
         },
         {
           name: 'Wayne W. Williams, Esq.',
           title: 'Founder',
           company: 'Law Offices of Wayne W. Williams',
-          image: 'https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebe98d66054ecb05fb.svg'
+          image: 'https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebe98d66054ecb05fb.svg',
+          bioLink: '/faculty#wayne-w-williams-esq'
         },
         {
           name: 'Patrick Scully, Esq.',
           title: 'Partner',
           company: 'Foley Hoag LLP',
-          image: 'https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebd086b27752e18e31.svg'
+          image: 'https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebd086b27752e18e31.svg',
+          bioLink: '/faculty#patrick-scully-esq'
         },
         {
           name: 'Grant S. Gibeau, Esq.',
           title: 'Partner',
           company: 'Taft Stettinius & Hollister LLP',
-          image: 'https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690e229c43570019cba3b51f.svg'
+          image: 'https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690e229c43570019cba3b51f.svg',
+          bioLink: '/faculty#grant-s-gibeau-esq'
         },
         {
           name: 'Amy J. Zdravecky, Esq.',
           title: 'Partner',
           company: 'Barnes & Thornburg LLP',
-          image: 'https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690e22acc87c0f45146d61fd.svg'
+          image: 'https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690e22acc87c0f45146d61fd.svg',
+          bioLink: '/faculty#amy-j-zdravecky-esq'
         },
         {
           name: 'Rudi S. Turner, Esq.',
           title: 'Sr. Corporate Counsel',
           company: 'White Cap',
-          image: 'https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690e22920269a38b86c905cb.svg'
+          image: 'https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690e22920269a38b86c905cb.svg',
+          bioLink: '/faculty#rudi-s-turner-esq'
         },
         {
           name: 'Dawn R. Kubik, Esq.',
           title: 'Of Counsel',
           company: 'Kubik Workplace & Investigative Services',
-          image: 'https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebe98d665980cb05f7.svg'
+          image: 'https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebe98d665980cb05f7.svg',
+          bioLink: '/faculty#dawn-r-kubik-esq'
         },
         {
           name: 'Dominic DeMatties, Esq.',
           title: 'Partner',
           company: 'Thompson Hine LLP',
-          image: 'https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebe98d66862dcb05f6.svg'
+          image: 'https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebe98d66862dcb05f6.svg',
+          bioLink: '/faculty#dominic-dematties-esq'
         },
         {
           name: 'Ashley Gillihan, Esq.',
           title: 'Partner',
           company: 'Alston & Bird LLP',
-          image: 'https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebd086b239c1e18e30.svg'
+          image: 'https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebd086b239c1e18e30.svg',
+          bioLink: '/faculty#ashley-gillihan-esq'
         }
       ];
 
@@ -842,7 +853,7 @@
                 <div class="instructor-mini-name">${faculty.name}</div>
                 <div class="instructor-mini-title">${faculty.title}</div>
                 <div class="instructor-mini-company">${faculty.company}</div>
-                <a href="#" class="instructor-profile-btn">View Profile</a>
+                <a href="${faculty.bioLink}" class="instructor-profile-btn">View Profile</a>
               </div>
             </div>
           </div>
