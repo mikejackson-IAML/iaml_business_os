@@ -398,6 +398,7 @@ Primary Audience: [ICP segment(s)]
 11. **Cite knowledge docs** - Each recommendation should reference which doc it's from
 12. **Prioritize high-impact** - Tier 1 changes should come first in review
 13. **NEVER modify bottom CTA sections** - Skip any CTA section at the bottom of the page (typically the final call-to-action before the footer). These sections are standardized across the site and should not be changed.
+14. **Social proof banners must use "45+ YEARS"** - All social proof banners should display "45+ YEARS" (not 46+ or other variations). This is the standardized brand messaging.
 
 ---
 
@@ -408,7 +409,7 @@ Primary Audience: [ICP segment(s)]
 2. Failed Alternatives: Conferences are shallow, CLEs are brief, Google is risky
 3. Solution: Intensive multi-day programs from practicing attorneys + ongoing support
 4. Transformation: Expertise, confidence, credential, career advancement
-5. Proof: 45 years, 80,000+ alumni, top law firm faculty, testimonials
+5. Proof: 45+ years, 80,000+ alumni, top law firm faculty, testimonials
 
 **The Emotional Response (readers should feel):**
 - Confident: "I can handle this"
