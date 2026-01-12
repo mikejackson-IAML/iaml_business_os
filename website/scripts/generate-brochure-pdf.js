@@ -88,14 +88,21 @@ function generateDeliveryOptionsList(options) {
 
 /**
  * Generate benefits list HTML
+ * Handles both string arrays and object arrays with title/description
  */
 function generateBenefitsList(benefits) {
-    return benefits.map(benefit => `
-        <div class="benefit-item">
-            <span class="benefit-icon">&#10003;</span>
-            <div class="benefit-text">${benefit}</div>
-        </div>
-    `).join('\n');
+    return benefits.map(benefit => {
+        // Handle both string format and object format
+        const text = typeof benefit === 'string'
+            ? benefit
+            : `<strong>${benefit.title}</strong>: ${benefit.description}`;
+        return `
+            <div class="benefit-item">
+                <span class="benefit-icon">&#10003;</span>
+                <div class="benefit-text">${text}</div>
+            </div>
+        `;
+    }).join('\n');
 }
 
 /**
@@ -124,7 +131,7 @@ function generateCurriculumBlocks(curriculum) {
                     ${(group.skills || []).slice(0, 4).map(skill => `
                         <div class="skill-item">
                             <span class="skill-level ${skill.level.toLowerCase()}">${skill.level}</span>
-                            <span class="skill-title">${skill.title}</span>
+                            <span class="skill-title">${skill.name || skill.title}</span>
                         </div>
                     `).join('')}
                 </div>
@@ -150,8 +157,8 @@ function generateFacultyCards(faculty) {
         return bBio - aBio;
     });
 
-    // Take up to 6 faculty (or all if fewer than 6)
-    const topFaculty = sortedFaculty.slice(0, 6);
+    // Take up to 4 faculty to accommodate full bios
+    const topFaculty = sortedFaculty.slice(0, 4);
     console.log(`Faculty count: ${faculty.length}, showing: ${topFaculty.length}`);
     console.log(`Faculty names: ${topFaculty.map(f => f.name).join(', ')}`);
 
@@ -162,13 +169,10 @@ function generateFacultyCards(faculty) {
             .slice(0, 2)
             .join('');
 
-        // Use short bio - first sentence only, max 120 chars
-        let shortBio = '';
+        // Use full bio
+        let displayBio = '';
         if (member.bio && member.bio.trim().length > 0) {
-            const firstSentence = member.bio.split(/[.!?]/)[0];
-            shortBio = firstSentence.length > 120
-                ? firstSentence.substring(0, 117) + '...'
-                : firstSentence + '.';
+            displayBio = member.bio;
         }
 
         // Use actual image if available, otherwise fall back to initials
@@ -191,7 +195,7 @@ function generateFacultyCards(faculty) {
                         <p class="faculty-title">${titleText}</p>
                     </div>
                 </div>
-                ${shortBio ? `<p class="faculty-bio">${shortBio}</p>` : ''}
+                ${displayBio ? `<p class="faculty-bio">${displayBio}</p>` : ''}
             </div>
         `;
     }).join('\n');
@@ -208,7 +212,7 @@ function generateTestimonials(testimonials) {
         <div class="testimonial-card" style="background: #ffffff !important; border: none !important;">
             <p class="testimonial-quote">"${t.quote}"</p>
             <div class="testimonial-author">
-                <span class="testimonial-name">${t.name}</span>
+                <span class="testimonial-name">${t.author || t.name}</span>
                 <span class="testimonial-role">${t.title}, ${t.company}</span>
             </div>
         </div>
@@ -291,23 +295,32 @@ function generateOverviewContent(program) {
  * Populate template with program data
  */
 function populateTemplate(template, programData, facultyData) {
-    const program = programData;
+    // Handle nested structure: data may be under programData.program or flat
+    const program = programData.program || programData;
     const faculty = facultyData.faculty || [];
-    const hero = program.hero || {};
-    const curriculum = program.curriculum || {};
-    const benefits = program.benefits || {};
-    const contentSection = program.contentSection || {};
+    const hero = programData.hero || {};
+    const curriculum = programData.curriculum || {};
+    const benefits = programData.benefits || {};
+    const contentSection = programData.content || programData.contentSection || {};
+
+    // Merge program-level data into hero for backwards compatibility
+    const mergedHero = {
+        ...hero,
+        price: hero.price || program.price,
+        duration: hero.duration || program.duration,
+        deliveryOptions: hero.deliveryOptions || program.deliveryOptions || []
+    };
 
     const curriculumBlocks = generateCurriculumBlocks(curriculum);
 
     const replacements = {
-        '{{PROGRAM_NAME}}': program.programName || 'Program',
+        '{{PROGRAM_NAME}}': program.name || programData.programName || hero.title || 'Program',
         '{{HERO_DESCRIPTION}}': hero.description || '',
-        '{{DURATION}}': hero.duration || '2 days',
-        '{{PRICE}}': (hero.price || 0).toLocaleString(),
-        '{{CREDITS}}': (benefits.creditCount || '13').toString().match(/\d+/)?.[0] || '13',
-        '{{DELIVERY_OPTIONS}}': generateDeliveryOptions(hero.deliveryOptions || []),
-        '{{DELIVERY_OPTIONS_LIST}}': generateDeliveryOptionsList(hero.deliveryOptions || []),
+        '{{DURATION}}': mergedHero.duration || '2 days',
+        '{{PRICE}}': (mergedHero.price || 0).toLocaleString(),
+        '{{CREDITS}}': (benefits.credits || benefits.creditCount || '13').toString().match(/[\d.]+/)?.[0] || '13',
+        '{{DELIVERY_OPTIONS}}': generateDeliveryOptions(mergedHero.deliveryOptions),
+        '{{DELIVERY_OPTIONS_LIST}}': generateDeliveryOptionsList(mergedHero.deliveryOptions),
         '{{OVERVIEW_CONTENT}}': generateOverviewContent(program),
         '{{BENEFITS_LIST}}': generateBenefitsList(contentSection.benefits || []),
         '{{CURRICULUM_TITLE}}': curriculum.header?.title || 'What You\'ll Learn',
