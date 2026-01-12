@@ -1443,13 +1443,28 @@
       padding: 0;
       border-radius: 50%;
       flex-shrink: 0;
+      background: rgba(59, 89, 152, 0.9);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      color: white;
+    }
+
+    .program-sessions-widget .pagination-btn-left:hover:not(:disabled),
+    .program-sessions-widget .pagination-btn-right:hover:not(:disabled) {
+      background: rgba(74, 107, 168, 1);
+      transform: scale(1.1);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+    }
+
+    .program-sessions-widget .pagination-btn-left svg,
+    .program-sessions-widget .pagination-btn-right svg {
+      stroke: white;
     }
 
     .program-sessions-widget .pagination-btn-left:disabled,
     .program-sessions-widget .pagination-btn-right:disabled {
-      opacity: 0.3;
+      opacity: 0.5;
       cursor: not-allowed;
-      pointer-events: none;
     }
 
     .program-sessions-widget .pagination-info {
