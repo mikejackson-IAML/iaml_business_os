@@ -2,7 +2,7 @@
   "mcpServers": {
     "playwright": {
       "command": "npx",
-      "args": ["-y", "@playwright/mcp@latest"]
+      "args": ["-y", "@playwright/mcp@latest", "--viewport-size=1280x720"]
     },
     "context7": {
       "command": "npx",
@@ -170,4 +170,10 @@
         "VAPI_TOKEN": "${VAPI_TOKEN}"
       }
     },
-    
+    "pagespeed": {
+      "command": "npx",
+      "args": ["-y", "mcp-server-pagespeed"]
+    },
+  }
+}
+  
