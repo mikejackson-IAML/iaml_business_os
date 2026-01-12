@@ -1,0 +1,237 @@
+{
+  "programName": "Certificate in Employee Relations Law",
+  "programSlug": "employee-relations-law",
+  "registrationUrl": "#registration",
+  "meta": {
+    "title": "Certificate in Employee Relations Law | IAML",
+    "description": "Master employee relations strategies with practicing attorneys. 4½-day intensive program. Learn employment law that prevents 90% of workplace legal issues.",
+    "keywords": "employee relations law, employment law training, HR certification, IAML certificate program, workplace law, employee relations certification, HR law training, employment law course, HR legal compliance, SHRM PDC credits, HRCI recertification",
+    "ogImage": "https://iaml.com/images/og-image.jpg"
+  },
+  "seo": {
+    "canonicalUrl": "https://iaml.com/programs/employee-relations-law",
+    "robots": "index, follow",
+    "twitter": {
+      "card": "summary_large_image",
+      "site": "@IAMLTraining",
+      "title": "Certificate in Employee Relations Law | IAML",
+      "description": "Master employee relations strategies with practicing attorneys. Real cases, practical solutions, immediate results.",
+      "image": "https://iaml.com/images/og-image.jpg"
+    },
+    "schema": {
+      "educationalLevel": "intermediate",
+      "timeRequired": "P4DT4H",
+      "teaches": [
+        "Employee relations law fundamentals",
+        "Workplace investigations",
+        "Employment discrimination prevention",
+        "FMLA compliance and administration",
+        "ADA reasonable accommodation",
+        "Harassment prevention strategies",
+        "Discipline and termination procedures",
+        "NLRA compliance for non-union employers"
+      ]
+    }
+  },
+  "hero": {
+    "title": "Certificate in Employee Relations Law",
+    "description": "Most HR professionals never receive formal employment law training. In 4½ days, you'll build comprehensive expertise in labor relations, discrimination defense, and workplace compliance. Practicing attorneys. Practical strategies. Confidence to handle complex situations.",
+    "price": 2375,
+    "deliveryOptions": ["In Person", "Virtual", "On Demand"],
+    "duration": "4½ days"
+  },
+  "testimonials": [
+    {"quote": "Information and materials were excellent, but the experiences shared by the facilitators was fantastic! Sam's interactive facilitation style really made the course very interesting and memorable. Thanks for a great course!", "name": "Yvette Klepper", "title": "Chief Human Resources Officer", "company": "Palm Beach County Tax Collector's Office"},
+    {"quote": "The seminar, in my opinion, was second to none. All of the information was very well delivered and explained in detail so that everyone, from the least to the most experienced, was able to understand. IAML did an outstanding job and I will be sure to highly recommend your seminars to anyone who inquires.", "name": "Laurie Keenan", "title": "Director of Human Resources", "company": "Mohegan Sun"},
+    {"quote": "This is one of the best seminars I have ever attended. The instructors are well informed and have a repertoire of stories that emphasize the issues. Course materials are also excellent!", "name": "Debbie Colia", "title": "HR Executive Consultant", "company": "Cedars-Sinai"},
+    {"quote": "This was by far, the best seminar I've ever attended! The materials provided are a great resource and the instructors did a great job of presenting the information.", "name": "Sylvia Ayala", "title": "Vice President, Human Resources", "company": "Gladney Center for Adoption"},
+    {"quote": "With almost 20 years in the field of employment law, this was one of the best, if not the best, seminar I have ever attended.", "name": "Charles Rando", "title": "Personnel Field Manager", "company": "Wyoming Department of Workforce Services"},
+    {"quote": "The classroom participation was excellent and allowed us to share situations and get other perspectives in a safe space. This was the best employee relations seminar that I've ever attended.", "name": "JoAnne Guerrant", "title": "Employee Relations Manager", "company": "Delta Community Credit Union"},
+    {"quote": "Wayne Williams' intellect and energy truly made this an interactive session which is paramount for all adult learning. Kudos to him and to IAML!", "name": "Michael Cook", "title": "Corporate Employee Relations Manager", "company": "MillerCoors"},
+    {"quote": "Both of the presenters were fantastic! Brenda Heinicke's 'Friday Free for All' was a terrific way for us to discuss specific topics affecting our individual workplaces. The personal experiences shared by Patrick Scully of working for the NLRB were fascinating.", "name": "Kelly Stiles", "title": "Human Resources Manager", "company": "City of Unalaska, Alaska"},
+    {"quote": "One of the best training seminars I've attended! Very valuable to what I do every day, especially in reviewing litigation cases. There was much value in the interaction with other HR peers.", "name": "Jennifer Capozziello", "title": "AVP, Human Resources", "company": "Travelers"},
+    {"quote": "I think that this program is one of the best that you could ever attend as a human resource professional. It is comprehensive and thorough. I left this training with the human resource equipment I need.", "name": "Dennis Scott", "title": "Personnel Officer", "company": "Office of Regulation Policy and Management, Department of Veterans Affairs"}
+  ],
+  "contentSection": {
+    "headline": "Gain Confidence to Handle Complex Situations",
+    "description": "The Certificate in Employee Relations Law is <span class=\"emphasis\">4.5 intensive days</span> where you'll build practical employment law expertise with experienced attorneys - working through real workplace scenarios, not theoretical lectures.",
+    "benefits": [
+      "<strong>Practicing attorneys, not academics</strong> – Your instructors handle employment law cases daily at firms like Taft, Thompson Hine, and Barnes & Thornburg. They teach from real courtrooms and boardrooms, not textbooks.",
+      "<strong>Comprehensive depth, not surface overviews</strong> – 4½ days of intensive coverage you cannot get from conference sessions, law firm CLEs, or online searches. This is the formal training most HR professionals lack.",
+      "<strong>Peer learning with HR professionals nationwide</strong> – Discussions with peers facing similar challenges provide insights you cannot find anywhere else.",
+      "<strong>A credential that advances your career</strong> – Join 80,000+ professionals who earned the IAML certificate. It demonstrates your expertise to employers and serves as evidence your organization takes employment law seriously.",
+      "<strong>Support that continues after you leave</strong> – 12 months of quarterly employment law updates, alumni resources, and faculty access keep you current as regulations change."
+    ]
+  },
+  "curriculum": {
+    "header": {
+      "title": "What You'll Master in 4½ Days",
+      "description": "Build comprehensive expertise in labor relations, discrimination defense, and employment law compliance. Each block delivers practical strategies from practicing attorneys you can apply to your most pressing challenges the following week."
+    },
+    "blocks": [
+      {
+        "id": "block1",
+        "label": "Block I",
+        "title": "Comprehensive Labor Relations",
+        "description": "Navigate the complex terrain of organizing risk, employee handbooks, union elections, and collective bargaining with proven strategies that protect your workforce while maintaining compliance.",
+        "price": 1375,
+        "availability": "Available individually",
+        "competencyGroups": [
+          {
+            "title": "The Current NLRB & Organizing Landscape",
+            "description": "Key shifts in elections, handbooks, and joint-employer liability.",
+            "skills": [
+              {"level": "Foundation", "title": "Elections & recognition after NLRB Cemex decision", "description": "Faster elections; higher risk of bargaining orders for ULPs; what 'card-check-adjacent' and new GC guidance mean in practice."},
+              {"level": "Advanced", "title": "Handbooks after NLRB Stericycle decision", "description": "Why neutral rules (civility, confidentiality, social media, devices) can still violate §7; how to rewrite with context-specific justifications."},
+              {"level": "Expert", "title": "Joint-employer status (where it stands now)", "description": "2023 rule invalidated; prior standard effectively back—implications for franchise/contracting models and vendor oversight."}
+            ]
+          },
+          {
+            "title": "Practical Guidance for Non-Union Workplaces",
+            "description": "Reduce organizing heat with lawful hiring, onboarding, and training.",
+            "skills": [
+              {"level": "Foundation", "title": "Hiring & onboarding practices", "description": "Lower ULP risk; orientation scripts that avoid 'captive audience' pitfalls."},
+              {"level": "Advanced", "title": "The three big sparks for organizing", "description": "Scheduling/fairness, safety (including psychological safety), and transparency (wages/career paths)—how HR cools them with credible channels and swift fixes."},
+              {"level": "Expert", "title": "Manager training for §7 in non-union settings", "description": "Protected concerted activity on Slack/Teams and group chats; where discipline goes wrong under Stericycle."}
+            ]
+          },
+          {
+            "title": "Election Readiness & Campaign Law",
+            "description": "Operate within accelerated timelines while preserving laboratory conditions.",
+            "skills": [
+              {"level": "Foundation", "title": "Campaign playbook: Do / Don't", "description": "Practical rules for message discipline under accelerated timelines; maintaining true laboratory conditions."},
+              {"level": "Advanced", "title": "Access, equal time, and solicitation rules", "description": "Apply solicitation/distribution and email/Teams policies—updated for hybrid work."},
+              {"level": "Expert", "title": "Post-election objections and reruns", "description": "Prevent and defend against objections to avoid costly reruns."}
+            ]
+          },
+          {
+            "title": "Collective Bargaining",
+            "description": "Proposals that matter, documentation, and aligning handbooks with CBAs.",
+            "skills": [
+              {"level": "Foundation", "title": "Setting the table", "description": "Management rights, grievance/arbitration, zipper, information requests, technology/data clauses, and safety."},
+              {"level": "Advanced", "title": "Good-faith bargaining", "description": "Information requests, surface bargaining risks, and documenting proposals/counterproposals."},
+              {"level": "Expert", "title": "Handbook ↔ CBA alignment", "description": "Avoid conflicts and unintended past-practice creation."}
+            ]
+          },
+          {
+            "title": "Strikes, Pickets, and Employer Response",
+            "description": "Protected vs unprotected actions, lawful responses, and contingency planning.",
+            "skills": [
+              {"level": "Foundation", "title": "Types of strikes and lockouts", "description": "Intermittent/partial strike pitfalls; replacements and lawful lockout strategy."},
+              {"level": "Advanced", "title": "Picketing & social media amplification", "description": "What changes in a viral era and how to respond lawfully."},
+              {"level": "Expert", "title": "Contingency planning", "description": "Checklists and communication protocols that minimize disruption."}
+            ]
+          }
+        ]
+      },
+      {
+        "id": "block2",
+        "label": "Block II",
+        "title": "Discrimination Prevention & Defense",
+        "description": "Master discrimination law fundamentals across all protected classes. Learn how to identify workplace practices that expose your company to liability and implement preventive measures that strengthen your defense.",
+        "price": 1375,
+        "availability": "Available individually",
+        "competencyGroups": [
+          {
+            "title": "Title VII: Discrimination, Harassment & Retaliation",
+            "description": "Trends, hybrid risks, LGBTQ+ protections, religion, and compliant DEI.",
+            "skills": [
+              {"level": "Foundation", "title": "Charge trends", "description": "Higher filings; retaliation remains most prevalent—action items for intake, interim measures, and documentation."},
+              {"level": "Advanced", "title": "Harassment in hybrid workplaces", "description": "Chats/DMs, meeting recordings, and third-party/customer harassment—practical controls."},
+              {"level": "Advanced", "title": "LGBTQ+ and sex-based claims post-Bostock; religious conflicts after Groff", "description": "Document undue hardship for schedules/duties while ensuring equal treatment."},
+              {"level": "Expert", "title": "Reverse-discrimination / DEI backlash", "description": "Run compliant DEI—widen access, use merit-based selection, and lawful outreach—amid scrutiny."}
+            ]
+          },
+          {
+            "title": "ADA, PWFA, FMLA: Accommodation & Leave in a Hybrid World",
+            "description": "Define essential functions, align performance, and coordinate overlapping laws.",
+            "skills": [
+              {"level": "Foundation", "title": "Defining essential functions with remote options", "description": "Use defensible analyses and documented rationales."},
+              {"level": "Advanced", "title": "Mental-health accommodations and performance alignment", "description": "Balance supports with expectations and safety."},
+              {"level": "Advanced", "title": "PWFA / PUMP intersections", "description": "Scheduling and break implications; coordination with other laws."},
+              {"level": "Expert", "title": "FMLA interference/retaliation traps", "description": "Coordinate ADA/FMLA/Workers' Comp to avoid compounding liability."}
+            ]
+          },
+          {
+            "title": "ADEA & Equal Pay",
+            "description": "RIF documentation and privileged, action-oriented pay audits.",
+            "skills": [
+              {"level": "Foundation", "title": "Disparate impact and RIF selection", "description": "Build selection files that hold up and avoid age bias."},
+              {"level": "Expert", "title": "Pay transparency and equal pay audits", "description": "Structure privileged audits and communications."}
+            ]
+          },
+          {
+            "title": "Resolving Claims Without Litigation",
+            "description": "Internal resolution, arbitration programs, and mediation tactics.",
+            "skills": [
+              {"level": "Foundation", "title": "Internal resolution", "description": "Prompt, impartial investigations; what to share in outcome letters."},
+              {"level": "Advanced", "title": "Arbitration & class/collective waivers", "description": "Enforceability trends; drafting updates for remote workers and electronic consent."},
+              {"level": "Expert", "title": "Pre-charge settlements and mediation", "description": "Best practices to resolve early with durable agreements."}
+            ]
+          }
+        ]
+      },
+      {
+        "id": "block3",
+        "label": "Block III",
+        "title": "Special Issues & Advanced Topics",
+        "description": "Deep dive into complex employment law issues including wage and hour, wrongful discharge, workplace privacy, and post-employment restrictions.",
+        "price": 575,
+        "availability": "Available individually",
+        "competencyGroups": [
+          {
+            "title": "Wage & Hour (FLSA) Under Remote/Hybrid",
+            "description": "Off-the-clock time, hybrid travel, and complex pay calculations.",
+            "skills": [
+              {"level": "Foundation", "title": "Remote off-the-clock risk", "description": "Email/IM, rounding, device sync; travel time for split/hybrid days; audits for 'player-coach' roles."},
+              {"level": "Advanced", "title": "Commission/bonus/draw plans", "description": "Overtime calculations without tripping over spiffs and recoveries."}
+            ]
+          },
+          {
+            "title": "Wrongful Discharge & Retaliation",
+            "description": "Documented timelines and protected-activity analysis that defeat pretext.",
+            "skills": [
+              {"level": "Foundation", "title": "'At-will with evidence'", "description": "Build the performance notes → PIP → termination timeline that defeats pretext."},
+              {"level": "Advanced", "title": "Protected activity lookback", "description": "Adverse-action timing; manager speech and political/off-duty conduct."}
+            ]
+          },
+          {
+            "title": "Workplace Privacy & Monitoring",
+            "description": "Employee data privacy and productivity monitoring in practice.",
+            "skills": [
+              {"level": "Foundation", "title": "Employee data privacy", "description": "CPRA and state analogs: notices, access requests, retention/deletion, and disciplinary use."},
+              {"level": "Advanced", "title": "Monitoring productivity and keystrokes", "description": "Geolocation, BYOD, and personal-account discovery—practical boundaries."}
+            ]
+          },
+          {
+            "title": "Protecting Confidential Information & Mobility",
+            "description": "Post-employment restrictions after the FTC rule's vacatur.",
+            "skills": [
+              {"level": "Foundation", "title": "What remains enforceable", "description": "NDAs, non-solicits, trade-secret law—how to draft so they stick."},
+              {"level": "Advanced", "title": "Garden leave and TRAPs", "description": "Training-repayment agreements and choice-of-law strategy across states."}
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "faq": [
+    {"question": "Can I attend just one or two blocks instead of the full program?", "answer": "Yes. While most participants get the best value from the complete 4½-day program, you can register for individual blocks based on your immediate needs. Block I (Labor Relations) and Block II (Discrimination Law) are each $1,375 individually, while Block III (Special Issues) is $575. The full program at $2,375 saves you $1,000 versus purchasing all blocks separately."},
+    {"question": "What's the difference between in-person, virtual, and on-demand formats?", "answer": "All three formats feature the same practicing attorney instructors, current content, and professional credits. In-person provides face-to-face networking and immediate interaction. Virtual delivers the same live instruction via Zoom with full Q&A capability. On-demand lets you learn at your own pace over 90 days with the ability to pause and revisit complex topics. Choose the format that fits your schedule and learning style—the quality and content remain identical."},
+    {"question": "What happens after I register?", "answer": "Within minutes, you'll receive an invoice email. Once payment is processed, you can schedule your complimentary pre-program consultation (10-15 minutes) to discuss your specific workplace challenges and identify which program content will have the biggest impact for you. Pre-program materials arrive one week before your session starts."},
+    {"question": "What continuing education credits will I earn?", "answer": "The complete program provides 29.75 SHRM/HRCI/CLE credits. Plus, your enrollment includes 12 months of quarterly employment law updates (4 sessions × 1.5 credits each = 6 additional credits), bringing your total to 35.75 credits—typically more than HR professionals earn in two years."},
+    {"question": "How current is the content? When was it last updated?", "answer": "Your materials are living resources that update continuously as employment law changes. Unlike static textbooks that become outdated immediately after publication, our content reflects current court decisions, regulatory changes, and compliance requirements. Recent updates include the NLRB's Cemex decision on organizing, the Stericycle handbook standards, post-Bostock LGBTQ+ protections, and state-specific AI hiring regulations."},
+    {"question": "Why do you emphasize practicing attorneys, not academics?", "answer": "Your instructors handle employment law cases, defend discrimination charges, and advise employers on these exact issues daily. They're not teaching from textbooks—they're sharing strategies that work in actual courtrooms and real workplaces. When you ask what do I do about a specific situation, they answer from direct experience, not theory."},
+    {"question": "Does the $2,375 program fee include everything?", "answer": "Yes. Your enrollment includes all live instruction, complete program materials, 29.75 continuing education credits, pre-program consultation, 12 months of quarterly employment law updates (4 sessions, $1,588 value), permanent access to living resources, and alumni benefits for all future programs. There are no hidden fees or additional charges."}
+  ],
+  "benefits": {
+    "creditCount": "29.75 SHRM/HRCI/CLE",
+    "updatePeriod": "12 months",
+    "alumniDiscount": "15%"
+  },
+  "airtable": {
+    "inPersonViewId": null,
+    "virtualViewId": null,
+    "onDemandViewId": null
+  }
+}

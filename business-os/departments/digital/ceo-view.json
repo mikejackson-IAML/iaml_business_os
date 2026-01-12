@@ -1,0 +1,81 @@
+{
+  "department": "digital",
+  "summary_prompt": "Provide a brief status of the IAML website including: site uptime, recent deployments, performance scores, and any critical issues.",
+  "key_metrics": [
+    {
+      "name": "Uptime",
+      "description": "Website availability over last 30 days",
+      "target": "99.9%",
+      "source": "uptime_checks"
+    },
+    {
+      "name": "Performance Score",
+      "description": "Average Lighthouse performance score",
+      "target": "> 80",
+      "source": "lighthouse_audits"
+    },
+    {
+      "name": "Deployment Success Rate",
+      "description": "Successful deploys / total deploys",
+      "target": "> 95%",
+      "source": "vercel_deployments"
+    },
+    {
+      "name": "Page Load Time",
+      "description": "Average LCP across key pages",
+      "target": "< 2.5s",
+      "source": "lighthouse_audits"
+    }
+  ],
+  "quick_actions": [
+    {
+      "name": "Deploy to Production",
+      "command": "/deploy",
+      "description": "Push latest changes live"
+    },
+    {
+      "name": "Run Health Check",
+      "command": "/smoke",
+      "description": "Quick site verification"
+    },
+    {
+      "name": "Check Performance",
+      "command": "/speed-optimize",
+      "description": "Analyze and optimize speed"
+    }
+  ],
+  "status_indicators": {
+    "healthy": {
+      "color": "green",
+      "conditions": [
+        "uptime > 99.5%",
+        "no critical alerts",
+        "performance > 80"
+      ]
+    },
+    "warning": {
+      "color": "yellow",
+      "conditions": [
+        "uptime 98-99.5%",
+        "performance 60-80",
+        "pending issues"
+      ]
+    },
+    "critical": {
+      "color": "red",
+      "conditions": [
+        "uptime < 98%",
+        "site down",
+        "payment flow broken",
+        "security vulnerability"
+      ]
+    }
+  },
+  "common_questions": [
+    "How's the website doing?",
+    "Any site issues?",
+    "When was the last deployment?",
+    "What's our site performance?",
+    "Are registrations working?"
+  ]
+}

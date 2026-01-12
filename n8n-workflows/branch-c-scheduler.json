@@ -1,0 +1,263 @@
+{
+  "name": "Branch C Scheduler (No Response)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hour": 6
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Daily at 6am",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n  cc.id as campaign_contact_id,\n  cc.contact_id,\n  c.first_name,\n  c.last_name,\n  c.email,\n  c.linkedin_url,\n  c.company,\n  c.job_title,\n  ccc.current_message_code,\n  ccc.current_message_sent_at,\n  ch.campaign_id\nFROM campaign_contacts cc\nJOIN contacts c ON c.id = cc.contact_id\nJOIN campaign_contact_channels ccc ON ccc.campaign_contact_id = cc.id\nJOIN campaign_channels ch ON ch.id = ccc.campaign_channel_id\nWHERE ch.channel = 'linkedin'\n  AND ch.platform = 'heyreach'\n  AND ccc.current_message_code = 'L3'\n  AND ccc.current_message_sent_at < NOW() - INTERVAL '7 days'\n  AND ccc.has_replied = FALSE\n  AND cc.ghl_branch IS NULL\n  AND cc.status = 'active'\nLIMIT 100",
+        "options": {}
+      },
+      "id": "get-stale-contacts",
+      "name": "Get Contacts for Branch C",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [320, 300],
+      "credentials": {
+        "postgres": {
+          "id": "YOUR_SUPABASE_CREDENTIAL_ID",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-contacts",
+              "leftValue": "={{ $json.length || 0 }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-has-contacts",
+      "name": "Has Contacts?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [540, 300]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "split-batches",
+      "name": "Process One at a Time",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [760, 200]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=SELECT assign_ghl_branch(\n  '{{ $json.campaign_contact_id }}',\n  'linkedin',\n  'no_response'\n) as assigned_branch",
+        "options": {}
+      },
+      "id": "assign-branch-c",
+      "name": "Assign Branch C",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [980, 200],
+      "credentials": {
+        "postgres": {
+          "id": "YOUR_SUPABASE_CREDENTIAL_ID",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://services.leadconnectorhq.com/hooks/MjGEy0pobNT9su2YJqFI/webhook-trigger/cb929231-04f8-4235-b107-8f43dc03f992",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"first_name\": \"{{ $('Process One at a Time').first().json.first_name }}\",\n  \"last_name\": \"{{ $('Process One at a Time').first().json.last_name }}\",\n  \"email\": \"{{ $('Process One at a Time').first().json.email }}\",\n  \"linkedin_url\": \"{{ $('Process One at a Time').first().json.linkedin_url }}\",\n  \"ghl_branch\": \"C\",\n  \"campaign_name\": \"Alumni Reconnect Q1 2026\",\n  \"trigger_event\": \"no_response\",\n  \"trigger_channel\": \"linkedin\",\n  \"company\": \"{{ $('Process One at a Time').first().json.company }}\",\n  \"job_title\": \"{{ $('Process One at a Time').first().json.job_title }}\",\n  \"source\": \"n8n_branch_c_scheduler\",\n  \"days_since_last_message\": \"7+\"\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "push-to-ghl",
+      "name": "Push to GHL",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1200, 200],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "amount": 1,
+        "unit": "seconds"
+      },
+      "id": "wait-rate-limit",
+      "name": "Rate Limit Wait",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1420, 200]
+    },
+    {
+      "parameters": {},
+      "id": "end-no-contacts",
+      "name": "End - No Contacts",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [760, 400]
+    },
+    {
+      "parameters": {},
+      "id": "end-done",
+      "name": "End - Completed",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [1640, 300]
+    }
+  ],
+  "connections": {
+    "Daily at 6am": {
+      "main": [
+        [
+          {
+            "node": "Get Contacts for Branch C",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Contacts for Branch C": {
+      "main": [
+        [
+          {
+            "node": "Has Contacts?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Contacts?": {
+      "main": [
+        [
+          {
+            "node": "Process One at a Time",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "End - No Contacts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process One at a Time": {
+      "main": [
+        [
+          {
+            "node": "Assign Branch C",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "End - Completed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assign Branch C": {
+      "main": [
+        [
+          {
+            "node": "Push to GHL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Push to GHL": {
+      "main": [
+        [
+          {
+            "node": "Rate Limit Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rate Limit Wait": {
+      "main": [
+        [
+          {
+            "node": "Process One at a Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "instanceId": "IAML-Business-OS"
+  },
+  "pinData": {},
+  "versionId": "1.0.0",
+  "triggerCount": 1,
+  "tags": [
+    {
+      "name": "scheduled",
+      "createdAt": "2026-01-09T00:00:00.000Z",
+      "updatedAt": "2026-01-09T00:00:00.000Z"
+    },
+    {
+      "name": "campaign-tracking",
+      "createdAt": "2026-01-09T00:00:00.000Z",
+      "updatedAt": "2026-01-09T00:00:00.000Z"
+    }
+  ]
+}

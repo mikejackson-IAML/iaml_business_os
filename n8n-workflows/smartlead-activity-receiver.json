@@ -1,0 +1,1686 @@
+{
+  "name": "Smartlead Activity Receiver",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "smartlead",
+        "responseMode": "onReceived",
+        "responseData": "allEntries",
+        "options": {}
+      },
+      "id": "sl-webhook-001",
+      "name": "Smartlead Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-1200, 400],
+      "webhookId": "smartlead-webhook"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"event_type\": \"{{ $json.body?.event_type || $json.event_type || 'unknown' }}\",\n  \"smartlead_event_id\": \"{{ $json.body?.stats_id || $json.stats_id || $json.body?.webhook_id || $json.webhook_id || $now.toMillis() }}\",\n  \"to_email\": \"{{ ($json.body?.to_email || $json.to_email || '').toLowerCase().trim() }}\",\n  \"to_name\": \"{{ $json.body?.to_name || $json.to_name || '' }}\",\n  \"from_email\": \"{{ $json.body?.from_email || $json.from_email || '' }}\",\n  \"subject\": \"{{ $json.body?.subject || $json.subject || '' }}\",\n  \"campaign_id\": \"{{ $json.body?.campaign_id || $json.campaign_id || '' }}\",\n  \"campaign_name\": \"{{ $json.body?.campaign_name || $json.campaign_name || '' }}\",\n  \"sequence_number\": {{ $json.body?.sequence_number || $json.sequence_number || 1 }},\n  \"event_timestamp\": \"{{ $json.body?.event_timestamp || $json.event_timestamp || $now.toISO() }}\",\n  \"reply_category\": \"{{ $json.body?.reply_category || $json.reply_category || '' }}\",\n  \"reply_text\": \"{{ ($json.body?.reply_message?.text || $json.reply_message?.text || '').substring(0, 1000) }}\",\n  \"link_clicked\": \"{{ $json.body?.link_details || $json.link_details || '' }}\",\n  \"lead_category_old\": \"{{ $json.body?.lead_category?.old_name || $json.lead_category?.old_name || '' }}\",\n  \"lead_category_new\": \"{{ $json.body?.lead_category?.new_name || $json.lead_category?.new_name || '' }}\",\n  \"sl_email_lead_id\": \"{{ $json.body?.sl_email_lead_id || $json.sl_email_lead_id || '' }}\",\n  \"raw_payload\": {{ JSON.stringify($json.body || $json) }}\n}",
+        "options": {}
+      },
+      "id": "sl-extract-001",
+      "name": "Extract Payload Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-800, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputData = $input.first().json;\n\n// Map Smartlead event types to our activity types\nconst eventTypeMap = {\n  'EMAIL_SENT': 'sent',\n  'EMAIL_OPEN': 'opened',\n  'EMAIL_LINK_CLICK': 'clicked',\n  'EMAIL_REPLY': 'replied',\n  'EMAIL_BOUNCE': 'bounced',\n  'LEAD_UNSUBSCRIBED': 'unsubscribed',\n  'LEAD_CATEGORY_UPDATED': 'status_changed'\n};\n\nconst mappedActivityType = eventTypeMap[inputData.event_type] || inputData.event_type;\n\n// Determine if this is an engagement event (for updating first_engagement_at)\nconst isEngagementEvent = ['opened', 'clicked', 'replied'].includes(mappedActivityType);\n\n// Determine if this is a reply event\nconst isReplyEvent = mappedActivityType === 'replied';\n\n// Determine if this should pause the contact\nconst isPauseEvent = ['bounced', 'unsubscribed'].includes(mappedActivityType);\n\n// Determine engagement level based on event\nlet engagementLevel = null;\nif (mappedActivityType === 'opened') engagementLevel = 'warm';\nif (mappedActivityType === 'clicked') engagementLevel = 'engaged';\nif (mappedActivityType === 'replied') engagementLevel = 'hot';\n\nreturn [{\n  json: {\n    ...inputData,\n    mapped_activity_type: mappedActivityType,\n    is_engagement_event: isEngagementEvent,\n    is_reply_event: isReplyEvent,\n    is_pause_event: isPauseEvent,\n    engagement_level_update: engagementLevel\n  }\n}];"
+      },
+      "id": "sl-map-events-001",
+      "name": "Map Event Types",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-600, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-email",
+              "leftValue": "={{ $json.to_email }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "sl-valid-email-001",
+      "name": "Has Valid Email?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [-400, 400]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=SELECT id FROM campaign_activity WHERE metadata->>'smartlead_event_id' = '{{ $json.smartlead_event_id }}' LIMIT 1",
+        "options": {}
+      },
+      "id": "sl-check-dup-001",
+      "name": "Check Duplicate Event",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [-176, 304],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "is-new",
+              "leftValue": "={{ $json.length || 0 }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "sl-is-new-001",
+      "name": "Is New Event?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [48, 304]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=SELECT id, email, first_name, last_name, linkedin_url FROM contacts WHERE LOWER(email) = '{{ $('Map Event Types').first().json.to_email }}' LIMIT 1",
+        "options": {}
+      },
+      "id": "sl-lookup-001",
+      "name": "Lookup Contact by Email",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [272, 208],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "contact-found",
+              "leftValue": "={{ $json.length || 0 }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "sl-contact-found-001",
+      "name": "Contact Found?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [496, 208]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Merge contact data from lookup\nconst eventData = $('Map Event Types').first().json;\nconst contactResult = $input.first().json;\n\n// Contact data comes as array from Postgres node\nlet contact;\nif (Array.isArray(contactResult)) {\n  contact = contactResult[0];\n} else if (contactResult && contactResult.id) {\n  contact = contactResult;\n} else {\n  contact = null;\n}\n\nreturn [{\n  json: {\n    ...eventData,\n    contact_id: contact?.id || null,\n    contact_email: contact?.email || eventData.to_email,\n    contact_first_name: contact?.first_name || '',\n    contact_last_name: contact?.last_name || '',\n    contact_linkedin_url: contact?.linkedin_url || ''\n  }\n}];"
+      },
+      "id": "sl-merge-contact-001",
+      "name": "Merge Contact Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [720, 112]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "WITH campaign_contact AS (\n  SELECT cc.id as campaign_contact_id\n  FROM campaign_contacts cc\n  WHERE cc.contact_id = '{{ $json.contact_id }}'\n    AND cc.campaign_id = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'\n  LIMIT 1\n),\nensure_channel AS (\n  INSERT INTO campaign_contact_channels (campaign_contact_id, campaign_channel_id, status)\n  SELECT \n    (SELECT campaign_contact_id FROM campaign_contact),\n    'cc222222-3333-4444-5555-666677778888',\n    'active'\n  WHERE EXISTS (SELECT 1 FROM campaign_contact)\n  ON CONFLICT (campaign_contact_id, campaign_channel_id) DO UPDATE SET updated_at = NOW()\n  RETURNING id\n)\nSELECT \n  (SELECT campaign_contact_id FROM campaign_contact) as campaign_contact_id,\n  COALESCE(\n    (SELECT id FROM ensure_channel),\n    (SELECT ccc.id FROM campaign_contact_channels ccc \n     WHERE ccc.campaign_contact_id = (SELECT campaign_contact_id FROM campaign_contact)\n       AND ccc.campaign_channel_id = 'cc222222-3333-4444-5555-666677778888')\n  ) as campaign_contact_channel_id,\n  'cc222222-3333-4444-5555-666677778888' as campaign_channel_id",
+        "options": {}
+      },
+      "id": "sl-get-context-001",
+      "name": "Get Campaign Context",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [944, 112],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-context",
+              "leftValue": "={{ $json[0]?.campaign_contact_id || $json.campaign_contact_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "sl-has-context-001",
+      "name": "Has Campaign Context?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1168, 112]
+    },
+    {
+      "parameters": {
+        "jsCode": "const eventData = $('Merge Contact Data').first().json;\nconst contextResult = $('Get Campaign Context').first().json;\n\n// Handle array response from Postgres\nconst ctx = Array.isArray(contextResult) ? contextResult[0] : contextResult;\n\nreturn [{\n  json: {\n    ...eventData,\n    campaign_contact_id: ctx?.campaign_contact_id || null,\n    campaign_contact_channel_id: ctx?.campaign_contact_channel_id || null,\n    campaign_channel_id: ctx?.campaign_channel_id || 'cc222222-3333-4444-5555-666677778888'\n  }\n}];"
+      },
+      "id": "sl-merge-context-001",
+      "name": "Merge Campaign Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1392, 16]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=INSERT INTO campaign_activity (\n  campaign_contact_id,\n  campaign_channel_id,\n  activity_type,\n  channel,\n  activity_at,\n  metadata\n) VALUES (\n  '{{ $json.campaign_contact_id }}',\n  '{{ $json.campaign_channel_id }}',\n  '{{ $json.mapped_activity_type }}',\n  'smartlead',\n  '{{ $json.event_timestamp }}',\n  '{{ JSON.stringify({\n    smartlead_event_id: $json.smartlead_event_id,\n    sl_email_lead_id: $json.sl_email_lead_id,\n    sequence_number: $json.sequence_number,\n    subject: $json.subject,\n    reply_category: $json.reply_category,\n    link_clicked: $json.link_clicked,\n    campaign_id: $json.campaign_id,\n    campaign_name: $json.campaign_name\n  }) }}'\n)\nRETURNING id",
+        "options": {}
+      },
+      "id": "sl-insert-activity-001",
+      "name": "Insert Activity",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1616, 16],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Merge Campaign Context').first().json.mapped_activity_type }}",
+                    "rightValue": "sent",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "sent"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Merge Campaign Context').first().json.mapped_activity_type }}",
+                    "rightValue": "opened",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "opened"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Merge Campaign Context').first().json.mapped_activity_type }}",
+                    "rightValue": "clicked",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "clicked"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Merge Campaign Context').first().json.mapped_activity_type }}",
+                    "rightValue": "replied",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "replied"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Merge Campaign Context').first().json.mapped_activity_type }}",
+                    "rightValue": "bounced",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "bounced"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Merge Campaign Context').first().json.mapped_activity_type }}",
+                    "rightValue": "unsubscribed",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "unsubscribed"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Merge Campaign Context').first().json.mapped_activity_type }}",
+                    "rightValue": "status_changed",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "category_updated"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "id": "sl-switch-event-001",
+      "name": "Route by Event Type",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [1840, 16]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=UPDATE campaign_contact_channels\nSET \n  status = 'active',\n  current_message_code = 'S{{ $('Merge Campaign Context').first().json.sequence_number }}',\n  current_message_sent_at = '{{ $('Merge Campaign Context').first().json.event_timestamp }}',\n  updated_at = NOW()\nWHERE id = '{{ $('Merge Campaign Context').first().json.campaign_contact_channel_id }}';\n\nUPDATE campaign_contacts\nSET \n  total_touches = total_touches + 1,\n  first_touch_at = COALESCE(first_touch_at, '{{ $('Merge Campaign Context').first().json.event_timestamp }}'),\n  last_touch_at = '{{ $('Merge Campaign Context').first().json.event_timestamp }}',\n  updated_at = NOW()\nWHERE id = '{{ $('Merge Campaign Context').first().json.campaign_contact_id }}';",
+        "options": {}
+      },
+      "id": "sl-update-sent-001",
+      "name": "Update Sent Status",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [2112, -256],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=UPDATE campaign_contact_channels\nSET \n  last_email_opened_at = '{{ $('Merge Campaign Context').first().json.event_timestamp }}',\n  engagement_level = CASE \n    WHEN engagement_level = 'cold' THEN 'warm'\n    ELSE engagement_level\n  END,\n  updated_at = NOW()\nWHERE id = '{{ $('Merge Campaign Context').first().json.campaign_contact_channel_id }}';\n\nUPDATE campaign_contacts\nSET \n  last_touch_at = '{{ $('Merge Campaign Context').first().json.event_timestamp }}',\n  first_engagement_at = COALESCE(first_engagement_at, '{{ $('Merge Campaign Context').first().json.event_timestamp }}'),\n  updated_at = NOW()\nWHERE id = '{{ $('Merge Campaign Context').first().json.campaign_contact_id }}';",
+        "options": {}
+      },
+      "id": "sl-update-opened-001",
+      "name": "Update Opened Status",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [2112, -128],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=UPDATE campaign_contact_channels\nSET \n  last_email_clicked_at = '{{ $('Merge Campaign Context').first().json.event_timestamp }}',\n  engagement_level = CASE \n    WHEN engagement_level IN ('cold', 'warm') THEN 'engaged'\n    ELSE engagement_level\n  END,\n  updated_at = NOW()\nWHERE id = '{{ $('Merge Campaign Context').first().json.campaign_contact_channel_id }}';\n\nUPDATE campaign_contacts\nSET \n  last_touch_at = '{{ $('Merge Campaign Context').first().json.event_timestamp }}',\n  first_engagement_at = COALESCE(first_engagement_at, '{{ $('Merge Campaign Context').first().json.event_timestamp }}'),\n  updated_at = NOW()\nWHERE id = '{{ $('Merge Campaign Context').first().json.campaign_contact_id }}';",
+        "options": {}
+      },
+      "id": "sl-update-clicked-001",
+      "name": "Update Clicked Status",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [2112, 0],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=UPDATE campaign_contact_channels\nSET \n  has_replied = TRUE,\n  replied_at = '{{ $('Merge Campaign Context').first().json.event_timestamp }}',\n  engagement_level = 'hot',\n  updated_at = NOW()\nWHERE id = '{{ $('Merge Campaign Context').first().json.campaign_contact_channel_id }}';\n\nUPDATE campaign_contacts\nSET \n  last_touch_at = '{{ $('Merge Campaign Context').first().json.event_timestamp }}',\n  first_engagement_at = COALESCE(first_engagement_at, '{{ $('Merge Campaign Context').first().json.event_timestamp }}'),\n  updated_at = NOW()\nWHERE id = '{{ $('Merge Campaign Context').first().json.campaign_contact_id }}';",
+        "options": {}
+      },
+      "id": "sl-update-replied-001",
+      "name": "Update Replied Status",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [2112, 128],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=UPDATE campaign_contact_channels\nSET \n  status = 'paused',\n  updated_at = NOW()\nWHERE id = '{{ $('Merge Campaign Context').first().json.campaign_contact_channel_id }}';\n\nUPDATE contacts\nSET \n  email_status = 'bounced',\n  email_validation_result = 'invalid',\n  email_validated_at = NOW(),\n  email_validation_source = 'smartlead_bounce',\n  updated_at = NOW()\nWHERE id = '{{ $('Merge Campaign Context').first().json.contact_id }}';\n\nUPDATE campaign_contacts\nSET \n  last_touch_at = '{{ $('Merge Campaign Context').first().json.event_timestamp }}',\n  updated_at = NOW()\nWHERE id = '{{ $('Merge Campaign Context').first().json.campaign_contact_id }}';",
+        "options": {}
+      },
+      "id": "sl-update-bounced-001",
+      "name": "Handle Bounce",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [2112, 256],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=UPDATE campaign_contact_channels\nSET \n  status = 'paused',\n  updated_at = NOW()\nWHERE id = '{{ $('Merge Campaign Context').first().json.campaign_contact_channel_id }}';\n\nUPDATE campaign_contacts\nSET \n  status = 'opted_out',\n  opted_out_at = NOW(),\n  opt_out_reason = 'Unsubscribed via Smartlead',\n  opt_out_channel = 'smartlead',\n  last_touch_at = '{{ $('Merge Campaign Context').first().json.event_timestamp }}',\n  updated_at = NOW()\nWHERE id = '{{ $('Merge Campaign Context').first().json.campaign_contact_id }}';",
+        "options": {}
+      },
+      "id": "sl-update-unsub-001",
+      "name": "Handle Unsubscribe",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [2112, 384],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const eventData = $('Merge Campaign Context').first().json;\n\n// Map Smartlead lead categories to our intent classifications\n// Common Smartlead categories: Interested, Not Interested, Out of Office, \n// Wrong Person, Unsubscribed, Auto Reply, Meeting Request, etc.\nconst categoryLower = (eventData.lead_category_new || '').toLowerCase();\n\nlet triggerEvent = null;\nlet suggestedBranch = null;\nlet shouldOptOut = false;\nlet shouldPause = false;\n\n// Map category to action\nif (categoryLower.includes('interested') && !categoryLower.includes('not')) {\n  triggerEvent = 'positive_reply';\n  suggestedBranch = 'A';\n} else if (categoryLower.includes('meeting') || categoryLower.includes('demo') || categoryLower.includes('call')) {\n  triggerEvent = 'positive_reply';\n  suggestedBranch = 'A';\n} else if (categoryLower.includes('not interested') || categoryLower.includes('not_interested')) {\n  triggerEvent = 'not_interested';\n  shouldOptOut = true;\n} else if (categoryLower.includes('wrong person') || categoryLower.includes('wrong_person')) {\n  triggerEvent = 'wrong_person';\n  shouldPause = true;\n} else if (categoryLower.includes('out of office') || categoryLower.includes('ooo') || categoryLower.includes('auto reply')) {\n  // Just log, no action\n  triggerEvent = 'auto_reply';\n} else if (categoryLower.includes('unsubscribe')) {\n  triggerEvent = 'unsubscribe';\n  shouldOptOut = true;\n} else if (categoryLower.includes('maybe') || categoryLower.includes('later') || categoryLower.includes('not now')) {\n  triggerEvent = 'not_now_polite';\n  suggestedBranch = 'B';\n}\n\nreturn [{\n  json: {\n    ...eventData,\n    lead_category_trigger_event: triggerEvent,\n    lead_category_suggested_branch: suggestedBranch,\n    lead_category_should_opt_out: shouldOptOut,\n    lead_category_should_pause: shouldPause\n  }\n}];"
+      },
+      "id": "sl-process-category-001",
+      "name": "Process Lead Category",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2112, 512]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=INSERT INTO campaign_activity (\n  campaign_contact_id,\n  campaign_channel_id,\n  activity_type,\n  channel,\n  metadata\n) VALUES (\n  '{{ $json.campaign_contact_id }}',\n  '{{ $json.campaign_channel_id }}',\n  'status_changed',\n  'smartlead',\n  '{{ JSON.stringify({\n    old_category: $json.lead_category_old,\n    new_category: $json.lead_category_new,\n    trigger_event: $json.lead_category_trigger_event\n  }) }}'\n)",
+        "options": {}
+      },
+      "id": "sl-log-category-001",
+      "name": "Log Category Change",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [2336, 512],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-branch",
+              "leftValue": "={{ $json.lead_category_suggested_branch }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "sl-category-branch-001",
+      "name": "Category Needs Branch?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2560, 512]
+    },
+    {
+      "parameters": {
+        "jsCode": "const eventData = $('Merge Campaign Context').first().json;\n\n// Smartlead's reply_category often contains intent:\n// Common values: Interested, Not Interested, Out of Office, Wrong Person, etc.\nconst replyCategory = (eventData.reply_category || '').toLowerCase();\nconst replyText = eventData.reply_text || '';\n\nlet classification = 'neutral';\nlet triggerEvent = null;\nlet suggestedBranch = null;\nlet shouldOptOut = false;\n\n// First, try to classify from reply_category if present\nif (replyCategory) {\n  if (replyCategory.includes('interested') && !replyCategory.includes('not')) {\n    classification = 'positive_reply';\n    triggerEvent = 'positive_reply';\n    suggestedBranch = 'A';\n  } else if (replyCategory.includes('not interested') || replyCategory.includes('not_interested')) {\n    classification = 'not_interested';\n    triggerEvent = 'not_interested';\n    shouldOptOut = true;\n  } else if (replyCategory.includes('out of office') || replyCategory.includes('ooo') || replyCategory.includes('auto')) {\n    classification = 'auto_reply';\n    // No action for auto-replies\n  } else if (replyCategory.includes('wrong')) {\n    classification = 'wrong_person';\n    shouldOptOut = true;\n  } else if (replyCategory.includes('unsubscribe') || replyCategory.includes('remove')) {\n    classification = 'unsubscribe';\n    triggerEvent = 'unsubscribe';\n    shouldOptOut = true;\n  } else if (replyCategory.includes('meeting') || replyCategory.includes('call') || replyCategory.includes('demo')) {\n    classification = 'positive_reply';\n    triggerEvent = 'positive_reply';\n    suggestedBranch = 'A';\n  } else if (replyCategory.includes('maybe') || replyCategory.includes('later') || replyCategory.includes('not now') || replyCategory.includes('busy')) {\n    classification = 'not_now_polite';\n    triggerEvent = 'not_now_polite';\n    suggestedBranch = 'B';\n  }\n}\n\n// If no clear classification from category, we could use AI here\n// For now, default to neutral which won't trigger any branch assignment\n\nreturn [{\n  json: {\n    ...eventData,\n    classification: classification,\n    trigger_event: triggerEvent,\n    suggested_branch: suggestedBranch,\n    is_opt_out: shouldOptOut,\n    needs_ai_classification: !replyCategory && replyText.length > 0\n  }\n}];"
+      },
+      "id": "sl-classify-reply-001",
+      "name": "Classify Reply",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2336, 128]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "needs-ai",
+              "leftValue": "={{ $json.needs_ai_classification }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "sl-needs-ai-001",
+      "name": "Needs AI Classification?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2560, 128]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyA92ZVz8uAaRfJjHpFUIYrCa5B_06v5G1M",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [{\n    \"parts\": [{\n      \"text\": \"Classify this email reply for a professional training company's alumni outreach campaign.\\n\\nContext: We're reaching out to past participants of employment law training programs, offering them quarterly update sessions and virtual training opportunities.\\n\\nReply: \\\"{{ $json.reply_text.replace(/\"/g, '\\\\\"').replace(/\\n/g, ' ').substring(0, 800) }}\\\"\\n\\nClassify as ONE of these exact labels:\\n- positive_reply (interested in learning more, wants to reconnect, positive response)\\n- interested_secondary (specifically mentions virtual training, programs for colleagues, or training for their team)\\n- not_now_polite (polite decline, maybe later, timing issue, too busy right now)\\n- not_interested (firm no, not relevant to them, wrong person)\\n- unsubscribe (asks to be removed, stop contacting, do not contact again)\\n- neutral (unclear intent, just acknowledging receipt, asking questions)\\n\\nRespond with ONLY the classification label, nothing else.\"\n    }]\n  }],\n  \"generationConfig\": {\n    \"temperature\": 0.1,\n    \"maxOutputTokens\": 50\n  }\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "sl-ai-classify-001",
+      "name": "AI Classify Reply (Gemini)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2784, 32],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const prevData = $('Classify Reply').first().json;\nconst geminiResponse = $input.first().json;\n\n// Extract classification from Gemini response\nlet classification = 'neutral';\ntry {\n  const text = geminiResponse?.candidates?.[0]?.content?.parts?.[0]?.text || '';\n  classification = text.trim().toLowerCase().replace(/[^a-z_]/g, '');\n  \n  // Validate it's one of our expected values\n  const validClassifications = ['positive_reply', 'interested_secondary', 'not_now_polite', 'not_interested', 'unsubscribe', 'neutral'];\n  if (!validClassifications.includes(classification)) {\n    classification = 'neutral';\n  }\n} catch (e) {\n  classification = 'neutral';\n}\n\n// Map classification to branch\nconst branchMap = {\n  'positive_reply': 'A',\n  'interested_secondary': 'A+',\n  'not_now_polite': 'B',\n  'not_interested': null,\n  'unsubscribe': null,\n  'neutral': null\n};\n\nconst triggerEvent = classification;\nconst suggestedBranch = branchMap[classification];\nconst isOptOut = ['not_interested', 'unsubscribe'].includes(classification);\n\nreturn [{\n  json: {\n    ...prevData,\n    classification: classification,\n    trigger_event: triggerEvent,\n    suggested_branch: suggestedBranch,\n    is_opt_out: isOptOut,\n    gemini_raw_response: geminiResponse\n  }\n}];"
+      },
+      "id": "sl-process-ai-001",
+      "name": "Process AI Classification",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3008, 32]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-branch",
+              "leftValue": "={{ $json.suggested_branch }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "sl-needs-branch-001",
+      "name": "Needs Branch Assignment?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [3232, 64]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=SELECT assign_ghl_branch(\n  '{{ $json.campaign_contact_id }}',\n  'smartlead',\n  '{{ $json.trigger_event }}'\n) as assigned_branch",
+        "options": {}
+      },
+      "id": "sl-assign-branch-001",
+      "name": "Assign GHL Branch",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [3456, -32],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the classification data from whichever path we came from\nlet classificationData;\ntry {\n  classificationData = $('Process AI Classification').first().json;\n} catch (e) {\n  classificationData = $('Classify Reply').first().json;\n}\n\nconst branchResult = $input.first().json;\n\n// Get branch from function result\nconst assignedBranch = Array.isArray(branchResult) \n  ? branchResult[0]?.assigned_branch \n  : branchResult?.assigned_branch;\n\nreturn [{\n  json: {\n    ...classificationData,\n    assigned_branch: assignedBranch || classificationData.suggested_branch\n  }\n}];"
+      },
+      "id": "sl-merge-branch-001",
+      "name": "Merge Branch Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3680, -32]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://services.leadconnectorhq.com/hooks/MjGEy0pobNT9su2YJqFI/webhook-trigger/cb929231-04f8-4235-b107-8f43dc03f992",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"first_name\": \"{{ $json.contact_first_name || '' }}\",\n  \"last_name\": \"{{ $json.contact_last_name || '' }}\",\n  \"email\": \"{{ $json.contact_email || $json.to_email }}\",\n  \"linkedin_url\": \"{{ $json.contact_linkedin_url || '' }}\",\n  \"ghl_branch\": \"{{ $json.assigned_branch }}\",\n  \"campaign_name\": \"Alumni Reconnect Q1 2026\",\n  \"trigger_event\": \"{{ $json.trigger_event }}\",\n  \"trigger_channel\": \"smartlead\",\n  \"reply_text\": \"{{ ($json.reply_text || '').substring(0, 500) }}\",\n  \"reply_sentiment\": \"{{ $json.classification }}\",\n  \"source\": \"n8n_smartlead_integration\"\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "sl-push-ghl-001",
+      "name": "Push to GHL",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3904, -32],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "is-opt-out",
+              "leftValue": "={{ $json.is_opt_out }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "sl-is-optout-001",
+      "name": "Is Opt Out?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [3456, 160]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=SELECT handle_opt_out(\n  '{{ $json.campaign_contact_id }}',\n  'smartlead',\n  '{{ $json.classification === \"unsubscribe\" ? \"Requested removal via email reply\" : \"Not interested - replied\" }}'\n)",
+        "options": {}
+      },
+      "id": "sl-handle-optout-001",
+      "name": "Handle Opt Out",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [3680, 160],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=UPDATE campaign_contact_channels\nSET \n  reply_sentiment = '{{ $json.classification }}',\n  updated_at = NOW()\nWHERE id = '{{ $json.campaign_contact_channel_id }}'",
+        "options": {}
+      },
+      "id": "sl-update-sentiment-001",
+      "name": "Update Reply Sentiment",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [3456, 288],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=SELECT assign_ghl_branch(\n  '{{ $json.campaign_contact_id }}',\n  'smartlead',\n  '{{ $json.lead_category_trigger_event }}'\n) as assigned_branch",
+        "options": {}
+      },
+      "id": "sl-assign-cat-branch-001",
+      "name": "Assign Branch from Category",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [2784, 416],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const categoryData = $('Process Lead Category').first().json;\nconst branchResult = $input.first().json;\n\nconst assignedBranch = Array.isArray(branchResult) \n  ? branchResult[0]?.assigned_branch \n  : branchResult?.assigned_branch;\n\nreturn [{\n  json: {\n    ...categoryData,\n    assigned_branch: assignedBranch || categoryData.lead_category_suggested_branch\n  }\n}];"
+      },
+      "id": "sl-merge-cat-branch-001",
+      "name": "Merge Category Branch",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3008, 416]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://services.leadconnectorhq.com/hooks/MjGEy0pobNT9su2YJqFI/webhook-trigger/cb929231-04f8-4235-b107-8f43dc03f992",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"first_name\": \"{{ $json.contact_first_name || '' }}\",\n  \"last_name\": \"{{ $json.contact_last_name || '' }}\",\n  \"email\": \"{{ $json.contact_email || $json.to_email }}\",\n  \"linkedin_url\": \"{{ $json.contact_linkedin_url || '' }}\",\n  \"ghl_branch\": \"{{ $json.assigned_branch }}\",\n  \"campaign_name\": \"Alumni Reconnect Q1 2026\",\n  \"trigger_event\": \"{{ $json.lead_category_trigger_event }}\",\n  \"trigger_channel\": \"smartlead\",\n  \"source\": \"n8n_smartlead_category_update\"\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "sl-push-ghl-cat-001",
+      "name": "Push Category to GHL",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3232, 416],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cat-opt-out",
+              "leftValue": "={{ $('Process Lead Category').first().json.lead_category_should_opt_out }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "sl-cat-optout-001",
+      "name": "Category Opt Out?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2784, 608]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=SELECT handle_opt_out(\n  '{{ $('Process Lead Category').first().json.campaign_contact_id }}',\n  'smartlead',\n  'Lead category: {{ $('Process Lead Category').first().json.lead_category_new }}'\n)",
+        "options": {}
+      },
+      "id": "sl-handle-cat-optout-001",
+      "name": "Handle Category Opt Out",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [3008, 608],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cat-pause",
+              "leftValue": "={{ $('Process Lead Category').first().json.lead_category_should_pause }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "sl-cat-pause-001",
+      "name": "Category Pause?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [3232, 608]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=UPDATE campaign_contact_channels\nSET \n  status = 'paused',\n  updated_at = NOW()\nWHERE campaign_contact_id = '{{ $('Process Lead Category').first().json.campaign_contact_id }}'",
+        "options": {}
+      },
+      "id": "sl-pause-contact-001",
+      "name": "Pause Contact Channels",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [3456, 608],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=INSERT INTO campaign_activity (\n  activity_type,\n  channel,\n  metadata\n) VALUES (\n  'webhook_error',\n  'system',\n  '{{ JSON.stringify({\n    error: \"No email in payload\",\n    raw_event_type: $('Map Event Types').first().json.event_type,\n    smartlead_event_id: $('Map Event Types').first().json.smartlead_event_id\n  }) }}'\n)",
+        "options": {}
+      },
+      "id": "sl-log-no-email-001",
+      "name": "Log No Email Error",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [-176, 512],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=INSERT INTO campaign_activity (\n  activity_type,\n  channel,\n  metadata\n) VALUES (\n  'webhook_error',\n  'system',\n  '{{ JSON.stringify({\n    error: \"Contact not found by email\",\n    email: $('Map Event Types').first().json.to_email,\n    event_type: $('Map Event Types').first().json.event_type,\n    smartlead_event_id: $('Map Event Types').first().json.smartlead_event_id\n  }) }}'\n)",
+        "options": {}
+      },
+      "id": "sl-log-no-contact-001",
+      "name": "Log Contact Not Found",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [720, 304],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=INSERT INTO campaign_activity (\n  activity_type,\n  channel,\n  metadata\n) VALUES (\n  'webhook_error',\n  'system',\n  '{{ JSON.stringify({\n    error: \"No campaign context found\",\n    contact_id: $('Merge Contact Data').first().json.contact_id,\n    email: $('Map Event Types').first().json.to_email,\n    event_type: $('Map Event Types').first().json.event_type\n  }) }}'\n)",
+        "options": {}
+      },
+      "id": "sl-log-no-context-001",
+      "name": "Log No Campaign Context",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1392, 208],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {},
+      "id": "sl-end-success-001",
+      "name": "End - Success",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [4128, 208]
+    },
+    {
+      "parameters": {},
+      "id": "sl-end-dup-001",
+      "name": "End - Duplicate",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [272, 400]
+    },
+    {
+      "parameters": {},
+      "id": "sl-end-error-001",
+      "name": "End - Error",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [944, 400]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Smartlead Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extract Payload Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Payload Fields": {
+      "main": [
+        [
+          {
+            "node": "Map Event Types",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Map Event Types": {
+      "main": [
+        [
+          {
+            "node": "Has Valid Email?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Valid Email?": {
+      "main": [
+        [
+          {
+            "node": "Check Duplicate Event",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log No Email Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Duplicate Event": {
+      "main": [
+        [
+          {
+            "node": "Is New Event?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is New Event?": {
+      "main": [
+        [
+          {
+            "node": "Lookup Contact by Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "End - Duplicate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lookup Contact by Email": {
+      "main": [
+        [
+          {
+            "node": "Contact Found?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contact Found?": {
+      "main": [
+        [
+          {
+            "node": "Merge Contact Data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Contact Not Found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Contact Not Found": {
+      "main": [
+        [
+          {
+            "node": "End - Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Contact Data": {
+      "main": [
+        [
+          {
+            "node": "Get Campaign Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Campaign Context": {
+      "main": [
+        [
+          {
+            "node": "Has Campaign Context?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Campaign Context?": {
+      "main": [
+        [
+          {
+            "node": "Merge Campaign Context",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log No Campaign Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log No Campaign Context": {
+      "main": [
+        [
+          {
+            "node": "End - Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Campaign Context": {
+      "main": [
+        [
+          {
+            "node": "Insert Activity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Activity": {
+      "main": [
+        [
+          {
+            "node": "Route by Event Type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Event Type": {
+      "main": [
+        [
+          {
+            "node": "Update Sent Status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Opened Status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Clicked Status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Replied Status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Handle Bounce",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Handle Unsubscribe",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Process Lead Category",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "End - Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Sent Status": {
+      "main": [
+        [
+          {
+            "node": "End - Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Opened Status": {
+      "main": [
+        [
+          {
+            "node": "End - Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Clicked Status": {
+      "main": [
+        [
+          {
+            "node": "End - Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Replied Status": {
+      "main": [
+        [
+          {
+            "node": "Classify Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Handle Bounce": {
+      "main": [
+        [
+          {
+            "node": "End - Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Handle Unsubscribe": {
+      "main": [
+        [
+          {
+            "node": "End - Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Lead Category": {
+      "main": [
+        [
+          {
+            "node": "Log Category Change",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Category Change": {
+      "main": [
+        [
+          {
+            "node": "Category Needs Branch?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Category Opt Out?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Category Needs Branch?": {
+      "main": [
+        [
+          {
+            "node": "Assign Branch from Category",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Category Pause?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assign Branch from Category": {
+      "main": [
+        [
+          {
+            "node": "Merge Category Branch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Category Branch": {
+      "main": [
+        [
+          {
+            "node": "Push Category to GHL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Push Category to GHL": {
+      "main": [
+        [
+          {
+            "node": "End - Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Category Opt Out?": {
+      "main": [
+        [
+          {
+            "node": "Handle Category Opt Out",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "End - Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Handle Category Opt Out": {
+      "main": [
+        [
+          {
+            "node": "End - Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Category Pause?": {
+      "main": [
+        [
+          {
+            "node": "Pause Contact Channels",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "End - Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pause Contact Channels": {
+      "main": [
+        [
+          {
+            "node": "End - Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classify Reply": {
+      "main": [
+        [
+          {
+            "node": "Needs AI Classification?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Needs AI Classification?": {
+      "main": [
+        [
+          {
+            "node": "AI Classify Reply (Gemini)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Needs Branch Assignment?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Classify Reply (Gemini)": {
+      "main": [
+        [
+          {
+            "node": "Process AI Classification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process AI Classification": {
+      "main": [
+        [
+          {
+            "node": "Needs Branch Assignment?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Needs Branch Assignment?": {
+      "main": [
+        [
+          {
+            "node": "Assign GHL Branch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Is Opt Out?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assign GHL Branch": {
+      "main": [
+        [
+          {
+            "node": "Merge Branch Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Branch Result": {
+      "main": [
+        [
+          {
+            "node": "Push to GHL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Push to GHL": {
+      "main": [
+        [
+          {
+            "node": "Update Reply Sentiment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Opt Out?": {
+      "main": [
+        [
+          {
+            "node": "Handle Opt Out",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Reply Sentiment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Handle Opt Out": {
+      "main": [
+        [
+          {
+            "node": "End - Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Reply Sentiment": {
+      "main": [
+        [
+          {
+            "node": "End - Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log No Email Error": {
+      "main": [
+        [
+          {
+            "node": "End - Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "smartlead-v1-20260111",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1f7825745c8d832579f8944a8977ccc40cc1572556aae3f7808e4ba42337190b"
+  },
+  "tags": [
+    {
+      "name": "smartlead"
+    },
+    {
+      "name": "email"
+    },
+    {
+      "name": "campaign-tracking"
+    }
+  ]
+}

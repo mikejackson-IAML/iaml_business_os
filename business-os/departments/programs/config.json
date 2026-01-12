@@ -1,0 +1,437 @@
+{
+  "department": "programs",
+  "version": "1.0.0",
+  "director": {
+    "name": "Programs Director",
+    "model": "claude-sonnet-4-20250514",
+    "context_includes": [
+      "DEPARTMENT.md",
+      "employees/*/ROLE.md",
+      "sub-departments/*/SKILL.md",
+      "sub-departments/*/workers/*.md"
+    ]
+  },
+  "health_score": {
+    "weights": {
+      "programs_ready": 0.30,
+      "enrollment_vs_target": 0.25,
+      "faculty_confirmed": 0.15,
+      "materials_on_track": 0.10,
+      "certifications_current": 0.10,
+      "no_critical_blockers": 0.10
+    },
+    "thresholds": {
+      "healthy": 80,
+      "warning": 60,
+      "critical": 40
+    }
+  },
+  "readiness_checklist": {
+    "items": [
+      {
+        "id": "faculty_confirmed",
+        "label": "Faculty Confirmed",
+        "target_days_before": 60,
+        "weight": 10
+      },
+      {
+        "id": "faculty_brief_sent",
+        "label": "Faculty Communication Sent",
+        "target_days_before": 14,
+        "weight": 10
+      },
+      {
+        "id": "venue_confirmed",
+        "label": "Venue Confirmed (contract signed)",
+        "target_days_before": 90,
+        "weight": 10
+      },
+      {
+        "id": "materials_ordered",
+        "label": "Materials Ordered (sent to printer)",
+        "target_days_before": 21,
+        "weight": 10
+      },
+      {
+        "id": "materials_received",
+        "label": "Materials Received",
+        "target_days_before": 7,
+        "weight": 10
+      },
+      {
+        "id": "shrm_approved",
+        "label": "SHRM Approval Obtained",
+        "target_days_before": 30,
+        "weight": 10
+      },
+      {
+        "id": "av_ordered",
+        "label": "AV Equipment Ordered",
+        "target_days_before": 14,
+        "weight": 10
+      },
+      {
+        "id": "catering_confirmed",
+        "label": "Catering Confirmed",
+        "target_days_before": 7,
+        "weight": 10
+      },
+      {
+        "id": "room_block_active",
+        "label": "Room Block Active/Monitored",
+        "target_days_before": 45,
+        "weight": 10,
+        "applies_to": "in_person_only"
+      },
+      {
+        "id": "reg_page_live",
+        "label": "Registration Page Live",
+        "target_days_before": 60,
+        "weight": 10
+      }
+    ]
+  },
+  "enrollment_thresholds": {
+    "days_60": {
+      "minimum_percent": 25,
+      "alert_level": "info"
+    },
+    "days_45": {
+      "minimum_percent": 40,
+      "alert_level": "warning"
+    },
+    "days_30": {
+      "minimum_percent": 60,
+      "alert_level": "warning"
+    },
+    "days_14": {
+      "minimum_percent": 80,
+      "alert_level": "critical"
+    },
+    "days_7": {
+      "minimum_percent": 100,
+      "alert_level": "decision"
+    }
+  },
+  "room_block_thresholds": {
+    "pickup_warning": 60,
+    "pickup_critical": 40,
+    "attrition_warning_days": 7,
+    "attrition_critical_days": 3
+  },
+  "faculty_thresholds": {
+    "confirmation_warning_days": 45,
+    "confirmation_critical_days": 30,
+    "brief_warning_days": 10,
+    "brief_critical_days": 5
+  },
+  "materials_thresholds": {
+    "order_warning_days": 14,
+    "order_critical_days": 10,
+    "receive_warning_days": 5,
+    "receive_critical_days": 3
+  },
+  "certification_thresholds": {
+    "shrm_expiry_warning_days": 60,
+    "shrm_expiry_critical_days": 30,
+    "cle_submission_lead_days": 45
+  },
+  "capacity_guidelines": {
+    "certificate": {
+      "minimum": 15,
+      "target": 25,
+      "maximum": 35
+    },
+    "single_day": {
+      "minimum": 12,
+      "target": 20,
+      "maximum": 30
+    },
+    "workshop": {
+      "minimum": 15,
+      "target": 22,
+      "maximum": 30
+    },
+    "boot_camp": {
+      "minimum": 18,
+      "target": 28,
+      "maximum": 40
+    },
+    "summit": {
+      "minimum": 20,
+      "target": 35,
+      "maximum": 50
+    }
+  },
+  "alerts": {
+    "channels": ["dashboard", "email", "slack"],
+    "escalation_delay_minutes": 15,
+    "critical_immediate_notify": true
+  },
+  "integrations": {
+    "supabase": {
+      "enabled": true,
+      "purpose": "Central database - programs, instances, faculty, registrations",
+      "sync_frequency": "real-time",
+      "credentials_key": "SUPABASE_TOKEN"
+    },
+    "airtable": {
+      "enabled": true,
+      "purpose": "Legacy program data during migration",
+      "sync_frequency": "hourly",
+      "credentials_key": "AIRTABLE_API_KEY"
+    },
+    "gohighlevel": {
+      "enabled": true,
+      "purpose": "Contact management, participant communications",
+      "sync_frequency": "real-time",
+      "credentials_key": "GHL_PIT_TOKEN"
+    },
+    "stripe": {
+      "enabled": true,
+      "purpose": "Payment processing webhooks",
+      "sync_frequency": "webhook",
+      "credentials_key": "STRIPE_API_KEY"
+    },
+    "google_sheets": {
+      "enabled": true,
+      "purpose": "Hotel room block tracking reports",
+      "sync_frequency": "daily",
+      "credentials_key": "GOOGLE_APPLICATION_CREDENTIALS"
+    },
+    "vercel": {
+      "enabled": true,
+      "purpose": "Website deployment status for registration pages",
+      "sync_frequency": "on-deploy",
+      "credentials_key": "VERCEL_TOKEN"
+    }
+  },
+  "employees": {
+    "program-coordinator": {
+      "commands": [
+        "readiness-check",
+        "program-status",
+        "faculty-brief"
+      ]
+    },
+    "certification-specialist": {
+      "commands": [
+        "submit-shrm",
+        "cle-status",
+        "cert-renewal"
+      ]
+    },
+    "participant-services": {
+      "commands": [
+        "registration-report",
+        "attendee-comms",
+        "certificate-batch"
+      ]
+    }
+  },
+  "workers": {
+    "program-planning": {
+      "readiness-monitor": {
+        "type": "monitor",
+        "schedule": "0 */2 * * *",
+        "enabled": true,
+        "description": "Track readiness scores across all programs"
+      },
+      "schedule-optimizer": {
+        "type": "hybrid",
+        "trigger": "on-change",
+        "enabled": true,
+        "description": "Flag scheduling conflicts"
+      },
+      "registration-page-monitor": {
+        "type": "monitor",
+        "schedule": "0 6 * * *",
+        "enabled": true,
+        "description": "Verify website listings are live"
+      },
+      "enrollment-alert": {
+        "type": "monitor",
+        "schedule": "0 8 * * *",
+        "enabled": true,
+        "description": "Flag low enrollment programs"
+      }
+    },
+    "faculty-management": {
+      "faculty-availability-tracker": {
+        "type": "monitor",
+        "schedule": "0 7 * * *",
+        "enabled": true,
+        "description": "Track faculty confirmations and gaps"
+      },
+      "faculty-reminder-agent": {
+        "type": "agent",
+        "schedule": "0 9 * * *",
+        "enabled": true,
+        "description": "Send logistics emails before programs"
+      },
+      "faculty-performance-monitor": {
+        "type": "monitor",
+        "trigger": "post-program",
+        "enabled": true,
+        "description": "Track post-program ratings"
+      },
+      "faculty-gap-alert": {
+        "type": "monitor",
+        "schedule": "0 7 * * *",
+        "enabled": true,
+        "description": "Alert on unconfirmed faculty"
+      }
+    },
+    "venue-logistics": {
+      "room-block-monitor": {
+        "type": "monitor",
+        "schedule": "0 8 * * *",
+        "enabled": true,
+        "description": "Track room block pickup rates"
+      },
+      "venue-contract-tracker": {
+        "type": "monitor",
+        "schedule": "0 9 * * 1",
+        "enabled": true,
+        "description": "Track contract status and deadlines"
+      },
+      "av-order-tracker": {
+        "type": "monitor",
+        "trigger": "on-order",
+        "enabled": true,
+        "description": "Track Amazon AV orders"
+      },
+      "catering-coordinator": {
+        "type": "hybrid",
+        "schedule": "0 10 * * *",
+        "enabled": true,
+        "description": "Confirm catering counts"
+      }
+    },
+    "materials": {
+      "materials-update-tracker": {
+        "type": "monitor",
+        "schedule": "0 9 * * 1",
+        "enabled": true,
+        "description": "Track faculty materials submissions"
+      },
+      "print-order-tracker": {
+        "type": "monitor",
+        "schedule": "0 10 * * *",
+        "enabled": true,
+        "description": "Track print jobs and delivery"
+      },
+      "shipping-monitor": {
+        "type": "monitor",
+        "schedule": "0 11 * * *",
+        "enabled": true,
+        "description": "Verify materials received"
+      },
+      "inventory-manager": {
+        "type": "monitor",
+        "schedule": "0 9 * * 1",
+        "enabled": true,
+        "description": "Track materials inventory"
+      }
+    },
+    "certifications": {
+      "shrm-approval-tracker": {
+        "type": "monitor",
+        "schedule": "0 8 * * *",
+        "enabled": true,
+        "description": "Track SHRM submissions and approvals"
+      },
+      "cle-approval-monitor": {
+        "type": "monitor",
+        "schedule": "0 8 * * 1",
+        "enabled": true,
+        "description": "Track state CLE approvals"
+      },
+      "hrci-credit-manager": {
+        "type": "monitor",
+        "schedule": "0 8 * * 1",
+        "enabled": true,
+        "description": "Track HRCI certification status"
+      },
+      "certificate-issuer": {
+        "type": "agent",
+        "trigger": "post-program",
+        "enabled": true,
+        "description": "Issue certificates to attendees"
+      },
+      "renewal-alert-agent": {
+        "type": "agent",
+        "schedule": "0 7 * * *",
+        "enabled": true,
+        "description": "Alert on expiring certifications"
+      }
+    },
+    "participant-ops": {
+      "registration-processor": {
+        "type": "agent",
+        "trigger": "webhook",
+        "enabled": true,
+        "description": "Process incoming registrations"
+      },
+      "attendee-communicator": {
+        "type": "agent",
+        "schedule": "0 9 * * *",
+        "enabled": true,
+        "description": "Send participant communications"
+      },
+      "attendance-tracker": {
+        "type": "monitor",
+        "trigger": "program-day",
+        "enabled": true,
+        "description": "Track check-ins and no-shows"
+      },
+      "post-program-agent": {
+        "type": "agent",
+        "trigger": "post-program",
+        "enabled": true,
+        "description": "Handle post-program follow-up"
+      }
+    }
+  },
+  "notification_templates": {
+    "faculty_reminder": {
+      "trigger_days_before": [14, 7, 3],
+      "template_id": "faculty_logistics_reminder"
+    },
+    "participant_confirmation": {
+      "trigger": "on_registration",
+      "template_id": "registration_confirmation"
+    },
+    "participant_reminder": {
+      "trigger_days_before": [7, 3, 1],
+      "template_id": "program_reminder"
+    },
+    "low_enrollment_alert": {
+      "trigger": "threshold",
+      "template_id": "enrollment_alert"
+    },
+    "room_block_alert": {
+      "trigger": "threshold",
+      "template_id": "room_block_warning"
+    }
+  },
+  "reporting": {
+    "daily_digest": {
+      "enabled": true,
+      "time": "07:00",
+      "recipients": ["programs@iaml.com"]
+    },
+    "weekly_summary": {
+      "enabled": true,
+      "day": "monday",
+      "time": "08:00",
+      "recipients": ["programs@iaml.com", "ceo@iaml.com"]
+    },
+    "monthly_review": {
+      "enabled": true,
+      "day": 1,
+      "time": "09:00",
+      "recipients": ["programs@iaml.com", "ceo@iaml.com", "finance@iaml.com"]
+    }
+  }
+}

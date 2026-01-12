@@ -1,0 +1,31 @@
+{
+  "name": "n8n-brain-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for n8n workflow learning - patterns, error fixes, credentials, and confidence scoring",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "n8n-brain-mcp": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "bootstrap": "node scripts/bootstrap.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "@supabase/supabase-js": "^2.39.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "mcp",
+    "n8n",
+    "workflow",
+    "automation",
+    "learning",
+    "model-context-protocol"
+  ],
+  "author": "IAML",
+  "license": "MIT"
+}

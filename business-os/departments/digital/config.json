@@ -1,0 +1,195 @@
+{
+  "department": "digital",
+  "version": "1.0.0",
+  "director": {
+    "name": "Digital Director",
+    "model": "claude-sonnet-4-20250514",
+    "context_includes": [
+      "DEPARTMENT.md",
+      "employees/*/ROLE.md",
+      "workers/*/*.md"
+    ]
+  },
+  "health_score": {
+    "weights": {
+      "uptime": 0.25,
+      "performance": 0.20,
+      "deployment_health": 0.15,
+      "test_coverage": 0.15,
+      "seo_health": 0.10,
+      "security": 0.10,
+      "no_critical_blockers": 0.05
+    },
+    "thresholds": {
+      "healthy": 85,
+      "warning": 70,
+      "critical": 50
+    }
+  },
+  "alerts": {
+    "channels": ["dashboard", "email"],
+    "escalation_delay_minutes": 5
+  },
+  "integrations": {
+    "vercel": {
+      "enabled": true,
+      "purpose": "Hosting, deployments, serverless functions",
+      "sync_frequency": "real-time",
+      "credentials_key": "VERCEL_TOKEN"
+    },
+    "airtable": {
+      "enabled": true,
+      "purpose": "Program data, sessions, faculty content",
+      "sync_frequency": "on-demand",
+      "credentials_key": "AIRTABLE_API_KEY"
+    },
+    "stripe": {
+      "enabled": true,
+      "purpose": "Payment processing webhooks",
+      "sync_frequency": "real-time",
+      "credentials_key": "STRIPE_API_KEY"
+    },
+    "supabase": {
+      "enabled": true,
+      "purpose": "Content insights, analytics storage",
+      "sync_frequency": "real-time",
+      "credentials_key": "SUPABASE_TOKEN"
+    },
+    "neverbounce": {
+      "enabled": true,
+      "purpose": "Email verification for registration forms",
+      "sync_frequency": "on-demand",
+      "credentials_key": "NEVERBOUNCE_API_KEY"
+    },
+    "google_analytics": {
+      "enabled": true,
+      "purpose": "User behavior tracking",
+      "sync_frequency": "passive",
+      "credentials_key": null
+    }
+  },
+  "employees": {
+    "webdev-specialist": {
+      "commands": [
+        "new-program",
+        "component-variants",
+        "deep-plan-ui"
+      ]
+    },
+    "qa-specialist": {
+      "commands": [
+        "smoke",
+        "fullqa",
+        "a11y",
+        "responsive",
+        "links"
+      ]
+    },
+    "devops-specialist": {
+      "commands": [
+        "deploy",
+        "preview",
+        "speed-optimize"
+      ]
+    },
+    "content-specialist": {
+      "commands": [
+        "seo-optimize",
+        "brand-upgrade",
+        "brochure"
+      ]
+    }
+  },
+  "workers": {
+    "website": {
+      "uptime-monitor": {
+        "type": "monitor",
+        "schedule": "*/5 * * * *",
+        "enabled": false,
+        "alerts": {
+          "threshold_ms": 5000,
+          "consecutive_failures": 2
+        }
+      },
+      "link-checker": {
+        "type": "monitor",
+        "schedule": "0 6 * * *",
+        "enabled": false
+      },
+      "ssl-monitor": {
+        "type": "monitor",
+        "schedule": "0 7 * * *",
+        "enabled": false,
+        "alerts": {
+          "days_before_expiry": 30
+        }
+      },
+      "form-submission-monitor": {
+        "type": "monitor",
+        "schedule": "0 * * * *",
+        "enabled": false
+      }
+    },
+    "performance": {
+      "lighthouse-auditor": {
+        "type": "monitor",
+        "schedule": "0 5 * * *",
+        "enabled": false,
+        "config": {
+          "pages": [
+            "/",
+            "/programs/employee-relations-law",
+            "/featured-programs"
+          ],
+          "categories": ["performance", "accessibility", "seo"]
+        }
+      },
+      "page-speed-monitor": {
+        "type": "monitor",
+        "schedule": "0 */4 * * *",
+        "enabled": false
+      },
+      "image-optimizer": {
+        "type": "trigger",
+        "trigger": "on-deploy",
+        "enabled": false
+      },
+      "bundle-tracker": {
+        "type": "trigger",
+        "trigger": "on-deploy",
+        "enabled": false
+      }
+    },
+    "seo": {
+      "sitemap-validator": {
+        "type": "monitor",
+        "schedule": "0 8 * * *",
+        "enabled": false
+      },
+      "meta-tag-auditor": {
+        "type": "monitor",
+        "schedule": "0 9 * * 1",
+        "enabled": false
+      },
+      "schema-validator": {
+        "type": "monitor",
+        "schedule": "0 10 * * 1",
+        "enabled": false
+      },
+      "indexability-checker": {
+        "type": "monitor",
+        "schedule": "0 6 * * *",
+        "enabled": false
+      }
+    }
+  },
+  "deployment": {
+    "production_branch": "main",
+    "preview_enabled": true,
+    "auto_deploy": true,
+    "pre_deploy_checks": [
+      "smoke",
+      "links"
+    ]
+  }
+}

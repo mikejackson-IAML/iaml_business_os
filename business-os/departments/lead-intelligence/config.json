@@ -1,0 +1,243 @@
+{
+  "department": "lead-intelligence",
+  "version": "1.0.0",
+  "director": {
+    "name": "Lead Intelligence Director",
+    "model": "claude-sonnet-4-20250514",
+    "context_includes": [
+      "DEPARTMENT.md",
+      "employees/*/ROLE.md",
+      "workers/*/*.md"
+    ]
+  },
+  "health_score": {
+    "weights": {
+      "platform_health": 0.25,
+      "capacity_available": 0.25,
+      "data_quality": 0.20,
+      "domain_health": 0.20,
+      "no_critical_blockers": 0.10
+    },
+    "thresholds": {
+      "healthy": 85,
+      "warning": 70,
+      "critical": 50
+    }
+  },
+  "alerts": {
+    "channels": ["dashboard", "email"],
+    "escalation_delay_minutes": 5
+  },
+  "integrations": {
+    "phantombuster": {
+      "enabled": true,
+      "purpose": "LinkedIn automation and scraping",
+      "sync_frequency": "continuous",
+      "credentials_key": "PHANTOMBUSTER_API_KEY"
+    },
+    "apollo": {
+      "enabled": true,
+      "purpose": "B2B contact data and enrichment",
+      "sync_frequency": "daily",
+      "credentials_key": "APOLLO_API_KEY"
+    },
+    "apify": {
+      "enabled": true,
+      "purpose": "Custom scraping jobs",
+      "sync_frequency": "on-demand",
+      "credentials_key": "APIFY_TOKEN"
+    },
+    "smartlead": {
+      "enabled": true,
+      "purpose": "Email campaign platform sync",
+      "sync_frequency": "hourly",
+      "credentials_key": "SMARTLEAD_API_KEY"
+    },
+    "gohighlevel": {
+      "enabled": true,
+      "purpose": "Past participant contact sync",
+      "sync_frequency": "hourly",
+      "credentials_key": "GHL_PIT_TOKEN"
+    },
+    "neverbounce": {
+      "enabled": true,
+      "purpose": "Email verification",
+      "sync_frequency": "on-demand",
+      "credentials_key": "NEVERBOUNCE_API_KEY"
+    },
+    "supabase": {
+      "enabled": true,
+      "purpose": "Contact database, analytics storage",
+      "sync_frequency": "real-time",
+      "credentials_key": "SUPABASE_TOKEN"
+    }
+  },
+  "employees": {},
+  "workers": {
+    "sourcing": {
+      "linkedin-scraper-manager": {
+        "type": "monitor",
+        "schedule": "*/15 * * * *",
+        "enabled": false,
+        "alerts": {
+          "daily_limit_warning": 0.80,
+          "daily_limit_critical": 0.95,
+          "weekly_limit_warning": 0.70,
+          "weekly_limit_critical": 0.90
+        }
+      },
+      "apollo-manager": {
+        "type": "monitor",
+        "schedule": "0 6 * * *",
+        "enabled": false,
+        "alerts": {
+          "credits_warning": 0.30,
+          "credits_critical": 0.10
+        }
+      },
+      "apify-manager": {
+        "type": "monitor",
+        "trigger": "on-job-complete",
+        "enabled": false
+      },
+      "source-balancer": {
+        "type": "agent",
+        "schedule": "0 7 * * *",
+        "enabled": false
+      }
+    },
+    "data-quality": {
+      "email-validator": {
+        "type": "agent",
+        "trigger": "on-import",
+        "enabled": false,
+        "config": {
+          "provider": "neverbounce",
+          "reject_invalid": true,
+          "reject_risky": false
+        }
+      },
+      "enrichment-processor": {
+        "type": "agent",
+        "trigger": "on-import",
+        "enabled": false,
+        "config": {
+          "provider": "apollo",
+          "fields": ["company", "title", "phone", "linkedin_url"]
+        }
+      },
+      "deduplication-manager": {
+        "type": "agent",
+        "trigger": "on-import",
+        "enabled": false,
+        "config": {
+          "match_fields": ["email"],
+          "fuzzy_match": ["company", "name"]
+        }
+      },
+      "compliance-monitor": {
+        "type": "monitor",
+        "schedule": "0 * * * *",
+        "enabled": false
+      }
+    },
+    "capacity": {
+      "sending-capacity-calculator": {
+        "type": "agent",
+        "schedule": "0 6 * * *",
+        "enabled": false
+      },
+      "domain-capacity-tracker": {
+        "type": "monitor",
+        "schedule": "0 */4 * * *",
+        "enabled": false,
+        "alerts": {
+          "bounce_rate_warning": 0.02,
+          "bounce_rate_critical": 0.05,
+          "spam_warning": 1,
+          "spam_critical": 2
+        }
+      },
+      "lead-to-campaign-allocator": {
+        "type": "hybrid",
+        "trigger": "on-request",
+        "enabled": false
+      },
+      "throttle-monitor": {
+        "type": "monitor",
+        "schedule": "*/30 * * * *",
+        "enabled": false,
+        "alerts": {
+          "capacity_warning": 0.85,
+          "capacity_critical": 0.95
+        }
+      }
+    },
+    "contact-database": {
+      "database-manager": {
+        "type": "monitor",
+        "schedule": "0 */6 * * *",
+        "enabled": false
+      },
+      "segment-builder": {
+        "type": "skill",
+        "trigger": "on-demand",
+        "enabled": false
+      },
+      "platform-sync-manager": {
+        "type": "agent",
+        "schedule": "0 * * * *",
+        "enabled": false,
+        "config": {
+          "platforms": ["smartlead", "gohighlevel", "apollo"],
+          "sync_direction": "bidirectional"
+        }
+      },
+      "lifecycle-manager": {
+        "type": "agent",
+        "schedule": "0 3 * * 0",
+        "enabled": false,
+        "config": {
+          "stale_threshold_days": 90,
+          "archive_threshold_days": 180
+        }
+      }
+    }
+  },
+  "data_quality": {
+    "required_fields": ["email", "first_name", "last_name"],
+    "preferred_fields": ["company", "title"],
+    "optional_fields": ["phone", "linkedin_url"],
+    "validation_target": 0.90,
+    "enrichment_target": 0.85
+  },
+  "capacity": {
+    "domains": {
+      "primary": {
+        "count": 1,
+        "purpose": "transactional",
+        "daily_limit": 0
+      },
+      "established": {
+        "count": 5,
+        "purpose": "marketing",
+        "daily_limit": 300
+      },
+      "warming": {
+        "count": 3,
+        "purpose": "building",
+        "daily_limit": 35
+      },
+      "resting": {
+        "count": 2,
+        "purpose": "recovery",
+        "daily_limit": 0
+      }
+    },
+    "health_multipliers": {
+      "healthy": 1.0,
+      "warning": 0.5,
+      "resting": 0.0
+    }
+  }
+}

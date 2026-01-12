@@ -1,3 +1,4 @@
 iaml_business_os/
 .vercel
 .env*.local
+business-os/docs/API-CREDENTIALS.md

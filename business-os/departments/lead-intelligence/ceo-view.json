@@ -1,0 +1,128 @@
+{
+  "department": "lead-intelligence",
+  "summary_prompt": "Provide a brief status of lead intelligence including: email sending capacity, lead pipeline status, platform health, domain health, and any critical issues affecting lead sourcing or campaign capacity.",
+  "key_metrics": [
+    {
+      "name": "Daily Email Capacity",
+      "description": "Total emails that can be sent today across all domains",
+      "target": "> 2000",
+      "source": "capacity_calculations"
+    },
+    {
+      "name": "Capacity Utilization",
+      "description": "Percentage of sending capacity currently in use",
+      "target": "< 85%",
+      "source": "capacity_calculations"
+    },
+    {
+      "name": "Leads Sourced This Week",
+      "description": "New leads imported from all platforms",
+      "target": "> 500",
+      "source": "lead_imports"
+    },
+    {
+      "name": "Email Validation Rate",
+      "description": "Percentage of leads with valid emails",
+      "target": "> 90%",
+      "source": "validation_results"
+    },
+    {
+      "name": "Avg Domain Health",
+      "description": "Average health score across active domains",
+      "target": "> 85",
+      "source": "domain_health"
+    },
+    {
+      "name": "Platform Status",
+      "description": "All scraping platforms operational",
+      "target": "All Green",
+      "source": "platform_status"
+    }
+  ],
+  "quick_actions": [
+    {
+      "name": "Check Capacity",
+      "command": "/capacity-report",
+      "description": "View current sending capacity"
+    },
+    {
+      "name": "Domain Status",
+      "command": "/domain-health",
+      "description": "Check domain health scores"
+    },
+    {
+      "name": "Platform Health",
+      "command": "/platform-status",
+      "description": "View scraping platform status"
+    }
+  ],
+  "status_indicators": {
+    "healthy": {
+      "color": "green",
+      "conditions": [
+        "capacity utilization < 85%",
+        "all platforms operational",
+        "avg domain health > 85",
+        "validation rate > 90%",
+        "no critical alerts"
+      ]
+    },
+    "warning": {
+      "color": "yellow",
+      "conditions": [
+        "capacity utilization 85-95%",
+        "platform rate limit warnings",
+        "avg domain health 70-85",
+        "validation rate 80-90%",
+        "Apollo credits < 30%"
+      ]
+    },
+    "critical": {
+      "color": "red",
+      "conditions": [
+        "capacity utilization > 95%",
+        "platform banned or restricted",
+        "domain blacklisted",
+        "compliance violation detected",
+        "sync failures affecting campaigns"
+      ]
+    }
+  },
+  "common_questions": [
+    "How many leads can we handle right now?",
+    "What's our sending capacity?",
+    "Are there any platform issues?",
+    "What's the domain health status?",
+    "How many leads did we source this week?",
+    "Are we running low on Apollo credits?",
+    "Which domains need rest?",
+    "What's our validation rate?"
+  ],
+  "dashboard_sections": [
+    {
+      "id": "capacity",
+      "title": "Capacity Status",
+      "description": "Email sending capacity and utilization"
+    },
+    {
+      "id": "pipeline",
+      "title": "Lead Pipeline",
+      "description": "Leads sourced, validated, and ready for campaigns"
+    },
+    {
+      "id": "platforms",
+      "title": "Platform Status",
+      "description": "PhantomBuster, Apollo, Apify health and limits"
+    },
+    {
+      "id": "domains",
+      "title": "Domain Health",
+      "description": "Active, warming, and resting domain status"
+    },
+    {
+      "id": "quality",
+      "title": "Data Quality",
+      "description": "Validation rates, enrichment, compliance"
+    }
+  ]
+}
