@@ -29,6 +29,46 @@
       "env": {
         "VERCEL_TOKEN": "${VERCEL_TOKEN}"
       }
+    },
+    "n8n-docs": {
+      "command": "npx",
+      "args": ["-y", "n8n-mcp"]
+    },
+    "exa": {
+      "command": "npx",
+      "args": ["-y", "exa-mcp-server"],
+      "env": {
+        "EXA_API_KEY": "${EXA_API_KEY}"
+      }
+    },
+    "airtable": {
+      "command": "npx",
+      "args": ["-y", "airtable-mcp-server"],
+      "env": {
+        "AIRTABLE_API_KEY": "${AIRTABLE_API_KEY}"
+      }
+    },
+    "smartlead": {
+      "command": "npx",
+      "args": ["-y", "smartlead-mcp-by-leadmagic"],
+      "env": {
+        "SMARTLEAD_API_KEY": "${SMARTLEAD_API_KEY}"
+      }
+    },
+    "apollo": {
+      "command": "npx",
+      "args": ["-y", "@thevgergroup/apollo-io-mcp@latest"],
+      "env": {
+        "APOLLO_API_KEY": "${APOLLO_API_KEY}",
+        "APOLLO_BASE_URL": "https://api.apollo.io/api/v1"
+      }
+    },
+    "brave-search": {
+      "command": "npx",
+      "args": ["-y", "@brave/brave-search-mcp-server"],
+      "env": {
+        "BRAVE_API_KEY": "${BRAVE_API_KEY}"
+      }
     }
   }
 }
