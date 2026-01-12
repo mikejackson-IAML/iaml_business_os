@@ -56,21 +56,21 @@
         "locationId": "${GHL_LOCATION_ID}"
       }
     },
-    "smartlead": {
+    "_DISABLED_smartlead": {
       "command": "npx",
       "args": ["-y", "smartlead-mcp-by-leadmagic"],
       "env": {
         "SMARTLEAD_API_KEY": "${SMARTLEAD_API_KEY}"
       }
     },
-    "zapmail": {
+    "_DISABLED_zapmail": {
       "command": "npx",
       "args": ["-y", "zapmail-mcp"],
       "env": {
         "ZAPMAIL_API_KEY": "${ZAPMAIL_API_KEY}"
       }
     },
-    "apollo": {
+    "_DISABLED_apollo": {
       "command": "npx",
       "args": ["-y", "@thevgergroup/apollo-io-mcp@latest"],
       "env": {
@@ -78,11 +78,11 @@
         "APOLLO_BASE_URL": "https://api.apollo.io/api/v1"
       }
     },
-    "semgrep": {
+    "_DISABLED_semgrep": {
       "command": "uvx",
       "args": ["semgrep-mcp"]
     },
-    "dataforseo": {
+    "_DISABLED_dataforseo": {
       "command": "npx",
       "args": ["-y", "dataforseo-mcp-server"],
       "env": {
@@ -90,32 +90,32 @@
         "DATAFORSEO_PASSWORD": "${DATAFORSEO_PASSWORD}"
       }
     },
-    "lighthouse": {
+    "_DISABLED_lighthouse": {
       "command": "npx",
       "args": ["-y", "@danielsogl/lighthouse-mcp"]
     },
-    "google-search-console": {
+    "_DISABLED_google-search-console": {
       "command": "npx",
       "args": ["-y", "mcp-server-gsc"],
       "env": {
         "GOOGLE_APPLICATION_CREDENTIALS": "${GOOGLE_APPLICATION_CREDENTIALS}"
       }
     },
-    "vercel": {
+    "_DISABLED_vercel": {
       "command": "npx",
       "args": ["-y", "vercel-mcp"],
       "env": {
         "VERCEL_TOKEN": "${VERCEL_TOKEN}"
       }
     },
-    "notion": {
+    "_DISABLED_notion": {
       "command": "npx",
       "args": ["-y", "@notionhq/notion-mcp-server"],
       "env": {
         "OPENAPI_MCP_HEADERS": "{\"Authorization\": \"Bearer ${NOTION_TOKEN}\", \"Notion-Version\": \"2022-06-28\"}"
       }
     },
-    "google-workspace": {
+    "_DISABLED_google-workspace": {
       "command": "npx",
       "args": ["-y", "mcp-google-workspace"],
       "env": {
@@ -124,53 +124,53 @@
         "GOOGLE_REDIRECT_URI": "http://localhost:3000/oauth2callback"
       }
     },
-    "perplexity": {
+    "_DISABLED_perplexity": {
       "command": "npx",
       "args": ["-y", "@perplexity-ai/mcp-server"],
       "env": {
         "PERPLEXITY_API_KEY": "${PERPLEXITY_API_KEY}"
       }
     },
-    "gemini": {
+    "_DISABLED_gemini": {
       "command": "npx",
       "args": ["-y", "aistudio-mcp-server"],
       "env": {
         "GEMINI_API_KEY": "${GEMINI_API_KEY}"
       }
     },
-    "brave-search": {
+    "_DISABLED_brave-search": {
       "command": "npx",
       "args": ["-y", "@brave/brave-search-mcp-server"],
       "env": {
         "BRAVE_API_KEY": "${BRAVE_API_KEY}"
       }
     },
-    "firecrawl": {
+    "_DISABLED_firecrawl": {
       "command": "npx",
       "args": ["-y", "firecrawl-mcp"],
       "env": {
         "FIRECRAWL_API_KEY": "${FIRECRAWL_API_KEY}"
       }
     },
-    "stripe": {
+    "_DISABLED_stripe": {
       "command": "npx",
       "args": ["-y", "@stripe/mcp", "--tools=all", "--api-key=${STRIPE_API_KEY}"]
     },
-    "elevenlabs": {
+    "_DISABLED_elevenlabs": {
       "command": "uvx",
       "args": ["elevenlabs-mcp"],
       "env": {
         "ELEVENLABS_API_KEY": "${ELEVENLABS_API_KEY}"
       }
     },
-    "vapi": {
+    "_DISABLED_vapi": {
       "command": "npx",
       "args": ["-y", "@vapi-ai/mcp-server"],
       "env": {
         "VAPI_TOKEN": "${VAPI_TOKEN}"
       }
     },
-    "pagespeed": {
+    "_DISABLED_pagespeed": {
       "command": "npx",
       "args": ["-y", "mcp-server-pagespeed"]
     },
