@@ -1,17 +1,19 @@
 #!/usr/bin/env node
 
 /**
- * IAML Brochure PDF Generator
+ * IAML Brochure PDF Generator - v2.0
  *
- * Generates PDF brochures from program JSON data using Puppeteer.
+ * Generates professional PDF brochures from program JSON data.
+ * Features:
+ * - Block-based curriculum with pricing info
+ * - Top 8 strongest testimonials (scored)
+ * - Upcoming sessions with location images
+ * - Pre-program consultation section
+ * - Dynamic page generation
  *
  * Usage:
  *   node generate-brochure-pdf.js [program-slug]
- *   node generate-brochure-pdf.js hr-law-fundamentals
  *   node generate-brochure-pdf.js --all
- *
- * Prerequisites:
- *   npm install puppeteer
  */
 
 const puppeteer = require('puppeteer');
@@ -22,15 +24,23 @@ const path = require('path');
 const CONFIG = {
     programsDir: path.join(__dirname, '../programs/data'),
     facultyDir: path.join(__dirname, '../data/faculty/by-program'),
+    sessionsFile: path.join(__dirname, '../data/sessions/all-sessions.json'),
     templatesDir: path.join(__dirname, '../brochures/templates'),
     outputDir: path.join(__dirname, '../brochures/output'),
-    templateFile: 'program-brochure.html',
     cssFile: 'brochure-styles.css'
 };
 
-/**
- * Load program data from JSON file
- */
+// Pagination limits
+const ITEMS_PER_PAGE = {
+    faculty: 8,
+    testimonials: 8,
+    faqs: 4
+};
+
+// ============================================
+// DATA LOADING
+// ============================================
+
 function loadProgramData(slug) {
     const filePath = path.join(CONFIG.programsDir, `${slug}.json`);
     if (!fs.existsSync(filePath)) {
@@ -39,9 +49,6 @@ function loadProgramData(slug) {
     return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 }
 
-/**
- * Load faculty data for a program
- */
 function loadFacultyData(slug) {
     const filePath = path.join(CONFIG.facultyDir, `${slug}.json`);
     if (!fs.existsSync(filePath)) {
@@ -51,48 +58,167 @@ function loadFacultyData(slug) {
     return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 }
 
-/**
- * Load and prepare template HTML
- */
-function loadTemplate() {
-    const templatePath = path.join(CONFIG.templatesDir, CONFIG.templateFile);
+function loadUpcomingSessions(programName) {
+    if (!fs.existsSync(CONFIG.sessionsFile)) {
+        console.warn('Sessions file not found');
+        return [];
+    }
+
+    const allSessions = JSON.parse(fs.readFileSync(CONFIG.sessionsFile, 'utf-8'));
+    const today = new Date();
+
+    return allSessions.records
+        .filter(s => {
+            const pName = s.fields['Program Name']?.[0];
+            return pName && pName.toLowerCase().includes(programName.toLowerCase().replace('certificate in ', ''));
+        })
+        .filter(s => s.fields['Start Date'] && new Date(s.fields['Start Date']) > today)
+        .filter(s => s.fields['Show on Website'])
+        .filter(s => s.fields['Format'] !== 'On Demand') // Exclude on-demand
+        .sort((a, b) => new Date(a.fields['Start Date']) - new Date(b.fields['Start Date']))
+        .slice(0, 3);
+}
+
+function loadCss() {
     const cssPath = path.join(CONFIG.templatesDir, CONFIG.cssFile);
-
-    let html = fs.readFileSync(templatePath, 'utf-8');
-    const css = fs.readFileSync(cssPath, 'utf-8');
-
-    // Inline the CSS for PDF generation
-    html = html.replace(
-        '<link rel="stylesheet" href="brochure-styles.css">',
-        `<style>${css}</style>`
-    );
-
-    return html;
+    return fs.readFileSync(cssPath, 'utf-8');
 }
 
-/**
- * Generate delivery options HTML
- */
-function generateDeliveryOptions(options) {
-    return options.map(opt =>
-        `<span class="delivery-option">${opt}</span>`
-    ).join('\n');
+// ============================================
+// UTILITY FUNCTIONS
+// ============================================
+
+function paginateItems(items, itemsPerPage) {
+    const pages = [];
+    for (let i = 0; i < items.length; i += itemsPerPage) {
+        pages.push(items.slice(i, i + itemsPerPage));
+    }
+    return pages;
 }
 
-/**
- * Generate delivery options list HTML
- */
-function generateDeliveryOptionsList(options) {
-    return options.map(opt => `<li>${opt} sessions available</li>`).join('\n');
+function formatDateRange(startDate, endDate) {
+    const options = { month: 'short', day: 'numeric' };
+    const start = startDate.toLocaleDateString('en-US', options);
+    const end = endDate.toLocaleDateString('en-US', { ...options, year: 'numeric' });
+    return `${start} - ${end}`;
 }
 
-/**
- * Generate benefits list HTML
- * Handles both string arrays and object arrays with title/description
- */
-function generateBenefitsList(benefits) {
-    return benefits.map(benefit => {
-        // Handle both string format and object format
+function scoreTestimonial(t) {
+    let score = 0;
+    // Length bonus (longer = more detailed, cap at 5 points)
+    score += Math.min(t.quote.length / 50, 5);
+    // Senior title bonus
+    if (/director|vp|vice president|manager|attorney|specialist|lead|senior|chief/i.test(t.title)) score += 3;
+    // Specific content mentions
+    if (/instructor|attorney|practical|apply|valuable|excellent|outstanding|recommend/i.test(t.quote)) score += 2;
+    // Company recognition (Fortune 500 types)
+    if (/deere|federal|corporation|inc\.|llc/i.test(t.company)) score += 1;
+    return score;
+}
+
+function selectStrongestTestimonials(testimonials, count = 8) {
+    if (!testimonials || testimonials.length === 0) return [];
+    return testimonials
+        .map(t => ({ ...t, score: scoreTestimonial(t) }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, count);
+}
+
+// ============================================
+// HTML GENERATION - STRUCTURE
+// ============================================
+
+function getHtmlHead(programName, css) {
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${programName} - IAML Program Brochure</title>
+    <style>${css}</style>
+</head>
+<body>
+`;
+}
+
+function getHtmlFoot() {
+    return `</body></html>`;
+}
+
+function generatePageFooter(pageNum, darkMode = false) {
+    const style = darkMode ? 'border-top-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.6);' : '';
+    return `
+        <div class="page-footer" style="${style}">
+            <span>IAML | Institute for Applied Management & Law</span>
+            <span class="page-number">${pageNum}</span>
+        </div>
+    `;
+}
+
+// ============================================
+// PAGE GENERATORS
+// ============================================
+
+function generateCoverPage(programData) {
+    const program = programData.program || programData;
+    const hero = programData.hero || {};
+    const benefits = programData.benefits || {};
+
+    const price = hero.price || program.price || 0;
+    const duration = hero.duration || program.duration || '2 days';
+    const deliveryOptions = hero.deliveryOptions || program.deliveryOptions || [];
+    const credits = (benefits.credits || benefits.creditCount || '13').toString().match(/[\d.]+/)?.[0] || '13';
+    const programName = program.name || programData.programName || hero.title || 'Program';
+
+    return `
+    <div class="page cover-page">
+        <div class="logo">
+            <img src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69541d517483036e7b3a3c24.svg" alt="IAML Logo" />
+        </div>
+        <h1>${programName}</h1>
+        <p class="tagline">${hero.description || ''}</p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-value">${duration}</div>
+                <div class="hero-stat-label">Duration</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value">$${price.toLocaleString()}</div>
+                <div class="hero-stat-label">Investment</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value">${credits} credits</div>
+                <div class="hero-stat-label">SHRM/HRCI/CLE</div>
+            </div>
+        </div>
+        <div class="delivery-options">
+            ${deliveryOptions.map(opt => `<span class="delivery-option">${opt}</span>`).join('\n')}
+        </div>
+    </div>
+`;
+}
+
+function generateOverviewPage(programData, pageNum) {
+    const program = programData.program || programData;
+    const content = programData.content || {};
+    const hero = programData.hero || {};
+    const benefits = content.benefits || [];
+
+    // Build overview text
+    let overview = '';
+    if (content.headline) {
+        overview += `<p><strong>${content.headline}</strong></p>\n`;
+    }
+    if (hero.description) {
+        overview += `<p>${hero.description}</p>\n`;
+    }
+    if (content.description) {
+        const cleanDesc = content.description.replace(/<[^>]*>/g, '');
+        overview += `<p>${cleanDesc}</p>\n`;
+    }
+
+    // Benefits list
+    const benefitsHtml = benefits.length > 0 ? benefits.map(benefit => {
         const text = typeof benefit === 'string'
             ? benefit
             : `<strong>${benefit.title}</strong>: ${benefit.description}`;
@@ -102,114 +228,183 @@ function generateBenefitsList(benefits) {
                 <div class="benefit-text">${text}</div>
             </div>
         `;
-    }).join('\n');
+    }).join('\n') : '<p class="text-muted">Program benefits will prepare you for real-world application.</p>';
+
+    // Pre-program consultation section
+    const consultationHtml = `
+        <div class="consultation-section">
+            <h3>Your Pre-Program Consultation</h3>
+            <p>Every enrollment includes a complimentary 10-15 minute consultation with our team. Before your program begins, we'll discuss your specific challenges, identify which topics will have the biggest impact for your role, and ensure you get maximum value from your investment.</p>
+        </div>
+    `;
+
+    return `
+    <div class="page overview-page">
+        <h2>Program Overview</h2>
+        <div class="overview-content">
+            ${overview}
+        </div>
+        <h3>What You'll Gain</h3>
+        <div class="benefits-list">
+            ${benefitsHtml}
+        </div>
+        ${consultationHtml}
+        ${generatePageFooter(pageNum)}
+    </div>
+`;
 }
 
-/**
- * Generate curriculum blocks HTML (split into two pages)
- */
-function generateCurriculumBlocks(curriculum) {
-    const blocks = curriculum.blocks || [];
-    const allGroups = [];
+function generateGroupHtml(group) {
+    const skillsHtml = (group.skills || []).map(skill => `
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level ${skill.level.toLowerCase()}">${skill.level}</span>
+                <span class="skill-title">${skill.name || skill.title}</span>
+            </div>
+            ${skill.description ? `<p class="skill-description">${skill.description}</p>` : ''}
+        </div>
+    `).join('');
 
-    blocks.forEach(block => {
-        (block.competencyGroups || []).forEach(group => {
-            allGroups.push(group);
+    return `
+        <div class="competency-group">
+            <h4>${group.title}</h4>
+            <div class="skill-list">
+                ${skillsHtml}
+            </div>
+        </div>
+    `;
+}
+
+function generateCurriculumBlockPages(curriculum, startPageNum) {
+    const blocks = curriculum.blocks || [];
+    if (blocks.length === 0) {
+        return { html: '', count: 0 };
+    }
+
+    const isMultiBlock = blocks.length > 1;
+    let pagesHtml = '';
+    let pageCount = 0;
+
+    blocks.forEach((block, blockIdx) => {
+        const groups = block.competencyGroups || [];
+        const groupsPerPage = 3; // Fit ~3 competency groups per page
+        const groupPages = paginateItems(groups, groupsPerPage);
+
+        groupPages.forEach((pageGroups, pageIdx) => {
+            const pageNum = startPageNum + pageCount;
+            const isFirstPageOfBlock = pageIdx === 0;
+
+            const blockHeaderHtml = isFirstPageOfBlock ? `
+                <div class="block-header">
+                    <span class="block-label">${block.label}</span>
+                    <h2>${block.title}</h2>
+                    <div class="block-meta">
+                        <span class="block-days">${block.days}</span>
+                        <span class="block-divider">|</span>
+                        <span class="block-price">$${(block.price || 0).toLocaleString()}</span>
+                    </div>
+                    <p class="block-description">${block.description || ''}</p>
+                    ${isMultiBlock && blockIdx === 0 ? '<p class="block-note">Individual blocks can be taken separately. The full program provides the best value.</p>' : ''}
+                </div>
+            ` : `<h2>${block.title} (Continued)</h2>`;
+
+            pagesHtml += `
+    <div class="page curriculum-page">
+        ${blockHeaderHtml}
+        <div class="curriculum-content">
+            ${pageGroups.map(g => generateGroupHtml(g)).join('\n')}
+        </div>
+        ${generatePageFooter(pageNum)}
+    </div>
+`;
+            pageCount++;
         });
     });
 
-    // Split groups: 55% on page 1 to avoid footer overlap (5/4 split for 9 groups)
-    const splitPoint = Math.ceil(allGroups.length * 0.55); // ~55% on first page
-    const page1Groups = allGroups.slice(0, splitPoint);
-    const page2Groups = allGroups.slice(splitPoint);
-
-    const generateGroupHtml = (groups) => {
-        return groups.map(group => `
-            <div class="competency-group">
-                <h3>${group.title}</h3>
-                <div class="skill-list">
-                    ${(group.skills || []).slice(0, 4).map(skill => `
-                        <div class="skill-item">
-                            <span class="skill-level ${skill.level.toLowerCase()}">${skill.level}</span>
-                            <span class="skill-title">${skill.name || skill.title}</span>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        `).join('\n');
-    };
-
-    return {
-        page1: generateGroupHtml(page1Groups),
-        page2: generateGroupHtml(page2Groups)
-    };
+    return { html: pagesHtml, count: pageCount };
 }
 
-/**
- * Generate faculty cards HTML
- */
-function generateFacultyCards(faculty) {
-    // Sort faculty to prioritize those with bios
+function generateFacultyCardHtml(member) {
+    const initials = member.name.split(' ')
+        .map(n => n[0])
+        .filter(c => c && c.match(/[A-Z]/))
+        .slice(0, 2)
+        .join('');
+
+    const photoHtml = member.imageUrl
+        ? `<img class="faculty-photo" src="${member.imageUrl}" alt="${member.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" /><div class="faculty-photo-placeholder" style="display:none;">${initials}</div>`
+        : `<div class="faculty-photo-placeholder">${initials}</div>`;
+
+    const titleParts = [];
+    if (member.title) titleParts.push(member.title);
+    if (member.organization) titleParts.push(member.organization);
+    const titleText = titleParts.join(', ');
+
+    const bioHtml = member.bio && member.bio.trim().length > 0
+        ? `<p class="faculty-bio">${member.bio}</p>`
+        : '';
+
+    return `
+        <div class="faculty-card">
+            <div class="faculty-card-header">
+                ${photoHtml}
+                <div class="faculty-info">
+                    <h4>${member.name}</h4>
+                    <p class="faculty-title">${titleText}</p>
+                </div>
+            </div>
+            ${bioHtml}
+        </div>
+    `;
+}
+
+function generateFacultyPages(faculty, startPageNum) {
+    if (!faculty || faculty.length === 0) {
+        return { html: '', count: 0 };
+    }
+
+    // Sort by those with bios first
     const sortedFaculty = [...faculty].sort((a, b) => {
-        // Faculty with bios come first
         const aBio = a.bio && a.bio.trim().length > 0 ? 1 : 0;
         const bBio = b.bio && b.bio.trim().length > 0 ? 1 : 0;
         return bBio - aBio;
     });
 
-    // Take up to 4 faculty to accommodate full bios
-    const topFaculty = sortedFaculty.slice(0, 4);
-    console.log(`Faculty count: ${faculty.length}, showing: ${topFaculty.length}`);
-    console.log(`Faculty names: ${topFaculty.map(f => f.name).join(', ')}`);
+    const pages = paginateItems(sortedFaculty, ITEMS_PER_PAGE.faculty);
+    let pagesHtml = '';
 
-    return topFaculty.map(member => {
-        const initials = member.name.split(' ')
-            .map(n => n[0])
-            .filter(c => c && c.match(/[A-Z]/))
-            .slice(0, 2)
-            .join('');
+    pages.forEach((members, idx) => {
+        const pageNum = startPageNum + idx;
+        const pageTitle = idx === 0 ? 'Your Expert Instructors' : 'Faculty (Continued)';
+        const introHtml = idx === 0
+            ? '<p>Learn from practicing attorneys and industry experts who bring real-world experience to every session.</p>'
+            : '';
 
-        // Use full bio
-        let displayBio = '';
-        if (member.bio && member.bio.trim().length > 0) {
-            displayBio = member.bio;
-        }
+        pagesHtml += `
+    <div class="page faculty-page">
+        <h2>${pageTitle}</h2>
+        ${introHtml}
+        <div class="faculty-grid">
+            ${members.map(m => generateFacultyCardHtml(m)).join('\n')}
+        </div>
+        ${generatePageFooter(pageNum)}
+    </div>
+`;
+    });
 
-        // Use actual image if available, otherwise fall back to initials
-        const photoHtml = member.imageUrl
-            ? `<img class="faculty-photo" src="${member.imageUrl}" alt="${member.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" /><div class="faculty-photo-placeholder" style="display:none;">${initials}</div>`
-            : `<div class="faculty-photo-placeholder">${initials}</div>`;
-
-        // Build title with organization
-        const titleParts = [];
-        if (member.title) titleParts.push(member.title);
-        if (member.organization) titleParts.push(member.organization);
-        const titleText = titleParts.join(', ');
-
-        return `
-            <div class="faculty-card">
-                <div class="faculty-card-header">
-                    ${photoHtml}
-                    <div class="faculty-info">
-                        <h4>${member.name}</h4>
-                        <p class="faculty-title">${titleText}</p>
-                    </div>
-                </div>
-                ${displayBio ? `<p class="faculty-bio">${displayBio}</p>` : ''}
-            </div>
-        `;
-    }).join('\n');
+    return { html: pagesHtml, count: pages.length };
 }
 
-/**
- * Generate testimonials HTML
- */
-function generateTestimonials(testimonials) {
-    // Take top 7 testimonials to fill the page
-    const topTestimonials = testimonials.slice(0, 7);
+function generateTestimonialsPage(testimonials, pageNum) {
+    if (!testimonials || testimonials.length === 0) {
+        return { html: '', count: 0 };
+    }
 
-    return topTestimonials.map(t => `
-        <div class="testimonial-card" style="background: #ffffff !important; border: none !important;">
+    // Select top 8 strongest testimonials
+    const topTestimonials = selectStrongestTestimonials(testimonials, 8);
+
+    const testimonialsHtml = topTestimonials.map(t => `
+        <div class="testimonial-card">
             <p class="testimonial-quote">"${t.quote}"</p>
             <div class="testimonial-author">
                 <span class="testimonial-name">${t.author || t.name}</span>
@@ -217,135 +412,236 @@ function generateTestimonials(testimonials) {
             </div>
         </div>
     `).join('\n');
+
+    return {
+        html: `
+    <div class="page testimonials-page">
+        <h2>What Participants Say</h2>
+        <div class="testimonials-grid">
+            ${testimonialsHtml}
+        </div>
+        ${generatePageFooter(pageNum)}
+    </div>
+`,
+        count: 1
+    };
 }
 
-/**
- * Generate FAQ items HTML
- * Selects impactful FAQs that add value beyond what's already in the brochure
- */
-function generateFaqItems(faq) {
-    // Priority keywords for selecting impactful FAQs (avoiding duplicates of price/credits/format info)
-    const impactfulKeywords = ['new to', 'experience', 'ready', 'learn', 'advanced', 'after', 'apply', 'different'];
-    const skipKeywords = ['register', 'credit', 'format', 'virtual', 'in-person', 'price', 'fee', 'cost'];
+function generateUpcomingSessionsPage(sessions, pageNum) {
+    if (!sessions || sessions.length === 0) {
+        return { html: '', count: 0 };
+    }
 
-    // Filter and score FAQs for relevance
-    const scoredFaqs = faq.map((item, index) => {
-        const questionLower = item.question.toLowerCase();
-        const hasImpactful = impactfulKeywords.some(kw => questionLower.includes(kw));
-        const hasSkip = skipKeywords.some(kw => questionLower.includes(kw));
-        return {
-            ...item,
-            index,
-            score: hasImpactful && !hasSkip ? 2 : (!hasSkip ? 1 : 0)
-        };
+    const sessionsHtml = sessions.map(session => {
+        const fields = session.fields;
+        const startDate = new Date(fields['Start Date']);
+        const endDate = new Date(fields['End Date']);
+        const imageUrl = fields['Hero Image URL'];
+        const venueName = fields['Venue Name (from Venue)']?.[0] || '';
+
+        return `
+            <div class="session-card-horizontal">
+                ${imageUrl ? `<img class="session-image-horizontal" src="${imageUrl}" alt="${fields.City}" />` : '<div class="session-image-placeholder-horizontal"></div>'}
+                <div class="session-details-horizontal">
+                    <div class="session-date-large">${formatDateRange(startDate, endDate)}</div>
+                    <div class="session-location-large">${fields.City}, ${fields['State/Province']}</div>
+                    ${venueName ? `<div class="session-venue">${venueName}</div>` : ''}
+                    <div class="session-format-badge">${fields.Format}</div>
+                </div>
+            </div>
+        `;
+    }).join('\n');
+
+    return {
+        html: `
+    <div class="page sessions-page">
+        <h2>Upcoming Sessions</h2>
+        <p>Choose the location and format that works best for your schedule.</p>
+        <div class="sessions-list-vertical">
+            ${sessionsHtml}
+        </div>
+        <p class="sessions-note">Visit <strong>iaml.com</strong> for all sessions and registration.</p>
+        ${generatePageFooter(pageNum)}
+    </div>
+`,
+        count: 1
+    };
+}
+
+function generateDetailsPage(programData, pageNum) {
+    const program = programData.program || programData;
+    const hero = programData.hero || {};
+    const benefits = programData.benefits || {};
+
+    const price = hero.price || program.price || 0;
+    const deliveryOptions = hero.deliveryOptions || program.deliveryOptions || [];
+    const credits = (benefits.credits || benefits.creditCount || '13').toString().match(/[\d.]+/)?.[0] || '13';
+    const updatePeriod = benefits.updatePeriod || '12 months';
+    const alumniDiscount = benefits.alumniDiscount || 'Up to $500';
+
+    return `
+    <div class="page details-page">
+        <h2>Program Details</h2>
+        <div class="details-grid">
+            <div class="detail-card">
+                <h3>Investment</h3>
+                <p class="price-highlight">$${price.toLocaleString()}</p>
+                <p class="text-small mt-1">Includes all instruction, materials, and continuing education credits</p>
+            </div>
+            <div class="detail-card">
+                <h3>Professional Credits</h3>
+                <p><span class="credits-badge">${credits}</span></p>
+                <p class="text-small mt-1">SHRM, HRCI, and CLE credits included</p>
+            </div>
+            <div class="detail-card">
+                <h3>Delivery Options</h3>
+                <ul>
+                    ${deliveryOptions.map(opt => `<li>${opt} sessions available</li>`).join('\n')}
+                </ul>
+            </div>
+            <div class="detail-card">
+                <h3>What's Included</h3>
+                <ul>
+                    <li>Live instruction from practicing attorneys</li>
+                    <li>Complete program materials</li>
+                    <li>${updatePeriod} of quarterly updates</li>
+                    <li>${alumniDiscount} alumni discount on future programs</li>
+                </ul>
+            </div>
+        </div>
+        ${generatePageFooter(pageNum)}
+    </div>
+`;
+}
+
+function generateFaqPages(faq, startPageNum) {
+    if (!faq || faq.length === 0) {
+        return { html: '', count: 0 };
+    }
+
+    const pages = paginateItems(faq, ITEMS_PER_PAGE.faqs);
+    let pagesHtml = '';
+
+    pages.forEach((items, idx) => {
+        const pageNum = startPageNum + idx;
+        const pageTitle = idx === 0 ? 'Frequently Asked Questions' : 'FAQs (Continued)';
+
+        const faqHtml = items.map(item => `
+            <div class="faq-item">
+                <p class="faq-question">${item.question}</p>
+                <p class="faq-answer">${item.answer}</p>
+            </div>
+        `).join('\n');
+
+        pagesHtml += `
+    <div class="page details-page">
+        <h2>${pageTitle}</h2>
+        <div class="faq-section">
+            ${faqHtml}
+        </div>
+        ${generatePageFooter(pageNum)}
+    </div>
+`;
     });
 
-    // Sort by score (highest first) and take top 3
-    const selectedFaqs = scoredFaqs
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 3);
-
-    return selectedFaqs.map(item => `
-        <div class="faq-item">
-            <p class="faq-question">${item.question}</p>
-            <p class="faq-answer">${item.answer}</p>
-        </div>
-    `).join('\n');
+    return { html: pagesHtml, count: pages.length };
 }
 
-/**
- * Generate CTA content
- */
-function generateCtaContent(programName) {
-    return `Join HR professionals and employment attorneys who have mastered ${programName}.
-    Build the legal foundation that protects your organization and advances your career.
-    Upcoming sessions are available in-person and virtual formats.`;
-}
-
-/**
- * Generate overview content
- */
-function generateOverviewContent(program) {
-    const content = program.contentSection || {};
-    const hero = program.hero || {};
-
-    let overview = '';
-
-    // Use content section headline as intro
-    if (content.headline) {
-        overview += `<p><strong>${content.headline}</strong></p>\n`;
-    }
-
-    // Use hero description
-    if (hero.description) {
-        overview += `<p>${hero.description}</p>\n`;
-    }
-
-    // Add content section description
-    if (content.description) {
-        // Strip HTML tags for cleaner text
-        const cleanDesc = content.description.replace(/<[^>]*>/g, '');
-        overview += `<p>${cleanDesc}</p>\n`;
-    }
-
-    return overview;
-}
-
-/**
- * Populate template with program data
- */
-function populateTemplate(template, programData, facultyData) {
-    // Handle nested structure: data may be under programData.program or flat
+function generateCtaPage(programData, pageNum) {
     const program = programData.program || programData;
-    const faculty = facultyData.faculty || [];
-    const hero = programData.hero || {};
-    const curriculum = programData.curriculum || {};
-    const benefits = programData.benefits || {};
-    const contentSection = programData.content || programData.contentSection || {};
+    const programName = program.name || programData.programName || 'this program';
+    const programSlug = program.slug || programData.slug || 'programs';
 
-    // Merge program-level data into hero for backwards compatibility
-    const mergedHero = {
-        ...hero,
-        price: hero.price || program.price,
-        duration: hero.duration || program.duration,
-        deliveryOptions: hero.deliveryOptions || program.deliveryOptions || []
-    };
+    const registrationUrl = `https://iaml.com/programs/${programSlug}.html`;
+    const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(registrationUrl)}`;
 
-    const curriculumBlocks = generateCurriculumBlocks(curriculum);
-
-    const replacements = {
-        '{{PROGRAM_NAME}}': program.name || programData.programName || hero.title || 'Program',
-        '{{HERO_DESCRIPTION}}': hero.description || '',
-        '{{DURATION}}': mergedHero.duration || '2 days',
-        '{{PRICE}}': (mergedHero.price || 0).toLocaleString(),
-        '{{CREDITS}}': (benefits.credits || benefits.creditCount || '13').toString().match(/[\d.]+/)?.[0] || '13',
-        '{{DELIVERY_OPTIONS}}': generateDeliveryOptions(mergedHero.deliveryOptions),
-        '{{DELIVERY_OPTIONS_LIST}}': generateDeliveryOptionsList(mergedHero.deliveryOptions),
-        '{{OVERVIEW_CONTENT}}': generateOverviewContent(program),
-        '{{BENEFITS_LIST}}': generateBenefitsList(contentSection.benefits || []),
-        '{{CURRICULUM_TITLE}}': curriculum.header?.title || 'What You\'ll Learn',
-        '{{CURRICULUM_DESCRIPTION}}': curriculum.header?.description || '',
-        '{{CURRICULUM_BLOCKS_1}}': curriculumBlocks.page1,
-        '{{CURRICULUM_BLOCKS_2}}': curriculumBlocks.page2,
-        '{{FACULTY_CARDS}}': generateFacultyCards(faculty),
-        '{{TESTIMONIALS}}': generateTestimonials(program.testimonials || []),
-        '{{FAQ_ITEMS}}': generateFaqItems(program.faq || []),
-        '{{UPDATE_PERIOD}}': benefits.updatePeriod || '12 months',
-        '{{ALUMNI_DISCOUNT}}': benefits.alumniDiscount || 'Up to $500',
-        '{{CTA_CONTENT}}': generateCtaContent(program.programName)
-    };
-
-    let result = template;
-    for (const [placeholder, value] of Object.entries(replacements)) {
-        result = result.replace(new RegExp(placeholder.replace(/[{}]/g, '\\$&'), 'g'), value);
-    }
-
-    return result;
+    return `
+    <div class="page cta-page">
+        <h2>Take the Next Step</h2>
+        <div class="cta-content">
+            <p>Join HR professionals and employment attorneys who have mastered ${programName}. Build the legal foundation that protects your organization and advances your career.</p>
+        </div>
+        <div class="qr-section">
+            <img class="qr-code" src="${qrCodeUrl}" alt="Scan to Register" />
+            <p class="qr-label">Scan to Register</p>
+        </div>
+        <div class="cta-button">Reserve Your Spot</div>
+        <p class="cta-url">Visit <strong>iaml.com</strong> to view upcoming sessions and register</p>
+        <div class="contact-info">
+            <p><strong>Questions?</strong></p>
+            <p>Email: info@iaml.com | Phone: (949) 760-1700</p>
+        </div>
+        ${generatePageFooter(pageNum, true)}
+    </div>
+`;
 }
 
-/**
- * Generate PDF from HTML using Puppeteer
- */
+// ============================================
+// MAIN BUILD FUNCTION
+// ============================================
+
+function buildBrochureHtml(programData, facultyData, sessions) {
+    const program = programData.program || programData;
+    const programName = program.name || programData.programName || 'Program';
+    const css = loadCss();
+
+    let pageNum = 1;
+    let html = getHtmlHead(programName, css);
+
+    // Page 1: Cover
+    html += generateCoverPage(programData);
+    pageNum++;
+
+    // Page 2: Overview with benefits and consultation
+    html += generateOverviewPage(programData, pageNum);
+    pageNum++;
+
+    // Curriculum pages (one or more per block)
+    const curriculum = programData.curriculum || {};
+    const curriculumResult = generateCurriculumBlockPages(curriculum, pageNum);
+    html += curriculumResult.html;
+    pageNum += curriculumResult.count;
+
+    // Faculty pages
+    const faculty = facultyData.faculty || [];
+    const facultyResult = generateFacultyPages(faculty, pageNum);
+    html += facultyResult.html;
+    pageNum += facultyResult.count;
+
+    // Testimonials (1 page, top 8)
+    const testimonials = programData.testimonials || [];
+    const testimonialResult = generateTestimonialsPage(testimonials, pageNum);
+    html += testimonialResult.html;
+    pageNum += testimonialResult.count;
+
+    // Upcoming sessions
+    const sessionsResult = generateUpcomingSessionsPage(sessions, pageNum);
+    html += sessionsResult.html;
+    pageNum += sessionsResult.count;
+
+    // Details page
+    html += generateDetailsPage(programData, pageNum);
+    pageNum++;
+
+    // FAQ pages
+    const faq = programData.faq || [];
+    const faqResult = generateFaqPages(faq, pageNum);
+    html += faqResult.html;
+    pageNum += faqResult.count;
+
+    // CTA page
+    html += generateCtaPage(programData, pageNum);
+
+    html += getHtmlFoot();
+
+    console.log(`Total pages: ${pageNum}`);
+    return html;
+}
+
+// ============================================
+// PDF GENERATION
+// ============================================
+
 async function generatePdf(html, outputPath) {
     const browser = await puppeteer.launch({
         headless: 'new',
@@ -354,18 +650,13 @@ async function generatePdf(html, outputPath) {
 
     try {
         const page = await browser.newPage();
-
-        // Set content and wait for fonts to load
         await page.setContent(html, {
             waitUntil: ['networkidle0', 'domcontentloaded']
         });
 
-        // Wait a bit for fonts to render
-        await page.evaluate(() => {
-            return new Promise(resolve => setTimeout(resolve, 500));
-        });
+        // Wait for fonts and images
+        await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 1000)));
 
-        // Generate PDF
         await page.pdf({
             path: outputPath,
             format: 'Letter',
@@ -380,25 +671,29 @@ async function generatePdf(html, outputPath) {
     }
 }
 
-/**
- * Generate brochure for a single program
- */
 async function generateBrochure(slug) {
     console.log(`\nGenerating brochure for: ${slug}`);
 
     try {
-        // Load data
         const programData = loadProgramData(slug);
         const facultyData = loadFacultyData(slug);
 
-        // Load and populate template
-        const template = loadTemplate();
-        const html = populateTemplate(template, programData, facultyData);
+        const program = programData.program || programData;
+        const programName = program.name || programData.programName || slug;
+        const sessions = loadUpcomingSessions(programName);
 
-        // Ensure output directory exists
+        console.log(`Found ${sessions.length} upcoming sessions`);
+
+        const html = buildBrochureHtml(programData, facultyData, sessions);
+
         if (!fs.existsSync(CONFIG.outputDir)) {
             fs.mkdirSync(CONFIG.outputDir, { recursive: true });
         }
+
+        // Save editable HTML file
+        const htmlOutputPath = path.join(CONFIG.outputDir, `${slug}-brochure.html`);
+        fs.writeFileSync(htmlOutputPath, html, 'utf-8');
+        console.log(`Saved editable HTML: ${htmlOutputPath}`);
 
         // Generate PDF
         const outputPath = path.join(CONFIG.outputDir, `${slug}-brochure.pdf`);
@@ -411,9 +706,20 @@ async function generateBrochure(slug) {
     }
 }
 
-/**
- * Get list of all available program slugs
- */
+async function convertHtmlToPdf(htmlPath) {
+    console.log(`\nConverting HTML to PDF: ${htmlPath}`);
+
+    if (!fs.existsSync(htmlPath)) {
+        throw new Error(`HTML file not found: ${htmlPath}`);
+    }
+
+    const html = fs.readFileSync(htmlPath, 'utf-8');
+    const outputPath = htmlPath.replace('.html', '.pdf');
+
+    await generatePdf(html, outputPath);
+    return outputPath;
+}
+
 function getAllProgramSlugs() {
     const files = fs.readdirSync(CONFIG.programsDir);
     return files
@@ -421,9 +727,6 @@ function getAllProgramSlugs() {
         .map(f => f.replace('.json', ''));
 }
 
-/**
- * Main entry point
- */
 async function main() {
     const args = process.argv.slice(2);
 
@@ -432,9 +735,7 @@ async function main() {
         console.log('  node generate-brochure-pdf.js [program-slug]');
         console.log('  node generate-brochure-pdf.js --all');
         console.log('  node generate-brochure-pdf.js --list');
-        console.log('\nExamples:');
-        console.log('  node generate-brochure-pdf.js hr-law-fundamentals');
-        console.log('  node generate-brochure-pdf.js strategic-hr-management');
+        console.log('  node generate-brochure-pdf.js --html-to-pdf [path-to-html]');
         process.exit(1);
     }
 
@@ -443,6 +744,17 @@ async function main() {
         console.log('Available programs:');
         slugs.forEach(s => console.log(`  - ${s}`));
         process.exit(0);
+    }
+
+    if (args[0] === '--html-to-pdf') {
+        if (!args[1]) {
+            console.error('Error: Please provide path to HTML file');
+            console.log('Usage: node generate-brochure-pdf.js --html-to-pdf [path-to-html]');
+            process.exit(1);
+        }
+        await convertHtmlToPdf(args[1]);
+        console.log('\nDone!');
+        return;
     }
 
     if (args[0] === '--all') {
@@ -463,7 +775,6 @@ async function main() {
     }
 }
 
-// Run if called directly
 if (require.main === module) {
     main().catch(error => {
         console.error('Fatal error:', error);
@@ -471,11 +782,11 @@ if (require.main === module) {
     });
 }
 
-// Export for use as module
 module.exports = {
     generateBrochure,
+    convertHtmlToPdf,
     loadProgramData,
     loadFacultyData,
-    populateTemplate,
+    buildBrochureHtml,
     getAllProgramSlugs
 };
