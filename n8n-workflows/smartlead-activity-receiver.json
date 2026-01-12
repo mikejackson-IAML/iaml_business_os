@@ -145,11 +145,11 @@
           "conditions": [
             {
               "id": "contact-found",
-              "leftValue": "={{ $json.length || 0 }}",
-              "rightValue": 0,
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
               "operator": {
-                "type": "number",
-                "operation": "gt"
+                "type": "string",
+                "operation": "notEmpty"
               }
             }
           ],
