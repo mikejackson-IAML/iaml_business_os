@@ -148,9 +148,9 @@ const getHeaderHTML = () => `
                   <li><div class="benefit-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><div><strong>Lifetime Alumni Discounts</strong><span>For you and your colleagues</span></div></li>
               </ul>
               <h3 class="mega-menu-heading" style="margin-top: 24px;">Credentials</h3>
-              <ul class="mega-menu-list">
-                  <li><span class="mega-menu-link mega-menu-link-disabled"><span class="mega-menu-link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg></span><span>SHRM &amp; HRCI Credits</span></span></li>
-                  <li><span class="mega-menu-link mega-menu-link-disabled"><span class="mega-menu-link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><span>CLE Credits by State</span></span></li>
+              <ul class="mega-menu-benefits-detailed">
+                  <li><div class="benefit-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><div><strong>SHRM &amp; HRCI Credits</strong><span>Recertification credits included</span></div></li>
+                  <li><div class="benefit-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><div><strong>CLE Credits by State</strong><span>Attorneys earn CLE alongside HR</span></div></li>
               </ul>
           </div>
           <div class="mega-menu-column mega-menu-testimonial-panel">
