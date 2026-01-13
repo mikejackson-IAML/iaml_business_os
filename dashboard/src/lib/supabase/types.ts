@@ -79,6 +79,36 @@ export type Database = {
           updated_at?: string;
         };
       };
+      profiles: {
+        Row: {
+          id: string;
+          email: string;
+          full_name: string | null;
+          avatar_url: string | null;
+          role: 'admin' | 'viewer';
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id: string;
+          email: string;
+          full_name?: string | null;
+          avatar_url?: string | null;
+          role?: 'admin' | 'viewer';
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          email?: string;
+          full_name?: string | null;
+          avatar_url?: string | null;
+          role?: 'admin' | 'viewer';
+          is_active?: boolean;
+          updated_at?: string;
+        };
+      };
       multichannel_campaigns: {
         Row: {
           id: string;
@@ -400,6 +430,11 @@ export type CampaignChannel = Database['public']['Tables']['campaign_channels'][
 export type CampaignActivity = Database['public']['Tables']['campaign_activity']['Row'];
 export type CampaignFunnel = Database['public']['Views']['campaign_funnel']['Row'];
 export type ChannelPerformance = Database['public']['Views']['channel_performance']['Row'];
+
+// User profiles
+export type Profile = Database['public']['Tables']['profiles']['Row'];
+export type ProfileInsert = Database['public']['Tables']['profiles']['Insert'];
+export type ProfileUpdate = Database['public']['Tables']['profiles']['Update'];
 
 // n8n-brain types
 export type Pattern = Database['n8n_brain']['Tables']['patterns']['Row'];

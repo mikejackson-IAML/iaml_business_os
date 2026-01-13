@@ -1,12 +1,14 @@
 'use client';
 
-import { Users, Target, TrendingUp, MessageSquare, Mail, Phone, Linkedin } from 'lucide-react';
+import { Users, Target, TrendingUp, MessageSquare, Mail, Phone, Linkedin, Monitor, BarChart3, GraduationCap, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 import { MetricCard } from '@/dashboard-kit/components/dashboard/metric-card';
 import { HealthScore } from '@/dashboard-kit/components/dashboard/health-score';
 import { ActivityFeed } from '@/dashboard-kit/components/dashboard/activity-feed';
 import { Card, CardContent, CardHeader, CardTitle } from '@/dashboard-kit/components/ui/card';
 import { Progress } from '@/dashboard-kit/components/ui/progress';
 import { FallingPattern } from '@/components/ui/falling-pattern';
+import { UserMenu } from '@/components/UserMenu';
 import type { Campaign, CampaignActivity, ChannelPerformance } from '@/lib/supabase/types';
 import type { HealthStatus, ActivityItem } from '@/dashboard-kit/types';
 
@@ -106,13 +108,44 @@ export function DashboardContent({ metrics, campaigns, activities }: DashboardCo
       <div className="relative z-10 p-6 lg:p-8">
         {/* Header */}
         <header className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <span className="badge-live">LIVE</span>
-            <h1 className="text-display-sm text-foreground">CEO Dashboard</h1>
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-3">
+              <span className="badge-live">LIVE</span>
+              <h1 className="text-display-sm text-foreground">CEO Dashboard</h1>
+            </div>
+            <UserMenu />
           </div>
           <p className="text-muted-foreground">
             Business operations overview • Campaign performance • Real-time metrics
           </p>
+
+          {/* Quick Links to Department Dashboards */}
+          <div className="flex gap-3 mt-4">
+            <Link
+              href="/dashboard/digital"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400 transition-colors"
+            >
+              <Monitor className="h-4 w-4" />
+              <span className="text-sm font-medium">Digital</span>
+              <ArrowRight className="h-3 w-3" />
+            </Link>
+            <Link
+              href="/dashboard/marketing"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-pink-500/10 hover:bg-pink-500/20 text-pink-600 dark:text-pink-400 transition-colors"
+            >
+              <BarChart3 className="h-4 w-4" />
+              <span className="text-sm font-medium">Marketing</span>
+              <ArrowRight className="h-3 w-3" />
+            </Link>
+            <Link
+              href="/dashboard/programs"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 transition-colors"
+            >
+              <GraduationCap className="h-4 w-4" />
+              <span className="text-sm font-medium">Programs</span>
+              <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
         </header>
 
         {/* Main Grid */}
