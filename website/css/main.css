@@ -1857,6 +1857,31 @@ hr.separator {
   line-height: 1.6;
 }
 
+/* Who Should Attend Section */
+.who-should-attend-section {
+  background: var(--gray-50);
+}
+
+.who-should-attend-section header {
+  text-align: center;
+  margin-bottom: var(--space-3xl);
+}
+
+.who-should-attend-section header h2 {
+  color: var(--gray-900);
+  margin-bottom: var(--space-lg);
+  font-size: 48px;
+  font-weight: 600;
+}
+
+.who-should-attend-section header p {
+  color: var(--gray-600);
+  font-size: 1.125rem;
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
 /* Block Navigation */
 .curriculum-nav {
   display: grid;
@@ -2172,6 +2197,14 @@ hr.separator {
     font-size: 1rem;
   }
 
+  .who-should-attend-section header h2 {
+    font-size: 1.875rem;
+  }
+
+  .who-should-attend-section header p {
+    font-size: 1rem;
+  }
+
   .curriculum-nav {
     grid-template-columns: 1fr;
     gap: var(--space-md);
@@ -2256,6 +2289,14 @@ hr.separator {
   }
 
   .curriculum-header p {
+    font-size: 0.95rem;
+  }
+
+  .who-should-attend-section header h2 {
+    font-size: 1.5rem;
+  }
+
+  .who-should-attend-section header p {
     font-size: 0.95rem;
   }
 
