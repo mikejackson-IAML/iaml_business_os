@@ -364,6 +364,14 @@
     flex-shrink: 0;
 }
 
+.mega-menu-benefits li span {
+    font-weight: 600;
+    color: var(--gray-900, #0f172a);
+    display: flex;
+    align-items: center;
+    height: 32px;
+}
+
 /* Benefits with details */
 .mega-menu-benefits-detailed {
     list-style: none;
