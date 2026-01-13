@@ -1,0 +1,1858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate in Employee Relations Law - IAML Program Brochure</title>
+    <style>/* IAML Program Brochure - Print-Optimized Styles */
+
+/* Import Google Fonts for print */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;600;700&display=swap');
+
+/* Page Setup */
+@page {
+    size: Letter;
+    margin: 0;
+}
+
+@page :first {
+    margin: 0;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Root Variables (matching website) */
+:root {
+    /* Brand Colors */
+    --blue-primary: #188bf6;
+    --blue-dark: #28528c;
+    --blue-darker: #222639;
+    --red-accent: #dc2626;
+    --red-hover: #b91c1c;
+    --gold-accent: #af9232;
+    --purple-accent: #7c3aed;
+
+    /* Neutral Colors */
+    --white: #ffffff;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-800: #1e293b;
+    --gray-900: #0f172a;
+    --black: #000000;
+
+    /* Typography */
+    --font-heading: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    --font-body: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+    font-family: var(--font-body);
+    font-size: 11pt;
+    line-height: 1.5;
+    color: var(--gray-800);
+    background: var(--white);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+/* Page Container */
+.page {
+    width: 8.5in;
+    height: 11in;
+    padding: 0.5in;
+    page-break-after: always;
+    page-break-inside: avoid;
+    position: relative;
+    overflow: hidden;
+}
+
+.page:last-child {
+    page-break-after: auto;
+}
+
+/* Typography */
+h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--blue-darker);
+    line-height: 1.2;
+}
+
+h1 {
+    font-size: 36pt;
+    margin-bottom: 0.3in;
+}
+
+h2 {
+    font-size: 24pt;
+    margin-bottom: 0.2in;
+    padding-bottom: 0.1in;
+    border-bottom: 2px solid var(--blue-primary);
+}
+
+h3 {
+    font-size: 14pt;
+    margin-bottom: 0.1in;
+    color: var(--blue-dark);
+}
+
+h4 {
+    font-size: 12pt;
+    margin-bottom: 0.05in;
+}
+
+p {
+    margin-bottom: 0.15in;
+}
+
+strong {
+    font-weight: 600;
+    color: var(--blue-dark);
+}
+
+/* Cover Page */
+.cover-page {
+    background: linear-gradient(135deg, var(--blue-darker) 0%, var(--blue-dark) 100%);
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 1in;
+}
+
+.cover-page .logo {
+    width: 120px;
+    height: auto;
+    margin-bottom: 0.5in;
+}
+
+.cover-page .logo img,
+.cover-page .logo svg {
+    width: 100%;
+    height: auto;
+}
+
+.cover-page h1 {
+    color: var(--white);
+    font-size: 42pt;
+    margin-bottom: 0.3in;
+}
+
+.cover-page .tagline {
+    font-size: 16pt;
+    font-weight: 300;
+    max-width: 5.5in;
+    line-height: 1.6;
+    margin-bottom: 0.5in;
+    opacity: 0.95;
+}
+
+.cover-page .hero-stats {
+    display: flex;
+    gap: 0.5in;
+    margin-top: 0.3in;
+}
+
+.cover-page .hero-stat {
+    text-align: center;
+}
+
+.cover-page .hero-stat-value {
+    font-size: 24pt;
+    font-weight: 700;
+    font-family: var(--font-heading);
+    color: var(--gold-accent);
+}
+
+.cover-page .hero-stat-label {
+    font-size: 10pt;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.8;
+}
+
+.cover-page .delivery-options {
+    display: flex;
+    gap: 0.2in;
+    margin-top: 0.4in;
+}
+
+.cover-page .delivery-option {
+    background: rgba(255,255,255,0.15);
+    padding: 0.1in 0.2in;
+    border-radius: 4px;
+    font-size: 10pt;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Social Proof Bar */
+.social-proof-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--blue-darker);
+    border-top: 3px solid var(--gold-accent);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.25in 0.5in;
+    gap: 0.5in;
+}
+
+.proof-item {
+    text-align: center;
+    flex: 1;
+}
+
+.proof-value {
+    font-size: 14pt;
+    font-weight: 700;
+    color: var(--gold-accent);
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+.proof-label {
+    font-size: 9pt;
+    color: rgba(255,255,255,0.8);
+    margin-top: 0.03in;
+}
+
+.proof-divider {
+    width: 1px;
+    height: 0.4in;
+    background: rgba(255,255,255,0.3);
+}
+
+/* Overview Page */
+.overview-page {
+    padding: 0.6in;
+}
+
+.overview-content {
+    font-size: 12pt;
+    line-height: 1.7;
+    margin-bottom: 0.3in;
+}
+
+.benefits-list {
+    margin-top: 0.3in;
+}
+
+.benefit-item {
+    display: flex;
+    gap: 0.15in;
+    margin-bottom: 0.2in;
+    padding: 0.15in;
+    background: var(--gray-50);
+    border-left: 3px solid var(--blue-primary);
+    border-radius: 0 6px 6px 0;
+}
+
+.benefit-item .benefit-icon {
+    color: var(--blue-primary);
+    font-size: 14pt;
+    flex-shrink: 0;
+}
+
+.benefit-item .benefit-text {
+    font-size: 11pt;
+    line-height: 1.5;
+}
+
+/* Curriculum Page */
+.curriculum-page {
+    padding: 0.5in;
+    padding-bottom: 0.6in; /* Extra space for footer */
+}
+
+.curriculum-intro {
+    font-size: 10pt;
+    margin-bottom: 0.15in;
+    color: var(--gray-600);
+    line-height: 1.4;
+}
+
+.curriculum-content {
+    max-height: 9in; /* Prevent overflow */
+    overflow: hidden;
+}
+
+.competency-group {
+    margin-bottom: 0.15in;
+    page-break-inside: avoid;
+}
+
+.competency-group h3 {
+    background: var(--blue-darker);
+    color: var(--white);
+    padding: 0.06in 0.12in;
+    border-radius: 4px;
+    font-size: 10pt;
+    margin-bottom: 0.06in;
+}
+
+.skill-list {
+    padding-left: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.1in 0.2in;
+}
+
+.skill-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.03in;
+    margin-bottom: 0;
+    font-size: 9pt;
+    line-height: 1.3;
+}
+
+.skill-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.08in;
+}
+
+.skill-title {
+    flex: 1;
+    font-weight: 500;
+}
+
+.skill-description {
+    font-size: 8pt;
+    color: var(--gray-600);
+    margin: 0;
+    padding-left: 0.7in;
+    line-height: 1.3;
+}
+
+.skill-level {
+    font-size: 7pt;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 0.02in 0.06in;
+    border-radius: 3px;
+    flex-shrink: 0;
+    min-width: 0.6in;
+    text-align: center;
+    text-align: center;
+}
+
+.skill-level.foundation {
+    background: var(--blue-primary);
+    color: var(--white);
+}
+
+.skill-level.advanced {
+    background: var(--gold-accent);
+    color: var(--white);
+}
+
+.skill-level.expert {
+    background: var(--purple-accent);
+    color: var(--white);
+}
+
+.skill-title {
+    color: var(--gray-700);
+}
+
+/* Faculty Page */
+.faculty-page {
+    padding: 0.5in;
+}
+
+.faculty-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.1in;
+    margin-top: 0.12in;
+}
+
+.faculty-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.05in;
+    padding: 0.08in;
+    background: var(--gray-50);
+    border-radius: 6px;
+    page-break-inside: avoid;
+}
+
+.faculty-card-header {
+    display: flex;
+    gap: 0.1in;
+    align-items: flex-start;
+}
+
+.faculty-photo {
+    width: 0.7in;
+    height: 0.7in;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--gray-200);
+    flex-shrink: 0;
+}
+
+.faculty-photo-placeholder {
+    width: 0.7in;
+    height: 0.7in;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue-dark), var(--blue-primary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-size: 18pt;
+    font-family: var(--font-heading);
+    flex-shrink: 0;
+}
+
+.faculty-info {
+    flex: 1;
+}
+
+.faculty-info h4 {
+    color: var(--blue-darker);
+    margin-bottom: 0.02in;
+    font-size: 10pt;
+}
+
+.faculty-title {
+    font-size: 7pt;
+    color: var(--gray-600);
+    margin-bottom: 0.03in;
+    line-height: 1.3;
+}
+
+.faculty-bio {
+    font-size: 7pt;
+    line-height: 1.3;
+    color: var(--gray-700);
+    margin-top: 0.03in;
+    max-height: 0.7in;
+    overflow: hidden;
+}
+
+/* Testimonials Page */
+.testimonials-page {
+    padding: 0.4in 0.5in;
+    background: var(--white);
+}
+
+.testimonials-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1in;
+    margin-top: 0.15in;
+}
+
+.testimonial-card {
+    background: var(--white);
+    padding: 0.1in 0.15in;
+    border-radius: 4px;
+    border: 1px solid #e2e8f0;
+    position: relative;
+    page-break-inside: avoid;
+    outline: none;
+}
+
+.testimonial-quote {
+    font-size: 9pt;
+    font-style: italic;
+    line-height: 1.4;
+    color: var(--gray-700);
+    margin-bottom: 0.06in;
+}
+
+
+.testimonial-author {
+    display: flex;
+    flex-direction: column;
+    padding-left: 0.1in;
+    border-left: 2px solid var(--gold-accent);
+}
+
+.testimonial-name {
+    font-weight: 600;
+    color: var(--blue-darker);
+    font-size: 8pt;
+}
+
+.testimonial-role {
+    font-size: 7pt;
+    color: var(--gray-600);
+}
+
+/* Details Page */
+.details-page {
+    padding: 0.6in;
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.3in;
+    margin-top: 0.3in;
+}
+
+.detail-card {
+    padding: 0.2in;
+    background: var(--gray-50);
+    border-radius: 8px;
+}
+
+.detail-card h3 {
+    font-size: 12pt;
+    margin-bottom: 0.1in;
+    color: var(--blue-dark);
+}
+
+.detail-card p,
+.detail-card li {
+    font-size: 10pt;
+    line-height: 1.5;
+}
+
+.detail-card ul {
+    padding-left: 0.2in;
+}
+
+.detail-card li {
+    margin-bottom: 0.05in;
+}
+
+.price-highlight {
+    font-size: 28pt;
+    font-weight: 700;
+    font-family: var(--font-heading);
+    color: var(--blue-primary);
+}
+
+.credits-badge {
+    display: inline-block;
+    background: var(--gold-accent);
+    color: var(--white);
+    padding: 0.05in 0.15in;
+    border-radius: 4px;
+    font-size: 11pt;
+    font-weight: 600;
+}
+
+.faq-section {
+    margin-top: 0.3in;
+}
+
+.faq-item {
+    margin-bottom: 0.2in;
+    page-break-inside: avoid;
+}
+
+.faq-question {
+    font-weight: 600;
+    color: var(--blue-dark);
+    font-size: 10pt;
+    margin-bottom: 0.05in;
+}
+
+.faq-answer {
+    font-size: 10pt;
+    line-height: 1.5;
+    color: var(--gray-700);
+    padding-left: 0.15in;
+    border-left: 2px solid var(--gray-200);
+}
+
+/* CTA Page */
+.cta-page {
+    padding: 0.6in;
+    background: linear-gradient(135deg, var(--blue-darker) 0%, var(--blue-dark) 100%);
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.cta-page h2 {
+    color: var(--white);
+    border-bottom: 2px solid var(--gold-accent);
+    font-size: 28pt;
+    margin-bottom: 0.4in;
+}
+
+.cta-content {
+    max-width: 5in;
+    margin-bottom: 0.4in;
+}
+
+.cta-content p {
+    font-size: 14pt;
+    line-height: 1.6;
+    opacity: 0.95;
+}
+
+.cta-button {
+    display: inline-block;
+    background: var(--red-accent);
+    color: var(--white);
+    padding: 0.2in 0.5in;
+    border-radius: 8px;
+    font-size: 14pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    margin-bottom: 0.4in;
+}
+
+.contact-info {
+    margin-top: 0.3in;
+    padding-top: 0.3in;
+    border-top: 1px solid rgba(255,255,255,0.2);
+}
+
+.contact-info p {
+    font-size: 11pt;
+    margin-bottom: 0.1in;
+    opacity: 0.9;
+}
+
+.contact-info strong {
+    color: var(--gold-accent);
+}
+
+/* Footer (on each page) */
+.page-footer {
+    position: absolute;
+    bottom: 0.3in;
+    left: 0.5in;
+    right: 0.5in;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 8pt;
+    color: var(--gray-500);
+    border-top: 1px solid var(--gray-200);
+    padding-top: 0.1in;
+}
+
+.page-footer .footer-logo {
+    height: 20px;
+}
+
+.page-number {
+    font-weight: 600;
+}
+
+/* Utility Classes */
+.text-primary { color: var(--blue-primary); }
+.text-dark { color: var(--blue-darker); }
+.text-gold { color: var(--gold-accent); }
+.text-red { color: var(--red-accent); }
+.text-center { text-align: center; }
+.text-small { font-size: 9pt; }
+.mb-0 { margin-bottom: 0; }
+.mt-1 { margin-top: 0.1in; }
+.mt-2 { margin-top: 0.2in; }
+
+/* Block Header (Curriculum) */
+.block-header {
+    margin-bottom: 0.2in;
+}
+
+.block-label {
+    display: inline-block;
+    background: var(--gold-accent);
+    color: var(--white);
+    padding: 0.03in 0.1in;
+    border-radius: 3px;
+    font-size: 9pt;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.05in;
+}
+
+.block-header h2 {
+    margin-top: 0.05in;
+    margin-bottom: 0.08in;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.block-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.1in;
+    margin-bottom: 0.1in;
+    font-size: 11pt;
+}
+
+.block-days {
+    color: var(--gray-600);
+    font-weight: 500;
+}
+
+.block-divider {
+    color: var(--gray-400);
+}
+
+.block-price {
+    color: var(--blue-primary);
+    font-weight: 700;
+    font-size: 14pt;
+}
+
+.block-description {
+    font-size: 10pt;
+    color: var(--gray-600);
+    margin-bottom: 0.1in;
+    line-height: 1.4;
+}
+
+.block-note {
+    font-size: 9pt;
+    color: var(--gold-accent);
+    font-style: italic;
+    margin-bottom: 0.15in;
+    padding: 0.08in;
+    background: rgba(175, 146, 50, 0.1);
+    border-radius: 4px;
+}
+
+/* Consultation Section */
+.consultation-section {
+    margin-top: 0.25in;
+    padding: 0.15in;
+    background: linear-gradient(135deg, var(--blue-darker) 0%, var(--blue-dark) 100%);
+    border-radius: 8px;
+    color: var(--white);
+}
+
+.consultation-section h3 {
+    color: var(--gold-accent);
+    font-size: 12pt;
+    margin-bottom: 0.08in;
+}
+
+.consultation-section p {
+    font-size: 9pt;
+    line-height: 1.5;
+    margin-bottom: 0;
+    opacity: 0.95;
+}
+
+/* Sessions Page */
+.sessions-page {
+    padding: 0.5in;
+}
+
+.sessions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.2in;
+    margin: 0.2in 0;
+}
+
+.session-card {
+    background: var(--gray-50);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.session-image {
+    width: 100%;
+    height: 1.5in;
+    object-fit: cover;
+    display: block;
+}
+
+.session-image-placeholder {
+    width: 100%;
+    height: 1.5in;
+    background: linear-gradient(135deg, var(--blue-dark), var(--blue-primary));
+}
+
+.session-details {
+    padding: 0.12in;
+}
+
+.session-date {
+    font-weight: 700;
+    color: var(--blue-darker);
+    font-size: 11pt;
+    margin-bottom: 0.03in;
+}
+
+.session-location {
+    color: var(--gray-700);
+    font-size: 10pt;
+    margin-bottom: 0.02in;
+}
+
+.session-format {
+    color: var(--gray-500);
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.sessions-note {
+    text-align: center;
+    font-size: 10pt;
+    color: var(--gray-600);
+    margin-top: 0.15in;
+}
+
+/* Vertical Sessions Layout */
+.sessions-list-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15in;
+    margin: 0.15in 0;
+}
+
+.session-card-horizontal {
+    display: flex;
+    gap: 0.2in;
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--gray-200);
+}
+
+.session-image-horizontal {
+    width: 2.2in;
+    height: 1.5in;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.session-image-placeholder-horizontal {
+    width: 2.2in;
+    height: 1.5in;
+    background: linear-gradient(135deg, var(--blue-dark), var(--blue-primary));
+    flex-shrink: 0;
+}
+
+.session-details-horizontal {
+    padding: 0.15in;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.session-date-large {
+    font-weight: 700;
+    color: var(--blue-darker);
+    font-size: 14pt;
+    margin-bottom: 0.05in;
+}
+
+.session-location-large {
+    color: var(--gray-700);
+    font-size: 12pt;
+    margin-bottom: 0.03in;
+}
+
+.session-venue {
+    color: var(--gray-500);
+    font-size: 10pt;
+    font-style: italic;
+    margin-bottom: 0.08in;
+}
+
+.session-format-badge {
+    display: inline-block;
+    background: var(--blue-primary);
+    color: white;
+    padding: 0.03in 0.1in;
+    border-radius: 3px;
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    align-self: flex-start;
+}
+
+/* CTA Page Refinements */
+.qr-section {
+    margin: 0.3in 0;
+    text-align: center;
+}
+
+.qr-code {
+    width: 1.5in;
+    height: 1.5in;
+}
+
+.qr-label {
+    font-size: 11pt;
+    color: rgba(255,255,255,0.8);
+    margin-top: 0.08in;
+}
+
+.cta-url {
+    font-size: 14pt;
+    margin-top: 0.15in;
+}
+
+.cta-url strong {
+    color: var(--gold-accent);
+    font-size: 16pt;
+}
+
+/* Print-specific adjustments */
+@media print {
+    body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .page {
+        margin: 0;
+        box-shadow: none;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+}
+</style>
+</head>
+<body>
+
+    <div class="page cover-page">
+        <div class="logo">
+            <img src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69541d517483036e7b3a3c24.svg" alt="IAML Logo" />
+        </div>
+        <h1>Certificate in Employee Relations Law</h1>
+        <p class="tagline">Most HR professionals never receive formal employment law training. In 4½ days, you'll build comprehensive expertise in labor relations, discrimination defense, and workplace compliance. Practicing attorneys. Practical strategies. Confidence to handle complex situations.</p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-value">4½ days</div>
+                <div class="hero-stat-label">Duration</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value">$2,375</div>
+                <div class="hero-stat-label">Investment</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value">29.75 credits</div>
+                <div class="hero-stat-label">SHRM/HRCI/CLE</div>
+            </div>
+        </div>
+        <div class="delivery-options">
+            <span class="delivery-option">In Person</span>
+<span class="delivery-option">Virtual</span>
+<span class="delivery-option">On Demand</span>
+        </div>
+
+        <div class="social-proof-bar">
+            <div class="proof-item">
+                <div class="proof-value">45+ YEARS</div>
+                <div class="proof-label">Trusted Since 1979</div>
+            </div>
+            <div class="proof-divider"></div>
+            <div class="proof-item">
+                <div class="proof-value">80,000+</div>
+                <div class="proof-label">Certificates Earned</div>
+            </div>
+            <div class="proof-divider"></div>
+            <div class="proof-item">
+                <div class="proof-value">PRACTICING ATTORNEYS</div>
+                <div class="proof-label">Not Academics</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page overview-page">
+        <h2>Program Overview</h2>
+        <div class="overview-content">
+            <p>This intensive certificate program transforms how you approach workplace legal challenges. From navigating union organizing campaigns to defending discrimination charges, you'll learn directly from attorneys who handle these cases daily. The curriculum covers the full spectrum of employee relations law: NLRA compliance, Title VII, ADA/FMLA accommodations, wage and hour requirements, and post-employment restrictions. You'll gain the knowledge to prevent problems before they become lawsuits.</p>
+
+        </div>
+        <h3>What You'll Gain</h3>
+        <div class="benefits-list">
+            <div class="benefit-item">
+                <span class="benefit-icon">&#10003;</span>
+                <span class="benefit-text"><strong>Confident decision-making</strong> when facing union organizing, discrimination charges, or complex accommodation requests</span>
+            </div>
+            <div class="benefit-item">
+                <span class="benefit-icon">&#10003;</span>
+                <span class="benefit-text"><strong>Practical frameworks</strong> for handbook policies, investigations, and termination documentation that withstand legal scrutiny</span>
+            </div>
+            <div class="benefit-item">
+                <span class="benefit-icon">&#10003;</span>
+                <span class="benefit-text"><strong>Current legal knowledge</strong> on NLRB developments, Title VII, ADA/FMLA, and state-specific requirements affecting your workforce</span>
+            </div>
+            <div class="benefit-item">
+                <span class="benefit-icon">&#10003;</span>
+                <span class="benefit-text"><strong>Risk prevention skills</strong> to identify liability exposure before it becomes litigation</span>
+            </div>
+        </div>
+        
+        <div class="consultation-section">
+            <h3>Your Pre-Program Consultation</h3>
+            <p>Every enrollment includes a complimentary 10-15 minute consultation with our team. Before your program begins, we'll discuss your specific challenges, identify which topics will have the biggest impact for your role, and ensure you get maximum value from your investment.</p>
+        </div>
+    
+        
+        <div class="page-footer" style="">
+            <span>IAML | Institute for Applied Management & Law</span>
+            <span class="page-number">2</span>
+        </div>
+    
+    </div>
+
+    <div class="page curriculum-page">
+        
+                <div class="block-header">
+                    <span class="block-label">Block I</span>
+                    <h2>Comprehensive Labor Relations</h2>
+                    <div class="block-meta">
+                        <span class="block-days">2 Days</span>
+                        <span class="block-divider">|</span>
+                        <span class="block-price">$1,375</span>
+                    </div>
+                    <p class="block-description">Navigate the complex terrain of organizing risk, employee handbooks, union elections, and collective bargaining with proven strategies that protect your workforce while maintaining compliance.</p>
+                    <p class="block-note">Individual blocks can be taken separately. The full program provides the best value.</p>
+                </div>
+            
+        <div class="curriculum-content">
+            
+        <div class="competency-group">
+            <h4>The Current NLRB & Organizing Landscape</h4>
+            <div class="skill-list">
+                
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level foundation">Foundation</span>
+                <span class="skill-title">Elections & recognition after NLRB Cemex decision</span>
+            </div>
+            <p class="skill-description">Faster elections; higher risk of bargaining orders for ULPs; what 'card-check-adjacent' and new GC guidance mean in practice.</p>
+        </div>
+    
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level advanced">Advanced</span>
+                <span class="skill-title">Handbooks after NLRB Stericycle decision</span>
+            </div>
+            <p class="skill-description">Why neutral rules (civility, confidentiality, social media, devices) can still violate §7; how to rewrite with context-specific justifications.</p>
+        </div>
+    
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level expert">Expert</span>
+                <span class="skill-title">Joint-employer status (where it stands now)</span>
+            </div>
+            <p class="skill-description">2023 rule invalidated; prior standard effectively back. Implications for franchise/contracting models and vendor oversight.</p>
+        </div>
+    
+            </div>
+        </div>
+    
+
+        <div class="competency-group">
+            <h4>Practical Guidance for Non-Union Workplaces</h4>
+            <div class="skill-list">
+                
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level foundation">Foundation</span>
+                <span class="skill-title">Hiring & onboarding practices</span>
+            </div>
+            <p class="skill-description">Lower ULP risk; orientation scripts that avoid 'captive audience' pitfalls.</p>
+        </div>
+    
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level advanced">Advanced</span>
+                <span class="skill-title">The three big sparks for organizing</span>
+            </div>
+            <p class="skill-description">Scheduling/fairness, safety (including psychological safety), and transparency (wages/career paths). Learn how HR cools them with credible channels and swift fixes.</p>
+        </div>
+    
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level expert">Expert</span>
+                <span class="skill-title">Manager training for §7 in non-union settings</span>
+            </div>
+            <p class="skill-description">Protected concerted activity on Slack/Teams and group chats; where discipline goes wrong under Stericycle.</p>
+        </div>
+    
+            </div>
+        </div>
+    
+
+        <div class="competency-group">
+            <h4>Election Readiness & Campaign Law</h4>
+            <div class="skill-list">
+
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level foundation">Foundation</span>
+                <span class="skill-title">Campaign playbook: Do / Don't</span>
+            </div>
+            <p class="skill-description">Practical rules for message discipline under accelerated timelines; maintaining true laboratory conditions.</p>
+        </div>
+
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level advanced">Advanced</span>
+                <span class="skill-title">Access, equal time, and solicitation rules</span>
+            </div>
+            <p class="skill-description">Apply solicitation/distribution and email/Teams policies, updated for hybrid work.</p>
+        </div>
+
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level expert">Expert</span>
+                <span class="skill-title">Post-election objections and reruns</span>
+            </div>
+            <p class="skill-description">Prevent and defend against objections to avoid costly reruns.</p>
+        </div>
+
+            </div>
+        </div>
+
+        <div class="competency-group">
+            <h4>Collective Bargaining</h4>
+            <div class="skill-list">
+
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level foundation">Foundation</span>
+                <span class="skill-title">Setting the table</span>
+            </div>
+            <p class="skill-description">Management rights, grievance/arbitration, zipper, information requests, technology/data clauses, and safety.</p>
+        </div>
+
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level advanced">Advanced</span>
+                <span class="skill-title">Good-faith bargaining</span>
+            </div>
+            <p class="skill-description">Information requests, surface bargaining risks, and documenting proposals/counterproposals.</p>
+        </div>
+
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level expert">Expert</span>
+                <span class="skill-title">Handbook ↔ CBA alignment</span>
+            </div>
+            <p class="skill-description">Avoid conflicts and unintended past-practice creation.</p>
+        </div>
+
+            </div>
+        </div>
+
+        <div class="competency-group">
+            <h4>Strikes, Pickets, and Employer Response</h4>
+            <div class="skill-list">
+
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level foundation">Foundation</span>
+                <span class="skill-title">Types of strikes and lockouts</span>
+            </div>
+            <p class="skill-description">Intermittent/partial strike pitfalls; replacements and lawful lockout strategy.</p>
+        </div>
+
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level advanced">Advanced</span>
+                <span class="skill-title">Picketing & social media amplification</span>
+            </div>
+            <p class="skill-description">What changes in a viral era and how to respond lawfully.</p>
+        </div>
+
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level expert">Expert</span>
+                <span class="skill-title">Contingency planning</span>
+            </div>
+            <p class="skill-description">Checklists and communication protocols that minimize disruption.</p>
+        </div>
+
+            </div>
+        </div>
+
+        </div>
+
+        <div class="page-footer" style="">
+            <span>IAML | Institute for Applied Management & Law</span>
+            <span class="page-number">3</span>
+        </div>
+    
+    </div>
+
+    <div class="page curriculum-page">
+
+                <div class="block-header">
+                    <span class="block-label">Block II</span>
+                    <h2>Discrimination Prevention & Defense</h2>
+                    <div class="block-meta">
+                        <span class="block-days">2 Days</span>
+                        <span class="block-divider">|</span>
+                        <span class="block-price">$1,375</span>
+                    </div>
+                    <p class="block-description">Master discrimination law fundamentals across all protected classes. Learn how to identify workplace practices that expose your company to liability and implement preventive measures that strengthen your defense.</p>
+                    
+                </div>
+            
+        <div class="curriculum-content">
+            
+        <div class="competency-group">
+            <h4>Title VII: Discrimination, Harassment & Retaliation</h4>
+            <div class="skill-list">
+                
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level foundation">Foundation</span>
+                <span class="skill-title">Charge trends</span>
+            </div>
+            <p class="skill-description">Higher filings; retaliation remains most prevalent. Action items for intake, interim measures, and documentation.</p>
+        </div>
+    
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level advanced">Advanced</span>
+                <span class="skill-title">Harassment in hybrid workplaces</span>
+            </div>
+            <p class="skill-description">Chats/DMs, meeting recordings, and third-party/customer harassment. Practical controls.</p>
+        </div>
+    
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level advanced">Advanced</span>
+                <span class="skill-title">LGBTQ+ and sex-based claims post-Bostock; religious conflicts after Groff</span>
+            </div>
+            <p class="skill-description">Document undue hardship for schedules/duties while ensuring equal treatment.</p>
+        </div>
+    
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level expert">Expert</span>
+                <span class="skill-title">Reverse-discrimination / DEI backlash</span>
+            </div>
+            <p class="skill-description">Run compliant DEI: widen access, use merit-based selection, and lawful outreach amid scrutiny.</p>
+        </div>
+    
+            </div>
+        </div>
+    
+
+        <div class="competency-group">
+            <h4>ADA, PWFA, FMLA: Accommodation & Leave in a Hybrid World</h4>
+            <div class="skill-list">
+                
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level foundation">Foundation</span>
+                <span class="skill-title">Defining essential functions with remote options</span>
+            </div>
+            <p class="skill-description">Use defensible analyses and documented rationales.</p>
+        </div>
+    
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level advanced">Advanced</span>
+                <span class="skill-title">Mental-health accommodations and performance alignment</span>
+            </div>
+            <p class="skill-description">Balance supports with expectations and safety.</p>
+        </div>
+    
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level advanced">Advanced</span>
+                <span class="skill-title">PWFA / PUMP intersections</span>
+            </div>
+            <p class="skill-description">Scheduling and break implications; coordination with other laws.</p>
+        </div>
+    
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level expert">Expert</span>
+                <span class="skill-title">FMLA interference/retaliation traps</span>
+            </div>
+            <p class="skill-description">Coordinate ADA/FMLA/Workers' Comp to avoid compounding liability.</p>
+        </div>
+    
+            </div>
+        </div>
+    
+
+        <div class="competency-group">
+            <h4>ADEA & Equal Pay</h4>
+            <div class="skill-list">
+                
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level foundation">Foundation</span>
+                <span class="skill-title">Disparate impact and RIF selection</span>
+            </div>
+            <p class="skill-description">Build selection files that hold up and avoid age bias.</p>
+        </div>
+    
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level expert">Expert</span>
+                <span class="skill-title">Pay transparency and equal pay audits</span>
+            </div>
+            <p class="skill-description">Structure privileged audits and communications.</p>
+        </div>
+
+            </div>
+        </div>
+
+        <div class="competency-group">
+            <h4>Resolving Claims Without Litigation</h4>
+            <div class="skill-list">
+
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level foundation">Foundation</span>
+                <span class="skill-title">Internal resolution</span>
+            </div>
+            <p class="skill-description">Prompt, impartial investigations; what to share in outcome letters.</p>
+        </div>
+
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level advanced">Advanced</span>
+                <span class="skill-title">Arbitration & class/collective waivers</span>
+            </div>
+            <p class="skill-description">Enforceability trends; drafting updates for remote workers and electronic consent.</p>
+        </div>
+
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level expert">Expert</span>
+                <span class="skill-title">Pre-charge settlements and mediation</span>
+            </div>
+            <p class="skill-description">Best practices to resolve early with durable agreements.</p>
+        </div>
+
+            </div>
+        </div>
+
+        </div>
+
+        <div class="page-footer" style="">
+            <span>IAML | Institute for Applied Management & Law</span>
+            <span class="page-number">4</span>
+        </div>
+
+    </div>
+
+    <div class="page curriculum-page">
+        
+                <div class="block-header">
+                    <span class="block-label">Block III</span>
+                    <h2>Special Issues & Advanced Topics</h2>
+                    <div class="block-meta">
+                        <span class="block-days">Half Day</span>
+                        <span class="block-divider">|</span>
+                        <span class="block-price">$575</span>
+                    </div>
+                    <p class="block-description">Deep dive into complex employment law issues including wage and hour, wrongful discharge, workplace privacy, and post-employment restrictions.</p>
+                    
+                </div>
+            
+        <div class="curriculum-content">
+            
+        <div class="competency-group">
+            <h4>Wage & Hour (FLSA) Under Remote/Hybrid</h4>
+            <div class="skill-list">
+                
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level foundation">Foundation</span>
+                <span class="skill-title">Remote off-the-clock risk</span>
+            </div>
+            <p class="skill-description">Email/IM, rounding, device sync; travel time for split/hybrid days; audits for 'player-coach' roles.</p>
+        </div>
+    
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level advanced">Advanced</span>
+                <span class="skill-title">Commission/bonus/draw plans</span>
+            </div>
+            <p class="skill-description">Overtime calculations without tripping over spiffs and recoveries.</p>
+        </div>
+    
+            </div>
+        </div>
+    
+
+        <div class="competency-group">
+            <h4>Wrongful Discharge & Retaliation</h4>
+            <div class="skill-list">
+                
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level foundation">Foundation</span>
+                <span class="skill-title">'At-will with evidence'</span>
+            </div>
+            <p class="skill-description">Build the performance notes → PIP → termination timeline that defeats pretext.</p>
+        </div>
+    
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level advanced">Advanced</span>
+                <span class="skill-title">Protected activity lookback</span>
+            </div>
+            <p class="skill-description">Adverse-action timing; manager speech and political/off-duty conduct.</p>
+        </div>
+    
+            </div>
+        </div>
+    
+
+        <div class="competency-group">
+            <h4>Workplace Privacy & Monitoring</h4>
+            <div class="skill-list">
+
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level foundation">Foundation</span>
+                <span class="skill-title">Employee data privacy</span>
+            </div>
+            <p class="skill-description">CPRA and state analogs: notices, access requests, retention/deletion, and disciplinary use.</p>
+        </div>
+
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level advanced">Advanced</span>
+                <span class="skill-title">Monitoring productivity and keystrokes</span>
+            </div>
+            <p class="skill-description">Geolocation, BYOD, and personal-account discovery. Practical boundaries.</p>
+        </div>
+
+            </div>
+        </div>
+
+        <div class="competency-group">
+            <h4>Protecting Confidential Information & Mobility</h4>
+            <div class="skill-list">
+
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level foundation">Foundation</span>
+                <span class="skill-title">What remains enforceable</span>
+            </div>
+            <p class="skill-description">NDAs, non-solicits, trade-secret law: how to draft so they stick.</p>
+        </div>
+
+        <div class="skill-item">
+            <div class="skill-header">
+                <span class="skill-level advanced">Advanced</span>
+                <span class="skill-title">Garden leave and TRAPs</span>
+            </div>
+            <p class="skill-description">Training-repayment agreements and choice-of-law strategy across states.</p>
+        </div>
+
+            </div>
+        </div>
+
+        </div>
+
+        <div class="page-footer" style="">
+            <span>IAML | Institute for Applied Management & Law</span>
+            <span class="page-number">5</span>
+        </div>
+
+    </div>
+
+    <div class="page faculty-page">
+        <h2>Your Expert Instructors</h2>
+        <p>Learn from practicing attorneys and industry experts who bring real-world experience to every session.</p>
+        <div class="faculty-grid">
+            
+        <div class="faculty-card">
+            <div class="faculty-card-header">
+                <img class="faculty-photo" src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6954554b74830396d5415841.svg" alt="Sara Hamilton, Esq." onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" /><div class="faculty-photo-placeholder" style="display:none;">SH</div>
+                <div class="faculty-info">
+                    <h4>Sara Hamilton, Esq.</h4>
+                    <p class="faculty-title">Senior Director & Associate General Counsel, United Parcel Service, Inc.</p>
+                </div>
+            </div>
+            <p class="faculty-bio">Sara defends UPS against employment litigation while building programs that prevent disputes before they start. She brings 12+ years of experience from both in-house and BigLaw, plus a track record of community leadership, including founding Georgia's Korean American Bar Association during the rise of anti-AAPI hate.</p>
+        </div>
+    
+
+        <div class="faculty-card">
+            <div class="faculty-card-header">
+                <img class="faculty-photo" src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6911ef6e87254432cbd4b2fe.svg" alt="Brenda Heinicke, Esq." onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" /><div class="faculty-photo-placeholder" style="display:none;">BH</div>
+                <div class="faculty-info">
+                    <h4>Brenda Heinicke, Esq.</h4>
+                    <p class="faculty-title">Director, Global Employment Law, Terumo Blood & Cell Technologies</p>
+                </div>
+            </div>
+            <p class="faculty-bio">Brenda represents employers on discrimination, wage-and-hour compliance, workplace privacy, and wrongful termination disputes. She partners with HR professionals to prevent problems before they become lawsuits and has delivered dynamic, practical IAML training for over 15 years.</p>
+        </div>
+    
+
+        <div class="faculty-card">
+            <div class="faculty-card-header">
+                <img class="faculty-photo" src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebe98d66054ecb05fb.svg" alt="Wayne Williams, Esq." onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" /><div class="faculty-photo-placeholder" style="display:none;">WW</div>
+                <div class="faculty-info">
+                    <h4>Wayne Williams, Esq.</h4>
+                    <p class="faculty-title">Founder, Law Offices of Wayne Williams</p>
+                </div>
+            </div>
+            <p class="faculty-bio">Wayne advises employers on discrimination, harassment, wrongful discharge, wage-and-hour compliance, and traditional labor law. A former University of Colorado professor and IAML faculty member for over 20 years, he brings both courtroom experience and classroom clarity to every issue.</p>
+        </div>
+    
+
+        <div class="faculty-card">
+            <div class="faculty-card-header">
+                <img class="faculty-photo" src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebe98d665980cb05f7.svg" alt="Dawn Kubik, Esq." onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" /><div class="faculty-photo-placeholder" style="display:none;">DK</div>
+                <div class="faculty-info">
+                    <h4>Dawn Kubik, Esq.</h4>
+                    <p class="faculty-title">Of Counsel, Wymer Employment Law</p>
+                </div>
+            </div>
+            <p class="faculty-bio">Dawn represents employers in employment, contract, and insurance disputes with experience on both the plaintiff and defense sides. She champions a proactive approach to workplace issues, helping businesses prevent conflicts before they escalate into costly crises.</p>
+        </div>
+    
+
+        <div class="faculty-card">
+            <div class="faculty-card-header">
+                <img class="faculty-photo" src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667eb6947d87c78edcc71.svg" alt="Patrick Scully, Esq." onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" /><div class="faculty-photo-placeholder" style="display:none;">PS</div>
+                <div class="faculty-info">
+                    <h4>Patrick Scully, Esq.</h4>
+                    <p class="faculty-title">Partner, Foley Hoag LLP</p>
+                </div>
+            </div>
+            <p class="faculty-bio">Patrick navigates complex labor disputes, from unfair labor practice charges to federal court litigation. He advises employers through collective bargaining, union organizing drives, strikes, and corporate campaigns, turning persistent union challenges into resolved outcomes.</p>
+        </div>
+    
+
+        <div class="faculty-card">
+            <div class="faculty-card-header">
+                <img class="faculty-photo" src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690e254f27678e7871e709c4.svg" alt="Jacqueline Kalk, Esq." onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" /><div class="faculty-photo-placeholder" style="display:none;">JK</div>
+                <div class="faculty-info">
+                    <h4>Jacqueline Kalk, Esq.</h4>
+                    <p class="faculty-title">Shareholder at Littler Mendelson P.C., Wymer Employment Law</p>
+                </div>
+            </div>
+            <p class="faculty-bio">Jacqueline advises employers on independent contractor classification, wage-and-hour compliance, and equal pay, defending clients in state and federal courts. She helps organizations avoid litigation through compliant policies, worker classification analyses, and practical training programs.</p>
+        </div>
+    
+
+        <div class="faculty-card">
+            <div class="faculty-card-header">
+                <img class="faculty-photo" src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690e22920269a38b86c905cb.svg" alt="Rudi Turner, Esq." onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" /><div class="faculty-photo-placeholder" style="display:none;">RT</div>
+                <div class="faculty-info">
+                    <h4>Rudi Turner, Esq.</h4>
+                    <p class="faculty-title">Senior Corporate Counsel, White Cap</p>
+                </div>
+            </div>
+            <p class="faculty-bio">Rudi represents employers in discrimination, harassment, and wrongful termination disputes across state and federal courts. Beyond litigation, she helps organizations build policies that reduce risk before problems start.</p>
+        </div>
+
+
+        <div class="faculty-card">
+            <div class="faculty-card-header">
+                <img class="faculty-photo" src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690e229c43570019cba3b51f.svg" alt="Grant Gibeau, Esq." onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" /><div class="faculty-photo-placeholder" style="display:none;">GG</div>
+                <div class="faculty-info">
+                    <h4>Grant Gibeau, Esq.</h4>
+                    <p class="faculty-title">Partner, Taft Stettinius & Hollister LLP</p>
+                </div>
+            </div>
+            <p class="faculty-bio">Grant Gibeau defends employers against discrimination claims, wage-hour lawsuits, union challenges, and NLRB disputes. As a Taft partner in Minneapolis, he prevents workplace problems before they escalate and wins the battles that can't be avoided.</p>
+        </div>
+
+
+        <div class="faculty-card">
+            <div class="faculty-card-header">
+                <img class="faculty-photo" src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667ebba45f28666768ce6.svg" alt="John Wymer, Esq." onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" /><div class="faculty-photo-placeholder" style="display:none;">JW</div>
+                <div class="faculty-info">
+                    <h4>John Wymer, Esq.</h4>
+                    <p class="faculty-title">Partner, Thompson Hine LLP</p>
+                </div>
+            </div>
+            <p class="faculty-bio">John represents public and private sector employers in discrimination, wage-and-hour, labor negotiations, and ERISA disputes. He regularly appears before federal courts, the NLRB, EEOC, and Department of Labor and co-authors The Developing Labor Law.</p>
+        </div>
+
+        <div class="faculty-card">
+            <div class="faculty-card-header">
+                <img class="faculty-photo" src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/690667eb6947d86fd7edcc6f.svg" alt="Ray Deeny, Esq." onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" /><div class="faculty-photo-placeholder" style="display:none;">RD</div>
+                <div class="faculty-info">
+                    <h4>Ray Deeny, Esq.</h4>
+                    <p class="faculty-title">Partner, Taft Stettinius & Hollister LLP</p>
+                </div>
+            </div>
+            <p class="faculty-bio">Ray advises employers on labor relations, union avoidance, and collective bargaining strategy. With decades of experience guiding companies through organizing campaigns and contract negotiations, he brings practical insight to every labor law challenge.</p>
+        </div>
+
+        </div>
+
+        <div class="page-footer" style="">
+            <span>IAML | Institute for Applied Management & Law</span>
+            <span class="page-number">6</span>
+        </div>
+
+    </div>
+
+    <div class="page testimonials-page">
+        <h2>What Participants Say</h2>
+        <div class="testimonials-grid">
+            
+        <div class="testimonial-card">
+            <p class="testimonial-quote">"The seminar, in my opinion, was second to none. All of the information was very well delivered and explained in detail so that everyone, from the least to the most experienced, was able to understand. IAML did an outstanding job and I will be sure to highly recommend your seminars to anyone who inquires."</p>
+            <div class="testimonial-author">
+                <span class="testimonial-name">Laurie Keenan</span>
+                <span class="testimonial-role">Director of Human Resources, Mohegan Sun</span>
+            </div>
+        </div>
+    
+
+        <div class="testimonial-card">
+            <p class="testimonial-quote">"Information and materials were excellent, but the experiences shared by the facilitators was fantastic! Sam's interactive facilitation style really made the course very interesting and memorable. Thanks for a great course!"</p>
+            <div class="testimonial-author">
+                <span class="testimonial-name">Yvette Klepper</span>
+                <span class="testimonial-role">Chief Human Resources Officer, Palm Beach County Tax Collector's Office</span>
+            </div>
+        </div>
+    
+
+        <div class="testimonial-card">
+            <p class="testimonial-quote">"The classroom participation was excellent and allowed us to share situations and get other perspectives in a safe space. This was the best employee relations seminar that I've ever attended."</p>
+            <div class="testimonial-author">
+                <span class="testimonial-name">JoAnne Guerrant</span>
+                <span class="testimonial-role">Employee Relations Manager, Delta Community Credit Union</span>
+            </div>
+        </div>
+    
+
+        <div class="testimonial-card">
+            <p class="testimonial-quote">"One of the best training seminars I've attended! Very valuable to what I do every day, especially in reviewing litigation cases. There was much value in the interaction with other HR peers."</p>
+            <div class="testimonial-author">
+                <span class="testimonial-name">Jennifer Capozziello</span>
+                <span class="testimonial-role">AVP, Human Resources, Travelers</span>
+            </div>
+        </div>
+    
+
+        <div class="testimonial-card">
+            <p class="testimonial-quote">"This was by far, the best seminar I've ever attended! The materials provided are a great resource and the instructors did a great job of presenting the information."</p>
+            <div class="testimonial-author">
+                <span class="testimonial-name">Sylvia Ayala</span>
+                <span class="testimonial-role">Vice President, Human Resources, Gladney Center for Adoption</span>
+            </div>
+        </div>
+    
+
+        <div class="testimonial-card">
+            <p class="testimonial-quote">"Both of the presenters were fantastic! Brenda Heinicke's 'Friday Free for All' was a terrific way for us to discuss specific topics affecting our individual workplaces. The personal experiences shared by Patrick Scully of working for the NLRB were fascinating."</p>
+            <div class="testimonial-author">
+                <span class="testimonial-name">Kelly Stiles</span>
+                <span class="testimonial-role">Human Resources Manager, City of Unalaska, Alaska</span>
+            </div>
+        </div>
+    
+
+        <div class="testimonial-card">
+            <p class="testimonial-quote">"Wayne Williams' intellect and energy truly made this an interactive session which is paramount for all adult learning. Kudos to him and to IAML!"</p>
+            <div class="testimonial-author">
+                <span class="testimonial-name">Michael Cook</span>
+                <span class="testimonial-role">Corporate Employee Relations Manager, MillerCoors</span>
+            </div>
+        </div>
+    
+
+        <div class="testimonial-card">
+            <p class="testimonial-quote">"This is one of the best seminars I have ever attended. The instructors are well informed and have a repertoire of stories that emphasize the issues. Course materials are also excellent!"</p>
+            <div class="testimonial-author">
+                <span class="testimonial-name">Debbie Colia</span>
+                <span class="testimonial-role">HR Executive Consultant, Cedars-Sinai</span>
+            </div>
+        </div>
+    
+        </div>
+        
+        <div class="page-footer" style="">
+            <span>IAML | Institute for Applied Management & Law</span>
+            <span class="page-number">7</span>
+        </div>
+
+    </div>
+
+    <div class="page sessions-page">
+        <h2>Upcoming In-Person Sessions</h2>
+        <p>Choose the location that works best for your schedule.</p>
+        <div class="sessions-list-vertical">
+
+            <div class="session-card-horizontal">
+                <img class="session-image-horizontal" src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c454ca7298b50b678d83.jpg" alt="Atlanta" />
+                <div class="session-details-horizontal">
+                    <div class="session-date-large">Apr 20 - Apr 24, 2026</div>
+                    <div class="session-location-large">Atlanta, Georgia</div>
+                    <div class="session-format-badge">In-Person</div>
+                </div>
+            </div>
+
+            <div class="session-card-horizontal">
+                <img class="session-image-horizontal" src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c539d7ebf250f264ca1d.jpg" alt="Scottsdale" />
+                <div class="session-details-horizontal">
+                    <div class="session-date-large">Jun 1 - Jun 5, 2026</div>
+                    <div class="session-location-large">Scottsdale, Arizona</div>
+                    <div class="session-format-badge">In-Person</div>
+                </div>
+            </div>
+
+            <div class="session-card-horizontal">
+                <img class="session-image-horizontal" src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4719a634f6065ac7644.jpg" alt="Austin" />
+                <div class="session-details-horizontal">
+                    <div class="session-date-large">Jun 8 - Jun 12, 2026</div>
+                    <div class="session-location-large">Austin, Texas</div>
+                    <div class="session-format-badge">In-Person</div>
+                </div>
+            </div>
+
+            <div class="session-card-horizontal">
+                <img class="session-image-horizontal" src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c539d7ebf250f264ca1d.jpg" alt="Nashville" />
+                <div class="session-details-horizontal">
+                    <div class="session-date-large">Aug 17 - Aug 21, 2026</div>
+                    <div class="session-location-large">Nashville, Tennessee</div>
+                    <div class="session-format-badge">In-Person</div>
+                </div>
+            </div>
+
+        </div>
+        <p class="sessions-note">Visit <strong>iaml.com</strong> for all sessions and registration.</p>
+        
+        <div class="page-footer" style="">
+            <span>IAML | Institute for Applied Management & Law</span>
+            <span class="page-number">8</span>
+        </div>
+
+    </div>
+
+    <div class="page details-page">
+        <h2>Program Details</h2>
+        <div class="details-grid">
+            <div class="detail-card">
+                <h3>Investment</h3>
+                <p class="price-highlight">$2,375</p>
+                <p class="text-small mt-1">Includes all instruction, materials, and continuing education credits</p>
+            </div>
+            <div class="detail-card">
+                <h3>Professional Credits</h3>
+                <p><span class="credits-badge">29.75</span></p>
+                <p class="text-small mt-1">SHRM, HRCI, and CLE credits included</p>
+            </div>
+            <div class="detail-card">
+                <h3>Delivery Options</h3>
+                <ul>
+                    <li>In Person sessions available</li>
+<li>Virtual sessions available</li>
+<li>On Demand sessions available</li>
+                </ul>
+            </div>
+            <div class="detail-card">
+                <h3>What's Included</h3>
+                <ul>
+                    <li>Live instruction from practicing attorneys</li>
+                    <li>Complete program materials</li>
+                    <li>12 months of quarterly updates</li>
+                    <li>15% alumni discount on future programs</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="page-footer" style="">
+            <span>IAML | Institute for Applied Management & Law</span>
+            <span class="page-number">9</span>
+        </div>
+
+    </div>
+
+    <div class="page details-page">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-section">
+            
+            <div class="faq-item">
+                <p class="faq-question">Can I attend just one or two blocks instead of the full program?</p>
+                <p class="faq-answer">Yes. While most participants get the best value from the complete 4½-day program, you can register for individual blocks based on your immediate needs. Block I (Labor Relations) and Block II (Discrimination Law) are each $1,375 individually, while Block III (Special Issues) is $575. The full program at $2,375 saves you $1,000 versus purchasing all blocks separately.</p>
+            </div>
+        
+
+            <div class="faq-item">
+                <p class="faq-question">What's the difference between in-person, virtual, and on-demand formats?</p>
+                <p class="faq-answer">All three formats feature the same practicing attorney instructors, current content, and professional credits. In-person provides face-to-face networking and immediate interaction. Virtual delivers the same live instruction via Zoom with full Q&A capability. On-demand lets you learn at your own pace over 90 days with the ability to pause and revisit complex topics. Choose the format that fits your schedule and learning style. The quality and content remain identical.</p>
+            </div>
+        
+
+            <div class="faq-item">
+                <p class="faq-question">What continuing education credits will I earn?</p>
+                <p class="faq-answer">The complete program provides 29.75 SHRM/HRCI/CLE credits. Plus, your enrollment includes 12 months of quarterly employment law updates (4 sessions × 1.5 credits each = 6 additional credits), bringing your total to 35.75 credits, typically more than HR professionals earn in two years.</p>
+            </div>
+
+            <div class="faq-item">
+                <p class="faq-question">How current is the content? When was it last updated?</p>
+                <p class="faq-answer">Your materials are living resources that update continuously as employment law changes. Unlike static textbooks that become outdated immediately after publication, our content reflects current court decisions, regulatory changes, and compliance requirements. Recent updates include the NLRB's Cemex decision on organizing, the Stericycle handbook standards, post-Bostock LGBTQ+ protections, and state-specific AI hiring regulations.</p>
+            </div>
+
+            <div class="faq-item">
+                <p class="faq-question">Why do you emphasize practicing attorneys, not academics?</p>
+                <p class="faq-answer">Your instructors handle employment law cases, defend discrimination charges, and advise employers on these exact issues daily. They're not teaching from textbooks. They're sharing strategies that work in actual courtrooms and real workplaces. When you ask what do I do about a specific situation, they answer from direct experience, not theory.</p>
+            </div>
+
+            <div class="faq-item">
+                <p class="faq-question">Does the $2,375 program fee include everything?</p>
+                <p class="faq-answer">Yes. Your enrollment includes all live instruction, complete program materials, 29.75 continuing education credits, pre-program consultation, 12 months of quarterly employment law updates (4 sessions, $1,588 value), permanent access to living resources, and alumni benefits for all future programs. There are no hidden fees or additional charges.</p>
+            </div>
+
+        </div>
+
+        <div class="page-footer" style="">
+            <span>IAML | Institute for Applied Management & Law</span>
+            <span class="page-number">10</span>
+        </div>
+
+    </div>
+
+    <div class="page cta-page">
+        <h2>Take the Next Step</h2>
+        <div class="cta-content">
+            <p>Join HR professionals and employment attorneys who have mastered Certificate in Employee Relations Law. Build the legal foundation that protects your organization and advances your career.</p>
+        </div>
+        <div class="qr-section">
+            <img class="qr-code" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Fiaml.com%2Fprograms%2Femployee-relations-law.html" alt="Scan to Register" />
+            <p class="qr-label">Scan to Register</p>
+        </div>
+        <div class="cta-button">Reserve Your Spot</div>
+        <p class="cta-url">Visit <strong>iaml.com</strong> to view upcoming sessions and register</p>
+        <div class="contact-info">
+            <p><strong>Questions?</strong></p>
+            <p>Email: info@iaml.com | Phone: (949) 760-1700</p>
+        </div>
+        
+        <div class="page-footer" style="border-top-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.6);">
+            <span>IAML | Institute for Applied Management & Law</span>
+            <span class="page-number">11</span>
+        </div>
+
+    </div>
+</body></html>
