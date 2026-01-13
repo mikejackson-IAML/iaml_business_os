@@ -19,6 +19,9 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
+const sharp = require('sharp');
+const https = require('https');
+const http = require('http');
 
 // Configuration
 const CONFIG = {
@@ -82,6 +85,85 @@ function loadUpcomingSessions(programName) {
 function loadCss() {
     const cssPath = path.join(CONFIG.templatesDir, CONFIG.cssFile);
     return fs.readFileSync(cssPath, 'utf-8');
+}
+
+// ============================================
+// IMAGE OPTIMIZATION
+// ============================================
+
+// Cache for optimized image data URIs
+const imageCache = new Map();
+
+/**
+ * Fetch an image from URL and return as Buffer
+ */
+function fetchImage(url) {
+    return new Promise((resolve, reject) => {
+        const client = url.startsWith('https') ? https : http;
+        client.get(url, (res) => {
+            if (res.statusCode === 301 || res.statusCode === 302) {
+                fetchImage(res.headers.location).then(resolve).catch(reject);
+                return;
+            }
+            if (res.statusCode !== 200) {
+                reject(new Error(`Failed to fetch ${url}: ${res.statusCode}`));
+                return;
+            }
+            const chunks = [];
+            res.on('data', chunk => chunks.push(chunk));
+            res.on('end', () => resolve(Buffer.concat(chunks)));
+            res.on('error', reject);
+        }).on('error', reject);
+    });
+}
+
+/**
+ * Optimize an image URL and return a data URI
+ * @param {string} url - Image URL
+ * @param {number} maxWidth - Maximum width in pixels
+ * @param {number} quality - JPEG quality (1-100)
+ */
+async function optimizeImageUrl(url, maxWidth = 300, quality = 70) {
+    // Return cached version if available
+    const cacheKey = `${url}-${maxWidth}-${quality}`;
+    if (imageCache.has(cacheKey)) {
+        return imageCache.get(cacheKey);
+    }
+
+    try {
+        // Skip SVGs - they're already small
+        if (url.endsWith('.svg') || url.includes('.svg')) {
+            return url;
+        }
+
+        // Skip QR codes - they're generated at appropriate size
+        if (url.includes('qrserver.com')) {
+            return url;
+        }
+
+        console.log(`  Optimizing: ${url.substring(0, 60)}...`);
+        const imageBuffer = await fetchImage(url);
+
+        // Resize and compress with sharp
+        const optimized = await sharp(imageBuffer)
+            .resize(maxWidth, null, { withoutEnlargement: true })
+            .jpeg({ quality })
+            .toBuffer();
+
+        const dataUri = `data:image/jpeg;base64,${optimized.toString('base64')}`;
+
+        // Cache the result
+        imageCache.set(cacheKey, dataUri);
+
+        const originalKB = Math.round(imageBuffer.length / 1024);
+        const optimizedKB = Math.round(optimized.length / 1024);
+        console.log(`    ${originalKB}KB -> ${optimizedKB}KB (${Math.round((1 - optimizedKB/originalKB) * 100)}% reduction)`);
+
+        return dataUri;
+    } catch (error) {
+        console.warn(`  Failed to optimize ${url}: ${error.message}`);
+        return url; // Return original URL on failure
+    }
 }
 
 // ============================================
@@ -427,17 +509,24 @@ function generateTestimonialsPage(testimonials, pageNum) {
     };
 }
 
-function generateUpcomingSessionsPage(sessions, pageNum) {
+async function generateUpcomingSessionsPage(sessions, pageNum) {
     if (!sessions || sessions.length === 0) {
         return { html: '', count: 0 };
     }
 
-    const sessionsHtml = sessions.map(session => {
+    // Optimize session images (these are often very large)
+    console.log('Optimizing session images...');
+    const sessionsHtml = await Promise.all(sessions.map(async session => {
         const fields = session.fields;
         const startDate = new Date(fields['Start Date']);
         const endDate = new Date(fields['End Date']);
-        const imageUrl = fields['Hero Image URL'];
+        let imageUrl = fields['Hero Image URL'];
         const venueName = fields['Venue Name (from Venue)']?.[0] || '';
+
+        // Optimize the session image (max 400px wide for brochure)
+        if (imageUrl) {
+            imageUrl = await optimizeImageUrl(imageUrl, 400, 75);
+        }
 
         return `
             <div class="session-card-horizontal">
@@ -450,7 +539,7 @@ function generateUpcomingSessionsPage(sessions, pageNum) {
                 </div>
             </div>
         `;
-    }).join('\n');
+    }));
 
     return {
         html: `
@@ -458,7 +547,7 @@ function generateUpcomingSessionsPage(sessions, pageNum) {
         <h2>Upcoming Sessions</h2>
         <p>Choose the location and format that works best for your schedule.</p>
         <div class="sessions-list-vertical">
-            ${sessionsHtml}
+            ${sessionsHtml.join('\n')}
         </div>
         <p class="sessions-note">Visit <strong>iaml.com</strong> for all sessions and registration.</p>
         ${generatePageFooter(pageNum)}
@@ -580,7 +669,7 @@ function generateCtaPage(programData, pageNum) {
 // MAIN BUILD FUNCTION
 // ============================================
 
-function buildBrochureHtml(programData, facultyData, sessions) {
+async function buildBrochureHtml(programData, facultyData, sessions) {
     const program = programData.program || programData;
     const programName = program.name || programData.programName || 'Program';
     const css = loadCss();
@@ -614,8 +703,8 @@ function buildBrochureHtml(programData, facultyData, sessions) {
     html += testimonialResult.html;
     pageNum += testimonialResult.count;
 
-    // Upcoming sessions
-    const sessionsResult = generateUpcomingSessionsPage(sessions, pageNum);
+    // Upcoming sessions (async - optimizes images)
+    const sessionsResult = await generateUpcomingSessionsPage(sessions, pageNum);
     html += sessionsResult.html;
     pageNum += sessionsResult.count;
 
@@ -650,12 +739,19 @@ async function generatePdf(html, outputPath) {
 
     try {
         const page = await browser.newPage();
+
+        // Set viewport to standard Letter size at 96 DPI
+        await page.setViewport({ width: 816, height: 1056, deviceScaleFactor: 1 });
+
+        // Emulate print media for optimized rendering
+        await page.emulateMediaType('print');
+
         await page.setContent(html, {
             waitUntil: ['networkidle0', 'domcontentloaded']
         });
 
-        // Wait for fonts and images
-        await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 1000)));
+        // Wait for fonts and images to load
+        await page.evaluate(() => new Promise(resolve => setTimeout(resolve, 1500)));
 
         await page.pdf({
             path: outputPath,
@@ -684,7 +780,7 @@ async function generateBrochure(slug) {
 
         console.log(`Found ${sessions.length} upcoming sessions`);
 
-        const html = buildBrochureHtml(programData, facultyData, sessions);
+        const html = await buildBrochureHtml(programData, facultyData, sessions);
 
         if (!fs.existsSync(CONFIG.outputDir)) {
             fs.mkdirSync(CONFIG.outputDir, { recursive: true });

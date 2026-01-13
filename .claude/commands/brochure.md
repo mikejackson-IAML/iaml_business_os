@@ -30,12 +30,14 @@ When invoked, this skill follows a hybrid content generation workflow:
 ### Phase 2: Content Generation
 Generate brochure copy applying IAML brand voice:
 - **Cover**: Program name and compelling tagline
-- **Overview**: What you'll learn, who it's for
-- **Curriculum**: Key competencies organized by level (Foundation → Advanced → Expert)
-- **Faculty**: Featured instructors with credentials
-- **Testimonials**: Selected participant quotes
-- **Details**: Pricing, credits, delivery options, FAQs
-- **CTA**: Registration call-to-action
+- **Overview**: What you'll learn, who it's for, pre-program consultation section
+- **Curriculum**: Full content for each block with individual pricing (Foundation → Advanced → Expert)
+- **Faculty**: Up to 8 instructors with full bios
+- **Testimonials**: Up to 8 participant quotes
+- **Upcoming Sessions**: Up to 5 sessions with location images and dates
+- **Details**: Pricing, credits, delivery options
+- **FAQs**: All available FAQs from program data
+- **CTA**: Registration call-to-action with QR code
 
 ### Phase 3: Human Approval Checkpoint
 Present the draft content for review:
@@ -60,6 +62,13 @@ Content should follow IAML voice (from `brand-voice.md`):
 
 **Preferred words**: Protect, Practical, Navigate, Equip, Partner
 **Avoid**: Simple, Just, Obviously, Comprehensive, Solutions, Leverage
+
+**Formatting rules**:
+- Use regular dashes (-) or rewrite sentences to avoid em-dashes (—)
+- Use "faculty" not "instructors"
+- Use "program" not "seminar" or "course"
+- Use "participants" not "students"
+- Use "practicing attorneys" consistently
 
 ## Output
 
@@ -138,11 +147,12 @@ When the user invokes `/brochure [slug]`:
 
 3. **Generate content sections** (applying brand voice):
    - Cover headline and tagline
-   - Program overview (2-3 paragraphs)
-   - Curriculum highlights (condensed competency groups)
-   - Faculty selection (top 3-4 with bios)
-   - Testimonials (best 3 quotes)
-   - FAQ highlights (top 3)
+   - Program overview (2-3 paragraphs) with pre-program consultation section
+   - Curriculum: full content for each block with individual pricing
+   - Faculty selection (up to 8 instructors with bios)
+   - Testimonials (up to 8 quotes, scored for impact)
+   - Upcoming sessions (up to 5 sessions with location images)
+   - FAQs (all available FAQs from program data)
    - CTA copy
 
 4. **Present for approval**:
@@ -159,11 +169,11 @@ When the user invokes `/brochure [slug]`:
    CURRICULUM HIGHLIGHTS:
      [condensed list]
 
-   FACULTY (4 selected):
+   FACULTY (up to 8 selected):
      - [name] - [title]
      ...
 
-   TESTIMONIALS (3 selected):
+   TESTIMONIALS (up to 8 selected):
      - "[quote]" - [name], [company]
      ...
 

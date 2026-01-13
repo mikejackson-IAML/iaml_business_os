@@ -353,7 +353,7 @@
 .mega-menu-benefits li {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     padding: 8px 0;
     font-size: 14px;
     color: var(--gray-700, #334155);

@@ -8,13 +8,6 @@
       "command": "npx",
       "args": ["-y", "@upstash/context7-mcp"]
     },
-    "supabase": {
-      "type": "http",
-      "url": "https://mcp.supabase.com/mcp?project_ref=${SUPABASE_PROJECT_REF}",
-      "headers": {
-        "Authorization": "Bearer ${SUPABASE_TOKEN}"
-      }
-    },
     "n8n": {
       "command": "npx",
       "args": ["-y", "@leonardsellem/n8n-mcp-server"],

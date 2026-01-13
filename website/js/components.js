@@ -108,10 +108,10 @@ const getHeaderHTML = () => `
               </ul>
               <h3 class="mega-menu-heading" style="margin-top: 24px;">Why Teams Choose Us</h3>
               <ul class="mega-menu-benefits">
-                  <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Same content, your location</li>
-                  <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Customize for your industry</li>
-                  <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Confidential Q&amp;A</li>
-                  <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Group pricing available</li>
+                  <li><span class="benefit-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span><span>Same content, your location</span></li>
+                  <li><span class="benefit-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span><span>Customize for your industry</span></li>
+                  <li><span class="benefit-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span><span>Confidential Q&amp;A</span></li>
+                  <li><span class="benefit-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span><span>Group pricing available</span></li>
               </ul>
           </div>
           <div class="mega-menu-column mega-menu-cta-panel">
