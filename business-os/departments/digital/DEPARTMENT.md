@@ -35,6 +35,7 @@ Interactive roles you can invoke via commands.
 | QA Specialist | Test sites, verify deployments, run audits | `/smoke`, `/fullqa`, `/a11y`, `/responsive`, `/links` |
 | DevOps Specialist | Deploy, monitor, optimize infrastructure | `/deploy`, `/preview`, `/speed-optimize` |
 | Content Specialist | Optimize content for SEO and brand voice | `/seo-optimize`, `/brand-upgrade`, `/brochure` |
+| Team Coordinator | Manage agent parallelism and task routing | `/workflow-multiplier`, `offload` |
 
 ---
 
