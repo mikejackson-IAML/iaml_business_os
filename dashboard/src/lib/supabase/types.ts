@@ -269,6 +269,176 @@ export type Database = {
           metadata?: Json | null;
         };
       };
+      // Lead Intelligence Tables
+      domains: {
+        Row: {
+          id: string;
+          domain_name: string;
+          status: 'active' | 'warming' | 'resting' | 'blacklisted';
+          daily_limit: number;
+          warmup_day: number | null;
+          warmup_start_date: string | null;
+          warmup_target_limit: number | null;
+          health_score: number;
+          bounce_rate: number;
+          spam_rate: number;
+          open_rate: number;
+          sent_today: number;
+          sent_this_week: number;
+          last_sent_at: string | null;
+          cooldown_until: string | null;
+          cooldown_reason: string | null;
+          platform: string;
+          platform_domain_id: string | null;
+          notes: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          domain_name: string;
+          status?: 'active' | 'warming' | 'resting' | 'blacklisted';
+          daily_limit?: number;
+          platform?: string;
+        };
+        Update: {
+          status?: 'active' | 'warming' | 'resting' | 'blacklisted';
+          daily_limit?: number;
+          health_score?: number;
+          bounce_rate?: number;
+          spam_rate?: number;
+          sent_today?: number;
+        };
+      };
+      domain_health_log: {
+        Row: {
+          id: string;
+          domain_id: string;
+          log_date: string;
+          health_score: number | null;
+          bounce_rate: number | null;
+          spam_rate: number | null;
+          open_rate: number | null;
+          emails_sent: number | null;
+          status: string | null;
+          created_at: string;
+        };
+        Insert: {
+          domain_id: string;
+          log_date: string;
+          health_score?: number | null;
+          bounce_rate?: number | null;
+        };
+        Update: {
+          health_score?: number | null;
+          bounce_rate?: number | null;
+        };
+      };
+      lead_sources: {
+        Row: {
+          id: string;
+          name: string;
+          display_name: string;
+          source_type: string | null;
+          status: 'operational' | 'degraded' | 'down' | 'rate_limited';
+          last_status_check: string | null;
+          error_message: string | null;
+          credits_remaining: number | null;
+          credits_total: number | null;
+          daily_limit_used: number;
+          daily_limit_total: number | null;
+          api_endpoint: string | null;
+          settings: Json;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          name: string;
+          display_name: string;
+          source_type?: string | null;
+        };
+        Update: {
+          status?: 'operational' | 'degraded' | 'down' | 'rate_limited';
+          credits_remaining?: number | null;
+          daily_limit_used?: number;
+          error_message?: string | null;
+        };
+      };
+      lead_imports: {
+        Row: {
+          id: string;
+          source_id: string | null;
+          source_name: string;
+          import_name: string | null;
+          leads_sourced: number;
+          leads_validated: number;
+          leads_enriched: number;
+          leads_ready: number;
+          leads_rejected: number;
+          validation_rate: number | null;
+          enrichment_rate: number | null;
+          duplicate_rate: number | null;
+          status: 'pending' | 'processing' | 'completed' | 'failed';
+          error_message: string | null;
+          metadata: Json;
+          imported_at: string;
+          completed_at: string | null;
+        };
+        Insert: {
+          source_name: string;
+          leads_sourced?: number;
+          import_name?: string | null;
+        };
+        Update: {
+          leads_validated?: number;
+          leads_enriched?: number;
+          leads_ready?: number;
+          status?: 'pending' | 'processing' | 'completed' | 'failed';
+        };
+      };
+      sending_capacity: {
+        Row: {
+          id: string;
+          calculation_date: string;
+          total_daily_capacity: number | null;
+          used_capacity: number | null;
+          available_capacity: number | null;
+          active_domains: number | null;
+          warming_domains: number | null;
+          resting_domains: number | null;
+          blacklisted_domains: number | null;
+          utilization_percent: number | null;
+          calculated_at: string;
+        };
+        Insert: {
+          calculation_date: string;
+          total_daily_capacity: number;
+        };
+        Update: {
+          used_capacity?: number;
+          utilization_percent?: number;
+        };
+      };
+      lead_intelligence_activity: {
+        Row: {
+          id: string;
+          activity_type: string;
+          description: string | null;
+          source_name: string | null;
+          domain_id: string | null;
+          lead_import_id: string | null;
+          lead_source_id: string | null;
+          metadata: Json;
+          activity_at: string;
+        };
+        Insert: {
+          activity_type: string;
+          description?: string | null;
+          source_name?: string | null;
+        };
+        Update: {
+          metadata?: Json;
+        };
+      };
     };
     Views: {
       campaign_funnel: {
@@ -292,6 +462,47 @@ export type Database = {
           paused: number | null;
           replied: number | null;
           hot_leads: number | null;
+        };
+      };
+      // Lead Intelligence Views
+      domain_summary: {
+        Row: {
+          total_domains: number | null;
+          active_domains: number | null;
+          warming_domains: number | null;
+          resting_domains: number | null;
+          blacklisted_domains: number | null;
+          avg_active_health: number | null;
+          avg_overall_health: number | null;
+          total_active_capacity: number | null;
+          total_sent_today: number | null;
+        };
+      };
+      lead_pipeline_summary: {
+        Row: {
+          leads_sourced_week: number | null;
+          leads_validated_week: number | null;
+          leads_enriched_week: number | null;
+          leads_ready_week: number | null;
+          leads_rejected_week: number | null;
+          avg_validation_rate: number | null;
+          import_count: number | null;
+        };
+      };
+      capacity_dashboard: {
+        Row: {
+          id: string;
+          calculation_date: string;
+          total_daily_capacity: number | null;
+          used_capacity: number | null;
+          available_capacity: number | null;
+          active_domains: number | null;
+          warming_domains: number | null;
+          resting_domains: number | null;
+          blacklisted_domains: number | null;
+          utilization_percent: number | null;
+          calculated_at: string;
+          status: 'healthy' | 'warning' | 'critical';
         };
       };
     };
