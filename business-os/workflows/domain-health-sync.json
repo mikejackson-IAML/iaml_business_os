@@ -1,0 +1,357 @@
+{
+  "name": "Domain Health Sync - Daily",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "triggerAtHour": 6
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Daily 6am",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "url": "=https://server.smartlead.ai/api/v1/email-accounts?api_key={{ $env.SMARTLEAD_API_KEY }}",
+        "options": {}
+      },
+      "id": "get-email-accounts",
+      "name": "Get Email Accounts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [224, 0]
+    },
+    {
+      "parameters": {
+        "url": "=https://server.smartlead.ai/api/v1/analytics/mailbox/domain-wise-health?api_key={{ $env.SMARTLEAD_API_KEY }}",
+        "options": {}
+      },
+      "id": "get-domain-health",
+      "name": "Get Domain Health",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [224, 200]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "id": "merge-data",
+      "name": "Merge Data",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [448, 100]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "domain_name",
+              "name": "domain_name",
+              "value": "={{ $json.from_email?.split('@')[1] ?? $json.domain ?? 'unknown' }}",
+              "type": "string"
+            },
+            {
+              "id": "status",
+              "name": "status",
+              "value": "={{ $json.warmup_enabled ? 'warming' : ($json.is_active ? 'active' : 'resting') }}",
+              "type": "string"
+            },
+            {
+              "id": "daily_limit",
+              "name": "daily_limit",
+              "value": "={{ $json.max_email_per_day ?? 50 }}",
+              "type": "number"
+            },
+            {
+              "id": "warmup_day",
+              "name": "warmup_day",
+              "value": "={{ $json.warmup_details?.warmup_day ?? null }}",
+              "type": "number"
+            },
+            {
+              "id": "bounce_rate",
+              "name": "bounce_rate",
+              "value": "={{ $json.bounce_rate ?? 0 }}",
+              "type": "number"
+            },
+            {
+              "id": "spam_rate",
+              "name": "spam_rate",
+              "value": "={{ $json.spam_rate ?? 0 }}",
+              "type": "number"
+            },
+            {
+              "id": "open_rate",
+              "name": "open_rate",
+              "value": "={{ $json.open_rate ?? 0 }}",
+              "type": "number"
+            },
+            {
+              "id": "sent_today",
+              "name": "sent_today",
+              "value": "={{ $json.sent_count_today ?? 0 }}",
+              "type": "number"
+            },
+            {
+              "id": "smartlead_account_id",
+              "name": "smartlead_account_id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "transform-domain-data",
+      "name": "Transform Domain Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [672, 100]
+    },
+    {
+      "parameters": {
+        "url": "=https://api.mxtoolbox.com/api/v1/Lookup/blacklist/{{ $json.domain_name }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ $env.MXTOOLBOX_API_KEY }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "check-blacklist",
+      "name": "Check Blacklist",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [896, 100],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "blacklist_count",
+              "name": "blacklist_count",
+              "value": "={{ $json.Failed?.length ?? 0 }}",
+              "type": "number"
+            },
+            {
+              "id": "blacklist_score",
+              "name": "blacklist_score",
+              "value": "={{ ($json.Failed?.length ?? 0) === 0 ? 100 : ($json.Failed?.length < 3 ? 50 : 0) }}",
+              "type": "number"
+            },
+            {
+              "id": "health_score",
+              "name": "health_score",
+              "value": "={{ Math.round(Math.max(0, Math.min(100, (100 - ($('Transform Domain Data').item.json.bounce_rate * 10)) * 0.30 + (100 - ($('Transform Domain Data').item.json.spam_rate * 20)) * 0.30 + (($json.Failed?.length ?? 0) === 0 ? 100 : 0) * 0.20 + ($('Transform Domain Data').item.json.open_rate ?? 30) * 0.20))) }}",
+              "type": "number"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "include": "selected",
+        "options": {}
+      },
+      "id": "calculate-health-score",
+      "name": "Calculate Health Score",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1120, 100]
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": "public",
+        "table": "domains",
+        "conflictColumns": ["domain_name"],
+        "columns": "domain_name, status, daily_limit, warmup_day, health_score, bounce_rate, spam_rate, open_rate, sent_today, platform_domain_id, updated_at",
+        "columnValues": "={{ $json.domain_name }}, {{ $json.status }}, {{ $json.daily_limit }}, {{ $json.warmup_day }}, {{ $json.health_score }}, {{ $json.bounce_rate }}, {{ $json.spam_rate }}, {{ $json.open_rate }}, {{ $json.sent_today }}, {{ $json.smartlead_account_id }}, NOW()"
+      },
+      "id": "upsert-domain",
+      "name": "Upsert Domain",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [1344, 0],
+      "credentials": {
+        "supabaseApi": {
+          "id": "3CPchaCatw5WmkUQ",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "public",
+        "table": "domain_health_log",
+        "columns": "domain_id, log_date, health_score, bounce_rate, spam_rate, open_rate, emails_sent, status",
+        "columnValues": "={{ $json.domain_id }}, CURRENT_DATE, {{ $json.health_score }}, {{ $json.bounce_rate }}, {{ $json.spam_rate }}, {{ $json.open_rate }}, {{ $json.sent_today }}, {{ $json.status }}"
+      },
+      "id": "log-health",
+      "name": "Log to History",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [1344, 200],
+      "credentials": {
+        "supabaseApi": {
+          "id": "3CPchaCatw5WmkUQ",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-health",
+              "leftValue": "={{ $json.health_score }}",
+              "rightValue": 70,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "check-alerts",
+      "name": "Health Below 70?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [1568, 100]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "public",
+        "table": "lead_intelligence_activity",
+        "columns": "activity_type, description, source_name, metadata, activity_at",
+        "columnValues": "domain_health_warning, Domain {{ $json.domain_name }} health score dropped to {{ $json.health_score }}, smartlead, {\"domain\": \"{{ $json.domain_name }}\", \"health_score\": {{ $json.health_score }}, \"bounce_rate\": {{ $json.bounce_rate }}}, NOW()"
+      },
+      "id": "log-alert",
+      "name": "Log Health Alert",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [1792, 0],
+      "credentials": {
+        "supabaseApi": {
+          "id": "3CPchaCatw5WmkUQ",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \":warning: *Domain Health Alert*\\n\\n*Domain:* {{ $json.domain_name }}\\n*Health Score:* {{ $json.health_score }}/100\\n*Bounce Rate:* {{ $json.bounce_rate }}%\\n*Spam Rate:* {{ $json.spam_rate }}%\\n\\nReview in Lead Intelligence Dashboard.\"\n}",
+        "options": {}
+      },
+      "id": "slack-alert",
+      "name": "Slack Health Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1792, 160]
+    }
+  ],
+  "connections": {
+    "Daily 6am": {
+      "main": [
+        [
+          {"node": "Get Email Accounts", "type": "main", "index": 0},
+          {"node": "Get Domain Health", "type": "main", "index": 0}
+        ]
+      ]
+    },
+    "Get Email Accounts": {
+      "main": [
+        [{"node": "Merge Data", "type": "main", "index": 0}]
+      ]
+    },
+    "Get Domain Health": {
+      "main": [
+        [{"node": "Merge Data", "type": "main", "index": 1}]
+      ]
+    },
+    "Merge Data": {
+      "main": [
+        [{"node": "Transform Domain Data", "type": "main", "index": 0}]
+      ]
+    },
+    "Transform Domain Data": {
+      "main": [
+        [{"node": "Check Blacklist", "type": "main", "index": 0}]
+      ]
+    },
+    "Check Blacklist": {
+      "main": [
+        [{"node": "Calculate Health Score", "type": "main", "index": 0}]
+      ]
+    },
+    "Calculate Health Score": {
+      "main": [
+        [
+          {"node": "Upsert Domain", "type": "main", "index": 0},
+          {"node": "Log to History", "type": "main", "index": 0},
+          {"node": "Health Below 70?", "type": "main", "index": 0}
+        ]
+      ]
+    },
+    "Health Below 70?": {
+      "main": [
+        [
+          {"node": "Log Health Alert", "type": "main", "index": 0},
+          {"node": "Slack Health Alert", "type": "main", "index": 0}
+        ],
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {},
+  "triggerCount": 1,
+  "tags": [
+    {"name": "lead-intelligence"},
+    {"name": "domain-health"}
+  ]
+}

@@ -1,0 +1,311 @@
+{
+  "name": "Capacity Tracker - Hourly",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Every Hour",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "url": "=https://server.smartlead.ai/api/v1/email-accounts?api_key={{ $env.SMARTLEAD_API_KEY }}",
+        "options": {}
+      },
+      "id": "get-accounts",
+      "name": "Get Email Accounts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [224, 0]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "domain_name",
+              "name": "domain_name",
+              "value": "={{ $json.from_email?.split('@')[1] ?? 'unknown' }}",
+              "type": "string"
+            },
+            {
+              "id": "sent_today",
+              "name": "sent_today",
+              "value": "={{ $json.sent_count_today ?? 0 }}",
+              "type": "number"
+            },
+            {
+              "id": "sent_this_week",
+              "name": "sent_this_week",
+              "value": "={{ $json.sent_count_week ?? 0 }}",
+              "type": "number"
+            },
+            {
+              "id": "daily_limit",
+              "name": "daily_limit",
+              "value": "={{ $json.max_email_per_day ?? 50 }}",
+              "type": "number"
+            },
+            {
+              "id": "is_active",
+              "name": "is_active",
+              "value": "={{ $json.is_active ?? false }}",
+              "type": "boolean"
+            },
+            {
+              "id": "warmup_enabled",
+              "name": "warmup_enabled",
+              "value": "={{ $json.warmup_enabled ?? false }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "extract-capacity",
+      "name": "Extract Capacity Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [448, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=UPDATE domains SET sent_today = {{ $json.sent_today }}, sent_this_week = {{ $json.sent_this_week }}, last_sent_at = CASE WHEN {{ $json.sent_today }} > 0 THEN NOW() ELSE last_sent_at END, updated_at = NOW() WHERE domain_name = '{{ $json.domain_name }}'",
+        "options": {}
+      },
+      "id": "update-sent-counts",
+      "name": "Update Sent Counts",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [672, 0],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "aggregate",
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "all_accounts",
+        "options": {}
+      },
+      "id": "aggregate-data",
+      "name": "Aggregate All",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 3.1,
+      "position": [896, 0]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "total_capacity",
+              "name": "total_capacity",
+              "value": "={{ $json.all_accounts.reduce((sum, a) => sum + (a.is_active || a.warmup_enabled ? a.daily_limit : 0), 0) }}",
+              "type": "number"
+            },
+            {
+              "id": "used_capacity",
+              "name": "used_capacity",
+              "value": "={{ $json.all_accounts.reduce((sum, a) => sum + a.sent_today, 0) }}",
+              "type": "number"
+            },
+            {
+              "id": "active_domains",
+              "name": "active_domains",
+              "value": "={{ $json.all_accounts.filter(a => a.is_active && !a.warmup_enabled).length }}",
+              "type": "number"
+            },
+            {
+              "id": "warming_domains",
+              "name": "warming_domains",
+              "value": "={{ $json.all_accounts.filter(a => a.warmup_enabled).length }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "calculate-totals",
+      "name": "Calculate Totals",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1120, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=INSERT INTO sending_capacity (calculation_date, total_daily_capacity, used_capacity, available_capacity, active_domains, warming_domains, resting_domains, blacklisted_domains, utilization_percent, calculated_at) VALUES (CURRENT_DATE, {{ $json.total_capacity }}, {{ $json.used_capacity }}, {{ $json.total_capacity - $json.used_capacity }}, {{ $json.active_domains }}, {{ $json.warming_domains }}, (SELECT COUNT(*) FROM domains WHERE status = 'resting'), (SELECT COUNT(*) FROM domains WHERE status = 'blacklisted'), CASE WHEN {{ $json.total_capacity }} > 0 THEN ROUND(({{ $json.used_capacity }}::DECIMAL / {{ $json.total_capacity }}) * 100, 2) ELSE 0 END, NOW()) ON CONFLICT (calculation_date) DO UPDATE SET total_daily_capacity = EXCLUDED.total_daily_capacity, used_capacity = EXCLUDED.used_capacity, available_capacity = EXCLUDED.available_capacity, active_domains = EXCLUDED.active_domains, warming_domains = EXCLUDED.warming_domains, resting_domains = EXCLUDED.resting_domains, blacklisted_domains = EXCLUDED.blacklisted_domains, utilization_percent = EXCLUDED.utilization_percent, calculated_at = NOW()",
+        "options": {}
+      },
+      "id": "upsert-capacity",
+      "name": "Upsert Capacity",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1344, 0],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-utilization",
+              "leftValue": "={{ ($json.used_capacity / $json.total_capacity) * 100 }}",
+              "rightValue": 90,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-capacity-alert",
+      "name": "Utilization > 90%?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [1568, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=INSERT INTO lead_intelligence_activity (activity_type, description, metadata, activity_at) VALUES ('capacity_warning', 'Email capacity at {{ Math.round(($json.used_capacity / $json.total_capacity) * 100) }}% - {{ $json.total_capacity - $json.used_capacity }} emails remaining', '{\"used\": {{ $json.used_capacity }}, \"total\": {{ $json.total_capacity }}, \"utilization\": {{ Math.round(($json.used_capacity / $json.total_capacity) * 100) }}}'::jsonb, NOW())",
+        "options": {}
+      },
+      "id": "log-capacity-alert",
+      "name": "Log Capacity Alert",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1792, -100],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \":warning: *Email Capacity Alert*\\n\\n*Utilization:* {{ Math.round(($json.used_capacity / $json.total_capacity) * 100) }}%\\n*Used:* {{ $json.used_capacity }} / {{ $json.total_capacity }}\\n*Remaining:* {{ $json.total_capacity - $json.used_capacity }} emails\\n\\nConsider pacing outreach or adding domains.\"\n}",
+        "options": {}
+      },
+      "id": "slack-capacity-alert",
+      "name": "Slack Capacity Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1792, 60]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "summary",
+              "name": "summary",
+              "value": "=Capacity updated: {{ $json.used_capacity }}/{{ $json.total_capacity }} ({{ Math.round(($json.used_capacity / $json.total_capacity) * 100) }}%)",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "done",
+      "name": "Done",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1792, 200]
+    }
+  ],
+  "connections": {
+    "Every Hour": {
+      "main": [
+        [{"node": "Get Email Accounts", "type": "main", "index": 0}]
+      ]
+    },
+    "Get Email Accounts": {
+      "main": [
+        [{"node": "Extract Capacity Data", "type": "main", "index": 0}]
+      ]
+    },
+    "Extract Capacity Data": {
+      "main": [
+        [{"node": "Update Sent Counts", "type": "main", "index": 0}]
+      ]
+    },
+    "Update Sent Counts": {
+      "main": [
+        [{"node": "Aggregate All", "type": "main", "index": 0}]
+      ]
+    },
+    "Aggregate All": {
+      "main": [
+        [{"node": "Calculate Totals", "type": "main", "index": 0}]
+      ]
+    },
+    "Calculate Totals": {
+      "main": [
+        [{"node": "Upsert Capacity", "type": "main", "index": 0}]
+      ]
+    },
+    "Upsert Capacity": {
+      "main": [
+        [{"node": "Utilization > 90%?", "type": "main", "index": 0}]
+      ]
+    },
+    "Utilization > 90%?": {
+      "main": [
+        [
+          {"node": "Log Capacity Alert", "type": "main", "index": 0},
+          {"node": "Slack Capacity Alert", "type": "main", "index": 0}
+        ],
+        [{"node": "Done", "type": "main", "index": 0}]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {},
+  "triggerCount": 1,
+  "tags": [
+    {"name": "lead-intelligence"},
+    {"name": "capacity"}
+  ]
+}
