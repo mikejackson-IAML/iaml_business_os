@@ -36,7 +36,13 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const { type, data } = req.body;
+    // Parse body if it's a string
+    let body = req.body;
+    if (typeof body === 'string') {
+      body = JSON.parse(body);
+    }
+
+    const { type, data } = body;
 
     // Validate request body
     if (!type || !data) {
@@ -56,7 +62,7 @@ module.exports = async function handler(req, res) {
     if (type === 'registration') {
       webhookUrl = process.env.GHL_REGISTRATION_WEBHOOK;
     } else if (type === 'contact') {
-      webhookUrl = process.env.GHL_CONTACT_WEBHOOK;
+      webhookUrl = process.env.GHL_CONTACT_US_WEBHOOK;
     }
 
     // Validate webhook URL is configured

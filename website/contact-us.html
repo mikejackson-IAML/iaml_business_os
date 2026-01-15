@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us | IAML</title>
+  <meta name="description" content="Connect with IAML for personalized program recommendations, corporate training consultation, or questions about employment law education. We respond within one business day.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Lato:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/mega-menu.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body class="contact-page">
+  <!-- Skip Link for Accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Header (injected by components.js) -->
+  <div id="header-placeholder"></div>
+
+  <main id="main-content">
+    <!-- Hero Section (Black Background) -->
+    <section class="contact-hero-banner">
+      <div class="container">
+        <p class="contact-eyebrow">CONNECT WITH OUR TEAM</p>
+        <h1 class="contact-hero-title">Your Success Starts with a Conversation</h1>
+        <p class="contact-hero-subtitle">
+          Whether you need program guidance, corporate training options, or answers to your questions,
+          our team responds within one business day.
+        </p>
+      </div>
+    </section>
+
+    <!-- Main Content Section (White Background) -->
+    <section class="contact-body">
+      <div class="container">
+        <div class="contact-grid">
+          <!-- Left Column: Value Proposition -->
+          <div class="contact-content">
+            <h2 class="contact-section-title">
+              Expert guidance,<br>
+              <span class="contact-highlight">personalized</span> to your needs.
+            </h2>
+
+            <ul class="contact-benefits">
+              <li>
+                <span class="contact-benefit-icon" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16.667 5L7.5 14.167L3.333 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                <div class="contact-benefit-text">
+                  <strong>Personalized program recommendations</strong>
+                  <span>Our team matches you with the right certificate program based on your role, experience, and goals.</span>
+                </div>
+              </li>
+              <li>
+                <span class="contact-benefit-icon" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16.667 5L7.5 14.167L3.333 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                <div class="contact-benefit-text">
+                  <strong>Corporate training consultation</strong>
+                  <span>Learn how IAML can bring intensive employment law training to your entire HR team.</span>
+                </div>
+              </li>
+              <li>
+                <span class="contact-benefit-icon" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16.667 5L7.5 14.167L3.333 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                <div class="contact-benefit-text">
+                  <strong>Quick response times</strong>
+                  <span>Expect a response within one business day from our dedicated support team.</span>
+                </div>
+              </li>
+            </ul>
+
+            <!-- Logo Carousel -->
+            <div class="contact-logos-section">
+              <p class="contact-logos-header">Trusted by HR professionals at leading organizations</p>
+              <div class="logo-carousel-container"></div>
+            </div>
+          </div>
+
+          <!-- Right Column: Form Card -->
+          <div class="contact-form-wrapper">
+            <div class="contact-form-card">
+              <h2 class="contact-form-title">How can we help?</h2>
+
+              <form id="contactForm" class="contact-form" novalidate>
+                <!-- Name Row -->
+                <div class="form-row">
+                  <div class="form-field">
+                    <label for="firstName">First Name <span class="required">*</span></label>
+                    <input type="text" id="firstName" name="firstName" autocomplete="given-name" required aria-required="true">
+                    <span class="field-error" id="firstNameError" role="alert" aria-live="polite"></span>
+                  </div>
+                  <div class="form-field">
+                    <label for="lastName">Last Name <span class="required">*</span></label>
+                    <input type="text" id="lastName" name="lastName" autocomplete="family-name" required aria-required="true">
+                    <span class="field-error" id="lastNameError" role="alert" aria-live="polite"></span>
+                  </div>
+                </div>
+
+                <!-- Email and Job Title Row -->
+                <div class="form-row">
+                  <div class="form-field">
+                    <label for="email">Work Email <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" autocomplete="email" required aria-required="true" placeholder="you@company.com">
+                    <span class="field-error" id="emailError" role="alert" aria-live="polite"></span>
+                  </div>
+                  <div class="form-field">
+                    <label for="jobTitle">Job Title <span class="optional">(optional)</span></label>
+                    <input type="text" id="jobTitle" name="jobTitle" autocomplete="organization-title" placeholder="e.g., HR Director">
+                  </div>
+                </div>
+
+                <!-- Company Name (Full Width) -->
+                <div class="form-field">
+                  <label for="company">Company Name <span class="required">*</span></label>
+                  <input type="text" id="company" name="company" autocomplete="organization" required aria-required="true">
+                  <span class="field-error" id="companyError" role="alert" aria-live="polite"></span>
+                </div>
+
+                <!-- Inquiry Type -->
+                <div class="form-field">
+                  <label for="inquiryType">What can we help you with? <span class="required">*</span></label>
+                  <select id="inquiryType" name="inquiryType" required aria-required="true">
+                    <option value="">Select an option</option>
+                    <option value="program-info">Program Information</option>
+                    <option value="corporate-training">Corporate Training</option>
+                    <option value="general">General Question</option>
+                  </select>
+                  <span class="field-error" id="inquiryTypeError" role="alert" aria-live="polite"></span>
+                </div>
+
+                <!-- Message -->
+                <div class="form-field">
+                  <label for="message">Message <span class="required">*</span></label>
+                  <textarea id="message" name="message" rows="4" required aria-required="true" placeholder="Tell us about your goals or questions..."></textarea>
+                  <span class="field-error" id="messageError" role="alert" aria-live="polite"></span>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary contact-submit-btn" id="submitBtn">
+                  <span class="btn-text">Send Message</span>
+                  <span class="btn-loading" aria-hidden="true">
+                    <svg class="spinner" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="31.4 31.4" stroke-linecap="round">
+                        <animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="1s" repeatCount="indefinite"/>
+                      </circle>
+                    </svg>
+                    Sending...
+                  </span>
+                </button>
+
+                <!-- Privacy Note -->
+                <p class="contact-privacy">
+                  By submitting this form, you agree to IAML's <a href="privacy-policy.html">Privacy Policy</a>.
+                  We'll never share your information with third parties.
+                </p>
+              </form>
+
+              <!-- Success Message (hidden by default) -->
+              <div class="contact-success" id="contactSuccess" hidden>
+                <div class="contact-success-icon" aria-hidden="true">
+                  <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="24" cy="24" r="24" fill="#10B981"/>
+                    <path d="M32 18L21 29L16 24" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <h3>Thank you for reaching out!</h3>
+                <p>We've received your message and will respond within one business day. Check your email for a confirmation.</p>
+              </div>
+
+              <!-- Error Message (hidden by default) -->
+              <div class="contact-error" id="contactError" hidden role="alert">
+                <p>Something went wrong. Please try again or call us at <a href="tel:+18007264485">(800) 726-4485</a>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (injected by components.js) -->
+  <div id="footer-placeholder"></div>
+
+  <!-- Scripts -->
+  <script src="js/components.js" defer></script>
+  <script src="js/megaMenu.js" defer></script>
+  <script src="js/utm-tracking.js" defer></script>
+  <script src="js/headerBehavior.js" defer></script>
+  <script src="js/mobileMenu.js" defer></script>
+  <script src="js/carousel.js" defer></script>
+  <script src="js/contact.js" defer></script>
+</body>
+</html>
