@@ -1,0 +1,198 @@
+{
+  "programName": "Quarterly Employment Law Updates",
+  "programSlug": "quarterly-updates",
+  "pageType": "session-series",
+  "meta": {
+    "title": "Quarterly Employment Law Updates | IAML",
+    "description": "Stay current on employment law with quarterly updates from practicing attorneys. 1.5 CE credits per session. Free for IAML alumni, $397/session for subscribers.",
+    "keywords": "employment law updates, quarterly employment law, HR continuing education, SHRM PDC credits, HRCI recertification, CLE credits, employment law training, HR legal updates, NLRB updates, employment law CE credits",
+    "ogImage": "https://iaml.com/images/og-image.jpg"
+  },
+  "seo": {
+    "canonicalUrl": "https://iaml.com/programs/quarterly-updates",
+    "robots": "index, follow",
+    "twitter": {
+      "card": "summary_large_image",
+      "site": "@IAMLTraining",
+      "title": "Quarterly Employment Law Updates | IAML",
+      "description": "Stay current on employment law changes. 1.5 CE credits per session from practicing attorneys.",
+      "image": "https://iaml.com/images/og-image.jpg"
+    },
+    "schema": {
+      "educationalLevel": "intermediate",
+      "timeRequired": "PT1H30M",
+      "teaches": [
+        "Current NLRB decisions and enforcement trends",
+        "State employment law updates",
+        "Supreme Court employment decisions",
+        "DOL and EEOC guidance",
+        "Emerging compliance risks"
+      ]
+    }
+  },
+  "hero": {
+    "title": "Quarterly Employment<br>Law Updates",
+    "description": "Employment law moves fast. Four times a year, the same practicing attorneys who teach our certificate programs deliver 90-minute sessions on the most critical developments. NLRB rulings, state law changes, Supreme Court decisions, and emerging compliance risks. Stay current without leaving your desk.",
+    "price": 397,
+    "priceNote": "/session",
+    "deliveryOptions": ["Live Virtual", "On Demand"],
+    "duration": "90 minutes",
+    "alumniNote": "IAML Alumni: Free access included with your certificate program."
+  },
+  "contentSection": {
+    "headline": "Stay Current Without the Time Commitment",
+    "description": "Each quarterly session delivers <span class=\"emphasis\">90 focused minutes</span> on the employment law developments that actually matter to your organization. No fluff, no theory - just practical updates from attorneys who handle these issues daily.",
+    "benefits": [
+      "<strong>Practicing attorneys, not academics</strong> - Your instructors handle employment law cases daily at firms like Taft, Thompson Hine, and Barnes & Thornburg. They teach from real courtrooms and boardrooms, not textbooks.",
+      "<strong>Curated content, not information overload</strong> - We filter the noise and focus on the developments that actually affect your workplace. No padding, just substance.",
+      "<strong>Practical strategies you can implement</strong> - Each session includes specific action items you can apply immediately, not just legal theory.",
+      "<strong>CE credits without the travel</strong> - Earn 1.5 SHRM PDCs, HRCI recertification credits, and CLE credits from your desk."
+    ]
+  },
+  "topicAreas": [
+    {
+      "title": "NLRB & Labor Relations",
+      "description": "New decisions, enforcement priorities, and what they mean for your workplace policies and practices."
+    },
+    {
+      "title": "State Law Updates",
+      "description": "California, New York, and emerging state requirements you need to know before they take effect."
+    },
+    {
+      "title": "Federal Developments",
+      "description": "Supreme Court decisions, DOL and EEOC guidance, and regulatory changes affecting employers."
+    },
+    {
+      "title": "Discrimination & Harassment",
+      "description": "New case law, enforcement trends, and practical prevention strategies across all protected classes."
+    },
+    {
+      "title": "Wage & Hour",
+      "description": "FLSA developments, overtime changes, and classification issues affecting compensation compliance."
+    },
+    {
+      "title": "Emerging Issues",
+      "description": "AI hiring regulations, pay transparency, remote work policies, and other developments shaping HR strategy."
+    }
+  ],
+  "pricing": {
+    "alumni": {
+      "price": "FREE",
+      "priceNote": "12 months included with your certificate",
+      "features": [
+        "All 4 quarterly sessions",
+        "1.5 CE credits per session",
+        "Recordings within 24 hours",
+        "Part of your program investment"
+      ],
+      "cta": {
+        "text": "Claim Alumni Access",
+        "url": "#registration"
+      }
+    },
+    "perSession": {
+      "price": "$397",
+      "priceNote": "per quarterly session",
+      "features": [
+        "Live virtual session",
+        "1.5 CE credits",
+        "Recording within 24 hours",
+        "No commitment required"
+      ],
+      "cta": {
+        "text": "Register for Next Session",
+        "url": "#registration"
+      }
+    }
+  },
+  "testimonials": [
+    {
+      "quote": "The quarterly updates keep me current on the changes that matter most. I can apply what I learn immediately.",
+      "name": "HR Director",
+      "title": "",
+      "company": "Fortune 500 Company"
+    },
+    {
+      "quote": "I really liked the presenter and it was definitely worth my time. It was interactive and gave me some really good skills and knowledge to take with me.",
+      "name": "Program Attendee",
+      "title": "",
+      "company": ""
+    },
+    {
+      "quote": "IAML once again surpassed my expectations. The content is always relevant and practical.",
+      "name": "Returning Attendee",
+      "title": "",
+      "company": ""
+    },
+    {
+      "quote": "This is one of the best seminars I have ever attended. The instructors are well informed and have a repertoire of stories that emphasize the issues.",
+      "name": "Debbie Colia",
+      "title": "HR Executive Consultant",
+      "company": "Cedars-Sinai"
+    },
+    {
+      "quote": "With almost 20 years in the field of employment law, this was one of the best, if not the best, seminar I have ever attended.",
+      "name": "Charles Rando",
+      "title": "Personnel Field Manager",
+      "company": "Wyoming Department of Workforce Services"
+    },
+    {
+      "quote": "The information was extremely valuable and interesting, I learned a great deal. The instructors did an exceptional job presenting.",
+      "name": "Katie Sanders",
+      "title": "Coordinator of Workforce Development",
+      "company": "Northside Hospital"
+    },
+    {
+      "quote": "It's always good to come back to IAML to get updated on the newest rulings as well as to refresh my knowledge of employment law.",
+      "name": "Denise Teuscher",
+      "title": "Lead Labor Relations Specialist",
+      "company": "Battelle Energy Alliance"
+    }
+  ],
+  "faq": [
+    {
+      "question": "Am I eligible for free alumni access?",
+      "answer": "If you've attended any IAML certificate program, you're eligible for complimentary access to Quarterly Employment Law Updates for 12 months following your program. This benefit is part of your program investment and reflects our commitment to ongoing support."
+    },
+    {
+      "question": "What if I miss a live session?",
+      "answer": "Recordings are available within 24 hours of each session. You can watch at your convenience while still earning CE credits."
+    },
+    {
+      "question": "Do I earn continuing education credits?",
+      "answer": "Yes. Each 90-minute session provides 1.5 SHRM PDCs, 1.5 HRCI recertification credits, and 1.5 CLE credits (where applicable)."
+    },
+    {
+      "question": "Can I share my access with colleagues?",
+      "answer": "Registration is individual. However, your colleagues can register for $397/session, or if they attend an IAML certificate program, they'll receive complimentary access as alumni."
+    },
+    {
+      "question": "What topics are covered in each session?",
+      "answer": "Topics vary by quarter based on the most significant employment law developments. Recent sessions have covered NLRB's Cemex and Stericycle decisions, state law updates from California and New York, and emerging AI hiring regulations. We focus on what you need to know now."
+    },
+    {
+      "question": "How long is each session?",
+      "answer": "Each live session runs 90 minutes, including Q&A with our faculty. This format provides enough depth to be actionable without consuming your entire day."
+    },
+    {
+      "question": "Is this the same content as your certificate programs?",
+      "answer": "No. Quarterly updates focus exclusively on recent developments and emerging trends. They complement the foundational expertise you gain from certificate programs by keeping you current as the law evolves."
+    },
+    {
+      "question": "When are the sessions held?",
+      "answer": "Sessions are typically held mid-quarter (January, April, July, October) to provide timely coverage of developments from the previous quarter. Exact dates are announced 4-6 weeks in advance."
+    }
+  ],
+  "facultySection": {
+    "headline": "Practicing Attorneys, Not Academics",
+    "subtitle": "The same faculty who teach our certificate programs deliver your quarterly updates"
+  },
+  "finalCta": {
+    "headline": "Don't Let Employment Law Changes Catch You Off Guard",
+    "body": "Employment law moves fast. New NLRB decisions, state legislature activity, and agency guidance can change the rules overnight. Quarterly updates from practicing attorneys keep you current and confident.",
+    "cta": {
+      "text": "Register for Next Session: $397",
+      "url": "#registration"
+    }
+  }
+}
