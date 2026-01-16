@@ -32,7 +32,8 @@ module.exports = async function handler(req, res) {
 
   try {
     const BASE_ID = process.env.AIRTABLE_BASE_ID;
-    const API_KEY = process.env.AIRTABLE_PROGRAMS_API_KEY;
+    // Use dedicated contacts API key, fall back to registration key
+    const API_KEY = process.env.AIRTABLE_CONTACTS_API_KEY || process.env.AIRTABLE_REGISTRATION_API_KEY;
 
     if (!BASE_ID || !API_KEY) {
       console.error('Missing Airtable configuration');
