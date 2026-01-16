@@ -2008,12 +2008,16 @@
       }
 
       // Build session details for metadata
-      const sessionDetails = state.sessionRecord || {};
+      const sessionFields = state.sessionRecord?.fields || {};
       const formatName = FORMAT_MAP[state.format] || state.format;
-      const startDate = state.dynamicStartDate || sessionDetails['Start Date'] || '';
-      const endDate = state.dynamicEndDate || sessionDetails['End Date'] || '';
-      const city = sessionDetails['City'] || '';
-      const venue = sessionDetails['Venue Name'] || '';
+      const startDate = state.dynamicStartDate || sessionFields['Start Date'] || '';
+      const endDate = state.dynamicEndDate || sessionFields['End Date'] || '';
+      const city = state.city || sessionFields['City'] || '';
+      const stateProvince = state.stateProvince || sessionFields['State/Province'] || '';
+      const venue = state.venueName || sessionFields['Venue Name'] || '';
+      const location = state.format === 'in-person'
+        ? (stateProvince ? `${city}, ${stateProvince}` : city)
+        : (state.format === 'virtual' ? 'Virtual Classroom' : 'Online (Self-Paced)');
 
       // Create Checkout Session
       const response = await fetch('/api/create-checkout-session', {
@@ -2037,6 +2041,7 @@
             startDate: startDate,
             endDate: endDate,
             city: city,
+            location: location,
             venue: venue,
             customerName: `${state.contactFirstName} ${state.contactLastName}`,
             customerPhone: state.contactPhone

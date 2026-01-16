@@ -804,7 +804,7 @@ END:VCALENDAR`;
           program_format: sessionData.metadata?.formatName,
           program_start_date: sessionData.metadata?.startDate,
           program_end_date: sessionData.metadata?.endDate,
-          selected_location: sessionData.metadata?.city,
+          selected_location: sessionData.metadata?.location || sessionData.metadata?.city,
           attendance_type__3_block_programs: sessionData.metadata?.blocks ? 'Partial' : 'Full',
           coupon_code_used: sessionData.metadata?.couponCode || '',
           discount_amount: 0,
