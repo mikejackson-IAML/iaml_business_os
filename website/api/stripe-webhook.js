@@ -367,23 +367,40 @@ async function findOrCreateCompanyWebhook(companyName) {
 }
 
 async function updateRegistrationStatus(registrationId, status) {
-  const baseId = process.env.AIRTABLE_BASE_ID;
-  const apiKey = process.env.AIRTABLE_REGISTRATION_API_KEY;
-  const registrationsTableId = 'tblhp9Llw7zSRqRnt';
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  await fetch(
-    `https://api.airtable.com/v0/${baseId}/${registrationsTableId}/${registrationId}`,
-    {
-      method: 'PATCH',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        fields: { 'Payment Status': status }
-      })
+  if (!supabaseUrl || !supabaseKey) {
+    console.error('Supabase credentials not configured for webhook');
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `${supabaseUrl}/rest/v1/registrations?id=eq.${registrationId}`,
+      {
+        method: 'PATCH',
+        headers: {
+          'apikey': supabaseKey,
+          'Authorization': `Bearer ${supabaseKey}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          payment_status: status
+        })
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.text();
+      console.error('Failed to update registration status in Supabase:', error);
+    } else {
+      console.log(`Registration ${registrationId} status updated to ${status}`);
     }
-  );
+  } catch (error) {
+    console.error('Error updating registration status:', error);
+  }
 }
 
 async function notifyGHL(eventType, data) {
