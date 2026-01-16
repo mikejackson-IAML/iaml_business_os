@@ -1,5 +1,6 @@
 // Serverless function to create registrations directly in Supabase
 // Supports: POST (create new registration)
+// Registration code format: {FORMAT}-{PROGRAM}-{CITY}-{MMYY}-{SEQ}
 
 module.exports = async function handler(req, res) {
   // CORS headers
@@ -33,6 +34,42 @@ module.exports = async function handler(req, res) {
       });
     }
 
+    // Generate registration code with sequence number
+    let registrationCode = registration.registration_code || null;
+
+    if (registration.registration_code_prefix) {
+      // Query for existing registrations with this prefix to get sequence number
+      const prefix = registration.registration_code_prefix;
+      const countResponse = await fetch(
+        `${SUPABASE_URL}/rest/v1/registrations?registration_code=like.${encodeURIComponent(prefix + '-*')}&select=id`,
+        {
+          method: 'GET',
+          headers: {
+            'apikey': SUPABASE_SERVICE_KEY,
+            'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
+            'Prefer': 'count=exact'
+          }
+        }
+      );
+
+      // Get count from content-range header or response length
+      let existingCount = 0;
+      const contentRange = countResponse.headers.get('content-range');
+      if (contentRange) {
+        const match = contentRange.match(/\/(\d+)$/);
+        if (match) {
+          existingCount = parseInt(match[1], 10);
+        }
+      } else {
+        const countData = await countResponse.json();
+        existingCount = Array.isArray(countData) ? countData.length : 0;
+      }
+
+      // Generate sequence number (3 digits, zero-padded)
+      const sequenceNumber = String(existingCount + 1).padStart(3, '0');
+      registrationCode = `${prefix}-${sequenceNumber}`;
+    }
+
     // Build the registration record
     const record = {
       first_name: registration.first_name,
@@ -45,7 +82,7 @@ module.exports = async function handler(req, res) {
       registration_date: new Date().toISOString(),
       registration_source: 'Website',
       registration_status: 'Confirmed',
-      registration_code: registration.registration_code || null,
+      registration_code: registrationCode,
       list_price: registration.list_price || 0,
       discount_amount: registration.discount_amount || 0,
       final_price: registration.final_price || 0,

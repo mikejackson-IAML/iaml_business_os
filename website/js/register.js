@@ -619,7 +619,10 @@
   // REGISTRATION CODE GENERATOR
   // ============================================
 
-  function generateRegistrationCode() {
+  // Generate registration code prefix (sequence number added server-side)
+  // Format: {FORMAT}-{PROGRAM}-{CITY}-{MMYY}
+  // Full code with sequence: {FORMAT}-{PROGRAM}-{CITY}-{MMYY}-{SEQ}
+  function generateRegistrationCodePrefix() {
     const formatMap = { 'in-person': 'IP', 'virtual': 'VL', 'on-demand': 'OD' };
     const formatCode = formatMap[state.format] || 'XX';
 
@@ -1807,9 +1810,6 @@
     qs('#loadingOverlay').classList.remove('hidden');
 
     try {
-      // Generate registration code
-      state.registrationCode = generateRegistrationCode();
-
       // Create/find contact
       state.contactRecordId = await findOrCreateContact();
 
@@ -1990,8 +1990,20 @@
     qs('#loadingOverlay').classList.remove('hidden');
 
     try {
-      // Generate registration code
-      state.registrationCode = generateRegistrationCode();
+      // Create/find contact first (needed for Supabase registration)
+      state.contactRecordId = await findOrCreateContact();
+
+      // Create/find company
+      let companyId = null;
+      if (state.contactCompany) {
+        companyId = await findOrCreateCompany();
+      }
+      state.companyRecordId = companyId;
+
+      // Create registration in Supabase FIRST (Pending Payment status)
+      // This gives us the full registration code with sequence number
+      const registration = await createSupabaseRegistration('Pending Payment');
+      const registrationId = registration?.id || state.registrationRecordId;
 
       // Build line items for Checkout (handles full program and partial blocks)
       const lineItems = buildCheckoutLineItems();
@@ -2026,6 +2038,7 @@
             formatName: formatName,
             sessionId: state.sessionId,
             registrationCode: state.registrationCode,
+            registrationId: registrationId, // Supabase registration ID for status update
             company: state.contactCompany,
             blocks: state.selectedBlocks.join(','),
             couponCode: state.couponCode,
@@ -2260,11 +2273,15 @@
   }
 
   // Create registration directly in Supabase (primary data store)
+  // Server generates full registration code with sequence number
   async function createSupabaseRegistration(paymentStatus, stripePaymentIntent = null) {
     // Get UTM tracking data if available
     const trackingData = typeof window.getIAMLTrackingData === 'function'
       ? window.getIAMLTrackingData()
       : {};
+
+    // Generate registration code prefix (server adds sequence number)
+    const registrationCodePrefix = generateRegistrationCodePrefix();
 
     const registrationData = {
       first_name: state.contactFirstName,
@@ -2274,7 +2291,7 @@
       job_title: state.contactTitle || null,
       company_name: state.contactCompany || null,
       session_id: state.sessionId,
-      registration_code: state.registrationCode,
+      registration_code_prefix: registrationCodePrefix,
       list_price: state.listPrice,
       discount_amount: state.couponDiscount || 0,
       final_price: state.finalPrice,
@@ -2306,6 +2323,7 @@
 
     const registration = await response.json();
     state.registrationRecordId = registration.id;
+    state.registrationCode = registration.registration_code; // Store full code from server
     return registration;
   }
 
