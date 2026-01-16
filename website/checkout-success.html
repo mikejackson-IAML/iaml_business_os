@@ -594,9 +594,14 @@
         // Update the UI with payment details
         updateUI(data);
 
-        // Create registration in Airtable if we have the metadata
+        // Submit to GHL if we have the metadata
+        console.log('Checkout data:', { metadata: data.metadata, customer: data.customer });
         if (data.metadata && data.customer) {
+          console.log('Calling createRegistration...');
           await createRegistration(data);
+          console.log('createRegistration completed');
+        } else {
+          console.warn('Skipping createRegistration - missing metadata or customer');
         }
 
         // Show success state
@@ -787,34 +792,39 @@ END:VCALENDAR`;
         // Direct GHL webhook URL
         const webhookUrl = 'https://services.leadconnectorhq.com/hooks/MjGEy0pobNT9su2YJqFI/webhook-trigger/05c35ef9-9aa6-4503-aa56-5d0092277865';
 
+        const payload = {
+          unique_identifier: sessionData.metadata?.registrationId || sessionData.paymentIntentId,
+          first_name: firstName,
+          last_name: lastName,
+          email: sessionData.customer.email,
+          phone: sessionData.metadata?.customerPhone || sessionData.customer.phone,
+          title: '',
+          company_name: sessionData.metadata?.company || '',
+          selected_program: sessionData.metadata?.program || sessionData.lineItems?.[0]?.description,
+          program_format: sessionData.metadata?.formatName,
+          program_start_date: sessionData.metadata?.startDate,
+          program_end_date: sessionData.metadata?.endDate,
+          selected_location: sessionData.metadata?.city,
+          attendance_type__3_block_programs: sessionData.metadata?.blocks ? 'Partial' : 'Full',
+          coupon_code_used: sessionData.metadata?.couponCode || '',
+          discount_amount: 0,
+          registration_code: sessionData.metadata?.registrationCode || '',
+          amount_due: sessionData.amountTotal,
+          payment_status: 'Paid',
+          registration_status: 'Confirmed',
+          registration_date: new Date().toISOString().split('T')[0],
+          tags: ['new_registration', 'stripe_checkout', 'website']
+        };
+
+        console.log('GHL Payload:', payload);
+
         try {
-          await fetch(webhookUrl, {
+          const response = await fetch(webhookUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              unique_identifier: sessionData.metadata?.registrationId || sessionData.paymentIntentId,
-              first_name: firstName,
-              last_name: lastName,
-              email: sessionData.customer.email,
-              phone: sessionData.metadata?.customerPhone || sessionData.customer.phone,
-              title: '',
-              company_name: sessionData.metadata?.company || '',
-              selected_program: sessionData.metadata?.program || sessionData.lineItems?.[0]?.description,
-              program_format: sessionData.metadata?.formatName,
-              program_start_date: sessionData.metadata?.startDate,
-              program_end_date: sessionData.metadata?.endDate,
-              selected_location: sessionData.metadata?.city,
-              attendance_type__3_block_programs: sessionData.metadata?.blocks ? 'Partial' : 'Full',
-              coupon_code_used: sessionData.metadata?.couponCode || '',
-              discount_amount: 0,
-              registration_code: sessionData.metadata?.registrationCode || '',
-              amount_due: sessionData.amountTotal,
-              payment_status: 'Paid',
-              registration_status: 'Confirmed',
-              registration_date: new Date().toISOString().split('T')[0],
-              tags: ['new_registration', 'stripe_checkout', 'website']
-            })
+            body: JSON.stringify(payload)
           });
+          console.log('GHL Response:', response.status, response.statusText);
         } catch (error) {
           console.error('GHL webhook error:', error);
         }
