@@ -2019,8 +2019,6 @@
         ? (stateProvince ? `${city}, ${stateProvince}` : city)
         : (state.format === 'virtual' ? 'Virtual Classroom' : 'Online (Self-Paced)');
 
-      console.log('Checkout metadata debug:', { city, stateProvince, location, format: state.format, sessionFields });
-
       // Create Checkout Session
       const response = await fetch('/api/create-checkout-session', {
         method: 'POST',

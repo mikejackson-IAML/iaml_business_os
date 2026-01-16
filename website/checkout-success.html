@@ -595,13 +595,8 @@
         updateUI(data);
 
         // Submit to GHL if we have the metadata
-        console.log('Checkout data:', { metadata: data.metadata, customer: data.customer });
         if (data.metadata && data.customer) {
-          console.log('Calling createRegistration...');
           await createRegistration(data);
-          console.log('createRegistration completed');
-        } else {
-          console.warn('Skipping createRegistration - missing metadata or customer');
         }
 
         // Show success state
@@ -816,17 +811,14 @@ END:VCALENDAR`;
           tags: ['new_registration', 'stripe_checkout', 'website']
         };
 
-        console.log('GHL Payload:', payload);
-
         try {
-          const response = await fetch(webhookUrl, {
+          await fetch(webhookUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
           });
-          console.log('GHL Response:', response.status, response.statusText);
         } catch (error) {
-          console.error('GHL webhook error:', error);
+          // GHL submission failed silently - don't block user experience
         }
       }
     })();
