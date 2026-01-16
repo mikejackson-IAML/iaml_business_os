@@ -1820,17 +1820,8 @@
     qs('#loadingOverlay').classList.remove('hidden');
 
     try {
-      // Create/find contact
-      state.contactRecordId = await findOrCreateContact();
-
-      // Create/find company
-      let companyId = null;
-      if (state.contactCompany) {
-        companyId = await findOrCreateCompany();
-      }
-      state.companyRecordId = companyId;
-
       // Create registration in Supabase FIRST (with Pending Payment status)
+      // Contact/company data is stored directly in the registration record
       // This gives us the registrationId for the Stripe invoice metadata
       const registration = await createSupabaseRegistration('Pending Payment');
       const registrationId = registration?.id || state.registrationRecordId;
@@ -2000,17 +1991,8 @@
     qs('#loadingOverlay').classList.remove('hidden');
 
     try {
-      // Create/find contact first (needed for Supabase registration)
-      state.contactRecordId = await findOrCreateContact();
-
-      // Create/find company
-      let companyId = null;
-      if (state.contactCompany) {
-        companyId = await findOrCreateCompany();
-      }
-      state.companyRecordId = companyId;
-
       // Create registration in Supabase FIRST (Pending Payment status)
+      // Contact/company data is stored directly in the registration record
       // This gives us the full registration code with sequence number
       const registration = await createSupabaseRegistration('Pending Payment');
       const registrationId = registration?.id || state.registrationRecordId;
@@ -2126,17 +2108,8 @@
         throw new Error('Payment not completed');
       }
 
-      // Create/find contact
-      state.contactRecordId = await findOrCreateContact();
-
-      // Create/find company
-      let companyId = null;
-      if (state.contactCompany) {
-        companyId = await findOrCreateCompany();
-      }
-      state.companyRecordId = companyId;
-
       // Create registration in Supabase (with payment intent for tracking)
+      // Contact/company data is stored directly in the registration record
       await createSupabaseRegistration('Paid', paymentIntent.id);
 
       // Submit to GHL
@@ -2310,9 +2283,6 @@
       stripe_payment_intent: stripePaymentIntent,
       attendance_type: state.blockSelectionType || 'Full',
       selected_blocks: state.selectedBlocks.length > 0 ? state.selectedBlocks : null,
-      // Airtable references (for Contact/Company linkage)
-      contact_airtable_id: state.contactRecordId || null,
-      company_airtable_id: state.companyRecordId || null,
       // UTM tracking
       utm_source: trackingData.utm_source || null,
       utm_medium: trackingData.utm_medium || null,

@@ -96,10 +96,7 @@ module.exports = async function handler(req, res) {
       utm_medium: registration.utm_medium || null,
       utm_campaign: registration.utm_campaign || null,
       utm_content: registration.utm_content || null,
-      utm_term: registration.utm_term || null,
-      // Link to Airtable contact/company IDs for reference
-      contact_airtable_id: registration.contact_airtable_id || null,
-      company_airtable_id: registration.company_airtable_id || null
+      utm_term: registration.utm_term || null
     };
 
     // Insert into Supabase

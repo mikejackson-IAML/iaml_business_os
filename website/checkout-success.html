@@ -755,15 +755,8 @@ END:VCALENDAR`;
             lastName = nameParts.slice(1).join(' ') || '';
           }
 
-          // Find or create contact
-          const contactId = await findOrCreateContact({
-            firstName,
-            lastName,
-            email: sessionData.customer.email,
-            phone: sessionData.metadata?.customerPhone || sessionData.customer.phone
-          });
-
           // Update Supabase registration status to "Paid" (registration was created before checkout)
+          // Contact/company data is already stored in the registration record
           const registrationId = sessionData.metadata?.registrationId;
           if (registrationId) {
             const regResponse = await fetch('/api/supabase-registration-update', {
@@ -788,53 +781,6 @@ END:VCALENDAR`;
           console.error('Error creating registration:', error);
           // Don't show error to user - payment was successful
         }
-      }
-
-      async function findOrCreateContact({ firstName, lastName, email, phone }) {
-        const filter = `{Email}='${email.replace(/'/g, "\\'")}'`;
-        const response = await fetch(`/api/airtable-contacts?filterByFormula=${encodeURIComponent(filter)}`);
-        const data = await response.json();
-
-        if (data.records?.length > 0) {
-          return data.records[0].id;
-        }
-
-        const createResponse = await fetch('/api/airtable-contacts', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            fields: {
-              'First Name': firstName,
-              'Last Name': lastName,
-              'Email': email,
-              'Phone': phone || ''
-            }
-          })
-        });
-
-        const newContact = await createResponse.json();
-        return newContact.id;
-      }
-
-      async function findOrCreateCompany(companyName) {
-        const filter = `LOWER({Company Name})=LOWER('${companyName.replace(/'/g, "\\'")}')`
-        const response = await fetch(`/api/airtable-companies?filterByFormula=${encodeURIComponent(filter)}`);
-        const data = await response.json();
-
-        if (data.records?.length > 0) {
-          return data.records[0].id;
-        }
-
-        const createResponse = await fetch('/api/airtable-companies', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            fields: { 'Company Name': companyName }
-          })
-        });
-
-        const newCompany = await createResponse.json();
-        return newCompany.id;
       }
 
       async function submitToGHL(sessionData, firstName, lastName) {
