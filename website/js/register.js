@@ -627,7 +627,7 @@
     const formatCode = formatMap[state.format] || 'XX';
 
     const programData = PROGRAM_DATA[state.program];
-    const programCode = programData.code;
+    const programCode = programData?.code || 'XX';
 
     let cityCode = 'ONL';
     if (state.format === 'in-person' && state.city) {
@@ -636,7 +636,17 @@
       cityCode = 'VIR';
     }
 
-    const date = state.dynamicStartDate || new Date(state.sessionRecord.fields['Start Date']);
+    // Handle date - could be Date object or string
+    let dateStr = state.dynamicStartDate || state.sessionRecord?.fields?.['Start Date'];
+    let date;
+    if (dateStr instanceof Date) {
+      date = dateStr;
+    } else if (typeof dateStr === 'string') {
+      date = new Date(dateStr);
+    } else {
+      date = new Date(); // Fallback to today
+    }
+
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = String(date.getFullYear()).slice(-2);
 
