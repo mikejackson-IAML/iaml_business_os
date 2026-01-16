@@ -1820,13 +1820,20 @@
       }
       state.companyRecordId = companyId;
 
-      // Create Stripe Invoice
-      const invoiceResult = await createStripeInvoice();
+      // Create registration in Supabase FIRST (with Pending Payment status)
+      // This gives us the registrationId for the Stripe invoice metadata
+      const registration = await createSupabaseRegistration('Pending Payment');
+      const registrationId = registration?.id || state.registrationRecordId;
+
+      // Create Stripe Invoice WITH registrationId in metadata
+      const invoiceResult = await createStripeInvoice(registrationId);
       state.stripeInvoiceId = invoiceResult?.invoiceId;
       state.stripeInvoiceUrl = invoiceResult?.invoiceUrl;
 
-      // Create registration in Airtable
-      await createAirtableRegistration('Pending Payment');
+      // Update registration with Stripe Invoice ID
+      if (invoiceResult?.invoiceId && registrationId) {
+        await updateRegistrationWithInvoice(registrationId, invoiceResult.invoiceId);
+      }
 
       // Submit to GHL
       await submitToGoHighLevel('invoice');
@@ -1843,7 +1850,8 @@
   }
 
   // Create Stripe Invoice for invoice payment method
-  async function createStripeInvoice() {
+  // registrationId is included in metadata so webhook can update the correct registration
+  async function createStripeInvoice(registrationId) {
     // Build line items based on selection
     const lineItems = buildInvoiceLineItems();
 
@@ -1867,6 +1875,7 @@
             format: state.format,
             sessionId: state.sessionId,
             registrationCode: state.registrationCode,
+            registrationId: registrationId,  // For webhook to update payment status
             blocks: state.selectedBlocks.join(',')
           },
           dueDate: 30,
@@ -2104,8 +2113,8 @@
       }
       state.companyRecordId = companyId;
 
-      // Create registration in Airtable
-      await createAirtableRegistration('Paid');
+      // Create registration in Supabase (with payment intent for tracking)
+      await createSupabaseRegistration('Paid', paymentIntent.id);
 
       // Submit to GHL
       await submitToGoHighLevel('stripe');
@@ -2250,39 +2259,45 @@
     return newCompany.id;
   }
 
-  async function createAirtableRegistration(paymentStatus) {
+  // Create registration directly in Supabase (primary data store)
+  async function createSupabaseRegistration(paymentStatus, stripePaymentIntent = null) {
     // Get UTM tracking data if available
     const trackingData = typeof window.getIAMLTrackingData === 'function'
       ? window.getIAMLTrackingData()
       : {};
 
-    const fields = {
-      'Contact': [state.contactRecordId],
-      'Company': state.companyRecordId ? [state.companyRecordId] : [],
-      'Program Instance': [state.sessionId],
-      'Registration Date': new Date().toISOString(),
-      'Registration Source': 'Website',
-      'List Price': state.listPrice,
-      'Discount Amount': state.couponDiscount,
-      'Final Price': state.finalPrice,
-      'Payment Status': paymentStatus,
-      'Payment Method': state.paymentMethod === 'invoice' ? 'Invoice' : 'Credit Card',
-      'Registration Status': 'Confirmed'
+    const registrationData = {
+      first_name: state.contactFirstName,
+      last_name: state.contactLastName,
+      email: state.contactEmail,
+      phone: state.contactPhone || null,
+      job_title: state.contactTitle || null,
+      company_name: state.contactCompany || null,
+      session_id: state.sessionId,
+      registration_code: state.registrationCode,
+      list_price: state.listPrice,
+      discount_amount: state.couponDiscount || 0,
+      final_price: state.finalPrice,
+      payment_status: paymentStatus,
+      payment_method: state.paymentMethod === 'invoice' ? 'Invoice' : 'Credit Card',
+      stripe_payment_intent: stripePaymentIntent,
+      attendance_type: state.blockSelectionType || 'Full',
+      selected_blocks: state.selectedBlocks.length > 0 ? state.selectedBlocks : null,
+      // Airtable references (for Contact/Company linkage)
+      contact_airtable_id: state.contactRecordId || null,
+      company_airtable_id: state.companyRecordId || null,
+      // UTM tracking
+      utm_source: trackingData.utm_source || null,
+      utm_medium: trackingData.utm_medium || null,
+      utm_campaign: trackingData.utm_campaign || null,
+      utm_content: trackingData.utm_content || null,
+      utm_term: trackingData.utm_term || null
     };
 
-    // Add tracking fields only if they have values
-    if (trackingData.utm_source) fields['UTM Source'] = trackingData.utm_source;
-    if (trackingData.utm_medium) fields['UTM Medium'] = trackingData.utm_medium;
-    if (trackingData.utm_campaign) fields['UTM Campaign'] = trackingData.utm_campaign;
-    if (trackingData.utm_content) fields['UTM Content'] = trackingData.utm_content;
-    if (trackingData.utm_term) fields['UTM Term'] = trackingData.utm_term;
-    if (trackingData.landing_page) fields['Landing Page'] = trackingData.landing_page;
-    if (trackingData.referring_url) fields['Referring URL'] = trackingData.referring_url;
-
-    const response = await fetch('/api/airtable-registrations', {
+    const response = await fetch('/api/supabase-registration', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ fields })
+      body: JSON.stringify(registrationData)
     });
 
     if (!response.ok) {
@@ -2294,6 +2309,28 @@
     return registration;
   }
 
+  // Update registration with Stripe Invoice ID after invoice is created
+  async function updateRegistrationWithInvoice(registrationId, invoiceId) {
+    try {
+      const response = await fetch('/api/supabase-registration-update', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: registrationId,
+          stripe_invoice_id: invoiceId
+        })
+      });
+
+      if (!response.ok) {
+        console.error('Failed to update registration with invoice ID');
+      }
+    } catch (error) {
+      // Non-blocking - invoice was already sent, registration exists
+      console.error('Error updating registration with invoice:', error);
+    }
+  }
+
+  // Push registration to GHL via direct webhook
   async function submitToGoHighLevel(source) {
     // Get dates in YYYY-MM-DD format
     const startDate = state.dynamicStartDate || state.sessionRecord?.fields['Start Date'];
@@ -2309,35 +2346,37 @@
       selectedLocation = 'Online (Self-Paced)';
     }
 
-    const ghlData = {
-      type: 'registration',
-      data: {
-        unique_identifier: crypto.randomUUID(),
-        first_name: state.contactFirstName,
-        last_name: state.contactLastName,
-        title: state.contactTitle || '',
-        company_name: state.contactCompany || '',
-        phone: state.contactPhone,
-        email: state.contactEmail,
-        selected_program: state.program,
-        program_format: FORMAT_MAP[state.format],
-        selected_location: selectedLocation,
-        program_start_date: startDate,
-        program_end_date: endDate,
-        attendance_type__3_block_programs: state.blockSelectionType || 'Full',
-        coupon_code_used: state.couponCode || '',
-        discount_amount: state.couponDiscount || 0,
-        registration_code: state.registrationCode,
-        amount_due: state.finalPrice,
-        tags: ['new_registration']
-      }
+    // Direct GHL webhook payload (matches GHL workflow field mappings)
+    const ghlPayload = {
+      unique_identifier: state.registrationRecordId || crypto.randomUUID(),
+      first_name: state.contactFirstName,
+      last_name: state.contactLastName,
+      title: state.contactTitle || '',
+      company_name: state.contactCompany || '',
+      phone: state.contactPhone,
+      email: state.contactEmail,
+      selected_program: state.program,
+      program_format: FORMAT_MAP[state.format],
+      selected_location: selectedLocation,
+      program_start_date: startDate,
+      program_end_date: endDate,
+      attendance_type__3_block_programs: state.blockSelectionType || 'Full',
+      coupon_code_used: state.couponCode || '',
+      discount_amount: state.couponDiscount || 0,
+      registration_code: state.registrationCode,
+      amount_due: state.finalPrice,
+      payment_status: state.paymentMethod === 'invoice' ? 'Pending Payment' : 'Paid',
+      registration_status: 'Confirmed',
+      registration_date: new Date().toISOString().split('T')[0],
+      tags: ['new_registration', 'website']
     };
 
     try {
-      const response = await fetch('/api/ghl-webhook', {
+      // Direct webhook to GHL (bypasses proxy for reliability)
+      const response = await fetch('https://services.leadconnectorhq.com/hooks/MjGEy0pobNT9su2YJqFI/webhook-trigger/05c35ef9-9aa6-4503-aa56-5d0092277865', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(ghlData)
+        body: JSON.stringify(ghlPayload)
       });
 
       if (!response.ok) {
