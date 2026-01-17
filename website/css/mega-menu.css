@@ -415,6 +415,140 @@
     color: var(--gray-500, #64748b);
 }
 
+/* Benefits with title/subtitle structure */
+.mega-menu-benefits--detailed li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+}
+
+.mega-menu-benefits--detailed li:first-child {
+    padding-top: 0;
+}
+
+.mega-menu-benefits--detailed .benefit-icon {
+    margin-top: 2px;
+}
+
+.mega-menu-benefits--detailed .benefit-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    height: auto;
+}
+
+.mega-menu-benefits--detailed .benefit-title {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-900, #0f172a);
+    height: auto;
+    line-height: 1.3;
+}
+
+.mega-menu-benefits--detailed .benefit-subtitle {
+    display: block;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--gray-500, #64748b);
+    height: auto;
+    line-height: 1.4;
+}
+
+/* Corporate Training Value Cards Row */
+.mega-menu-container--corporate {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 32px;
+}
+
+.mega-menu-container--corporate > .mega-menu-column:nth-child(1),
+.mega-menu-container--corporate > .mega-menu-column:nth-child(2) {
+    grid-row: 1;
+}
+
+.mega-menu-container--corporate > .mega-menu-cta-panel {
+    grid-row: 1 / 3;
+    grid-column: 3;
+}
+
+.ct-value-wrapper {
+    grid-column: 1 / 3;
+    grid-row: 2;
+    padding-top: 20px;
+    border-top: 1px solid var(--gray-100, #f1f5f9);
+}
+
+.ct-value-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray-400, #94a3b8);
+    margin-bottom: 12px;
+}
+
+.ct-value-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    padding: 24px 20px;
+    background: linear-gradient(135deg, var(--blue-dark, #28528c) 0%, #1e3a5f 100%);
+    border-radius: 12px;
+}
+
+.ct-value-card {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 16px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+
+.ct-value-card:hover {
+    background: var(--white, #ffffff);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.ct-value-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.ct-value-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: var(--gold-accent, #af9232);
+    border-radius: 50%;
+    color: var(--white, #ffffff);
+    flex-shrink: 0;
+}
+
+.ct-value-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--blue-dark, #28528c);
+    margin: 0;
+    line-height: 1.2;
+}
+
+.ct-value-desc {
+    font-size: 12px;
+    color: var(--gray-600, #475569);
+    margin: 0;
+    line-height: 1.5;
+    padding-left: 42px;
+}
+
 /* Text link */
 .mega-menu-text-link {
     display: inline-flex;

@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corporate Training Value Cards - Variant Comparison</title>
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="../../css/mega-menu.css">
+    <style>
+        /* Variant comparison layout */
+        body {
+            background: var(--gray-100);
+        }
+
+        .variant-showcase {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: var(--space-xl);
+        }
+
+        .variant-section {
+            margin-bottom: var(--space-3xl);
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .variant-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-lg) var(--space-xl);
+            background: var(--gray-50);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .variant-label {
+            font-family: var(--font-heading);
+            font-size: var(--text-2xl);
+            color: var(--blue-dark);
+        }
+
+        .variant-tag {
+            padding: var(--space-xs) var(--space-md);
+            border-radius: var(--radius-full);
+            font-size: var(--text-sm);
+            font-weight: 600;
+        }
+
+        .tag-minimal { background: var(--gray-200); color: var(--gray-700); }
+        .tag-recommended { background: var(--blue-primary); color: white; }
+        .tag-bold { background: var(--gold-accent); color: white; }
+
+        .variant-description {
+            color: var(--gray-600);
+            padding: var(--space-md) var(--space-xl);
+            font-size: var(--text-base);
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .variant-demo {
+            padding: var(--space-xl);
+            background: var(--white);
+        }
+
+        /* ============================================
+           VARIANT A: Centered Cards (Current)
+           ============================================ */
+        .variant-a-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            padding-top: 24px;
+            border-top: 1px solid var(--gray-100);
+        }
+
+        .variant-a-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 20px 12px;
+            background: var(--gray-50);
+            border-radius: 12px;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .variant-a-card:hover {
+            background: var(--gray-100);
+            transform: translateY(-2px);
+        }
+
+        .variant-a-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-radius: 12px;
+            color: var(--blue-primary);
+            margin-bottom: 12px;
+        }
+
+        .variant-a-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin: 0 0 6px 0;
+            line-height: 1.3;
+        }
+
+        .variant-a-desc {
+            font-size: 12px;
+            color: var(--gray-500);
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        /* ============================================
+           VARIANT B: Horizontal Compact
+           Left-aligned with subtle left border accent
+           ============================================ */
+        .variant-b-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            padding-top: 20px;
+            border-top: 1px solid var(--gray-100);
+        }
+
+        .variant-b-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px;
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .variant-b-card:hover {
+            border-color: var(--blue-primary);
+            box-shadow: 0 2px 8px rgba(24, 139, 246, 0.1);
+        }
+
+        .variant-b-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: var(--blue-primary);
+            border-radius: 8px;
+            color: var(--white);
+            flex-shrink: 0;
+        }
+
+        .variant-b-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .variant-b-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .variant-b-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin: 0 0 4px 0;
+            line-height: 1.3;
+        }
+
+        .variant-b-desc {
+            font-size: 11px;
+            color: var(--gray-500);
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        /* ============================================
+           VARIANT C: Full-Width Feature Strip
+           Bold gradient background with white cards
+           ============================================ */
+        .variant-c-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            padding: 24px 20px;
+            margin-top: 20px;
+            background: linear-gradient(135deg, var(--blue-dark) 0%, #1e3a5f 100%);
+            border-radius: 12px;
+        }
+
+        .variant-c-card {
+            display: flex;
+            flex-direction: column;
+            padding: 20px 16px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .variant-c-card:hover {
+            background: var(--white);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .variant-c-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .variant-c-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: var(--gold-accent);
+            border-radius: 50%;
+            color: var(--white);
+            flex-shrink: 0;
+        }
+
+        .variant-c-icon svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .variant-c-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--blue-dark);
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .variant-c-desc {
+            font-size: 12px;
+            color: var(--gray-600);
+            margin: 0;
+            line-height: 1.5;
+            padding-left: 42px;
+        }
+
+        /* Section label for Variant C */
+        .variant-c-wrapper {
+            padding-top: 20px;
+            border-top: 1px solid var(--gray-100);
+        }
+
+        .variant-c-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="variant-showcase">
+        <h1 style="font-family: var(--font-heading); margin-bottom: var(--space-sm); color: var(--blue-dark);">
+            Corporate Training Value Cards
+        </h1>
+        <p style="color: var(--gray-600); margin-bottom: var(--space-2xl); max-width: 700px;">
+            Three styling approaches for the "Why Teams Choose Us" section in the Corporate Training mega menu.
+            Each fills the same horizontal space across two columns.
+        </p>
+
+        <!-- VARIANT A -->
+        <section class="variant-section">
+            <div class="variant-header">
+                <span class="variant-label">Variant A</span>
+                <span class="variant-tag tag-minimal">Current / Minimal</span>
+            </div>
+            <p class="variant-description">
+                Centered cards with soft blue gradient icon boxes. Clean and approachable.
+                Good balance of information and white space. <strong>This is what's currently deployed.</strong>
+            </p>
+            <div class="variant-demo">
+                <div class="variant-a-row">
+                    <div class="variant-a-card">
+                        <div class="variant-a-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <h4 class="variant-a-title">45 Years of Expertise</h4>
+                        <p class="variant-a-desc">Same intensive programs, delivered at your facility</p>
+                    </div>
+                    <div class="variant-a-card">
+                        <div class="variant-a-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        </div>
+                        <h4 class="variant-a-title">Tailored to Your Risks</h4>
+                        <p class="variant-a-desc">Scenarios built from your industry and policies</p>
+                    </div>
+                    <div class="variant-a-card">
+                        <div class="variant-a-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        </div>
+                        <h4 class="variant-a-title">Confidential Consultations</h4>
+                        <p class="variant-a-desc">Get answers to questions you can't ask elsewhere</p>
+                    </div>
+                    <div class="variant-a-card">
+                        <div class="variant-a-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                        </div>
+                        <h4 class="variant-a-title">Invest in Your Team</h4>
+                        <p class="variant-a-desc">Group rates that build organization-wide capability</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VARIANT B -->
+        <section class="variant-section">
+            <div class="variant-header">
+                <span class="variant-label">Variant B</span>
+                <span class="variant-tag tag-recommended">Compact / Professional</span>
+            </div>
+            <p class="variant-description">
+                Left-aligned horizontal layout with solid blue icons. More compact and information-dense.
+                Clean borders with subtle hover states. Professional and efficient feel.
+            </p>
+            <div class="variant-demo">
+                <div class="variant-b-row">
+                    <div class="variant-b-card">
+                        <div class="variant-b-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <div class="variant-b-content">
+                            <h4 class="variant-b-title">45 Years of Expertise</h4>
+                            <p class="variant-b-desc">Same intensive programs, delivered at your facility</p>
+                        </div>
+                    </div>
+                    <div class="variant-b-card">
+                        <div class="variant-b-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        </div>
+                        <div class="variant-b-content">
+                            <h4 class="variant-b-title">Tailored to Your Risks</h4>
+                            <p class="variant-b-desc">Scenarios built from your industry and policies</p>
+                        </div>
+                    </div>
+                    <div class="variant-b-card">
+                        <div class="variant-b-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        </div>
+                        <div class="variant-b-content">
+                            <h4 class="variant-b-title">Confidential Consultations</h4>
+                            <p class="variant-b-desc">Get answers to questions you can't ask elsewhere</p>
+                        </div>
+                    </div>
+                    <div class="variant-b-card">
+                        <div class="variant-b-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                        </div>
+                        <div class="variant-b-content">
+                            <h4 class="variant-b-title">Invest in Your Team</h4>
+                            <p class="variant-b-desc">Group rates that build organization-wide capability</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VARIANT C -->
+        <section class="variant-section">
+            <div class="variant-header">
+                <span class="variant-label">Variant C</span>
+                <span class="variant-tag tag-bold">Bold / High-Impact</span>
+            </div>
+            <p class="variant-description">
+                Full-width dark gradient background strip with white cards and gold accent icons.
+                Maximum visual impact and contrast. Creates a distinct "feature block" feel.
+            </p>
+            <div class="variant-demo">
+                <div class="variant-c-wrapper">
+                    <div class="variant-c-label">Why Teams Choose Us</div>
+                    <div class="variant-c-row">
+                        <div class="variant-c-card">
+                            <div class="variant-c-header">
+                                <div class="variant-c-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                </div>
+                                <h4 class="variant-c-title">45 Years of Expertise</h4>
+                            </div>
+                            <p class="variant-c-desc">Same intensive programs, delivered at your facility</p>
+                        </div>
+                        <div class="variant-c-card">
+                            <div class="variant-c-header">
+                                <div class="variant-c-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                                </div>
+                                <h4 class="variant-c-title">Tailored to Your Risks</h4>
+                            </div>
+                            <p class="variant-c-desc">Scenarios built from your industry and policies</p>
+                        </div>
+                        <div class="variant-c-card">
+                            <div class="variant-c-header">
+                                <div class="variant-c-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                                </div>
+                                <h4 class="variant-c-title">Confidential Consultations</h4>
+                            </div>
+                            <p class="variant-c-desc">Get answers to questions you can't ask elsewhere</p>
+                        </div>
+                        <div class="variant-c-card">
+                            <div class="variant-c-header">
+                                <div class="variant-c-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                                </div>
+                                <h4 class="variant-c-title">Invest in Your Team</h4>
+                            </div>
+                            <p class="variant-c-desc">Group rates that build organization-wide capability</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div style="background: var(--gray-50); padding: var(--space-xl); border-radius: var(--radius-lg); margin-top: var(--space-xl);">
+            <h3 style="font-family: var(--font-heading); color: var(--blue-dark); margin-bottom: var(--space-md);">Quick Comparison</h3>
+            <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                <thead>
+                    <tr style="border-bottom: 2px solid var(--gray-200);">
+                        <th style="text-align: left; padding: 12px 8px; color: var(--gray-700);">Aspect</th>
+                        <th style="text-align: left; padding: 12px 8px; color: var(--gray-700);">Variant A</th>
+                        <th style="text-align: left; padding: 12px 8px; color: var(--gray-700);">Variant B</th>
+                        <th style="text-align: left; padding: 12px 8px; color: var(--gray-700);">Variant C</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid var(--gray-100);">
+                        <td style="padding: 12px 8px; font-weight: 600;">Visual Weight</td>
+                        <td style="padding: 12px 8px;">Light</td>
+                        <td style="padding: 12px 8px;">Medium</td>
+                        <td style="padding: 12px 8px;">Heavy</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--gray-100);">
+                        <td style="padding: 12px 8px; font-weight: 600;">Icon Style</td>
+                        <td style="padding: 12px 8px;">Blue gradient box</td>
+                        <td style="padding: 12px 8px;">Solid blue square</td>
+                        <td style="padding: 12px 8px;">Gold circle</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--gray-100);">
+                        <td style="padding: 12px 8px; font-weight: 600;">Text Alignment</td>
+                        <td style="padding: 12px 8px;">Centered</td>
+                        <td style="padding: 12px 8px;">Left-aligned</td>
+                        <td style="padding: 12px 8px;">Left-aligned</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--gray-100);">
+                        <td style="padding: 12px 8px; font-weight: 600;">Background</td>
+                        <td style="padding: 12px 8px;">Gray cards</td>
+                        <td style="padding: 12px 8px;">White w/ border</td>
+                        <td style="padding: 12px 8px;">Dark strip + white cards</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px 8px; font-weight: 600;">Best For</td>
+                        <td style="padding: 12px 8px;">Subtle, approachable</td>
+                        <td style="padding: 12px 8px;">Professional, efficient</td>
+                        <td style="padding: 12px 8px;">Maximum impact</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

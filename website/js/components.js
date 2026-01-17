@@ -90,7 +90,7 @@ const getHeaderHTML = () => `
   </div>
 
   <div class="mega-menu" id="mega-menu-corporate" role="menu" aria-label="Corporate Training menu">
-      <div class="mega-menu-container">
+      <div class="mega-menu-container mega-menu-container--corporate">
           <div class="mega-menu-column">
               <h3 class="mega-menu-heading">Training Solutions</h3>
               <ul class="mega-menu-list mega-menu-list-detailed">
@@ -106,13 +106,6 @@ const getHeaderHTML = () => `
                   <li><a href="/corporate-training" class="mega-menu-link"><span class="mega-menu-link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span><span>Workplace Investigations</span></a></li>
                   <li><a href="/corporate-training" class="mega-menu-link"><span class="mega-menu-link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span><span>Strategic HR Leadership</span></a></li>
               </ul>
-              <h3 class="mega-menu-heading" style="margin-top: 24px;">Why Teams Choose Us</h3>
-              <ul class="mega-menu-benefits">
-                  <li><span class="benefit-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span><span>Same content, your location</span></li>
-                  <li><span class="benefit-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span><span>Customize for your industry</span></li>
-                  <li><span class="benefit-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span><span>Confidential Q&amp;A</span></li>
-                  <li><span class="benefit-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span><span>Group pricing available</span></li>
-              </ul>
           </div>
           <div class="mega-menu-column mega-menu-cta-panel">
               <div class="cta-panel-image"><img src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/695d44c4a8a91c0bb970611d.svg" alt="Corporate training" loading="lazy"></div>
@@ -121,6 +114,39 @@ const getHeaderHTML = () => `
                   <a href="#" class="cta-panel-button" onclick="openBookingModal(); closeMegaMenu(); return false;">Schedule a Consultation<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
               </div>
               <blockquote class="testimonial-panel-quote"><p>"The opportunity to interact through role playing and ask questions specific to our business was very helpful."</p><cite><strong>Coreen Oradee</strong><span>Employee Relations Specialist</span><span>American Family Insurance</span></cite></blockquote>
+          </div>
+          <div class="ct-value-wrapper">
+              <div class="ct-value-label">Why Teams Choose Us</div>
+              <div class="ct-value-row">
+                  <div class="ct-value-card">
+                      <div class="ct-value-header">
+                          <div class="ct-value-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+                          <h4 class="ct-value-title">45 Years of Expertise</h4>
+                      </div>
+                      <p class="ct-value-desc">Same intensive programs, delivered at your facility</p>
+                  </div>
+                  <div class="ct-value-card">
+                      <div class="ct-value-header">
+                          <div class="ct-value-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
+                          <h4 class="ct-value-title">Tailored to Your Risks</h4>
+                      </div>
+                      <p class="ct-value-desc">Scenarios built from your industry and policies</p>
+                  </div>
+                  <div class="ct-value-card">
+                      <div class="ct-value-header">
+                          <div class="ct-value-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg></div>
+                          <h4 class="ct-value-title">Confidential Consultations</h4>
+                      </div>
+                      <p class="ct-value-desc">Get answers to questions you can't ask elsewhere</p>
+                  </div>
+                  <div class="ct-value-card">
+                      <div class="ct-value-header">
+                          <div class="ct-value-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg></div>
+                          <h4 class="ct-value-title">Invest in Your Team</h4>
+                      </div>
+                      <p class="ct-value-desc">Group rates that build organization-wide capability</p>
+                  </div>
+              </div>
           </div>
       </div>
   </div>
