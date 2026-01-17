@@ -11,11 +11,10 @@
   // CONFIGURATION & CONSTANTS
   // ============================================
 
-  // Calculate years since founding (auto-increments every January 1st)
+  // Years of excellence - use standard "45+" convention for brand consistency
+  // (matches about-us.html and other website pages)
   function getYearsOfExcellence() {
-    const foundingYear = 1979;
-    const currentYear = new Date().getFullYear();
-    return currentYear - foundingYear;
+    return '45';
   }
 
   const PROGRAM_DATA = {

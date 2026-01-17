@@ -37,7 +37,6 @@ function connectPopup_closeOnOverlay(e) {
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     connectPopup_close();
-    registrationMaintenance_close();
   }
 });
 
@@ -446,70 +445,6 @@ document.addEventListener('DOMContentLoaded', function() {
   initFirstVisitPopup();
 });
 
-// ===== REGISTRATION MAINTENANCE MODAL =====
-// Temporary placeholder while registration system is under maintenance
-// TO REMOVE: Delete this entire section and remove registrationMaintenance_close() from Escape handler
-
-(function() {
-  // Inject modal HTML on DOM ready
-  document.addEventListener('DOMContentLoaded', function() {
-    const modalHTML = `
-      <div class="connectPopup-overlay" id="registrationMaintenance_Modal" onclick="if(event.target===this)registrationMaintenance_close()">
-        <div class="connectPopup-modal" onclick="event.stopPropagation()">
-          <div class="connectPopup-header">
-            <h3>Registration Under Maintenance</h3>
-            <button class="connectPopup-closeBtn" onclick="registrationMaintenance_close()" aria-label="Close">&times;</button>
-          </div>
-          <div class="connectPopup-body" style="text-align: center;">
-            <p style="margin-bottom: 1.5rem;">Our online registration system is currently under maintenance.</p>
-            <p style="font-size: 1.1rem; margin-bottom: 1.5rem;"><strong>To register, please call:</strong></p>
-            <a href="tel:+19497601700" class="connectPopup-submitBtn" style="display: block; text-decoration: none;">(949) 760-1700</a>
-            <p style="margin-top: 1rem; color: var(--gray-500); font-size: 0.9rem;">Monday–Friday, 8am–5pm PT</p>
-          </div>
-        </div>
-      </div>`;
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-
-    // Intercept registration-related clicks
-    document.body.addEventListener('click', function(e) {
-      const el = e.target.closest('a, button');
-      if (!el) return;
-
-      const text = (el.textContent || '').toLowerCase();
-      const href = (el.getAttribute('href') || '').toLowerCase();
-
-      // Match: register, reserve your spot, reserve your seat
-      const isRegistration =
-        href.includes('register') ||
-        text.includes('register') ||
-        text.includes('reserve your spot') ||
-        text.includes('reserve your seat');
-
-      if (isRegistration) {
-        e.preventDefault();
-        e.stopPropagation();
-        registrationMaintenance_open();
-      }
-    }, true);
-  });
-})();
-
-function registrationMaintenance_open() {
-  const modal = document.getElementById('registrationMaintenance_Modal');
-  if (modal) {
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
-}
-
-function registrationMaintenance_close() {
-  const modal = document.getElementById('registrationMaintenance_Modal');
-  if (modal) {
-    modal.classList.remove('active');
-    document.body.style.overflow = 'auto';
-  }
-}
-
 // Make functions globally available
 if (typeof window !== 'undefined') {
   window.connectPopup_open = connectPopup_open;
@@ -520,6 +455,4 @@ if (typeof window !== 'undefined') {
   window.closeFirstVisitPopup = closeFirstVisitPopup;
   window.closeFirstVisitPopupOnOverlay = closeFirstVisitPopupOnOverlay;
   window.resetFirstVisitPopup = resetFirstVisitPopup;
-  window.registrationMaintenance_open = registrationMaintenance_open;
-  window.registrationMaintenance_close = registrationMaintenance_close;
 }
