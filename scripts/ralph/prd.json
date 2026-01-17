@@ -1,0 +1,175 @@
+{
+  "project": "IAML Business OS - Phase 2 Workers",
+  "description": "Deploy remaining Marketing and Lead Intelligence n8n workers",
+  "branchName": "feature/phase-2-workers",
+  "stories": [
+    {
+      "id": "DIG-27",
+      "title": "Content Freshness Monitor Worker",
+      "description": "n8n workflow that monitors website content age, identifies stale pages (>90 days without update), and alerts for review. Checks /programs/ and key landing pages.",
+      "priority": 1,
+      "acceptance": [
+        "Workflow triggers on daily schedule",
+        "Scans all program pages for last-modified dates",
+        "Identifies pages older than 90 days threshold",
+        "Stores results in content_health table",
+        "Pattern stored in n8n-brain"
+      ],
+      "passes": false
+    },
+    {
+      "id": "DIG-28",
+      "title": "Broken Resource Monitor Worker",
+      "description": "n8n workflow that checks for broken images, scripts, and stylesheets across the website. Reports 404s and missing resources.",
+      "priority": 2,
+      "acceptance": [
+        "Workflow triggers on weekly schedule",
+        "Crawls all pages for resource references",
+        "Validates each resource URL returns 200",
+        "Logs broken resources to resource_health table",
+        "Pattern stored in n8n-brain"
+      ],
+      "passes": false
+    },
+    {
+      "id": "MKT-04",
+      "title": "Campaign Analyst Worker",
+      "description": "n8n workflow that analyzes campaign_funnel view daily, calculates key metrics (engagement rate, conversion rate, channel performance), stores insights in campaign_metrics table, and alerts on significant changes (>10% variance).",
+      "priority": 3,
+      "acceptance": [
+        "Workflow triggers daily at 6 AM",
+        "Queries campaign_funnel view for all active campaigns",
+        "Calculates: engagement_rate, conversion_rate, channel_performance",
+        "Compares to 7-day rolling average",
+        "Alerts if variance exceeds 10%",
+        "Stores metrics in campaign_metrics table",
+        "Pattern stored in n8n-brain"
+      ],
+      "passes": false
+    },
+    {
+      "id": "MKT-05",
+      "title": "A/B Test Manager Worker",
+      "description": "n8n workflow that monitors message_variants performance, calculates statistical significance using chi-square test, auto-pauses underperforming variants when significance threshold (95%) reached.",
+      "priority": 4,
+      "acceptance": [
+        "Workflow triggers every 4 hours",
+        "Queries message_variants with sends > 100",
+        "Calculates conversion rates per variant",
+        "Performs chi-square significance test",
+        "When p < 0.05, marks winner and pauses losers",
+        "Logs decisions to ab_test_results table",
+        "Pattern stored in n8n-brain"
+      ],
+      "passes": false
+    },
+    {
+      "id": "MKT-06",
+      "title": "Content Performance Tracker Worker",
+      "description": "n8n workflow that tracks engagement metrics by message content type, identifies top-performing message templates, and generates weekly content performance report.",
+      "priority": 5,
+      "acceptance": [
+        "Workflow triggers weekly on Monday",
+        "Aggregates campaign_activity by message_id",
+        "Groups by message_type (connection_request, follow_up, email, etc.)",
+        "Calculates: open_rate, click_rate, reply_rate by type",
+        "Identifies top 5 performing messages",
+        "Stores report in content_performance table",
+        "Pattern stored in n8n-brain"
+      ],
+      "passes": false
+    },
+    {
+      "id": "LEAD-09",
+      "title": "Lead Scoring Engine Worker",
+      "description": "n8n workflow that calculates lead scores based on engagement signals (opens, clicks, replies, calls), updates lifecycle_tag automatically, and triggers GHL branch routing when thresholds met.",
+      "priority": 6,
+      "acceptance": [
+        "Workflow triggers on new campaign_activity events",
+        "Calculates weighted score: opens(1), clicks(3), replies(10), calls(15)",
+        "Updates campaign_contacts.engagement_score",
+        "Auto-updates lifecycle_tag based on score thresholds",
+        "Triggers assign_ghl_branch when qualified",
+        "Pattern stored in n8n-brain"
+      ],
+      "passes": false
+    },
+    {
+      "id": "LEAD-10",
+      "title": "Engagement Decay Monitor Worker",
+      "description": "n8n workflow that identifies contacts whose engagement is declining (no activity in 14+ days after initial engagement), triggers re-engagement workflows, and updates engagement_level field.",
+      "priority": 7,
+      "acceptance": [
+        "Workflow triggers daily",
+        "Finds contacts with first_engagement_at but no activity in 14 days",
+        "Updates engagement_level from 'engaged' to 'warm' to 'cold'",
+        "Queues contacts for re-engagement sequence",
+        "Logs decay events to campaign_activity",
+        "Pattern stored in n8n-brain"
+      ],
+      "passes": false
+    },
+    {
+      "id": "LEAD-11",
+      "title": "Re-engagement Trigger Worker",
+      "description": "n8n workflow that activates dormant contacts through personalized outreach based on their engagement history, tracks re-engagement success rates.",
+      "priority": 8,
+      "acceptance": [
+        "Workflow triggers when engagement_decay_monitor queues contacts",
+        "Retrieves contact's engagement history from campaign_activity",
+        "Selects appropriate re-engagement template based on history",
+        "Triggers GHL sequence or Smartlead email",
+        "Tracks re-engagement attempts and outcomes",
+        "Pattern stored in n8n-brain"
+      ],
+      "passes": false
+    },
+    {
+      "id": "OPS-18",
+      "title": "Invoice Generator Worker",
+      "description": "n8n workflow that generates invoices for corporate training bookings, integrates with Stripe for invoice creation, and stores invoice records in Supabase.",
+      "priority": 9,
+      "acceptance": [
+        "Workflow triggers on corporate booking requests",
+        "Creates Stripe invoice with line items",
+        "Generates PDF invoice via Stripe",
+        "Stores invoice record in invoices table",
+        "Sends invoice email via GHL",
+        "Pattern stored in n8n-brain"
+      ],
+      "passes": false
+    },
+    {
+      "id": "OPS-19",
+      "title": "Payment Reminder Worker",
+      "description": "n8n workflow that sends payment reminders for unpaid invoices at 7, 14, and 30 day intervals, escalates to phone outreach after 30 days.",
+      "priority": 10,
+      "acceptance": [
+        "Workflow triggers daily",
+        "Queries invoices table for unpaid items",
+        "Sends appropriate reminder based on age",
+        "7 days: Friendly reminder email",
+        "14 days: Urgent reminder with link",
+        "30 days: Final notice + phone queue",
+        "Logs all reminders to invoice_reminders table",
+        "Pattern stored in n8n-brain"
+      ],
+      "passes": false
+    },
+    {
+      "id": "OPS-20",
+      "title": "Group Discount Manager Worker",
+      "description": "n8n workflow that automatically applies group discounts based on registration count, validates discount codes, and tracks discount usage.",
+      "priority": 11,
+      "acceptance": [
+        "Workflow triggers on registration events",
+        "Counts registrations per company/group",
+        "Applies tiered discounts: 5+ (10%), 10+ (15%), 20+ (20%)",
+        "Creates/validates Stripe coupon codes",
+        "Tracks discount usage in discounts table",
+        "Pattern stored in n8n-brain"
+      ],
+      "passes": false
+    }
+  ]
+}

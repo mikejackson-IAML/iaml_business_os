@@ -1,0 +1,17 @@
+# Ralph Progress Log - IAML Business OS
+
+## Codebase Patterns
+<!-- Add reusable patterns discovered during iterations -->
+- n8n-brain available for credential lookups and pattern storage
+- Campaign tracking uses: campaign_contacts, campaign_activity, campaign_contact_channels
+- Lifecycle tags: STANDARD, HOT LEAD, ENGAGED, WARM, COLD, QUALIFIED, NURTURE, NO CONTACT, OPT OUT
+- GHL branches: A (qualified), A+ (qualified+), B (nurture), C (no contact)
+- Message codes: L (LinkedIn), S (Smartlead), P (Phone), A/A+/B/C (GHL)
+- All timestamps in UTC
+- Use Supabase helper functions: update_contact_lifecycle_tag(), assign_ghl_branch()
+
+---
+
+## Iteration Log
+
+<!-- Progress entries will be appended below -->
