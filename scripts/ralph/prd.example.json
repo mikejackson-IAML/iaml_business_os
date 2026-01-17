@@ -1,0 +1,29 @@
+{
+  "project": "Your Project Name",
+  "description": "Brief description of what you're building",
+  "branchName": "feature/your-feature-name",
+  "stories": [
+    {
+      "id": "STORY-01",
+      "title": "Short descriptive title",
+      "description": "Detailed description of what needs to be built. Include context about how it fits into the larger system.",
+      "priority": 1,
+      "acceptance": [
+        "First acceptance criterion",
+        "Second acceptance criterion",
+        "Pattern stored in n8n-brain (for n8n workflows)"
+      ],
+      "passes": false
+    },
+    {
+      "id": "STORY-02",
+      "title": "Another story",
+      "description": "Another detailed description",
+      "priority": 2,
+      "acceptance": [
+        "Acceptance criteria here"
+      ],
+      "passes": false
+    }
+  ]
+}
