@@ -221,7 +221,6 @@
       'Handle employee terminations with confidence, knowing exactly what documentation you need',
       'Navigate FMLA/ADA intersection issues that trip up even experienced HR professionals',
       'Spot wage-hour compliance gaps before they become class action exposure',
-      'Conduct workplace investigations that hold up under legal scrutiny',
       'Advise managers on discipline situations without second-guessing yourself',
       'Draft separation agreements and releases that actually protect your organization'
     ],
