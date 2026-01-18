@@ -3954,7 +3954,8 @@ button#prev-btn {
                 if (Array.isArray(raw)) return Number(String(raw[0]).replace(/[^\d.]/g,'')||0) || undefined;
                 const num = Number(String(raw).replace(/[^\d.]/g,'')||0);
                 return num || undefined;
-              })()
+              })(),
+              registrationUrl: safeString(f['Registration URL'])
             };
           } catch (error) {
             return null; // Skip this record
@@ -4052,7 +4053,8 @@ button#prev-btn {
                 const raw = f['Program Pricing'];
                 const num = Number(String(raw).replace(/[^\d.]/g,'')||0);
                 return num || undefined;
-              })()
+              })(),
+              registrationUrl: safeString(f['Registration URL'])
             };
           } catch (error) {
             return null;
@@ -4700,6 +4702,7 @@ button#prev-btn {
                    data-state="${program.state || ''}"
                    data-start-date="${program.startDate || ''}"
                    data-end-date="${program.endDate || ''}"
+                   data-registration-url="${program.registrationUrl || ''}"
                    data-tracking="session-card-${formatKey}"
                    onclick="return false;">${formatKey==='on-demand' ? 'START LEARNING IMMEDIATELY' : 'RESERVE YOUR SEAT'}</a>
               </div>
@@ -8960,6 +8963,7 @@ button#prev-btn {
   <script src="../js/components.js" defer></script>
   <script src="../js/megaMenu.js" defer></script>
   <script src="../js/utm-tracking.js" defer></script>
+  <script src="../js/reserveButton.js" defer></script>
   <script src="../js/headerBehavior.js" defer></script>
   <script src="../js/mobileMenu.js" defer></script>
 

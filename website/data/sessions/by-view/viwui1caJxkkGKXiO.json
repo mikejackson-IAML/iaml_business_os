@@ -1,5 +1,5 @@
 {
-  "generated": "2026-01-18T08:14:42.581Z",
+  "generated": "2026-01-18T16:15:14.344Z",
   "viewId": "viwui1caJxkkGKXiO",
   "usedBy": [
     {
@@ -30,11 +30,12 @@
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
         "Show on Website": true,
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-benefits-law",
         "Block 1 Title": "Retirement Plans",
         "Block 2 Title": "Benefit Plan Claims, Appeals & Litigation",
         "Block 3 Title": "Welfare Benefits Plan Issues",
         "Created Date": "2025-12-15T19:35:44.000Z",
-        "Last Modified": "2025-12-17T15:04:53.000Z",
+        "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
           "id": "usrSAo8TcudAuSfA4",
           "email": "mike.jackson@re-vitalized.com",
@@ -77,11 +78,12 @@
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
         "Show on Website": true,
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-benefits-law",
         "Block 1 Title": "Retirement Plans",
         "Block 2 Title": "Benefit Plan Claims, Appeals & Litigation",
         "Block 3 Title": "Welfare Benefits Plan Issues",
         "Created Date": "2025-12-15T19:35:44.000Z",
-        "Last Modified": "2025-12-17T15:07:23.000Z",
+        "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
           "id": "usrSAo8TcudAuSfA4",
           "email": "mike.jackson@re-vitalized.com",
