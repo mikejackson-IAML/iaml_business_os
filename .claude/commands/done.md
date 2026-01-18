@@ -135,33 +135,54 @@ QUARTERLY (Q1 2026):
 
 ### Step 5: Save to Database
 
-Insert entries via Supabase MCP or direct SQL:
+**IMPORTANT: Save automatically via Supabase REST API when user selects [S] Save.**
 
-```sql
-INSERT INTO accomplishments.entries (
-  title,
-  description,
-  impact_category,
-  impact_level,
-  work_date,
-  detection_source,
-  git_metadata
-) VALUES (
-  $title,
-  $description,
-  $impact_category,
-  $impact_level,
-  CURRENT_DATE,
-  $detection_source,
-  $git_metadata::jsonb
-);
+Use this bash command to insert accomplishments (replace variables with actual values):
+
+```bash
+# Supabase credentials (from Claude config)
+SUPABASE_URL="https://mnkuffgxemfyitcjnjdc.supabase.co"
+SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ua3VmZmd4ZW1meWl0Y2puamRjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MzgyNjc1NSwiZXhwIjoyMDc5NDAyNzU1fQ.9xE-Ee_A1UgVO12avVwtzLaT792EZ8JCJaupAAP0-88"
+
+# Insert accomplishments via REST API
+curl -s -X POST "${SUPABASE_URL}/rest/v1/entries" \
+  -H "apikey: ${SUPABASE_KEY}" \
+  -H "Authorization: Bearer ${SUPABASE_KEY}" \
+  -H "Content-Type: application/json" \
+  -H "Content-Profile: accomplishments" \
+  -H "Prefer: return=representation" \
+  -d '[
+    {
+      "title": "TITLE_HERE",
+      "description": "DESCRIPTION_HERE",
+      "impact_category": "CATEGORY_HERE",
+      "impact_level": "LEVEL_HERE",
+      "work_date": "YYYY-MM-DD",
+      "detection_source": "git_commit",
+      "git_metadata": {"commit": "HASH", "files_changed": N, "insertions": N, "branch": "main"}
+    }
+  ]'
 ```
 
-If linking to goals:
+**When user selects [S] Save:**
+1. Build the JSON array of accomplishments from detected entries
+2. Execute the curl command above with actual values
+3. Parse the response to confirm success
+4. Display confirmation to user
 
-```sql
-INSERT INTO accomplishments.goal_entries (goal_id, entry_id, contribution_value)
-VALUES ($goal_id, $entry_id, 1);
+**Fallback:** If the REST API fails (schema not exposed), save to SQL file:
+- Location: `supabase/scripts/log-accomplishments-YYYY-MM-DD.sql`
+- Inform user to run in Supabase SQL Editor
+
+If linking to goals, also insert:
+
+```bash
+curl -s -X POST "${SUPABASE_URL}/rest/v1/goal_entries" \
+  -H "apikey: ${SUPABASE_KEY}" \
+  -H "Authorization: Bearer ${SUPABASE_KEY}" \
+  -H "Content-Type: application/json" \
+  -H "Content-Profile: accomplishments" \
+  -d '[{"goal_id": "UUID", "entry_id": "UUID", "contribution_value": 1}]'
 ```
 
 ### Step 6: Confirm and Summarize
