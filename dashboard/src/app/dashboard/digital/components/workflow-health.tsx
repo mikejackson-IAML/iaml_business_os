@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import {
   Activity,
   AlertTriangle,
@@ -7,6 +8,7 @@ import {
   Clock,
   XCircle,
   RefreshCw,
+  ExternalLink,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/dashboard-kit/components/ui/card';
 import type { WorkflowRun, WorkflowHealth as WorkflowHealthType } from '@/lib/api/workflow-queries';
@@ -65,15 +67,24 @@ export function WorkflowHealthCard({ recentErrors, healthSummary, stats }: Workf
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-heading-md flex items-center gap-2">
-          <Activity className="h-5 w-5" />
-          Workflow Health
-          {hasErrors && (
-            <span className="ml-2 text-xs px-2 py-0.5 bg-red-100 text-red-700 rounded dark:bg-red-900/30 dark:text-red-400">
-              {stats.unresolvedErrors} unresolved
-            </span>
-          )}
-        </CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-heading-md flex items-center gap-2">
+            <Activity className="h-5 w-5" />
+            Workflow Health
+            {hasErrors && (
+              <span className="ml-2 text-xs px-2 py-0.5 bg-red-100 text-red-700 rounded dark:bg-red-900/30 dark:text-red-400">
+                {stats.unresolvedErrors} unresolved
+              </span>
+            )}
+          </CardTitle>
+          <Link
+            href="/dashboard/digital/workflows"
+            className="text-sm text-accent-primary hover:underline flex items-center gap-1"
+          >
+            View All
+            <ExternalLink className="h-3 w-3" />
+          </Link>
+        </div>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Summary Stats */}
