@@ -10474,6 +10474,22 @@ input[type="radio"].session-radio {
   color: var(--color-muted);
 }
 
+/* Disabled format option (unavailable for selected program) */
+.format-option.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.format-option.disabled .format-card {
+  background: var(--gray-100);
+  border-color: var(--gray-200);
+}
+
+.format-option.disabled:hover {
+  border-color: var(--gray-200);
+}
+
 /* ========================================
    PROGRAM SELECTION STYLES
    ======================================== */

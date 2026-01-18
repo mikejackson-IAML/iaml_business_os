@@ -349,7 +349,11 @@
     programDuration: '',
 
     // URL Pre-selection flag
-    preselectedFromURL: false
+    preselectedFromURL: false,
+
+    // Program pre-selection flag (for conditional flow)
+    // When true, user arrived with program in URL - show format step first
+    programPreselectedFromURL: false
   };
 
   // ============================================
@@ -476,6 +480,75 @@
     return program.blocks[format];
   }
 
+  /**
+   * Get available formats for a given program
+   * Returns array of format strings: ['in-person', 'virtual', 'on-demand']
+   */
+  function getAvailableFormats(programName) {
+    const available = [];
+
+    // Check if program has in-person sessions
+    if (SESSION_VIEW_IDS[programName] && SESSION_VIEW_IDS[programName]['in-person']) {
+      available.push('in-person');
+    }
+
+    // Check if program has virtual sessions (via blocks or direct)
+    const program = PROGRAM_DATA[programName];
+    if (program) {
+      // Check if any blocks have virtual availability
+      if (program.blocks) {
+        const hasVirtualBlocks = Object.keys(program.blocks).includes('virtual');
+        if (hasVirtualBlocks) {
+          available.push('virtual');
+        }
+      }
+      // Check SESSION_VIEW_IDS for virtual (full program)
+      if (SESSION_VIEW_IDS[programName] && SESSION_VIEW_IDS[programName]['virtual']) {
+        if (!available.includes('virtual')) {
+          available.push('virtual');
+        }
+      }
+    }
+
+    // On-demand is available for all programs (no session selection required)
+    available.push('on-demand');
+
+    return available;
+  }
+
+  /**
+   * Filter format options in the UI based on available formats for the selected program
+   */
+  function filterFormatOptions(programName) {
+    const availableFormats = programName ? getAvailableFormats(programName) : ['in-person', 'virtual', 'on-demand'];
+
+    qsa('.format-option').forEach(option => {
+      const input = option.querySelector('input[name="format"]');
+      if (!input) return;
+
+      const formatValue = input.value;
+      const isAvailable = availableFormats.includes(formatValue);
+
+      if (isAvailable) {
+        option.classList.remove('disabled');
+        input.disabled = false;
+        option.setAttribute('aria-disabled', 'false');
+      } else {
+        option.classList.add('disabled');
+        input.disabled = true;
+        input.checked = false;
+        option.setAttribute('aria-disabled', 'true');
+      }
+    });
+
+    // If current format selection is no longer available, clear it
+    if (state.format && !availableFormats.includes(state.format)) {
+      state.format = '';
+      const selectedInput = qs(`input[name="format"][value="${state.format}"]`);
+      if (selectedInput) selectedInput.checked = false;
+    }
+  }
+
   function saveStateToSessionStorage() {
     try {
       sessionStorage.setItem('iaml_registration_state', JSON.stringify(state));
@@ -512,13 +585,45 @@
   // STEP DETERMINATION
   // ============================================
 
+  /**
+   * Determine step order based on how user arrived:
+   *
+   * 1. Program pre-selected from URL (no format yet):
+   *    Format → (Blocks) → Session → Contact → Payment
+   *    (User came from program page, skip program selection)
+   *
+   * 2. Neither pre-selected (fresh start):
+   *    Program → Format → (Blocks) → Session → Contact → Payment
+   *    (User picks program first, then delivery format)
+   *
+   * 3. Both pre-selected from URL:
+   *    (Blocks) → Session → Contact → Payment
+   *    (User came from session card with all selections)
+   */
   function determineSteps() {
-    const steps = ['format', 'program'];
+    const steps = [];
 
-    // Skip session/blocks for on-demand
+    // Determine first steps based on pre-selection
+    if (state.programPreselectedFromURL && !state.format) {
+      // Scenario 1: Program pre-selected, need format
+      // Show format step only (program already known)
+      steps.push('format');
+    } else if (!state.program && !state.format) {
+      // Scenario 2: Fresh start - show program first, then format
+      steps.push('program', 'format');
+    } else if (state.program && !state.format) {
+      // Program selected during session, need format next
+      steps.push('format');
+    } else if (!state.program && state.format) {
+      // Format selected, need program
+      steps.push('program');
+    }
+    // Scenario 3: Both already selected - no format/program steps needed
+
+    // Add remaining steps based on format/program selection
     if (state.format !== 'on-demand') {
       // Add blocks step BEFORE session for block programs
-      if (isBlockProgram(state.program, state.format)) {
+      if (state.program && state.format && isBlockProgram(state.program, state.format)) {
         steps.push('blocks');
       }
       steps.push('session');
@@ -779,6 +884,23 @@
     updateNavigationButtons();
     updateLeftPanel();
 
+    // Filter format options when showing format step with pre-selected program
+    if (stepName === 'format' && state.program) {
+      filterFormatOptions(state.program);
+
+      // Update step title/subtitle when program is pre-selected
+      if (state.programPreselectedFromURL) {
+        const stepTitle = qs('#step-format-title');
+        const stepSubtitle = qs('#step-format .step-subtitle');
+        if (stepTitle) {
+          stepTitle.textContent = 'Select Your Delivery Format';
+        }
+        if (stepSubtitle) {
+          stepSubtitle.textContent = `Choose how you'd like to attend the ${state.program}`;
+        }
+      }
+    }
+
     // Load blocks when navigating to blocks step
     if (stepName === 'blocks' && isBlockProgram(state.program, state.format)) {
       loadBlocksOptions();
@@ -1008,7 +1130,17 @@
 
     if (!leftPanel || !panelContent) return;
 
-    const content = LEFT_PANEL_CONTENT[state.currentStep];
+    // Determine which content to show
+    // When on format step with program pre-selected, show program-specific content
+    let content;
+    if (state.currentStep === 'format' && state.programPreselectedFromURL && state.program) {
+      content = {
+        type: 'program-takeaways',
+        headline: `Great choice! After the ${state.program}, you'll be able to...`
+      };
+    } else {
+      content = LEFT_PANEL_CONTENT[state.currentStep];
+    }
 
     // Hide left panel for confirmation steps
     if (!content || state.currentStep.startsWith('confirm')) {
@@ -1248,13 +1380,26 @@
     qsa('input[name="format"]').forEach(input => {
       input.addEventListener('change', (e) => {
         state.format = e.target.value;
-        state.program = '';
+
+        // Only reset program if it wasn't pre-selected from URL
+        // (When user came from program page, keep the program selection)
+        if (!state.programPreselectedFromURL) {
+          state.program = '';
+        }
+
         state.sessionId = '';
         state.blockSelectionType = 'Full';
         state.selectedBlocks = [];
+
+        // Re-determine steps based on new state
         state.steps = determineSteps();
         buildStepperUI();
-        loadPrograms();
+
+        // Only load programs if we need to (user needs to select program)
+        if (!state.program) {
+          loadPrograms();
+        }
+
         saveStateToSessionStorage();
         updateNextButtonVisibility();
       });
@@ -2526,7 +2671,41 @@
     const urlParams = parseURLParams();
     const { format, program, session, blocks } = urlParams;
 
-    // Need at minimum format and program
+    // Handle program-only pre-selection (user coming from program detail page)
+    if (program && !format) {
+      // Map program slug to full name
+      const programName = PROGRAM_SLUG_MAP[program];
+      if (!programName || !PROGRAM_DATA[programName]) {
+        console.warn('Unknown program slug:', program);
+        return false;
+      }
+
+      // Set program and flag as pre-selected
+      state.program = programName;
+      state.programPreselectedFromURL = true;
+
+      // Set initial pricing
+      const programData = PROGRAM_DATA[programName];
+      state.listPrice = programData.price;
+      state.finalPrice = programData.price;
+
+      // Determine steps (will show format first since program is pre-selected)
+      state.steps = determineSteps();
+      buildStepperUI();
+
+      // Filter format options based on available formats for this program
+      filterFormatOptions(programName);
+
+      // Show format step
+      showStep('format');
+
+      // Clear URL params
+      clearURLParams();
+
+      return true;
+    }
+
+    // Need both format and program for full pre-selection
     if (!format || !program) {
       return false;
     }
@@ -2553,6 +2732,7 @@
     // Set format and program
     state.format = format;
     state.program = programName;
+    state.programPreselectedFromURL = true; // Mark program as pre-selected
 
     // Set initial pricing
     const programData = PROGRAM_DATA[programName];
@@ -2678,9 +2858,11 @@
         buildStepperUI();
         showStep(state.currentStep);
       } else {
+        // Fresh start: show first step (will be 'program' for fresh users)
         state.steps = determineSteps();
         buildStepperUI();
-        showStep('format');
+        loadPrograms(); // Pre-load programs for the program selection step
+        showStep(state.steps[0]);
       }
     }
 
