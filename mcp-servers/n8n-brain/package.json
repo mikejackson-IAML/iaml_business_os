@@ -27,5 +27,8 @@
     "model-context-protocol"
   ],
   "author": "IAML",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "pg": "^8.17.1"
+  }
 }
