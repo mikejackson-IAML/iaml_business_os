@@ -1,5 +1,7 @@
 # Materials Tracker
 
+> **CEO Summary:** Tracks printed materials from faculty content submission through delivery to the venue. Ensures no program runs without materials by monitoring: content received → print order placed → shipped → delivered. Alerts when any step falls behind schedule.
+
 ## Purpose
 
 Track the complete materials lifecycle for all upcoming programs—from faculty content submission through print ordering and delivery confirmation. This monitor ensures no program goes without materials by tracking every step and alerting when timelines slip.

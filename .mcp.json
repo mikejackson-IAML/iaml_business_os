@@ -166,7 +166,7 @@
     "pagespeed": {
       "command": "npx",
       "args": ["-y", "mcp-server-pagespeed"]
-    },
+    }
   }
 }
   

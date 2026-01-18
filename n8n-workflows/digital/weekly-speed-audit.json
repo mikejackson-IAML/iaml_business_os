@@ -1,0 +1,471 @@
+{
+  "name": "Weekly Speed Audit - iaml.com",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 6 * * 1"
+            }
+          ]
+        }
+      },
+      "id": "schedule",
+      "name": "Monday 6 AM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Define all pages to audit\nconst pages = [\n  { url: 'https://www.iaml.com/', name: 'Homepage' },\n  { url: 'https://www.iaml.com/programs/employment-law-update', name: 'Employment Law Update' },\n  { url: 'https://www.iaml.com/programs/advanced-employment-law', name: 'Advanced Employment Law' },\n  { url: 'https://www.iaml.com/programs/the-california-hr-master-class', name: 'California HR Master Class' },\n  { url: 'https://www.iaml.com/programs/employee-relations-law', name: 'Employee Relations Law' },\n  { url: 'https://www.iaml.com/programs/labor-relations-101', name: 'Labor Relations 101' },\n  { url: 'https://www.iaml.com/programs/employment-law-for-supervisors', name: 'Employment Law for Supervisors' },\n  { url: 'https://www.iaml.com/about', name: 'About' },\n  { url: 'https://www.iaml.com/faculty', name: 'Faculty' },\n  { url: 'https://www.iaml.com/corporate-training', name: 'Corporate Training' }\n];\n\nreturn pages.map(p => ({ json: p }));"
+      },
+      "id": "get-pages",
+      "name": "Get Pages to Audit",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {
+          "reset": false
+        }
+      },
+      "id": "batch-pages",
+      "name": "Batch Pages",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "url": "=https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url={{ encodeURIComponent($json.url) }}&strategy=mobile&category=performance&category=accessibility&category=best-practices&category=seo&key=AIzaSyAkD4TCCJ0pQGHJZR18PiRP0ct_DCgNIRA",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "pagespeed-mobile",
+      "name": "PageSpeed Mobile",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, -100]
+    },
+    {
+      "parameters": {
+        "url": "=https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url={{ encodeURIComponent($json.url) }}&strategy=desktop&category=performance&category=accessibility&category=best-practices&category=seo&key=AIzaSyAkD4TCCJ0pQGHJZR18PiRP0ct_DCgNIRA",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "pagespeed-desktop",
+      "name": "PageSpeed Desktop",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 100]
+    },
+    {
+      "parameters": {
+        "mode": "append"
+      },
+      "id": "merge-results",
+      "name": "Merge Results",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [880, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse PageSpeed results for a single page\nconst items = $input.all();\nconst mobile = items[0]?.json || {};\nconst desktop = items[1]?.json || {};\n\n// Helper to extract score\nfunction getScore(data, category) {\n  return Math.round((data.lighthouseResult?.categories?.[category]?.score || 0) * 100);\n}\n\n// Helper to extract metric value in ms\nfunction getMetricMs(data, auditId) {\n  const value = data.lighthouseResult?.audits?.[auditId]?.numericValue;\n  return value ? Math.round(value) : null;\n}\n\n// Helper to extract CLS (already a decimal)\nfunction getCLS(data) {\n  const value = data.lighthouseResult?.audits?.['cumulative-layout-shift']?.numericValue;\n  return value ? parseFloat(value.toFixed(3)) : null;\n}\n\n// Get the page URL from the request\nconst pageUrl = mobile.lighthouseResult?.requestedUrl || mobile.id || 'unknown';\nconst pageName = $('Batch Pages').first().json.name || pageUrl.split('/').pop() || 'Page';\n\nconst result = {\n  page_url: pageUrl,\n  page_name: pageName,\n  \n  // Scores\n  pagespeed_mobile: getScore(mobile, 'performance'),\n  pagespeed_desktop: getScore(desktop, 'performance'),\n  accessibility_score: getScore(mobile, 'accessibility'),\n  best_practices_score: getScore(mobile, 'best-practices'),\n  seo_score: getScore(mobile, 'seo'),\n  \n  // Core Web Vitals (from mobile)\n  lcp_ms: getMetricMs(mobile, 'largest-contentful-paint'),\n  cls: getCLS(mobile),\n  fid_ms: getMetricMs(mobile, 'max-potential-fid'),\n  fcp_ms: getMetricMs(mobile, 'first-contentful-paint'),\n  ttfb_ms: getMetricMs(mobile, 'server-response-time'),\n  speed_index: getMetricMs(mobile, 'speed-index'),\n  total_blocking_time_ms: getMetricMs(mobile, 'total-blocking-time'),\n  \n  // Resource sizes\n  total_bytes: mobile.lighthouseResult?.audits?.['total-byte-weight']?.numericValue || 0,\n  \n  // Opportunities (for issue generation)\n  opportunities: (mobile.lighthouseResult?.audits || {}),\n  \n  // Raw data for storage\n  lighthouse_data: {\n    mobile: mobile.lighthouseResult,\n    desktop: desktop.lighthouseResult\n  }\n};\n\n// Store result in workflow static data for accumulation across loop iterations\nconst staticData = $getWorkflowStaticData('global');\nif (!staticData.pageResults) {\n  staticData.pageResults = [];\n}\nstaticData.pageResults.push(result);\n\nreturn [{ json: result }];"
+      },
+      "id": "parse-page-results",
+      "name": "Parse Page Results",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1100, 0]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "sheetId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "options": {}
+      },
+      "id": "store-page-batch",
+      "name": "Store Page Result",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1320, 0],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "more-pages",
+              "leftValue": "={{ $('Batch Pages').context.noItemsLeft }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-more-pages",
+      "name": "More Pages?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [1540, 0]
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "all_page_results",
+        "options": {}
+      },
+      "id": "aggregate-results",
+      "name": "Aggregate All Results",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [1760, 100]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get accumulated results from workflow static data\nconst staticData = $getWorkflowStaticData('global');\nconst allResults = staticData.pageResults || [];\n\n// Clear static data for next run\nstaticData.pageResults = [];\n\nif (allResults.length === 0) {\n  return [{ json: { error: 'No page results to aggregate' } }];\n}\n\n// Calculate averages\nconst validMobile = allResults.filter(r => r.pagespeed_mobile > 0);\nconst validDesktop = allResults.filter(r => r.pagespeed_desktop > 0);\nconst validLcp = allResults.filter(r => r.lcp_ms > 0);\nconst validCls = allResults.filter(r => r.cls !== null);\n\nconst avg = (arr, key) => arr.length > 0 \n  ? Math.round(arr.reduce((sum, r) => sum + (r[key] || 0), 0) / arr.length) \n  : null;\n\nconst avgDecimal = (arr, key) => arr.length > 0 \n  ? parseFloat((arr.reduce((sum, r) => sum + (r[key] || 0), 0) / arr.length).toFixed(3)) \n  : null;\n\n// Generate audit items from opportunities\nconst auditItems = [];\nlet itemCounter = 0;\n\n// Common issue patterns to check\nconst issuePatterns = [\n  { audit: 'render-blocking-resources', type: 'blocking_script', severity: 'high', title: 'Render-blocking resources' },\n  { audit: 'unminified-javascript', type: 'unused_js', severity: 'medium', title: 'Unminified JavaScript' },\n  { audit: 'unminified-css', type: 'unused_css', severity: 'medium', title: 'Unminified CSS' },\n  { audit: 'unused-javascript', type: 'unused_js', severity: 'medium', title: 'Unused JavaScript' },\n  { audit: 'unused-css-rules', type: 'unused_css', severity: 'medium', title: 'Unused CSS rules' },\n  { audit: 'uses-responsive-images', type: 'large_image', severity: 'high', title: 'Properly sized images' },\n  { audit: 'offscreen-images', type: 'no_lazy_load', severity: 'medium', title: 'Offscreen images not lazy-loaded' },\n  { audit: 'uses-webp-images', type: 'unoptimized_image', severity: 'medium', title: 'Images not in next-gen format' },\n  { audit: 'uses-text-compression', type: 'no_compression', severity: 'high', title: 'Text compression not enabled' },\n  { audit: 'uses-rel-preconnect', type: 'no_preconnect', severity: 'low', title: 'Missing preconnect hints' },\n  { audit: 'dom-size', type: 'large_dom', severity: 'medium', title: 'DOM too large' },\n  { audit: 'mainthread-work-breakdown', type: 'main_thread_work', severity: 'high', title: 'Excessive main thread work' },\n  { audit: 'bootup-time', type: 'long_task', severity: 'high', title: 'Long JavaScript execution time' }\n];\n\n// Process each page for issues\nfor (const pageResult of allResults) {\n  const audits = pageResult.opportunities || {};\n  \n  for (const pattern of issuePatterns) {\n    const audit = audits[pattern.audit];\n    if (audit && audit.score !== undefined && audit.score < 0.9) {\n      const savings = audit.numericValue || 0;\n      const savingsBytes = audit.overallSavingsBytes || 0;\n      \n      // Only create item if there's meaningful savings\n      if (savings > 100 || savingsBytes > 1000) {\n        itemCounter++;\n        auditItems.push({\n          item_code: `SPEED-${String(itemCounter).padStart(3, '0')}`,\n          issue_type: pattern.type,\n          severity: audit.score < 0.5 ? 'critical' : (audit.score < 0.7 ? 'high' : pattern.severity),\n          page_url: pageResult.page_url,\n          title: `${pattern.title} on ${pageResult.page_name}`,\n          description: audit.description || `${pattern.title} detected`,\n          fix_suggestion: audit.details?.items?.[0]?.url ? `Optimize: ${audit.details.items[0].url}` : pattern.title,\n          estimated_impact: savings > 1000 ? 'High' : (savings > 500 ? 'Medium' : 'Low'),\n          estimated_savings_ms: Math.round(savings),\n          estimated_savings_bytes: Math.round(savingsBytes)\n        });\n      }\n    }\n  }\n}\n\n// Count issues by severity\nconst criticalCount = auditItems.filter(i => i.severity === 'critical').length;\nconst highCount = auditItems.filter(i => i.severity === 'high').length;\nconst mediumCount = auditItems.filter(i => i.severity === 'medium').length;\nconst lowCount = auditItems.filter(i => i.severity === 'low').length;\n\nconst auditSummary = {\n  audit_date: new Date().toISOString().split('T')[0],\n  \n  // Aggregate scores\n  avg_pagespeed_mobile: avg(validMobile, 'pagespeed_mobile'),\n  avg_pagespeed_desktop: avg(validDesktop, 'pagespeed_desktop'),\n  avg_lcp_ms: avg(validLcp, 'lcp_ms'),\n  avg_cls: avgDecimal(validCls, 'cls'),\n  avg_fcp_ms: avg(allResults.filter(r => r.fcp_ms), 'fcp_ms'),\n  avg_ttfb_ms: avg(allResults.filter(r => r.ttfb_ms), 'ttfb_ms'),\n  avg_speed_index: avg(allResults.filter(r => r.speed_index), 'speed_index'),\n  \n  // Issue counts\n  critical_issues: criticalCount,\n  high_issues: highCount,\n  medium_issues: mediumCount,\n  low_issues: lowCount,\n  \n  // Data for storage\n  page_results: allResults.map(r => ({\n    page_url: r.page_url,\n    page_name: r.page_name,\n    pagespeed_mobile: r.pagespeed_mobile,\n    pagespeed_desktop: r.pagespeed_desktop,\n    lcp_ms: r.lcp_ms,\n    cls: r.cls,\n    fcp_ms: r.fcp_ms\n  })),\n  \n  audit_items: auditItems,\n  \n  // For notifications\n  total_pages: allResults.length,\n  total_issues: auditItems.length\n};\n\nreturn [{ json: auditSummary }];"
+      },
+      "id": "generate-audit-summary",
+      "name": "Generate Audit Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1980, 100]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- Create the main audit record\nINSERT INTO speed_audits (\n  audit_date,\n  avg_pagespeed_mobile,\n  avg_pagespeed_desktop,\n  avg_lcp_ms,\n  avg_cls,\n  avg_fcp_ms,\n  avg_ttfb_ms,\n  avg_speed_index,\n  critical_issues,\n  high_issues,\n  medium_issues,\n  low_issues,\n  page_results,\n  status\n) VALUES (\n  '{{ $json.audit_date }}'::date,\n  {{ $json.avg_pagespeed_mobile || 'NULL' }},\n  {{ $json.avg_pagespeed_desktop || 'NULL' }},\n  {{ $json.avg_lcp_ms || 'NULL' }},\n  {{ $json.avg_cls || 'NULL' }},\n  {{ $json.avg_fcp_ms || 'NULL' }},\n  {{ $json.avg_ttfb_ms || 'NULL' }},\n  {{ $json.avg_speed_index || 'NULL' }},\n  {{ $json.critical_issues }},\n  {{ $json.high_issues }},\n  {{ $json.medium_issues }},\n  {{ $json.low_issues }},\n  '{{ JSON.stringify($json.page_results) }}'::jsonb,\n  'pending'\n)\nRETURNING id;",
+        "options": {}
+      },
+      "id": "insert-audit",
+      "name": "Insert Audit Record",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [2200, 100],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare audit items for bulk insert\nconst auditId = $('Insert Audit Record').first().json.id;\nconst items = $('Generate Audit Summary').first().json.audit_items || [];\n\nif (!auditId) {\n  throw new Error('Audit ID not found');\n}\n\nreturn items.map(item => ({\n  json: {\n    audit_id: auditId,\n    ...item\n  }\n}));"
+      },
+      "id": "prepare-items",
+      "name": "Prepare Items",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2420, 100]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "table": {
+          "__rl": true,
+          "value": "speed_audit_items",
+          "mode": "list",
+          "cachedResultName": "speed_audit_items"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "insert-items",
+      "name": "Insert Audit Items",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [2640, 100],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT calculate_speed_audit_deltas('{{ $('Insert Audit Record').first().json.id }}');",
+        "options": {}
+      },
+      "id": "calculate-deltas",
+      "name": "Calculate WoW Deltas",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [2860, 100],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n  sa.*,\n  (SELECT COUNT(*) FROM speed_audit_items WHERE audit_id = sa.id) as item_count\nFROM speed_audits sa\nWHERE sa.id = '{{ $('Insert Audit Record').first().json.id }}';",
+        "options": {}
+      },
+      "id": "get-final-audit",
+      "name": "Get Final Audit",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [3080, 100],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Generate notification content\nconst audit = $input.first().json;\nconst summary = $('Generate Audit Summary').first().json;\n\n// Determine status emoji based on scores\nconst getMobileStatus = (score) => {\n  if (score >= 90) return ':white_check_mark:';\n  if (score >= 50) return ':large_yellow_circle:';\n  return ':red_circle:';\n};\n\nconst mobileDelta = audit.mobile_score_delta;\nconst desktopDelta = audit.desktop_score_delta;\nconst deltaStr = (d) => d > 0 ? `+${d}` : (d < 0 ? `${d}` : '0');\n\n// Top 5 issues for Slack\nconst topIssues = summary.audit_items\n  .sort((a, b) => {\n    const sevOrder = { critical: 4, high: 3, medium: 2, low: 1 };\n    return sevOrder[b.severity] - sevOrder[a.severity];\n  })\n  .slice(0, 5);\n\nconst issueList = topIssues.map((item, i) => {\n  const sev = { critical: ':fire:', high: ':warning:', medium: ':large_yellow_circle:', low: ':information_source:' };\n  return `${i + 1}. ${sev[item.severity]} *${item.item_code}*: ${item.title}`;\n}).join('\\n');\n\n// Generate Slack blocks for interactive message\nconst slackBlocks = [\n  {\n    type: 'header',\n    text: { type: 'plain_text', text: ':zap: Weekly Speed Audit Report', emoji: true }\n  },\n  {\n    type: 'section',\n    text: {\n      type: 'mrkdwn',\n      text: `*Week of ${audit.audit_date}* | ${summary.total_pages} pages audited`\n    }\n  },\n  { type: 'divider' },\n  {\n    type: 'section',\n    fields: [\n      { type: 'mrkdwn', text: `*Mobile Score*\\n${getMobileStatus(audit.avg_pagespeed_mobile)} ${audit.avg_pagespeed_mobile}/100 (${deltaStr(mobileDelta)})` },\n      { type: 'mrkdwn', text: `*Desktop Score*\\n${getMobileStatus(audit.avg_pagespeed_desktop)} ${audit.avg_pagespeed_desktop}/100 (${deltaStr(desktopDelta)})` },\n      { type: 'mrkdwn', text: `*LCP*\\n${audit.avg_lcp_ms}ms` },\n      { type: 'mrkdwn', text: `*CLS*\\n${audit.avg_cls}` }\n    ]\n  },\n  { type: 'divider' },\n  {\n    type: 'section',\n    text: {\n      type: 'mrkdwn',\n      text: `*Issues Found:* :fire: ${audit.critical_issues} critical | :warning: ${audit.high_issues} high | :large_yellow_circle: ${audit.medium_issues} medium | :information_source: ${audit.low_issues} low`\n    }\n  },\n  {\n    type: 'section',\n    text: {\n      type: 'mrkdwn',\n      text: `*Top Issues to Address:*\\n${issueList}`\n    }\n  },\n  { type: 'divider' },\n  {\n    type: 'actions',\n    elements: [\n      {\n        type: 'button',\n        text: { type: 'plain_text', text: ':white_check_mark: Approve All', emoji: true },\n        style: 'primary',\n        action_id: 'approve_all',\n        value: audit.id\n      },\n      {\n        type: 'button',\n        text: { type: 'plain_text', text: ':ballot_box_with_check: Approve Critical/High', emoji: true },\n        action_id: 'approve_critical_high',\n        value: audit.id\n      },\n      {\n        type: 'button',\n        text: { type: 'plain_text', text: ':fast_forward: Defer to Next Week', emoji: true },\n        action_id: 'defer',\n        value: audit.id\n      }\n    ]\n  }\n];\n\n// Generate email HTML\nconst emailHtml = `\n<h2>Weekly Speed Audit Report</h2>\n<p><strong>Week of ${audit.audit_date}</strong> | ${summary.total_pages} pages audited</p>\n\n<h3>Performance Scores</h3>\n<table style=\"border-collapse: collapse; width: 100%;\">\n  <tr style=\"background: #f5f5f5;\">\n    <th style=\"padding: 8px; text-align: left;\">Metric</th>\n    <th style=\"padding: 8px; text-align: center;\">Score</th>\n    <th style=\"padding: 8px; text-align: center;\">Change</th>\n  </tr>\n  <tr>\n    <td style=\"padding: 8px;\">Mobile PageSpeed</td>\n    <td style=\"padding: 8px; text-align: center;\"><strong>${audit.avg_pagespeed_mobile}</strong>/100</td>\n    <td style=\"padding: 8px; text-align: center; color: ${mobileDelta >= 0 ? 'green' : 'red'};\">${deltaStr(mobileDelta)}</td>\n  </tr>\n  <tr>\n    <td style=\"padding: 8px;\">Desktop PageSpeed</td>\n    <td style=\"padding: 8px; text-align: center;\"><strong>${audit.avg_pagespeed_desktop}</strong>/100</td>\n    <td style=\"padding: 8px; text-align: center; color: ${desktopDelta >= 0 ? 'green' : 'red'};\">${deltaStr(desktopDelta)}</td>\n  </tr>\n  <tr>\n    <td style=\"padding: 8px;\">LCP</td>\n    <td style=\"padding: 8px; text-align: center;\">${audit.avg_lcp_ms}ms</td>\n    <td style=\"padding: 8px; text-align: center;\">-</td>\n  </tr>\n  <tr>\n    <td style=\"padding: 8px;\">CLS</td>\n    <td style=\"padding: 8px; text-align: center;\">${audit.avg_cls}</td>\n    <td style=\"padding: 8px; text-align: center;\">-</td>\n  </tr>\n</table>\n\n<h3>Issues Found</h3>\n<ul>\n  <li><strong>${audit.critical_issues}</strong> Critical</li>\n  <li><strong>${audit.high_issues}</strong> High</li>\n  <li><strong>${audit.medium_issues}</strong> Medium</li>\n  <li><strong>${audit.low_issues}</strong> Low</li>\n</ul>\n\n<h3>Top Issues</h3>\n<ol>\n${topIssues.map(item => `  <li><strong>[${item.severity.toUpperCase()}]</strong> ${item.title}</li>`).join('\\n')}\n</ol>\n\n<p><a href=\"https://iaml-dashboard.vercel.app/dashboard/digital/speed-audit\" style=\"background: #0066cc; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;\">View Full Report & Approve</a></p>\n`;\n\nreturn [{\n  json: {\n    audit_id: audit.id,\n    slack_blocks: slackBlocks,\n    slack_text: `Weekly Speed Audit: Mobile ${audit.avg_pagespeed_mobile}/100 | ${summary.total_issues} issues found`,\n    email_html: emailHtml,\n    email_subject: `Weekly Speed Audit: ${audit.avg_pagespeed_mobile}/100 Mobile | ${summary.total_issues} issues`,\n    audit: audit,\n    summary: summary\n  }\n}];"
+      },
+      "id": "generate-notifications",
+      "name": "Generate Notifications",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3300, 100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"{{ $json.slack_text }}\",\n  \"blocks\": {{ JSON.stringify($json.slack_blocks) }}\n}",
+        "options": {}
+      },
+      "id": "send-slack",
+      "name": "Send Slack Notification",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3520, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.sendgrid.com/v3/mail/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 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"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"personalizations\": [{\"to\": [{\"email\": \"mike.jackson@iaml.com\"}]}],\n  \"from\": {\"email\": \"mike.jackson@iaml.com\", \"name\": \"IAML Speed Audit\"},\n  \"subject\": \"{{ $json.email_subject }}\",\n  \"content\": [{\"type\": \"text/html\", \"value\": {{ JSON.stringify($json.email_html) }}}]\n}",
+        "options": {}
+      },
+      "id": "send-email",
+      "name": "Send Email Report",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3520, 200]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE speed_audits SET slack_sent_at = NOW(), email_sent_at = NOW() WHERE id = '{{ $('Generate Notifications').first().json.audit_id }}';",
+        "options": {}
+      },
+      "id": "update-notification-status",
+      "name": "Update Notification Status",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [3740, 100],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Monday 6 AM": {
+      "main": [
+        [
+          { "node": "Get Pages to Audit", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Get Pages to Audit": {
+      "main": [
+        [
+          { "node": "Batch Pages", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Batch Pages": {
+      "main": [
+        [],
+        [
+          { "node": "PageSpeed Mobile", "type": "main", "index": 0 },
+          { "node": "PageSpeed Desktop", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "PageSpeed Mobile": {
+      "main": [
+        [
+          { "node": "Merge Results", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "PageSpeed Desktop": {
+      "main": [
+        [
+          { "node": "Merge Results", "type": "main", "index": 1 }
+        ]
+      ]
+    },
+    "Merge Results": {
+      "main": [
+        [
+          { "node": "Parse Page Results", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Parse Page Results": {
+      "main": [
+        [
+          { "node": "Store Page Result", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Store Page Result": {
+      "main": [
+        [
+          { "node": "More Pages?", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "More Pages?": {
+      "main": [
+        [
+          { "node": "Batch Pages", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "Aggregate All Results", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Aggregate All Results": {
+      "main": [
+        [
+          { "node": "Generate Audit Summary", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Generate Audit Summary": {
+      "main": [
+        [
+          { "node": "Insert Audit Record", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Insert Audit Record": {
+      "main": [
+        [
+          { "node": "Prepare Items", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Prepare Items": {
+      "main": [
+        [
+          { "node": "Insert Audit Items", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Insert Audit Items": {
+      "main": [
+        [
+          { "node": "Calculate WoW Deltas", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Calculate WoW Deltas": {
+      "main": [
+        [
+          { "node": "Get Final Audit", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Get Final Audit": {
+      "main": [
+        [
+          { "node": "Generate Notifications", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Generate Notifications": {
+      "main": [
+        [
+          { "node": "Send Slack Notification", "type": "main", "index": 0 },
+          { "node": "Send Email Report", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Send Slack Notification": {
+      "main": [
+        [
+          { "node": "Update Notification Status", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Send Email Report": {
+      "main": [
+        [
+          { "node": "Update Notification Status", "type": "main", "index": 0 }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}

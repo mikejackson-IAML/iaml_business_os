@@ -1,5 +1,7 @@
 # Readiness Monitor
 
+> **CEO Summary:** This is the CORE monitor for Programs. It runs every 2 hours to score each upcoming program on a 10-point readiness checklist (faculty confirmed, venue booked, materials ordered, etc.). Programs scoring below 60% are flagged as critical. Answers: "Is each program ready to deliver?"
+
 ## Purpose
 
 Track all upcoming program instances against the 10-point readiness checklist, calculating readiness scores and surfacing programs that need attention. This is the CORE monitor for the Programs department—it provides real-time visibility into delivery readiness.

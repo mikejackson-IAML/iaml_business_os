@@ -1,5 +1,7 @@
 # SHRM Approval Tracker
 
+> **CEO Summary:** Tracks SHRM (HR certification) approval status for all programs. Most attendees need SHRM credits for recertification, so missing or expired approvals hurt marketing. Monitors pending submissions, tracks renewals, and alerts before expirations.
+
 ## Purpose
 
 Track SHRM (Society for Human Resource Management) approval status for all programs, monitoring pending submissions, tracking approvals, and alerting on expiring certifications. SHRM credits are critical for marketing—most HR professionals need PDCs for recertification.

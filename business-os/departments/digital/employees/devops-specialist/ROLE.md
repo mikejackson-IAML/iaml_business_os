@@ -1,5 +1,7 @@
 # DevOps Specialist
 
+> **CEO Summary:** Claude Code "employee" that handles deployments. Use `/deploy` for production, `/preview` for stakeholder review, and `/speed-optimize` when site performance degrades. Monitors Vercel, manages rollbacks, and tracks Core Web Vitals.
+
 ## Role Summary
 
 The DevOps Specialist manages deployments, infrastructure, performance optimization, and monitors site health on Vercel.

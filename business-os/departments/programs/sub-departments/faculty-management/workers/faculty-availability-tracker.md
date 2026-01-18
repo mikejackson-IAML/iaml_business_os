@@ -1,5 +1,7 @@
 # Faculty Availability Tracker
 
+> **CEO Summary:** Tracks which faculty members are assigned and confirmed for upcoming programs. Identifies gaps where programs don't have instructors and flags unconfirmed faculty assignments. Answers: "Do all programs have confirmed faculty?"
+
 ## Purpose
 
 Monitor faculty confirmations across all upcoming programs, identifying gaps where programs don't have confirmed instructors and tracking the overall faculty fill rate. This enables proactive intervention before faculty gaps become critical.

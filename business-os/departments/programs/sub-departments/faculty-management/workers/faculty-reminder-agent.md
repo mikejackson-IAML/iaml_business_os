@@ -1,5 +1,7 @@
 # Faculty Reminder Agent
 
+> **CEO Summary:** Automatically sends scheduled emails to faculty at key milestones: confirmation reminder (T-30), logistics brief (T-14), final reminder (T-7), and day-before details (T-1). Ensures faculty are prepared without manual follow-up.
+
 ## Purpose
 
 Automatically send scheduled communications to faculty members at key milestones before their programs. This agent ensures faculty receive timely logistics information without manual intervention, reducing administrative burden and improving faculty preparedness.

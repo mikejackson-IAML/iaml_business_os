@@ -1,0 +1,323 @@
+{
+  "createdAt": "2026-01-14T22:44:05.065Z",
+  "updatedAt": "2026-01-14T22:44:05.305Z",
+  "id": "bGgsBjTfjCV6mv72",
+  "name": "Indexability Checker - iaml.com",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 24
+            }
+          ]
+        }
+      },
+      "id": "schedule",
+      "name": "Daily Check",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.iaml.com/robots.txt",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "fetch-robots",
+      "name": "Fetch robots.txt",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Check key pages for indexability issues\nconst pages = [\n  'https://www.iaml.com/',\n  'https://www.iaml.com/programs/employment-law-update',\n  'https://www.iaml.com/about'\n];\nreturn pages.map(url => ({ json: { url } }));"
+      },
+      "id": "get-pages",
+      "name": "Get Pages",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {
+          "timeout": 15000,
+          "response": {
+            "response": {
+              "responseFormat": "text",
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "id": "fetch-page",
+      "name": "Fetch Page",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Analyze indexability\nconst robots = $('Fetch robots.txt').first().json;\nconst pages = $('Fetch Page').all();\nconst issues = [];\n\n// Check robots.txt\nconst robotsTxt = robots.data || '';\nif (!robotsTxt) {\n  issues.push({ type: 'robots.txt', issue: 'robots.txt not found or empty' });\n}\nif (robotsTxt.includes('Disallow: /')) {\n  // Check if it's blocking everything\n  const lines = robotsTxt.split('\\n');\n  for (const line of lines) {\n    if (line.trim() === 'Disallow: /' && !line.includes('/programs')) {\n      issues.push({ type: 'robots.txt', issue: 'robots.txt may be blocking entire site' });\n    }\n  }\n}\n\n// Check each page\nfor (const page of pages) {\n  const html = page.json.data || page.json.body || '';\n  const url = page.json.url || 'unknown';\n  const headers = page.json.headers || {};\n  \n  // Check for noindex\n  if (html.includes('noindex') || html.match(/<meta[^>]*robots[^>]*noindex/i)) {\n    issues.push({ type: 'noindex', url, issue: 'Page has noindex tag' });\n  }\n  \n  // Check for nofollow\n  if (html.match(/<meta[^>]*robots[^>]*nofollow/i)) {\n    issues.push({ type: 'nofollow', url, issue: 'Page has nofollow tag' });\n  }\n  \n  // Check canonical\n  const canonicalMatch = html.match(/<link[^>]*rel=[\"']canonical[\"'][^>]*href=[\"']([^\"']+)/i);\n  if (!canonicalMatch) {\n    issues.push({ type: 'canonical', url, issue: 'Missing canonical tag' });\n  } else {\n    const canonical = canonicalMatch[1];\n    // Check if canonical points to different URL\n    if (canonical && !url.includes(canonical.replace('https://www.', '').replace('https://', ''))) {\n      issues.push({ type: 'canonical', url, issue: 'Canonical points to different URL: ' + canonical });\n    }\n  }\n  \n  // Check X-Robots-Tag header\n  const xRobots = headers['x-robots-tag'] || '';\n  if (xRobots.includes('noindex')) {\n    issues.push({ type: 'header', url, issue: 'X-Robots-Tag header contains noindex' });\n  }\n}\n\nreturn [{\n  json: {\n    checkedAt: new Date().toISOString(),\n    robotsTxtFound: !!robotsTxt,\n    pagesChecked: pages.length,\n    issues: issues,\n    issueCount: issues.length,\n    hasIssues: issues.length > 0\n  }\n}];"
+      },
+      "id": "analyze",
+      "name": "Analyze Indexability",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check",
+              "leftValue": "={{ $json.hasIssues }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-issues",
+      "name": "Has Issues?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        880,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "s",
+              "name": "status",
+              "value": "ok",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ok",
+      "name": "All OK",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1100,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"text\": \"*Indexability Checker Alert*\\n\\n*Issues Found:* {{ $json.issueCount }}\\n\\n{{ $json.issues.map(i => '\u2022 [' + i.type + '] ' + i.issue + (i.url ? '\\n  ' + i.url : '')).join('\\n') }}\\n\\nThese issues may prevent Google from indexing your pages.\"}",
+        "options": {}
+      },
+      "id": "slack",
+      "name": "Slack Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1100,
+        100
+      ]
+    }
+  ],
+  "connections": {
+    "Daily Check": {
+      "main": [
+        [
+          {
+            "node": "Fetch robots.txt",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Pages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Pages": {
+      "main": [
+        [
+          {
+            "node": "Fetch Page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch robots.txt": {
+      "main": [
+        [
+          {
+            "node": "Analyze Indexability",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Page": {
+      "main": [
+        [
+          {
+            "node": "Analyze Indexability",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze Indexability": {
+      "main": [
+        [
+          {
+            "node": "Has Issues?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Issues?": {
+      "main": [
+        [
+          {
+            "node": "All OK",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Slack Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Daily Check": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": null,
+  "pinData": null,
+  "versionId": "c5e2c80a-3b62-49a5-8e28-ec7fa3b34cc6",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2026-01-14T22:44:05.068Z",
+      "updatedAt": "2026-01-14T22:44:05.068Z",
+      "role": "workflow:owner",
+      "workflowId": "bGgsBjTfjCV6mv72",
+      "projectId": "N5IZDJlcXNhJSNRP",
+      "project": {
+        "createdAt": "2025-06-18T12:33:00.421Z",
+        "updatedAt": "2025-06-18T16:06:52.396Z",
+        "id": "N5IZDJlcXNhJSNRP",
+        "name": "Mike  Jackson <mike.jackson@realtyamp.ai>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-06-18T12:33:00.421Z",
+            "updatedAt": "2025-06-18T12:33:00.421Z",
+            "role": "project:personalOwner",
+            "userId": "2ee556b5-70f2-46de-b2a3-6fce9dd3883a",
+            "projectId": "N5IZDJlcXNhJSNRP",
+            "user": {
+              "createdAt": "2025-06-18T12:32:59.783Z",
+              "updatedAt": "2026-01-14T22:16:21.000Z",
+              "id": "2ee556b5-70f2-46de-b2a3-6fce9dd3883a",
+              "email": "mike.jackson@realtyamp.ai",
+              "firstName": "Mike ",
+              "lastName": "Jackson",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-06-18T16:07:15.112Z",
+                "personalization_survey_n8n_version": "1.98.1",
+                "companySize": "<20",
+                "companyType": "saas",
+                "role": "business-owner",
+                "reportedSource": "youtube"
+              },
+              "settings": {
+                "userActivated": true,
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "C5H06PO1rEBjrHgi",
+                "userActivatedAt": 1750345043352,
+                "npsSurvey": {
+                  "waitingForResponse": true,
+                  "ignoredCount": 1,
+                  "lastShownAt": 1768075347683
+                },
+                "dismissedCallouts": {
+                  "ragStarterCallout": true
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2026-01-14",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

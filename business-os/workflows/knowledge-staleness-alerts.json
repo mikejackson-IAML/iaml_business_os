@@ -1,0 +1,363 @@
+{
+  "name": "Knowledge Staleness Alerts",
+  "active": false,
+  "meta": {
+    "description": "Weekly check for stale knowledge: decisions past review date, constraints/tribal not verified in 90/180 days. Sends summary email every Monday.",
+    "templateCredsSetupCompleted": false
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * 1"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Weekly Monday 9am",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0],
+      "notes": "Triggers at 9:00 AM every Monday"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "knowledge-staleness-check",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 200],
+      "webhookId": "knowledge-staleness-check",
+      "notes": "POST to /webhook/knowledge-staleness-check for on-demand check"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, title, domain, department, review_date, last_reviewed_at, CURRENT_DATE - review_date as days_overdue FROM knowledge.decisions WHERE status = 'active' AND review_date IS NOT NULL AND review_date < CURRENT_DATE ORDER BY days_overdue DESC LIMIT 50",
+        "options": {}
+      },
+      "id": "get-stale-decisions",
+      "name": "Get Stale Decisions",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [224, 0],
+      "credentials": {
+        "postgres": {
+          "id": "SUPABASE_CREDENTIAL_ID",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, title, domain, constraint_type, last_verified_at, EXTRACT(DAY FROM NOW() - last_verified_at)::INTEGER as days_since_verified FROM knowledge.constraints WHERE still_valid = TRUE AND last_verified_at < NOW() - INTERVAL '90 days' ORDER BY days_since_verified DESC LIMIT 50",
+        "options": {}
+      },
+      "id": "get-stale-constraints",
+      "name": "Get Stale Constraints",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [224, 150],
+      "credentials": {
+        "postgres": {
+          "id": "SUPABASE_CREDENTIAL_ID",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, title, domain, knowledge_type, last_verified_at, EXTRACT(DAY FROM NOW() - last_verified_at)::INTEGER as days_since_verified FROM knowledge.tribal WHERE last_verified_at < NOW() - INTERVAL '180 days' ORDER BY days_since_verified DESC LIMIT 50",
+        "options": {}
+      },
+      "id": "get-stale-tribal",
+      "name": "Get Stale Tribal",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [224, 300],
+      "credentials": {
+        "postgres": {
+          "id": "SUPABASE_CREDENTIAL_ID",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM knowledge.stats",
+        "options": {}
+      },
+      "id": "get-stats",
+      "name": "Get Knowledge Stats",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [224, 450],
+      "credentials": {
+        "postgres": {
+          "id": "SUPABASE_CREDENTIAL_ID",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "mergeByFields": {
+          "values": []
+        },
+        "options": {}
+      },
+      "id": "merge-results",
+      "name": "Merge All Results",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [448, 150]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-stale",
+              "leftValue": "={{ $('Get Stale Decisions').item.json.length + $('Get Stale Constraints').item.json.length + $('Get Stale Tribal').item.json.length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-has-stale",
+      "name": "Has Stale Knowledge?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [672, 150]
+    },
+    {
+      "parameters": {
+        "jsCode": "const staleDecisions = $('Get Stale Decisions').all().map(i => i.json);\nconst staleConstraints = $('Get Stale Constraints').all().map(i => i.json);\nconst staleTribal = $('Get Stale Tribal').all().map(i => i.json);\nconst stats = $('Get Knowledge Stats').first().json;\n\nconst today = new Date().toLocaleDateString('en-US', {\n  weekday: 'long',\n  year: 'numeric',\n  month: 'long',\n  day: 'numeric'\n});\n\nconst totalStale = staleDecisions.length + staleConstraints.length + staleTribal.length;\n\nlet html = `\n<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"utf-8\">\n  <style>\n    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #1e293b; max-width: 650px; margin: 0 auto; padding: 20px; }\n    .header { border-bottom: 2px solid #f59e0b; padding-bottom: 16px; margin-bottom: 24px; }\n    .header h1 { margin: 0; font-size: 24px; color: #d97706; }\n    .summary { display: flex; justify-content: space-around; background: #fef3c7; padding: 16px; border-radius: 8px; margin-bottom: 24px; }\n    .stat { text-align: center; }\n    .stat-value { font-size: 24px; font-weight: 700; color: #d97706; }\n    .stat-label { font-size: 12px; color: #92400e; }\n    .section { margin-bottom: 24px; }\n    .section h2 { font-size: 16px; color: #78350f; border-bottom: 1px solid #fde68a; padding-bottom: 8px; margin-bottom: 12px; }\n    .item { padding: 12px 16px; margin: 8px 0; background: #fff; border: 1px solid #fde68a; border-radius: 6px; }\n    .item-title { font-weight: 600; color: #1e293b; }\n    .item-meta { font-size: 12px; color: #64748b; margin-top: 4px; }\n    .overdue { color: #dc2626; font-weight: 600; }\n    .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 4px; margin-left: 8px; }\n    .badge-domain { background: #dbeafe; color: #1d4ed8; }\n    .badge-type { background: #f3e8ff; color: #7c3aed; }\n    .action-link { display: inline-block; margin-top: 16px; padding: 12px 24px; background: #f59e0b; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; }\n    .action-link:hover { background: #d97706; }\n    .footer { margin-top: 32px; text-align: center; font-size: 12px; color: #94a3b8; }\n    .knowledge-stats { background: #f1f5f9; padding: 16px; border-radius: 8px; margin-top: 24px; }\n    .knowledge-stats h3 { margin: 0 0 12px 0; font-size: 14px; color: #475569; }\n    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }\n    .mini-stat { text-align: center; }\n    .mini-stat-value { font-size: 18px; font-weight: 600; color: #3b82f6; }\n    .mini-stat-label { font-size: 11px; color: #64748b; }\n  </style>\n</head>\n<body>\n  <div class=\"header\">\n    <h1>Knowledge Review Needed</h1>\n    <div style=\"color: #92400e;\">${today}</div>\n  </div>\n  \n  <div class=\"summary\">\n    <div class=\"stat\"><div class=\"stat-value\">${totalStale}</div><div class=\"stat-label\">Items Need Review</div></div>\n    <div class=\"stat\"><div class=\"stat-value\">${staleDecisions.length}</div><div class=\"stat-label\">Decisions</div></div>\n    <div class=\"stat\"><div class=\"stat-value\">${staleConstraints.length}</div><div class=\"stat-label\">Constraints</div></div>\n    <div class=\"stat\"><div class=\"stat-value\">${staleTribal.length}</div><div class=\"stat-label\">Tribal</div></div>\n  </div>\n`;\n\nif (staleDecisions.length > 0) {\n  html += `\n  <div class=\"section\">\n    <h2>Decisions Past Review Date</h2>\n`;\n  staleDecisions.slice(0, 10).forEach(d => {\n    html += `\n    <div class=\"item\">\n      <div class=\"item-title\">${d.title}<span class=\"badge badge-domain\">${d.domain}</span></div>\n      <div class=\"item-meta\">\n        Review date: ${new Date(d.review_date).toLocaleDateString()}\n        <span class=\"overdue\">(${d.days_overdue} days overdue)</span>\n      </div>\n    </div>`;\n  });\n  if (staleDecisions.length > 10) {\n    html += `<div class=\"item-meta\">...and ${staleDecisions.length - 10} more</div>`;\n  }\n  html += '</div>';\n}\n\nif (staleConstraints.length > 0) {\n  html += `\n  <div class=\"section\">\n    <h2>Constraints Not Verified in 90+ Days</h2>\n`;\n  staleConstraints.slice(0, 10).forEach(c => {\n    html += `\n    <div class=\"item\">\n      <div class=\"item-title\">${c.title}<span class=\"badge badge-domain\">${c.domain}</span><span class=\"badge badge-type\">${c.constraint_type}</span></div>\n      <div class=\"item-meta\">\n        Last verified: ${c.last_verified_at ? new Date(c.last_verified_at).toLocaleDateString() : 'Never'}\n        <span class=\"overdue\">(${c.days_since_verified} days ago)</span>\n      </div>\n    </div>`;\n  });\n  if (staleConstraints.length > 10) {\n    html += `<div class=\"item-meta\">...and ${staleConstraints.length - 10} more</div>`;\n  }\n  html += '</div>';\n}\n\nif (staleTribal.length > 0) {\n  html += `\n  <div class=\"section\">\n    <h2>Tribal Knowledge Not Verified in 180+ Days</h2>\n`;\n  staleTribal.slice(0, 10).forEach(t => {\n    html += `\n    <div class=\"item\">\n      <div class=\"item-title\">${t.title}<span class=\"badge badge-domain\">${t.domain || 'general'}</span><span class=\"badge badge-type\">${t.knowledge_type}</span></div>\n      <div class=\"item-meta\">\n        Last verified: ${t.last_verified_at ? new Date(t.last_verified_at).toLocaleDateString() : 'Never'}\n        <span class=\"overdue\">(${t.days_since_verified} days ago)</span>\n      </div>\n    </div>`;\n  });\n  if (staleTribal.length > 10) {\n    html += `<div class=\"item-meta\">...and ${staleTribal.length - 10} more</div>`;\n  }\n  html += '</div>';\n}\n\nhtml += `\n  <center>\n    <p style=\"color: #78350f;\">Run <code>/knowledge review</code> in Claude Code to review and update these items.</p>\n  </center>\n  \n  <div class=\"knowledge-stats\">\n    <h3>Knowledge Base Overview</h3>\n    <div class=\"stats-grid\">\n      <div class=\"mini-stat\"><div class=\"mini-stat-value\">${stats.active_decisions || 0}</div><div class=\"mini-stat-label\">Decisions</div></div>\n      <div class=\"mini-stat\"><div class=\"mini-stat-value\">${stats.total_lessons || 0}</div><div class=\"mini-stat-label\">Lessons</div></div>\n      <div class=\"mini-stat\"><div class=\"mini-stat-value\">${stats.tribal_items || 0}</div><div class=\"mini-stat-label\">Tribal</div></div>\n      <div class=\"mini-stat\"><div class=\"mini-stat-value\">${stats.active_constraints || 0}</div><div class=\"mini-stat-label\">Constraints</div></div>\n      <div class=\"mini-stat\"><div class=\"mini-stat-value\">${stats.active_dependencies || 0}</div><div class=\"mini-stat-label\">Dependencies</div></div>\n      <div class=\"mini-stat\"><div class=\"mini-stat-value\">${stats.current_processes || 0}</div><div class=\"mini-stat-label\">Processes</div></div>\n    </div>\n  </div>\n  \n  <div class=\"footer\">\n    Generated by IAML Business OS Knowledge System\n  </div>\n</body>\n</html>\n`;\n\nreturn {\n  subject: `Knowledge Review: ${totalStale} items need attention`,\n  html,\n  totalStale,\n  staleDecisions: staleDecisions.length,\n  staleConstraints: staleConstraints.length,\n  staleTribal: staleTribal.length\n};"
+      },
+      "id": "generate-email",
+      "name": "Generate Email HTML",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [896, 50]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.sendgrid.com/v3/mail/send",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"personalizations\": [{\"to\": [{\"email\": \"mike.jackson@iaml.com\"}]}],\n  \"from\": {\"email\": \"knowledge@iaml.com\", \"name\": \"IAML Knowledge System\"},\n  \"subject\": \"{{ $json.subject }}\",\n  \"content\": [{\"type\": \"text/html\", \"value\": {{ JSON.stringify($json.html) }}}]\n}",
+        "options": {}
+      },
+      "id": "send-email",
+      "name": "Send via SendGrid",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1120, 50],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "SENDGRID_CREDENTIAL_ID",
+          "name": "SendGrid API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "skipped",
+              "name": "skipped",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "reason",
+              "name": "reason",
+              "value": "No stale knowledge found",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "no-stale",
+      "name": "No Stale - Skip",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [896, 250]
+    }
+  ],
+  "connections": {
+    "Weekly Monday 9am": {
+      "main": [
+        [
+          {
+            "node": "Get Stale Decisions",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Stale Constraints",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Stale Tribal",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Knowledge Stats",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Stale Decisions",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Stale Constraints",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Stale Tribal",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Knowledge Stats",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Stale Decisions": {
+      "main": [
+        [
+          {
+            "node": "Merge All Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Stale Constraints": {
+      "main": [
+        [
+          {
+            "node": "Merge All Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Stale Tribal": {
+      "main": [
+        [
+          {
+            "node": "Merge All Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge All Results": {
+      "main": [
+        [
+          {
+            "node": "Has Stale Knowledge?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Stale Knowledge?": {
+      "main": [
+        [
+          {
+            "node": "Generate Email HTML",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Stale - Skip",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Email HTML": {
+      "main": [
+        [
+          {
+            "node": "Send via SendGrid",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "knowledge"
+    },
+    {
+      "name": "email"
+    },
+    {
+      "name": "alerts"
+    }
+  ],
+  "triggerCount": 2,
+  "pinData": {}
+}

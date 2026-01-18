@@ -1,0 +1,509 @@
+{
+  "name": "Smartlead Inbox Sync",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 4
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Every 4 Hours",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 200]
+    },
+    {
+      "parameters": {},
+      "id": "manual-trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [0, 400]
+    },
+    {
+      "parameters": {
+        "url": "https://server.smartlead.ai/api/v1/email-accounts?limit=100",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "fetch-all-accounts",
+      "name": "Fetch All Email Accounts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [250, 300],
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "a8mXHIaPChJTGO6S",
+          "name": "Smartlead API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://server.smartlead.ai/api/v1/email-accounts/{{ $json.id }}/warmup-stats",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "fetch-warmup-stats",
+      "name": "Fetch Warmup Stats",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [700, 300],
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "a8mXHIaPChJTGO6S",
+          "name": "Smartlead API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "smartlead_account_id",
+              "name": "smartlead_account_id",
+              "value": "={{ $('Fetch All Email Accounts').item.json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "inbox_email",
+              "name": "inbox_email",
+              "value": "={{ $('Fetch All Email Accounts').item.json.from_email }}",
+              "type": "string"
+            },
+            {
+              "id": "display_name",
+              "name": "display_name",
+              "value": "={{ $('Fetch All Email Accounts').item.json.from_name ?? '' }}",
+              "type": "string"
+            },
+            {
+              "id": "domain_name",
+              "name": "domain_name",
+              "value": "={{ $('Fetch All Email Accounts').item.json.from_email?.split('@')[1] ?? 'unknown' }}",
+              "type": "string"
+            },
+            {
+              "id": "daily_limit",
+              "name": "daily_limit",
+              "value": "={{ $('Fetch All Email Accounts').item.json.message_per_day ?? 50 }}",
+              "type": "number"
+            },
+            {
+              "id": "sent_today",
+              "name": "sent_today",
+              "value": "={{ $('Fetch All Email Accounts').item.json.daily_sent_count ?? 0 }}",
+              "type": "number"
+            },
+            {
+              "id": "is_smtp_connected",
+              "name": "is_smtp_connected",
+              "value": "={{ $('Fetch All Email Accounts').item.json.is_smtp_success ?? false }}",
+              "type": "boolean"
+            },
+            {
+              "id": "is_imap_connected",
+              "name": "is_imap_connected",
+              "value": "={{ $('Fetch All Email Accounts').item.json.is_imap_success ?? false }}",
+              "type": "boolean"
+            },
+            {
+              "id": "is_connected",
+              "name": "is_connected",
+              "value": "={{ ($('Fetch All Email Accounts').item.json.is_smtp_success ?? false) && ($('Fetch All Email Accounts').item.json.is_imap_success ?? false) }}",
+              "type": "boolean"
+            },
+            {
+              "id": "smtp_error",
+              "name": "smtp_error",
+              "value": "={{ $('Fetch All Email Accounts').item.json.smtp_failure_error ?? null }}",
+              "type": "string"
+            },
+            {
+              "id": "imap_error",
+              "name": "imap_error",
+              "value": "={{ $('Fetch All Email Accounts').item.json.imap_failure_error ?? null }}",
+              "type": "string"
+            },
+            {
+              "id": "last_error",
+              "name": "last_error",
+              "value": "={{ $('Fetch All Email Accounts').item.json.smtp_failure_error ?? $('Fetch All Email Accounts').item.json.imap_failure_error ?? null }}",
+              "type": "string"
+            },
+            {
+              "id": "account_type",
+              "name": "account_type",
+              "value": "={{ $('Fetch All Email Accounts').item.json.type ?? 'SMTP' }}",
+              "type": "string"
+            },
+            {
+              "id": "warmup_enabled",
+              "name": "warmup_enabled",
+              "value": "={{ $('Fetch All Email Accounts').item.json.warmup_details?.status === 'ACTIVE' || $json.status === 'ACTIVE' }}",
+              "type": "boolean"
+            },
+            {
+              "id": "warmup_status",
+              "name": "warmup_status",
+              "value": "={{ $('Fetch All Email Accounts').item.json.warmup_details?.status ?? $json.status ?? 'INACTIVE' }}",
+              "type": "string"
+            },
+            {
+              "id": "warmup_day",
+              "name": "warmup_day",
+              "value": "={{ $json.warmup_day ?? null }}",
+              "type": "number"
+            },
+            {
+              "id": "warmup_target_limit",
+              "name": "warmup_target_limit",
+              "value": "={{ $('Fetch All Email Accounts').item.json.warmup_details?.max_email_per_day ?? $json.max_email_per_day ?? null }}",
+              "type": "number"
+            },
+            {
+              "id": "warmup_sent_count",
+              "name": "warmup_sent_count",
+              "value": "={{ $('Fetch All Email Accounts').item.json.warmup_details?.total_sent_count ?? $json.total_sent_count ?? 0 }}",
+              "type": "number"
+            },
+            {
+              "id": "warmup_spam_count",
+              "name": "warmup_spam_count",
+              "value": "={{ $('Fetch All Email Accounts').item.json.warmup_details?.total_spam_count ?? $json.total_spam_count ?? 0 }}",
+              "type": "number"
+            },
+            {
+              "id": "warmup_reputation",
+              "name": "warmup_reputation",
+              "value": "={{ $('Fetch All Email Accounts').item.json.warmup_details?.warmup_reputation ?? $json.warmup_reputation ?? '100%' }}",
+              "type": "string"
+            },
+            {
+              "id": "warmup_reply_rate",
+              "name": "warmup_reply_rate",
+              "value": "={{ parseFloat($('Fetch All Email Accounts').item.json.warmup_details?.reply_rate ?? $json.reply_rate ?? 0) }}",
+              "type": "number"
+            },
+            {
+              "id": "is_warmup_blocked",
+              "name": "is_warmup_blocked",
+              "value": "={{ $('Fetch All Email Accounts').item.json.warmup_details?.is_warmup_blocked ?? $json.is_warmup_blocked ?? false }}",
+              "type": "boolean"
+            },
+            {
+              "id": "blocked_reason",
+              "name": "blocked_reason",
+              "value": "={{ $('Fetch All Email Accounts').item.json.warmup_details?.blocked_reason ?? $json.blocked_reason ?? null }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "transform-account-data",
+      "name": "Transform Account Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [925, 300]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "status",
+              "name": "status",
+              "value": "={{ !$json.is_connected ? 'disconnected' : (($json.warmup_enabled && $json.daily_limit < 30) ? 'warming' : 'active') }}",
+              "type": "string"
+            },
+            {
+              "id": "spam_rate",
+              "name": "spam_rate",
+              "value": "={{ $json.warmup_sent_count > 0 ? Math.round(($json.warmup_spam_count / $json.warmup_sent_count) * 10000) / 100 : 0 }}",
+              "type": "number"
+            },
+            {
+              "id": "reply_rate",
+              "name": "reply_rate",
+              "value": "={{ $json.warmup_reply_rate ?? 0 }}",
+              "type": "number"
+            },
+            {
+              "id": "reputation_score",
+              "name": "reputation_score",
+              "value": "={{ parseInt($json.warmup_reputation?.replace('%', '') ?? '100') }}",
+              "type": "number"
+            },
+            {
+              "id": "health_score",
+              "name": "health_score",
+              "value": "={{ Math.round(Math.max(0, Math.min(100, ($json.is_connected ? 40 : 0) + (parseInt($json.warmup_reputation?.replace('%', '') ?? '100') * 0.4) + ($json.is_warmup_blocked ? 0 : 20)))) }}",
+              "type": "number"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "calculate-health",
+      "name": "Calculate Health Score",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1150, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- Upsert inbox data (works even if domain not in domains table)\nINSERT INTO email_inboxes (\n  inbox_email,\n  smartlead_account_id,\n  display_name,\n  status,\n  sent_today,\n  sent_this_week,\n  daily_limit,\n  bounce_rate,\n  open_rate,\n  reply_rate,\n  spam_rate,\n  warmup_enabled,\n  warmup_day,\n  warmup_target_limit,\n  is_connected,\n  last_error,\n  health_score,\n  last_connected_at,\n  domain_id\n)\nVALUES (\n  $1::text,\n  $2::text,\n  $3::text,\n  $4::text,\n  $5::integer,\n  $5::integer,\n  $6::integer,\n  0,\n  0,\n  $7::decimal,\n  $8::decimal,\n  $9::boolean,\n  $10::integer,\n  $11::integer,\n  $12::boolean,\n  $13::text,\n  $14::integer,\n  CASE WHEN $12::boolean THEN NOW() ELSE NULL END,\n  (SELECT id FROM domains WHERE domain_name = $15::text)\n)\nON CONFLICT (inbox_email) DO UPDATE SET\n  smartlead_account_id = EXCLUDED.smartlead_account_id,\n  display_name = EXCLUDED.display_name,\n  status = EXCLUDED.status,\n  sent_today = EXCLUDED.sent_today,\n  daily_limit = EXCLUDED.daily_limit,\n  reply_rate = EXCLUDED.reply_rate,\n  spam_rate = EXCLUDED.spam_rate,\n  warmup_enabled = EXCLUDED.warmup_enabled,\n  warmup_day = EXCLUDED.warmup_day,\n  warmup_target_limit = EXCLUDED.warmup_target_limit,\n  is_connected = EXCLUDED.is_connected,\n  last_error = EXCLUDED.last_error,\n  health_score = EXCLUDED.health_score,\n  last_connected_at = CASE WHEN EXCLUDED.is_connected THEN NOW() ELSE email_inboxes.last_connected_at END,\n  domain_id = COALESCE(EXCLUDED.domain_id, email_inboxes.domain_id),\n  updated_at = NOW()\nRETURNING id, inbox_email, status, health_score, is_connected;",
+        "options": {
+          "queryReplacement": "={{ [$json.inbox_email, String($json.smartlead_account_id), $json.display_name || '', $json.status, $json.sent_today, $json.daily_limit, $json.reply_rate, $json.spam_rate, $json.warmup_enabled, $json.warmup_day, $json.warmup_target_limit, $json.is_connected, $json.last_error, $json.health_score, $json.domain_name] }}"
+        }
+      },
+      "id": "upsert-inbox",
+      "name": "Upsert Inbox",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1375, 300],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- Log daily health snapshot and return data for downstream nodes\nWITH log_insert AS (\n  INSERT INTO inbox_health_log (\n    inbox_id,\n    log_date,\n    health_score,\n    bounce_rate,\n    spam_rate,\n    open_rate,\n    reply_rate,\n    emails_sent,\n    status\n  )\n  SELECT \n    i.id,\n    CURRENT_DATE,\n    $2::integer,\n    COALESCE(i.bounce_rate, 0),\n    $3::decimal,\n    COALESCE(i.open_rate, 0),\n    $4::decimal,\n    $5::integer,\n    $6::text\n  FROM email_inboxes i\n  WHERE i.inbox_email = $1\n  ON CONFLICT (inbox_id, log_date) DO UPDATE SET\n    health_score = EXCLUDED.health_score,\n    spam_rate = EXCLUDED.spam_rate,\n    reply_rate = EXCLUDED.reply_rate,\n    emails_sent = EXCLUDED.emails_sent,\n    status = EXCLUDED.status\n  RETURNING inbox_id\n)\nSELECT \n  $1::text as inbox_email,\n  $2::integer as health_score,\n  $7::boolean as is_connected,\n  $8::boolean as is_warmup_blocked,\n  $9::text as blocked_reason,\n  $10::text as last_error,\n  $11::text as warmup_reputation;",
+        "options": {
+          "queryReplacement": "={{ [$json.inbox_email, $json.health_score, $json.spam_rate, $json.reply_rate, $json.sent_today, $json.status, $json.is_connected, $json.is_warmup_blocked, $json.blocked_reason, $json.last_error, $json.warmup_reputation] }}"
+        }
+      },
+      "id": "log-health-snapshot",
+      "name": "Log Health Snapshot",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1600, 300],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-disconnected",
+              "leftValue": "={{ $json.is_connected }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "check-low-health",
+              "leftValue": "={{ $json.health_score }}",
+              "rightValue": 50,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            },
+            {
+              "id": "check-warmup-blocked",
+              "leftValue": "={{ $json.is_warmup_blocked }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "check-alerts",
+      "name": "Has Issues?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [1825, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO lead_intelligence_activity (\n  activity_type,\n  description,\n  source_name,\n  metadata,\n  activity_at\n) VALUES (\n  CASE \n    WHEN NOT $2::boolean THEN 'inbox_disconnected'\n    WHEN $4::boolean THEN 'inbox_health_critical'\n    ELSE 'inbox_health_warning'\n  END,\n  CASE\n    WHEN NOT $2::boolean THEN 'Inbox ' || $1 || ' disconnected: ' || COALESCE($3, 'Unknown error')\n    WHEN $4::boolean THEN 'Inbox ' || $1 || ' warmup blocked: ' || COALESCE($5, 'Unknown reason')\n    ELSE 'Inbox ' || $1 || ' health score dropped to ' || $6::text\n  END,\n  'smartlead_sync',\n  jsonb_build_object(\n    'inbox_email', $1,\n    'is_connected', $2::boolean,\n    'last_error', $3,\n    'is_warmup_blocked', $4::boolean,\n    'blocked_reason', $5,\n    'health_score', $6::integer,\n    'warmup_reputation', $7\n  ),\n  NOW()\n);",
+        "options": {
+          "queryReplacement": "={{ [$json.inbox_email, $json.is_connected, $json.last_error, $json.is_warmup_blocked, $json.blocked_reason, $json.health_score, $json.warmup_reputation] }}"
+        }
+      },
+      "id": "log-alert",
+      "name": "Log Alert",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [2050, 200],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \":warning: *Inbox Alert*\\n\\n*Inbox:* {{ $json.inbox_email }}\\n*Status:* {{ !$json.is_connected ? 'DISCONNECTED' : ($json.is_warmup_blocked ? 'WARMUP BLOCKED' : 'Low Health') }}\\n*Health Score:* {{ $json.health_score }}/100\\n*Reputation:* {{ $json.warmup_reputation }}\\n{{ $json.last_error ? '*Error:* ' + $json.last_error : '' }}{{ $json.blocked_reason ? '*Blocked:* ' + $json.blocked_reason : '' }}\\n\\nReview in Lead Intelligence Dashboard.\"\n}",
+        "options": {}
+      },
+      "id": "slack-alert",
+      "name": "Send Slack Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2050, 400]
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "id": "aggregate-results",
+      "name": "Aggregate Results",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [2275, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- Log sync completion\nINSERT INTO lead_intelligence_activity (\n  activity_type,\n  description,\n  source_name,\n  metadata,\n  activity_at\n) VALUES (\n  'sync_completed',\n  'Smartlead inbox sync completed: ' || $1::text || ' inboxes synced',\n  'smartlead_sync',\n  jsonb_build_object(\n    'total_synced', $1::integer,\n    'disconnected_count', $2::integer,\n    'low_health_count', $3::integer,\n    'sync_timestamp', NOW()\n  ),\n  NOW()\n);",
+        "options": {
+          "queryReplacement": "={{ [$json.data.length, $json.data.filter(i => !i.is_connected).length, $json.data.filter(i => i.health_score < 70).length] }}"
+        }
+      },
+      "id": "log-sync-complete",
+      "name": "Log Sync Complete",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [2500, 300],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every 4 Hours": {
+      "main": [
+        [{"node": "Fetch All Email Accounts", "type": "main", "index": 0}]
+      ]
+    },
+    "Manual Trigger": {
+      "main": [
+        [{"node": "Fetch All Email Accounts", "type": "main", "index": 0}]
+      ]
+    },
+    "Fetch All Email Accounts": {
+      "main": [
+        [{"node": "Fetch Warmup Stats", "type": "main", "index": 0}]
+      ]
+    },
+    "Fetch Warmup Stats": {
+      "main": [
+        [{"node": "Transform Account Data", "type": "main", "index": 0}]
+      ]
+    },
+    "Transform Account Data": {
+      "main": [
+        [{"node": "Calculate Health Score", "type": "main", "index": 0}]
+      ]
+    },
+    "Calculate Health Score": {
+      "main": [
+        [{"node": "Upsert Inbox", "type": "main", "index": 0}]
+      ]
+    },
+    "Upsert Inbox": {
+      "main": [
+        [{"node": "Log Health Snapshot", "type": "main", "index": 0}]
+      ]
+    },
+    "Log Health Snapshot": {
+      "main": [
+        [{"node": "Has Issues?", "type": "main", "index": 0}]
+      ]
+    },
+    "Has Issues?": {
+      "main": [
+        [
+          {"node": "Log Alert", "type": "main", "index": 0},
+          {"node": "Send Slack Alert", "type": "main", "index": 0}
+        ],
+        [{"node": "Aggregate Results", "type": "main", "index": 0}]
+      ]
+    },
+    "Log Alert": {
+      "main": [
+        [{"node": "Aggregate Results", "type": "main", "index": 0}]
+      ]
+    },
+    "Send Slack Alert": {
+      "main": []
+    },
+    "Aggregate Results": {
+      "main": [
+        [{"node": "Log Sync Complete", "type": "main", "index": 0}]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {},
+  "triggerCount": 1,
+  "tags": [
+    {"name": "lead-intelligence"},
+    {"name": "inbox-tracking"},
+    {"name": "smartlead"}
+  ]
+}

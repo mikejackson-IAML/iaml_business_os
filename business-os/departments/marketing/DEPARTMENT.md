@@ -1,5 +1,7 @@
 # Marketing Department
 
+> **CEO Summary:** Marketing owns all outreach to fill seats in programs—email campaigns, LinkedIn automation, and engagement tracking. They consume leads produced by Lead Intelligence and coordinate with Programs on enrollment goals. Key metrics: open rates, reply rates, and registrations driven by campaigns.
+
 ## Director Role
 
 **Marketing Director** oversees all marketing channels, coordinates campaigns, tracks performance across email, SEO, social, and LinkedIn automation, and recommends strategic adjustments. The Director maintains awareness of campaign performance, list health, engagement trends, and can answer "How's marketing doing?" at any time.

@@ -1,0 +1,286 @@
+{
+  "name": "Daily Accomplishment Email",
+  "active": false,
+  "meta": {
+    "description": "Sends daily accomplishment summary email at 6pm EST, or on-demand via webhook",
+    "templateCredsSetupCompleted": false
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 18 * * 1-5"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Daily 6pm (Mon-Fri)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0],
+      "notes": "Triggers at 6:00 PM EST on weekdays"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "accomplishment-email",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 200],
+      "webhookId": "accomplishment-email",
+      "notes": "POST to /webhook/accomplishment-email for on-demand emails"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM accomplishments.entries WHERE work_date = CURRENT_DATE ORDER BY CASE impact_level WHEN 'critical' THEN 1 WHEN 'high' THEN 2 WHEN 'medium' THEN 3 ELSE 4 END, logged_at DESC",
+        "options": {}
+      },
+      "id": "get-entries",
+      "name": "Get Today's Entries",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [224, 100],
+      "credentials": {
+        "postgres": {
+          "id": "SUPABASE_CREDENTIAL_ID",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM accomplishments.get_active_goals()",
+        "options": {}
+      },
+      "id": "get-goals",
+      "name": "Get Active Goals",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [224, 250],
+      "credentials": {
+        "postgres": {
+          "id": "SUPABASE_CREDENTIAL_ID",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-entries",
+              "leftValue": "={{ $('Get Today\\'s Entries').item.json.length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-has-entries",
+      "name": "Has Entries?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [448, 100]
+    },
+    {
+      "parameters": {
+        "jsCode": "const entries = $('Get Today\\'s Entries').all().map(i => i.json);\nconst goals = $('Get Active Goals').all().map(i => i.json);\n\nconst today = new Date().toLocaleDateString('en-US', {\n  weekday: 'long',\n  year: 'numeric',\n  month: 'long',\n  day: 'numeric'\n});\n\n// Group entries by impact level\nconst high = entries.filter(e => e.impact_level === 'high' || e.impact_level === 'critical');\nconst medium = entries.filter(e => e.impact_level === 'medium');\nconst low = entries.filter(e => e.impact_level === 'low' || !e.impact_level);\n\n// Count goals with progress\nconst goalsProgressed = goals.filter(g => g.current_value > 0).length;\n\n// Generate HTML\nlet html = `\n<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"utf-8\">\n  <style>\n    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #1e293b; max-width: 600px; margin: 0 auto; padding: 20px; }\n    .header { border-bottom: 2px solid #3b82f6; padding-bottom: 16px; margin-bottom: 24px; }\n    .header h1 { margin: 0; font-size: 24px; }\n    .stats { display: flex; justify-content: space-around; background: #f1f5f9; padding: 16px; border-radius: 8px; margin-bottom: 24px; }\n    .stat { text-align: center; }\n    .stat-value { font-size: 24px; font-weight: 700; color: #3b82f6; }\n    .stat-label { font-size: 12px; color: #64748b; }\n    .section h2 { font-size: 18px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; }\n    .impact-group h3 { font-size: 14px; color: #64748b; text-transform: uppercase; }\n    .entry { padding: 12px 16px; margin: 8px 0; background: #f8fafc; border-radius: 6px; }\n    .entry.high { border-left: 4px solid #22c55e; }\n    .entry.medium { border-left: 4px solid #eab308; }\n    .entry.low { border-left: 4px solid #94a3b8; }\n    .entry-title { font-weight: 600; }\n    .entry-category { font-size: 11px; color: #64748b; background: #e2e8f0; padding: 2px 8px; border-radius: 4px; margin-left: 8px; }\n    .entry-desc { font-size: 14px; color: #475569; margin-top: 4px; }\n    .goal { padding: 12px 0; border-bottom: 1px solid #e2e8f0; }\n    .goal-title { font-weight: 600; }\n    .goal-meta { font-size: 12px; color: #64748b; }\n    .progress-bar { height: 8px; background: #e2e8f0; border-radius: 4px; margin: 8px 0; }\n    .progress-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #06b6d4); border-radius: 4px; }\n    .footer { margin-top: 32px; text-align: center; font-size: 12px; color: #94a3b8; }\n  </style>\n</head>\n<body>\n  <div class=\"header\">\n    <h1>Daily Progress</h1>\n    <div style=\"color: #64748b;\">${today}</div>\n  </div>\n  \n  <div class=\"stats\">\n    <div class=\"stat\"><div class=\"stat-value\">${entries.length}</div><div class=\"stat-label\">Accomplishments</div></div>\n    <div class=\"stat\"><div class=\"stat-value\">${high.length}</div><div class=\"stat-label\">High Impact</div></div>\n    <div class=\"stat\"><div class=\"stat-value\">${goalsProgressed}</div><div class=\"stat-label\">Goals Progressed</div></div>\n  </div>\n  \n  <div class=\"section\">\n    <h2>Today's Accomplishments</h2>\n`;\n\nif (high.length > 0) {\n  html += '<div class=\"impact-group\"><h3>High Impact</h3>';\n  high.forEach(e => {\n    html += `<div class=\"entry high\"><div class=\"entry-title\">${e.title}<span class=\"entry-category\">${e.impact_category}</span></div>${e.description ? `<div class=\"entry-desc\">${e.description}</div>` : ''}</div>`;\n  });\n  html += '</div>';\n}\n\nif (medium.length > 0) {\n  html += '<div class=\"impact-group\"><h3>Medium Impact</h3>';\n  medium.forEach(e => {\n    html += `<div class=\"entry medium\"><div class=\"entry-title\">${e.title}<span class=\"entry-category\">${e.impact_category}</span></div>${e.description ? `<div class=\"entry-desc\">${e.description}</div>` : ''}</div>`;\n  });\n  html += '</div>';\n}\n\nif (low.length > 0) {\n  html += '<div class=\"impact-group\"><h3>Low Impact</h3>';\n  low.forEach(e => {\n    html += `<div class=\"entry low\"><div class=\"entry-title\">${e.title}<span class=\"entry-category\">${e.impact_category}</span></div></div>`;\n  });\n  html += '</div>';\n}\n\nhtml += '</div><div class=\"section\"><h2>Goal Progress</h2>';\n\ngoals.forEach(g => {\n  const progress = g.progress_percent || 0;\n  html += `\n    <div class=\"goal\">\n      <div class=\"goal-title\">${g.title}</div>\n      <div class=\"goal-meta\">${g.horizon} | ${g.days_remaining} days remaining</div>\n      <div class=\"progress-bar\"><div class=\"progress-fill\" style=\"width: ${progress}%\"></div></div>\n      <div class=\"goal-meta\">${progress}% complete${g.target_value ? ` (${g.current_value}/${g.target_value})` : ''}</div>\n    </div>\n  `;\n});\n\nhtml += `\n  </div>\n  <div class=\"footer\">\n    Generated by IAML Business OS\n  </div>\n</body>\n</html>\n`;\n\nreturn {\n  subject: `Daily Progress: ${today}`,\n  html,\n  entryCount: entries.length,\n  highImpactCount: high.length,\n  goalsCount: goals.length\n};"
+      },
+      "id": "generate-email",
+      "name": "Generate Email HTML",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [672, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.sendgrid.com/v3/mail/send",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"personalizations\": [{\"to\": [{\"email\": \"mike.jackson@iaml.com\"}]}],\n  \"from\": {\"email\": \"accomplishments@iaml.com\", \"name\": \"IAML Accomplishment Tracker\"},\n  \"subject\": \"{{ $json.subject }}\",\n  \"content\": [{\"type\": \"text/html\", \"value\": {{ JSON.stringify($json.html) }}}]\n}",
+        "options": {}
+      },
+      "id": "send-email",
+      "name": "Send via SendGrid",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [896, 0],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "SENDGRID_CREDENTIAL_ID",
+          "name": "SendGrid API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO accomplishments.email_summaries (summary_date, summary_type, email_subject, sent_at, sent_to, status, trigger_type) VALUES (CURRENT_DATE, 'daily', '{{ $('Generate Email HTML').item.json.subject }}', NOW(), ARRAY['mike.jackson@iaml.com'], 'sent', '{{ $input.first().json.trigger || \"scheduled\" }}')",
+        "options": {}
+      },
+      "id": "log-summary",
+      "name": "Log Email Summary",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1120, 0],
+      "credentials": {
+        "postgres": {
+          "id": "SUPABASE_CREDENTIAL_ID",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "skipped",
+              "name": "skipped",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "reason",
+              "name": "reason",
+              "value": "No accomplishments logged today",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "no-entries",
+      "name": "No Entries - Skip",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [672, 200]
+    }
+  ],
+  "connections": {
+    "Daily 6pm (Mon-Fri)": {
+      "main": [
+        [
+          {
+            "node": "Get Today's Entries",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Active Goals",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Today's Entries",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Active Goals",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Today's Entries": {
+      "main": [
+        [
+          {
+            "node": "Has Entries?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Entries?": {
+      "main": [
+        [
+          {
+            "node": "Generate Email HTML",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Entries - Skip",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Email HTML": {
+      "main": [
+        [
+          {
+            "node": "Send via SendGrid",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send via SendGrid": {
+      "main": [
+        [
+          {
+            "node": "Log Email Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "accomplishments"
+    },
+    {
+      "name": "email"
+    }
+  ],
+  "triggerCount": 2,
+  "pinData": {}
+}

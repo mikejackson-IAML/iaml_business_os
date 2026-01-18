@@ -16,6 +16,27 @@ export interface DomainHealth {
   cooldownUntil?: Date;
 }
 
+export interface EmailInbox {
+  id: string;
+  domainId: string;
+  domainName: string;
+  inboxEmail: string;
+  displayName?: string;
+  status: 'active' | 'warming' | 'paused' | 'disconnected';
+  sentToday: number;
+  sentThisWeek: number;
+  dailyLimit: number;
+  bounceRate: number;
+  openRate: number;
+  replyRate: number;
+  spamRate: number;
+  warmupEnabled: boolean;
+  warmupDay?: number;
+  isConnected: boolean;
+  lastError?: string;
+  healthScore: number;
+}
+
 export interface PlatformStatusInfo {
   id: string;
   name: 'phantombuster' | 'apollo' | 'apify' | 'heyreach' | 'smartlead';
@@ -63,6 +84,7 @@ export interface LeadIntelligenceDashboardData {
   metrics: LeadIntelligenceMetrics;
   capacity: CapacityMetrics;
   domains: DomainHealth[];
+  inboxes: EmailInbox[];
   platforms: PlatformStatusInfo[];
   recentImports: LeadPipeline[];
   alerts: AlertItem[];

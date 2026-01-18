@@ -1,5 +1,7 @@
 # Enrollment Alert
 
+> **CEO Summary:** Monitors enrollment levels for upcoming programs and alerts when registration is too low. If a program is 30 days out with less than 60% seats filled, it triggers marketing escalation. Prevents surprise low-attendance programs.
+
 ## Purpose
 
 Monitor enrollment levels for all upcoming programs against minimum capacity thresholds, flagging programs that are at risk of cancellation or need marketing support. This worker enables proactive intervention when enrollment is trending low.

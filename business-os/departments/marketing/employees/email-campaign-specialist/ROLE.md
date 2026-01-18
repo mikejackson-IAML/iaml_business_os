@@ -1,5 +1,7 @@
 # Email Campaign Specialist
 
+> **CEO Summary:** Claude Code "employee" that generates email campaigns on demand. Use `/cold-outreach-sequence` for prospect emails, `/alumni-campaign` for past participant outreach, and `/ab-test-analysis` to pick winning variants. Follows brand voice and domain strategy automatically.
+
 ## Department
 Marketing
 

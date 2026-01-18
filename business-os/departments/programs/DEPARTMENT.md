@@ -1,5 +1,7 @@
 # Programs & Operations Department
 
+> **CEO Summary:** Programs is the CORE department—everything else exists to fill seats in these programs. They manage the logistics of delivering ~40 seminar programs: faculty assignments, venue coordination, materials, certifications (SHRM/CLE), and participant communications. The key question they answer: "Is each upcoming program ready to deliver successfully?"
+
 ## Director Role
 
 **Programs Director** oversees all program delivery operations, coordinating the complex logistics required to deliver ~40 seminar programs with ~70 scheduled instances at any given time. The Director maintains real-time awareness of program readiness, enrollment status, faculty assignments, venue logistics, and materials tracking. They answer "Is each upcoming program ready to deliver successfully?", "Are we on track for the next 90 days?", and "What needs attention right now?" at any time. This is the CORE department of IAML—everything else exists to fill seats in these programs.

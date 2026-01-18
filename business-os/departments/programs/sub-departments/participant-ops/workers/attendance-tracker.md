@@ -1,5 +1,7 @@
 # Attendance Tracker
 
+> **CEO Summary:** Tracks who actually shows up during programs. Monitors check-ins, identifies no-shows for outreach, and flags attendance anomalies (like only 60% showing up on Day 1). Also determines certificate eligibility based on attendance percentage.
+
 ## Purpose
 
 Track participant check-ins during programs, monitor attendance patterns, and flag no-shows for follow-up. This monitor provides real-time visibility into who's attending and identifies participants who may need outreach.

@@ -63,9 +63,21 @@
               "type": "string"
             },
             {
+              "id": "inbox_email",
+              "name": "inbox_email",
+              "value": "={{ $json.from_email ?? '' }}",
+              "type": "string"
+            },
+            {
+              "id": "display_name",
+              "name": "display_name",
+              "value": "={{ $json.from_name ?? '' }}",
+              "type": "string"
+            },
+            {
               "id": "status",
               "name": "status",
-              "value": "={{ $json.warmup_enabled ? 'warming' : ($json.is_active ? 'active' : 'resting') }}",
+              "value": "={{ $json.warmup_enabled ? 'warming' : ($json.is_active ? 'active' : 'paused') }}",
               "type": "string"
             },
             {
@@ -78,6 +90,18 @@
               "id": "warmup_day",
               "name": "warmup_day",
               "value": "={{ $json.warmup_details?.warmup_day ?? null }}",
+              "type": "number"
+            },
+            {
+              "id": "warmup_enabled",
+              "name": "warmup_enabled",
+              "value": "={{ $json.warmup_enabled ?? false }}",
+              "type": "boolean"
+            },
+            {
+              "id": "warmup_target_limit",
+              "name": "warmup_target_limit",
+              "value": "={{ $json.warmup_details?.target_emails_per_day ?? null }}",
               "type": "number"
             },
             {
@@ -99,10 +123,34 @@
               "type": "number"
             },
             {
+              "id": "reply_rate",
+              "name": "reply_rate",
+              "value": "={{ $json.reply_rate ?? 0 }}",
+              "type": "number"
+            },
+            {
               "id": "sent_today",
               "name": "sent_today",
               "value": "={{ $json.sent_count_today ?? 0 }}",
               "type": "number"
+            },
+            {
+              "id": "sent_this_week",
+              "name": "sent_this_week",
+              "value": "={{ $json.sent_count_week ?? 0 }}",
+              "type": "number"
+            },
+            {
+              "id": "is_connected",
+              "name": "is_connected",
+              "value": "={{ $json.is_connected ?? true }}",
+              "type": "boolean"
+            },
+            {
+              "id": "last_error",
+              "name": "last_error",
+              "value": "={{ $json.last_error ?? null }}",
+              "type": "string"
             },
             {
               "id": "smartlead_account_id",
@@ -170,6 +218,12 @@
               "name": "health_score",
               "value": "={{ Math.round(Math.max(0, Math.min(100, (100 - ($('Transform Domain Data').item.json.bounce_rate * 10)) * 0.30 + (100 - ($('Transform Domain Data').item.json.spam_rate * 20)) * 0.30 + (($json.Failed?.length ?? 0) === 0 ? 100 : 0) * 0.20 + ($('Transform Domain Data').item.json.open_rate ?? 30) * 0.20))) }}",
               "type": "number"
+            },
+            {
+              "id": "inbox_health_score",
+              "name": "inbox_health_score",
+              "value": "={{ Math.round(Math.max(0, Math.min(100, (100 - ($('Transform Domain Data').item.json.bounce_rate * 10)) * 0.30 + (100 - ($('Transform Domain Data').item.json.spam_rate * 20)) * 0.30 + (($('Transform Domain Data').item.json.reply_rate ?? 0) * 2) * 0.20 + ($('Transform Domain Data').item.json.is_connected ? 100 : 0) * 0.20))) }}",
+              "type": "number"
             }
           ]
         },
@@ -190,13 +244,13 @@
         "table": "domains",
         "conflictColumns": ["domain_name"],
         "columns": "domain_name, status, daily_limit, warmup_day, health_score, bounce_rate, spam_rate, open_rate, sent_today, platform_domain_id, updated_at",
-        "columnValues": "={{ $json.domain_name }}, {{ $json.status }}, {{ $json.daily_limit }}, {{ $json.warmup_day }}, {{ $json.health_score }}, {{ $json.bounce_rate }}, {{ $json.spam_rate }}, {{ $json.open_rate }}, {{ $json.sent_today }}, {{ $json.smartlead_account_id }}, NOW()"
+        "columnValues": "={{ $json.domain_name }}, {{ $json.status === 'paused' ? 'resting' : $json.status }}, {{ $json.daily_limit }}, {{ $json.warmup_day }}, {{ $json.health_score }}, {{ $json.bounce_rate }}, {{ $json.spam_rate }}, {{ $json.open_rate }}, {{ $json.sent_today }}, {{ $json.smartlead_account_id }}, NOW()"
       },
       "id": "upsert-domain",
       "name": "Upsert Domain",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
-      "position": [1344, 0],
+      "position": [1344, -100],
       "credentials": {
         "supabaseApi": {
           "id": "3CPchaCatw5WmkUQ",
@@ -213,14 +267,48 @@
         "columnValues": "={{ $json.domain_id }}, CURRENT_DATE, {{ $json.health_score }}, {{ $json.bounce_rate }}, {{ $json.spam_rate }}, {{ $json.open_rate }}, {{ $json.sent_today }}, {{ $json.status }}"
       },
       "id": "log-health",
-      "name": "Log to History",
+      "name": "Log Domain History",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
-      "position": [1344, 200],
+      "position": [1568, -100],
       "credentials": {
         "supabaseApi": {
           "id": "3CPchaCatw5WmkUQ",
           "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO email_inboxes (inbox_email, smartlead_account_id, display_name, status, sent_today, sent_this_week, daily_limit, bounce_rate, open_rate, reply_rate, spam_rate, warmup_enabled, warmup_day, warmup_target_limit, is_connected, last_error, health_score, domain_id)\nSELECT \n  '{{ $json.inbox_email }}',\n  '{{ $json.smartlead_account_id }}',\n  '{{ $json.display_name }}',\n  '{{ $json.status }}',\n  {{ $json.sent_today }},\n  {{ $json.sent_this_week }},\n  {{ $json.daily_limit }},\n  {{ $json.bounce_rate }},\n  {{ $json.open_rate }},\n  {{ $json.reply_rate }},\n  {{ $json.spam_rate }},\n  {{ $json.warmup_enabled }},\n  {{ $json.warmup_day ?? 'NULL' }},\n  {{ $json.warmup_target_limit ?? 'NULL' }},\n  {{ $json.is_connected }},\n  {{ $json.last_error ? \"'\" + $json.last_error.replace(/'/g, \"''\") + \"'\" : 'NULL' }},\n  {{ $json.inbox_health_score }},\n  d.id\nFROM domains d\nWHERE d.domain_name = '{{ $json.domain_name }}'\nON CONFLICT (inbox_email) DO UPDATE SET\n  smartlead_account_id = EXCLUDED.smartlead_account_id,\n  display_name = EXCLUDED.display_name,\n  status = EXCLUDED.status,\n  sent_today = EXCLUDED.sent_today,\n  sent_this_week = EXCLUDED.sent_this_week,\n  daily_limit = EXCLUDED.daily_limit,\n  bounce_rate = EXCLUDED.bounce_rate,\n  open_rate = EXCLUDED.open_rate,\n  reply_rate = EXCLUDED.reply_rate,\n  spam_rate = EXCLUDED.spam_rate,\n  warmup_enabled = EXCLUDED.warmup_enabled,\n  warmup_day = EXCLUDED.warmup_day,\n  warmup_target_limit = EXCLUDED.warmup_target_limit,\n  is_connected = EXCLUDED.is_connected,\n  last_error = EXCLUDED.last_error,\n  health_score = EXCLUDED.health_score,\n  domain_id = EXCLUDED.domain_id,\n  updated_at = NOW()"
+      },
+      "id": "upsert-inbox",
+      "name": "Upsert Inbox",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1344, 100],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO inbox_health_log (inbox_id, log_date, health_score, bounce_rate, spam_rate, open_rate, reply_rate, emails_sent, status)\nSELECT \n  i.id,\n  CURRENT_DATE,\n  {{ $json.inbox_health_score }},\n  {{ $json.bounce_rate }},\n  {{ $json.spam_rate }},\n  {{ $json.open_rate }},\n  {{ $json.reply_rate }},\n  {{ $json.sent_today }},\n  '{{ $json.status }}'\nFROM email_inboxes i\nWHERE i.inbox_email = '{{ $json.inbox_email }}'\nON CONFLICT (inbox_id, log_date) DO UPDATE SET\n  health_score = EXCLUDED.health_score,\n  bounce_rate = EXCLUDED.bounce_rate,\n  spam_rate = EXCLUDED.spam_rate,\n  open_rate = EXCLUDED.open_rate,\n  reply_rate = EXCLUDED.reply_rate,\n  emails_sent = EXCLUDED.emails_sent,\n  status = EXCLUDED.status"
+      },
+      "id": "log-inbox-health",
+      "name": "Log Inbox History",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1568, 100],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
         }
       }
     },
@@ -234,7 +322,7 @@
           },
           "conditions": [
             {
-              "id": "check-health",
+              "id": "check-domain-health",
               "leftValue": "={{ $json.health_score }}",
               "rightValue": 70,
               "operator": {
@@ -247,11 +335,58 @@
         },
         "options": {}
       },
-      "id": "check-alerts",
-      "name": "Health Below 70?",
+      "id": "check-domain-alerts",
+      "name": "Domain Health < 70?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
-      "position": [1568, 100]
+      "position": [1792, -100]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-inbox-health",
+              "leftValue": "={{ $json.inbox_health_score }}",
+              "rightValue": 70,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            },
+            {
+              "id": "check-disconnected",
+              "leftValue": "={{ $json.is_connected }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "check-high-bounce",
+              "leftValue": "={{ $json.bounce_rate }}",
+              "rightValue": 5,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "check-inbox-alerts",
+      "name": "Inbox Issues?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [1792, 100]
     },
     {
       "parameters": {
@@ -261,11 +396,31 @@
         "columns": "activity_type, description, source_name, metadata, activity_at",
         "columnValues": "domain_health_warning, Domain {{ $json.domain_name }} health score dropped to {{ $json.health_score }}, smartlead, {\"domain\": \"{{ $json.domain_name }}\", \"health_score\": {{ $json.health_score }}, \"bounce_rate\": {{ $json.bounce_rate }}}, NOW()"
       },
-      "id": "log-alert",
-      "name": "Log Health Alert",
+      "id": "log-domain-alert",
+      "name": "Log Domain Alert",
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
-      "position": [1792, 0],
+      "position": [2016, -200],
+      "credentials": {
+        "supabaseApi": {
+          "id": "3CPchaCatw5WmkUQ",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "public",
+        "table": "lead_intelligence_activity",
+        "columns": "activity_type, description, source_name, metadata, activity_at",
+        "columnValues": "={{ !$json.is_connected ? 'inbox_disconnected' : ($json.inbox_health_score < 70 ? 'inbox_health_warning' : 'inbox_health_critical') }}, Inbox {{ $json.inbox_email }} {{ !$json.is_connected ? 'disconnected' : 'health at ' + $json.inbox_health_score }}, smartlead, {\"inbox\": \"{{ $json.inbox_email }}\", \"health_score\": {{ $json.inbox_health_score }}, \"bounce_rate\": {{ $json.bounce_rate }}, \"is_connected\": {{ $json.is_connected }}}, NOW()"
+      },
+      "id": "log-inbox-alert",
+      "name": "Log Inbox Alert",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [2016, 0],
       "credentials": {
         "supabaseApi": {
           "id": "3CPchaCatw5WmkUQ",
@@ -282,11 +437,26 @@
         "jsonBody": "={\n  \"text\": \":warning: *Domain Health Alert*\\n\\n*Domain:* {{ $json.domain_name }}\\n*Health Score:* {{ $json.health_score }}/100\\n*Bounce Rate:* {{ $json.bounce_rate }}%\\n*Spam Rate:* {{ $json.spam_rate }}%\\n\\nReview in Lead Intelligence Dashboard.\"\n}",
         "options": {}
       },
-      "id": "slack-alert",
-      "name": "Slack Health Alert",
+      "id": "slack-domain-alert",
+      "name": "Slack Domain Alert",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1792, 160]
+      "position": [2016, -100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \":mailbox_with_no_mail: *Inbox Alert*\\n\\n*Inbox:* {{ $json.inbox_email }}\\n*Status:* {{ !$json.is_connected ? 'DISCONNECTED' : 'Health Warning' }}\\n*Health Score:* {{ $json.inbox_health_score }}/100\\n*Bounce Rate:* {{ $json.bounce_rate }}%\\n*Reply Rate:* {{ $json.reply_rate }}%\\n{{ $json.last_error ? '*Error:* ' + $json.last_error : '' }}\\n\\nReview in Lead Intelligence Dashboard.\"\n}",
+        "options": {}
+      },
+      "id": "slack-inbox-alert",
+      "name": "Slack Inbox Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2016, 100]
     }
   ],
   "connections": {
@@ -327,16 +497,44 @@
       "main": [
         [
           {"node": "Upsert Domain", "type": "main", "index": 0},
-          {"node": "Log to History", "type": "main", "index": 0},
-          {"node": "Health Below 70?", "type": "main", "index": 0}
+          {"node": "Upsert Inbox", "type": "main", "index": 0}
         ]
       ]
     },
-    "Health Below 70?": {
+    "Upsert Domain": {
+      "main": [
+        [{"node": "Log Domain History", "type": "main", "index": 0}]
+      ]
+    },
+    "Log Domain History": {
+      "main": [
+        [{"node": "Domain Health < 70?", "type": "main", "index": 0}]
+      ]
+    },
+    "Upsert Inbox": {
+      "main": [
+        [{"node": "Log Inbox History", "type": "main", "index": 0}]
+      ]
+    },
+    "Log Inbox History": {
+      "main": [
+        [{"node": "Inbox Issues?", "type": "main", "index": 0}]
+      ]
+    },
+    "Domain Health < 70?": {
       "main": [
         [
-          {"node": "Log Health Alert", "type": "main", "index": 0},
-          {"node": "Slack Health Alert", "type": "main", "index": 0}
+          {"node": "Log Domain Alert", "type": "main", "index": 0},
+          {"node": "Slack Domain Alert", "type": "main", "index": 0}
+        ],
+        []
+      ]
+    },
+    "Inbox Issues?": {
+      "main": [
+        [
+          {"node": "Log Inbox Alert", "type": "main", "index": 0},
+          {"node": "Slack Inbox Alert", "type": "main", "index": 0}
         ],
         []
       ]
@@ -352,6 +550,7 @@
   "triggerCount": 1,
   "tags": [
     {"name": "lead-intelligence"},
-    {"name": "domain-health"}
+    {"name": "domain-health"},
+    {"name": "inbox-tracking"}
   ]
 }

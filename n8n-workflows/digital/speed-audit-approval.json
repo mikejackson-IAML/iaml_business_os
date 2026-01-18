@@ -1,0 +1,407 @@
+{
+  "name": "Speed Audit Approval Handler",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "speed-audit-approval",
+        "options": {}
+      },
+      "id": "webhook",
+      "name": "Slack Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "speed-audit-approval"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse Slack interactive payload\nconst body = $input.first().json.body;\n\n// Slack sends form-encoded payload\nlet payload;\nif (typeof body === 'string') {\n  // URL decode and parse\n  const decoded = decodeURIComponent(body.replace('payload=', ''));\n  payload = JSON.parse(decoded);\n} else if (body.payload) {\n  payload = JSON.parse(body.payload);\n} else {\n  payload = body;\n}\n\nconst action = payload.actions?.[0];\nif (!action) {\n  return [{ json: { error: 'No action found in payload' } }];\n}\n\nconst result = {\n  action_id: action.action_id,\n  audit_id: action.value,\n  user_id: payload.user?.id,\n  user_name: payload.user?.name,\n  channel_id: payload.channel?.id,\n  response_url: payload.response_url,\n  trigger_id: payload.trigger_id\n};\n\nreturn [{ json: result }];"
+      },
+      "id": "parse-payload",
+      "name": "Parse Slack Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "approve-all",
+              "leftValue": "={{ $json.action_id }}",
+              "rightValue": "approve_all",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-approve-all",
+      "name": "Approve All?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [440, -100]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "approve-critical-high",
+              "leftValue": "={{ $json.action_id }}",
+              "rightValue": "approve_critical_high",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-approve-critical",
+      "name": "Approve Critical/High?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [440, 100]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT approve_speed_audit_items('{{ $json.audit_id }}', 'low', '{{ $json.user_name || 'slack' }}') as approved_count;",
+        "options": {}
+      },
+      "id": "approve-all-items",
+      "name": "Approve All Items",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [660, -200],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT approve_speed_audit_items('{{ $json.audit_id }}', 'high', '{{ $json.user_name || 'slack' }}') as approved_count;",
+        "options": {}
+      },
+      "id": "approve-critical-high-items",
+      "name": "Approve Critical/High",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [660, 0],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE speed_audits SET status = 'deferred' WHERE id = '{{ $('Parse Slack Payload').first().json.audit_id }}';",
+        "options": {}
+      },
+      "id": "defer-audit",
+      "name": "Defer Audit",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [660, 200],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n  sa.id,\n  sa.audit_date,\n  sa.status,\n  COUNT(sai.id) FILTER (WHERE sai.approved = TRUE) as approved_count,\n  COUNT(sai.id) as total_count\nFROM speed_audits sa\nLEFT JOIN speed_audit_items sai ON sai.audit_id = sa.id\nWHERE sa.id = '{{ $('Parse Slack Payload').first().json.audit_id }}'\nGROUP BY sa.id, sa.audit_date, sa.status;",
+        "options": {}
+      },
+      "id": "get-audit-status",
+      "name": "Get Audit Status",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [880, 0],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Generate response message for Slack\nconst actionId = $('Parse Slack Payload').first().json.action_id;\nconst audit = $input.first().json;\nconst userName = $('Parse Slack Payload').first().json.user_name || 'User';\n\nlet message;\nlet emoji;\n\nswitch (actionId) {\n  case 'approve_all':\n    message = `All ${audit.approved_count} items approved by ${userName}. PRD generation will begin shortly.`;\n    emoji = ':white_check_mark:';\n    break;\n  case 'approve_critical_high':\n    message = `${audit.approved_count} critical/high items approved by ${userName}. PRD generation will begin shortly.`;\n    emoji = ':ballot_box_with_check:';\n    break;\n  case 'defer':\n    message = `Audit deferred to next week by ${userName}.`;\n    emoji = ':fast_forward:';\n    break;\n  default:\n    message = `Action processed: ${actionId}`;\n    emoji = ':gear:';\n}\n\nconst responseBlock = {\n  replace_original: true,\n  blocks: [\n    {\n      type: 'section',\n      text: {\n        type: 'mrkdwn',\n        text: `${emoji} *Speed Audit Update*\\n\\n${message}\\n\\n_Week of ${audit.audit_date} | ${audit.total_count} total items_`\n      }\n    },\n    {\n      type: 'context',\n      elements: [\n        {\n          type: 'mrkdwn',\n          text: `Updated at <!date^${Math.floor(Date.now() / 1000)}^{date_short_pretty} at {time}|${new Date().toISOString()}>`\n        }\n      ]\n    }\n  ]\n};\n\nreturn [{\n  json: {\n    response_url: $('Parse Slack Payload').first().json.response_url,\n    response_body: responseBlock,\n    should_generate_prd: actionId !== 'defer' && audit.approved_count > 0,\n    audit_id: audit.id\n  }\n}];"
+      },
+      "id": "generate-response",
+      "name": "Generate Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1100, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.response_url }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.response_body) }}",
+        "options": {}
+      },
+      "id": "update-slack-message",
+      "name": "Update Slack Message",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1320, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "should-generate-prd",
+              "leftValue": "={{ $('Generate Response').first().json.should_generate_prd }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-generate-prd",
+      "name": "Generate PRD?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [1540, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n  sai.item_code,\n  sai.issue_type,\n  sai.severity,\n  sai.title,\n  sai.description,\n  sai.fix_suggestion,\n  sai.estimated_impact,\n  sai.page_url,\n  sai.file_path,\n  sai.acceptance_criteria,\n  sai.affected_files\nFROM speed_audit_items sai\nWHERE sai.audit_id = '{{ $('Generate Response').first().json.audit_id }}'\n  AND sai.approved = TRUE\nORDER BY \n  CASE sai.severity \n    WHEN 'critical' THEN 1 \n    WHEN 'high' THEN 2 \n    WHEN 'medium' THEN 3 \n    ELSE 4 \n  END,\n  sai.item_code;",
+        "options": {}
+      },
+      "id": "get-approved-items",
+      "name": "Get Approved Items",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1760, -100],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Generate PRD JSON for Ralph\nconst items = $input.all().map(i => i.json);\nconst auditId = $('Generate Response').first().json.audit_id;\nconst today = new Date().toISOString().split('T')[0];\n\n// Generate acceptance criteria based on issue type\nfunction getAcceptanceCriteria(item) {\n  const baseAc = item.acceptance_criteria || [];\n  const typeAc = {\n    'blocking_script': [\n      'All blocking scripts have defer or async attribute',\n      'LCP improves by >100ms',\n      'No functionality regression'\n    ],\n    'large_image': [\n      'Images are properly sized for viewport',\n      'Total page weight reduces',\n      'Image quality remains acceptable'\n    ],\n    'no_lazy_load': [\n      'Below-fold images have loading=\"lazy\"',\n      'Above-fold images remain eager',\n      'Initial load time improves'\n    ],\n    'unoptimized_image': [\n      'Images converted to WebP format',\n      'Fallbacks provided for older browsers',\n      'File size reduces by >30%'\n    ],\n    'no_preconnect': [\n      'Preconnect hints added for external domains',\n      'TTFB improves for external resources'\n    ],\n    'unused_js': [\n      'Unused JavaScript removed or deferred',\n      'Bundle size reduces',\n      'No functionality regression'\n    ],\n    'unused_css': [\n      'Unused CSS removed or loaded asynchronously',\n      'Critical CSS inlined if needed',\n      'Styles render correctly'\n    ],\n    'main_thread_work': [\n      'Long tasks broken up',\n      'Main thread blocking time reduces',\n      'INP improves'\n    ],\n    'long_task': [\n      'JavaScript execution time reduces',\n      'Tasks split using requestIdleCallback or similar',\n      'TBT improves'\n    ]\n  };\n  \n  return [...baseAc, ...(typeAc[item.issue_type] || ['Fix verified by re-running PageSpeed'])];\n}\n\n// Build PRD structure\nconst prd = {\n  project: `IAML Speed Optimization - Week of ${today}`,\n  branchName: `feature/speed-opt-${today.replace(/-/g, '')}`,\n  auditId: auditId,\n  stories: items.map((item, index) => ({\n    id: item.item_code,\n    title: item.title,\n    description: item.description + (item.fix_suggestion ? `\\n\\nSuggested fix: ${item.fix_suggestion}` : ''),\n    priority: item.severity === 'critical' ? 1 : (item.severity === 'high' ? 2 : (item.severity === 'medium' ? 3 : 4)),\n    files: item.affected_files || (item.file_path ? [item.file_path] : []),\n    context: item.page_url ? `Affects: ${item.page_url}` : '',\n    acceptance: getAcceptanceCriteria(item),\n    passes: false,\n    severity: item.severity,\n    estimatedImpact: item.estimated_impact\n  }))\n};\n\nreturn [{ json: { prd: prd, prdString: JSON.stringify(prd, null, 2) } }];"
+      },
+      "id": "generate-prd",
+      "name": "Generate PRD JSON",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1980, -100]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE speed_audits \nSET \n  prd_generated_at = NOW(),\n  prd_file_path = '.planning/speed-prd-{{ new Date().toISOString().split('T')[0] }}.json'\nWHERE id = '{{ $('Generate Response').first().json.audit_id }}';",
+        "options": {}
+      },
+      "id": "update-prd-status",
+      "name": "Update PRD Status",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [2200, -100],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \":clipboard: Speed Optimization PRD Generated\",\n  \"blocks\": [\n    {\n      \"type\": \"section\",\n      \"text\": {\n        \"type\": \"mrkdwn\",\n        \"text\": \":clipboard: *Speed Optimization PRD Generated*\\n\\n*Project:* {{ $json.prd.project }}\\n*Stories:* {{ $json.prd.stories.length }}\\n*Branch:* `{{ $json.prd.branchName }}`\\n\\nRun Ralph to execute the optimizations:\\n```\\nralph --prd .planning/speed-prd-{{ new Date().toISOString().split('T')[0] }}.json\\n```\"\n      }\n    }\n  ]\n}",
+        "options": {}
+      },
+      "id": "notify-prd-ready",
+      "name": "Notify PRD Ready",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2420, -100]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"ok\": true}",
+        "options": {}
+      },
+      "id": "respond-ok",
+      "name": "Respond OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [2420, 100]
+    }
+  ],
+  "connections": {
+    "Slack Webhook": {
+      "main": [
+        [
+          { "node": "Parse Slack Payload", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Parse Slack Payload": {
+      "main": [
+        [
+          { "node": "Approve All?", "type": "main", "index": 0 },
+          { "node": "Approve Critical/High?", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Approve All?": {
+      "main": [
+        [
+          { "node": "Approve All Items", "type": "main", "index": 0 }
+        ],
+        []
+      ]
+    },
+    "Approve Critical/High?": {
+      "main": [
+        [
+          { "node": "Approve Critical/High", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "Defer Audit", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Approve All Items": {
+      "main": [
+        [
+          { "node": "Get Audit Status", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Approve Critical/High": {
+      "main": [
+        [
+          { "node": "Get Audit Status", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Defer Audit": {
+      "main": [
+        [
+          { "node": "Get Audit Status", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Get Audit Status": {
+      "main": [
+        [
+          { "node": "Generate Response", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Generate Response": {
+      "main": [
+        [
+          { "node": "Update Slack Message", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Update Slack Message": {
+      "main": [
+        [
+          { "node": "Check Generate PRD?", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Check Generate PRD?": {
+      "main": [
+        [
+          { "node": "Get Approved Items", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "Respond OK", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Get Approved Items": {
+      "main": [
+        [
+          { "node": "Generate PRD JSON", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Generate PRD JSON": {
+      "main": [
+        [
+          { "node": "Update PRD Status", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Update PRD Status": {
+      "main": [
+        [
+          { "node": "Notify PRD Ready", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Notify PRD Ready": {
+      "main": [
+        [
+          { "node": "Respond OK", "type": "main", "index": 0 }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}

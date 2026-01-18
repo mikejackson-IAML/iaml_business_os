@@ -70,9 +70,42 @@ lookup_error_fix({
 | Confidence | `calculate_confidence`, `record_action` |
 | Preferences | `set_preference`, `get_preferences` |
 
+## Documentation Requirements (MANDATORY)
+
+All Business OS components MUST include documentation with CEO summaries. This is non-negotiable.
+
+### CEO Summary Format
+
+Every document must start with a CEO Summary immediately after the title:
+
+```markdown
+# Component Name
+
+> **CEO Summary:** [One sentence in plain English explaining what this does and why it matters]
+```
+
+### Required Documentation
+
+| When You Create... | You Must Also Create... |
+|--------------------|------------------------|
+| New n8n workflow | `business-os/workflows/README-[name].md` + update `business-os/workflows/README.md` |
+| New worker | Worker spec with CEO summary at top |
+| New employee/role | `ROLE.md` with CEO summary at top |
+| New department | `DEPARTMENT.md` with CEO summary at top |
+
+### Documentation Checklist
+
+Before considering any component "done":
+- [ ] CEO Summary block exists at top of doc
+- [ ] Central README (`business-os/workflows/README.md` for workflows) updated if applicable
+- [ ] Related docs linked where appropriate
+
+Reference: `business-os/docs/DOCUMENTATION-STANDARDS.md`
+
 ## Reference Documents
 
 - Business OS architecture: @business-os/docs/architecture/
+- Documentation standards: @business-os/docs/DOCUMENTATION-STANDARDS.md
 - Campaign tracking: @business-os/docs/architecture/08-CAMPAIGN-TRACKING.md
 - n8n-brain schema: @supabase/migrations/20260111_create_n8n_brain_schema.sql
 

@@ -1,5 +1,7 @@
 # WebDev Specialist
 
+> **CEO Summary:** Claude Code "employee" that builds website features. Use `/new-program` to create program pages, `/component-variants` for UI patterns, and `/deep-plan-ui` for complex frontend work. Follows the style guide and accessibility standards.
+
 ## Role Summary
 
 The WebDev Specialist builds and maintains the IAML website, creating new program pages, implementing UI features, and ensuring code quality follows established patterns.

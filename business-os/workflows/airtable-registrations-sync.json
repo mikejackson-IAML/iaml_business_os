@@ -1,0 +1,186 @@
+{
+  "name": "Airtable Registrations Sync + GHL",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "hours", "triggerAtHour": 0}]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Daily Midnight Sync",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "airtable-registration-sync",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 200],
+      "webhookId": "airtable-registration-sync"
+    },
+    {
+      "parameters": {
+        "url": "https://api.airtable.com/v0/applWPVmMkgMWoZIC/tblhp9Llw7zSRqRnt",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [{"name": "maxRecords", "value": "1000"}]
+        },
+        "options": {}
+      },
+      "id": "get-registrations",
+      "name": "Get Registrations from Airtable",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [224, 100],
+      "credentials": {
+        "httpHeaderAuth": {"id": "xMPEGJc6SUNw3C1n", "name": "Airtable API"}
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "records",
+        "options": {}
+      },
+      "id": "split-records",
+      "name": "Split Out Records",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [448, 100]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {"id": "airtable_id", "name": "airtable_id", "value": "={{ $json.id }}", "type": "string"},
+            {"id": "program_instance_airtable_id", "name": "program_instance_airtable_id", "value": "={{ $json.fields['Program Instance']?.[0] ?? null }}", "type": "string"},
+            {"id": "contact_airtable_id", "name": "contact_airtable_id", "value": "={{ $json.fields['Contact']?.[0] ?? null }}", "type": "string"},
+            {"id": "contact_name", "name": "contact_name", "value": "={{ $json.fields['Contact Name (from Contact)']?.[0] ?? '' }}", "type": "string"},
+            {"id": "first_name", "name": "first_name", "value": "={{ ($json.fields['Contact Name (from Contact)']?.[0] ?? '').split(' ')[0] ?? '' }}", "type": "string"},
+            {"id": "last_name", "name": "last_name", "value": "={{ ($json.fields['Contact Name (from Contact)']?.[0] ?? '').split(' ').slice(1).join(' ') ?? '' }}", "type": "string"},
+            {"id": "email", "name": "email", "value": "={{ $json.fields['Contact Email (from Contact)']?.[0] ?? '' }}", "type": "string"},
+            {"id": "phone", "name": "phone", "value": "={{ $json.fields['Contact Phone (from Contact)']?.[0] ?? '' }}", "type": "string"},
+            {"id": "job_title", "name": "job_title", "value": "={{ $json.fields['Job Title (from Contact)']?.[0] ?? '' }}", "type": "string"},
+            {"id": "company_airtable_id", "name": "company_airtable_id", "value": "={{ $json.fields['Company']?.[0] ?? null }}", "type": "string"},
+            {"id": "company_name", "name": "company_name", "value": "={{ $json.fields['Company Name (from Contact)']?.[0] ?? $json.fields['Company Name'] ?? '' }}", "type": "string"},
+            {"id": "registration_date", "name": "registration_date", "value": "={{ $json.fields['Created Date'] ?? $json.createdTime }}", "type": "string"},
+            {"id": "registration_source", "name": "registration_source", "value": "={{ $json.fields['Registration Source'] ?? 'Website' }}", "type": "string"},
+            {"id": "registration_status", "name": "registration_status", "value": "={{ $json.fields['Registration Status'] ?? 'Confirmed' }}", "type": "string"},
+            {"id": "registration_code", "name": "registration_code", "value": "={{ $json.fields['Registration Code'] ?? $json.fields['Registration ID'] ?? '' }}", "type": "string"},
+            {"id": "list_price", "name": "list_price", "value": "={{ $json.fields['List Price'] ?? 0 }}", "type": "number"},
+            {"id": "discount_amount", "name": "discount_amount", "value": "={{ $json.fields['Discount Amount'] ?? 0 }}", "type": "number"},
+            {"id": "final_price", "name": "final_price", "value": "={{ $json.fields['Final Price'] ?? $json.fields['Total Amount'] ?? 0 }}", "type": "number"},
+            {"id": "payment_status", "name": "payment_status", "value": "={{ $json.fields['Payment Status'] ?? 'Pending' }}", "type": "string"},
+            {"id": "payment_method", "name": "payment_method", "value": "={{ $json.fields['Payment Method'] ?? '' }}", "type": "string"},
+            {"id": "stripe_payment_intent", "name": "stripe_payment_intent", "value": "={{ $json.fields['Stripe Payment Intent'] ?? null }}", "type": "string"},
+            {"id": "stripe_invoice_id", "name": "stripe_invoice_id", "value": "={{ $json.fields['Stripe Invoice ID'] ?? null }}", "type": "string"},
+            {"id": "attendance_type", "name": "attendance_type", "value": "={{ $json.fields['Attendance Type'] ?? 'Full' }}", "type": "string"},
+            {"id": "selected_blocks", "name": "selected_blocks", "value": "={{ $json.fields['Selected Blocks'] ? $json.fields['Selected Blocks'].split(',').map(b => b.trim()) : null }}", "type": "string"},
+            {"id": "program_name", "name": "program_name", "value": "={{ $json.fields['Program Name (from Program Instance)']?.[0] ?? $json.fields['Program Name'] ?? '' }}", "type": "string"},
+            {"id": "program_format", "name": "program_format", "value": "={{ $json.fields['Format (from Program Instance)']?.[0] ?? $json.fields['Program Format'] ?? 'In-Person' }}", "type": "string"},
+            {"id": "session_location", "name": "session_location", "value": "={{ $json.fields['Location (from Program Instance)']?.[0] ?? $json.fields['Location'] ?? '' }}", "type": "string"},
+            {"id": "session_start_date", "name": "session_start_date", "value": "={{ $json.fields['Start Date (from Program Instance)']?.[0] ?? $json.fields['Start Date'] ?? '' }}", "type": "string"},
+            {"id": "session_end_date", "name": "session_end_date", "value": "={{ $json.fields['End Date (from Program Instance)']?.[0] ?? $json.fields['End Date'] ?? '' }}", "type": "string"},
+            {"id": "coupon_code", "name": "coupon_code", "value": "={{ $json.fields['Coupon Code'] ?? '' }}", "type": "string"},
+            {"id": "utm_source", "name": "utm_source", "value": "={{ $json.fields['UTM Source'] ?? '' }}", "type": "string"},
+            {"id": "utm_medium", "name": "utm_medium", "value": "={{ $json.fields['UTM Medium'] ?? '' }}", "type": "string"},
+            {"id": "utm_campaign", "name": "utm_campaign", "value": "={{ $json.fields['UTM Campaign'] ?? '' }}", "type": "string"}
+          ]
+        },
+        "options": {}
+      },
+      "id": "transform-registration",
+      "name": "Transform Registration Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [672, 100]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO registrations (\n  airtable_id,\n  program_instance_airtable_id,\n  contact_airtable_id,\n  first_name,\n  last_name,\n  email,\n  phone,\n  job_title,\n  company_airtable_id,\n  company_name,\n  registration_date,\n  registration_source,\n  registration_status,\n  registration_code,\n  list_price,\n  discount_amount,\n  final_price,\n  payment_status,\n  payment_method,\n  stripe_payment_intent,\n  stripe_invoice_id,\n  attendance_type,\n  selected_blocks,\n  utm_source,\n  utm_medium,\n  utm_campaign\n) VALUES (\n  '{{ $json.airtable_id }}',\n  {{ $json.program_instance_airtable_id ? \"'\" + $json.program_instance_airtable_id + \"'\" : 'NULL' }},\n  {{ $json.contact_airtable_id ? \"'\" + $json.contact_airtable_id + \"'\" : 'NULL' }},\n  '{{ ($json.first_name || '').replace(/'/g, \"''\") }}',\n  '{{ ($json.last_name || '').replace(/'/g, \"''\") }}',\n  '{{ $json.email || '' }}',\n  {{ $json.phone ? \"'\" + $json.phone + \"'\" : 'NULL' }},\n  {{ $json.job_title ? \"'\" + $json.job_title.replace(/'/g, \"''\") + \"'\" : 'NULL' }},\n  {{ $json.company_airtable_id ? \"'\" + $json.company_airtable_id + \"'\" : 'NULL' }},\n  {{ $json.company_name ? \"'\" + $json.company_name.replace(/'/g, \"''\") + \"'\" : 'NULL' }},\n  '{{ $json.registration_date }}',\n  '{{ $json.registration_source }}',\n  '{{ $json.registration_status }}',\n  {{ $json.registration_code ? \"'\" + $json.registration_code + \"'\" : 'NULL' }},\n  {{ $json.list_price }},\n  {{ $json.discount_amount }},\n  {{ $json.final_price }},\n  '{{ $json.payment_status }}',\n  {{ $json.payment_method ? \"'\" + $json.payment_method + \"'\" : 'NULL' }},\n  {{ $json.stripe_payment_intent ? \"'\" + $json.stripe_payment_intent + \"'\" : 'NULL' }},\n  {{ $json.stripe_invoice_id ? \"'\" + $json.stripe_invoice_id + \"'\" : 'NULL' }},\n  '{{ $json.attendance_type }}',\n  {{ $json.selected_blocks ? \"ARRAY[\" + $json.selected_blocks.map(b => \"'\" + b + \"'\").join(',') + \"]\" : 'NULL' }},\n  {{ $json.utm_source ? \"'\" + $json.utm_source + \"'\" : 'NULL' }},\n  {{ $json.utm_medium ? \"'\" + $json.utm_medium + \"'\" : 'NULL' }},\n  {{ $json.utm_campaign ? \"'\" + $json.utm_campaign + \"'\" : 'NULL' }}\n)\nON CONFLICT (airtable_id) DO UPDATE SET\n  program_instance_airtable_id = EXCLUDED.program_instance_airtable_id,\n  first_name = EXCLUDED.first_name,\n  last_name = EXCLUDED.last_name,\n  email = EXCLUDED.email,\n  phone = EXCLUDED.phone,\n  job_title = EXCLUDED.job_title,\n  company_airtable_id = EXCLUDED.company_airtable_id,\n  company_name = EXCLUDED.company_name,\n  registration_status = EXCLUDED.registration_status,\n  list_price = EXCLUDED.list_price,\n  discount_amount = EXCLUDED.discount_amount,\n  final_price = EXCLUDED.final_price,\n  payment_status = EXCLUDED.payment_status,\n  payment_method = EXCLUDED.payment_method,\n  stripe_payment_intent = EXCLUDED.stripe_payment_intent,\n  stripe_invoice_id = EXCLUDED.stripe_invoice_id,\n  attendance_type = EXCLUDED.attendance_type,\n  selected_blocks = EXCLUDED.selected_blocks,\n  updated_at = NOW()"
+      },
+      "id": "upsert-registration",
+      "name": "Upsert to Supabase",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [896, 100],
+      "credentials": {
+        "postgres": {"id": "EgmvZHbvINHsh6PR", "name": "Supabase Postgres"}
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE registrations r\nSET program_instance_id = pi.id\nFROM program_instances pi\nWHERE r.program_instance_airtable_id = pi.airtable_id\n  AND r.program_instance_id IS NULL"
+      },
+      "id": "link-program-instances",
+      "name": "Link Program Instances",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1120, 100],
+      "credentials": {
+        "postgres": {"id": "EgmvZHbvINHsh6PR", "name": "Supabase Postgres"}
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://services.leadconnectorhq.com/hooks/MjGEy0pobNT9su2YJqFI/webhook-trigger/05c35ef9-9aa6-4503-aa56-5d0092277865",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"unique_identifier\": \"{{ $json.airtable_id }}\",\n  \"first_name\": \"{{ $json.first_name || '' }}\",\n  \"last_name\": \"{{ $json.last_name || '' }}\",\n  \"title\": \"{{ $json.job_title || '' }}\",\n  \"company_name\": \"{{ $json.company_name || '' }}\",\n  \"phone\": \"{{ $json.phone || '' }}\",\n  \"email\": \"{{ $json.email || '' }}\",\n  \"selected_program\": \"{{ $json.program_name || '' }}\",\n  \"program_format\": \"{{ $json.program_format || '' }}\",\n  \"selected_location\": \"{{ $json.session_location || '' }}\",\n  \"program_start_date\": \"{{ $json.session_start_date || '' }}\",\n  \"program_end_date\": \"{{ $json.session_end_date || '' }}\",\n  \"attendance_type__3_block_programs\": \"{{ $json.attendance_type || 'Full' }}\",\n  \"coupon_code_used\": \"{{ $json.coupon_code || '' }}\",\n  \"discount_amount\": {{ $json.discount_amount || 0 }},\n  \"registration_code\": \"{{ $json.registration_code || '' }}\",\n  \"amount_due\": {{ $json.final_price || 0 }},\n  \"payment_status\": \"{{ $json.payment_status || '' }}\",\n  \"registration_status\": \"{{ $json.registration_status || '' }}\",\n  \"registration_date\": \"{{ $json.registration_date || '' }}\",\n  \"utm_source\": \"{{ $json.utm_source || '' }}\",\n  \"utm_medium\": \"{{ $json.utm_medium || '' }}\",\n  \"utm_campaign\": \"{{ $json.utm_campaign || '' }}\",\n  \"tags\": [\"n8n_sync\", \"airtable_registration\"]\n}",
+        "options": {
+          "response": {
+            "response": {"responseFormat": "text"}
+          }
+        }
+      },
+      "id": "push-to-ghl",
+      "name": "Push to GHL",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1344, 100]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ { \"success\": true, \"synced\": $('Split Out Records').all().length, \"pushed_to_ghl\": true } }}"
+      },
+      "id": "respond-webhook",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1568, 200]
+    },
+    {
+      "parameters": {},
+      "id": "no-op-end",
+      "name": "Sync Complete",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [1568, 0]
+    }
+  ],
+  "connections": {
+    "Daily Midnight Sync": {"main": [[{"node": "Get Registrations from Airtable", "type": "main", "index": 0}]]},
+    "Webhook Trigger": {"main": [[{"node": "Get Registrations from Airtable", "type": "main", "index": 0}]]},
+    "Get Registrations from Airtable": {"main": [[{"node": "Split Out Records", "type": "main", "index": 0}]]},
+    "Split Out Records": {"main": [[{"node": "Transform Registration Data", "type": "main", "index": 0}]]},
+    "Transform Registration Data": {"main": [[{"node": "Upsert to Supabase", "type": "main", "index": 0}]]},
+    "Upsert to Supabase": {"main": [[{"node": "Link Program Instances", "type": "main", "index": 0}]]},
+    "Link Program Instances": {"main": [[{"node": "Push to GHL", "type": "main", "index": 0}]]},
+    "Push to GHL": {"main": [[{"node": "Sync Complete", "type": "main", "index": 0}, {"node": "Respond to Webhook", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"}
+}

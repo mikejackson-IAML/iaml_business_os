@@ -5,6 +5,7 @@
 import { getServerClient } from '@/lib/supabase/server';
 import type {
   DomainHealth,
+  EmailInbox,
   PlatformStatusInfo,
   LeadPipeline,
   CapacityMetrics,
@@ -136,8 +137,52 @@ export interface LeadIntelligenceAlert {
   title: string;
   description: string;
   severity: 'info' | 'warning' | 'critical';
-  category: 'domain' | 'platform' | 'capacity' | 'data_quality' | 'compliance';
+  category: 'domain' | 'platform' | 'capacity' | 'data_quality' | 'compliance' | 'inbox';
   timestamp: Date;
+}
+
+export interface EmailInboxDb {
+  id: string;
+  domain_id: string | null;
+  inbox_email: string;
+  smartlead_account_id: string | null;
+  display_name: string | null;
+  status: 'active' | 'warming' | 'paused' | 'disconnected';
+  sent_today: number;
+  sent_this_week: number;
+  daily_limit: number;
+  bounce_rate: number;
+  open_rate: number;
+  reply_rate: number;
+  spam_rate: number;
+  warmup_enabled: boolean;
+  warmup_day: number | null;
+  warmup_target_limit: number | null;
+  is_connected: boolean;
+  last_error: string | null;
+  last_connected_at: string | null;
+  health_score: number;
+  created_at: string;
+  updated_at: string;
+  // Joined from domains
+  domains?: {
+    domain_name: string;
+  };
+}
+
+export interface InboxSummary {
+  total_inboxes: number | null;
+  active_inboxes: number | null;
+  warming_inboxes: number | null;
+  paused_inboxes: number | null;
+  disconnected_inboxes: number | null;
+  connection_issues: number | null;
+  avg_active_health: number | null;
+  avg_overall_health: number | null;
+  avg_bounce_rate: number | null;
+  avg_reply_rate: number | null;
+  total_inbox_capacity: number | null;
+  total_sent_today: number | null;
 }
 
 // ============================================
@@ -181,6 +226,49 @@ export async function getDomainSummary(): Promise<DomainSummary | null> {
   }
 
   return data as DomainSummary;
+}
+
+/**
+ * Fetch all email inboxes with domain join
+ */
+export async function getEmailInboxes(): Promise<EmailInboxDb[]> {
+  const supabase = getServerClient();
+
+  const { data, error } = await supabase
+    .from('email_inboxes')
+    .select(`
+      *,
+      domains (domain_name)
+    `)
+    .order('health_score', { ascending: true })
+    .order('status', { ascending: true });
+
+  if (error) {
+    console.error('Error fetching email inboxes:', error);
+    return [];
+  }
+
+  return (data as EmailInboxDb[]) || [];
+}
+
+/**
+ * Fetch inbox summary statistics
+ */
+export async function getInboxSummary(): Promise<InboxSummary | null> {
+  const supabase = getServerClient();
+
+  const { data, error } = await supabase
+    .from('inbox_summary')
+    .select('*')
+    .single();
+
+  if (error) {
+    // View might not exist yet or no data
+    console.warn('Error fetching inbox summary:', error.message);
+    return null;
+  }
+
+  return data as InboxSummary;
 }
 
 /**
@@ -477,6 +565,32 @@ export function transformImportsToPipeline(imports: LeadImport[]): LeadPipeline[
 }
 
 /**
+ * Transform email inboxes to dashboard format
+ */
+export function transformInboxesToDashboard(inboxes: EmailInboxDb[]): EmailInbox[] {
+  return inboxes.map((inbox) => ({
+    id: inbox.id,
+    domainId: inbox.domain_id || '',
+    domainName: inbox.domains?.domain_name || inbox.inbox_email.split('@')[1] || 'unknown',
+    inboxEmail: inbox.inbox_email,
+    displayName: inbox.display_name || undefined,
+    status: inbox.status,
+    sentToday: inbox.sent_today,
+    sentThisWeek: inbox.sent_this_week,
+    dailyLimit: inbox.daily_limit,
+    bounceRate: Number(inbox.bounce_rate),
+    openRate: Number(inbox.open_rate),
+    replyRate: Number(inbox.reply_rate),
+    spamRate: Number(inbox.spam_rate),
+    warmupEnabled: inbox.warmup_enabled,
+    warmupDay: inbox.warmup_day || undefined,
+    isConnected: inbox.is_connected,
+    lastError: inbox.last_error || undefined,
+    healthScore: inbox.health_score,
+  }));
+}
+
+/**
  * Build capacity metrics from dashboard data
  */
 export function buildCapacityMetrics(
@@ -588,6 +702,7 @@ export function calculateLeadIntelligenceHealth(
 export function generateLeadIntelligenceAlerts(
   platforms: PlatformStatusInfo[],
   domains: DomainHealth[],
+  inboxes: EmailInbox[],
   capacity: CapacityMetrics,
   pipelineSummary: LeadPipelineSummary | null
 ): LeadIntelligenceAlert[] {
@@ -684,6 +799,60 @@ export function generateLeadIntelligenceAlerts(
     }
   });
 
+  // Inbox alerts
+  inboxes.forEach((inbox) => {
+    if (!inbox.isConnected) {
+      alerts.push({
+        id: `inbox-disconnected-${inbox.id}`,
+        title: `Inbox Disconnected: ${inbox.inboxEmail}`,
+        description: inbox.lastError || 'Inbox is disconnected and cannot send emails',
+        severity: 'critical',
+        category: 'inbox',
+        timestamp: now,
+      });
+    } else if (inbox.healthScore < 50) {
+      alerts.push({
+        id: `inbox-health-critical-${inbox.id}`,
+        title: `Inbox Health Critical: ${inbox.inboxEmail}`,
+        description: `Health score is ${inbox.healthScore}%. Consider pausing this inbox.`,
+        severity: 'critical',
+        category: 'inbox',
+        timestamp: now,
+      });
+    } else if (inbox.healthScore < 70) {
+      alerts.push({
+        id: `inbox-health-warning-${inbox.id}`,
+        title: `Inbox Health Low: ${inbox.inboxEmail}`,
+        description: `Health score is ${inbox.healthScore}%. Monitor closely.`,
+        severity: 'warning',
+        category: 'inbox',
+        timestamp: now,
+      });
+    }
+
+    if (inbox.bounceRate > 5) {
+      alerts.push({
+        id: `inbox-bounce-${inbox.id}`,
+        title: `High Bounce Rate: ${inbox.inboxEmail}`,
+        description: `Bounce rate is ${inbox.bounceRate.toFixed(1)}% (above 5% threshold)`,
+        severity: 'critical',
+        category: 'inbox',
+        timestamp: now,
+      });
+    }
+
+    if (inbox.spamRate > 1) {
+      alerts.push({
+        id: `inbox-spam-${inbox.id}`,
+        title: `High Spam Rate: ${inbox.inboxEmail}`,
+        description: `Spam rate is ${inbox.spamRate.toFixed(1)}% (above 1% threshold)`,
+        severity: 'warning',
+        category: 'inbox',
+        timestamp: now,
+      });
+    }
+  });
+
   // Capacity alerts
   if (capacity.utilizationPercent >= 95) {
     alerts.push({
@@ -744,6 +913,14 @@ export function transformActivityToFeed(activities: LeadIntelActivity[]): Activi
     domain_restored: 'Domain restored',
     domain_health_warning: 'Domain health warning',
     domain_health_critical: 'Domain health critical',
+    inbox_added: 'Inbox added',
+    inbox_warming_started: 'Inbox warming started',
+    inbox_warmed: 'Inbox fully warmed',
+    inbox_paused: 'Inbox paused',
+    inbox_disconnected: 'Inbox disconnected',
+    inbox_reconnected: 'Inbox reconnected',
+    inbox_health_warning: 'Inbox health warning',
+    inbox_health_critical: 'Inbox health critical',
     platform_status_changed: 'Platform status changed',
     platform_rate_limited: 'Platform rate limited',
     platform_recovered: 'Platform recovered',
@@ -780,6 +957,7 @@ export async function getLeadIntelligenceDashboardData(): Promise<LeadIntelligen
   const [
     domains,
     domainSummary,
+    emailInboxes,
     leadSources,
     recentImports,
     pipelineSummary,
@@ -790,6 +968,7 @@ export async function getLeadIntelligenceDashboardData(): Promise<LeadIntelligen
   ] = await Promise.all([
     getDomains(),
     getDomainSummary(),
+    getEmailInboxes(),
     getLeadSources(),
     getRecentImports(5),
     getLeadPipelineSummary(),
@@ -801,6 +980,7 @@ export async function getLeadIntelligenceDashboardData(): Promise<LeadIntelligen
 
   // Transform data
   const domainHealthData = transformDomainsToDashboard(domains);
+  const inboxData = transformInboxesToDashboard(emailInboxes);
   const platformsData = transformSourcesToPlatforms(leadSources, apolloData, phantomData);
   const pipelineData = transformImportsToPipeline(recentImports);
   const capacityMetrics = buildCapacityMetrics(capacityStatus, domainSummary);
@@ -809,6 +989,7 @@ export async function getLeadIntelligenceDashboardData(): Promise<LeadIntelligen
   const alerts = generateLeadIntelligenceAlerts(
     platformsData,
     domainHealthData,
+    inboxData,
     capacityMetrics,
     pipelineSummary
   );
@@ -898,6 +1079,7 @@ export async function getLeadIntelligenceDashboardData(): Promise<LeadIntelligen
     metrics,
     capacity: capacityMetrics,
     domains: domainHealthData,
+    inboxes: inboxData,
     platforms: platformsData,
     recentImports: pipelineData,
     alerts: alerts.map((a) => ({

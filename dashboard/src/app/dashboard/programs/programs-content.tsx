@@ -36,10 +36,13 @@ import type {
   ProgramActivity,
   ProgramsAlert,
   ReadinessBreakdown,
+  RegistrationSummary,
 } from '@/lib/api/programs-queries';
+import { RegistrationsTable } from './components/registrations-table';
 
 interface ProgramsContentProps {
   data: ProgramsDashboardData;
+  recentRegistrations: RegistrationSummary[];
 }
 
 // Map alerts to AlertItem format
@@ -117,7 +120,7 @@ const readinessItems = [
   { key: 'registration_live_count', label: 'Registration Live', icon: Globe },
 ] as const;
 
-export function ProgramsContent({ data }: ProgramsContentProps) {
+export function ProgramsContent({ data, recentRegistrations }: ProgramsContentProps) {
   const {
     programs,
     metrics,
@@ -381,6 +384,15 @@ export function ProgramsContent({ data }: ProgramsContentProps) {
               activities={activityItems}
               title="Recent Activity"
               maxItems={6}
+            />
+          </div>
+
+          {/* Row 5: Recent Registrations (full width) */}
+          <div className="col-span-12">
+            <RegistrationsTable
+              registrations={recentRegistrations}
+              title="Recent Registrations"
+              maxItems={10}
             />
           </div>
         </div>

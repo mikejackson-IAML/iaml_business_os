@@ -1,0 +1,332 @@
+{
+  "createdAt": "2026-01-14T22:36:51.275Z",
+  "updatedAt": "2026-01-14T22:36:51.557Z",
+  "id": "H2H172J1WS9poTfl",
+  "name": "Page Speed Monitor - iaml.com",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 4
+            }
+          ]
+        }
+      },
+      "id": "schedule",
+      "name": "Every 4 Hours",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Define key pages to check\nconst pages = [\"https://www.iaml.com/\", \"https://www.iaml.com/programs/employment-law-update\", \"https://www.iaml.com/programs/advanced-employment-law\", \"https://www.iaml.com/about\", \"https://www.iaml.com/faculty\"];\nreturn pages.map(url => ({ json: { url } }));"
+      },
+      "id": "get-pages",
+      "name": "Get Pages",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {
+          "timeout": 30000,
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "id": "check-page",
+      "name": "Check Page",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Calculate load times and identify slow pages\nconst items = $input.all();\nconst SLOW_THRESHOLD_MS = 3000; // 3 seconds\n\nconst results = items.map(item => {\n  const headers = item.json.headers || {};\n  const responseTime = parseFloat(headers['x-response-time']) || 0;\n  \n  // Use total time from response if available, or estimate\n  const loadTime = item.json.responseTime || responseTime || 0;\n  \n  return {\n    url: item.json.url || 'unknown',\n    statusCode: item.json.statusCode || 0,\n    loadTimeMs: Math.round(loadTime),\n    isSlow: loadTime > SLOW_THRESHOLD_MS\n  };\n});\n\nconst slowPages = results.filter(r => r.isSlow || r.statusCode >= 400);\nconst avgLoadTime = Math.round(results.reduce((sum, r) => sum + r.loadTimeMs, 0) / results.length);\n\nreturn [{\n  json: {\n    checkedAt: new Date().toISOString(),\n    pagesChecked: results.length,\n    avgLoadTimeMs: avgLoadTime,\n    slowPages: slowPages,\n    slowCount: slowPages.length,\n    hasIssues: slowPages.length > 0,\n    allResults: results\n  }\n}];"
+      },
+      "id": "analyze",
+      "name": "Analyze Results",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-issues",
+              "leftValue": "={{ $json.hasIssues }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-slow",
+      "name": "Slow Pages?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        880,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "status",
+              "name": "status",
+              "value": "ok",
+              "type": "string"
+            },
+            {
+              "id": "summary",
+              "name": "summary",
+              "value": "={{ 'All ' + $json.pagesChecked + ' pages OK. Avg: ' + $json.avgLoadTimeMs + 'ms' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "all-ok",
+      "name": "All Fast",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1100,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"*Page Speed Alert: Slow Pages Detected*\\n\\n*Pages Checked:* {{ $json.pagesChecked }}\\n*Slow Pages:* {{ $json.slowCount }}\\n*Avg Load Time:* {{ $json.avgLoadTimeMs }}ms\\n\\n*Slow Pages:*\\n{{ $json.slowPages.map(p => '\u2022 ' + p.url + ' (' + p.loadTimeMs + 'ms)').join('\\n') }}\\n\\n*Threshold:* 3000ms\"\n}",
+        "options": {}
+      },
+      "id": "slack-alert",
+      "name": "Slack Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1100,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.sendgrid.com/v3/mail/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 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"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"personalizations\": [{\"to\": [{\"email\": \"mike.jackson@iaml.com\"}]}],\n  \"from\": {\"email\": \"mike.jackson@iaml.com\", \"name\": \"IAML Page Speed\"},\n  \"subject\": \"=Page Speed Alert: {{ $json.slowCount }} Slow Pages\",\n  \"content\": [{\"type\": \"text/plain\", \"value\": \"Page speed check detected slow pages.\\n\\nPages Checked: {{ $json.pagesChecked }}\\nSlow Pages: {{ $json.slowCount }}\\nAvg Load Time: {{ $json.avgLoadTimeMs }}ms\\n\\nSlow pages are loading over 3 seconds. Please investigate.\"}]\n}"
+      },
+      "id": "email-alert",
+      "name": "Email Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1100,
+        220
+      ]
+    }
+  ],
+  "connections": {
+    "Every 4 Hours": {
+      "main": [
+        [
+          {
+            "node": "Get Pages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Pages": {
+      "main": [
+        [
+          {
+            "node": "Check Page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Page": {
+      "main": [
+        [
+          {
+            "node": "Analyze Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze Results": {
+      "main": [
+        [
+          {
+            "node": "Slow Pages?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slow Pages?": {
+      "main": [
+        [
+          {
+            "node": "All Fast",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Slack Alert",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Email Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Every 4 Hours": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": null,
+  "pinData": null,
+  "versionId": "03805ee1-f99b-44b2-b3a2-74d8b5986c05",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2026-01-14T22:36:51.278Z",
+      "updatedAt": "2026-01-14T22:36:51.278Z",
+      "role": "workflow:owner",
+      "workflowId": "H2H172J1WS9poTfl",
+      "projectId": "N5IZDJlcXNhJSNRP",
+      "project": {
+        "createdAt": "2025-06-18T12:33:00.421Z",
+        "updatedAt": "2025-06-18T16:06:52.396Z",
+        "id": "N5IZDJlcXNhJSNRP",
+        "name": "Mike  Jackson <mike.jackson@realtyamp.ai>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-06-18T12:33:00.421Z",
+            "updatedAt": "2025-06-18T12:33:00.421Z",
+            "role": "project:personalOwner",
+            "userId": "2ee556b5-70f2-46de-b2a3-6fce9dd3883a",
+            "projectId": "N5IZDJlcXNhJSNRP",
+            "user": {
+              "createdAt": "2025-06-18T12:32:59.783Z",
+              "updatedAt": "2026-01-14T22:16:21.000Z",
+              "id": "2ee556b5-70f2-46de-b2a3-6fce9dd3883a",
+              "email": "mike.jackson@realtyamp.ai",
+              "firstName": "Mike ",
+              "lastName": "Jackson",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-06-18T16:07:15.112Z",
+                "personalization_survey_n8n_version": "1.98.1",
+                "companySize": "<20",
+                "companyType": "saas",
+                "role": "business-owner",
+                "reportedSource": "youtube"
+              },
+              "settings": {
+                "userActivated": true,
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "C5H06PO1rEBjrHgi",
+                "userActivatedAt": 1750345043352,
+                "npsSurvey": {
+                  "waitingForResponse": true,
+                  "ignoredCount": 1,
+                  "lastShownAt": 1768075347683
+                },
+                "dismissedCallouts": {
+                  "ragStarterCallout": true
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2026-01-14",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

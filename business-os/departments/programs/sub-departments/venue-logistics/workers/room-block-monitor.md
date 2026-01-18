@@ -1,5 +1,7 @@
 # Room Block Monitor
 
+> **CEO Summary:** Tracks hotel room block pickup rates to avoid attrition penalties. If rooms aren't being booked by participants, we either pay penalties or need to release rooms early. Alerts when pickup falls behind schedule so we can push reminders or renegotiate.
+
 ## Purpose
 
 Track hotel room block pickup rates for all upcoming in-person programs, alerting when pickup falls below thresholds that risk attrition penalties. This monitor enables proactive management of room blocks—either through marketing pushes or strategic releases.

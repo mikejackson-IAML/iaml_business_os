@@ -15,6 +15,7 @@ import { ActivityFeed } from '@/dashboard-kit/components/dashboard/activity-feed
 import { AlertList } from '@/dashboard-kit/components/dashboard/alert-list';
 import { PlatformStatus } from '@/dashboard-kit/components/dashboard/platform-status';
 import { DomainHealthTable } from './components/domain-health-table';
+import { InboxPerformanceTable } from './components/inbox-performance-table';
 import { CapacityGauge } from './components/capacity-gauge';
 import { LeadPipelineChart } from './components/lead-pipeline-chart';
 import { FallingPattern } from '@/components/ui/falling-pattern';
@@ -27,7 +28,7 @@ interface LeadsContentProps {
 }
 
 export function LeadsContent({ data }: LeadsContentProps) {
-  const { metrics, capacity, domains, platforms, recentImports, alerts } = data;
+  const { metrics, capacity, domains, inboxes, platforms, recentImports, alerts } = data;
 
   // Calculate health score with breakdown
   const healthData = calculateHealthData(data);
@@ -184,6 +185,11 @@ export function LeadsContent({ data }: LeadsContentProps) {
           {/* Domain Health Table */}
           <div className="col-span-12 lg:col-span-8">
             <DomainHealthTable domains={domains} />
+          </div>
+
+          {/* Inbox Performance Table */}
+          <div className="col-span-12">
+            <InboxPerformanceTable inboxes={inboxes} domains={domains} />
           </div>
 
           {/* Activity Feed */}

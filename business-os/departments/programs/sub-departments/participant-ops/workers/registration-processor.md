@@ -1,5 +1,7 @@
 # Registration Processor
 
+> **CEO Summary:** Processes new registrations in real-time when someone pays via Stripe. Creates the participant record, syncs to CRM (GHL), sends confirmation email, and schedules future logistics communications. Runs instantly for each new registration.
+
 ## Purpose
 
 Process incoming registrations received via Stripe webhooks, creating participant records, sending confirmation emails, and updating enrollment counts. This agent is triggered in real-time for each new registration.

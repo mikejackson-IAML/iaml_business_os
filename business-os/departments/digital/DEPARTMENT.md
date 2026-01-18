@@ -1,5 +1,7 @@
 # Digital Department
 
+> **CEO Summary:** Digital keeps iaml.com running fast, secure, and error-free. They handle website development, deployments, performance optimization, and monitoring. When something breaks on the website or SSL certificates need renewal, Digital handles it. They support all other departments by maintaining the platform.
+
 ## Director Role
 
 **Digital Director** oversees all website development, deployment, performance optimization, and technical operations. The Director maintains awareness of site health, deployment status, performance metrics, and can answer "How's the website doing?" at any time.

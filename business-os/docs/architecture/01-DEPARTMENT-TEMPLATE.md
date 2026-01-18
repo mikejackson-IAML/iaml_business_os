@@ -1,9 +1,13 @@
 # Department Template
 
+> **CEO Summary:** This template defines the standard structure for creating new Business OS departments, ensuring consistency and completeness.
+
 Copy everything below into your new department's DEPARTMENT.md file:
 
 ```markdown
 # [Department Name] Department
+
+> **CEO Summary:** [One sentence explaining what this department owns and why it matters to the business]
 
 ## Director Role
 
@@ -84,6 +88,8 @@ For each worker in a sub-department, create a worker definition file:
 
 ```markdown
 # [Worker Name]
+
+> **CEO Summary:** [One sentence explaining what this worker does and why it matters]
 
 ## Purpose
 [One sentence: what does this worker do?]
@@ -226,13 +232,13 @@ For each worker in a sub-department, create a worker definition file:
 
 ### Phase 2: Structure
 - [ ] Create folder structure
-- [ ] Write DEPARTMENT.md
+- [ ] Write DEPARTMENT.md with CEO Summary at top
 - [ ] Create config.json
 - [ ] Define dashboard view
 
 ### Phase 3: Workers
 - [ ] List all workers per sub-department
-- [ ] Create worker definition files
+- [ ] Create worker definition files with CEO Summary at top
 - [ ] Build Monitor workers first (visibility)
 - [ ] Build Agent workers second (automation)
 - [ ] Build Skill workers last (conversational)
@@ -240,7 +246,8 @@ For each worker in a sub-department, create a worker definition file:
 ### Phase 4: Integration
 - [ ] Set up API connections
 - [ ] Configure credentials in environment
-- [ ] Build n8n workflows
+- [ ] Build n8n workflows with README documentation
+- [ ] Update `business-os/workflows/README.md` with new workflows
 - [ ] Test data flow
 
 ### Phase 5: Dashboard
@@ -254,6 +261,12 @@ For each worker in a sub-department, create a worker definition file:
 - [ ] Set up outcome tracking
 - [ ] Configure feedback capture
 - [ ] Document learning objectives
+
+### Phase 7: Documentation Verification
+- [ ] Run `/docs-audit` to verify all documentation is complete
+- [ ] All CEO Summaries are in plain English (no jargon)
+- [ ] Central README files updated
+- [ ] Related docs cross-linked
 
 ---
 

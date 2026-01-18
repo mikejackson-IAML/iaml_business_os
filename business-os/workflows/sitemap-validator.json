@@ -1,0 +1,267 @@
+{
+  "createdAt": "2026-01-14T22:40:58.709Z",
+  "updatedAt": "2026-01-14T22:40:58.950Z",
+  "id": "szLUgbSu4sY3VTkF",
+  "name": "Sitemap Validator - iaml.com",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 24
+            }
+          ]
+        }
+      },
+      "id": "schedule",
+      "name": "Daily Check",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.iaml.com/sitemap.xml",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "fetch-sitemap",
+      "name": "Fetch Sitemap",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Validate sitemap XML\nconst response = $input.first().json;\nconst xml = response.data || '';\nconst issues = [];\n\n// Check if valid XML\nif (!xml.includes('<?xml') && !xml.includes('<urlset')) {\n  issues.push('Invalid XML format - missing XML declaration or urlset');\n}\n\n// Extract URLs\nconst urlRegex = /<loc>(.*?)<\\/loc>/g;\nconst urls = [];\nlet match;\nwhile ((match = urlRegex.exec(xml)) !== null) {\n  urls.push(match[1]);\n}\n\n// Check for common issues\nif (urls.length === 0) {\n  issues.push('No URLs found in sitemap');\n}\n\n// Check for duplicate URLs\nconst duplicates = urls.filter((url, i) => urls.indexOf(url) !== i);\nif (duplicates.length > 0) {\n  issues.push(`Found ${duplicates.length} duplicate URLs`);\n}\n\n// Check for non-HTTPS URLs\nconst httpUrls = urls.filter(u => u.startsWith('http://'));\nif (httpUrls.length > 0) {\n  issues.push(`Found ${httpUrls.length} non-HTTPS URLs`);\n}\n\n// Check for missing trailing consistency\nconst withSlash = urls.filter(u => u.endsWith('/'));\nconst withoutSlash = urls.filter(u => !u.endsWith('/') && !u.includes('.'));\n\nreturn [{\n  json: {\n    checkedAt: new Date().toISOString(),\n    totalUrls: urls.length,\n    issues: issues,\n    issueCount: issues.length,\n    hasIssues: issues.length > 0,\n    duplicateCount: duplicates.length,\n    sampleUrls: urls.slice(0, 5)\n  }\n}];"
+      },
+      "id": "validate",
+      "name": "Validate Sitemap",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-issues",
+              "leftValue": "={{ $json.hasIssues }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-issues",
+      "name": "Has Issues?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        660,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "status",
+              "name": "status",
+              "value": "ok",
+              "type": "string"
+            },
+            {
+              "id": "msg",
+              "name": "message",
+              "value": "={{ 'Sitemap valid: ' + $json.totalUrls + ' URLs' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ok",
+      "name": "Sitemap OK",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        880,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"text\": \"*Sitemap Validator Alert*\\n\\n*Issues Found:* {{ $json.issueCount }}\\n\\n{{ $json.issues.map(i => '\u2022 ' + i).join('\\n') }}\\n\\n*Total URLs:* {{ $json.totalUrls }}\"}",
+        "options": {}
+      },
+      "id": "slack",
+      "name": "Slack Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        880,
+        100
+      ]
+    }
+  ],
+  "connections": {
+    "Daily Check": {
+      "main": [
+        [
+          {
+            "node": "Fetch Sitemap",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Sitemap": {
+      "main": [
+        [
+          {
+            "node": "Validate Sitemap",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Sitemap": {
+      "main": [
+        [
+          {
+            "node": "Has Issues?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Issues?": {
+      "main": [
+        [
+          {
+            "node": "Sitemap OK",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Slack Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Daily Check": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": null,
+  "pinData": null,
+  "versionId": "8163de17-8ef1-43ec-b3b7-31f52be2f386",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2026-01-14T22:40:58.713Z",
+      "updatedAt": "2026-01-14T22:40:58.713Z",
+      "role": "workflow:owner",
+      "workflowId": "szLUgbSu4sY3VTkF",
+      "projectId": "N5IZDJlcXNhJSNRP",
+      "project": {
+        "createdAt": "2025-06-18T12:33:00.421Z",
+        "updatedAt": "2025-06-18T16:06:52.396Z",
+        "id": "N5IZDJlcXNhJSNRP",
+        "name": "Mike  Jackson <mike.jackson@realtyamp.ai>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-06-18T12:33:00.421Z",
+            "updatedAt": "2025-06-18T12:33:00.421Z",
+            "role": "project:personalOwner",
+            "userId": "2ee556b5-70f2-46de-b2a3-6fce9dd3883a",
+            "projectId": "N5IZDJlcXNhJSNRP",
+            "user": {
+              "createdAt": "2025-06-18T12:32:59.783Z",
+              "updatedAt": "2026-01-14T22:16:21.000Z",
+              "id": "2ee556b5-70f2-46de-b2a3-6fce9dd3883a",
+              "email": "mike.jackson@realtyamp.ai",
+              "firstName": "Mike ",
+              "lastName": "Jackson",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-06-18T16:07:15.112Z",
+                "personalization_survey_n8n_version": "1.98.1",
+                "companySize": "<20",
+                "companyType": "saas",
+                "role": "business-owner",
+                "reportedSource": "youtube"
+              },
+              "settings": {
+                "userActivated": true,
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "C5H06PO1rEBjrHgi",
+                "userActivatedAt": 1750345043352,
+                "npsSurvey": {
+                  "waitingForResponse": true,
+                  "ignoredCount": 1,
+                  "lastShownAt": 1768075347683
+                },
+                "dismissedCallouts": {
+                  "ragStarterCallout": true
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2026-01-14",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

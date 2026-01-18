@@ -500,3 +500,112 @@ export async function getProgramsDashboardData(): Promise<ProgramsDashboardData>
     healthScore,
   };
 }
+
+// ============================================
+// Registration Types
+// ============================================
+
+export interface RegistrationSummary {
+  id: string;
+  airtable_id: string | null;
+  first_name: string;
+  last_name: string;
+  full_name: string;
+  email: string;
+  phone: string | null;
+  company_name: string | null;
+  job_title: string | null;
+  registration_date: string;
+  registration_status: string;
+  registration_code: string | null;
+  payment_status: string;
+  payment_method: string | null;
+  final_price: number;
+  attendance_type: string;
+  selected_blocks: string[] | null;
+  program_instance_id: string | null;
+  instance_name: string | null;
+  program_name: string | null;
+  format: string | null;
+  start_date: string | null;
+  end_date: string | null;
+  city: string | null;
+  state: string | null;
+}
+
+// ============================================
+// Registration Query Functions
+// ============================================
+
+export async function getRecentRegistrations(limit: number = 20): Promise<RegistrationSummary[]> {
+  const supabase = getServerClient();
+
+  const { data, error } = await supabase
+    .from('registration_dashboard_summary')
+    .select('*')
+    .order('registration_date', { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    console.error('Error fetching recent registrations:', error);
+    return [];
+  }
+
+  return (data || []) as RegistrationSummary[];
+}
+
+export async function getRegistrationsByProgram(
+  programInstanceId: string
+): Promise<RegistrationSummary[]> {
+  const supabase = getServerClient();
+
+  const { data, error } = await supabase
+    .from('registration_dashboard_summary')
+    .select('*')
+    .eq('program_instance_id', programInstanceId)
+    .order('registration_date', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching registrations for program:', error);
+    return [];
+  }
+
+  return (data || []) as RegistrationSummary[];
+}
+
+export async function getRegistrationStats(): Promise<{
+  total: number;
+  paid: number;
+  pending: number;
+  last7Days: number;
+}> {
+  const supabase = getServerClient();
+
+  // Get all registrations
+  const { data: allRegs, error: allError } = await supabase
+    .from('registrations')
+    .select('payment_status, registration_date')
+    .eq('registration_status', 'Confirmed') as {
+      data: { payment_status: string; registration_date: string }[] | null;
+      error: Error | null
+    };
+
+  if (allError) {
+    console.error('Error fetching registration stats:', allError);
+    return { total: 0, paid: 0, pending: 0, last7Days: 0 };
+  }
+
+  const total = allRegs?.length || 0;
+  const paid = allRegs?.filter(r => r.payment_status === 'Paid').length || 0;
+  const pending = allRegs?.filter(r => r.payment_status === 'Pending').length || 0;
+
+  // Calculate last 7 days
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+  const last7Days = allRegs?.filter(r => {
+    const regDate = new Date(r.registration_date);
+    return regDate >= sevenDaysAgo;
+  }).length || 0;
+
+  return { total, paid, pending, last7Days };
+}

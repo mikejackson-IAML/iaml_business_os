@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weekly Speed Audit Report</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      border-radius: 8px 8px 0 0;
+      text-align: center;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .header .subtitle {
+      margin-top: 8px;
+      opacity: 0.9;
+    }
+    .content {
+      background: #fff;
+      padding: 30px;
+      border: 1px solid #e1e1e1;
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+    }
+    .scorecard {
+      display: flex;
+      gap: 20px;
+      margin: 20px 0;
+    }
+    .score-item {
+      flex: 1;
+      text-align: center;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+    .score-value {
+      font-size: 36px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .score-label {
+      font-size: 12px;
+      color: #666;
+      text-transform: uppercase;
+    }
+    .score-delta {
+      font-size: 14px;
+      margin-top: 5px;
+    }
+    .delta-positive { color: #28a745; }
+    .delta-negative { color: #dc3545; }
+    .delta-neutral { color: #6c757d; }
+    .metrics-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    .metrics-table th,
+    .metrics-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #e1e1e1;
+    }
+    .metrics-table th {
+      background: #f8f9fa;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 11px;
+      color: #666;
+    }
+    .issues-summary {
+      display: flex;
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .issue-badge {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    .issue-critical { background: #f8d7da; color: #721c24; }
+    .issue-high { background: #fff3cd; color: #856404; }
+    .issue-medium { background: #d4edda; color: #155724; }
+    .issue-low { background: #d1ecf1; color: #0c5460; }
+    .top-issues {
+      margin: 20px 0;
+    }
+    .issue-item {
+      padding: 15px;
+      background: #f8f9fa;
+      border-left: 4px solid #667eea;
+      margin-bottom: 10px;
+      border-radius: 0 4px 4px 0;
+    }
+    .issue-item.critical { border-left-color: #dc3545; }
+    .issue-item.high { border-left-color: #ffc107; }
+    .issue-item.medium { border-left-color: #28a745; }
+    .issue-item.low { border-left-color: #17a2b8; }
+    .issue-title {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    .issue-meta {
+      font-size: 12px;
+      color: #666;
+    }
+    .cta-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white !important;
+      text-decoration: none;
+      padding: 15px 30px;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 20px 0;
+    }
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #e1e1e1;
+    }
+    @media (max-width: 480px) {
+      .scorecard { flex-direction: column; }
+      .issues-summary { flex-wrap: wrap; }
+      .issue-badge { flex: 1 1 45%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Weekly Speed Audit Report</h1>
+    <div class="subtitle">Week of {{AUDIT_DATE}} | {{PAGES_AUDITED}} pages audited</div>
+  </div>
+
+  <div class="content">
+    <!-- Performance Scores -->
+    <h2>Performance Scores</h2>
+    <div class="scorecard">
+      <div class="score-item">
+        <div class="score-value" style="color: {{MOBILE_SCORE_COLOR}}">{{MOBILE_SCORE}}</div>
+        <div class="score-label">Mobile</div>
+        <div class="score-delta {{MOBILE_DELTA_CLASS}}">{{MOBILE_DELTA_SIGN}}{{MOBILE_DELTA}} from last week</div>
+      </div>
+      <div class="score-item">
+        <div class="score-value" style="color: {{DESKTOP_SCORE_COLOR}}">{{DESKTOP_SCORE}}</div>
+        <div class="score-label">Desktop</div>
+        <div class="score-delta {{DESKTOP_DELTA_CLASS}}">{{DESKTOP_DELTA_SIGN}}{{DESKTOP_DELTA}} from last week</div>
+      </div>
+    </div>
+
+    <!-- Core Web Vitals -->
+    <h2>Core Web Vitals</h2>
+    <table class="metrics-table">
+      <tr>
+        <th>Metric</th>
+        <th>Current</th>
+        <th>Target</th>
+        <th>Status</th>
+      </tr>
+      <tr>
+        <td><strong>LCP</strong> (Largest Contentful Paint)</td>
+        <td>{{LCP_VALUE}}s</td>
+        <td>&lt; 2.5s</td>
+        <td>{{LCP_STATUS}}</td>
+      </tr>
+      <tr>
+        <td><strong>CLS</strong> (Cumulative Layout Shift)</td>
+        <td>{{CLS_VALUE}}</td>
+        <td>&lt; 0.1</td>
+        <td>{{CLS_STATUS}}</td>
+      </tr>
+      <tr>
+        <td><strong>FCP</strong> (First Contentful Paint)</td>
+        <td>{{FCP_VALUE}}s</td>
+        <td>&lt; 1.8s</td>
+        <td>{{FCP_STATUS}}</td>
+      </tr>
+      <tr>
+        <td><strong>TTFB</strong> (Time to First Byte)</td>
+        <td>{{TTFB_VALUE}}ms</td>
+        <td>&lt; 800ms</td>
+        <td>{{TTFB_STATUS}}</td>
+      </tr>
+    </table>
+
+    <!-- Issues Summary -->
+    <h2>Issues Found</h2>
+    <div class="issues-summary">
+      <div class="issue-badge issue-critical">{{CRITICAL_COUNT}} Critical</div>
+      <div class="issue-badge issue-high">{{HIGH_COUNT}} High</div>
+      <div class="issue-badge issue-medium">{{MEDIUM_COUNT}} Medium</div>
+      <div class="issue-badge issue-low">{{LOW_COUNT}} Low</div>
+    </div>
+
+    <!-- Top Issues -->
+    <h2>Top Issues to Address</h2>
+    <div class="top-issues">
+      {{#TOP_ISSUES}}
+      <div class="issue-item {{SEVERITY}}">
+        <div class="issue-title">[{{ITEM_CODE}}] {{TITLE}}</div>
+        <div class="issue-meta">
+          {{SEVERITY_LABEL}} | Impact: {{IMPACT}} | Est. savings: {{SAVINGS}}
+        </div>
+      </div>
+      {{/TOP_ISSUES}}
+    </div>
+
+    <!-- CTA -->
+    <div style="text-align: center;">
+      <a href="{{DASHBOARD_URL}}" class="cta-button">View Full Report & Approve</a>
+    </div>
+
+    <!-- Quick Actions -->
+    <h2>Quick Actions</h2>
+    <p>Reply to this email with one of the following:</p>
+    <ul>
+      <li><strong>APPROVE ALL</strong> - Approve all {{TOTAL_ISSUES}} issues for execution</li>
+      <li><strong>APPROVE CRITICAL</strong> - Approve only critical and high priority issues</li>
+      <li><strong>DEFER</strong> - Defer all issues to next week</li>
+    </ul>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>This report was generated automatically by the IAML Speed Optimization system.</p>
+      <p>
+        <a href="{{DASHBOARD_URL}}">Dashboard</a> |
+        <a href="{{UNSUBSCRIBE_URL}}">Manage Preferences</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,5 +1,7 @@
 # Lead Intelligence Department
 
+> **CEO Summary:** Lead Intelligence produces the leads that Marketing consumes. They handle lead sourcing, email validation, domain health, and sending capacity. Think of them as the "supply chain" for outreach—they answer "How many leads can we handle?" and "Are our domains healthy enough to send?"
+
 ## Director Role
 
 **Lead Intelligence Director** oversees all lead sourcing, data quality, capacity planning, and contact database management. This department **produces** the leads that Marketing and Sales **consume**. The Director answers "How many leads can we handle?", "Where should we source them?", and "What's our capacity?" at any time.

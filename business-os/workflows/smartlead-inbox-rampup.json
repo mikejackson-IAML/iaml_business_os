@@ -1,0 +1,295 @@
+{
+  "name": "Smartlead Inbox Ramp-Up",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtDay": [1],
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Weekly Monday 8am",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 200]
+    },
+    {
+      "parameters": {},
+      "id": "manual-trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [0, 400]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- Get ramp config (start date and schedule)\nSELECT \n  COALESCE(\n    (SELECT value->>'start_date' FROM n8n_brain.preferences WHERE category = 'ramp' AND key = 'inbox_ramp'),\n    '2026-01-20'\n  )::date as ramp_start_date,\n  GREATEST(1, CEIL((CURRENT_DATE - COALESCE(\n    (SELECT value->>'start_date' FROM n8n_brain.preferences WHERE category = 'ramp' AND key = 'inbox_ramp'),\n    '2026-01-20'\n  )::date)::numeric / 7))::integer as current_week,\n  CASE \n    WHEN GREATEST(1, CEIL((CURRENT_DATE - COALESCE(\n      (SELECT value->>'start_date' FROM n8n_brain.preferences WHERE category = 'ramp' AND key = 'inbox_ramp'),\n      '2026-01-20'\n    )::date)::numeric / 7))::integer = 1 THEN 15\n    WHEN GREATEST(1, CEIL((CURRENT_DATE - COALESCE(\n      (SELECT value->>'start_date' FROM n8n_brain.preferences WHERE category = 'ramp' AND key = 'inbox_ramp'),\n      '2026-01-20'\n    )::date)::numeric / 7))::integer = 2 THEN 25\n    WHEN GREATEST(1, CEIL((CURRENT_DATE - COALESCE(\n      (SELECT value->>'start_date' FROM n8n_brain.preferences WHERE category = 'ramp' AND key = 'inbox_ramp'),\n      '2026-01-20'\n    )::date)::numeric / 7))::integer = 3 THEN 35\n    ELSE 50\n  END as target_daily_limit;",
+        "options": {}
+      },
+      "id": "get-ramp-config",
+      "name": "Get Ramp Config",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [250, 300],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://server.smartlead.ai/api/v1/email-accounts?limit=100",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "options": {}
+      },
+      "id": "fetch-accounts",
+      "name": "Fetch All Accounts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [500, 300],
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "a8mXHIaPChJTGO6S",
+          "name": "Smartlead API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "needs-update",
+              "leftValue": "={{ $json.message_per_day }}",
+              "rightValue": "={{ $('Get Ramp Config').item.json.target_daily_limit }}",
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "filter-needs-update",
+      "name": "Needs Limit Increase?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [750, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://server.smartlead.ai/api/v1/email-accounts/{{ $json.id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ max_email_per_day: $('Get Ramp Config').item.json.target_daily_limit }) }}",
+        "options": {}
+      },
+      "id": "update-limit",
+      "name": "Update Daily Limit",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1000, 200],
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "a8mXHIaPChJTGO6S",
+          "name": "Smartlead API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "account_id",
+              "name": "account_id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "email",
+              "name": "email",
+              "value": "={{ $json.from_email }}",
+              "type": "string"
+            },
+            {
+              "id": "old_limit",
+              "name": "old_limit",
+              "value": "={{ $json.message_per_day }}",
+              "type": "number"
+            },
+            {
+              "id": "new_limit",
+              "name": "new_limit",
+              "value": "={{ $('Get Ramp Config').item.json.target_daily_limit }}",
+              "type": "number"
+            },
+            {
+              "id": "ramp_week",
+              "name": "ramp_week",
+              "value": "={{ $('Get Ramp Config').item.json.current_week }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "prepare-log",
+      "name": "Prepare Log Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1250, 200]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO lead_intelligence_activity (\n  activity_type,\n  description,\n  source_name,\n  metadata,\n  activity_at\n) VALUES (\n  'capacity_calculated',\n  'Increased daily limit for ' || $2::text || ' from ' || $3::text || ' to ' || $4::text || ' (Week ' || $5::text || ')',\n  'smartlead_rampup',\n  jsonb_build_object(\n    'account_id', $1,\n    'email', $2,\n    'old_limit', $3::integer,\n    'new_limit', $4::integer,\n    'ramp_week', $5::integer\n  ),\n  NOW()\n);",
+        "options": {
+          "queryReplacement": "={{ [$json.account_id, $json.email, $json.old_limit, $json.new_limit, $json.ramp_week] }}"
+        }
+      },
+      "id": "log-update",
+      "name": "Log Update",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1500, 200],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "id": "aggregate-updates",
+      "name": "Aggregate Updates",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [1750, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \":chart_with_upwards_trend: *Inbox Ramp-Up Complete*\\n\\n*Week:* {{ $('Get Ramp Config').item.json.current_week }}\\n*Target Limit:* {{ $('Get Ramp Config').item.json.target_daily_limit }} emails/day\\n*Inboxes Updated:* {{ $json.data ? $json.data.length : 0 }}\\n\\nAll eligible inboxes have been updated to the new daily limit.\"\n}",
+        "options": {}
+      },
+      "id": "slack-notify",
+      "name": "Slack Notification",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2000, 300]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "message",
+              "name": "message",
+              "value": "No inboxes needed updating - all are at or above target limit",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "no-updates",
+      "name": "No Updates Needed",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1000, 400],
+      "alwaysOutputData": true
+    }
+  ],
+  "connections": {
+    "Weekly Monday 8am": {
+      "main": [
+        [{"node": "Get Ramp Config", "type": "main", "index": 0}]
+      ]
+    },
+    "Manual Trigger": {
+      "main": [
+        [{"node": "Get Ramp Config", "type": "main", "index": 0}]
+      ]
+    },
+    "Get Ramp Config": {
+      "main": [
+        [{"node": "Fetch All Accounts", "type": "main", "index": 0}]
+      ]
+    },
+    "Fetch All Accounts": {
+      "main": [
+        [{"node": "Needs Limit Increase?", "type": "main", "index": 0}]
+      ]
+    },
+    "Needs Limit Increase?": {
+      "main": [
+        [{"node": "Update Daily Limit", "type": "main", "index": 0}],
+        [{"node": "No Updates Needed", "type": "main", "index": 0}]
+      ]
+    },
+    "Update Daily Limit": {
+      "main": [
+        [{"node": "Prepare Log Data", "type": "main", "index": 0}]
+      ]
+    },
+    "Prepare Log Data": {
+      "main": [
+        [{"node": "Log Update", "type": "main", "index": 0}]
+      ]
+    },
+    "Log Update": {
+      "main": [
+        [{"node": "Aggregate Updates", "type": "main", "index": 0}]
+      ]
+    },
+    "No Updates Needed": {
+      "main": [
+        [{"node": "Aggregate Updates", "type": "main", "index": 0}]
+      ]
+    },
+    "Aggregate Updates": {
+      "main": [
+        [{"node": "Slack Notification", "type": "main", "index": 0}]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {},
+  "pinData": {},
+  "tags": [
+    {"name": "lead-intelligence"},
+    {"name": "capacity"},
+    {"name": "smartlead"}
+  ]
+}

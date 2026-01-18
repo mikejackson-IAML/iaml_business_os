@@ -1,0 +1,376 @@
+{
+  "name": "Supabase to HeyReach Exporter",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 4
+            }
+          ]
+        }
+      },
+      "id": "hr-export-trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [-1400, 400]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "export-to-heyreach",
+        "options": {}
+      },
+      "id": "hr-export-webhook",
+      "name": "Manual Trigger Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-1400, 600],
+      "webhookId": "export-to-heyreach"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- Get contacts enrolled in Alumni Reconnect campaign with LinkedIn URL\n-- that haven't been exported to HeyReach yet\n-- Prioritize VIP titles first\nWITH vip_titles AS (\n  SELECT id\n  FROM contacts\n  WHERE job_title ILIKE ANY(ARRAY[\n    '%VP%', '%Vice President%', '%Director%', '%Chief%', \n    '%Head of%', '%SVP%', '%EVP%', '%C-Level%', '%CEO%', '%CFO%', '%COO%', '%CHRO%'\n  ])\n)\nSELECT \n  c.id as contact_id,\n  c.email,\n  c.first_name,\n  c.last_name,\n  c.company,\n  c.job_title,\n  c.linkedin_url,\n  cc.id as campaign_contact_id,\n  CASE WHEN v.id IS NOT NULL THEN 1 ELSE 0 END as is_vip\nFROM contacts c\nJOIN campaign_contacts cc ON c.id = cc.contact_id\nLEFT JOIN campaign_contact_channels ccc ON ccc.campaign_contact_id = cc.id \n  AND ccc.campaign_channel_id = 'cc111111-2222-3333-4444-555566667777'\nLEFT JOIN vip_titles v ON v.id = c.id\nWHERE cc.campaign_id = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'\n  AND cc.status = 'active'\n  AND c.linkedin_url IS NOT NULL\n  AND c.linkedin_url != ''\n  AND ccc.id IS NULL  -- Not yet assigned to LinkedIn channel\nORDER BY is_vip DESC, c.created_at ASC\nLIMIT 50  -- Smaller batch due to LinkedIn limits",
+        "options": {}
+      },
+      "id": "hr-export-query",
+      "name": "Get Contacts for HeyReach",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [-1000, 400],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-contacts",
+              "leftValue": "={{ $json.length || ($json.contact_id ? 1 : 0) }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "hr-export-has-contacts",
+      "name": "Has Contacts?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [-800, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Format contacts for HeyReach API\nconst contacts = $input.all();\n\n// HeyReach lead format\nconst heyreachLeads = contacts.map(item => {\n  const c = item.json;\n  return {\n    linkedinUrl: c.linkedin_url,\n    firstName: c.first_name || '',\n    lastName: c.last_name || '',\n    email: c.email || '',\n    companyName: c.company || '',\n    position: c.job_title || '',\n    customFields: {\n      contact_id: c.contact_id,\n      campaign_contact_id: c.campaign_contact_id,\n      source: 'alumni_reconnect_q1_2026',\n      is_vip: c.is_vip === 1\n    }\n  };\n});\n\nreturn {\n  json: {\n    leads: heyreachLeads,\n    total_count: heyreachLeads.length,\n    vip_count: contacts.filter(c => c.json.is_vip === 1).length,\n    contact_ids: contacts.map(c => ({\n      contact_id: c.json.contact_id,\n      campaign_contact_id: c.json.campaign_contact_id,\n      linkedin_url: c.json.linkedin_url\n    }))\n  }\n};"
+      },
+      "id": "hr-export-format",
+      "name": "Format for HeyReach API",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-600, 304]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.heyreach.io/api/v1/lists/{{$env.HEYREACH_LIST_ID}}/leads",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ leads: $json.leads }) }}",
+        "options": {}
+      },
+      "id": "hr-export-api",
+      "name": "POST to HeyReach API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-400, 304],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "heyreach-api-key",
+          "name": "HeyReach API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "api-success",
+              "leftValue": "={{ $json.success || $response.statusCode === 200 || $response.statusCode === 201 }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "hr-export-success",
+      "name": "API Success?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [-200, 304]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the contact IDs from earlier node\nconst formatNode = $('Format for HeyReach API').first().json;\nconst contactIds = formatNode.contact_ids || [];\n\n// Prepare SQL values for batch insert\nconst channelId = 'cc111111-2222-3333-4444-555566667777'; // LinkedIn channel\n\n// Build VALUES clause\nconst values = contactIds.map(c => \n  `('${c.campaign_contact_id}', '${channelId}', 'pending')`\n).join(',\\n  ');\n\nreturn {\n  json: {\n    values: values,\n    count: contactIds.length,\n    vip_count: formatNode.vip_count,\n    contact_ids: contactIds\n  }\n};"
+      },
+      "id": "hr-export-prepare-insert",
+      "name": "Prepare Channel Insert",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [0, 208]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=-- Create campaign_contact_channels records for LinkedIn/HeyReach\nINSERT INTO campaign_contact_channels (campaign_contact_id, campaign_channel_id, status)\nVALUES \n  {{ $json.values }}\nON CONFLICT (campaign_contact_id, campaign_channel_id) DO UPDATE SET\n  status = 'pending',\n  updated_at = NOW()",
+        "options": {}
+      },
+      "id": "hr-export-insert-channels",
+      "name": "Create Channel Records",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [200, 208],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=-- Log export activity\nINSERT INTO campaign_activity (campaign_contact_id, campaign_channel_id, activity_type, channel, metadata)\nSELECT \n  unnest(ARRAY{{ JSON.stringify($('Prepare Channel Insert').first().json.contact_ids.map(c => c.campaign_contact_id)) }}::uuid[]),\n  'cc111111-2222-3333-4444-555566667777'::uuid,\n  'sent',\n  'linkedin',\n  jsonb_build_object(\n    'export_batch', '{{ $now.toISO() }}',\n    'total_in_batch', {{ $('Prepare Channel Insert').first().json.count }},\n    'vip_count', {{ $('Prepare Channel Insert').first().json.vip_count }},\n    'platform', 'heyreach'\n  )",
+        "options": {}
+      },
+      "id": "hr-export-log-activity",
+      "name": "Log Export Activity",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [400, 208],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"success\": true,\n  \"exported_count\": {{ $('Prepare Channel Insert').first().json.count }},\n  \"vip_count\": {{ $('Prepare Channel Insert').first().json.vip_count }},\n  \"timestamp\": \"{{ $now.toISO() }}\",\n  \"campaign\": \"Alumni Reconnect Q1 2026\",\n  \"platform\": \"heyreach\"\n}",
+        "options": {}
+      },
+      "id": "hr-export-success-response",
+      "name": "Success Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [600, 208]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"success\": false,\n  \"error\": \"API call failed\",\n  \"response\": {{ JSON.stringify($json) }},\n  \"timestamp\": \"{{ $now.toISO() }}\"\n}",
+        "options": {}
+      },
+      "id": "hr-export-error-response",
+      "name": "Error Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [0, 400]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"success\": true,\n  \"exported_count\": 0,\n  \"message\": \"No contacts to export\",\n  \"timestamp\": \"{{ $now.toISO() }}\"\n}",
+        "options": {}
+      },
+      "id": "hr-export-no-contacts",
+      "name": "No Contacts Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-600, 496]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Contacts for HeyReach",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manual Trigger Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get Contacts for HeyReach",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Contacts for HeyReach": {
+      "main": [
+        [
+          {
+            "node": "Has Contacts?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Contacts?": {
+      "main": [
+        [
+          {
+            "node": "Format for HeyReach API",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Contacts Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format for HeyReach API": {
+      "main": [
+        [
+          {
+            "node": "POST to HeyReach API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "POST to HeyReach API": {
+      "main": [
+        [
+          {
+            "node": "API Success?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API Success?": {
+      "main": [
+        [
+          {
+            "node": "Prepare Channel Insert",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Channel Insert": {
+      "main": [
+        [
+          {
+            "node": "Create Channel Records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Channel Records": {
+      "main": [
+        [
+          {
+            "node": "Log Export Activity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Export Activity": {
+      "main": [
+        [
+          {
+            "node": "Success Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "1",
+  "meta": {
+    "instanceId": "alumni-reconnect-heyreach-exporter"
+  },
+  "tags": [
+    {
+      "name": "alumni-reconnect",
+      "id": "tag-alumni"
+    },
+    {
+      "name": "export",
+      "id": "tag-export"
+    }
+  ]
+}

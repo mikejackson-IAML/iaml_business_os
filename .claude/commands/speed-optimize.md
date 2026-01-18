@@ -12,17 +12,23 @@ A comprehensive website performance optimization agent that leverages multiple M
 - `all` - Full site audit (default)
 - `homepage` - Just index.html
 - `programs` - All program pages
+- `weekly` - Weekly automated audit system
 - `[file-path]` - Specific file (e.g., `website/programs/employee-relations-law.html`)
 
 **Modes:**
 - `audit` - Analysis only, no changes (default)
 - `fix` - Apply automated fixes
 - `validate` - Run validation checks only
+- `status` - Check weekly audit status (weekly target only)
+- `approve` - Open approval dashboard (weekly target only)
+- `prd` - Generate PRD from approved items (weekly target only)
 
 **Examples:**
 - `/speed-optimize` - Full site audit
 - `/speed-optimize homepage fix` - Audit and fix homepage
 - `/speed-optimize programs audit` - Audit all program pages
+- `/speed-optimize weekly status` - Check this week's audit status
+- `/speed-optimize weekly approve` - Open dashboard to approve items
 
 ---
 
@@ -605,6 +611,61 @@ Already configured:
 
 ---
 
+## Weekly Automated Workflow
+
+The speed optimization system includes an automated weekly audit cycle:
+
+### How It Works
+
+1. **Monday 6 AM**: n8n workflow runs full PageSpeed audit on all pages
+2. **Monday 9 AM**: Review report in Slack/email, approve items to fix
+3. **Monday-Wednesday**: Ralph executes approved fixes
+4. **Thursday**: Validation audit runs automatically
+5. **Friday**: Summary email with improvement metrics
+
+### Weekly Mode Commands
+
+```
+/speed-optimize weekly status    # Check current week's audit status
+/speed-optimize weekly approve   # Open dashboard to approve items
+/speed-optimize weekly prd       # Generate PRD from approved items
+/speed-optimize weekly validate  # Run post-fix validation
+```
+
+### Supabase Tables
+
+| Table | Purpose |
+|-------|---------|
+| `speed_audits` | Weekly audit records with aggregate scores |
+| `speed_audit_items` | Individual optimization items |
+| `speed_audit_page_results` | Per-page detailed metrics |
+| `speed_optimization_patterns` | Learned patterns from successful fixes |
+
+### n8n Workflows
+
+| Workflow | Location | Purpose |
+|----------|----------|---------|
+| Weekly Speed Audit | `n8n-workflows/digital/weekly-speed-audit.json` | Monday audit |
+| Speed Audit Approval | `n8n-workflows/digital/speed-audit-approval.json` | Slack approval handler |
+
+### Dashboard
+
+View the weekly audit at: `/dashboard/digital/speed-audit`
+
+### PRD Generation
+
+After approving items, generate a Ralph-compatible PRD:
+
+```bash
+# Generate PRD for latest approved audit
+node scripts/speed-audit/generate-prd.js --latest
+
+# Generate PRD for specific audit
+node scripts/speed-audit/generate-prd.js [audit-id]
+```
+
+---
+
 ## Integration with Other Commands
 
 This command works well with:
@@ -620,6 +681,17 @@ This command works well with:
 3. /speed-optimize all validate   # Verify improvements
 4. /smoke                         # Test functionality
 5. /deploy                        # Ship it!
+```
+
+**Weekly automated workflow:**
+```
+1. Monday: Automated audit runs
+2. Review Slack notification
+3. Click "Approve All" or "Approve Critical/High"
+4. PRD auto-generated
+5. Run: ralph --prd .planning/speed-prd-YYYY-MM-DD.json
+6. Thursday: Validation runs automatically
+7. Check improvement metrics
 ```
 
 ---

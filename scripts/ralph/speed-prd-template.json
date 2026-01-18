@@ -1,0 +1,180 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Speed Optimization PRD Template",
+  "description": "Template for Ralph-compatible PRD for speed optimizations",
+
+  "project": "IAML Speed Optimization - Week of YYYY-MM-DD",
+  "description": "Automated speed optimization based on weekly audit",
+  "branchName": "feature/speed-opt-YYYYMMDD",
+
+  "metadata": {
+    "auditId": "uuid",
+    "auditDate": "YYYY-MM-DD",
+    "generatedAt": "ISO-8601 timestamp",
+    "generatedBy": "speed-audit/generate-prd.js"
+  },
+
+  "baselineMetrics": {
+    "mobileScore": 0,
+    "desktopScore": 0,
+    "lcp": 0,
+    "cls": 0.0,
+    "fcp": 0,
+    "ttfb": 0
+  },
+
+  "targetMetrics": {
+    "mobileScore": 85,
+    "desktopScore": 90,
+    "lcp": 2500,
+    "cls": 0.1,
+    "fcp": 1800,
+    "ttfb": 800
+  },
+
+  "stories": [
+    {
+      "id": "SPEED-001",
+      "title": "Add defer to blocking analytics scripts",
+      "description": "Multiple analytics scripts are render-blocking, delaying LCP.\n\n**Affected Page:** https://www.iaml.com/\n**Estimated Savings:** 450ms",
+      "priority": 1,
+      "severity": "critical",
+      "estimatedImpact": "High",
+      "estimatedSavingsMs": 450,
+      "estimatedSavingsBytes": 0,
+      "issueType": "blocking_script",
+      "pageUrl": "https://www.iaml.com/",
+      "files": [
+        "website/index.html",
+        "website/js/analytics.js"
+      ],
+      "acceptance": [
+        "All analytics scripts have defer attribute",
+        "LCP improves by >100ms",
+        "No functionality regression verified via smoke test"
+      ],
+      "passes": false,
+      "dependencies": []
+    },
+    {
+      "id": "SPEED-002",
+      "title": "Convert hero images to WebP format",
+      "description": "Hero images are in PNG/JPG format, WebP would reduce size by ~30%.\n\n**Affected Files:** website/images/hero-*.jpg",
+      "priority": 2,
+      "severity": "high",
+      "estimatedImpact": "High",
+      "estimatedSavingsMs": 200,
+      "estimatedSavingsBytes": 150000,
+      "issueType": "unoptimized_image",
+      "pageUrl": "https://www.iaml.com/",
+      "files": [
+        "website/images/hero-home.jpg",
+        "website/images/hero-programs.jpg"
+      ],
+      "acceptance": [
+        "Images converted to WebP format with fallbacks",
+        "File size reduces by >30%",
+        "Images display correctly across browsers"
+      ],
+      "passes": false,
+      "dependencies": []
+    },
+    {
+      "id": "SPEED-003",
+      "title": "Add lazy loading to below-fold images",
+      "description": "22 images below the fold are loading immediately.",
+      "priority": 3,
+      "severity": "medium",
+      "estimatedImpact": "Medium",
+      "estimatedSavingsMs": 150,
+      "estimatedSavingsBytes": 500000,
+      "issueType": "no_lazy_load",
+      "pageUrl": "https://www.iaml.com/faculty",
+      "files": [
+        "website/faculty.html"
+      ],
+      "acceptance": [
+        "Below-fold images have loading=\"lazy\" attribute",
+        "Above-fold images remain eager-loaded",
+        "Initial page load time improves"
+      ],
+      "passes": false,
+      "dependencies": []
+    }
+  ],
+
+  "validation": {
+    "runPageSpeedAfter": true,
+    "runLighthouseAfter": true,
+    "runSmokeTest": true,
+    "compareWithBaseline": true,
+    "requiredImprovement": {
+      "mobileScore": 3,
+      "lcp": 100
+    }
+  },
+
+  "hooks": {
+    "preExecution": [],
+    "postExecution": [
+      "node scripts/speed-audit/validate-improvements.js"
+    ],
+    "onSuccess": [
+      "node scripts/speed-audit/store-patterns.js"
+    ],
+    "onFailure": []
+  },
+
+  "acceptanceCriteriaTemplates": {
+    "blocking_script": [
+      "All blocking scripts have defer or async attribute",
+      "LCP improves by >100ms",
+      "No functionality regression verified via smoke test"
+    ],
+    "large_image": [
+      "Images are properly sized for viewport",
+      "Total page weight reduces by target amount",
+      "Image quality remains acceptable"
+    ],
+    "no_lazy_load": [
+      "Below-fold images have loading=\"lazy\" attribute",
+      "Above-fold images remain eager-loaded",
+      "Initial page load time improves"
+    ],
+    "unoptimized_image": [
+      "Images converted to WebP format with fallbacks",
+      "File size reduces by >30%",
+      "Images display correctly across browsers"
+    ],
+    "no_preconnect": [
+      "Preconnect hints added for external domains",
+      "DNS-prefetch added for secondary domains",
+      "TTFB for external resources improves"
+    ],
+    "unused_js": [
+      "Unused JavaScript removed or code-split",
+      "Bundle size reduces",
+      "No functionality regression"
+    ],
+    "unused_css": [
+      "Unused CSS removed or loaded asynchronously",
+      "Critical CSS identified and inlined if needed",
+      "Styles render correctly on all pages"
+    ],
+    "render_blocking_css": [
+      "Critical CSS inlined in <head>",
+      "Non-critical CSS loaded asynchronously",
+      "FCP improves"
+    ],
+    "main_thread_work": [
+      "Long tasks broken up using scheduling",
+      "Main thread blocking time reduces",
+      "INP improves"
+    ],
+    "long_task": [
+      "JavaScript execution time reduces",
+      "Tasks split using requestIdleCallback or similar",
+      "Total Blocking Time (TBT) improves"
+    ]
+  }
+}

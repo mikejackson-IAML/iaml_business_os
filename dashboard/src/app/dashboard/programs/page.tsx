@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { ProgramsSkeleton } from './programs-skeleton';
 import { ProgramsContent } from './programs-content';
-import { getProgramsDashboardData } from '@/lib/api/programs-queries';
+import { getProgramsDashboardData, getRecentRegistrations } from '@/lib/api/programs-queries';
 
 export const metadata = {
   title: 'Programs & Operations | IAML Business OS',
@@ -12,9 +12,12 @@ export const metadata = {
 export const revalidate = 300;
 
 async function ProgramsDataLoader() {
-  const data = await getProgramsDashboardData();
+  const [data, recentRegistrations] = await Promise.all([
+    getProgramsDashboardData(),
+    getRecentRegistrations(15),
+  ]);
 
-  return <ProgramsContent data={data} />;
+  return <ProgramsContent data={data} recentRegistrations={recentRegistrations} />;
 }
 
 export default function ProgramsDashboardPage() {

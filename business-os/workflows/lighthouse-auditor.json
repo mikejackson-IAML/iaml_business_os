@@ -1,0 +1,334 @@
+{
+  "createdAt": "2026-01-14T22:35:52.537Z",
+  "updatedAt": "2026-01-14T22:35:52.780Z",
+  "id": "RvHwQeupCo1e3N9c",
+  "name": "Lighthouse Auditor - iaml.com",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 24
+            }
+          ]
+        }
+      },
+      "id": "schedule",
+      "name": "Daily Audit",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=https://www.iaml.com&strategy=mobile&category=performance&category=accessibility&category=best-practices&category=seo",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "psi-mobile",
+      "name": "PageSpeed Mobile",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        -50
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=https://www.iaml.com&strategy=desktop&category=performance&category=accessibility&category=best-practices&category=seo",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "psi-desktop",
+      "name": "PageSpeed Desktop",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse PageSpeed Insights results\nconst mobile = $('PageSpeed Mobile').first().json;\nconst desktop = $('PageSpeed Desktop').first().json;\n\nfunction getScores(data, device) {\n  const cats = data.lighthouseResult?.categories || {};\n  return {\n    device: device,\n    performance: Math.round((cats.performance?.score || 0) * 100),\n    accessibility: Math.round((cats.accessibility?.score || 0) * 100),\n    bestPractices: Math.round((cats['best-practices']?.score || 0) * 100),\n    seo: Math.round((cats.seo?.score || 0) * 100)\n  };\n}\n\nconst mobileScores = getScores(mobile, 'mobile');\nconst desktopScores = getScores(desktop, 'desktop');\n\n// Core Web Vitals from mobile\nconst audits = mobile.lighthouseResult?.audits || {};\nconst cwv = {\n  lcp: audits['largest-contentful-paint']?.displayValue || 'N/A',\n  fid: audits['max-potential-fid']?.displayValue || 'N/A',\n  cls: audits['cumulative-layout-shift']?.displayValue || 'N/A',\n  fcp: audits['first-contentful-paint']?.displayValue || 'N/A',\n  ttfb: audits['server-response-time']?.displayValue || 'N/A'\n};\n\n// Determine if scores are concerning (below 50)\nconst minScore = Math.min(\n  mobileScores.performance, \n  desktopScores.performance\n);\nconst needsAttention = minScore < 50;\n\nconst result = {\n  url: 'https://www.iaml.com',\n  checkedAt: new Date().toISOString(),\n  mobile: mobileScores,\n  desktop: desktopScores,\n  coreWebVitals: cwv,\n  needsAttention: needsAttention,\n  lowestScore: minScore\n};\n\nreturn [{ json: result }];"
+      },
+      "id": "parse-results",
+      "name": "Parse Results",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        500,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-score",
+              "leftValue": "={{ $json.needsAttention }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-poor",
+      "name": "Poor Scores?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "status",
+              "name": "status",
+              "value": "ok",
+              "type": "string"
+            },
+            {
+              "id": "summary",
+              "name": "summary",
+              "value": "={{ 'Mobile: ' + $json.mobile.performance + ' | Desktop: ' + $json.desktop.performance }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "scores-ok",
+      "name": "Scores OK",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        940,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"*Lighthouse Alert: Poor Performance Scores*\\n\\n*URL:* {{ $json.url }}\\n\\n*Mobile Scores:*\\n\u2022 Performance: {{ $json.mobile.performance }}\\n\u2022 Accessibility: {{ $json.mobile.accessibility }}\\n\u2022 Best Practices: {{ $json.mobile.bestPractices }}\\n\u2022 SEO: {{ $json.mobile.seo }}\\n\\n*Desktop Scores:*\\n\u2022 Performance: {{ $json.desktop.performance }}\\n\\n*Core Web Vitals:*\\n\u2022 LCP: {{ $json.coreWebVitals.lcp }}\\n\u2022 CLS: {{ $json.coreWebVitals.cls }}\\n\u2022 FCP: {{ $json.coreWebVitals.fcp }}\\n\\nInvestigate performance issues.\"\n}",
+        "options": {}
+      },
+      "id": "slack-alert",
+      "name": "Slack Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        940,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.sendgrid.com/v3/mail/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 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"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"personalizations\": [{\"to\": [{\"email\": \"mike.jackson@iaml.com\"}]}],\n  \"from\": {\"email\": \"mike.jackson@iaml.com\", \"name\": \"IAML Lighthouse\"},\n  \"subject\": \"=Lighthouse Alert: Performance Score {{ $json.lowestScore }}\",\n  \"content\": [{\"type\": \"text/plain\", \"value\": \"Lighthouse detected poor performance scores.\\n\\nMobile Performance: {{ $json.mobile.performance }}\\nDesktop Performance: {{ $json.desktop.performance }}\\n\\nCore Web Vitals:\\n- LCP: {{ $json.coreWebVitals.lcp }}\\n- CLS: {{ $json.coreWebVitals.cls }}\\n- FCP: {{ $json.coreWebVitals.fcp }}\\n\\nPlease investigate.\"}]\n}"
+      },
+      "id": "email-alert",
+      "name": "Email Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        940,
+        220
+      ]
+    }
+  ],
+  "connections": {
+    "Daily Audit": {
+      "main": [
+        [
+          {
+            "node": "PageSpeed Mobile",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "PageSpeed Desktop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PageSpeed Mobile": {
+      "main": [
+        [
+          {
+            "node": "Parse Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PageSpeed Desktop": {
+      "main": [
+        [
+          {
+            "node": "Parse Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Results": {
+      "main": [
+        [
+          {
+            "node": "Poor Scores?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Poor Scores?": {
+      "main": [
+        [
+          {
+            "node": "Scores OK",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Slack Alert",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Email Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Daily Audit": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": null,
+  "pinData": null,
+  "versionId": "096eba05-31b7-460c-8153-4f5f09240c7f",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2026-01-14T22:35:52.547Z",
+      "updatedAt": "2026-01-14T22:35:52.547Z",
+      "role": "workflow:owner",
+      "workflowId": "RvHwQeupCo1e3N9c",
+      "projectId": "N5IZDJlcXNhJSNRP",
+      "project": {
+        "createdAt": "2025-06-18T12:33:00.421Z",
+        "updatedAt": "2025-06-18T16:06:52.396Z",
+        "id": "N5IZDJlcXNhJSNRP",
+        "name": "Mike  Jackson <mike.jackson@realtyamp.ai>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-06-18T12:33:00.421Z",
+            "updatedAt": "2025-06-18T12:33:00.421Z",
+            "role": "project:personalOwner",
+            "userId": "2ee556b5-70f2-46de-b2a3-6fce9dd3883a",
+            "projectId": "N5IZDJlcXNhJSNRP",
+            "user": {
+              "createdAt": "2025-06-18T12:32:59.783Z",
+              "updatedAt": "2026-01-14T22:16:21.000Z",
+              "id": "2ee556b5-70f2-46de-b2a3-6fce9dd3883a",
+              "email": "mike.jackson@realtyamp.ai",
+              "firstName": "Mike ",
+              "lastName": "Jackson",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2025-06-18T16:07:15.112Z",
+                "personalization_survey_n8n_version": "1.98.1",
+                "companySize": "<20",
+                "companyType": "saas",
+                "role": "business-owner",
+                "reportedSource": "youtube"
+              },
+              "settings": {
+                "userActivated": true,
+                "easyAIWorkflowOnboarded": true,
+                "firstSuccessfulWorkflowId": "C5H06PO1rEBjrHgi",
+                "userActivatedAt": 1750345043352,
+                "npsSurvey": {
+                  "waitingForResponse": true,
+                  "ignoredCount": 1,
+                  "lastShownAt": 1768075347683
+                },
+                "dismissedCallouts": {
+                  "ragStarterCallout": true
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2026-01-14",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

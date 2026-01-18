@@ -1,0 +1,385 @@
+{
+  "name": "Multi-Channel Escalation Scheduler",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 7
+            }
+          ]
+        }
+      },
+      "id": "mc-escalate-trigger",
+      "name": "Daily at 7 AM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [-1200, 400]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- Find LinkedIn contacts with no response after 7 days\n-- who have valid email but aren't in SmartLead yet\nSELECT \n  c.id as contact_id,\n  c.email,\n  c.first_name,\n  c.last_name,\n  c.company,\n  c.job_title,\n  cc.id as campaign_contact_id,\n  ccc_li.current_message_sent_at as last_linkedin_message_at,\n  'linkedin_to_email' as escalation_type\nFROM contacts c\nJOIN campaign_contacts cc ON c.id = cc.contact_id\nJOIN campaign_contact_channels ccc_li ON ccc_li.campaign_contact_id = cc.id \n  AND ccc_li.campaign_channel_id = 'cc111111-2222-3333-4444-555566667777'  -- LinkedIn channel\nLEFT JOIN campaign_contact_channels ccc_sl ON ccc_sl.campaign_contact_id = cc.id \n  AND ccc_sl.campaign_channel_id = 'cc222222-3333-4444-5555-666677778888'  -- SmartLead channel\nWHERE cc.campaign_id = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'\n  AND cc.status = 'active'\n  AND ccc_li.status = 'active'\n  AND ccc_li.has_replied = FALSE\n  AND ccc_li.current_message_sent_at < NOW() - INTERVAL '7 days'\n  AND c.email IS NOT NULL\n  AND c.email != ''\n  AND COALESCE(c.email_validation_result, 'unknown') IN ('valid', 'catch_all')\n  AND ccc_sl.id IS NULL  -- Not yet in SmartLead\nLIMIT 50",
+        "options": {}
+      },
+      "id": "mc-escalate-linkedin-query",
+      "name": "Find LinkedIn Non-Responders with Email",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [-800, 200],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- Find Email contacts with no response after 14 days\n-- who have phone numbers and are engaged (opened/clicked) but haven't replied\nSELECT \n  c.id as contact_id,\n  c.phone,\n  c.first_name,\n  c.last_name,\n  c.company,\n  c.job_title,\n  c.email,\n  cc.id as campaign_contact_id,\n  ccc_sl.current_message_sent_at as last_email_sent_at,\n  ccc_sl.engagement_level,\n  ccc_sl.last_email_opened_at,\n  'email_to_phone' as escalation_type\nFROM contacts c\nJOIN campaign_contacts cc ON c.id = cc.contact_id\nJOIN campaign_contact_channels ccc_sl ON ccc_sl.campaign_contact_id = cc.id \n  AND ccc_sl.campaign_channel_id = 'cc222222-3333-4444-5555-666677778888'  -- SmartLead channel\nLEFT JOIN campaign_contact_channels ccc_ph ON ccc_ph.campaign_contact_id = cc.id \n  AND ccc_ph.campaign_channel_id = 'cc333333-4444-5555-6666-777788889999'  -- Phone channel\nWHERE cc.campaign_id = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'\n  AND cc.status = 'active'\n  AND ccc_sl.status = 'active'\n  AND ccc_sl.has_replied = FALSE\n  AND ccc_sl.current_message_sent_at < NOW() - INTERVAL '14 days'\n  AND ccc_sl.engagement_level IN ('warm', 'engaged')  -- Only call warm/engaged contacts\n  AND c.phone IS NOT NULL\n  AND c.phone != ''\n  AND (ccc_ph.id IS NULL OR ccc_ph.call_attempts < 2)  -- Not yet called or < 2 attempts\nLIMIT 25",
+        "options": {}
+      },
+      "id": "mc-escalate-email-query",
+      "name": "Find Engaged Email Non-Responders with Phone",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [-800, 600],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-contacts",
+              "leftValue": "={{ $json.length || ($json.contact_id ? 1 : 0) }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "mc-escalate-linkedin-has",
+      "name": "Has LinkedIn Escalations?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [-600, 200]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-contacts",
+              "leftValue": "={{ $json.length || ($json.contact_id ? 1 : 0) }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "mc-escalate-email-has",
+      "name": "Has Phone Escalations?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [-600, 600]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Format LinkedIn escalations for SmartLead export\nconst contacts = $input.all();\n\nconst channelId = 'cc222222-3333-4444-5555-666677778888'; // SmartLead channel\n\n// Build VALUES clause for batch insert\nconst values = contacts.map(c => \n  `('${c.json.campaign_contact_id}', '${channelId}', 'pending')`\n).join(',\\n  ');\n\nreturn {\n  json: {\n    values: values,\n    count: contacts.length,\n    escalation_type: 'linkedin_to_email',\n    contact_ids: contacts.map(c => ({\n      contact_id: c.json.contact_id,\n      campaign_contact_id: c.json.campaign_contact_id,\n      email: c.json.email\n    }))\n  }\n};"
+      },
+      "id": "mc-escalate-linkedin-format",
+      "name": "Format LinkedIn Escalations",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-400, 104]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=-- Add LinkedIn non-responders to SmartLead channel\nINSERT INTO campaign_contact_channels (campaign_contact_id, campaign_channel_id, status)\nVALUES \n  {{ $json.values }}\nON CONFLICT (campaign_contact_id, campaign_channel_id) DO UPDATE SET\n  status = 'pending',\n  updated_at = NOW()",
+        "options": {}
+      },
+      "id": "mc-escalate-linkedin-insert",
+      "name": "Add to SmartLead Channel",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [-200, 104],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=-- Log LinkedIn → Email escalation activity\nINSERT INTO campaign_activity (campaign_contact_id, activity_type, channel, metadata)\nSELECT \n  unnest(ARRAY{{ JSON.stringify($('Format LinkedIn Escalations').first().json.contact_ids.map(c => c.campaign_contact_id)) }}::uuid[]),\n  'status_changed',\n  'system',\n  jsonb_build_object(\n    'action', 'escalated_to_email',\n    'reason', 'no_linkedin_response_7_days',\n    'escalation_batch', '{{ $now.toISO() }}'\n  )",
+        "options": {}
+      },
+      "id": "mc-escalate-linkedin-log",
+      "name": "Log LinkedIn Escalation",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [0, 104],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Format phone escalations - create/update phone channel records\nconst contacts = $input.all();\n\nconst channelId = 'cc333333-4444-5555-6666-777788889999'; // Phone channel\n\n// Build VALUES clause for batch insert/update\nconst values = contacts.map(c => \n  `('${c.json.campaign_contact_id}', '${channelId}', 'pending')`\n).join(',\\n  ');\n\n// Format for call queue notification\nconst callQueue = contacts.map(c => ({\n  name: `${c.json.first_name} ${c.json.last_name}`,\n  company: c.json.company,\n  phone: c.json.phone,\n  email: c.json.email,\n  engagement: c.json.engagement_level,\n  last_opened: c.json.last_email_opened_at\n}));\n\nreturn {\n  json: {\n    values: values,\n    count: contacts.length,\n    escalation_type: 'email_to_phone',\n    call_queue: callQueue,\n    contact_ids: contacts.map(c => ({\n      contact_id: c.json.contact_id,\n      campaign_contact_id: c.json.campaign_contact_id,\n      phone: c.json.phone\n    }))\n  }\n};"
+      },
+      "id": "mc-escalate-phone-format",
+      "name": "Format Phone Escalations",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-400, 504]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=-- Add engaged non-responders to Phone channel\nINSERT INTO campaign_contact_channels (campaign_contact_id, campaign_channel_id, status)\nVALUES \n  {{ $json.values }}\nON CONFLICT (campaign_contact_id, campaign_channel_id) DO UPDATE SET\n  status = 'pending',\n  updated_at = NOW()",
+        "options": {}
+      },
+      "id": "mc-escalate-phone-insert",
+      "name": "Add to Phone Channel",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [-200, 504],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=-- Log Email → Phone escalation activity\nINSERT INTO campaign_activity (campaign_contact_id, activity_type, channel, metadata)\nSELECT \n  unnest(ARRAY{{ JSON.stringify($('Format Phone Escalations').first().json.contact_ids.map(c => c.campaign_contact_id)) }}::uuid[]),\n  'status_changed',\n  'system',\n  jsonb_build_object(\n    'action', 'escalated_to_phone',\n    'reason', 'engaged_no_reply_14_days',\n    'escalation_batch', '{{ $now.toISO() }}'\n  )",
+        "options": {}
+      },
+      "id": "mc-escalate-phone-log",
+      "name": "Log Phone Escalation",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [0, 504],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"linkedin_to_email_count\": {{ $('Format LinkedIn Escalations').first()?.json?.count || 0 }},\n  \"email_to_phone_count\": {{ $('Format Phone Escalations').first()?.json?.count || 0 }},\n  \"call_queue\": {{ JSON.stringify($('Format Phone Escalations').first()?.json?.call_queue || []) }},\n  \"timestamp\": \"{{ $now.toISO() }}\",\n  \"campaign\": \"Alumni Reconnect Q1 2026\"\n}",
+        "options": {}
+      },
+      "id": "mc-escalate-summary",
+      "name": "Escalation Summary",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [200, 400]
+    }
+  ],
+  "connections": {
+    "Daily at 7 AM": {
+      "main": [
+        [
+          {
+            "node": "Find LinkedIn Non-Responders with Email",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Find Engaged Email Non-Responders with Phone",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find LinkedIn Non-Responders with Email": {
+      "main": [
+        [
+          {
+            "node": "Has LinkedIn Escalations?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Engaged Email Non-Responders with Phone": {
+      "main": [
+        [
+          {
+            "node": "Has Phone Escalations?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has LinkedIn Escalations?": {
+      "main": [
+        [
+          {
+            "node": "Format LinkedIn Escalations",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Escalation Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Phone Escalations?": {
+      "main": [
+        [
+          {
+            "node": "Format Phone Escalations",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Escalation Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format LinkedIn Escalations": {
+      "main": [
+        [
+          {
+            "node": "Add to SmartLead Channel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add to SmartLead Channel": {
+      "main": [
+        [
+          {
+            "node": "Log LinkedIn Escalation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log LinkedIn Escalation": {
+      "main": [
+        [
+          {
+            "node": "Escalation Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Phone Escalations": {
+      "main": [
+        [
+          {
+            "node": "Add to Phone Channel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add to Phone Channel": {
+      "main": [
+        [
+          {
+            "node": "Log Phone Escalation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Phone Escalation": {
+      "main": [
+        [
+          {
+            "node": "Escalation Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "1",
+  "meta": {
+    "instanceId": "alumni-reconnect-escalation"
+  },
+  "tags": [
+    {
+      "name": "alumni-reconnect",
+      "id": "tag-alumni"
+    },
+    {
+      "name": "escalation",
+      "id": "tag-escalation"
+    }
+  ]
+}

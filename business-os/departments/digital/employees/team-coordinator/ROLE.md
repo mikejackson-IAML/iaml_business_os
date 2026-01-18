@@ -1,5 +1,7 @@
 # Team Coordinator
 
+> **CEO Summary:** Manages parallel Claude Code work by routing tasks to background processes. When multiple things need to happen, this role decides what runs in parallel vs. sequentially. Maximizes throughput by keeping background agents busy.
+
 ## Role Summary
 
 The Team Coordinator manages AI agent parallelism, task routing, and work queue orchestration. This role maximizes development throughput by running background Claude processes as async workers while the primary session stays focused on execution work.
