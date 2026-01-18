@@ -33,6 +33,8 @@ import type {
   DevelopmentMetrics,
   DatabaseMetrics,
 } from '@/lib/api/digital-queries';
+import type { WorkflowDashboardData } from '@/lib/api/workflow-queries';
+import { WorkflowHealthCard } from './components/workflow-health';
 
 interface DigitalContentProps {
   siteStatus: SiteStatusData;
@@ -43,6 +45,7 @@ interface DigitalContentProps {
   security: SecurityMetrics;
   development: DevelopmentMetrics;
   alerts: DigitalAlert[];
+  workflowData?: WorkflowDashboardData;
 }
 
 // Convert DigitalAlert to AlertItem format
@@ -180,6 +183,7 @@ export function DigitalContent({
   security,
   development,
   alerts,
+  workflowData,
 }: DigitalContentProps) {
   const healthData = calculateHealthScore(
     siteStatus,
@@ -545,8 +549,8 @@ export function DigitalContent({
             </Card>
           </div>
 
-          {/* Row 5: Development (12 cols) */}
-          <div className="col-span-12">
+          {/* Row 5: Development (6 cols) + Workflow Health (6 cols) */}
+          <div className="col-span-12 lg:col-span-6">
             <Card>
               <CardHeader>
                 <CardTitle className="text-heading-md flex items-center gap-2">
@@ -555,7 +559,7 @@ export function DigitalContent({
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div className="grid grid-cols-2 gap-6">
                   <div className="space-y-1">
                     <div className="text-sm text-muted-foreground">Last Deploy</div>
                     <div className="flex items-center gap-2">
@@ -609,6 +613,16 @@ export function DigitalContent({
                 </div>
               </CardContent>
             </Card>
+          </div>
+
+          <div className="col-span-12 lg:col-span-6">
+            {workflowData && (
+              <WorkflowHealthCard
+                recentErrors={workflowData.recentErrors}
+                healthSummary={workflowData.healthSummary}
+                stats={workflowData.stats}
+              />
+            )}
           </div>
         </div>
       </div>

@@ -8,6 +8,7 @@ import {
   getSecurityMetrics,
   generateDigitalAlerts,
 } from '@/lib/api/digital-queries';
+import { getWorkflowDashboardData } from '@/lib/api/workflow-queries';
 
 export const metadata = {
   title: 'Digital Dashboard | IAML Business OS',
@@ -19,10 +20,11 @@ export const revalidate = 300;
 
 async function DigitalDataLoader() {
   // Fetch all data in parallel
-  const [metrics, registrationTests, integrations] = await Promise.all([
+  const [metrics, registrationTests, integrations, workflowData] = await Promise.all([
     getDigitalMetrics(),
     getRegistrationTests(),
     getIntegrationStatuses(),
+    getWorkflowDashboardData(),
   ]);
 
   // Derive security metrics from fetched data
@@ -48,6 +50,7 @@ async function DigitalDataLoader() {
       security={security}
       development={metrics.development}
       alerts={alerts}
+      workflowData={workflowData}
     />
   );
 }

@@ -21,13 +21,31 @@
     },
     {
       "parameters": {
-        "jsCode": "// Define all pages to audit\nconst pages = [\n  { url: 'https://www.iaml.com/', name: 'Homepage' },\n  { url: 'https://www.iaml.com/programs/employment-law-update', name: 'Employment Law Update' },\n  { url: 'https://www.iaml.com/programs/advanced-employment-law', name: 'Advanced Employment Law' },\n  { url: 'https://www.iaml.com/programs/the-california-hr-master-class', name: 'California HR Master Class' },\n  { url: 'https://www.iaml.com/programs/employee-relations-law', name: 'Employee Relations Law' },\n  { url: 'https://www.iaml.com/programs/labor-relations-101', name: 'Labor Relations 101' },\n  { url: 'https://www.iaml.com/programs/employment-law-for-supervisors', name: 'Employment Law for Supervisors' },\n  { url: 'https://www.iaml.com/about', name: 'About' },\n  { url: 'https://www.iaml.com/faculty', name: 'Faculty' },\n  { url: 'https://www.iaml.com/corporate-training', name: 'Corporate Training' }\n];\n\nreturn pages.map(p => ({ json: p }));"
+        "operation": "executeQuery",
+        "query": "SELECT n8n_brain.log_workflow_start(\n  'goebbeQY8Rdi8oRj',\n  'Weekly Speed Audit - iaml.com',\n  '{{ $execution.id }}',\n  'schedule',\n  '{}'::jsonb\n) as run_id;",
+        "options": {}
+      },
+      "id": "log-start",
+      "name": "Log Workflow Start",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Define all pages to audit\nconst pages = [\n  { url: 'https://www.iaml.com/', name: 'Homepage' },\n  { url: 'https://www.iaml.com/programs/employment-law-update', name: 'Employment Law Update' },\n  { url: 'https://www.iaml.com/programs/advanced-employment-law', name: 'Advanced Employment Law' },\n  { url: 'https://www.iaml.com/programs/the-california-hr-master-class', name: 'California HR Master Class' },\n  { url: 'https://www.iaml.com/programs/employee-relations-law', name: 'Employee Relations Law' },\n  { url: 'https://www.iaml.com/programs/labor-relations-101', name: 'Labor Relations 101' },\n  { url: 'https://www.iaml.com/programs/employment-law-for-supervisors', name: 'Employment Law for Supervisors' },\n  { url: 'https://www.iaml.com/about', name: 'About' },\n  { url: 'https://www.iaml.com/faculty', name: 'Faculty' },\n  { url: 'https://www.iaml.com/corporate-training', name: 'Corporate Training' }\n];\n\n// Store run_id in static data for later use\n// The Postgres function returns the UUID directly - check multiple possible keys\nconst logResult = $('Log Workflow Start').first().json;\nconst staticData = $getWorkflowStaticData('global');\nstaticData.run_id = logResult.run_id || logResult.log_workflow_start || Object.values(logResult)[0];\n\nreturn pages.map(p => ({ json: p }));"
       },
       "id": "get-pages",
       "name": "Get Pages to Audit",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [220, 0]
+      "position": [440, 0]
     },
     {
       "parameters": {
@@ -40,7 +58,7 @@
       "name": "Batch Pages",
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
-      "position": [440, 0]
+      "position": [660, 0]
     },
     {
       "parameters": {
@@ -53,7 +71,7 @@
       "name": "PageSpeed Mobile",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [660, -100]
+      "position": [880, -100]
     },
     {
       "parameters": {
@@ -66,7 +84,7 @@
       "name": "PageSpeed Desktop",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [660, 100]
+      "position": [880, 100]
     },
     {
       "parameters": {
@@ -76,7 +94,7 @@
       "name": "Merge Results",
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
-      "position": [880, 0]
+      "position": [1100, 0]
     },
     {
       "parameters": {
@@ -86,7 +104,7 @@
       "name": "Parse Page Results",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1100, 0]
+      "position": [1320, 0]
     },
     {
       "parameters": {
@@ -102,7 +120,7 @@
       "name": "Store Page Result",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [1320, 0],
+      "position": [1540, 0],
       "disabled": true
     },
     {
@@ -132,7 +150,7 @@
       "name": "More Pages?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
-      "position": [1540, 0]
+      "position": [1760, 0]
     },
     {
       "parameters": {
@@ -144,7 +162,7 @@
       "name": "Aggregate All Results",
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
-      "position": [1760, 100]
+      "position": [1980, 100]
     },
     {
       "parameters": {
@@ -154,7 +172,7 @@
       "name": "Generate Audit Summary",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1980, 100]
+      "position": [2200, 100]
     },
     {
       "parameters": {
@@ -166,7 +184,7 @@
       "name": "Insert Audit Record",
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
-      "position": [2200, 100],
+      "position": [2420, 100],
       "credentials": {
         "postgres": {
           "id": "EgmvZHbvINHsh6PR",
@@ -182,7 +200,7 @@
       "name": "Prepare Items",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2420, 100]
+      "position": [2640, 100]
     },
     {
       "parameters": {
@@ -205,7 +223,7 @@
       "name": "Insert Audit Items",
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
-      "position": [2640, 100],
+      "position": [2860, 100],
       "credentials": {
         "postgres": {
           "id": "EgmvZHbvINHsh6PR",
@@ -223,7 +241,7 @@
       "name": "Calculate WoW Deltas",
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
-      "position": [2860, 100],
+      "position": [3080, 100],
       "credentials": {
         "postgres": {
           "id": "EgmvZHbvINHsh6PR",
@@ -241,7 +259,7 @@
       "name": "Get Final Audit",
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
-      "position": [3080, 100],
+      "position": [3300, 100],
       "credentials": {
         "postgres": {
           "id": "EgmvZHbvINHsh6PR",
@@ -251,13 +269,13 @@
     },
     {
       "parameters": {
-        "jsCode": "// Generate notification content\nconst audit = $input.first().json;\nconst summary = $('Generate Audit Summary').first().json;\n\n// Determine status emoji based on scores\nconst getMobileStatus = (score) => {\n  if (score >= 90) return ':white_check_mark:';\n  if (score >= 50) return ':large_yellow_circle:';\n  return ':red_circle:';\n};\n\nconst mobileDelta = audit.mobile_score_delta;\nconst desktopDelta = audit.desktop_score_delta;\nconst deltaStr = (d) => d > 0 ? `+${d}` : (d < 0 ? `${d}` : '0');\n\n// Top 5 issues for Slack\nconst topIssues = summary.audit_items\n  .sort((a, b) => {\n    const sevOrder = { critical: 4, high: 3, medium: 2, low: 1 };\n    return sevOrder[b.severity] - sevOrder[a.severity];\n  })\n  .slice(0, 5);\n\nconst issueList = topIssues.map((item, i) => {\n  const sev = { critical: ':fire:', high: ':warning:', medium: ':large_yellow_circle:', low: ':information_source:' };\n  return `${i + 1}. ${sev[item.severity]} *${item.item_code}*: ${item.title}`;\n}).join('\\n');\n\n// Generate Slack blocks for interactive message\nconst slackBlocks = [\n  {\n    type: 'header',\n    text: { type: 'plain_text', text: ':zap: Weekly Speed Audit Report', emoji: true }\n  },\n  {\n    type: 'section',\n    text: {\n      type: 'mrkdwn',\n      text: `*Week of ${audit.audit_date}* | ${summary.total_pages} pages audited`\n    }\n  },\n  { type: 'divider' },\n  {\n    type: 'section',\n    fields: [\n      { type: 'mrkdwn', text: `*Mobile Score*\\n${getMobileStatus(audit.avg_pagespeed_mobile)} ${audit.avg_pagespeed_mobile}/100 (${deltaStr(mobileDelta)})` },\n      { type: 'mrkdwn', text: `*Desktop Score*\\n${getMobileStatus(audit.avg_pagespeed_desktop)} ${audit.avg_pagespeed_desktop}/100 (${deltaStr(desktopDelta)})` },\n      { type: 'mrkdwn', text: `*LCP*\\n${audit.avg_lcp_ms}ms` },\n      { type: 'mrkdwn', text: `*CLS*\\n${audit.avg_cls}` }\n    ]\n  },\n  { type: 'divider' },\n  {\n    type: 'section',\n    text: {\n      type: 'mrkdwn',\n      text: `*Issues Found:* :fire: ${audit.critical_issues} critical | :warning: ${audit.high_issues} high | :large_yellow_circle: ${audit.medium_issues} medium | :information_source: ${audit.low_issues} low`\n    }\n  },\n  {\n    type: 'section',\n    text: {\n      type: 'mrkdwn',\n      text: `*Top Issues to Address:*\\n${issueList}`\n    }\n  },\n  { type: 'divider' },\n  {\n    type: 'actions',\n    elements: [\n      {\n        type: 'button',\n        text: { type: 'plain_text', text: ':white_check_mark: Approve All', emoji: true },\n        style: 'primary',\n        action_id: 'approve_all',\n        value: audit.id\n      },\n      {\n        type: 'button',\n        text: { type: 'plain_text', text: ':ballot_box_with_check: Approve Critical/High', emoji: true },\n        action_id: 'approve_critical_high',\n        value: audit.id\n      },\n      {\n        type: 'button',\n        text: { type: 'plain_text', text: ':fast_forward: Defer to Next Week', emoji: true },\n        action_id: 'defer',\n        value: audit.id\n      }\n    ]\n  }\n];\n\n// Generate email HTML\nconst emailHtml = `\n<h2>Weekly Speed Audit Report</h2>\n<p><strong>Week of ${audit.audit_date}</strong> | ${summary.total_pages} pages audited</p>\n\n<h3>Performance Scores</h3>\n<table style=\"border-collapse: collapse; width: 100%;\">\n  <tr style=\"background: #f5f5f5;\">\n    <th style=\"padding: 8px; text-align: left;\">Metric</th>\n    <th style=\"padding: 8px; text-align: center;\">Score</th>\n    <th style=\"padding: 8px; text-align: center;\">Change</th>\n  </tr>\n  <tr>\n    <td style=\"padding: 8px;\">Mobile PageSpeed</td>\n    <td style=\"padding: 8px; text-align: center;\"><strong>${audit.avg_pagespeed_mobile}</strong>/100</td>\n    <td style=\"padding: 8px; text-align: center; color: ${mobileDelta >= 0 ? 'green' : 'red'};\">${deltaStr(mobileDelta)}</td>\n  </tr>\n  <tr>\n    <td style=\"padding: 8px;\">Desktop PageSpeed</td>\n    <td style=\"padding: 8px; text-align: center;\"><strong>${audit.avg_pagespeed_desktop}</strong>/100</td>\n    <td style=\"padding: 8px; text-align: center; color: ${desktopDelta >= 0 ? 'green' : 'red'};\">${deltaStr(desktopDelta)}</td>\n  </tr>\n  <tr>\n    <td style=\"padding: 8px;\">LCP</td>\n    <td style=\"padding: 8px; text-align: center;\">${audit.avg_lcp_ms}ms</td>\n    <td style=\"padding: 8px; text-align: center;\">-</td>\n  </tr>\n  <tr>\n    <td style=\"padding: 8px;\">CLS</td>\n    <td style=\"padding: 8px; text-align: center;\">${audit.avg_cls}</td>\n    <td style=\"padding: 8px; text-align: center;\">-</td>\n  </tr>\n</table>\n\n<h3>Issues Found</h3>\n<ul>\n  <li><strong>${audit.critical_issues}</strong> Critical</li>\n  <li><strong>${audit.high_issues}</strong> High</li>\n  <li><strong>${audit.medium_issues}</strong> Medium</li>\n  <li><strong>${audit.low_issues}</strong> Low</li>\n</ul>\n\n<h3>Top Issues</h3>\n<ol>\n${topIssues.map(item => `  <li><strong>[${item.severity.toUpperCase()}]</strong> ${item.title}</li>`).join('\\n')}\n</ol>\n\n<p><a href=\"https://iaml-dashboard.vercel.app/dashboard/digital/speed-audit\" style=\"background: #0066cc; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;\">View Full Report & Approve</a></p>\n`;\n\nreturn [{\n  json: {\n    audit_id: audit.id,\n    slack_blocks: slackBlocks,\n    slack_text: `Weekly Speed Audit: Mobile ${audit.avg_pagespeed_mobile}/100 | ${summary.total_issues} issues found`,\n    email_html: emailHtml,\n    email_subject: `Weekly Speed Audit: ${audit.avg_pagespeed_mobile}/100 Mobile | ${summary.total_issues} issues`,\n    audit: audit,\n    summary: summary\n  }\n}];"
+        "jsCode": "// Generate notification content\nconst audit = $input.first().json;\nconst summary = $('Generate Audit Summary').first().json;\n\n// Determine status emoji based on scores\nconst getMobileStatus = (score) => {\n  if (score >= 90) return ':white_check_mark:';\n  if (score >= 50) return ':large_yellow_circle:';\n  return ':red_circle:';\n};\n\nconst mobileDelta = audit.mobile_score_delta;\nconst desktopDelta = audit.desktop_score_delta;\nconst deltaStr = (d) => d > 0 ? `+${d}` : (d < 0 ? `${d}` : '0');\n\n// Top 5 issues for Slack\nconst topIssues = summary.audit_items\n  .sort((a, b) => {\n    const sevOrder = { critical: 4, high: 3, medium: 2, low: 1 };\n    return sevOrder[b.severity] - sevOrder[a.severity];\n  })\n  .slice(0, 5);\n\nconst issueList = topIssues.map((item, i) => {\n  const sev = { critical: ':fire:', high: ':warning:', medium: ':large_yellow_circle:', low: ':information_source:' };\n  return `${i + 1}. ${sev[item.severity]} *${item.item_code}*: ${item.title}`;\n}).join('\\n');\n\n// Generate Slack blocks for interactive message\nconst slackBlocks = [\n  {\n    type: 'header',\n    text: { type: 'plain_text', text: ':zap: Weekly Speed Audit Report', emoji: true }\n  },\n  {\n    type: 'section',\n    text: {\n      type: 'mrkdwn',\n      text: `*Week of ${audit.audit_date}* | ${summary.total_pages} pages audited`\n    }\n  },\n  { type: 'divider' },\n  {\n    type: 'section',\n    fields: [\n      { type: 'mrkdwn', text: `*Mobile Score*\\n${getMobileStatus(audit.avg_pagespeed_mobile)} ${audit.avg_pagespeed_mobile}/100 (${deltaStr(mobileDelta)})` },\n      { type: 'mrkdwn', text: `*Desktop Score*\\n${getMobileStatus(audit.avg_pagespeed_desktop)} ${audit.avg_pagespeed_desktop}/100 (${deltaStr(desktopDelta)})` },\n      { type: 'mrkdwn', text: `*LCP*\\n${audit.avg_lcp_ms}ms` },\n      { type: 'mrkdwn', text: `*CLS*\\n${audit.avg_cls}` }\n    ]\n  },\n  { type: 'divider' },\n  {\n    type: 'section',\n    text: {\n      type: 'mrkdwn',\n      text: `*Issues Found:* :fire: ${audit.critical_issues} critical | :warning: ${audit.high_issues} high | :large_yellow_circle: ${audit.medium_issues} medium | :information_source: ${audit.low_issues} low`\n    }\n  },\n  {\n    type: 'section',\n    text: {\n      type: 'mrkdwn',\n      text: `*Top Issues to Address:*\\n${issueList}`\n    }\n  },\n  { type: 'divider' },\n  {\n    type: 'actions',\n    elements: [\n      {\n        type: 'button',\n        text: { type: 'plain_text', text: ':white_check_mark: Approve All', emoji: true },\n        style: 'primary',\n        action_id: 'approve_all',\n        value: audit.id\n      },\n      {\n        type: 'button',\n        text: { type: 'plain_text', text: ':ballot_box_with_check: Approve Critical/High', emoji: true },\n        action_id: 'approve_critical_high',\n        value: audit.id\n      },\n      {\n        type: 'button',\n        text: { type: 'plain_text', text: ':fast_forward: Defer to Next Week', emoji: true },\n        action_id: 'defer',\n        value: audit.id\n      }\n    ]\n  }\n];\n\n// Generate email HTML\nconst emailHtml = `\n<h2>Weekly Speed Audit Report</h2>\n<p><strong>Week of ${audit.audit_date}</strong> | ${summary.total_pages} pages audited</p>\n\n<h3>Performance Scores</h3>\n<table style=\"border-collapse: collapse; width: 100%;\">\n  <tr style=\"background: #f5f5f5;\">\n    <th style=\"padding: 8px; text-align: left;\">Metric</th>\n    <th style=\"padding: 8px; text-align: center;\">Score</th>\n    <th style=\"padding: 8px; text-align: center;\">Change</th>\n  </tr>\n  <tr>\n    <td style=\"padding: 8px;\">Mobile PageSpeed</td>\n    <td style=\"padding: 8px; text-align: center;\"><strong>${audit.avg_pagespeed_mobile}</strong>/100</td>\n    <td style=\"padding: 8px; text-align: center; color: ${mobileDelta >= 0 ? 'green' : 'red'};\">${deltaStr(mobileDelta)}</td>\n  </tr>\n  <tr>\n    <td style=\"padding: 8px;\">Desktop PageSpeed</td>\n    <td style=\"padding: 8px; text-align: center;\"><strong>${audit.avg_pagespeed_desktop}</strong>/100</td>\n    <td style=\"padding: 8px; text-align: center; color: ${desktopDelta >= 0 ? 'green' : 'red'};\">${deltaStr(desktopDelta)}</td>\n  </tr>\n  <tr>\n    <td style=\"padding: 8px;\">LCP</td>\n    <td style=\"padding: 8px; text-align: center;\">${audit.avg_lcp_ms}ms</td>\n    <td style=\"padding: 8px; text-align: center;\">-</td>\n  </tr>\n  <tr>\n    <td style=\"padding: 8px;\">CLS</td>\n    <td style=\"padding: 8px; text-align: center;\">${audit.avg_cls}</td>\n    <td style=\"padding: 8px; text-align: center;\">-</td>\n  </tr>\n</table>\n\n<h3>Issues Found</h3>\n<ul>\n  <li><strong>${audit.critical_issues}</strong> Critical</li>\n  <li><strong>${audit.high_issues}</strong> High</li>\n  <li><strong>${audit.medium_issues}</strong> Medium</li>\n  <li><strong>${audit.low_issues}</strong> Low</li>\n</ul>\n\n<h3>Top Issues</h3>\n<ol>\n${topIssues.map(item => `  <li><strong>[${item.severity.toUpperCase()}]</strong> ${item.title}</li>`).join('\\n')}\n</ol>\n\n<p><a href=\"https://dashboard-theta-lovat-85.vercel.app/dashboard/digital/speed-audit\" style=\"background: #0066cc; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;\">View Full Report & Approve</a></p>\n`;\n\nreturn [{\n  json: {\n    audit_id: audit.id,\n    slack_blocks: slackBlocks,\n    slack_text: `Weekly Speed Audit: Mobile ${audit.avg_pagespeed_mobile}/100 | ${summary.total_issues} issues found`,\n    email_html: emailHtml,\n    email_subject: `Weekly Speed Audit: ${audit.avg_pagespeed_mobile}/100 Mobile | ${summary.total_issues} issues`,\n    audit: audit,\n    summary: summary\n  }\n}];"
       },
       "id": "generate-notifications",
       "name": "Generate Notifications",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [3300, 100]
+      "position": [3520, 100]
     },
     {
       "parameters": {
@@ -272,7 +290,7 @@
       "name": "Send Slack Notification",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [3520, 0]
+      "position": [3740, 0]
     },
     {
       "parameters": {
@@ -300,7 +318,7 @@
       "name": "Send Email Report",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [3520, 200]
+      "position": [3740, 200]
     },
     {
       "parameters": {
@@ -312,17 +330,182 @@
       "name": "Update Notification Status",
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
-      "position": [3740, 100],
+      "position": [3960, 100],
       "credentials": {
         "postgres": {
           "id": "EgmvZHbvINHsh6PR",
           "name": "Supabase Postgres"
         }
       }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get run_id from static data and call log_workflow_success\nconst staticData = $getWorkflowStaticData('global');\nconst runId = staticData.run_id;\n\nif (!runId) {\n  // No run_id available, skip logging but don't fail\n  return [{ json: { success: true, skipped: true, reason: 'No run_id in static data' } }];\n}\n\nreturn [{ json: { run_id: runId } }];"
+      },
+      "id": "prepare-success-log",
+      "name": "Prepare Success Log",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [4180, 100]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-run-id",
+              "leftValue": "={{ $json.run_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-run-id",
+      "name": "Has Run ID?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [4400, 100]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT n8n_brain.log_workflow_success(\n  '{{ $json.run_id }}'::uuid,\n  '{\"status\": \"completed\"}'::jsonb\n);",
+        "options": {}
+      },
+      "id": "log-success",
+      "name": "Log Workflow Success",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [4620, 0],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "error-trigger",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [0, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract error details\nconst error = $input.first().json;\n\n// Get run_id from static data if available\nconst staticData = $getWorkflowStaticData('global');\nconst runId = staticData.run_id || null;\n\nconst errorData = {\n  run_id: runId,\n  workflow_name: 'Weekly Speed Audit - iaml.com',\n  workflow_id: 'goebbeQY8Rdi8oRj',\n  execution_id: $execution.id,\n  error_message: error.message || error.error?.message || 'Unknown error',\n  error_node: error.node?.name || error.workflow?.lastNodeExecuted || 'Unknown',\n  error_node_type: error.node?.type || 'unknown',\n  error_details: JSON.stringify(error),\n  timestamp: new Date().toISOString()\n};\n\nreturn [{ json: errorData }];"
+      },
+      "id": "parse-error",
+      "name": "Parse Error Details",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [220, 400]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM n8n_brain.log_workflow_error(\n  {{ $json.run_id ? \"'\" + $json.run_id + \"'::uuid\" : 'NULL' }},\n  '{{ $json.error_message.replace(/'/g, \"''\") }}',\n  '{{ $json.error_node }}',\n  '{{ $json.error_node_type }}',\n  '{{ $json.error_details }}'::jsonb\n);",
+        "options": {}
+      },
+      "id": "log-error-db",
+      "name": "Log Error to DB",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [440, 400],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \":rotating_light: Workflow Error: Weekly Speed Audit\",\n  \"blocks\": [\n    {\n      \"type\": \"header\",\n      \"text\": { \"type\": \"plain_text\", \"text\": \":rotating_light: Workflow Error\", \"emoji\": true }\n    },\n    {\n      \"type\": \"section\",\n      \"text\": {\n        \"type\": \"mrkdwn\",\n        \"text\": \"*Workflow:* Weekly Speed Audit - iaml.com\\n*Failed Node:* {{ $('Parse Error Details').first().json.error_node }}\\n*Error:* {{ $('Parse Error Details').first().json.error_message.substring(0, 200) }}\"\n      }\n    },\n    {\n      \"type\": \"section\",\n      \"text\": {\n        \"type\": \"mrkdwn\",\n        \"text\": \"*Time:* {{ $('Parse Error Details').first().json.timestamp }}\"\n      }\n    },\n    {\n      \"type\": \"actions\",\n      \"elements\": [\n        {\n          \"type\": \"button\",\n          \"text\": { \"type\": \"plain_text\", \"text\": \":eyes: View in n8n\", \"emoji\": true },\n          \"url\": \"https://n8n.realtyamp.ai/workflow/goebbeQY8Rdi8oRj/executions\"\n        },\n        {\n          \"type\": \"button\",\n          \"text\": { \"type\": \"plain_text\", \"text\": \":chart_with_upwards_trend: View Dashboard\", \"emoji\": true },\n          \"url\": \"https://dashboard-theta-lovat-85.vercel.app/dashboard/digital/speed-audit\"\n        }\n      ]\n    }\n  ]\n}",
+        "options": {}
+      },
+      "id": "send-error-slack",
+      "name": "Send Error Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 300],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.sendgrid.com/v3/mail/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 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"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"personalizations\": [{\"to\": [{\"email\": \"mike.jackson@iaml.com\"}]}],\n  \"from\": {\"email\": \"mike.jackson@iaml.com\", \"name\": \"IAML Workflow Alerts\"},\n  \"subject\": \"Workflow Error: Weekly Speed Audit Failed\",\n  \"content\": [{\n    \"type\": \"text/html\",\n    \"value\": \"<h2 style='color: #dc3545;'>Workflow Error</h2><p><strong>Workflow:</strong> Weekly Speed Audit - iaml.com</p><p><strong>Failed Node:</strong> {{ $('Parse Error Details').first().json.error_node }}</p><p><strong>Error:</strong> {{ $('Parse Error Details').first().json.error_message.substring(0, 500) }}</p><p><strong>Time:</strong> {{ $('Parse Error Details').first().json.timestamp }}</p><p><a href='https://n8n.realtyamp.ai/workflow/goebbeQY8Rdi8oRj/executions' style='background: #0066cc; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;'>View in n8n</a></p>\"\n  }]\n}",
+        "options": {}
+      },
+      "id": "send-error-email",
+      "name": "Send Error Email",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 500],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT n8n_brain.mark_notifications_sent(\n  '{{ $('Parse Error Details').first().json.run_id }}'::uuid,\n  true,\n  true\n);",
+        "options": {}
+      },
+      "id": "mark-error-notified",
+      "name": "Mark Error Notified",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [880, 400],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "continueOnFail": true
     }
   ],
   "connections": {
     "Monday 6 AM": {
+      "main": [
+        [
+          { "node": "Log Workflow Start", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Log Workflow Start": {
       "main": [
         [
           { "node": "Get Pages to Audit", "type": "main", "index": 0 }
@@ -458,6 +641,64 @@
       "main": [
         [
           { "node": "Update Notification Status", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Update Notification Status": {
+      "main": [
+        [
+          { "node": "Prepare Success Log", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Prepare Success Log": {
+      "main": [
+        [
+          { "node": "Has Run ID?", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Has Run ID?": {
+      "main": [
+        [
+          { "node": "Log Workflow Success", "type": "main", "index": 0 }
+        ],
+        []
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          { "node": "Parse Error Details", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Parse Error Details": {
+      "main": [
+        [
+          { "node": "Log Error to DB", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Log Error to DB": {
+      "main": [
+        [
+          { "node": "Send Error Slack", "type": "main", "index": 0 },
+          { "node": "Send Error Email", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Send Error Slack": {
+      "main": [
+        [
+          { "node": "Mark Error Notified", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Send Error Email": {
+      "main": [
+        [
+          { "node": "Mark Error Notified", "type": "main", "index": 0 }
         ]
       ]
     }
