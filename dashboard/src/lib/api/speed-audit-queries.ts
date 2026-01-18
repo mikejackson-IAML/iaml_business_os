@@ -311,7 +311,8 @@ export async function approveAuditItems(
 ): Promise<{ success: boolean; error?: string }> {
   const supabase = getServerClient();
 
-  const { error } = await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error } = await (supabase as any)
     .from('speed_audit_items')
     .update({
       approved: true,
@@ -326,7 +327,8 @@ export async function approveAuditItems(
   }
 
   // Update audit status
-  await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  await (supabase as any)
     .from('speed_audits')
     .update({
       status: 'approved',
@@ -346,7 +348,8 @@ export async function deferAudit(
 ): Promise<{ success: boolean; error?: string }> {
   const supabase = getServerClient();
 
-  const { error } = await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error } = await (supabase as any)
     .from('speed_audits')
     .update({ status: 'deferred' })
     .eq('id', auditId);
@@ -367,7 +370,8 @@ export async function markItemExecuted(
 ): Promise<{ success: boolean; error?: string }> {
   const supabase = getServerClient();
 
-  const { error } = await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error } = await (supabase as any)
     .from('speed_audit_items')
     .update({
       executed: true,
@@ -393,7 +397,8 @@ export async function recordItemValidation(
 ): Promise<{ success: boolean; error?: string }> {
   const supabase = getServerClient();
 
-  const { error } = await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error } = await (supabase as any)
     .from('speed_audit_items')
     .update({
       validated: true,
