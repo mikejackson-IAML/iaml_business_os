@@ -11485,16 +11485,18 @@ input[type="radio"].session-radio {
 }
 
 .btn-coupon,
-.coupon-input-row button#applyCouponBtn {
+.coupon-input-row button#applyCouponBtn,
+button#applyCouponBtn.btn-coupon {
   display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
   padding: var(--space-sm) var(--space-md);
   background: #2563eb !important;
   color: white !important;
-  border: none;
+  border: none !important;
   border-radius: 6px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
   white-space: nowrap;
   flex-shrink: 0;
   min-width: 70px;
