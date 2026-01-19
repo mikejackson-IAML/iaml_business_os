@@ -282,7 +282,15 @@
           <p>These sessions are designed for professionals who need to stay current on employment law developments</p>
         </header>
 
-        <div class="audience-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+        <style>
+          @media (max-width: 1024px) {
+            .audience-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          }
+          @media (max-width: 640px) {
+            .audience-grid { grid-template-columns: 1fr !important; }
+          }
+        </style>
+        <div class="audience-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;">
 
           <div class="audience-card" style="background: #fff; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
             <h3 style="color: #3B5998; font-size: 1.25rem; margin-bottom: 1rem;">IAML Alumni</h3>
@@ -290,18 +298,43 @@
           </div>
 
           <div class="audience-card" style="background: #fff; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-            <h3 style="color: #3B5998; font-size: 1.25rem; margin-bottom: 1rem;">HR Leaders & Managers</h3>
-            <p style="color: #666; line-height: 1.6;">Stay ahead of regulatory changes that affect your workforce. Get actionable insights on NLRB decisions, state law updates, and compliance requirements before they become problems.</p>
+            <h3 style="color: #3B5998; font-size: 1.25rem; margin-bottom: 1rem;">HR Directors & VPs</h3>
+            <p style="color: #666; line-height: 1.6;">Stay ahead of regulatory changes that affect your workforce strategy. Get executive-level insights on NLRB decisions, state law updates, and compliance requirements before they impact your organization.</p>
           </div>
 
           <div class="audience-card" style="background: #fff; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
             <h3 style="color: #3B5998; font-size: 1.25rem; margin-bottom: 1rem;">Employee Relations Specialists</h3>
-            <p style="color: #666; line-height: 1.6;">Keep your expertise current with the latest case law, enforcement trends, and practical strategies for the issues you handle daily.</p>
+            <p style="color: #666; line-height: 1.6;">Keep your expertise current with the latest case law, enforcement trends, and practical strategies for the workplace issues you handle daily.</p>
           </div>
 
           <div class="audience-card" style="background: #fff; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
             <h3 style="color: #3B5998; font-size: 1.25rem; margin-bottom: 1rem;">In-House Counsel</h3>
             <p style="color: #666; line-height: 1.6;">Supplement your legal research with practical updates from attorneys who advise employers daily. Understand how HR actually implements the guidance you provide.</p>
+          </div>
+
+          <div class="audience-card" style="background: #fff; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+            <h3 style="color: #3B5998; font-size: 1.25rem; margin-bottom: 1rem;">HR Business Partners</h3>
+            <p style="color: #666; line-height: 1.6;">Become a trusted advisor to your business units by staying current on employment law changes that affect hiring, terminations, accommodations, and workplace policies.</p>
+          </div>
+
+          <div class="audience-card" style="background: #fff; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+            <h3 style="color: #3B5998; font-size: 1.25rem; margin-bottom: 1rem;">Labor Relations Professionals</h3>
+            <p style="color: #666; line-height: 1.6;">Stay current on NLRB decisions, union organizing trends, and collective bargaining developments. Get practical strategies for maintaining positive labor relations.</p>
+          </div>
+
+          <div class="audience-card" style="background: #fff; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+            <h3 style="color: #3B5998; font-size: 1.25rem; margin-bottom: 1rem;">Compliance Officers</h3>
+            <p style="color: #666; line-height: 1.6;">Track regulatory changes across federal and state jurisdictions. Get early warning on new requirements so you can update policies and training before deadlines hit.</p>
+          </div>
+
+          <div class="audience-card" style="background: #fff; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+            <h3 style="color: #3B5998; font-size: 1.25rem; margin-bottom: 1rem;">HR Managers & Generalists</h3>
+            <p style="color: #666; line-height: 1.6;">Handle day-to-day HR issues with confidence. Stay informed on the legal developments that affect hiring, discipline, leaves of absence, and terminations.</p>
+          </div>
+
+          <div class="audience-card" style="background: #fff; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+            <h3 style="color: #3B5998; font-size: 1.25rem; margin-bottom: 1rem;">Operations & Line Managers</h3>
+            <p style="color: #666; line-height: 1.6;">Understand the employment law issues that affect your team. Learn what you can and can't do when managing performance, handling complaints, and making workforce decisions.</p>
           </div>
 
         </div>
