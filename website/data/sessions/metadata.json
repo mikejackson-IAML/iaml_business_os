@@ -1,8 +1,8 @@
 {
-  "generated": "2026-01-19T08:19:41.585Z",
+  "generated": "2026-01-19T17:19:51.569Z",
   "version": "1.0.0",
   "totalSessions": 70,
-  "viewsCount": 17,
+  "viewsCount": 18,
   "viewStats": [
     {
       "viewId": "viwfys9oVCU3gFsel",
@@ -70,10 +70,6 @@
       "usedBy": [
         {
           "program": "Comprehensive Labor Relations",
-          "format": "in-person"
-        },
-        {
-          "program": "Special Issues in Employment Law",
           "format": "in-person"
         }
       ]
@@ -174,6 +170,16 @@
       "usedBy": [
         {
           "program": "Welfare Benefits Plan Issues",
+          "format": "in-person"
+        }
+      ]
+    },
+    {
+      "viewId": "viw2IfjMXttng3xlW",
+      "count": 5,
+      "usedBy": [
+        {
+          "program": "Special Issues in Employment Law",
           "format": "in-person"
         }
       ]

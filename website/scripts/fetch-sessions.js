@@ -68,7 +68,7 @@ const SESSION_VIEW_IDS = {
     'in-person': 'viwa8yRYP99luXOQc'
   },
   'Special Issues in Employment Law': {
-    'in-person': 'viwfRNxWVMk9nUxCc'
+    'in-person': 'viw2IfjMXttng3xlW'
   }
 };
 

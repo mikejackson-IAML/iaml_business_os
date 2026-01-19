@@ -209,9 +209,9 @@
               Employment law moves fast. Four times a year, the same practicing attorneys who teach our certificate programs deliver 90-minute sessions on the most critical developments. NLRB rulings, state law changes, Supreme Court decisions, and emerging compliance risks. Stay current without leaving your desk.
             </p>
 
-            <button id="openModalBtn-quarterly-updates" class="btn btn-register btn-lg" onclick="connectPopup_open()" type="button">
+            <a href="/register.html?block=quarterly-updates" class="btn btn-register btn-lg">
               Register Now: $397/session
-            </button>
+            </a>
 
             <div class="delivery-options">
               <span class="delivery-label">Delivery Options:</span>
@@ -273,170 +273,6 @@
         </div>
       </div>
     </section>
-
-    <!-- Testimonials Section with Infinite Scroll -->
-    <section class="testimonials-scroll-section" style="background: #ebebeb;">
-      <div class="container">
-        <div class="scroll-grid">
-
-          <!-- Left Column: Scrolling Testimonials -->
-          <aside class="testimonial-scroller">
-            <div class="top-fade"></div>
-            <div class="left-fade"></div>
-            <div class="testimonial-track" role="list" aria-label="Customer testimonials"></div>
-            <div class="bottom-fade"></div>
-            <div class="scroll-hint">Scroll to see more &#8595;</div>
-          </aside>
-
-          <!-- Right Column: Static Content -->
-          <article class="content-section">
-            <h2 class="font-display text-display text-primary">Stay Current Without the Time Commitment</h2>
-            <p class="text-large text-secondary">
-              Each quarterly session delivers <span style="color: #FF6A00; font-weight: 700;">90 focused minutes</span> on the employment law developments that actually matter to your organization. No fluff, no theory - just practical updates from attorneys who handle these issues daily.
-            </p>
-            <hr class="separator"/>
-            <div class="benefits-section benefits-section--gradient benefits-section--card">
-              <h3 class="font-display">What Sets These Sessions Apart</h3>
-              <ul class="benefits-list">
-                <li><strong>Practicing attorneys, not academics</strong> - Your instructors handle employment law cases daily at firms like Taft, Thompson Hine, and Barnes & Thornburg. They teach from real courtrooms and boardrooms, not textbooks.</li>
-                <li><strong>Curated content, not information overload</strong> - We filter the noise and focus on the developments that actually affect your workplace. No padding, just substance.</li>
-                <li><strong>Practical strategies you can implement</strong> - Each session includes specific action items you can apply immediately, not just legal theory.</li>
-                <li><strong>CE credits without the travel</strong> - Earn 1.5 SHRM PDCs, HRCI recertification credits, and CLE credits from your desk.</li>
-              </ul>
-              <a href="#registration" class="btn btn-primary">VIEW UPCOMING SESSIONS</a>
-            </div>
-          </article>
-
-        </div>
-      </div>
-    </section>
-
-    <script>
-      // Testimonial data
-      const TESTIMONIALS_DATA = [
-        {"quote": "The quarterly updates keep me current on the changes that matter most. I can apply what I learn immediately.", "name": "HR Director", "title": "", "company": "Fortune 500 Company"},
-        {"quote": "I really liked the presenter and it was definitely worth my time. It was interactive and gave me some really good skills and knowledge to take with me.", "name": "Program Attendee", "title": "", "company": ""},
-        {"quote": "IAML once again surpassed my expectations. The content is always relevant and practical.", "name": "Returning Attendee", "title": "", "company": ""},
-        {"quote": "The Advanced Certificate in Strategic Employment Law is by far the best conference I have attended. I have never walked out of an IAML program without learning something that I could apply immediately.", "name": "Senior HR Professional", "title": "", "company": ""},
-        {"quote": "This is one of the best seminars I have ever attended. The instructors are well informed and have a repertoire of stories that emphasize the issues.", "name": "Debbie Colia", "title": "HR Executive Consultant", "company": "Cedars-Sinai"},
-        {"quote": "With almost 20 years in the field of employment law, this was one of the best, if not the best, seminar I have ever attended.", "name": "Charles Rando", "title": "Personnel Field Manager", "company": "Wyoming Department of Workforce Services"},
-        {"quote": "The information was extremely valuable and interesting, I learned a great deal. The instructors did an exceptional job presenting.", "name": "Katie Sanders", "title": "Coordinator of Workforce Development", "company": "Northside Hospital"},
-        {"quote": "It's always good to come back to IAML to get updated on the newest rulings as well as to refresh my knowledge of employment law.", "name": "Denise Teuscher", "title": "Lead Labor Relations Specialist", "company": "Battelle Energy Alliance"}
-      ];
-
-      (function(){
-        const track = document.querySelector(".testimonial-track");
-        const contentSection = document.querySelector(".content-section");
-        let isScrolling = false;
-
-        function escapeHtml(text){
-          const div = document.createElement('div');
-          div.textContent = text;
-          return div.innerHTML;
-        }
-
-        function renderCard(t){
-          return `
-            <article class="testimonial-card" role="listitem">
-              <div class="star-wrapper">
-                <img src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/68d667936fe1a53fe6603670.png" alt="5 star rating" class="star-image">
-              </div>
-              <blockquote>"${escapeHtml(t.quote)}"</blockquote>
-              <footer>
-                <div class="author-name">${escapeHtml(t.name)}</div>
-                ${t.title ? `<div class="author-details">${escapeHtml(t.title)}</div>` : ''}
-                ${t.company ? `<div class="author-details">${escapeHtml(t.company)}</div>` : ''}
-              </footer>
-            </article>`;
-        }
-
-        function buildLoop(){
-          const A = TESTIMONIALS_DATA.map(renderCard).join("");
-          const B = TESTIMONIALS_DATA.map(renderCard).join("");
-          const C = TESTIMONIALS_DATA.map(renderCard).join("");
-          track.innerHTML = C + A + B;
-
-          requestAnimationFrame(() => {
-            track.scrollTop = blockHeight();
-          });
-        }
-
-        function blockHeight(){
-          let h = 0;
-          const kids = track.children;
-          const itemsPerBlock = TESTIMONIALS_DATA.length;
-
-          for(let i = 0; i < Math.min(itemsPerBlock, kids.length); i++){
-            h += kids[i].offsetHeight;
-          }
-          return h;
-        }
-
-        function syncHeights(){
-          if(!contentSection || !track) return;
-
-          const contentHeight = contentSection.offsetHeight;
-          const isMobile = window.innerWidth < 900;
-          const minHeight = isMobile ? 500 : 600;
-          const targetHeight = Math.max(contentHeight + 100, minHeight);
-
-          track.style.maxHeight = targetHeight + 'px';
-        }
-
-        function onScroll(){
-          if(isScrolling) return;
-
-          const b = blockHeight();
-          const y = track.scrollTop;
-
-          if(y >= b * 2){
-            isScrolling = true;
-            track.scrollTop = y - b;
-            requestAnimationFrame(() => { isScrolling = false; });
-          }
-          else if(y < b * 0.1){
-            isScrolling = true;
-            track.scrollTop = y + b;
-            requestAnimationFrame(() => { isScrolling = false; });
-          }
-        }
-
-        let resizeTimeout = null;
-        window.addEventListener("resize", () => {
-          clearTimeout(resizeTimeout);
-          resizeTimeout = setTimeout(() => {
-            const b = blockHeight();
-            const currentOffset = track.scrollTop % b;
-            track.scrollTop = b + currentOffset;
-            syncHeights();
-          }, 150);
-        });
-
-        // Auto-scroll configuration
-        const autoScrollSpeed = 0.7;
-        let isPaused = false;
-
-        function autoScroll() {
-          if (!isPaused) {
-            track.scrollTop += autoScrollSpeed;
-          }
-          requestAnimationFrame(autoScroll);
-        }
-
-        // Pause on hover/touch
-        track.addEventListener('mouseenter', () => { isPaused = true; });
-        track.addEventListener('mouseleave', () => { isPaused = false; });
-        track.addEventListener('touchstart', () => { isPaused = true; }, {passive: true});
-        track.addEventListener('touchend', () => { isPaused = false; }, {passive: true});
-
-        buildLoop();
-        requestAnimationFrame(() => {
-          syncHeights();
-          autoScroll();
-        });
-        track.addEventListener("scroll", onScroll, {passive: true});
-      })();
-    </script>
 
     <!-- Who Should Attend Section -->
     <section class="who-should-attend-section theme-light py-5xl">
@@ -576,134 +412,163 @@
       </div>
     </section>
 
-    <!-- Upcoming Sessions Section -->
-    <div class="sessions-wrapper" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
-      <section class="program-sessions-section" id="all-sessions">
-        <div class="container">
-          <h2 style="font-family: var(--font-heading); font-size: 48px; text-align: center; margin-bottom: 1rem; color: #ffffff;">2026 Session Schedule</h2>
-          <p class="section-subtitle" style="text-align: center; color: #e5e5e5; margin-bottom: 2.5rem;">Each 90-minute session covers the most significant employment law developments from the previous quarter.</p>
-
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; max-width: 1100px; margin: 0 auto;">
-
-            <!-- Q1 Session -->
-            <div style="background: rgba(255,255,255,0.08); border-radius: 12px; padding: 1.5rem; border: 1px solid rgba(255,255,255,0.1);">
-              <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
-                <span style="background: #FF6A00; color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">UPCOMING</span>
-              </div>
-              <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; color: white; margin-bottom: 0.5rem;">Q1 2026 Update</h3>
-              <div style="color: #e5e5e5; font-size: 1.1rem; margin-bottom: 0.75rem;">January 22, 2026</div>
-              <div style="color: #999; font-size: 0.9rem; margin-bottom: 1rem;">Covers developments from Q4 2025</div>
-              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem;">
-                <span style="background: rgba(255,255,255,0.1); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; color: #ccc;">90 min</span>
-                <span style="background: rgba(255,255,255,0.1); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; color: #ccc;">1.5 CE Credits</span>
-              </div>
-              <button onclick="connectPopup_open()" class="btn btn-primary" style="width: 100%; font-size: 0.9rem;">Register: $397</button>
-            </div>
-
-            <!-- Q2 Session -->
-            <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 1.5rem; border: 1px solid rgba(255,255,255,0.08);">
-              <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; color: white; margin-bottom: 0.5rem;">Q2 2026 Update</h3>
-              <div style="color: #e5e5e5; font-size: 1.1rem; margin-bottom: 0.75rem;">April 15, 2026</div>
-              <div style="color: #999; font-size: 0.9rem; margin-bottom: 1rem;">Covers developments from Q1 2026</div>
-              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem;">
-                <span style="background: rgba(255,255,255,0.1); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; color: #ccc;">90 min</span>
-                <span style="background: rgba(255,255,255,0.1); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; color: #ccc;">1.5 CE Credits</span>
-              </div>
-              <button onclick="connectPopup_open()" class="btn" style="width: 100%; font-size: 0.9rem; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">Register: $397</button>
-            </div>
-
-            <!-- Q3 Session -->
-            <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 1.5rem; border: 1px solid rgba(255,255,255,0.08);">
-              <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; color: white; margin-bottom: 0.5rem;">Q3 2026 Update</h3>
-              <div style="color: #e5e5e5; font-size: 1.1rem; margin-bottom: 0.75rem;">July 15, 2026</div>
-              <div style="color: #999; font-size: 0.9rem; margin-bottom: 1rem;">Covers developments from Q2 2026</div>
-              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem;">
-                <span style="background: rgba(255,255,255,0.1); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; color: #ccc;">90 min</span>
-                <span style="background: rgba(255,255,255,0.1); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; color: #ccc;">1.5 CE Credits</span>
-              </div>
-              <button onclick="connectPopup_open()" class="btn" style="width: 100%; font-size: 0.9rem; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">Register: $397</button>
-            </div>
-
-            <!-- Q4 Session -->
-            <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 1.5rem; border: 1px solid rgba(255,255,255,0.08);">
-              <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; color: white; margin-bottom: 0.5rem;">Q4 2026 Update</h3>
-              <div style="color: #e5e5e5; font-size: 1.1rem; margin-bottom: 0.75rem;">October 14, 2026</div>
-              <div style="color: #999; font-size: 0.9rem; margin-bottom: 1rem;">Covers developments from Q3 2026</div>
-              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem;">
-                <span style="background: rgba(255,255,255,0.1); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; color: #ccc;">90 min</span>
-                <span style="background: rgba(255,255,255,0.1); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; color: #ccc;">1.5 CE Credits</span>
-              </div>
-              <button onclick="connectPopup_open()" class="btn" style="width: 100%; font-size: 0.9rem; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">Register: $397</button>
-            </div>
-
-          </div>
-
-          <div style="text-align: center; margin-top: 2rem;">
-            <p style="color: #999; font-size: 0.95rem;">IAML Alumni: <a href="#registration" style="color: #FF6A00; text-decoration: underline;">Claim your free access</a> included with your certificate program.</p>
-          </div>
-        </div>
-      </section>
-    </div>
-
     <!-- FAQ Section -->
-    <section class="faq-section theme-light py-5xl">
-      <div class="container container-md mx-auto">
-        <header style="text-align: center; margin-bottom: 2rem;">
-          <h2 style="font-family: 'Playfair Display', serif; font-size: 2rem; color: #3B5998;">Frequently Asked Questions</h2>
-        </header>
-
-        <div class="faq-list">
-          <div class="faq-item">
-            <div class="faq-question">Am I eligible for free alumni access?</div>
-            <div class="faq-answer">If you've attended any IAML certificate program, you're eligible for complimentary access to Quarterly Employment Law Updates for 12 months following your program. This benefit is part of your program investment and reflects our commitment to ongoing support.</div>
+    <section class="faq-section full-width-section">
+      <div class="faq-container">
+        <div class="faq-grid">
+          <div class="faq-header">
+            <h2 class="faq-title">Quick Answers</h2>
+            <p class="faq-subtitle">We know you're busy. Here's what you actually need to know.</p>
           </div>
 
-          <div class="faq-item">
-            <div class="faq-question">What if I miss a live session?</div>
-            <div class="faq-answer">Recordings are available within 24 hours of each session. You can watch at your convenience while still earning CE credits.</div>
-          </div>
+          <div class="faq-list">
+            <!-- FAQ 1 -->
+            <div class="faq-item active">
+              <button class="faq-question">
+                Am I eligible for free alumni access?
+                <svg class="faq-chevron" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                </svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-content">
+                  If you've attended any IAML certificate program, you're eligible for complimentary access to Quarterly Employment Law Updates for 12 months following your program. This benefit is part of your program investment and reflects our commitment to ongoing support.
+                </div>
+              </div>
+            </div>
 
-          <div class="faq-item">
-            <div class="faq-question">Do I earn continuing education credits?</div>
-            <div class="faq-answer">Yes. Each 90-minute session provides 1.5 SHRM PDCs, 1.5 HRCI recertification credits, and 1.5 CLE credits (where applicable).</div>
-          </div>
+            <!-- FAQ 2 -->
+            <div class="faq-item">
+              <button class="faq-question">
+                What if I miss a live session?
+                <svg class="faq-chevron" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                </svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-content">
+                  Recordings are available within 24 hours of each session. You can watch at your convenience while still earning CE credits.
+                </div>
+              </div>
+            </div>
 
-          <div class="faq-item">
-            <div class="faq-question">Can I share my access with colleagues?</div>
-            <div class="faq-answer">Registration is individual. However, your colleagues can register for $397/session, or if they attend an IAML certificate program, they'll receive complimentary access as alumni.</div>
-          </div>
+            <!-- FAQ 3 -->
+            <div class="faq-item">
+              <button class="faq-question">
+                Do I earn continuing education credits?
+                <svg class="faq-chevron" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                </svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-content">
+                  Yes. Each 90-minute session provides 1.5 SHRM PDCs, 1.5 HRCI recertification credits, and 1.5 CLE credits (where applicable).
+                </div>
+              </div>
+            </div>
 
-          <div class="faq-item">
-            <div class="faq-question">What topics are covered in each session?</div>
-            <div class="faq-answer">Topics vary by quarter based on the most significant employment law developments. Recent sessions have covered NLRB's Cemex and Stericycle decisions, state law updates from California and New York, and emerging AI hiring regulations. We focus on what you need to know now.</div>
-          </div>
+            <!-- FAQ 4 -->
+            <div class="faq-item">
+              <button class="faq-question">
+                Can I share my access with colleagues?
+                <svg class="faq-chevron" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                </svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-content">
+                  Registration is individual. However, your colleagues can register for $397/session, or if they attend an IAML certificate program, they'll receive complimentary access as alumni.
+                </div>
+              </div>
+            </div>
 
-          <div class="faq-item">
-            <div class="faq-question">How long is each session?</div>
-            <div class="faq-answer">Each live session runs 90 minutes, including Q&A with our faculty. This format provides enough depth to be actionable without consuming your entire day.</div>
-          </div>
+            <!-- FAQ 5 -->
+            <div class="faq-item">
+              <button class="faq-question">
+                What topics are covered in each session?
+                <svg class="faq-chevron" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                </svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-content">
+                  Topics vary by quarter based on the most significant employment law developments. Recent sessions have covered NLRB's Cemex and Stericycle decisions, state law updates from California and New York, and emerging AI hiring regulations. We focus on what you need to know now.
+                </div>
+              </div>
+            </div>
 
-          <div class="faq-item">
-            <div class="faq-question">Is this the same content as your certificate programs?</div>
-            <div class="faq-answer">No. Quarterly updates focus exclusively on recent developments and emerging trends. They complement the foundational expertise you gain from certificate programs by keeping you current as the law evolves.</div>
-          </div>
+            <!-- FAQ 6 -->
+            <div class="faq-item">
+              <button class="faq-question">
+                How long is each session?
+                <svg class="faq-chevron" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                </svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-content">
+                  Each live session runs 90 minutes, including Q&A with our faculty. This format provides enough depth to be actionable without consuming your entire day.
+                </div>
+              </div>
+            </div>
 
-          <div class="faq-item">
-            <div class="faq-question">When are the sessions held?</div>
-            <div class="faq-answer">Sessions are typically held mid-quarter (January, April, July, October) to provide timely coverage of developments from the previous quarter. Exact dates are announced 4-6 weeks in advance.</div>
+            <!-- FAQ 7 -->
+            <div class="faq-item">
+              <button class="faq-question">
+                Is this the same content as your certificate programs?
+                <svg class="faq-chevron" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                </svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-content">
+                  No. Quarterly updates focus exclusively on recent developments and emerging trends. They complement the foundational expertise you gain from certificate programs by keeping you current as the law evolves.
+                </div>
+              </div>
+            </div>
+
+            <!-- FAQ 8 -->
+            <div class="faq-item">
+              <button class="faq-question">
+                When are the sessions held?
+                <svg class="faq-chevron" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                </svg>
+              </button>
+              <div class="faq-answer">
+                <div class="faq-answer-content">
+                  Sessions are typically held mid-quarter (January, April, July, October) to provide timely coverage of developments from the previous quarter. Exact dates are announced 4-6 weeks in advance.
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Final CTA -->
-    <section style="padding: 4rem 0; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white; text-align: center;">
-      <div class="container">
-        <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 4vw, 2rem); margin-bottom: 1rem;">Don't Let Employment Law Changes Catch You Off Guard</h2>
-        <p style="max-width: 700px; margin: 0 auto 2rem; font-size: 1.1rem; line-height: 1.7; opacity: 0.9;">
-          Employment law moves fast. New NLRB decisions, state legislature activity, and agency guidance can change the rules overnight. Quarterly updates from practicing attorneys keep you current and confident.
-        </p>
-        <button onclick="connectPopup_open()" class="btn btn-lg" style="background: white; color: #3B5998;">Register for Next Session: $397</button>
+    <!-- Load FAQ JavaScript -->
+    <script src="../js/faq.js" defer></script>
+
+    <!-- Final CTA Section -->
+    <section id="iaml-cta" class="theme-light py-5xl">
+      <div class="container container-lg mx-auto text-center">
+        <div class="mx-auto">
+          <h2 class="font-body text-display-lg text-primary font-light tracking-tight">
+            Ready to Stay Current with the
+            <span class="cta-cascade font-display text-hero text-brand">Professionals' Choice in Training?</span>
+          </h2>
+
+          <p class="font-body text-large text-secondary my-lg">Practicing attorneys. 45+ years of proven results. 80,000+ HR professionals trained. Join us.</p>
+
+          <div class="cta-button-group">
+            <button class="btn btn-primary hover-lift" id="openContactModal" aria-label="Open contact form" onclick="connectPopup_open()">
+              LET'S TALK
+            </button>
+            <a href="../register.html" class="btn btn-register hover-lift" aria-label="Register now">
+              REGISTER NOW
+            </a>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -712,34 +577,29 @@
   <!-- Footer placeholder (loaded by components.js) -->
   <div id="footer-placeholder"></div>
 
+  <!-- Connect Modal -->
+  <div class="connectPopup-overlay" id="connectPopup_Modal" onclick="connectPopup_closeOnOverlay(event)">
+    <div class="connectPopup-modal" onclick="event.stopPropagation();">
+      <div class="connectPopup-header">
+        <h3>Connect with Us in 20 Seconds or Less</h3>
+        <button class="connectPopup-closeBtn" onclick="connectPopup_close()" aria-label="Close">&times;</button>
+      </div>
+      <div class="connectPopup-body" id="connectPopup_Content">
+        <!-- Dynamic content -->
+      </div>
+    </div>
+  </div>
+
   <!-- JavaScript -->
   <script src="../js/components.js" defer></script>
   <script src="../js/utm-tracking.js" defer></script>
   <script src="../js/megaMenu.js" defer></script>
   <script src="../js/mobileMenu.js" defer></script>
+  <script src="../js/modals.js" defer></script>
 
-  <!-- FAQ Toggle Script -->
+  <!-- Faculty and Page Initialization Script -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // FAQ accordion functionality
-      const faqItems = document.querySelectorAll('.faq-item');
-
-      faqItems.forEach(item => {
-        const question = item.querySelector('.faq-question');
-
-        question.addEventListener('click', () => {
-          // Close other items
-          faqItems.forEach(other => {
-            if (other !== item && other.classList.contains('open')) {
-              other.classList.remove('open');
-            }
-          });
-
-          // Toggle current item
-          item.classList.toggle('open');
-        });
-      });
-
       // Load faculty data
       loadFaculty();
     });

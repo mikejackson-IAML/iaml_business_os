@@ -108,6 +108,87 @@
     'advanced-benefits-law': 'Advanced Certificate in Employee Benefits Law'
   };
 
+  // Standalone block programs (available for individual registration)
+  // These do NOT appear in the main registration flow - only accessible via direct links
+  const BLOCK_PROGRAM_DATA = {
+    'Comprehensive Labor Relations': {
+      price: 1375,
+      duration: '2 days',
+      parentProgram: 'Certificate in Employee Relations Law',
+      blockNum: 1,
+      formats: ['in-person', 'virtual']
+    },
+    'Discrimination Prevention and Defense': {
+      price: 1375,
+      duration: '2 days',
+      parentProgram: 'Certificate in Employee Relations Law',
+      blockNum: 2,
+      formats: ['in-person', 'virtual']
+    },
+    'Special Issues in Employment Law': {
+      price: 575,
+      duration: '0.5 days',
+      parentProgram: 'Certificate in Employee Relations Law',
+      blockNum: 3,
+      formats: ['in-person']
+    },
+    'HR Law Fundamentals': {
+      price: 1375,
+      duration: '2 days',
+      parentProgram: 'Certificate in Strategic HR Leadership',
+      blockNum: 1,
+      formats: ['in-person', 'virtual']
+    },
+    'Strategic HR Management': {
+      price: 1575,
+      duration: '2.5 days',
+      parentProgram: 'Certificate in Strategic HR Leadership',
+      blockNum: 2,
+      formats: ['in-person', 'virtual']
+    },
+    'Retirement Plans': {
+      price: 1375,
+      duration: '2 days',
+      parentProgram: 'Certificate in Employee Benefits Law',
+      blockNum: 1,
+      formats: ['in-person']
+    },
+    'Benefit Plan Claims, Appeals and Litigation': {
+      price: 575,
+      duration: '0.5 days',
+      parentProgram: 'Certificate in Employee Benefits Law',
+      blockNum: 2,
+      formats: ['in-person']
+    },
+    'Welfare Benefits Plan Issues': {
+      price: 975,
+      duration: '2 days',
+      parentProgram: 'Certificate in Employee Benefits Law',
+      blockNum: 3,
+      formats: ['in-person']
+    },
+    'Quarterly Employment Law Update': {
+      price: 397,
+      duration: '90 minutes',
+      parentProgram: null,
+      blockNum: null,
+      formats: ['virtual']
+    }
+  };
+
+  // Map URL slugs to block program names for deep linking
+  const BLOCK_SLUG_MAP = {
+    'comprehensive-labor-relations': 'Comprehensive Labor Relations',
+    'discrimination-prevention-defense': 'Discrimination Prevention and Defense',
+    'special-issues-employment-law': 'Special Issues in Employment Law',
+    'hr-law-fundamentals': 'HR Law Fundamentals',
+    'strategic-hr-management': 'Strategic HR Management',
+    'retirement-plans': 'Retirement Plans',
+    'benefit-plan-claims-appeals-litigation': 'Benefit Plan Claims, Appeals and Litigation',
+    'welfare-benefits-plan-issues': 'Welfare Benefits Plan Issues',
+    'quarterly-updates': 'Quarterly Employment Law Update'
+  };
+
   const FORMAT_MAP = {
     'in-person': 'In-Person',
     'virtual': 'Virtual',
@@ -163,7 +244,7 @@
       'in-person': 'viwa8yRYP99luXOQc'
     },
     'Special Issues in Employment Law': {
-      'in-person': 'viwfRNxWVMk9nUxCc'
+      'in-person': 'viw2IfjMXttng3xlW'
     }
   };
 
@@ -353,7 +434,12 @@
 
     // Program pre-selection flag (for conditional flow)
     // When true, user arrived with program in URL - show format step first
-    programPreselectedFromURL: false
+    programPreselectedFromURL: false,
+
+    // Standalone block program flag
+    // When true, user is registering for a standalone block (not a certificate program)
+    isStandaloneBlock: false,
+    standaloneBlockName: '' // The name of the standalone block program
   };
 
   // ============================================
@@ -370,7 +456,8 @@
       format: params.get('format'),
       program: params.get('program'),
       session: params.get('session'),
-      blocks: params.get('blocks')
+      blocks: params.get('blocks'),
+      block: params.get('block') // Standalone block program slug
     };
   }
 
@@ -549,6 +636,41 @@
     }
   }
 
+  // Filter format options for standalone block programs
+  function filterFormatOptionsForBlock(blockName) {
+    const blockData = BLOCK_PROGRAM_DATA[blockName];
+    if (!blockData) return;
+
+    const availableFormats = blockData.formats || [];
+
+    qsa('.format-option').forEach(option => {
+      const input = option.querySelector('input[name="format"]');
+      if (!input) return;
+
+      const formatValue = input.value;
+      // On-demand is never available for standalone blocks (they're live sessions)
+      const isAvailable = availableFormats.includes(formatValue) && formatValue !== 'on-demand';
+
+      if (isAvailable) {
+        option.classList.remove('disabled');
+        input.disabled = false;
+        option.setAttribute('aria-disabled', 'false');
+      } else {
+        option.classList.add('disabled');
+        input.disabled = true;
+        input.checked = false;
+        option.setAttribute('aria-disabled', 'true');
+      }
+    });
+
+    // If current format selection is no longer available, clear it
+    if (state.format && !availableFormats.includes(state.format)) {
+      state.format = '';
+      const selectedInput = qs(`input[name="format"][value="${state.format}"]`);
+      if (selectedInput) selectedInput.checked = false;
+    }
+  }
+
   function saveStateToSessionStorage() {
     try {
       sessionStorage.setItem('iaml_registration_state', JSON.stringify(state));
@@ -603,6 +725,19 @@
   function determineSteps() {
     const steps = [];
 
+    // STANDALONE BLOCK PROGRAMS: Simplified flow (no program/blocks selection)
+    // Flow: Format → Session → Contact → Payment
+    if (state.isStandaloneBlock) {
+      if (!state.format) {
+        steps.push('format');
+      }
+      // Always show session step for standalone blocks (no on-demand)
+      steps.push('session');
+      steps.push('contact', 'payment-method');
+      return steps;
+    }
+
+    // CERTIFICATE PROGRAMS: Standard flow
     // Determine first steps based on pre-selection
     if (state.programPreselectedFromURL && !state.format) {
       // Scenario 1: Program pre-selected, need format
@@ -1209,7 +1344,15 @@
 
       case 'program-takeaways':
         // Get takeaways for current program and randomly select 4
-        const allTakeaways = PROGRAM_TAKEAWAYS[state.program] || [];
+        // For standalone blocks, use the parent program's takeaways
+        let takeawaysProgram = state.program;
+        if (state.isStandaloneBlock && state.standaloneBlockName) {
+          const blockData = BLOCK_PROGRAM_DATA[state.standaloneBlockName];
+          if (blockData && blockData.parentProgram) {
+            takeawaysProgram = blockData.parentProgram;
+          }
+        }
+        const allTakeaways = PROGRAM_TAKEAWAYS[takeawaysProgram] || [];
         const shuffled = [...allTakeaways].sort(() => Math.random() - 0.5);
         const selectedTakeaways = shuffled.slice(0, 4);
 
@@ -1586,7 +1729,10 @@
       // Determine which view to use based on program/format/blocks
       let viewId;
 
-      if (state.blockSelectionType === 'Full' || !isBlockProgram(state.program, state.format)) {
+      if (state.isStandaloneBlock) {
+        // Standalone block program - use block name directly
+        viewId = SESSION_VIEW_IDS[state.standaloneBlockName]?.[state.format];
+      } else if (state.blockSelectionType === 'Full' || !isBlockProgram(state.program, state.format)) {
         // Full program or non-block program - use program view
         viewId = SESSION_VIEW_IDS[state.program]?.[state.format];
       } else {
@@ -1597,7 +1743,8 @@
       }
 
       if (!viewId) {
-        console.error(`No view configured for ${state.program} / ${state.format}`);
+        const programName = state.isStandaloneBlock ? state.standaloneBlockName : state.program;
+        console.error(`No view configured for ${programName} / ${state.format}`);
         throw new Error('Session configuration not available');
       }
 
@@ -2674,8 +2821,77 @@
   // Process URL parameters for pre-selection
   async function processURLPreSelection() {
     const urlParams = parseURLParams();
-    const { format, program, session, blocks } = urlParams;
+    const { format, program, session, blocks, block } = urlParams;
 
+    // ============================================
+    // STANDALONE BLOCK PROGRAM HANDLING
+    // ============================================
+    // Handle standalone block program registration (e.g., ?block=comprehensive-labor-relations)
+    if (block) {
+      const blockName = BLOCK_SLUG_MAP[block];
+      if (!blockName || !BLOCK_PROGRAM_DATA[blockName]) {
+        console.warn('Unknown block slug:', block);
+        return false;
+      }
+
+      const blockData = BLOCK_PROGRAM_DATA[blockName];
+
+      // Set standalone block state
+      state.isStandaloneBlock = true;
+      state.standaloneBlockName = blockName;
+      state.program = blockName; // Use block name as program for display purposes
+      state.programPreselectedFromURL = true;
+
+      // Set pricing
+      state.listPrice = blockData.price;
+      state.finalPrice = blockData.price;
+
+      // If format is provided and valid, set it
+      if (format && blockData.formats.includes(format)) {
+        state.format = format;
+
+        // Determine steps (will skip to session since program and format are set)
+        state.steps = determineSteps();
+        buildStepperUI();
+
+        // Handle session pre-selection if provided
+        if (session) {
+          const sessionRecord = await fetchSessionById(session);
+          if (sessionRecord && sessionRecord.fields) {
+            state.sessionId = session;
+            state.sessionRecord = sessionRecord;
+            state.city = sessionRecord.fields['City'] || '';
+            state.stateProvince = sessionRecord.fields['State/Province'] || '';
+            state.venueName = sessionRecord.fields['Venue Name'] || '';
+
+            // Skip to contact step
+            buildStepperUI();
+            showStep('contact');
+            state.preselectedFromURL = true;
+            clearURLParams();
+            return true;
+          }
+        }
+
+        // Show session step
+        showStep('session');
+        clearURLParams();
+        return true;
+      }
+
+      // No format provided - show format selection
+      // Filter format options based on available formats for this block
+      state.steps = determineSteps();
+      buildStepperUI();
+      filterFormatOptionsForBlock(blockName);
+      showStep('format');
+      clearURLParams();
+      return true;
+    }
+
+    // ============================================
+    // CERTIFICATE PROGRAM HANDLING (existing logic)
+    // ============================================
     // Handle program-only pre-selection (user coming from program detail page)
     if (program && !format) {
       // Map program slug to full name
