@@ -1207,6 +1207,11 @@
       priceDivider.classList.remove('hidden');
       qs('#summaryPrice').textContent = formatCurrency(state.listPrice);
       qs('#summaryDiscount').textContent = `-${formatCurrency(state.couponDiscount)}`;
+      // Show coupon code
+      const couponCodeLabel = qs('#summaryCouponCode');
+      if (couponCodeLabel && state.couponCode) {
+        couponCodeLabel.textContent = `(${state.couponCode.toUpperCase()})`;
+      }
     } else {
       // Hide price breakdown, only show total
       priceRow.classList.add('hidden');

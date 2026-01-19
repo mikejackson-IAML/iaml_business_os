@@ -35,26 +35,47 @@ module.exports = async function handler(req, res) {
         return res.status(400).json({ error: 'Coupon code parameter is required' });
       }
 
-      // Query Supabase for coupon (case-insensitive)
-      const response = await fetch(
-        `${SUPABASE_URL}/rest/v1/coupons?code=ilike.${encodeURIComponent(code)}&limit=1`,
-        {
-          method: 'GET',
-          headers: {
-            'apikey': SUPABASE_SERVICE_KEY,
-            'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
-            'Content-Type': 'application/json'
-          }
-        }
-      );
+      // Normalize code: uppercase, remove extra spaces
+      const normalizedCode = code.trim().toUpperCase();
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Supabase coupon query error:', errorText);
-        return res.status(response.status).json({ error: 'Coupon validation failed' });
+      // Generate code variants to try (handles IAML500 vs IAML-500)
+      const codeVariants = [normalizedCode];
+
+      // If code doesn't have hyphen after "IAML", add variant with hyphen
+      if (normalizedCode.startsWith('IAML') && !normalizedCode.includes('-')) {
+        codeVariants.push(normalizedCode.replace(/^IAML/, 'IAML-'));
+      }
+      // If code has hyphen, also try without
+      if (normalizedCode.includes('-')) {
+        codeVariants.push(normalizedCode.replace(/-/g, ''));
       }
 
-      const coupons = await response.json();
+      // Try each variant until we find a match
+      let coupons = [];
+      for (const variant of codeVariants) {
+        const response = await fetch(
+          `${SUPABASE_URL}/rest/v1/coupons?code=ilike.${encodeURIComponent(variant)}&limit=1`,
+          {
+            method: 'GET',
+            headers: {
+              'apikey': SUPABASE_SERVICE_KEY,
+              'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('Supabase coupon query error:', errorText);
+          continue;
+        }
+
+        coupons = await response.json();
+        if (coupons && coupons.length > 0) {
+          break; // Found a match
+        }
+      }
 
       if (!coupons || coupons.length === 0) {
         // Return empty records array (Airtable-compatible format)

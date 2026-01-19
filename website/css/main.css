@@ -10928,6 +10928,11 @@ input[type="radio"].session-radio {
   color: #16a34a;
 }
 
+.order-summary-row.discount-row .coupon-code-label {
+  font-weight: 500;
+  color: #16a34a;
+}
+
 .order-summary-row.total-row {
   padding-top: var(--space-xs);
 }
