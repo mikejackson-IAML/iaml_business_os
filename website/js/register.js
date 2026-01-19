@@ -2020,6 +2020,68 @@
   // COUPON CODE HANDLING
   // ============================================
 
+  /**
+   * Determines the current program type for coupon eligibility
+   * Returns: 'certificate', 'advanced_certificate', 'block', or 'standalone'
+   */
+  function getCurrentProgramType() {
+    // Standalone block programs (e.g., QELU)
+    if (state.isStandaloneBlock && state.standaloneBlockName) {
+      const blockData = BLOCK_PROGRAM_DATA[state.standaloneBlockName];
+      if (blockData && !blockData.parentProgram) {
+        // Standalone program with no parent (like QELU)
+        return 'standalone';
+      }
+      // Individual block from a certificate program
+      return 'block';
+    }
+
+    // Get program data
+    const programData = PROGRAM_DATA[state.program];
+    if (!programData) return 'unknown';
+
+    // If partial block selection (not full program)
+    if (state.blockSelectionType === 'Partial' && state.selectedBlocks.length > 0) {
+      const blockList = programData.blocks?.[state.format]?.list || [];
+      // If selecting fewer blocks than available, it's a block purchase
+      if (state.selectedBlocks.length < blockList.length) {
+        return 'block';
+      }
+    }
+
+    // Full program - check type by duration
+    if (programData.duration === '4.5 days') return 'certificate';
+    if (programData.duration === '2 days') return 'advanced_certificate';
+
+    // Fallback - check STRIPE_PRODUCTS type
+    if (typeof window.STRIPE_PRODUCTS !== 'undefined' && programData.code) {
+      const stripeProduct = window.STRIPE_PRODUCTS[programData.code];
+      if (stripeProduct && stripeProduct.type) {
+        return stripeProduct.type;
+      }
+    }
+
+    return 'certificate';
+  }
+
+  /**
+   * Returns a user-friendly error message for ineligible coupon
+   */
+  function getCouponIneligibleMessage(programType, eligibleTypes) {
+    const typeNames = {
+      'certificate': '4.5-day certificate programs',
+      'advanced_certificate': '2-day advanced programs',
+      'block': 'individual blocks',
+      'standalone': 'standalone programs like Quarterly Updates'
+    };
+
+    const eligibleNames = eligibleTypes
+      .map(t => typeNames[t] || t)
+      .join(' or ');
+
+    return `This coupon is only valid for ${eligibleNames}.`;
+  }
+
   async function handleApplyCoupon() {
     const couponInput = qs('#couponCode');
     const couponMessage = qs('#couponMessage');
@@ -2037,7 +2099,7 @@
 
     try {
       // Validate coupon via API
-      const response = await fetch(`/api/airtable-coupons?code=${encodeURIComponent(code)}`);
+      const response = await fetch(`/api/coupons?code=${encodeURIComponent(code)}`);
       const data = await response.json();
 
       if (!response.ok || !data.records || data.records.length === 0) {
@@ -2073,6 +2135,22 @@
         couponMessage.textContent = 'This coupon has reached its usage limit';
         couponMessage.className = 'coupon-message error';
         return;
+      }
+
+      // Check program type eligibility
+      const eligibleTypes = couponRecord['Eligible Program Types'];
+      if (eligibleTypes && eligibleTypes.length > 0) {
+        const currentProgramType = getCurrentProgramType();
+        // Handle both array (Multi-select) and comma-separated string formats
+        const eligibleList = Array.isArray(eligibleTypes)
+          ? eligibleTypes.map(t => t.toLowerCase().trim())
+          : eligibleTypes.toLowerCase().split(',').map(t => t.trim());
+
+        if (!eligibleList.includes(currentProgramType)) {
+          couponMessage.textContent = getCouponIneligibleMessage(currentProgramType, eligibleList);
+          couponMessage.className = 'coupon-message error';
+          return;
+        }
       }
 
       // Apply the coupon
@@ -2324,6 +2402,9 @@
         ? (stateProvince ? `${city}, ${stateProvince}` : city)
         : (state.format === 'virtual' ? 'Virtual Classroom' : 'Online (Self-Paced)');
 
+      // Get Stripe coupon ID if a coupon is applied
+      const stripeCouponId = state.couponRecord?.fields?.['Stripe Coupon ID'] || null;
+
       // Create Checkout Session
       const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
@@ -2333,6 +2414,7 @@
           customerEmail: state.contactEmail,
           successUrl: `${window.location.origin}/checkout-success.html?session_id={CHECKOUT_SESSION_ID}`,
           cancelUrl: `${window.location.origin}/checkout-cancel.html`,
+          couponId: stripeCouponId,
           metadata: {
             program: state.program,
             format: state.format,
