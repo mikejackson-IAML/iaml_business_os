@@ -683,7 +683,7 @@
                 startDate: f['Start Date'],
                 format: f['Format'] || 'Virtual',
                 price: price,
-                registrationUrl: '/program-schedule?program=employment-law-update'
+                registrationUrl: '/programs/quarterly-updates'
             };
 
         } catch (error) {
