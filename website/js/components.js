@@ -176,7 +176,7 @@ const getHeaderHTML = () => `
               <h3 class="mega-menu-heading" style="margin-top: 24px;">Credentials</h3>
               <ul class="mega-menu-benefits-detailed">
                   <li><div class="benefit-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><div><strong>SHRM &amp; HRCI Credits</strong><span>Recertification credits included</span></div></li>
-                  <li><div class="benefit-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><div><strong>CLE Credits by State</strong><span>Attorneys earn CLE alongside HR</span></div></li>
+                  <li><div class="benefit-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><div><strong>CLE Credits</strong><span>Attorneys earn CLE alongside HR</span></div></li>
               </ul>
           </div>
           <div class="mega-menu-column mega-menu-testimonial-panel">
