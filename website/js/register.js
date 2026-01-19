@@ -1534,11 +1534,9 @@
       input.addEventListener('change', (e) => {
         state.format = e.target.value;
 
-        // Only reset program if it wasn't pre-selected from URL
-        // (When user came from program page, keep the program selection)
-        if (!state.programPreselectedFromURL) {
-          state.program = '';
-        }
+        // Don't reset program when changing format - user likely wants the same
+        // program in a different format. Only reset session (different formats
+        // have different session dates/locations).
 
         state.sessionId = '';
         state.blockSelectionType = 'Full';
