@@ -823,12 +823,12 @@
         if (data.records && data.records.length > 0) {
           const fields = data.records[0].fields;
 
-          // Get program name - Programs field is an array of linked record names
+          // Get session name from available fields
           let sessionName = 'Quarterly Update';
-          if (fields.Programs && Array.isArray(fields.Programs)) {
-            sessionName = fields.Programs[0] || sessionName;
-          } else if (fields['Session Name']) {
-            sessionName = fields['Session Name'];
+          if (fields['Program Name'] && Array.isArray(fields['Program Name'])) {
+            sessionName = fields['Program Name'][0];
+          } else if (fields['Instance Name']) {
+            sessionName = fields['Instance Name'];
           }
 
           const startDate = fields['Start Date'];
