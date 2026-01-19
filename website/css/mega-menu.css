@@ -493,25 +493,24 @@
 .ct-value-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    padding: 24px 20px;
-    background: linear-gradient(135deg, var(--blue-dark, #28528c) 0%, #1e3a5f 100%);
-    border-radius: 12px;
+    gap: 24px;
 }
 
 .ct-value-card {
     display: flex;
     flex-direction: column;
-    padding: 20px 16px;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 10px;
-    transition: all 0.2s ease;
+    padding: 24px;
+    background: var(--white, #ffffff);
+    border: 1px solid var(--gray-200, #e2e8f0);
+    border-radius: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
 }
 
 .ct-value-card:hover {
-    background: var(--white, #ffffff);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    border-color: var(--gray-300, #cbd5e1);
 }
 
 .ct-value-header {
