@@ -11451,11 +11451,22 @@ input[type="radio"].session-radio {
 }
 
 .coupon-input-row {
-  display: flex;
+  display: flex !important;
+  flex-direction: row !important;
   align-items: center;
   gap: var(--space-sm);
   margin-top: var(--space-sm);
   flex-wrap: nowrap;
+}
+
+.coupon-input-row input#couponCode {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: calc(100% - 90px);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: var(--text-base);
 }
 
 .coupon-input-row input {
@@ -11473,7 +11484,9 @@ input[type="radio"].session-radio {
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-.btn-coupon {
+.btn-coupon,
+.coupon-input-row button#applyCouponBtn {
+  display: inline-block !important;
   padding: var(--space-sm) var(--space-md);
   background: var(--color-primary);
   color: white;
