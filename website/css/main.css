@@ -11452,12 +11452,15 @@ input[type="radio"].session-radio {
 
 .coupon-input-row {
   display: flex;
+  align-items: center;
   gap: var(--space-sm);
   margin-top: var(--space-sm);
+  flex-wrap: nowrap;
 }
 
 .coupon-input-row input {
   flex: 1;
+  min-width: 0;
   padding: var(--space-sm) var(--space-md);
   border: 1px solid #d1d5db;
   border-radius: 6px;
@@ -11480,6 +11483,8 @@ input[type="radio"].session-radio {
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 70px;
 }
 
 .btn-coupon:hover {
