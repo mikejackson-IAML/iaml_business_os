@@ -236,14 +236,8 @@
                     <div class="next-program-badge">Next Session</div>
 
                     <div class="program-info">
-                      <div class="program-location">Q1 2026 Update</div>
-                      <div class="program-dates">January 22, 2026</div>
-                    </div>
-
-                    <div class="program-link-container">
-                      <a href="#all-sessions" class="view-all-programs-link">
-                        View All Upcoming Sessions
-                      </a>
+                      <div class="program-location" id="nextSessionName">Loading...</div>
+                      <div class="program-dates" id="nextSessionDate"></div>
                     </div>
                   </div>
                 </div>
@@ -810,6 +804,69 @@
   <script src="../js/mobileMenu.js" defer></script>
   <script src="../js/modals.js" defer></script>
   <script src="../js/main.js" defer></script>
+
+  <!-- Fetch Next Session from Airtable -->
+  <script>
+    (async function loadNextSession() {
+      try {
+        const API_BASE = window.API_BASE || '';
+        // Use the Program Instances table with the Quarterly Updates view
+        const tableId = 'tblympiL1p6PmQz9i';
+        const viewId = 'viw9DTAzy22CUSzWU';
+        const url = `${API_BASE}/api/airtable-programs?table=${encodeURIComponent(tableId)}&view=${encodeURIComponent(viewId)}&maxRecords=1`;
+
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Failed to fetch session');
+
+        const data = await response.json();
+
+        if (data.records && data.records.length > 0) {
+          const fields = data.records[0].fields;
+
+          // Get program name - Programs field is an array of linked record names
+          let sessionName = 'Quarterly Update';
+          if (fields.Programs && Array.isArray(fields.Programs)) {
+            sessionName = fields.Programs[0] || sessionName;
+          } else if (fields['Session Name']) {
+            sessionName = fields['Session Name'];
+          }
+
+          const startDate = fields['Start Date'];
+
+          // Update the hero card
+          const nameEl = document.getElementById('nextSessionName');
+          const dateEl = document.getElementById('nextSessionDate');
+
+          if (nameEl) nameEl.textContent = sessionName;
+
+          if (dateEl && startDate) {
+            // Parse date avoiding timezone issues
+            const [year, month, day] = startDate.split('-').map(Number);
+            const date = new Date(year, month - 1, day);
+            const formatted = date.toLocaleDateString('en-US', {
+              month: 'long',
+              day: 'numeric',
+              year: 'numeric'
+            });
+            dateEl.textContent = formatted;
+          }
+        } else {
+          // No upcoming sessions found
+          const nameEl = document.getElementById('nextSessionName');
+          const dateEl = document.getElementById('nextSessionDate');
+          if (nameEl) nameEl.textContent = 'Coming Soon';
+          if (dateEl) dateEl.textContent = 'Check back for dates';
+        }
+      } catch (error) {
+        console.error('Error loading next session:', error);
+        // Fallback to static content
+        const nameEl = document.getElementById('nextSessionName');
+        const dateEl = document.getElementById('nextSessionDate');
+        if (nameEl) nameEl.textContent = 'Quarterly Update';
+        if (dateEl) dateEl.textContent = '';
+      }
+    })();
+  </script>
 
 </body>
 </html>
