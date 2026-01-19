@@ -814,8 +814,7 @@
         const tableId = 'tblympiL1p6PmQz9i';
         const viewId = 'viw9DTAzy22CUSzWU';
         // Filter for future sessions only (Start Date >= today)
-        const today = new Date().toISOString().split('T')[0];
-        const filterFormula = encodeURIComponent(`IS_AFTER({Start Date}, '${today}')`);
+        const filterFormula = encodeURIComponent(`{Start Date} >= TODAY()`);
         const url = `${API_BASE}/api/airtable-programs?table=${encodeURIComponent(tableId)}&view=${encodeURIComponent(viewId)}&maxRecords=1&filterByFormula=${filterFormula}&sort[0][field]=Start Date&sort[0][direction]=asc`;
 
         const response = await fetch(url);
