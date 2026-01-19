@@ -11488,8 +11488,8 @@ input[type="radio"].session-radio {
 .coupon-input-row button#applyCouponBtn {
   display: inline-block !important;
   padding: var(--space-sm) var(--space-md);
-  background: var(--color-primary);
-  color: white;
+  background: #2563eb !important;
+  color: white !important;
   border: none;
   border-radius: 6px;
   font-weight: 600;
