@@ -884,6 +884,11 @@
     updateNavigationButtons();
     updateLeftPanel();
 
+    // Load programs when showing program step
+    if (stepName === 'program') {
+      loadPrograms();
+    }
+
     // Filter format options when showing format step with pre-selected program
     if (stepName === 'format' && state.program) {
       filterFormatOptions(state.program);
