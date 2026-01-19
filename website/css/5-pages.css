@@ -5992,7 +5992,7 @@
 
 /* Active Step Number */
 .stepper-item.active .stepper-number {
-  background: var(--color-primary);
+  background: var(--blue-primary);
   color: white;
   box-shadow: 0 0 0 4px rgba(var(--color-primary-rgb), 0.1);
 }
@@ -7189,13 +7189,13 @@ input[type="radio"].session-radio {
 }
 
 .session-option input[type="radio"]:checked + .session-card {
-  border-color: var(--color-primary);
+  border-color: var(--blue-primary);
   background: #f0f9ff;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .session-option:hover .session-card {
-  border-color: var(--color-primary);
+  border-color: var(--blue-primary);
 }
 
 .session-dates {
@@ -7580,13 +7580,13 @@ input[type="radio"].session-radio {
 }
 
 .payment-method-option input[type="radio"]:checked + .payment-method-card {
-  border-color: var(--color-primary);
+  border-color: var(--blue-primary);
   background: #f0f9ff;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .payment-method-option:hover .payment-method-card {
-  border-color: var(--color-primary);
+  border-color: var(--blue-primary);
 }
 
 .payment-icon {
@@ -7753,7 +7753,7 @@ input[type="radio"].session-radio {
 }
 
 .btn-calendar {
-  background: var(--color-primary);
+  background: var(--blue-primary);
   color: white;
   border: none;
   padding: var(--space-md) var(--space-lg);
@@ -7840,7 +7840,7 @@ input[type="radio"].session-radio {
   background: #f9fafb;
   padding: var(--space-lg);
   border-radius: 8px;
-  border-left: 4px solid var(--color-primary);
+  border-left: 4px solid var(--blue-primary);
 }
 
 .confirmation-help p {
@@ -7849,7 +7849,7 @@ input[type="radio"].session-radio {
 }
 
 .confirmation-help a {
-  color: var(--color-primary);
+  color: var(--blue-primary);
   text-decoration: none;
   font-weight: 600;
 }
@@ -8117,7 +8117,7 @@ input[type="radio"].session-radio {
   height: 40px;
   margin: 0 auto var(--space-md);
   border: 3px solid #e5e7eb;
-  border-top-color: var(--color-primary);
+  border-top-color: var(--blue-primary);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -8153,13 +8153,13 @@ input[type="radio"].session-radio {
 
 .coupon-input-row input:focus {
   outline: none;
-  border-color: var(--color-primary);
+  border-color: var(--blue-primary);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .btn-coupon {
   padding: var(--space-sm) var(--space-md);
-  background: var(--color-primary);
+  background: var(--blue-primary);
   color: white;
   border: none;
   border-radius: 6px;
@@ -8259,7 +8259,7 @@ input[type="radio"].session-radio {
 }
 
 .stepper-item.active .stepper-number {
-  background: var(--color-primary);
+  background: var(--blue-primary);
   color: white;
 }
 
@@ -8417,7 +8417,7 @@ input[type="radio"].session-radio {
 
   .stepper-item.active::before,
   .stepper-item.completed::before {
-    background: var(--color-primary);
+    background: var(--blue-primary);
   }
 
   .register-nav {
