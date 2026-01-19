@@ -1742,6 +1742,16 @@
         viewId = SESSION_VIEW_IDS[firstBlock]?.[state.format];
       }
 
+      // Debug logging for session loading
+      console.log('loadSessions debug:', {
+        isStandaloneBlock: state.isStandaloneBlock,
+        standaloneBlockName: state.standaloneBlockName,
+        program: state.program,
+        format: state.format,
+        blockSelectionType: state.blockSelectionType,
+        viewId: viewId
+      });
+
       if (!viewId) {
         const programName = state.isStandaloneBlock ? state.standaloneBlockName : state.program;
         console.error(`No view configured for ${programName} / ${state.format}`);
