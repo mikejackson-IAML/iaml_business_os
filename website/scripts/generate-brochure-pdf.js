@@ -274,7 +274,7 @@ function generateCoverPage(programData) {
             </div>
         </div>
         <div class="delivery-options">
-            ${deliveryOptions.map(opt => `<span class="delivery-option">${opt}</span>`).join('\n')}
+            ${deliveryOptions.map(opt => `<span class="delivery-option">${opt === 'Virtual' ? 'Live Virtual' : opt}</span>`).join('\n')}
         </div>
     </div>
 `;
@@ -585,7 +585,7 @@ function generateDetailsPage(programData, pageNum) {
             <div class="detail-card">
                 <h3>Delivery Options</h3>
                 <ul>
-                    ${deliveryOptions.map(opt => `<li>${opt} sessions available</li>`).join('\n')}
+                    ${deliveryOptions.map(opt => `<li>${opt === 'Virtual' ? 'Live Virtual' : opt} sessions available</li>`).join('\n')}
                 </ul>
             </div>
             <div class="detail-card">
