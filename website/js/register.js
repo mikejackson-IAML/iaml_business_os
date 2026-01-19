@@ -181,7 +181,7 @@
     'program': {
       type: 'stats',
       headline: 'Practicing Attorneys, Not Academics',
-      subtext: getYearsOfExcellence() + ' years of training HR professionals who need answers they can use Monday morning.',
+      subtext: 'Decades of training HR professionals who need answers they can use Monday morning.',
       stats: [
         { number: getYearsOfExcellence() + '+', label: 'Years of Excellence' },
         { number: '80,000+', label: 'HR Professionals Trained' },
