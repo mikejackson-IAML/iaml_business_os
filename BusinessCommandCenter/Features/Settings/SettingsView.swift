@@ -1,18 +1,42 @@
 import SwiftUI
 
 struct SettingsView: View {
+    var appState: AppState
+
     var body: some View {
         NavigationStack {
             List {
                 Section("Security") {
                     NavigationLink {
-                        Text("API Key settings")
+                        APIKeyView(appState: appState)
                     } label: {
-                        Label("API Key", systemImage: "key")
+                        HStack {
+                            Label("API Key", systemImage: "key")
+
+                            Spacer()
+
+                            // Status indicator
+                            if appState.hasAPIKey {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundStyle(.green)
+                            } else {
+                                Text("Required")
+                                    .font(.caption)
+                                    .foregroundStyle(.orange)
+                            }
+                        }
                     }
                     .simultaneousGesture(TapGesture().onEnded {
                         HapticManager.shared.tap()
+                        appState.recordActivity()
                     })
+
+                    HStack {
+                        Label("Auto-Lock", systemImage: "lock.rotation")
+                        Spacer()
+                        Text("5 minutes")
+                            .foregroundStyle(.secondary)
+                    }
                 }
 
                 Section("Appearance") {
@@ -21,10 +45,41 @@ struct SettingsView: View {
 
                 Section("About") {
                     HStack {
-                        Text("Version")
+                        Label("Version", systemImage: "info.circle")
                         Spacer()
-                        Text(Constants.App.version)
+                        Text("\(Constants.App.version) (\(Constants.App.build))")
                             .foregroundStyle(.secondary)
+                    }
+
+                    Link(destination: URL(string: "https://docs.iaml.io")!) {
+                        HStack {
+                            Label("Documentation", systemImage: "book")
+                            Spacer()
+                            Image(systemName: "arrow.up.right.square")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .simultaneousGesture(TapGesture().onEnded {
+                        HapticManager.shared.tap()
+                    })
+
+                    Link(destination: URL(string: "https://support.iaml.io")!) {
+                        HStack {
+                            Label("Support", systemImage: "questionmark.circle")
+                            Spacer()
+                            Image(systemName: "arrow.up.right.square")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .simultaneousGesture(TapGesture().onEnded {
+                        HapticManager.shared.tap()
+                    })
+                }
+
+                Section("Debug") {
+                    Button("Lock App Now") {
+                        HapticManager.shared.button()
+                        appState.lock()
                     }
                 }
             }
@@ -48,5 +103,5 @@ struct AppearanceRow: View {
 }
 
 #Preview {
-    SettingsView()
+    SettingsView(appState: AppState())
 }
