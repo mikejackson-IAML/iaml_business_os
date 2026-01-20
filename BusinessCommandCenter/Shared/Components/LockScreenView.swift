@@ -32,6 +32,7 @@ struct LockScreenView: View {
 
             // Unlock button
             Button {
+                HapticManager.shared.button()
                 Task { await authenticate() }
             } label: {
                 HStack(spacing: 12) {
@@ -48,7 +49,7 @@ struct LockScreenView: View {
                 .padding()
                 .background(.blue)
                 .foregroundColor(.white)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .clipShape(RoundedRectangle(cornerRadius: Constants.UI.cornerRadius))
             }
             .disabled(isAuthenticating)
             .padding(.horizontal, 40)
@@ -81,17 +82,22 @@ struct LockScreenView: View {
 
         do {
             let context = try await biometricAuth.authenticate()
+            HapticManager.shared.success()
             appState.unlock(with: context)
         } catch let error as BiometricError {
-            if error.shouldShowAlert, let message = error.errorDescription {
-                errorMessage = message
-                showingError = true
+            if error.shouldShowAlert {
+                HapticManager.shared.error()
+                if let message = error.errorDescription {
+                    errorMessage = message
+                    showingError = true
+                }
             }
             // If biometry locked out, offer passcode fallback
             if case .lockout = error {
                 await authenticateWithPasscode()
             }
         } catch {
+            HapticManager.shared.error()
             errorMessage = error.localizedDescription
             showingError = true
         }
@@ -101,13 +107,18 @@ struct LockScreenView: View {
     private func authenticateWithPasscode() async {
         do {
             let context = try await biometricAuth.authenticateWithPasscodeFallback()
+            HapticManager.shared.success()
             appState.unlock(with: context)
         } catch let error as BiometricError {
-            if error.shouldShowAlert, let message = error.errorDescription {
-                errorMessage = message
-                showingError = true
+            if error.shouldShowAlert {
+                HapticManager.shared.error()
+                if let message = error.errorDescription {
+                    errorMessage = message
+                    showingError = true
+                }
             }
         } catch {
+            HapticManager.shared.error()
             errorMessage = error.localizedDescription
             showingError = true
         }
