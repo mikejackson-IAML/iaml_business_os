@@ -12,6 +12,7 @@ n8n-brain is an MCP server that provides learning capabilities for n8n workflow 
 - **Learns from errors** - Error→fix mappings help avoid repeating mistakes
 - **Tracks credentials** - Service→credential ID mappings (no secrets stored)
 - **Scores confidence** - Determines when to ask vs. act autonomously
+- **Tracks workflow testing** - Registry of all workflows with test status
 
 ### How Confidence Works
 
@@ -69,6 +70,51 @@ lookup_error_fix({
 | Credentials | `register_credential`, `get_credential`, `list_credentials` |
 | Confidence | `calculate_confidence`, `record_action` |
 | Preferences | `set_preference`, `get_preferences` |
+
+### Workflow Testing Registry
+
+Track which workflows have been tested and verified:
+
+```sql
+-- See testing progress
+SELECT * FROM n8n_brain.workflow_test_summary;
+
+-- See workflows needing attention (prioritized)
+SELECT * FROM n8n_brain.workflows_needing_attention;
+
+-- Register a new workflow
+SELECT n8n_brain.register_workflow(
+  'WORKFLOW_ID'::TEXT,
+  'Workflow Name'::TEXT,
+  'category'::TEXT,
+  'Department'::TEXT,
+  'schedule'::TEXT,
+  'Daily 6am'::TEXT,
+  'Description'::TEXT,
+  ARRAY['service1', 'service2']::TEXT[],
+  TRUE,  -- has_error_handling
+  TRUE,  -- has_slack_alerts
+  TRUE   -- has_dashboard_logging
+);
+
+-- Mark workflow as tested
+SELECT n8n_brain.mark_workflow_tested(
+  'WORKFLOW_ID'::TEXT,
+  'verified'::TEXT,
+  'tester_name'::TEXT,
+  'Test notes here'::TEXT
+);
+```
+
+**Test Status Values:**
+| Status | Meaning |
+|--------|---------|
+| `untested` | Never tested |
+| `in_progress` | Currently being tested |
+| `tested` | Tested but not verified in production |
+| `verified` | Verified working in production |
+| `needs_review` | Was working, needs re-testing |
+| `broken` | Known to be broken |
 
 ## Documentation Requirements (MANDATORY)
 
