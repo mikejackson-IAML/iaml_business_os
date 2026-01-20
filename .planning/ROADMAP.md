@@ -133,13 +133,13 @@ This milestone delivers a native iOS app serving as a mobile command center for 
 4. User can authenticate with Face ID or Touch ID to unlock the app
 5. API key is stored in iOS Keychain and never visible in source code or logs
 
-**Plans:** TBD
+**Plans:** 4 plans in 3 waves
 
 Plans:
-- [ ] 06-01: Xcode project setup with SwiftUI, MVVM architecture, and tab navigation
-- [ ] 06-02: Keychain integration and biometric authentication flow
-- [ ] 06-03: Dark mode support and haptic feedback utilities
-- [ ] 06-04: Auto-lock timer and Settings screen for API key management
+- [ ] 06-01-PLAN.md — Xcode project setup with SwiftUI and tab navigation (Wave 1)
+- [ ] 06-02-PLAN.md — Keychain integration and biometric authentication (Wave 2)
+- [ ] 06-03-PLAN.md — Dark mode support and haptic feedback utilities (Wave 2)
+- [ ] 06-04-PLAN.md — Auto-lock timer and Settings API key management (Wave 3)
 
 ---
 
@@ -303,7 +303,7 @@ Plans:
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 1-5 | v1.0 | - | Complete | - |
-| 6. Foundation & Security | v2.0 | 0/4 | Not started | - |
+| 6. Foundation & Security | v2.0 | 0/4 | Planned | - |
 | 7. Health API & Dashboard | v2.0 | 0/5 | Not started | - |
 | 8. Chat API | v2.0 | 0/4 | Not started | - |
 | 9. Chat UI | v2.0 | 0/5 | Not started | - |
