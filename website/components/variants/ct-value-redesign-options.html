@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corporate Training Value Section - Redesign Options</title>
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="../../css/mega-menu.css">
+    <style>
+        /* Demo page layout */
+        body {
+            background: var(--gray-100);
+            min-height: 100vh;
+        }
+
+        .demo-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 48px 24px;
+        }
+
+        .demo-header {
+            margin-bottom: 48px;
+        }
+
+        .demo-header h1 {
+            font-family: var(--font-heading);
+            font-size: 32px;
+            color: var(--blue-dark);
+            margin: 0 0 12px 0;
+        }
+
+        .demo-header p {
+            color: var(--gray-600);
+            font-size: 16px;
+            max-width: 700px;
+            line-height: 1.6;
+        }
+
+        .option-section {
+            margin-bottom: 64px;
+            background: var(--white);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .option-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 24px 32px;
+            background: linear-gradient(135deg, var(--blue-dark) 0%, #1e3a5f 100%);
+        }
+
+        .option-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .option-title {
+            font-family: var(--font-heading);
+            font-size: 22px;
+            color: white;
+            margin: 0;
+        }
+
+        .option-tag {
+            margin-left: auto;
+            padding: 6px 14px;
+            background: var(--gold-accent);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .option-description {
+            padding: 20px 32px;
+            background: var(--gray-50);
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .option-description p {
+            margin: 0;
+            color: var(--gray-700);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .option-description strong {
+            color: var(--blue-dark);
+        }
+
+        .option-demo {
+            padding: 32px;
+        }
+
+        .demo-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--gray-400);
+            margin-bottom: 16px;
+        }
+
+        /* ============================================
+           OPTION 1: Inline Benefits List
+           Matches the Why IAML mega menu style
+           ============================================ */
+        .opt1-benefits {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0 48px;
+        }
+
+        .opt1-benefits li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .opt1-benefits li:nth-child(1),
+        .opt1-benefits li:nth-child(2) {
+            padding-top: 0;
+        }
+
+        .opt1-benefits li:nth-child(3),
+        .opt1-benefits li:nth-child(4) {
+            border-bottom: none;
+        }
+
+        .opt1-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #dcfce7;
+            color: #16a34a;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .opt1-icon svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .opt1-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .opt1-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-900);
+            line-height: 1.3;
+        }
+
+        .opt1-subtitle {
+            font-size: 13px;
+            color: var(--gray-500);
+            line-height: 1.4;
+        }
+
+        /* ============================================
+           OPTION 2: Two Promo-Style Boxes
+           Matches the Programs mega menu promo boxes
+           ============================================ */
+        .opt2-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .opt2-box {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .opt2-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            border-color: var(--gray-300);
+        }
+
+        .opt2-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .opt2-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .opt2-icon--gold {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .opt2-icon--blue {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .opt2-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .opt2-title {
+            font-family: var(--font-heading);
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin: 0;
+            line-height: 1.3;
+        }
+
+        .opt2-items {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .opt2-items li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 0;
+            border-top: 1px solid var(--gray-100);
+        }
+
+        .opt2-items li:first-child {
+            border-top: none;
+            padding-top: 0;
+        }
+
+        .opt2-check {
+            color: #10b981;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .opt2-items span {
+            font-size: 14px;
+            color: var(--gray-600);
+            line-height: 1.4;
+        }
+
+        .opt2-items strong {
+            color: var(--gray-800);
+            font-weight: 600;
+        }
+
+        /* ============================================
+           OPTION 3: Compact Feature Strip
+           Minimal horizontal bar with stats
+           ============================================ */
+        .opt3-strip {
+            display: flex;
+            align-items: stretch;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .opt3-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 16px;
+            text-align: center;
+            border-right: 1px solid var(--gray-200);
+            transition: background 0.2s ease;
+        }
+
+        .opt3-item:last-child {
+            border-right: none;
+        }
+
+        .opt3-item:hover {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .opt3-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: var(--blue-primary);
+            border-radius: 8px;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .opt3-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .opt3-stat {
+            font-family: var(--font-heading);
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--blue-dark);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .opt3-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Comparison table */
+        .comparison-wrapper {
+            background: var(--gray-50);
+            border-radius: 12px;
+            padding: 32px;
+            margin-top: 48px;
+        }
+
+        .comparison-wrapper h3 {
+            font-family: var(--font-heading);
+            color: var(--blue-dark);
+            margin: 0 0 20px 0;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .comparison-table th {
+            text-align: left;
+            padding: 12px 16px;
+            background: var(--white);
+            color: var(--gray-800);
+            font-weight: 600;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        .comparison-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table td:first-child {
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .match-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            background: #dcfce7;
+            color: #16a34a;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <header class="demo-header">
+            <h1>Corporate Training Value Section Redesign</h1>
+            <p>
+                Three design options for the "Why Teams Choose Us" section that match the existing
+                mega menu patterns from Programs and Why IAML menus.
+            </p>
+        </header>
+
+        <!-- OPTION 1 -->
+        <section class="option-section">
+            <div class="option-header">
+                <span class="option-number">1</span>
+                <h2 class="option-title">Inline Benefits List</h2>
+                <span class="option-tag">Recommended</span>
+            </div>
+            <div class="option-description">
+                <p>
+                    <strong>Matches the Why IAML mega menu pattern exactly.</strong> Clean two-column grid with
+                    green checkmark icons and title/subtitle pairs. Professional, scannable, and consistent
+                    with the established design language. Removes visual clutter of separate card boxes.
+                </p>
+            </div>
+            <div class="option-demo">
+                <div class="demo-label">Why Teams Choose Us</div>
+                <ul class="opt1-benefits">
+                    <li>
+                        <span class="opt1-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="opt1-content">
+                            <span class="opt1-title">45 Years of Expertise, Your Location</span>
+                            <span class="opt1-subtitle">The same intensive programs, delivered at your facility</span>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="opt1-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="opt1-content">
+                            <span class="opt1-title">Tailored to Your Specific Risks</span>
+                            <span class="opt1-subtitle">Scenarios built from your industry and policies</span>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="opt1-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="opt1-content">
+                            <span class="opt1-title">Confidential Case Consultations</span>
+                            <span class="opt1-subtitle">Get answers to the questions you can't ask elsewhere</span>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="opt1-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+                        <span class="opt1-content">
+                            <span class="opt1-title">Invest in Your HR Function</span>
+                            <span class="opt1-subtitle">Group rates that build the capability to handle issues in-house</span>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- OPTION 2 -->
+        <section class="option-section">
+            <div class="option-header">
+                <span class="option-number">2</span>
+                <h2 class="option-title">Two Promo-Style Boxes</h2>
+            </div>
+            <div class="option-description">
+                <p>
+                    <strong>Matches the Programs mega menu promo box pattern.</strong> Groups the four benefits
+                    into two themed boxes (Training Quality + Business Value). Uses the same icon box style
+                    as the Programs menu promotional cards. More visual impact while staying consistent.
+                </p>
+            </div>
+            <div class="option-demo">
+                <div class="demo-label">Why Teams Choose Us</div>
+                <div class="opt2-row">
+                    <div class="opt2-box">
+                        <div class="opt2-header">
+                            <div class="opt2-icon opt2-icon--gold">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 14l9-5-9-5-9 5 9 5z"/>
+                                    <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+                                </svg>
+                            </div>
+                            <h4 class="opt2-title">Training Excellence</h4>
+                        </div>
+                        <ul class="opt2-items">
+                            <li>
+                                <svg class="opt2-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                                <span><strong>45 years of expertise</strong> delivered at your facility</span>
+                            </li>
+                            <li>
+                                <svg class="opt2-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                                <span><strong>Tailored scenarios</strong> built from your industry and policies</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="opt2-box">
+                        <div class="opt2-header">
+                            <div class="opt2-icon opt2-icon--blue">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                            </div>
+                            <h4 class="opt2-title">Business Value</h4>
+                        </div>
+                        <ul class="opt2-items">
+                            <li>
+                                <svg class="opt2-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                                <span><strong>Confidential consultations</strong> for questions you can't ask elsewhere</span>
+                            </li>
+                            <li>
+                                <svg class="opt2-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                                <span><strong>Group rates</strong> that build organization-wide capability</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- OPTION 3 -->
+        <section class="option-section">
+            <div class="option-header">
+                <span class="option-number">3</span>
+                <h2 class="option-title">Compact Feature Strip</h2>
+            </div>
+            <div class="option-description">
+                <p>
+                    <strong>Minimal horizontal bar optimized for quick scanning.</strong> Uses stats and key
+                    phrases to communicate value at a glance. Takes less vertical space, doesn't compete
+                    with main menu content. Works well if you want to de-emphasize this section.
+                </p>
+            </div>
+            <div class="option-demo">
+                <div class="demo-label">Why Teams Choose Us</div>
+                <div class="opt3-strip">
+                    <div class="opt3-item">
+                        <div class="opt3-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="opt3-stat">45</span>
+                        <span class="opt3-label">Years Expertise</span>
+                    </div>
+                    <div class="opt3-item">
+                        <div class="opt3-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                        </div>
+                        <span class="opt3-stat">100%</span>
+                        <span class="opt3-label">Customized</span>
+                    </div>
+                    <div class="opt3-item">
+                        <div class="opt3-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                        </div>
+                        <span class="opt3-stat">1:1</span>
+                        <span class="opt3-label">Confidential</span>
+                    </div>
+                    <div class="opt3-item">
+                        <div class="opt3-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                        </div>
+                        <span class="opt3-stat">Group</span>
+                        <span class="opt3-label">Pricing</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comparison -->
+        <div class="comparison-wrapper">
+            <h3>Quick Comparison</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Option 1: Inline List</th>
+                        <th>Option 2: Promo Boxes</th>
+                        <th>Option 3: Feature Strip</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Matches Pattern</td>
+                        <td><span class="match-badge">Why IAML</span></td>
+                        <td><span class="match-badge">Programs</span></td>
+                        <td>New pattern</td>
+                    </tr>
+                    <tr>
+                        <td>Visual Weight</td>
+                        <td>Light</td>
+                        <td>Medium</td>
+                        <td>Light</td>
+                    </tr>
+                    <tr>
+                        <td>Vertical Space</td>
+                        <td>~120px</td>
+                        <td>~180px</td>
+                        <td>~90px</td>
+                    </tr>
+                    <tr>
+                        <td>Detail Level</td>
+                        <td>Full (title + subtitle)</td>
+                        <td>Grouped with context</td>
+                        <td>Stats/highlights only</td>
+                    </tr>
+                    <tr>
+                        <td>Scanability</td>
+                        <td>High</td>
+                        <td>Medium</td>
+                        <td>Highest</td>
+                    </tr>
+                    <tr>
+                        <td>Best For</td>
+                        <td>Consistency with existing</td>
+                        <td>More visual impact</td>
+                        <td>Minimal footprint</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="margin-top: 32px; padding: 24px; background: #fef3c7; border-radius: 12px; border-left: 4px solid var(--gold-accent);">
+            <strong style="color: #92400e;">Recommendation:</strong>
+            <span style="color: #78350f;">Option 1 (Inline Benefits List) provides the best consistency with your existing mega menu design system. It uses the exact same pattern as the "Included With Every Program" section in the Why IAML menu.</span>
+        </div>
+    </div>
+</body>
+</html>
