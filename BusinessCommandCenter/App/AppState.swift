@@ -11,14 +11,16 @@ final class AppState {
     /// LAContext from successful authentication (for Keychain access)
     var authContext: LAContext?
 
-    /// Error message to display
-    var authError: String?
+    /// Whether API key is configured
+    var hasAPIKey = false
 
-    /// Last time user interacted with the app
-    var lastActiveTime: Date?
+    private let lockManager = LockManager.shared
+    private let keychainManager = KeychainManager.shared
 
-    /// Lock timeout in seconds (5 minutes)
-    private let lockTimeout: TimeInterval = 5 * 60
+    init() {
+        // Check if API key exists on init
+        hasAPIKey = keychainManager.hasAPIKey()
+    }
 
     // MARK: - Lock Management
 
@@ -26,7 +28,10 @@ final class AppState {
     func unlock(with context: LAContext) {
         authContext = context
         isLocked = false
-        recordActivity()
+        lockManager.reset()
+
+        // Refresh API key status
+        hasAPIKey = keychainManager.hasAPIKey()
     }
 
     /// Locks the app
@@ -35,23 +40,33 @@ final class AppState {
         authContext = nil
     }
 
-    /// Records user activity timestamp
-    func recordActivity() {
-        lastActiveTime = Date()
+    // MARK: - Scene Phase Handling
+
+    /// Called when app goes to background
+    func handleBackground() {
+        lockManager.recordBackgroundTime()
     }
 
-    /// Checks if app should be locked based on inactivity
-    func checkLockStatus() {
+    /// Called when app returns to active
+    func handleActive() {
         guard !isLocked else { return }
 
-        guard let lastActive = lastActiveTime else {
+        if lockManager.shouldLockAfterBackground() {
             lock()
-            return
         }
+    }
 
-        let elapsed = Date().timeIntervalSince(lastActive)
-        if elapsed >= lockTimeout {
-            lock()
-        }
+    // MARK: - Activity Recording
+
+    /// Records user activity (call on significant user interactions)
+    func recordActivity() {
+        lockManager.recordActivity()
+    }
+
+    // MARK: - API Key Status
+
+    /// Refreshes API key status
+    func refreshAPIKeyStatus() {
+        hasAPIKey = keychainManager.hasAPIKey()
     }
 }

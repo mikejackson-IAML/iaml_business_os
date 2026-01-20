@@ -11,7 +11,7 @@ struct BusinessCommandCenterApp: App {
                 if appState.isLocked {
                     LockScreenView(appState: appState)
                 } else {
-                    ContentView()
+                    ContentView(appState: appState)
                 }
             }
             .onChange(of: scenePhase) { oldPhase, newPhase in
@@ -23,11 +23,9 @@ struct BusinessCommandCenterApp: App {
     private func handleScenePhaseChange(from oldPhase: ScenePhase, to newPhase: ScenePhase) {
         switch newPhase {
         case .background:
-            // Record timestamp when going to background
-            appState.recordActivity()
+            appState.handleBackground()
         case .active:
-            // Check if we should lock when becoming active
-            appState.checkLockStatus()
+            appState.handleActive()
         case .inactive:
             // App in transition (e.g., control center open)
             break

@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    var appState: AppState
     @State private var selectedTab = 0
 
     var body: some View {
@@ -17,7 +18,7 @@ struct ContentView: View {
                 }
                 .tag(1)
 
-            SettingsView()
+            SettingsView(appState: appState)
                 .tabItem {
                     Label("Settings", systemImage: "gear")
                 }
@@ -25,10 +26,11 @@ struct ContentView: View {
         }
         .onChange(of: selectedTab) { _, _ in
             HapticManager.shared.selectionChanged()
+            appState.recordActivity()  // Record tab change as activity
         }
     }
 }
 
 #Preview {
-    ContentView()
+    ContentView(appState: AppState())
 }
