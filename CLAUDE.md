@@ -116,6 +116,33 @@ SELECT n8n_brain.mark_workflow_tested(
 | `needs_review` | Was working, needs re-testing |
 | `broken` | Known to be broken |
 
+### Automated Workflow Testing
+
+Use the `/test-workflow` skill to automatically test n8n workflows:
+
+```bash
+# Test a workflow by ID or name
+/test-workflow HnZQopXL7xjZnX3O
+/test-workflow "Airtable to GHL Sync"
+
+# Create a test specification
+/test-workflow --create-spec
+
+# Run specific test case
+/test-workflow HnZQopXL7xjZnX3O --test-case happy_path
+```
+
+The testing agent:
+1. Executes workflows with test data
+2. Diagnoses failures using n8n-brain error lookups
+3. Applies fixes automatically
+4. Learns from successful fixes
+5. Escalates to human when stuck
+
+**Test specifications** are stored in `.planning/workflow-tests/specs/`
+
+**Architecture:** `business-os/docs/architecture/N8N-WORKFLOW-TESTING-AGENT.md`
+
 ## Documentation Requirements (MANDATORY)
 
 All Business OS components MUST include documentation with CEO summaries. This is non-negotiable.
