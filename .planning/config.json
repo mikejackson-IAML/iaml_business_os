@@ -1,0 +1,12 @@
+{
+  "project": "IAML Business OS",
+  "current_milestone": "v2.0",
+  "workflow": {
+    "mode": "yolo",
+    "depth": "comprehensive",
+    "parallelization": true,
+    "commit_docs": true
+  },
+  "created": "2026-01-20",
+  "notes": "iOS app milestone - native SwiftUI + Next.js API routes"
+}
