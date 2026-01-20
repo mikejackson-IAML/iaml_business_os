@@ -13,6 +13,14 @@
 		A10000004 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000014 /* ChatView.swift */; };
 		A10000005 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000015 /* SettingsView.swift */; };
 		A10000006 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10000016 /* Assets.xcassets */; };
+		A10000007 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000018 /* AppState.swift */; };
+		A10000008 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000019 /* KeychainManager.swift */; };
+		A10000009 /* BiometricAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001A /* BiometricAuth.swift */; };
+		A1000000A /* LockManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001B /* LockManager.swift */; };
+		A1000000B /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001C /* HapticManager.swift */; };
+		A1000000C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001D /* Constants.swift */; };
+		A1000000D /* LockScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001E /* LockScreenView.swift */; };
+		A1000000E /* APIKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001F /* APIKeyView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +32,14 @@
 		A10000015 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		A10000016 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A10000017 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A10000018 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		A10000019 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
+		A1000001A /* BiometricAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricAuth.swift; sourceTree = "<group>"; };
+		A1000001B /* LockManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockManager.swift; sourceTree = "<group>"; };
+		A1000001C /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
+		A1000001D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		A1000001E /* LockScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenView.swift; sourceTree = "<group>"; };
+		A1000001F /* APIKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeyView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +87,7 @@
 			children = (
 				A10000011 /* BusinessCommandCenterApp.swift */,
 				A10000012 /* ContentView.swift */,
+				A10000018 /* AppState.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -113,6 +130,9 @@
 		A10000038 /* Security */ = {
 			isa = PBXGroup;
 			children = (
+				A10000019 /* KeychainManager.swift */,
+				A1000001A /* BiometricAuth.swift */,
+				A1000001B /* LockManager.swift */,
 			);
 			path = Security;
 			sourceTree = "<group>";
@@ -120,6 +140,8 @@
 		A10000039 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				A1000001C /* HapticManager.swift */,
+				A1000001D /* Constants.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -144,6 +166,7 @@
 			isa = PBXGroup;
 			children = (
 				A10000015 /* SettingsView.swift */,
+				A1000001F /* APIKeyView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -151,6 +174,7 @@
 		A1000003D /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				A1000001E /* LockScreenView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -226,9 +250,17 @@
 			files = (
 				A10000001 /* BusinessCommandCenterApp.swift in Sources */,
 				A10000002 /* ContentView.swift in Sources */,
+				A10000007 /* AppState.swift in Sources */,
 				A10000003 /* HomeView.swift in Sources */,
 				A10000004 /* ChatView.swift in Sources */,
 				A10000005 /* SettingsView.swift in Sources */,
+				A1000000E /* APIKeyView.swift in Sources */,
+				A10000008 /* KeychainManager.swift in Sources */,
+				A10000009 /* BiometricAuth.swift in Sources */,
+				A1000000A /* LockManager.swift in Sources */,
+				A1000000B /* HapticManager.swift in Sources */,
+				A1000000C /* Constants.swift in Sources */,
+				A1000000D /* LockScreenView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

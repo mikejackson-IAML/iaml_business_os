@@ -58,7 +58,8 @@ final class LockManager {
 
     /// Resets all timestamps (called on unlock)
     func reset() {
-        backgroundTimestamp = nil
+        // Set to current time so shouldLockAfterBackground returns false
+        backgroundTimestamp = Date()
         lastActivityTimestamp = Date()
     }
 
