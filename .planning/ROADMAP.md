@@ -1,14 +1,16 @@
 # IAML Business OS - Roadmap
 
-## Current Milestone: Complete V1 Workers
+## Milestones
 
-**Objective**: Deploy all 76 planned n8n workers
-
-**Status**: 54/76 Complete (71%)
+- ✅ **v1.0 Business OS Foundation** - Phases 1-5 (workers, dashboard foundation)
+- 🚧 **v2.0 iOS App** - Phases 6-13 (in progress)
 
 ---
 
-## Phase 1: Digital Department Completion ✅
+<details>
+<summary>✅ v1.0 Business OS Foundation (Phases 1-5) - COMPLETE</summary>
+
+## Phase 1: Digital Department Completion
 **Status**: COMPLETE (26/28 workers)
 
 Workers deployed:
@@ -20,104 +22,296 @@ Workers deployed:
 ---
 
 ## Phase 2: Marketing & Lead Intelligence
-**Status**: IN PROGRESS
+**Status**: COMPLETE
 
 ### 2.1 Remaining Digital Workers (2 workers)
-- [ ] DIG-27: Content Freshness Monitor
-- [ ] DIG-28: Broken Resource Monitor
+- [x] DIG-27: Content Freshness Monitor
+- [x] DIG-28: Broken Resource Monitor
 
 ### 2.2 Marketing Analytics (3 workers)
-- [ ] MKT-04: Campaign Analyst
-  - Analyzes campaign_funnel view daily
-  - Generates insights and stores in campaign_metrics table
-  - Alerts on significant changes
-
-- [ ] MKT-05: A/B Test Manager
-  - Monitors message_variants performance
-  - Calculates statistical significance
-  - Auto-pauses underperforming variants
-
-- [ ] MKT-06: Content Performance Tracker
-  - Tracks engagement by content type
-  - Identifies top-performing messages
-  - Recommends content improvements
+- [x] MKT-04: Campaign Analyst
+- [x] MKT-05: A/B Test Manager
+- [x] MKT-06: Content Performance Tracker
 
 ### 2.3 Lead Intelligence (3 workers)
-- [ ] LEAD-09: Lead Scoring Engine
-  - Multi-factor scoring based on engagement
-  - Updates lifecycle_tag automatically
-  - Triggers GHL branch routing
-
-- [ ] LEAD-10: Engagement Decay Monitor
-  - Identifies contacts going cold
-  - Triggers re-engagement workflows
-  - Updates engagement_level field
-
-- [ ] LEAD-11: Re-engagement Trigger
-  - Activates dormant contacts
-  - Personalizes outreach based on history
-  - Tracks re-engagement success rates
+- [x] LEAD-09: Lead Scoring Engine
+- [x] LEAD-10: Engagement Decay Monitor
+- [x] LEAD-11: Re-engagement Trigger
 
 ### 2.4 Operations (3 workers)
-- [ ] OPS-18: Invoice Generator
-- [ ] OPS-19: Payment Reminder
-- [ ] OPS-20: Group Discount Manager
-
-**Deliverables**: 11 additional workers deployed
+- [x] OPS-18: Invoice Generator
+- [x] OPS-19: Payment Reminder
+- [x] OPS-20: Group Discount Manager
 
 ---
 
 ## Phase 3: Advanced Lead & Marketing
-**Status**: PLANNED
+**Status**: COMPLETE
 
 ### 3.1 Marketing Social (2 workers)
-- [ ] MKT-07: Social Engagement Monitor
-- [ ] MKT-08: Competitor Tracker
+- [x] MKT-07: Social Engagement Monitor
+- [x] MKT-08: Competitor Tracker
 
-### 3.2 Lead Management (4 workers)
-- [ ] LEAD-12: List Health Monitor
-- [ ] LEAD-13: Segment Builder
-- [ ] LEAD-14: Suppression Manager
-- [ ] LEAD-15: Bounce Handler
-- [ ] LEAD-16: Unsubscribe Processor
+### 3.2 Lead Management (5 workers)
+- [x] LEAD-12: List Health Monitor
+- [x] LEAD-13: Segment Builder
+- [x] LEAD-14: Suppression Manager
+- [x] LEAD-15: Bounce Handler
+- [x] LEAD-16: Unsubscribe Processor
 
 ### 3.3 Operations Advanced (5 workers)
-- [ ] OPS-21: Corporate Account Manager
-- [ ] OPS-22: Partner Program Tracker
-- [ ] OPS-23: Alumni Network Manager
-- [ ] OPS-24: Referral Tracker
-- [ ] OPS-25: LMS Integration
-
-**Deliverables**: 11 additional workers deployed
+- [x] OPS-21: Corporate Account Manager
+- [x] OPS-22: Partner Program Tracker
+- [x] OPS-23: Alumni Network Manager
+- [x] OPS-24: Referral Tracker
+- [x] OPS-25: LMS Integration
 
 ---
 
 ## Phase 4: Dashboard MVP
-**Status**: PLANNED
+**Status**: COMPLETE
 
-- [ ] Real-time campaign dashboard
-- [ ] Worker health overview
-- [ ] Basic revenue analytics
-
----
-
-## Phase 5: V2 Features
-**Status**: FUTURE
-
-- Predictive lead scoring
-- Dynamic pricing
-- Advanced integrations
+- [x] Real-time campaign dashboard
+- [x] Worker health overview
+- [x] Basic revenue analytics
 
 ---
 
-## Progress Tracking
+## Phase 5: V1 Polish
+**Status**: COMPLETE
 
-| Phase | Workers | Status |
-|-------|---------|--------|
-| Phase 1 | 26 | ✅ COMPLETE |
-| Phase 2 | 11 | 🔄 IN PROGRESS |
-| Phase 3 | 11 | ⏳ PLANNED |
-| Phase 4 | - | ⏳ PLANNED |
-| Phase 5 | - | 📋 FUTURE |
+- [x] n8n-brain learning layer
+- [x] Workflow testing registry
+- [x] Documentation standards
 
-**Total V1 Workers**: 54 complete + 22 remaining = 76 total
+</details>
+
+---
+
+## v2.0 iOS App
+
+**Milestone Goal:** Build a native iOS app that serves as a mobile command center for the Business OS — monitor health, dispatch agents to do work, get notified when things need attention.
+
+### Overview
+
+This milestone delivers a native iOS app serving as a mobile command center for the Business OS. The build order prioritizes security and architecture patterns first (they affect everything), then builds API endpoints before their consuming UI features, and concludes with polish and App Store preparation.
+
+**Build Order Rationale:**
+1. Foundation & Security first - App structure and auth patterns affect all subsequent code
+2. API before UI - Each feature area builds backend first, then iOS UI that consumes it
+3. Dashboard before Chat - Simpler data flow validates architecture before complex streaming
+4. Chat before Quick Actions - Streaming infrastructure enables richer feedback
+5. Notifications last (API then UI) - Depends on all other features being complete
+6. Polish phase - Integration testing, edge cases, App Store submission
+
+### Phase Summary
+
+| Phase | Name | Requirements | Count |
+|-------|------|--------------|-------|
+| 6 | Foundation & Security | IOS-01, IOS-02, IOS-03, AUTH-01, AUTH-02, AUTH-03, AUTH-04 | 7 |
+| 7 | Health API & Dashboard | API-01, API-02, API-03, DASH-01, DASH-02, DASH-03, DASH-04 | 7 |
+| 8 | Chat API | API-04, API-05, API-06, API-07 | 4 |
+| 9 | Chat UI | CHAT-01, CHAT-02, CHAT-03, CHAT-04, CHAT-05, CHAT-06 | 6 |
+| 10 | Workflow API & Quick Actions | API-08, API-09, API-10, API-11, ACT-01, ACT-02, ACT-03, ACT-04 | 8 |
+| 11 | Push Notification API | API-12, API-13, API-14, API-15 | 4 |
+| 12 | Push Notification UI | NOTIF-01, NOTIF-02, NOTIF-03, NOTIF-04, NOTIF-05 | 5 |
+| 13 | Polish & App Store | (integration, testing, submission) | 0 |
+
+**Total:** 41 requirements across 8 phases
+
+---
+
+### Phase 6: Foundation & Security
+**Goal:** Establish the app skeleton with secure authentication that all features depend on
+**Depends on:** Nothing (first phase of milestone)
+**Requirements:** IOS-01, IOS-02, IOS-03, AUTH-01, AUTH-02, AUTH-03, AUTH-04
+
+**Success Criteria** (what must be TRUE):
+1. User can launch app and navigate between Home, Chat, and Settings tabs
+2. App appearance follows system dark/light mode setting
+3. User feels haptic feedback when tapping buttons and completing actions
+4. User can authenticate with Face ID or Touch ID to unlock the app
+5. API key is stored in iOS Keychain and never visible in source code or logs
+
+**Plans:** TBD
+
+Plans:
+- [ ] 06-01: Xcode project setup with SwiftUI, MVVM architecture, and tab navigation
+- [ ] 06-02: Keychain integration and biometric authentication flow
+- [ ] 06-03: Dark mode support and haptic feedback utilities
+- [ ] 06-04: Auto-lock timer and Settings screen for API key management
+
+---
+
+### Phase 7: Health API & Dashboard
+**Goal:** Users can view real-time department health from the Home tab
+**Depends on:** Phase 6 (authentication required for API calls)
+**Requirements:** API-01, API-02, API-03, DASH-01, DASH-02, DASH-03, DASH-04
+
+**Success Criteria** (what must be TRUE):
+1. GET /api/mobile/health returns department health scores as JSON
+2. Health endpoint aggregates data from Supabase and n8n into unified response
+3. Unauthenticated requests to health endpoint receive 401 error
+4. User sees department health scores displayed on Home tab after login
+5. User can pull down to refresh and see updated health data
+
+**Plans:** TBD
+
+Plans:
+- [ ] 07-01: Health API endpoint with Supabase/n8n aggregation
+- [ ] 07-02: API authentication middleware
+- [ ] 07-03: Dashboard UI with health score cards
+- [ ] 07-04: Pull-to-refresh and real-time update mechanism
+- [ ] 07-05: Alert count display with tap-to-view details
+
+---
+
+### Phase 8: Chat API
+**Goal:** Backend supports streaming AI chat with tool use capabilities
+**Depends on:** Phase 7 (uses same auth middleware)
+**Requirements:** API-04, API-05, API-06, API-07
+
+**Success Criteria** (what must be TRUE):
+1. POST /api/mobile/chat accepts message and returns streaming SSE response
+2. Chat endpoint proxies to Claude API without exposing API key to client
+3. Chat endpoint can invoke tools for workflow triggers and data operations
+4. Unauthenticated requests to chat endpoint receive 401 error
+
+**Plans:** TBD
+
+Plans:
+- [ ] 08-01: Chat endpoint structure with SSE streaming
+- [ ] 08-02: Claude API integration with streaming proxy
+- [ ] 08-03: Tool definitions for workflow triggers and data operations
+- [ ] 08-04: Tool execution and response formatting
+
+---
+
+### Phase 9: Chat UI
+**Goal:** Users can have natural language conversations with the AI assistant
+**Depends on:** Phase 8 (requires chat API)
+**Requirements:** CHAT-01, CHAT-02, CHAT-03, CHAT-04, CHAT-05, CHAT-06
+
+**Success Criteria** (what must be TRUE):
+1. User can type message and see it appear in conversation thread
+2. AI response streams in real-time as tokens arrive (not waiting for full response)
+3. User can scroll through conversation history within the session
+4. User can tap microphone button and speak message instead of typing
+5. User sees confirmation dialog before high-risk actions execute
+
+**Plans:** TBD
+
+Plans:
+- [ ] 09-01: Chat UI layout with message bubbles and input field
+- [ ] 09-02: SSE streaming integration with real-time token display
+- [ ] 09-03: Conversation history state management
+- [ ] 09-04: Voice input with Speech framework
+- [ ] 09-05: Risk-based confirmation dialogs for high-risk actions
+
+---
+
+### Phase 10: Workflow API & Quick Actions
+**Goal:** Users can trigger workflows with one tap from a grid of quick actions
+**Depends on:** Phase 9 (chat can also trigger workflows)
+**Requirements:** API-08, API-09, API-10, API-11, ACT-01, ACT-02, ACT-03, ACT-04
+
+**Success Criteria** (what must be TRUE):
+1. POST /api/mobile/workflows/trigger starts specified n8n workflow
+2. Workflow trigger returns execution ID for status tracking
+3. GET /api/mobile/workflows returns list of available quick actions
+4. User sees grid of quick action buttons on Home tab
+5. User taps action button, sees loading state, then success/failure feedback
+
+**Plans:** TBD
+
+Plans:
+- [ ] 10-01: Workflow trigger API endpoint with n8n integration
+- [ ] 10-02: Workflow list API endpoint
+- [ ] 10-03: Quick actions grid UI component
+- [ ] 10-04: Workflow execution feedback (loading, success, failure states)
+- [ ] 10-05: Configurable actions in Settings
+
+---
+
+### Phase 11: Push Notification API
+**Goal:** Backend can send push notifications for critical alerts, completions, and digests
+**Depends on:** Phase 10 (workflow completions trigger notifications)
+**Requirements:** API-12, API-13, API-14, API-15
+
+**Success Criteria** (what must be TRUE):
+1. POST /api/mobile/notifications/register stores APNs device token
+2. System can send push notification via APNs for critical alerts
+3. System can send push notification when triggered tasks complete
+4. System generates and sends daily digest notification
+
+**Plans:** TBD
+
+Plans:
+- [ ] 11-01: APNs device token registration endpoint
+- [ ] 11-02: APNs integration for sending push notifications
+- [ ] 11-03: Critical alert notification triggers
+- [ ] 11-04: Task completion notification triggers
+- [ ] 11-05: Daily digest generation and scheduling
+
+---
+
+### Phase 12: Push Notification UI
+**Goal:** Users receive and can act on push notifications
+**Depends on:** Phase 11 (requires notification API)
+**Requirements:** NOTIF-01, NOTIF-02, NOTIF-03, NOTIF-04, NOTIF-05
+
+**Success Criteria** (what must be TRUE):
+1. User receives push notification when critical alert fires (system down, payment failed)
+2. User receives push notification when triggered task completes
+3. User receives daily digest notification summarizing overnight activity
+4. Tapping notification opens app to relevant screen
+5. User can configure notification preferences in Settings
+
+**Plans:** TBD
+
+Plans:
+- [ ] 12-01: Push notification permission request and token handling
+- [ ] 12-02: Notification handling for different types (critical, completion, digest)
+- [ ] 12-03: Deep linking from notification tap to relevant screen
+- [ ] 12-04: Notification preferences UI in Settings
+
+---
+
+### Phase 13: Polish & App Store
+**Goal:** App is production-ready and submitted to App Store
+**Depends on:** Phase 12 (all features complete)
+**Requirements:** (none - integration and polish)
+
+**Success Criteria** (what must be TRUE):
+1. All features work together in end-to-end user flows
+2. App handles network errors, timeouts, and edge cases gracefully
+3. App passes App Store review guidelines
+4. App is submitted to App Store for review
+
+**Plans:** TBD
+
+Plans:
+- [ ] 13-01: End-to-end integration testing
+- [ ] 13-02: Error handling and edge case polish
+- [ ] 13-03: App Store assets (screenshots, description, metadata)
+- [ ] 13-04: App Store submission
+
+---
+
+## Progress
+
+| Phase | Milestone | Plans Complete | Status | Completed |
+|-------|-----------|----------------|--------|-----------|
+| 1-5 | v1.0 | - | Complete | - |
+| 6. Foundation & Security | v2.0 | 0/4 | Not started | - |
+| 7. Health API & Dashboard | v2.0 | 0/5 | Not started | - |
+| 8. Chat API | v2.0 | 0/4 | Not started | - |
+| 9. Chat UI | v2.0 | 0/5 | Not started | - |
+| 10. Workflow API & Quick Actions | v2.0 | 0/5 | Not started | - |
+| 11. Push Notification API | v2.0 | 0/5 | Not started | - |
+| 12. Push Notification UI | v2.0 | 0/4 | Not started | - |
+| 13. Polish & App Store | v2.0 | 0/4 | Not started | - |
+
+---
+*Roadmap created: 2026-01-20*
+*Last updated: 2026-01-20*

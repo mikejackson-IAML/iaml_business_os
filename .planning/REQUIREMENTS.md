@@ -119,53 +119,53 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| IOS-01 | TBD | Pending |
-| IOS-02 | TBD | Pending |
-| IOS-03 | TBD | Pending |
-| AUTH-01 | TBD | Pending |
-| AUTH-02 | TBD | Pending |
-| AUTH-03 | TBD | Pending |
-| AUTH-04 | TBD | Pending |
-| DASH-01 | TBD | Pending |
-| DASH-02 | TBD | Pending |
-| DASH-03 | TBD | Pending |
-| DASH-04 | TBD | Pending |
-| CHAT-01 | TBD | Pending |
-| CHAT-02 | TBD | Pending |
-| CHAT-03 | TBD | Pending |
-| CHAT-04 | TBD | Pending |
-| CHAT-05 | TBD | Pending |
-| CHAT-06 | TBD | Pending |
-| ACT-01 | TBD | Pending |
-| ACT-02 | TBD | Pending |
-| ACT-03 | TBD | Pending |
-| ACT-04 | TBD | Pending |
-| NOTIF-01 | TBD | Pending |
-| NOTIF-02 | TBD | Pending |
-| NOTIF-03 | TBD | Pending |
-| NOTIF-04 | TBD | Pending |
-| NOTIF-05 | TBD | Pending |
-| API-01 | TBD | Pending |
-| API-02 | TBD | Pending |
-| API-03 | TBD | Pending |
-| API-04 | TBD | Pending |
-| API-05 | TBD | Pending |
-| API-06 | TBD | Pending |
-| API-07 | TBD | Pending |
-| API-08 | TBD | Pending |
-| API-09 | TBD | Pending |
-| API-10 | TBD | Pending |
-| API-11 | TBD | Pending |
-| API-12 | TBD | Pending |
-| API-13 | TBD | Pending |
-| API-14 | TBD | Pending |
-| API-15 | TBD | Pending |
+| IOS-01 | Phase 6 | Pending |
+| IOS-02 | Phase 6 | Pending |
+| IOS-03 | Phase 6 | Pending |
+| AUTH-01 | Phase 6 | Pending |
+| AUTH-02 | Phase 6 | Pending |
+| AUTH-03 | Phase 6 | Pending |
+| AUTH-04 | Phase 6 | Pending |
+| DASH-01 | Phase 7 | Pending |
+| DASH-02 | Phase 7 | Pending |
+| DASH-03 | Phase 7 | Pending |
+| DASH-04 | Phase 7 | Pending |
+| CHAT-01 | Phase 9 | Pending |
+| CHAT-02 | Phase 9 | Pending |
+| CHAT-03 | Phase 9 | Pending |
+| CHAT-04 | Phase 9 | Pending |
+| CHAT-05 | Phase 9 | Pending |
+| CHAT-06 | Phase 9 | Pending |
+| ACT-01 | Phase 10 | Pending |
+| ACT-02 | Phase 10 | Pending |
+| ACT-03 | Phase 10 | Pending |
+| ACT-04 | Phase 10 | Pending |
+| NOTIF-01 | Phase 12 | Pending |
+| NOTIF-02 | Phase 12 | Pending |
+| NOTIF-03 | Phase 12 | Pending |
+| NOTIF-04 | Phase 12 | Pending |
+| NOTIF-05 | Phase 12 | Pending |
+| API-01 | Phase 7 | Pending |
+| API-02 | Phase 7 | Pending |
+| API-03 | Phase 7 | Pending |
+| API-04 | Phase 8 | Pending |
+| API-05 | Phase 8 | Pending |
+| API-06 | Phase 8 | Pending |
+| API-07 | Phase 8 | Pending |
+| API-08 | Phase 10 | Pending |
+| API-09 | Phase 10 | Pending |
+| API-10 | Phase 10 | Pending |
+| API-11 | Phase 10 | Pending |
+| API-12 | Phase 11 | Pending |
+| API-13 | Phase 11 | Pending |
+| API-14 | Phase 11 | Pending |
+| API-15 | Phase 11 | Pending |
 
 **Coverage:**
-- v2.0 requirements: 37 total
-- Mapped to phases: 0
-- Unmapped: 37 (pending roadmap creation)
+- v2.0 requirements: 41 total
+- Mapped to phases: 41
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-01-20*
-*Last updated: 2026-01-20 after initial definition*
+*Last updated: 2026-01-20 after roadmap creation*
