@@ -115,38 +115,14 @@ const getHeaderHTML = () => `
               </div>
               <blockquote class="testimonial-panel-quote"><p>"The opportunity to interact through role playing and ask questions specific to our business was very helpful."</p><cite><strong>Coreen Oradee</strong><span>Employee Relations Specialist</span><span>American Family Insurance</span></cite></blockquote>
           </div>
-          <div class="ct-value-wrapper">
-              <div class="ct-value-label">Why Teams Choose Us</div>
-              <div class="ct-value-row">
-                  <div class="ct-value-card">
-                      <div class="ct-value-header">
-                          <div class="ct-value-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
-                          <h4 class="ct-value-title">45 Years of Expertise</h4>
-                      </div>
-                      <p class="ct-value-desc">Same intensive programs, delivered at your facility</p>
-                  </div>
-                  <div class="ct-value-card">
-                      <div class="ct-value-header">
-                          <div class="ct-value-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
-                          <h4 class="ct-value-title">Tailored to Your Risks</h4>
-                      </div>
-                      <p class="ct-value-desc">Scenarios built from your industry and policies</p>
-                  </div>
-                  <div class="ct-value-card">
-                      <div class="ct-value-header">
-                          <div class="ct-value-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg></div>
-                          <h4 class="ct-value-title">Confidential Consultations</h4>
-                      </div>
-                      <p class="ct-value-desc">Get answers to questions you can't ask elsewhere</p>
-                  </div>
-                  <div class="ct-value-card">
-                      <div class="ct-value-header">
-                          <div class="ct-value-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg></div>
-                          <h4 class="ct-value-title">Invest in Your Team</h4>
-                      </div>
-                      <p class="ct-value-desc">Group rates that build organization-wide capability</p>
-                  </div>
-              </div>
+          <div class="ct-benefits-row">
+              <h3 class="mega-menu-heading">Why Teams Choose Us</h3>
+              <ul class="ct-benefits-grid">
+                  <li><span class="ct-benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="ct-benefit-content"><span class="ct-benefit-title">45 Years of Expertise, Your Location</span><span class="ct-benefit-subtitle">The same intensive programs, delivered at your facility</span></span></li>
+                  <li><span class="ct-benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="ct-benefit-content"><span class="ct-benefit-title">Tailored to Your Specific Risks</span><span class="ct-benefit-subtitle">Scenarios built from your industry and policies</span></span></li>
+                  <li><span class="ct-benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="ct-benefit-content"><span class="ct-benefit-title">Confidential Case Consultations</span><span class="ct-benefit-subtitle">Get answers to the questions you can't ask elsewhere</span></span></li>
+                  <li><span class="ct-benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="ct-benefit-content"><span class="ct-benefit-title">Invest in Your HR Function</span><span class="ct-benefit-subtitle">Group rates that build the capability to handle issues in-house</span></span></li>
+              </ul>
           </div>
       </div>
   </div>
