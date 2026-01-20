@@ -9,16 +9,16 @@ Requirements for iOS app milestone. Each maps to roadmap phases.
 
 ### iOS App - Foundation
 
-- [ ] **IOS-01**: User can launch app and see tab bar with Home, Chat, and Settings tabs
-- [ ] **IOS-02**: App supports dark mode following system appearance
-- [ ] **IOS-03**: App provides haptic feedback on user actions
+- [x] **IOS-01**: User can launch app and see tab bar with Home, Chat, and Settings tabs
+- [x] **IOS-02**: App supports dark mode following system appearance
+- [x] **IOS-03**: App provides haptic feedback on user actions
 
 ### iOS App - Authentication
 
-- [ ] **AUTH-01**: User can authenticate with Face ID or Touch ID to unlock the app
-- [ ] **AUTH-02**: API key is stored securely in iOS Keychain (never in source code)
-- [ ] **AUTH-03**: App auto-locks after 5 minutes of inactivity, requiring re-authentication
-- [ ] **AUTH-04**: User can view/update their API key in Settings
+- [x] **AUTH-01**: User can authenticate with Face ID or Touch ID to unlock the app
+- [x] **AUTH-02**: API key is stored securely in iOS Keychain (never in source code)
+- [x] **AUTH-03**: App auto-locks after 5 minutes of inactivity, requiring re-authentication
+- [x] **AUTH-04**: User can view/update their API key in Settings
 
 ### iOS App - Dashboard
 
@@ -119,13 +119,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| IOS-01 | Phase 6 | Pending |
-| IOS-02 | Phase 6 | Pending |
-| IOS-03 | Phase 6 | Pending |
-| AUTH-01 | Phase 6 | Pending |
-| AUTH-02 | Phase 6 | Pending |
-| AUTH-03 | Phase 6 | Pending |
-| AUTH-04 | Phase 6 | Pending |
+| IOS-01 | Phase 6 | Complete |
+| IOS-02 | Phase 6 | Complete |
+| IOS-03 | Phase 6 | Complete |
+| AUTH-01 | Phase 6 | Complete |
+| AUTH-02 | Phase 6 | Complete |
+| AUTH-03 | Phase 6 | Complete |
+| AUTH-04 | Phase 6 | Complete |
 | DASH-01 | Phase 7 | Pending |
 | DASH-02 | Phase 7 | Pending |
 | DASH-03 | Phase 7 | Pending |
