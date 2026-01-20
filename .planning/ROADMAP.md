@@ -155,14 +155,13 @@ Plans:
 4. User sees department health scores displayed on Home tab after login
 5. User can pull down to refresh and see updated health data
 
-**Plans:** TBD
+**Plans:** 4 plans in 3 waves
 
 Plans:
-- [ ] 07-01: Health API endpoint with Supabase/n8n aggregation
-- [ ] 07-02: API authentication middleware
-- [ ] 07-03: Dashboard UI with health score cards
-- [ ] 07-04: Pull-to-refresh and real-time update mechanism
-- [ ] 07-05: Alert count display with tap-to-view details
+- [ ] 07-01-PLAN.md — Health API endpoint with auth and data aggregation (Wave 1)
+- [ ] 07-02-PLAN.md — iOS networking layer with Codable models (Wave 2)
+- [ ] 07-03-PLAN.md — Dashboard UI with health score cards and pull-to-refresh (Wave 3)
+- [ ] 07-04-PLAN.md — Alert count display with tap-to-view details (Wave 3)
 
 ---
 
@@ -304,7 +303,7 @@ Plans:
 |-------|-----------|----------------|--------|-----------|
 | 1-5 | v1.0 | - | Complete | - |
 | 6. Foundation & Security | v2.0 | 4/4 | Complete | 2026-01-20 |
-| 7. Health API & Dashboard | v2.0 | 0/5 | Not started | - |
+| 7. Health API & Dashboard | v2.0 | 0/4 | Planned | - |
 | 8. Chat API | v2.0 | 0/4 | Not started | - |
 | 9. Chat UI | v2.0 | 0/5 | Not started | - |
 | 10. Workflow API & Quick Actions | v2.0 | 0/5 | Not started | - |
@@ -314,4 +313,4 @@ Plans:
 
 ---
 *Roadmap created: 2026-01-20*
-*Last updated: 2026-01-20 after Phase 6 completion*
+*Last updated: 2026-01-20 after Phase 7 planning*
