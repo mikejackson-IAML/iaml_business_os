@@ -123,8 +123,16 @@ function initBenefitSteps() {
     if (visualImg && visualImages[index]) {
       visualImg.style.opacity = "0";
       requestAnimationFrame(() => {
-        visualImg.src = visualImages[index];
         visualImg.onload = () => (visualImg.style.opacity = "1");
+        visualImg.onerror = () => {
+          // Fall back to default if custom image fails
+          if (index === 1 && creditsOverride) {
+            visualImg.src = defaultVisualImages[1];
+          } else {
+            visualImg.style.opacity = "1";
+          }
+        };
+        visualImg.src = visualImages[index];
       });
     }
 
