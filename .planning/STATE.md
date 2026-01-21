@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-20)
 ## Current Position
 
 Phase: 11 of 13 (Push Notification API)
-Plan: 1 of 4 complete
+Plan: 2 of 4 complete
 Status: In progress
-Last activity: 2026-01-21 - Completed 11-01-PLAN.md (Notification Schema & Types)
+Last activity: 2026-01-21 - Completed 11-03-PLAN.md (Device Registration Endpoint)
 
-Progress: [███████████████░] 69%
+Progress: [████████████████░] 72%
 
 ## Performance Metrics
 
@@ -32,10 +32,10 @@ Progress: [███████████████░] 69%
 | 8 | 4 | 11 min | 2.8 min |
 | 9 | 5 | 10 min | 2.0 min |
 | 10 | 6 | 10 min | 1.7 min |
-| 11 | 1 | 1 min | 1.0 min |
+| 11 | 2 | 2 min | 1.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 10-03 (2 min), 10-04 (1 min), 10-05 (1 min), 10-06 (2 min), 11-01 (1 min)
+- Last 5 plans: 10-04 (1 min), 10-05 (1 min), 10-06 (2 min), 11-01 (1 min), 11-03 (1 min)
 - Trend: Consistently fast execution
 
 *Updated after each plan completion*
@@ -121,6 +121,9 @@ Recent decisions affecting current work:
 - [11-01]: Status CHECK constraint (active/bounced/revoked) for token lifecycle
 - [11-01]: IANA timezone format for proper DST handling
 - [11-01]: Integer storage (0-23) for quiet hours enables simple hour comparison
+- [11-03]: Token format validation (64 hex chars) catches malformed APNs tokens early
+- [11-03]: Upsert with bounce recovery reactivates previously bounced tokens on re-registration
+- [11-03]: Lenient timezone validation accepts Area/Location and short abbreviations
 
 ### Pending Todos
 
@@ -132,8 +135,8 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-21T06:01:23Z
-Stopped at: Completed 11-01-PLAN.md (Notification Schema & Types)
+Last session: 2026-01-21T06:04:23Z
+Stopped at: Completed 11-03-PLAN.md (Device Registration Endpoint)
 Resume file: None
 
 ---
@@ -152,8 +155,8 @@ Resume file: None
 | 8 | Chat API | Complete |
 | 9 | Chat UI | Complete |
 | 10 | Workflow API & Quick Actions | Complete |
-| 11 | Push Notification API | In progress (1/4) |
+| 11 | Push Notification API | In progress (2/4) |
 | 12 | Push Notification UI | Not started |
 | 13 | Polish & App Store | Not started |
 
-**Next step:** `/gsd:execute-plan 11-02` to continue with Device Registration Endpoint
+**Next step:** `/gsd:execute-plan 11-04` to continue with Send Notification Endpoint
