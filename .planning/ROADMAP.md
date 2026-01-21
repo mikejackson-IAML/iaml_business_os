@@ -222,14 +222,15 @@ Plans:
 4. User sees grid of quick action buttons on Home tab
 5. User taps action button, sees loading state, then success/failure feedback
 
-**Plans:** TBD
+**Plans:** 6 plans in 5 waves
 
 Plans:
-- [ ] 10-01: Workflow trigger API endpoint with n8n integration
-- [ ] 10-02: Workflow list API endpoint
-- [ ] 10-03: Quick actions grid UI component
-- [ ] 10-04: Workflow execution feedback (loading, success, failure states)
-- [ ] 10-05: Configurable actions in Settings
+- [ ] 10-01-PLAN.md — Database migration and iOS models (Wave 1)
+- [ ] 10-02-PLAN.md — Workflow trigger and list API endpoints (Wave 2)
+- [ ] 10-03-PLAN.md — Toast notification component (Wave 2)
+- [ ] 10-04-PLAN.md — Chat tools update and iOS networking (Wave 3)
+- [ ] 10-05-PLAN.md — Quick actions grid UI on Home tab (Wave 4)
+- [ ] 10-06-PLAN.md — Settings UI for action configuration (Wave 5)
 
 ---
 
@@ -307,11 +308,11 @@ Plans:
 | 7. Health API & Dashboard | v2.0 | 4/4 | Complete | 2026-01-20 |
 | 8. Chat API | v2.0 | 4/4 | Complete | 2026-01-20 |
 | 9. Chat UI | v2.0 | 6/6 | Complete | 2026-01-21 |
-| 10. Workflow API & Quick Actions | v2.0 | 0/5 | Not started | - |
+| 10. Workflow API & Quick Actions | v2.0 | 0/6 | Not started | - |
 | 11. Push Notification API | v2.0 | 0/5 | Not started | - |
 | 12. Push Notification UI | v2.0 | 0/4 | Not started | - |
 | 13. Polish & App Store | v2.0 | 0/4 | Not started | - |
 
 ---
 *Roadmap created: 2026-01-20*
-*Last updated: 2026-01-21 after Phase 9 execution*
+*Last updated: 2026-01-21 after Phase 10 planning*
