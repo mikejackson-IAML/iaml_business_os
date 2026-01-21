@@ -1,7 +1,13 @@
 // Mobile Chat API - Types and helpers for Claude streaming
 // Provides mobile-optimized chat types for iOS app consumption
 
-import type { Tool } from '@anthropic-ai/sdk/resources/messages';
+import Anthropic from '@anthropic-ai/sdk';
+import type {
+  Tool,
+  MessageParam,
+  ContentBlockParam,
+  ToolResultBlockParam,
+} from '@anthropic-ai/sdk/resources/messages';
 import { getMobileHealthData } from './mobile-health';
 
 // ==================== Message Types ====================
@@ -279,4 +285,171 @@ async function executeQueryWorkflows(_input: QueryWorkflowsInput): Promise<strin
     note: 'For now, use the n8n dashboard to view workflows',
     workflows: [],
   });
+}
+
+// ==================== Chat Processing with Tools ====================
+
+/**
+ * Process a chat conversation with tool support
+ * Handles the conversation loop when Claude requests tool use
+ *
+ * @param anthropic - Anthropic client instance
+ * @param messages - Conversation history
+ * @param onEvent - Callback for each SSE event to stream
+ * @returns Stop reason and final message content
+ */
+export async function processChatWithTools(
+  anthropic: Anthropic,
+  messages: ChatMessage[],
+  onEvent: (event: ChatEvent) => void
+): Promise<{ stopReason: string; content: string }> {
+  // Convert to Anthropic message format
+  let conversationMessages: MessageParam[] = messages.map(m => ({
+    role: m.role,
+    content: m.content,
+  }));
+
+  // Maximum tool use iterations (prevent infinite loops)
+  const MAX_TOOL_ITERATIONS = 5;
+  let iterations = 0;
+  let finalContent = '';
+
+  while (iterations < MAX_TOOL_ITERATIONS) {
+    iterations++;
+
+    // Call Claude with streaming
+    const stream = anthropic.messages.stream({
+      model: 'claude-sonnet-4-5-20250929',
+      max_tokens: 4096,
+      system: SYSTEM_PROMPT,
+      messages: conversationMessages,
+      tools: CHAT_TOOLS,
+    });
+
+    // Track current response content blocks
+    const contentBlocks: ContentBlockParam[] = [];
+    let currentToolUseId: string | null = null;
+    let currentToolName: string | null = null;
+    let toolInputJson = '';
+
+    // Process streaming events
+    for await (const event of stream) {
+      switch (event.type) {
+        case 'content_block_start':
+          if (event.content_block.type === 'tool_use') {
+            currentToolUseId = event.content_block.id;
+            currentToolName = event.content_block.name;
+            toolInputJson = '';
+            onEvent({
+              type: 'tool_use_start',
+              id: event.content_block.id,
+              name: event.content_block.name,
+            });
+          }
+          break;
+
+        case 'content_block_delta':
+          if (event.delta.type === 'text_delta') {
+            finalContent += event.delta.text;
+            onEvent({ type: 'text', content: event.delta.text });
+          } else if (event.delta.type === 'input_json_delta') {
+            toolInputJson += event.delta.partial_json;
+          }
+          break;
+
+        case 'content_block_stop':
+          if (currentToolUseId && currentToolName) {
+            // Parse complete tool input
+            let toolInput: Record<string, unknown> = {};
+            try {
+              if (toolInputJson) {
+                toolInput = JSON.parse(toolInputJson);
+              }
+            } catch {
+              console.error('Failed to parse tool input:', toolInputJson);
+            }
+
+            // Add tool use block to content
+            contentBlocks.push({
+              type: 'tool_use',
+              id: currentToolUseId,
+              name: currentToolName,
+              input: toolInput,
+            });
+
+            // Send tool_use event to client
+            onEvent({
+              type: 'tool_use',
+              id: currentToolUseId,
+              name: currentToolName,
+              input: toolInput,
+            });
+
+            currentToolUseId = null;
+            currentToolName = null;
+            toolInputJson = '';
+          }
+          break;
+      }
+    }
+
+    // Get final message to check stop reason
+    const finalMessage = await stream.finalMessage();
+
+    // If no tool use, we're done
+    if (finalMessage.stop_reason !== 'tool_use') {
+      return {
+        stopReason: finalMessage.stop_reason || 'end_turn',
+        content: finalContent,
+      };
+    }
+
+    // Execute tools and continue conversation
+    const toolUseBlocks = finalMessage.content.filter(
+      (block): block is Anthropic.ToolUseBlock => block.type === 'tool_use'
+    );
+
+    const toolResults: ToolResultBlockParam[] = [];
+
+    for (const toolUse of toolUseBlocks) {
+      // Execute the tool
+      const result = await executeTool(
+        toolUse.name,
+        toolUse.input as Record<string, unknown>
+      );
+
+      // Send tool result event to client
+      onEvent({
+        type: 'tool_result',
+        id: toolUse.id,
+        content: result,
+      });
+
+      toolResults.push({
+        type: 'tool_result',
+        tool_use_id: toolUse.id,
+        content: result,
+      });
+    }
+
+    // Add assistant message with tool use to conversation
+    conversationMessages.push({
+      role: 'assistant',
+      content: finalMessage.content,
+    });
+
+    // Add tool results as user message
+    conversationMessages.push({
+      role: 'user',
+      content: toolResults,
+    });
+
+    // Continue loop to get Claude's response to tool results
+  }
+
+  // If we hit max iterations, return what we have
+  return {
+    stopReason: 'max_iterations',
+    content: finalContent,
+  };
 }
