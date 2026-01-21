@@ -245,6 +245,11 @@
     },
     'Special Issues in Employment Law': {
       'in-person': 'viw2IfjMXttng3xlW'
+    },
+
+    // Standalone programs (not part of certificate programs)
+    'Quarterly Employment Law Update': {
+      'virtual': 'viw9DTAzy22CUSzWU'
     }
   };
 
@@ -439,7 +444,11 @@
     // Standalone block program flag
     // When true, user is registering for a standalone block (not a certificate program)
     isStandaloneBlock: false,
-    standaloneBlockName: '' // The name of the standalone block program
+    standaloneBlockName: '', // The name of the standalone block program
+
+    // Session auto-selection flag
+    // When true, session was auto-fetched (e.g., for quarterly updates) - skip session step
+    sessionAutoSelected: false
   };
 
   // ============================================
@@ -727,12 +736,15 @@
 
     // STANDALONE BLOCK PROGRAMS: Simplified flow (no program/blocks selection)
     // Flow: Format → Session → Contact → Payment
+    // Special case: If session is auto-selected, skip format and session steps
     if (state.isStandaloneBlock) {
       if (!state.format) {
         steps.push('format');
       }
-      // Always show session step for standalone blocks (no on-demand)
-      steps.push('session');
+      // Skip session step if session was auto-selected (e.g., quarterly updates)
+      if (!state.sessionAutoSelected) {
+        steps.push('session');
+      }
       steps.push('contact', 'payment-method');
       return steps;
     }
@@ -1868,6 +1880,32 @@
     }
   }
 
+  // Fetch the next upcoming session for a given view (for auto-selection)
+  // Returns the first session with Start Date >= today, sorted by date
+  async function fetchNextUpcomingSession(viewId) {
+    try {
+      // Filter for future sessions only (Start Date >= today)
+      const filterFormula = encodeURIComponent(`{Start Date} >= TODAY()`);
+      const response = await fetch(
+        `/api/airtable-programs?table=tblympiL1p6PmQz9i&view=${encodeURIComponent(viewId)}&maxRecords=1&filterByFormula=${filterFormula}&sort[0][field]=Start Date&sort[0][direction]=asc`
+      );
+
+      if (!response.ok) {
+        console.error('Failed to fetch next session:', response.status);
+        return null;
+      }
+
+      const data = await response.json();
+      if (data.records && data.records.length > 0) {
+        return data.records[0];
+      }
+      return null;
+    } catch (error) {
+      console.error('Error fetching next upcoming session:', error);
+      return null;
+    }
+  }
+
   // ============================================
   // BLOCKS SELECTION
   // ============================================
@@ -2940,6 +2978,35 @@
       // Set pricing
       state.listPrice = blockData.price;
       state.finalPrice = blockData.price;
+
+      // SPECIAL CASE: Single-format programs (e.g., Quarterly Updates with only 'virtual')
+      // Auto-select format, skip session step entirely, go directly to contact
+      if (blockData.formats.length === 1) {
+        const autoFormat = blockData.formats[0];
+        state.format = autoFormat;
+        state.sessionAutoSelected = true; // Always skip session step for single-format programs
+
+        // Try to fetch the next upcoming session for display purposes (non-blocking)
+        const viewId = SESSION_VIEW_IDS[blockName]?.[autoFormat];
+        if (viewId) {
+          const nextSession = await fetchNextUpcomingSession(viewId);
+          if (nextSession && nextSession.fields) {
+            state.sessionId = nextSession.id;
+            state.sessionRecord = nextSession;
+            state.city = nextSession.fields['City'] || '';
+            state.stateProvince = nextSession.fields['State/Province'] || '';
+            state.venueName = nextSession.fields['Venue Name'] || '';
+          }
+        }
+
+        // Go directly to contact step (skip format and session)
+        state.steps = determineSteps();
+        buildStepperUI();
+        showStep('contact');
+        state.preselectedFromURL = true;
+        clearURLParams();
+        return true;
+      }
 
       // If format is provided and valid, set it
       if (format && blockData.formats.includes(format)) {
