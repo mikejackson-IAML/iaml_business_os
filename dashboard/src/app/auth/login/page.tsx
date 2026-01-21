@@ -107,8 +107,15 @@ function LoginFormSkeleton() {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[hsl(var(--background))]">
-      <div className="w-full max-w-md p-8">
+    <div className="min-h-screen flex items-center justify-center">
+      <div
+        className="w-full max-w-md p-8 rounded-xl border border-[hsl(var(--border))]"
+        style={{
+          background: 'hsl(218 30% 15% / 0.8)',
+          backdropFilter: 'blur(2px)',
+          WebkitBackdropFilter: 'blur(2px)',
+        }}
+      >
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-[hsl(var(--foreground))]">
             Nexus OS

@@ -46,8 +46,15 @@ export default function RegisterPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[hsl(var(--background))]">
-        <div className="w-full max-w-md p-8 text-center">
+      <div className="min-h-screen flex items-center justify-center">
+        <div
+          className="w-full max-w-md p-8 text-center rounded-xl border border-[hsl(var(--border))]"
+          style={{
+            background: 'hsl(218 30% 15% / 0.8)',
+            backdropFilter: 'blur(2px)',
+            WebkitBackdropFilter: 'blur(2px)',
+          }}
+        >
           <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[hsl(var(--success-muted))] flex items-center justify-center">
             <svg
               className="w-8 h-8 text-[hsl(var(--success))]"
@@ -82,8 +89,15 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[hsl(var(--background))]">
-      <div className="w-full max-w-md p-8">
+    <div className="min-h-screen flex items-center justify-center">
+      <div
+        className="w-full max-w-md p-8 rounded-xl border border-[hsl(var(--border))]"
+        style={{
+          background: 'hsl(218 30% 15% / 0.8)',
+          backdropFilter: 'blur(2px)',
+          WebkitBackdropFilter: 'blur(2px)',
+        }}
+      >
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-[hsl(var(--foreground))]">
             Nexus OS
