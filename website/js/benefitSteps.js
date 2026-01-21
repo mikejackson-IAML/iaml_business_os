@@ -39,13 +39,19 @@ function initBenefitSteps() {
     return;
   }
 
-  // Image set for each tab
-  const visualImages = [
+  // Image set for each tab (can be overridden via data-visual-image-N attributes)
+  const defaultVisualImages = [
     "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6939b7fef6cae945d6e4077d.svg",
     "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6939b89d169a423f0821325c.svg",
     "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6939b85d751b349ca140d632.svg",
     "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6939b8e0acebf7da5c056dd7.svg"
   ];
+
+  // Check for page-specific image overrides via data attributes
+  const visualImages = defaultVisualImages.map((defaultUrl, index) => {
+    const override = benefitStepsSection.dataset[`visualImage${index}`];
+    return override || defaultUrl;
+  });
 
   // Mobile summary content for each tab
   const mobileSummaries = [
