@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-20)
 
 **Core value:** Issue commands from anywhere and trust the system executes them correctly.
-**Current focus:** Phase 11 - Push Notification API
+**Current focus:** Phase 12 - Push Notification UI
 
 ## Current Position
 
-Phase: 11 of 13 (Push Notification API)
-Plan: 5 of 5 complete
-Status: Phase complete
-Last activity: 2026-01-21 - Completed 11-05-PLAN.md (Daily Digest Cron)
+Phase: 12 of 13 (Push Notification UI)
+Plan: 1 of 5 complete
+Status: In progress
+Last activity: 2026-01-21 - Completed 12-01-PLAN.md (AppDelegate & Entitlements)
 
-Progress: [█████████████████] 81%
+Progress: [██████████████████] 84%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 26
+- Total plans completed: 27
 - Average duration: 2.6 min
-- Total execution time: 1.18 hours
+- Total execution time: 1.23 hours
 
 **By Phase:**
 
@@ -33,9 +33,10 @@ Progress: [█████████████████] 81%
 | 9 | 5 | 10 min | 2.0 min |
 | 10 | 6 | 10 min | 1.7 min |
 | 11 | 5 | 10 min | 2.0 min |
+| 12 | 1 | 3 min | 3.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 11-01 (1 min), 11-03 (1 min), 11-02 (3 min), 11-04 (3 min), 11-05 (2 min)
+- Last 5 plans: 11-02 (3 min), 11-04 (3 min), 11-05 (2 min), 12-01 (3 min)
 - Trend: Consistently fast execution
 
 *Updated after each plan completion*
@@ -133,6 +134,9 @@ Recent decisions affecting current work:
 - [11-05]: Hourly cron checks all user timezones to find whose digest_hour matches
 - [11-05]: formatDigestNotification returns null for 'all quiet' days (no activity + healthy)
 - [11-05]: CRON_SECRET validation in production, no auth required in development
+- [12-01]: UNUserNotificationCenterDelegate set in willFinishLaunchingWithOptions (not didFinish) for cold-launch tap handling
+- [12-01]: NotificationCenter posts for device token and notification taps enable decoupled handling
+- [12-01]: Async delegate methods (iOS 15+) for modern Swift concurrency
 
 ### Pending Todos
 
@@ -144,8 +148,8 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-21T06:30:00Z
-Stopped at: Completed 11-05-PLAN.md (Daily Digest Cron) - Phase 11 complete
+Last session: 2026-01-21T06:38:00Z
+Stopped at: Completed 12-01-PLAN.md (AppDelegate & Entitlements)
 Resume file: None
 
 ---
@@ -165,7 +169,7 @@ Resume file: None
 | 9 | Chat UI | Complete |
 | 10 | Workflow API & Quick Actions | Complete |
 | 11 | Push Notification API | Complete |
-| 12 | Push Notification UI | Not started |
+| 12 | Push Notification UI | In progress (1/5) |
 | 13 | Polish & App Store | Not started |
 
-**Next step:** `/gsd:plan-phase 12` to start Push Notification UI phase
+**Next step:** `/gsd:execute-phase 12` to continue with plan 02
