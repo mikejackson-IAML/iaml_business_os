@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, Title, Text, BarChart } from '@tremor/react';
+import { Card, Title, Text, BarList } from '@tremor/react';
 
 interface ConversionFunnelChartProps {
   totalContacts: number;
@@ -15,16 +15,19 @@ export function ConversionFunnelChart({
 }: ConversionFunnelChartProps) {
   const chartData = [
     {
-      stage: 'Total Contacts',
-      count: totalContacts,
+      name: 'Total Contacts',
+      value: totalContacts,
+      color: 'bg-cyan-500',
     },
     {
-      stage: 'Engaged',
-      count: engagedContacts,
+      name: 'Engaged',
+      value: engagedContacts,
+      color: 'bg-blue-500',
     },
     {
-      stage: 'Registered',
-      count: registeredContacts,
+      name: 'Registered',
+      value: registeredContacts,
+      color: 'bg-emerald-500',
     },
   ];
 
@@ -36,20 +39,16 @@ export function ConversionFunnelChart({
     : '0';
 
   return (
-    <Card className="bg-background-card border-border">
-      <Title className="text-foreground">Conversion Funnel</Title>
-      <Text className="text-muted-foreground">
+    <Card className="!bg-white/5 !border-white/10 backdrop-blur-sm !ring-0">
+      <Title className="!text-white">Conversion Funnel</Title>
+      <Text className="!text-white/60">
         {engagementRate}% engaged, {conversionRate}% converted
       </Text>
-      <BarChart
-        className="mt-4 h-72"
+      <BarList
         data={chartData}
-        index="stage"
-        categories={['count']}
-        colors={['cyan']}
-        valueFormatter={(value) => value.toLocaleString()}
-        yAxisWidth={48}
-        showLegend={false}
+        className="mt-4"
+        valueFormatter={(value: number) => value.toLocaleString()}
+        color="cyan"
       />
     </Card>
   );

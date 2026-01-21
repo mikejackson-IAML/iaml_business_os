@@ -479,3 +479,62 @@
 .animate-fade-in {
   animation: fade-in 0.2s ease-out;
 }
+
+/* ============================================
+   TREMOR DARK MODE OVERRIDES
+   ============================================ */
+
+/* Force dark mode colors for Tremor components */
+:root {
+  --tremor-content-subtle: rgba(255, 255, 255, 0.4);
+  --tremor-content-default: rgba(255, 255, 255, 0.7);
+  --tremor-content-emphasis: rgba(255, 255, 255, 0.9);
+  --tremor-content-strong: rgba(255, 255, 255, 1);
+  --tremor-border-default: rgba(255, 255, 255, 0.1);
+  --tremor-background-subtle: rgba(255, 255, 255, 0.05);
+  --tremor-background-default: rgba(255, 255, 255, 0.08);
+  --tremor-background-emphasis: rgba(255, 255, 255, 0.15);
+}
+
+/* Tremor BarList styling */
+[data-tremor-id="tremor-BarList"] .tremor-BarList-bar {
+  background: linear-gradient(90deg, hsl(var(--accent-primary)), hsl(var(--info))) !important;
+}
+
+/* Tremor Card text colors */
+.tremor-Card-root,
+[class*="tremor-"] {
+  --tw-text-opacity: 1;
+}
+
+/* BarList bar colors */
+.bg-tremor-brand,
+[class*="bg-tremor-brand"] {
+  background-color: hsl(var(--accent-primary)) !important;
+}
+
+/* Fix bar background for dark mode */
+.bg-cyan-500,
+.bg-blue-500,
+.bg-emerald-500,
+.bg-violet-500 {
+  opacity: 1 !important;
+}
+
+/* Tremor content text colors for dark mode */
+.text-tremor-content-default {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.text-tremor-content-emphasis {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.text-tremor-content-strong {
+  color: rgba(255, 255, 255, 1) !important;
+}
+
+/* Fix BarList background track */
+.bg-tremor-background-subtle {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
