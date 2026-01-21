@@ -41,4 +41,26 @@ enum NetworkError: Error, LocalizedError {
             return false
         }
     }
+
+    /// User-friendly message for display in UI
+    var userMessage: String {
+        switch self {
+        case .noAPIKey:
+            return "API key not configured. Please add it in Settings."
+        case .unauthorized:
+            return "Authentication failed. Please check your API key."
+        case .networkUnavailable:
+            return "No internet connection."
+        case .serverError:
+            return "Server error. Please try again."
+        case .clientError(let code):
+            return "Request failed (error \(code))."
+        case .invalidResponse:
+            return "Invalid response from server."
+        case .decodingFailed:
+            return "Could not read server response."
+        case .requestFailed:
+            return "Request failed. Please try again."
+        }
+    }
 }
