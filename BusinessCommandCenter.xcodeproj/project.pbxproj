@@ -21,6 +21,32 @@
 		A1000000C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001D /* Constants.swift */; };
 		A1000000D /* LockScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001E /* LockScreenView.swift */; };
 		A1000000E /* APIKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001F /* APIKeyView.swift */; };
+		/* Phase 7 - Core */
+		A20000001 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000011 /* NetworkManager.swift */; };
+		A20000002 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000012 /* NetworkError.swift */; };
+		A20000003 /* HealthModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000013 /* HealthModels.swift */; };
+		/* Phase 7 - Home Feature */
+		A20000004 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000014 /* HomeViewModel.swift */; };
+		A20000005 /* AlertsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000015 /* AlertsView.swift */; };
+		A20000006 /* HealthScoreCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000016 /* HealthScoreCard.swift */; };
+		A20000007 /* DepartmentHealthRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000017 /* DepartmentHealthRow.swift */; };
+		A20000008 /* AlertBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000018 /* AlertBadge.swift */; };
+		A20000009 /* AlertRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000019 /* AlertRow.swift */; };
+		A2000000A /* StatusIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001A /* StatusIndicator.swift */; };
+		/* Phase 9 - Chat Feature */
+		A30000001 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30000011 /* ChatViewModel.swift */; };
+		A30000002 /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30000012 /* ChatMessage.swift */; };
+		A30000003 /* ChatEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30000013 /* ChatEvent.swift */; };
+		A30000004 /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30000014 /* ChatService.swift */; };
+		A30000005 /* SpeechService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30000015 /* SpeechService.swift */; };
+		A30000006 /* AIAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30000016 /* AIAvatarView.swift */; };
+		A30000007 /* MessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30000017 /* MessageBubble.swift */; };
+		A30000008 /* ChatInputBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30000018 /* ChatInputBar.swift */; };
+		A30000009 /* SkeletonBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30000019 /* SkeletonBubble.swift */; };
+		A3000000A /* StreamingBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3000001A /* StreamingBubble.swift */; };
+		A3000000B /* RecordingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3000001B /* RecordingIndicator.swift */; };
+		A3000000C /* ConfirmationBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3000001C /* ConfirmationBubble.swift */; };
+		A3000000D /* AnyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3000001D /* AnyCodable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +66,32 @@
 		A1000001D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		A1000001E /* LockScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenView.swift; sourceTree = "<group>"; };
 		A1000001F /* APIKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeyView.swift; sourceTree = "<group>"; };
+		/* Phase 7 - Core */
+		A20000011 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		A20000012 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
+		A20000013 /* HealthModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthModels.swift; sourceTree = "<group>"; };
+		/* Phase 7 - Home Feature */
+		A20000014 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		A20000015 /* AlertsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsView.swift; sourceTree = "<group>"; };
+		A20000016 /* HealthScoreCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthScoreCard.swift; sourceTree = "<group>"; };
+		A20000017 /* DepartmentHealthRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentHealthRow.swift; sourceTree = "<group>"; };
+		A20000018 /* AlertBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertBadge.swift; sourceTree = "<group>"; };
+		A20000019 /* AlertRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertRow.swift; sourceTree = "<group>"; };
+		A2000001A /* StatusIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusIndicator.swift; sourceTree = "<group>"; };
+		/* Phase 9 - Chat Feature */
+		A30000011 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
+		A30000012 /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
+		A30000013 /* ChatEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatEvent.swift; sourceTree = "<group>"; };
+		A30000014 /* ChatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatService.swift; sourceTree = "<group>"; };
+		A30000015 /* SpeechService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechService.swift; sourceTree = "<group>"; };
+		A30000016 /* AIAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIAvatarView.swift; sourceTree = "<group>"; };
+		A30000017 /* MessageBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubble.swift; sourceTree = "<group>"; };
+		A30000018 /* ChatInputBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInputBar.swift; sourceTree = "<group>"; };
+		A30000019 /* SkeletonBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonBubble.swift; sourceTree = "<group>"; };
+		A3000001A /* StreamingBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingBubble.swift; sourceTree = "<group>"; };
+		A3000001B /* RecordingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingIndicator.swift; sourceTree = "<group>"; };
+		A3000001C /* ConfirmationBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationBubble.swift; sourceTree = "<group>"; };
+		A3000001D /* AnyCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCodable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +149,8 @@
 			children = (
 				A10000038 /* Security */,
 				A10000039 /* Utilities */,
+				A2000003A /* Network */,
+				A2000003B /* Models */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -142,24 +196,93 @@
 			children = (
 				A1000001C /* HapticManager.swift */,
 				A1000001D /* Constants.swift */,
+				A3000001D /* AnyCodable.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		A2000003A /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				A20000011 /* NetworkManager.swift */,
+				A20000012 /* NetworkError.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		A2000003B /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A20000013 /* HealthModels.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		A1000003A /* Home */ = {
 			isa = PBXGroup;
 			children = (
 				A10000013 /* HomeView.swift */,
+				A20000014 /* HomeViewModel.swift */,
+				A20000015 /* AlertsView.swift */,
+				A2000003C /* Components */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		A2000003C /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				A20000016 /* HealthScoreCard.swift */,
+				A20000017 /* DepartmentHealthRow.swift */,
+				A20000018 /* AlertBadge.swift */,
+				A20000019 /* AlertRow.swift */,
+				A2000001A /* StatusIndicator.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		A1000003B /* Chat */ = {
 			isa = PBXGroup;
 			children = (
 				A10000014 /* ChatView.swift */,
+				A30000011 /* ChatViewModel.swift */,
+				A3000003D /* Models */,
+				A3000003E /* Services */,
+				A3000003F /* Components */,
 			);
 			path = Chat;
+			sourceTree = "<group>";
+		};
+		A3000003D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A30000012 /* ChatMessage.swift */,
+				A30000013 /* ChatEvent.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A3000003E /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A30000014 /* ChatService.swift */,
+				A30000015 /* SpeechService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A3000003F /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				A30000016 /* AIAvatarView.swift */,
+				A30000017 /* MessageBubble.swift */,
+				A30000018 /* ChatInputBar.swift */,
+				A30000019 /* SkeletonBubble.swift */,
+				A3000001A /* StreamingBubble.swift */,
+				A3000001B /* RecordingIndicator.swift */,
+				A3000001C /* ConfirmationBubble.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		A1000003C /* Settings */ = {
@@ -261,6 +384,32 @@
 				A1000000B /* HapticManager.swift in Sources */,
 				A1000000C /* Constants.swift in Sources */,
 				A1000000D /* LockScreenView.swift in Sources */,
+				/* Phase 7 - Core */
+				A20000001 /* NetworkManager.swift in Sources */,
+				A20000002 /* NetworkError.swift in Sources */,
+				A20000003 /* HealthModels.swift in Sources */,
+				/* Phase 7 - Home Feature */
+				A20000004 /* HomeViewModel.swift in Sources */,
+				A20000005 /* AlertsView.swift in Sources */,
+				A20000006 /* HealthScoreCard.swift in Sources */,
+				A20000007 /* DepartmentHealthRow.swift in Sources */,
+				A20000008 /* AlertBadge.swift in Sources */,
+				A20000009 /* AlertRow.swift in Sources */,
+				A2000000A /* StatusIndicator.swift in Sources */,
+				/* Phase 9 - Chat Feature */
+				A30000001 /* ChatViewModel.swift in Sources */,
+				A30000002 /* ChatMessage.swift in Sources */,
+				A30000003 /* ChatEvent.swift in Sources */,
+				A30000004 /* ChatService.swift in Sources */,
+				A30000005 /* SpeechService.swift in Sources */,
+				A30000006 /* AIAvatarView.swift in Sources */,
+				A30000007 /* MessageBubble.swift in Sources */,
+				A30000008 /* ChatInputBar.swift in Sources */,
+				A30000009 /* SkeletonBubble.swift in Sources */,
+				A3000000A /* StreamingBubble.swift in Sources */,
+				A3000000B /* RecordingIndicator.swift in Sources */,
+				A3000000C /* ConfirmationBubble.swift in Sources */,
+				A3000000D /* AnyCodable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
