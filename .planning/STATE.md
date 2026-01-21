@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-20)
 ## Current Position
 
 Phase: 9 of 13 (Chat UI)
-Plan: 1 of 6 complete
+Plan: 2 of 6 complete
 Status: In progress
-Last activity: 2026-01-21 - Completed 09-01-PLAN.md (Chat models & service)
+Last activity: 2026-01-21 - Completed 09-02-PLAN.md (Chat ViewModel)
 
-Progress: [█████████░░░░] 40.6%
+Progress: [█████████░░░░] 43.8%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 13
-- Average duration: 3.7 min
-- Total execution time: 0.82 hours
+- Total plans completed: 14
+- Average duration: 3.6 min
+- Total execution time: 0.85 hours
 
 **By Phase:**
 
@@ -30,10 +30,10 @@ Progress: [█████████░░░░] 40.6%
 | 6 | 4 | 22 min | 5.5 min |
 | 7 | 4 | 16 min | 4.0 min |
 | 8 | 4 | 11 min | 2.8 min |
-| 9 | 1 | 2 min | 2.0 min |
+| 9 | 2 | 4 min | 2.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 08-01 (4 min), 08-02 (2 min), 08-03 (4 min), 08-04 (1 min), 09-01 (2 min)
+- Last 5 plans: 08-02 (2 min), 08-03 (4 min), 08-04 (1 min), 09-01 (2 min), 09-02 (2 min)
 - Trend: Accelerating execution
 
 *Updated after each plan completion*
@@ -84,6 +84,10 @@ Recent decisions affecting current work:
 - [09-01]: Actor pattern for ChatService matching NetworkManager pattern
 - [09-01]: Static parse(from:) helper on ChatEvent for SSE line parsing
 - [09-01]: AnyCodable for type-erased tool input handling
+- [09-02]: ChatViewModel with @MainActor and @Published following HomeViewModel pattern
+- [09-02]: pendingMessages queue allows typing during AI response (max 3)
+- [09-02]: ConfirmationAction struct for high-risk tool confirmation UI
+- [09-02]: Error mapping from ChatServiceError to NetworkError for consistent UI
 
 ### Pending Todos
 
@@ -95,8 +99,8 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-21T03:24:17Z
-Stopped at: Completed 09-01-PLAN.md (Chat models & service)
+Last session: 2026-01-21T03:28:01Z
+Stopped at: Completed 09-02-PLAN.md (Chat ViewModel)
 Resume file: None
 
 ---
@@ -113,10 +117,10 @@ Resume file: None
 | 6 | Foundation & Security | Complete |
 | 7 | Health API & Dashboard | Complete |
 | 8 | Chat API | Complete |
-| 9 | Chat UI | In progress (1/6) |
+| 9 | Chat UI | In progress (2/6) |
 | 10 | Workflow API & Quick Actions | Not started |
 | 11 | Push Notification API | Not started |
 | 12 | Push Notification UI | Not started |
 | 13 | Polish & App Store | Not started |
 
-**Next step:** `/gsd:execute-plan .planning/phases/09-chat-ui/09-02-PLAN.md`
+**Next step:** `/gsd:execute-plan .planning/phases/09-chat-ui/09-03-PLAN.md`
