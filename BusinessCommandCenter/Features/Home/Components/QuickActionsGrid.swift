@@ -53,6 +53,11 @@ struct QuickActionsGrid: View {
             }
         }
         .toast($viewModel.toast)
+        .sheet(isPresented: $viewModel.showPermissionSheet) {
+            NotificationPermissionSheet { granted in
+                viewModel.handlePermissionResult(granted: granted, context: context)
+            }
+        }
     }
 
     // MARK: - Grid Content
