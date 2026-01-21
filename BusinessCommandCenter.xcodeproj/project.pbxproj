@@ -47,6 +47,8 @@
 		A3000000B /* RecordingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3000001B /* RecordingIndicator.swift */; };
 		A3000000C /* ConfirmationBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3000001C /* ConfirmationBubble.swift */; };
 		A3000000D /* AnyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3000001D /* AnyCodable.swift */; };
+		/* Phase 12 - Push Notifications */
+		A40000001 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40000012 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -94,6 +96,7 @@
 		A3000001D /* AnyCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCodable.swift; sourceTree = "<group>"; };
 		/* Phase 12 - Push Notifications */
 		A40000011 /* BusinessCommandCenter.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BusinessCommandCenter.entitlements; sourceTree = "<group>"; };
+		A40000012 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +144,7 @@
 			isa = PBXGroup;
 			children = (
 				A10000011 /* BusinessCommandCenterApp.swift */,
+				A40000012 /* AppDelegate.swift */,
 				A10000012 /* ContentView.swift */,
 				A10000018 /* AppState.swift */,
 			);
@@ -413,6 +417,8 @@
 				A3000000B /* RecordingIndicator.swift in Sources */,
 				A3000000C /* ConfirmationBubble.swift in Sources */,
 				A3000000D /* AnyCodable.swift in Sources */,
+				/* Phase 12 - Push Notifications */
+				A40000001 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
