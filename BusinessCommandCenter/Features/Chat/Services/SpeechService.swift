@@ -75,7 +75,7 @@ final class SpeechService: ObservableObject {
     /// Start speech recognition
     func startRecording() async throws {
         // Check permissions first
-        guard isAuthorized else {
+        if !isAuthorized {
             let granted = await requestPermissions()
             guard granted else { throw SpeechError.permissionDenied }
         }
