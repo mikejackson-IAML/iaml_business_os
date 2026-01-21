@@ -49,11 +49,11 @@ function initBenefitSteps() {
   ];
 
   // Check for Professional Credits image override (data-creditsimage attribute)
-  const creditsOverride = benefitStepsSection.dataset.creditsimage;
-  const visualImages = defaultVisualImages.map((defaultUrl, index) => {
-    if (index === 1 && creditsOverride) return creditsOverride;
-    return defaultUrl;
-  });
+  const creditsOverride = benefitStepsSection.getAttribute('data-creditsimage');
+  const visualImages = [...defaultVisualImages];
+  if (creditsOverride) {
+    visualImages[1] = creditsOverride;
+  }
 
   // Mobile summary content for each tab
   const mobileSummaries = [
