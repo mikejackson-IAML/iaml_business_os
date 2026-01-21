@@ -303,6 +303,14 @@
 
   // Program-specific takeaways for session step
   const PROGRAM_TAKEAWAYS = {
+    'Comprehensive Labor Relations': [
+      'Navigate NLRB compliance after Cemex and Stericycle with confidence',
+      'Recognize organizing risks and implement lawful union avoidance strategies',
+      'Prepare for and respond to union elections within accelerated timelines',
+      'Handle collective bargaining with proper documentation and good-faith practices',
+      'Manage strikes, pickets, and employer responses within legal boundaries',
+      'Audit employee handbooks for §7 compliance issues that expose you to ULP charges'
+    ],
     'Certificate in Employee Relations Law': [
       'Handle employee terminations with confidence, knowing exactly what documentation you need',
       'Navigate FMLA/ADA intersection issues that trip up even experienced HR professionals',
@@ -1293,7 +1301,7 @@
     if (state.currentStep === 'format' && state.programPreselectedFromURL && state.program) {
       content = {
         type: 'program-takeaways',
-        headline: `Great choice! After the ${state.program}, you'll be able to...`
+        headline: `Great choice! After the ${state.program} program, you'll be able to...`
       };
     } else {
       content = LEFT_PANEL_CONTENT[state.currentStep];
@@ -1361,12 +1369,16 @@
 
       case 'program-takeaways':
         // Get takeaways for current program and randomly select 4
-        // For standalone blocks, use the parent program's takeaways
+        // For standalone blocks, use block-specific takeaways if available, otherwise fall back to parent
         let takeawaysProgram = state.program;
         if (state.isStandaloneBlock && state.standaloneBlockName) {
-          const blockData = BLOCK_PROGRAM_DATA[state.standaloneBlockName];
-          if (blockData && blockData.parentProgram) {
-            takeawaysProgram = blockData.parentProgram;
+          // First check if the block has its own takeaways
+          if (!PROGRAM_TAKEAWAYS[state.standaloneBlockName]) {
+            // Fall back to parent program's takeaways
+            const blockData = BLOCK_PROGRAM_DATA[state.standaloneBlockName];
+            if (blockData && blockData.parentProgram) {
+              takeawaysProgram = blockData.parentProgram;
+            }
           }
         }
         const allTakeaways = PROGRAM_TAKEAWAYS[takeawaysProgram] || [];
