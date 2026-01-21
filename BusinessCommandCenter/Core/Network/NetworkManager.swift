@@ -332,4 +332,82 @@ actor NetworkManager {
             throw NetworkError.clientError(httpResponse.statusCode)
         }
     }
+
+    /// Updates notification preferences on the backend.
+    /// - Parameters:
+    ///   - token: Device token identifying this device
+    ///   - preferences: User's notification preferences
+    ///   - context: LAContext for Keychain access
+    /// - Throws: NetworkError for auth, network, or server failures
+    func updateNotificationPreferences(
+        token: String,
+        preferences: NotificationPreferences,
+        context: LAContext
+    ) async throws {
+        // Get API key from Keychain
+        let apiKey: String
+        do {
+            guard let key = try KeychainManager.shared.getAPIKey(context: context) else {
+                throw NetworkError.noAPIKey
+            }
+            apiKey = key
+        } catch let error as KeychainError {
+            if case .userCanceled = error {
+                throw NetworkError.unauthorized
+            }
+            throw NetworkError.noAPIKey
+        }
+
+        // Build request
+        guard let url = URL(string: Constants.API.baseURL)?
+            .appendingPathComponent("notifications/preferences") else {
+            throw NetworkError.invalidResponse
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.setValue(apiKey, forHTTPHeaderField: "X-API-Key")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.timeoutInterval = Constants.API.timeout
+
+        // Build request body
+        let requestBody = UpdatePreferencesRequest(token: token, preferences: preferences)
+        request.httpBody = try JSONEncoder().encode(requestBody)
+
+        // Execute request
+        let data: Data
+        let response: URLResponse
+
+        do {
+            (data, response) = try await session.data(for: request)
+        } catch let error as URLError {
+            if error.code == .notConnectedToInternet || error.code == .networkConnectionLost {
+                throw NetworkError.networkUnavailable
+            }
+            throw NetworkError.requestFailed(error)
+        } catch {
+            throw NetworkError.requestFailed(error)
+        }
+
+        // Validate response
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw NetworkError.invalidResponse
+        }
+
+        // Map status codes
+        switch httpResponse.statusCode {
+        case 200...299:
+            // Success
+            break
+        case 401:
+            throw NetworkError.unauthorized
+        case 400...499:
+            throw NetworkError.clientError(httpResponse.statusCode)
+        case 500...599:
+            throw NetworkError.serverError(httpResponse.statusCode)
+        default:
+            throw NetworkError.clientError(httpResponse.statusCode)
+        }
+    }
 }
