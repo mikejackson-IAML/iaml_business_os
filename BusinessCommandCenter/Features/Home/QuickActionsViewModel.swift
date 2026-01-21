@@ -1,5 +1,6 @@
 import Foundation
 import LocalAuthentication
+import SwiftUI
 
 /// Manages quick actions state for the QuickActionsGrid component.
 @MainActor
@@ -20,9 +21,18 @@ final class QuickActionsViewModel: ObservableObject {
     /// Maximum number of actions to display in the grid.
     private let maxActions = 6
 
+    /// Persisted enabled action IDs from settings.
+    @AppStorage("enabledActionIds") private var enabledActionIdsData: Data = Data()
+
+    /// Decoded array of enabled action IDs from AppStorage.
+    private var enabledActionIds: [String] {
+        guard !enabledActionIdsData.isEmpty else { return [] }
+        return (try? JSONDecoder().decode([String].self, from: enabledActionIdsData)) ?? []
+    }
+
     // MARK: - Loading Actions
 
-    /// Loads quick actions from the API.
+    /// Loads quick actions from the API, respecting user preferences.
     /// - Parameter context: LAContext for Keychain access.
     func loadActions(context: LAContext) async {
         guard !isLoading else { return }
@@ -31,8 +41,18 @@ final class QuickActionsViewModel: ObservableObject {
 
         do {
             let response = try await NetworkManager.shared.fetchWorkflows(context: context)
-            // Limit to first 6 actions for grid layout
-            actions = Array(response.workflows.prefix(maxActions))
+            let allWorkflows = response.workflows
+            let savedIds = enabledActionIds
+
+            if savedIds.isEmpty {
+                // Default: first 6 actions
+                actions = Array(allWorkflows.prefix(maxActions))
+            } else {
+                // Restore user-defined order from settings
+                actions = savedIds.compactMap { id in
+                    allWorkflows.first { $0.id == id }
+                }
+            }
         } catch let networkError as NetworkError {
             toast = Toast(message: networkError.userMessage, type: .error)
         } catch {

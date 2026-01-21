@@ -39,6 +39,18 @@ struct SettingsView: View {
                     }
                 }
 
+                Section("Customization") {
+                    NavigationLink {
+                        QuickActionsSettingsView()
+                    } label: {
+                        Label("Quick Actions", systemImage: "bolt.fill")
+                    }
+                    .simultaneousGesture(TapGesture().onEnded {
+                        HapticManager.shared.tap()
+                        appState.recordActivity()
+                    })
+                }
+
                 Section("Appearance") {
                     AppearanceRow()
                 }
