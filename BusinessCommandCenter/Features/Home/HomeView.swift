@@ -3,6 +3,7 @@ import SwiftUI
 struct HomeView: View {
     @Environment(AppState.self) private var appState
     @StateObject private var viewModel = HomeViewModel()
+    @State private var showAlerts = false
 
     var body: some View {
         NavigationStack {
@@ -16,6 +17,11 @@ struct HomeView: View {
                 .task {
                     guard let context = appState.authContext else { return }
                     await viewModel.loadHealth(context: context)
+                }
+                .sheet(isPresented: $showAlerts) {
+                    if let health = viewModel.healthData {
+                        AlertsView(alerts: health.alerts)
+                    }
                 }
         }
     }
@@ -106,6 +112,38 @@ struct HomeView: View {
                     status: health.overallHealth.status
                 )
                 .frame(maxWidth: .infinity)
+
+                // Alerts section (if any alerts exist)
+                if health.totalAlertCount > 0 {
+                    Button {
+                        showAlerts = true
+                        HapticManager.shared.tap()
+                    } label: {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Active Alerts")
+                                    .font(.headline)
+                                    .foregroundStyle(.primary)
+
+                                Text("Tap to view details")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+
+                            Spacer()
+
+                            AlertBadge(count: health.totalAlertCount, alerts: health.alerts)
+
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        .padding()
+                        .background(Color(.systemBackground))
+                        .clipShape(RoundedRectangle(cornerRadius: Constants.UI.cornerRadius))
+                    }
+                    .buttonStyle(.plain)
+                }
 
                 // Department list
                 VStack(alignment: .leading, spacing: 8) {
