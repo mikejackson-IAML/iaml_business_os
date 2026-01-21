@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-20)
 ## Current Position
 
 Phase: 9 of 13 (Chat UI)
-Plan: 4 of 6 complete
+Plan: 5 of 6 complete
 Status: In progress
-Last activity: 2026-01-21 - Completed 09-04-PLAN.md (ViewModel Wiring)
+Last activity: 2026-01-21 - Completed 09-05-PLAN.md (Voice Input)
 
-Progress: [███████████░░] 50.0%
+Progress: [████████████░] 53.1%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 16
-- Average duration: 3.4 min
-- Total execution time: 0.91 hours
+- Total plans completed: 17
+- Average duration: 3.2 min
+- Total execution time: 0.95 hours
 
 **By Phase:**
 
@@ -30,10 +30,10 @@ Progress: [███████████░░] 50.0%
 | 6 | 4 | 22 min | 5.5 min |
 | 7 | 4 | 16 min | 4.0 min |
 | 8 | 4 | 11 min | 2.8 min |
-| 9 | 4 | 8 min | 2.0 min |
+| 9 | 5 | 10 min | 2.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 08-04 (1 min), 09-01 (2 min), 09-02 (2 min), 09-03 (2 min), 09-04 (2 min)
+- Last 5 plans: 09-01 (2 min), 09-02 (2 min), 09-03 (2 min), 09-04 (2 min), 09-05 (2 min)
 - Trend: Consistently fast execution
 
 *Updated after each plan completion*
@@ -95,6 +95,9 @@ Recent decisions affecting current work:
 - [09-04]: Simplified auto-scroll: always scroll during streaming (iOS 17 compatible)
 - [09-04]: NetworkError.userMessage for consistent user-facing error display
 - [09-04]: @StateObject for ChatViewModel ownership in ChatView
+- [09-05]: @MainActor SpeechService for thread-safe UI updates
+- [09-05]: Audio session deactivation in stopRecording for clean resource release
+- [09-05]: Tap-anywhere overlay dismissal for voice-to-send flow
 
 ### Pending Todos
 
@@ -106,8 +109,8 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-21T03:32:00Z
-Stopped at: Completed 09-04-PLAN.md (ViewModel Wiring)
+Last session: 2026-01-21T03:36:55Z
+Stopped at: Completed 09-05-PLAN.md (Voice Input)
 Resume file: None
 
 ---
@@ -124,10 +127,10 @@ Resume file: None
 | 6 | Foundation & Security | Complete |
 | 7 | Health API & Dashboard | Complete |
 | 8 | Chat API | Complete |
-| 9 | Chat UI | In progress (4/6) |
+| 9 | Chat UI | In progress (5/6) |
 | 10 | Workflow API & Quick Actions | Not started |
 | 11 | Push Notification API | Not started |
 | 12 | Push Notification UI | Not started |
 | 13 | Polish & App Store | Not started |
 
-**Next step:** `/gsd:execute-plan .planning/phases/09-chat-ui/09-05-PLAN.md`
+**Next step:** `/gsd:execute-plan .planning/phases/09-chat-ui/09-06-PLAN.md`
