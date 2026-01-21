@@ -268,13 +268,13 @@ Plans:
 4. Tapping notification opens app to relevant screen
 5. User can configure notification preferences in Settings
 
-**Plans:** TBD
+**Plans:** 4 plans in 3 waves
 
 Plans:
-- [ ] 12-01: Push notification permission request and token handling
-- [ ] 12-02: Notification handling for different types (critical, completion, digest)
-- [ ] 12-03: Deep linking from notification tap to relevant screen
-- [ ] 12-04: Notification preferences UI in Settings
+- [ ] 12-01-PLAN.md — Xcode entitlements and AppDelegate for notification handling (Wave 1)
+- [ ] 12-02-PLAN.md — PushNotificationService for permission and token registration (Wave 2)
+- [ ] 12-03-PLAN.md — Deep linking from notification tap to relevant screen (Wave 2)
+- [ ] 12-04-PLAN.md — Notification preferences UI in Settings (Wave 3)
 
 ---
 
@@ -310,9 +310,9 @@ Plans:
 | 9. Chat UI | v2.0 | 6/6 | Complete | 2026-01-21 |
 | 10. Workflow API & Quick Actions | v2.0 | 6/6 | Complete | 2026-01-21 |
 | 11. Push Notification API | v2.0 | 5/5 | Complete | 2026-01-21 |
-| 12. Push Notification UI | v2.0 | 0/4 | Not started | - |
+| 12. Push Notification UI | v2.0 | 0/4 | Planned | - |
 | 13. Polish & App Store | v2.0 | 0/4 | Not started | - |
 
 ---
 *Roadmap created: 2026-01-20*
-*Last updated: 2026-01-21 after Phase 11 execution*
+*Last updated: 2026-01-21 after Phase 12 planning*
