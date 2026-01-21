@@ -179,10 +179,10 @@ Plans:
 **Plans:** 4 plans in 3 waves
 
 Plans:
-- [ ] 08-01-PLAN.md — Chat endpoint with SSE streaming and auth (Wave 1)
-- [ ] 08-02-PLAN.md — Claude API integration with streaming proxy (Wave 2)
-- [ ] 08-03-PLAN.md — Tool definitions for workflow triggers and data operations (Wave 2)
-- [ ] 08-04-PLAN.md — Tool execution loop and response formatting (Wave 3)
+- [x] 08-01-PLAN.md — Chat endpoint with SSE streaming and auth (Wave 1)
+- [x] 08-02-PLAN.md — Claude API integration with streaming proxy (Wave 2)
+- [x] 08-03-PLAN.md — Tool definitions for workflow triggers and data operations (Wave 2)
+- [x] 08-04-PLAN.md — Tool execution loop and response formatting (Wave 3)
 
 ---
 
@@ -304,7 +304,7 @@ Plans:
 | 1-5 | v1.0 | - | Complete | - |
 | 6. Foundation & Security | v2.0 | 4/4 | Complete | 2026-01-20 |
 | 7. Health API & Dashboard | v2.0 | 4/4 | Complete | 2026-01-20 |
-| 8. Chat API | v2.0 | 0/4 | Planned | - |
+| 8. Chat API | v2.0 | 4/4 | Complete | 2026-01-20 |
 | 9. Chat UI | v2.0 | 0/5 | Not started | - |
 | 10. Workflow API & Quick Actions | v2.0 | 0/5 | Not started | - |
 | 11. Push Notification API | v2.0 | 0/5 | Not started | - |
@@ -313,4 +313,4 @@ Plans:
 
 ---
 *Roadmap created: 2026-01-20*
-*Last updated: 2026-01-20 after Phase 8 planning*
+*Last updated: 2026-01-20 after Phase 8 execution*

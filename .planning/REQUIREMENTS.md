@@ -59,10 +59,10 @@ Requirements for iOS app milestone. Each maps to roadmap phases.
 
 ### API Backend - Chat
 
-- [ ] **API-04**: POST /api/mobile/chat accepts message and returns streaming response (SSE)
-- [ ] **API-05**: Chat endpoint proxies to Claude API (never exposes API key to client)
-- [ ] **API-06**: Chat endpoint supports tool use for workflow triggers and data operations
-- [ ] **API-07**: Chat endpoint requires valid API key authentication
+- [x] **API-04**: POST /api/mobile/chat accepts message and returns streaming response (SSE)
+- [x] **API-05**: Chat endpoint proxies to Claude API (never exposes API key to client)
+- [x] **API-06**: Chat endpoint supports tool use for workflow triggers and data operations
+- [x] **API-07**: Chat endpoint requires valid API key authentication
 
 ### API Backend - Workflows
 
@@ -148,10 +148,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | API-01 | Phase 7 | Complete |
 | API-02 | Phase 7 | Complete |
 | API-03 | Phase 7 | Complete |
-| API-04 | Phase 8 | Pending |
-| API-05 | Phase 8 | Pending |
-| API-06 | Phase 8 | Pending |
-| API-07 | Phase 8 | Pending |
+| API-04 | Phase 8 | Complete |
+| API-05 | Phase 8 | Complete |
+| API-06 | Phase 8 | Complete |
+| API-07 | Phase 8 | Complete |
 | API-08 | Phase 10 | Pending |
 | API-09 | Phase 10 | Pending |
 | API-10 | Phase 10 | Pending |
@@ -168,4 +168,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-20*
-*Last updated: 2026-01-20 after Phase 7 completion*
+*Last updated: 2026-01-20 after Phase 8 completion*

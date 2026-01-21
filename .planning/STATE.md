@@ -115,4 +115,4 @@ Resume file: None
 | 12 | Push Notification UI | Not started |
 | 13 | Polish & App Store | Not started |
 
-**Next step:** `/gsd:execute-phase 09` (Chat UI)
+**Next step:** `/gsd:discuss-phase 9` or `/gsd:plan-phase 9`
