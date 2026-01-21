@@ -39,7 +39,8 @@ function initBenefitSteps() {
     return;
   }
 
-  // Image set for each tab (can be overridden via data-visual-image-N attributes)
+  // Image set for each tab
+  // Index 1 (Professional Credits) can be overridden via data-creditsimage attribute
   const defaultVisualImages = [
     "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6939b7fef6cae945d6e4077d.svg",
     "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6939b89d169a423f0821325c.svg",
@@ -47,11 +48,11 @@ function initBenefitSteps() {
     "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6939b8e0acebf7da5c056dd7.svg"
   ];
 
-  // Check for page-specific image overrides via data attributes
-  // Note: data-visual-image-1 becomes dataset['visualImage-1'] (hyphen before digit preserved)
+  // Check for Professional Credits image override (data-creditsimage attribute)
+  const creditsOverride = benefitStepsSection.dataset.creditsimage;
   const visualImages = defaultVisualImages.map((defaultUrl, index) => {
-    const override = benefitStepsSection.dataset[`visualImage-${index}`];
-    return override || defaultUrl;
+    if (index === 1 && creditsOverride) return creditsOverride;
+    return defaultUrl;
   });
 
   // Mobile summary content for each tab
