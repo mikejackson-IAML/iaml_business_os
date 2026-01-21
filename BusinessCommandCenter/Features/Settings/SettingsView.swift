@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SettingsView: View {
     var appState: AppState
+    @StateObject private var pushService = PushNotificationService.shared
 
     var body: some View {
         NavigationStack {
@@ -44,6 +45,30 @@ struct SettingsView: View {
                         QuickActionsSettingsView()
                     } label: {
                         Label("Quick Actions", systemImage: "bolt.fill")
+                    }
+                    .simultaneousGesture(TapGesture().onEnded {
+                        HapticManager.shared.tap()
+                        appState.recordActivity()
+                    })
+
+                    NavigationLink {
+                        NotificationSettingsView()
+                    } label: {
+                        HStack {
+                            Label("Notifications", systemImage: "bell.badge")
+
+                            Spacer()
+
+                            // Status indicator
+                            if pushService.permissionStatus == .denied {
+                                Text("Disabled")
+                                    .font(.caption)
+                                    .foregroundStyle(.orange)
+                            } else if pushService.permissionStatus == .authorized {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundStyle(.green)
+                            }
+                        }
                     }
                     .simultaneousGesture(TapGesture().onEnded {
                         HapticManager.shared.tap()
