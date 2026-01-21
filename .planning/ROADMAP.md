@@ -201,12 +201,12 @@ Plans:
 **Plans:** 6 plans in 5 waves
 
 Plans:
-- [ ] 09-01-PLAN.md — Chat models and SSE streaming service (Wave 1)
-- [ ] 09-02-PLAN.md — ChatViewModel for state management (Wave 2)
-- [ ] 09-03-PLAN.md — Chat UI layout with message bubbles and input bar (Wave 2)
-- [ ] 09-04-PLAN.md — SSE integration with real-time streaming and auto-scroll (Wave 3)
-- [ ] 09-05-PLAN.md — Voice input with Speech framework (Wave 4)
-- [ ] 09-06-PLAN.md — Confirmation dialogs for high-risk actions (Wave 5)
+- [x] 09-01-PLAN.md — Chat models and SSE streaming service (Wave 1)
+- [x] 09-02-PLAN.md — ChatViewModel for state management (Wave 2)
+- [x] 09-03-PLAN.md — Chat UI layout with message bubbles and input bar (Wave 2)
+- [x] 09-04-PLAN.md — SSE integration with real-time streaming and auto-scroll (Wave 3)
+- [x] 09-05-PLAN.md — Voice input with Speech framework (Wave 4)
+- [x] 09-06-PLAN.md — Confirmation dialogs for high-risk actions (Wave 5)
 
 ---
 
@@ -306,7 +306,7 @@ Plans:
 | 6. Foundation & Security | v2.0 | 4/4 | Complete | 2026-01-20 |
 | 7. Health API & Dashboard | v2.0 | 4/4 | Complete | 2026-01-20 |
 | 8. Chat API | v2.0 | 4/4 | Complete | 2026-01-20 |
-| 9. Chat UI | v2.0 | 0/6 | Planned | - |
+| 9. Chat UI | v2.0 | 6/6 | Complete | 2026-01-21 |
 | 10. Workflow API & Quick Actions | v2.0 | 0/5 | Not started | - |
 | 11. Push Notification API | v2.0 | 0/5 | Not started | - |
 | 12. Push Notification UI | v2.0 | 0/4 | Not started | - |
@@ -314,4 +314,4 @@ Plans:
 
 ---
 *Roadmap created: 2026-01-20*
-*Last updated: 2026-01-20 after Phase 9 planning*
+*Last updated: 2026-01-21 after Phase 9 execution*
