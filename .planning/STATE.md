@@ -102,6 +102,9 @@ Recent decisions affecting current work:
 - [10-01]: risk_level CHECK constraint: safe/risky/destructive for confirmation behavior tiers
 - [10-01]: quick_action_icon default 'bolt.fill' as universal quick action symbol
 - [10-01]: canTrigger computed from webhook_url presence (null = cannot trigger)
+- [10-02]: 10-second webhook timeout with graceful handling (success=true if timeout)
+- [10-02]: Fire-and-forget pattern for workflow triggers (don't wait for completion)
+- [10-02]: QuickAction type with camelCase for iOS consumption (riskLevel, canTrigger)
 - [10-03]: Capsule shape with regularMaterial background for modern iOS toast look
 - [10-03]: 2-second auto-dismiss using Task.sleep (non-blocking)
 - [10-03]: Toast modifier pattern: .toast($toast) on any view
