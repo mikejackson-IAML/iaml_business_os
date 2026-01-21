@@ -48,8 +48,9 @@ function initBenefitSteps() {
   ];
 
   // Check for page-specific image overrides via data attributes
+  // Note: data-visual-image-1 becomes dataset['visualImage-1'] (hyphen before digit preserved)
   const visualImages = defaultVisualImages.map((defaultUrl, index) => {
-    const override = benefitStepsSection.dataset[`visualImage${index}`];
+    const override = benefitStepsSection.dataset[`visualImage-${index}`];
     return override || defaultUrl;
   });
 
