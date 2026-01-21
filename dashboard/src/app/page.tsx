@@ -1,22 +1,18 @@
 import Link from 'next/link';
-import { FallingPattern } from '@/components/ui/falling-pattern';
 
 export default function Home() {
   return (
     <div className="relative min-h-screen">
-      {/* Background pattern */}
-      <FallingPattern
-        color="hsl(var(--accent-primary))"
-        backgroundColor="hsl(var(--background))"
-        duration={150}
-        blurIntensity="1em"
-        density={1}
-        className="fixed inset-0 -z-10"
-      />
-
       {/* Content */}
-      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center p-8">
-        <main className="dashboard-card p-8 max-w-lg text-center animate-card-entrance">
+      <div className="flex min-h-screen flex-col items-center justify-center p-8">
+        <main
+          className="dashboard-card p-8 max-w-lg text-center animate-card-entrance"
+          style={{
+            background: 'hsl(218 30% 15% / 0.8)',
+            backdropFilter: 'blur(2px)',
+            WebkitBackdropFilter: 'blur(2px)',
+          }}
+        >
           {/* Live badge */}
           <div className="flex justify-center mb-6">
             <span className="badge-live">LIVE</span>
@@ -30,21 +26,42 @@ export default function Home() {
 
           {/* Status indicators */}
           <div className="grid grid-cols-3 gap-4 mb-8">
-            <div className="dashboard-card-spotlight p-4">
+            <div
+              className="dashboard-card-spotlight p-4"
+              style={{
+                background: 'hsl(216 28% 20% / 0.75)',
+                backdropFilter: 'blur(1px)',
+                WebkitBackdropFilter: 'blur(1px)',
+              }}
+            >
               <p className="text-caption mb-1">Systems</p>
               <div className="flex items-center gap-2">
                 <span className="status-dot status-dot-healthy"></span>
                 <span className="text-heading-sm text-foreground">Online</span>
               </div>
             </div>
-            <div className="dashboard-card-spotlight p-4">
+            <div
+              className="dashboard-card-spotlight p-4"
+              style={{
+                background: 'hsl(216 28% 20% / 0.75)',
+                backdropFilter: 'blur(1px)',
+                WebkitBackdropFilter: 'blur(1px)',
+              }}
+            >
               <p className="text-caption mb-1">Health</p>
               <div className="flex items-center gap-2">
                 <span className="status-dot status-dot-healthy"></span>
                 <span className="text-heading-sm text-foreground">98%</span>
               </div>
             </div>
-            <div className="dashboard-card-spotlight p-4">
+            <div
+              className="dashboard-card-spotlight p-4"
+              style={{
+                background: 'hsl(216 28% 20% / 0.75)',
+                backdropFilter: 'blur(1px)',
+                WebkitBackdropFilter: 'blur(1px)',
+              }}
+            >
               <p className="text-caption mb-1">Uptime</p>
               <div className="flex items-center gap-2">
                 <span className="status-dot status-dot-info"></span>

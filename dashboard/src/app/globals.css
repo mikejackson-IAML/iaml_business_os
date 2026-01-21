@@ -44,6 +44,12 @@
     /* Dashboard-kit compatible aliases */
     --card: 218 30% 15%;
     --card-foreground: 0 0% 100%;
+
+    /* Card transparency variants (for testing) */
+    --card-opacity-solid: 1;
+    --card-opacity-subtle: 0.8;
+    --card-opacity-glass: 0.55;
+    --card-opacity-ethereal: 0.35;
     --popover: 218 30% 15%;
     --popover-foreground: 0 0% 100%;
     --primary: 189 100% 50%;
@@ -172,14 +178,66 @@
   }
 
   .dashboard-card {
-    @apply bg-card rounded-xl border border-border shadow-sm;
+    @apply rounded-xl border border-border shadow-sm;
+    background: hsl(218 30% 15% / 0.8);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
   }
 
   .dashboard-card-spotlight {
-    background: hsl(var(--background-card-light));
+    background: hsl(216 28% 20% / 0.75);
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
     border: 1px solid hsl(var(--border));
     border-radius: var(--radius-lg);
     padding: var(--space-5);
+  }
+
+  /* ============================================
+     CARD TRANSPARENCY VARIANTS
+     ============================================ */
+
+  /* Version A: Subtle transparency (80%) */
+  .card-variant-subtle {
+    background: hsl(var(--card) / 0.8) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .card-variant-subtle .dashboard-card-spotlight {
+    background: hsl(var(--background-card-light) / 0.75) !important;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  /* Version B: Glass effect (55% with stronger blur) */
+  .card-variant-glass {
+    background: hsl(var(--card) / 0.55) !important;
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    border: 1px solid hsl(var(--border) / 0.5) !important;
+  }
+
+  .card-variant-glass .dashboard-card-spotlight {
+    background: hsl(var(--background-card-light) / 0.5) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid hsl(var(--border) / 0.4) !important;
+  }
+
+  /* Version C: Ethereal (35% - very transparent) */
+  .card-variant-ethereal {
+    background: hsl(var(--card) / 0.35) !important;
+    backdrop-filter: blur(24px) saturate(1.4);
+    -webkit-backdrop-filter: blur(24px) saturate(1.4);
+    border: 1px solid hsl(var(--accent-primary) / 0.15) !important;
+  }
+
+  .card-variant-ethereal .dashboard-card-spotlight {
+    background: hsl(var(--background-card-light) / 0.3) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid hsl(var(--accent-primary) / 0.1) !important;
   }
 
   .dashboard-card-header {
