@@ -27,5 +27,9 @@
     </array>
     <key>NSFaceIDUsageDescription</key>
     <string>Authenticate to access your Business Command Center</string>
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>Voice commands require speech recognition to understand what you say.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Microphone access is needed to record your voice commands.</string>
 </dict>
 </plist>
