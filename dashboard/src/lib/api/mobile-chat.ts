@@ -9,6 +9,7 @@ import type {
   ToolResultBlockParam,
 } from '@anthropic-ai/sdk/resources/messages';
 import { getMobileHealthData } from './mobile-health';
+import { triggerWorkflow, getAvailableWorkflows, getWorkflowById } from './workflow-triggers';
 
 // ==================== Message Types ====================
 
@@ -260,30 +261,63 @@ async function executeHealthStatus(input: HealthToolInput): Promise<string> {
 
 /**
  * Execute trigger_workflow tool
- * Placeholder - actual n8n webhook trigger will be implemented in Phase 10
+ * Looks up workflow by ID and triggers via webhook
  */
 async function executeTriggerWorkflow(input: TriggerWorkflowInput): Promise<string> {
-  // Placeholder - actual n8n webhook trigger will be implemented in Phase 10
-  // For now, return a message indicating what would happen
+  // Look up workflow to get webhook URL
+  const workflow = await getWorkflowById(input.workflow_id);
+
+  if (!workflow) {
+    return JSON.stringify({
+      error: `Workflow not found: ${input.workflow_id}`,
+    });
+  }
+
+  if (!workflow.webhook_url) {
+    return JSON.stringify({
+      error: `Workflow "${workflow.workflow_name}" does not have a webhook URL configured`,
+    });
+  }
+
+  // Trigger the workflow
+  const result = await triggerWorkflow(
+    input.workflow_id,
+    workflow.webhook_url,
+    input.parameters
+  );
+
   return JSON.stringify({
-    status: 'pending',
-    message: `Workflow trigger requested: ${input.workflow_name} (${input.workflow_id})`,
-    note: 'Workflow triggering will be fully implemented in Phase 10',
-    parameters: input.parameters || {},
+    status: result.success ? 'triggered' : 'failed',
+    workflow_name: workflow.workflow_name,
+    execution_id: result.executionId,
+    message: result.message,
   });
 }
 
 /**
  * Execute query_workflows tool
- * Placeholder - actual n8n API query will be implemented in Phase 10
+ * Queries available workflows from the database
  */
-async function executeQueryWorkflows(_input: QueryWorkflowsInput): Promise<string> {
-  // Placeholder - actual n8n API query will be implemented in Phase 10
-  // Return a helpful message about available workflows
+async function executeQueryWorkflows(input: QueryWorkflowsInput): Promise<string> {
+  // Get all available workflows
+  const allWorkflows = await getAvailableWorkflows();
+
+  // Apply limit (default 10)
+  const limit = input.limit || 10;
+  const workflows = allWorkflows.slice(0, limit);
+
+  // For now, filter is not fully implemented (all/active/failed/recent all return the same)
+  // This could be extended later with execution history tracking
   return JSON.stringify({
-    message: 'Workflow querying will be implemented in Phase 10',
-    note: 'For now, use the n8n dashboard to view workflows',
-    workflows: [],
+    workflows: workflows.map((w) => ({
+      id: w.id,
+      name: w.name,
+      description: w.description,
+      category: w.category,
+      canTrigger: w.canTrigger,
+    })),
+    total: allWorkflows.length,
+    filter: input.filter || 'all',
   });
 }
 
