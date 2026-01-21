@@ -3,7 +3,7 @@ import SwiftUI
 struct HomeView: View {
     @Environment(AppState.self) private var appState
     @StateObject private var viewModel = HomeViewModel()
-    @State private var showAlerts = false
+    @Binding var showAlerts: Bool
 
     var body: some View {
         NavigationStack {
@@ -196,6 +196,6 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView()
+    HomeView(showAlerts: .constant(false))
         .environment(AppState())
 }
