@@ -4,38 +4,15 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import Anthropic from '@anthropic-ai/sdk';
+import { ChatMessage, formatSSEEvent, SYSTEM_PROMPT } from '@/lib/api/mobile-chat';
 
 // Required for streaming - prevents edge runtime which doesn't support ReadableStream well
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-// Message type from iOS app
-interface ChatMessage {
-  role: 'user' | 'assistant';
-  content: string;
-}
-
 interface ChatRequest {
   messages: ChatMessage[];
 }
-
-// SSE event types sent to client
-interface TextEvent {
-  type: 'text';
-  content: string;
-}
-
-interface DoneEvent {
-  type: 'done';
-  stop_reason: string;
-}
-
-interface ErrorEvent {
-  type: 'error';
-  message: string;
-}
-
-type SSEEvent = TextEvent | DoneEvent | ErrorEvent;
 
 /**
  * POST /api/mobile/chat
@@ -77,62 +54,72 @@ export async function POST(request: NextRequest) {
   }
 
   // Validate messages array
-  if (!body.messages || !Array.isArray(body.messages) || body.messages.length === 0) {
+  const messages = body.messages;
+  if (!Array.isArray(messages) || messages.length === 0) {
     return NextResponse.json(
-      { error: 'Messages array is required and cannot be empty' },
+      { error: 'messages array required' },
       { status: 400 }
     );
   }
 
-  // Get the last user message for echo (placeholder until Claude integration)
-  const lastMessage = body.messages[body.messages.length - 1];
-  if (!lastMessage || typeof lastMessage.content !== 'string') {
-    return NextResponse.json(
-      { error: 'Invalid message format' },
-      { status: 400 }
-    );
+  // Validate message structure
+  for (const msg of messages) {
+    if (!msg.role || !msg.content || !['user', 'assistant'].includes(msg.role)) {
+      return NextResponse.json(
+        { error: 'Invalid message format' },
+        { status: 400 }
+      );
+    }
   }
 
   // Create SSE stream
   const encoder = new TextEncoder();
 
-  // Helper to format SSE event
-  const formatSSE = (event: SSEEvent): string => {
-    return `data: ${JSON.stringify(event)}\n\n`;
-  };
-
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        // Placeholder: Echo the user's message
-        // TODO: Replace with actual Claude API call in next plan
-        const echoResponse = `Echo: ${lastMessage.content}`;
+        // Create Anthropic client (SDK reads ANTHROPIC_API_KEY from env)
+        const anthropic = new Anthropic();
 
-        // Send text event
-        const textEvent: TextEvent = {
-          type: 'text',
-          content: echoResponse,
-        };
-        controller.enqueue(encoder.encode(formatSSE(textEvent)));
+        // Stream Claude response
+        const messageStream = anthropic.messages.stream({
+          model: 'claude-sonnet-4-5-20250929',
+          max_tokens: 4096,
+          system: SYSTEM_PROMPT,
+          messages: messages.map(m => ({ role: m.role, content: m.content })),
+        });
 
-        // Send done event
-        const doneEvent: DoneEvent = {
-          type: 'done',
-          stop_reason: 'end_turn',
-        };
-        controller.enqueue(encoder.encode(formatSSE(doneEvent)));
+        // Process streaming events
+        for await (const event of messageStream) {
+          switch (event.type) {
+            case 'content_block_delta':
+              if (event.delta.type === 'text_delta') {
+                controller.enqueue(encoder.encode(
+                  formatSSEEvent({ type: 'text', content: event.delta.text })
+                ));
+              }
+              break;
+            case 'message_stop':
+              // Message stop is handled after the loop with finalMessage
+              break;
+          }
+        }
 
-        // Close stream
+        // Get final message to determine stop reason
+        const finalMessage = await messageStream.finalMessage();
+        controller.enqueue(encoder.encode(
+          formatSSEEvent({ type: 'done', stop_reason: finalMessage.stop_reason || 'end_turn' })
+        ));
+
         controller.close();
       } catch (error) {
-        console.error('Chat stream error:', error);
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        console.error('Claude API error:', error);
 
-        // Send error event
-        const errorEvent: ErrorEvent = {
-          type: 'error',
-          message: error instanceof Error ? error.message : 'Unknown error',
-        };
-        controller.enqueue(encoder.encode(formatSSE(errorEvent)));
+        // Send user-friendly error (don't expose internal details)
+        controller.enqueue(encoder.encode(
+          formatSSEEvent({ type: 'error', message: 'AI service error. Please try again.' })
+        ));
         controller.close();
       }
     },
@@ -147,7 +134,3 @@ export async function POST(request: NextRequest) {
     },
   });
 }
-
-// Verify Anthropic SDK imports cleanly (will use in next plan)
-// This ensures the SDK is correctly installed and compatible
-const _anthropicTypeCheck: typeof Anthropic = Anthropic;
