@@ -24,6 +24,7 @@ struct ContentView: View {
                 }
                 .tag(2)
         }
+        .environment(appState)  // Inject AppState for child views using @Environment
         .onChange(of: selectedTab) { _, _ in
             HapticManager.shared.selectionChanged()
             appState.recordActivity()  // Record tab change as activity
