@@ -145,6 +145,11 @@ struct HomeView: View {
                     .buttonStyle(.plain)
                 }
 
+                // Quick Actions grid
+                if let context = appState.authContext {
+                    QuickActionsGrid(context: context)
+                }
+
                 // Department list
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Departments")
