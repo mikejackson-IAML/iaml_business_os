@@ -249,4 +249,87 @@ actor NetworkManager {
             throw NetworkError.decodingFailed(error)
         }
     }
+
+    // MARK: - Notifications
+
+    /// Registers device token with the backend for push notifications.
+    /// - Parameters:
+    ///   - token: APNs device token (64 hex characters)
+    ///   - timezone: IANA timezone identifier (e.g., "America/Chicago")
+    ///   - context: LAContext for Keychain access
+    /// - Throws: NetworkError for auth, network, or server failures
+    func registerDeviceToken(
+        token: String,
+        timezone: String,
+        context: LAContext
+    ) async throws {
+        // Get API key from Keychain
+        let apiKey: String
+        do {
+            guard let key = try KeychainManager.shared.getAPIKey(context: context) else {
+                throw NetworkError.noAPIKey
+            }
+            apiKey = key
+        } catch let error as KeychainError {
+            if case .userCanceled = error {
+                throw NetworkError.unauthorized
+            }
+            throw NetworkError.noAPIKey
+        }
+
+        // Build request
+        guard let url = URL(string: Constants.API.baseURL)?
+            .appendingPathComponent("notifications/register") else {
+            throw NetworkError.invalidResponse
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue(apiKey, forHTTPHeaderField: "X-API-Key")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.timeoutInterval = Constants.API.timeout
+
+        // Build request body
+        let body: [String: Any] = [
+            "device_token": token,
+            "timezone": timezone
+        ]
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+
+        // Execute request
+        let data: Data
+        let response: URLResponse
+
+        do {
+            (data, response) = try await session.data(for: request)
+        } catch let error as URLError {
+            if error.code == .notConnectedToInternet || error.code == .networkConnectionLost {
+                throw NetworkError.networkUnavailable
+            }
+            throw NetworkError.requestFailed(error)
+        } catch {
+            throw NetworkError.requestFailed(error)
+        }
+
+        // Validate response
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw NetworkError.invalidResponse
+        }
+
+        // Map status codes
+        switch httpResponse.statusCode {
+        case 200...299:
+            // Success - token registered
+            break
+        case 401:
+            throw NetworkError.unauthorized
+        case 400...499:
+            throw NetworkError.clientError(httpResponse.statusCode)
+        case 500...599:
+            throw NetworkError.serverError(httpResponse.statusCode)
+        default:
+            throw NetworkError.clientError(httpResponse.statusCode)
+        }
+    }
 }
