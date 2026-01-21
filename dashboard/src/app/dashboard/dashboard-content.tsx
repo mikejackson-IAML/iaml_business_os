@@ -9,6 +9,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/dashboard-kit/compon
 import { Progress } from '@/dashboard-kit/components/ui/progress';
 import { FallingPattern } from '@/components/ui/falling-pattern';
 import { UserMenu } from '@/components/UserMenu';
+import { ConversionFunnelChart } from './components/conversion-funnel-chart';
+import { ChannelPerformanceChart } from './components/channel-performance-chart';
 import type { Campaign, CampaignActivity, ChannelPerformance } from '@/lib/supabase/types';
 import type { HealthStatus, ActivityItem } from '@/dashboard-kit/types';
 
@@ -180,6 +182,16 @@ export function DashboardContent({ metrics, campaigns, activities }: DashboardCo
                 icon={MessageSquare}
                 format="number"
               />
+            </div>
+
+            {/* Charts Row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <ConversionFunnelChart
+                totalContacts={metrics.totalContacts}
+                engagedContacts={metrics.engagedContacts}
+                registeredContacts={metrics.registeredContacts}
+              />
+              <ChannelPerformanceChart channels={metrics.channelBreakdown} />
             </div>
 
             {/* Campaigns Table */}
