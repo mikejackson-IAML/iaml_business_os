@@ -29,19 +29,19 @@ Requirements for iOS app milestone. Each maps to roadmap phases.
 
 ### iOS App - AI Chat
 
-- [ ] **CHAT-01**: User can send natural language messages to AI assistant
-- [ ] **CHAT-02**: AI responses stream in real-time (not wait for full response)
-- [ ] **CHAT-03**: User can view conversation history within session
-- [ ] **CHAT-04**: User can use voice input to speak messages instead of typing
-- [ ] **CHAT-05**: AI can trigger workflows, generate content, perform research based on commands
-- [ ] **CHAT-06**: High-risk actions (sending messages, payments, deletions) show confirmation before executing
+- [x] **CHAT-01**: User can send natural language messages to AI assistant
+- [x] **CHAT-02**: AI responses stream in real-time (not wait for full response)
+- [x] **CHAT-03**: User can view conversation history within session
+- [x] **CHAT-04**: User can use voice input to speak messages instead of typing
+- [x] **CHAT-05**: AI can trigger workflows, generate content, perform research based on commands
+- [x] **CHAT-06**: High-risk actions (sending messages, payments, deletions) show confirmation before executing
 
 ### iOS App - Quick Actions
 
-- [ ] **ACT-01**: User can see grid of quick action buttons for common workflows
-- [ ] **ACT-02**: User can tap quick action to trigger n8n workflow
-- [ ] **ACT-03**: User sees success/failure feedback after workflow trigger
-- [ ] **ACT-04**: Quick actions are configurable (user can choose which workflows appear)
+- [x] **ACT-01**: User can see grid of quick action buttons for common workflows
+- [x] **ACT-02**: User can tap quick action to trigger n8n workflow
+- [x] **ACT-03**: User sees success/failure feedback after workflow trigger
+- [x] **ACT-04**: Quick actions are configurable (user can choose which workflows appear)
 
 ### iOS App - Push Notifications
 
@@ -66,10 +66,10 @@ Requirements for iOS app milestone. Each maps to roadmap phases.
 
 ### API Backend - Workflows
 
-- [ ] **API-08**: POST /api/mobile/workflows/trigger starts specified n8n workflow
-- [ ] **API-09**: Workflow trigger returns execution ID for status tracking
-- [ ] **API-10**: GET /api/mobile/workflows returns list of available quick actions
-- [ ] **API-11**: Workflow endpoints require valid API key authentication
+- [x] **API-08**: POST /api/mobile/workflows/trigger starts specified n8n workflow
+- [x] **API-09**: Workflow trigger returns execution ID for status tracking
+- [x] **API-10**: GET /api/mobile/workflows returns list of available quick actions
+- [x] **API-11**: Workflow endpoints require valid API key authentication
 
 ### API Backend - Notifications
 
