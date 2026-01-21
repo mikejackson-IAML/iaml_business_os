@@ -311,6 +311,62 @@
       'Manage strikes, pickets, and employer responses within legal boundaries',
       'Audit employee handbooks for §7 compliance issues that expose you to ULP charges'
     ],
+    'Discrimination Prevention and Defense': [
+      'Handle Title VII harassment claims including hybrid workplace and LGBTQ+ issues post-Bostock',
+      'Navigate ADA/FMLA/PWFA coordination without compounding liability',
+      'Structure RIFs that withstand ADEA disparate impact challenges',
+      'Resolve discrimination claims before they become litigation',
+      'Write EEOC position statements that help your defense rather than haunt you',
+      'Run compliant DEI programs amid reverse-discrimination scrutiny'
+    ],
+    'Special Issues in Employment Law': [
+      'Identify remote work wage and hour risks before they become class action exposure',
+      'Build termination documentation that defeats pretext claims',
+      'Avoid defamation and negligent hiring/retention liability in references and separations',
+      'Design ADR programs that are both fair and legally defensible',
+      'Navigate cannabis and fitness-for-duty issues across multi-state operations',
+      'Draft enforceable non-competes, NDAs, and non-solicits after the FTC rule vacatur'
+    ],
+    'HR Law Fundamentals': [
+      'Handle discrimination claims including retaliation, harassment, and religious accommodation',
+      'Document ADA interactive process and FMLA coordination without creating overlap traps',
+      'Navigate hiring compliance from pay transparency to AI screening pitfalls',
+      'Identify remote work wage and hour risks before they become unpaid work claims',
+      'Build performance documentation and termination files that defeat pretext allegations',
+      'Conduct HR investigations that are neutral, documented, and retaliation-proof'
+    ],
+    'Strategic HR Management': [
+      'Present HR metrics that executives actually listen to and tie to business outcomes',
+      'Build retention strategies using internal mobility, stay interviews, and manager capability',
+      'Design performance systems that measure value rather than tasks',
+      'Create compensation strategies using pay transparency as a trust-building tool',
+      'Develop workforce plans focused on skills portfolios, not just headcount',
+      'Turn HR data into executive dashboards with leading indicators, not lagging metrics'
+    ],
+    'Retirement Plans': [
+      'Navigate ERISA fiduciary obligations and protect yourself from personal liability',
+      'Identify prohibited transactions before they happen and use exemptions correctly',
+      'Pass ADP/ACP nondiscrimination tests and fix failed tests quickly',
+      'Process participant loans, hardship distributions, and QDROs correctly the first time',
+      'Use IRS voluntary correction programs (EPCRS) to fix errors before audits discover them',
+      'Handle required minimum distributions and anti-cutback rules without errors'
+    ],
+    'Benefit Plan Claims, Appeals and Litigation': [
+      'Establish DOL-compliant claims procedures that protect your plan in court',
+      'Build administrative records that win under the arbitrary and capricious standard',
+      'Handle disability benefit claims under heightened conflict-of-interest scrutiny',
+      'Structure appeals that satisfy regulatory requirements and strengthen your defense',
+      'Leverage ERISA litigation advantages including no jury trials and limited discovery',
+      'Protect plan reimbursement and subrogation rights in claims settlements'
+    ],
+    'Welfare Benefits Plan Issues': [
+      'Meet ACA employer mandate requirements including affordability calculations and Forms 1094/1095',
+      'Implement HIPAA privacy safeguards and structure compliant business associate agreements',
+      'Administer HSAs, HRAs, and FSAs with proper claim substantiation procedures',
+      'Handle COBRA qualifying events, notices, and elections without triggering penalties',
+      'Ensure mental health parity compliance across your behavioral health benefits',
+      'Coordinate FMLA leave with health benefit continuation and Medicare secondary payer rules'
+    ],
     'Certificate in Employee Relations Law': [
       'Handle employee terminations with confidence, knowing exactly what documentation you need',
       'Navigate FMLA/ADA intersection issues that trip up even experienced HR professionals',
