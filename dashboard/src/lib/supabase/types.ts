@@ -439,6 +439,64 @@ export type Database = {
           metadata?: Json;
         };
       };
+      mobile_device_tokens: {
+        Row: {
+          id: string;
+          device_token: string;
+          device_name: string | null;
+          os_version: string | null;
+          app_version: string | null;
+          user_identifier: string;
+          status: 'active' | 'bounced' | 'revoked';
+          bounce_reason: string | null;
+          bounced_at: string | null;
+          timezone: string;
+          quiet_hours_enabled: boolean;
+          quiet_hours_start: number;
+          quiet_hours_end: number;
+          digest_enabled: boolean;
+          digest_hour: number;
+          created_at: string;
+          updated_at: string;
+          last_used_at: string | null;
+        };
+        Insert: {
+          device_token: string;
+          device_name?: string | null;
+          os_version?: string | null;
+          app_version?: string | null;
+          user_identifier?: string;
+          status?: 'active' | 'bounced' | 'revoked';
+          bounce_reason?: string | null;
+          bounced_at?: string | null;
+          timezone?: string;
+          quiet_hours_enabled?: boolean;
+          quiet_hours_start?: number;
+          quiet_hours_end?: number;
+          digest_enabled?: boolean;
+          digest_hour?: number;
+          created_at?: string;
+          updated_at?: string;
+          last_used_at?: string | null;
+        };
+        Update: {
+          device_token?: string;
+          device_name?: string | null;
+          os_version?: string | null;
+          app_version?: string | null;
+          status?: 'active' | 'bounced' | 'revoked';
+          bounce_reason?: string | null;
+          bounced_at?: string | null;
+          timezone?: string;
+          quiet_hours_enabled?: boolean;
+          quiet_hours_start?: number;
+          quiet_hours_end?: number;
+          digest_enabled?: boolean;
+          digest_hour?: number;
+          updated_at?: string;
+          last_used_at?: string | null;
+        };
+      };
     };
     Views: {
       campaign_funnel: {

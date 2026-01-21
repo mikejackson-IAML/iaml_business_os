@@ -1,7 +1,7 @@
 // APNs Provider Singleton
 // Manages HTTP/2 connection to Apple Push Notification service
 
-import apn from '@parse/node-apn';
+import * as apn from '@parse/node-apn';
 
 let provider: apn.Provider | null = null;
 
