@@ -73,10 +73,10 @@ Requirements for iOS app milestone. Each maps to roadmap phases.
 
 ### API Backend - Notifications
 
-- [ ] **API-12**: POST /api/mobile/notifications/register stores APNs device token
-- [ ] **API-13**: System can send push notifications via APNs for critical alerts
-- [ ] **API-14**: System can send push notifications for task completions
-- [ ] **API-15**: System generates and sends daily digest notification
+- [x] **API-12**: POST /api/mobile/notifications/register stores APNs device token
+- [x] **API-13**: System can send push notifications via APNs for critical alerts
+- [x] **API-14**: System can send push notifications for task completions
+- [x] **API-15**: System generates and sends daily digest notification
 
 ## v2.1 Requirements (Future)
 
@@ -130,16 +130,16 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DASH-02 | Phase 7 | Complete |
 | DASH-03 | Phase 7 | Complete |
 | DASH-04 | Phase 7 | Complete |
-| CHAT-01 | Phase 9 | Pending |
-| CHAT-02 | Phase 9 | Pending |
-| CHAT-03 | Phase 9 | Pending |
-| CHAT-04 | Phase 9 | Pending |
-| CHAT-05 | Phase 9 | Pending |
-| CHAT-06 | Phase 9 | Pending |
-| ACT-01 | Phase 10 | Pending |
-| ACT-02 | Phase 10 | Pending |
-| ACT-03 | Phase 10 | Pending |
-| ACT-04 | Phase 10 | Pending |
+| CHAT-01 | Phase 9 | Complete |
+| CHAT-02 | Phase 9 | Complete |
+| CHAT-03 | Phase 9 | Complete |
+| CHAT-04 | Phase 9 | Complete |
+| CHAT-05 | Phase 9 | Complete |
+| CHAT-06 | Phase 9 | Complete |
+| ACT-01 | Phase 10 | Complete |
+| ACT-02 | Phase 10 | Complete |
+| ACT-03 | Phase 10 | Complete |
+| ACT-04 | Phase 10 | Complete |
 | NOTIF-01 | Phase 12 | Pending |
 | NOTIF-02 | Phase 12 | Pending |
 | NOTIF-03 | Phase 12 | Pending |
@@ -152,14 +152,14 @@ Which phases cover which requirements. Updated during roadmap creation.
 | API-05 | Phase 8 | Complete |
 | API-06 | Phase 8 | Complete |
 | API-07 | Phase 8 | Complete |
-| API-08 | Phase 10 | Pending |
-| API-09 | Phase 10 | Pending |
-| API-10 | Phase 10 | Pending |
-| API-11 | Phase 10 | Pending |
-| API-12 | Phase 11 | Pending |
-| API-13 | Phase 11 | Pending |
-| API-14 | Phase 11 | Pending |
-| API-15 | Phase 11 | Pending |
+| API-08 | Phase 10 | Complete |
+| API-09 | Phase 10 | Complete |
+| API-10 | Phase 10 | Complete |
+| API-11 | Phase 10 | Complete |
+| API-12 | Phase 11 | Complete |
+| API-13 | Phase 11 | Complete |
+| API-14 | Phase 11 | Complete |
+| API-15 | Phase 11 | Complete |
 
 **Coverage:**
 - v2.0 requirements: 41 total
@@ -168,4 +168,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-20*
-*Last updated: 2026-01-20 after Phase 8 completion*
+*Last updated: 2026-01-21 after Phase 11 completion*
