@@ -22,10 +22,10 @@ Requirements for iOS app milestone. Each maps to roadmap phases.
 
 ### iOS App - Dashboard
 
-- [ ] **DASH-01**: User can view department health scores on Home tab
-- [ ] **DASH-02**: User can pull-to-refresh to update dashboard data
-- [ ] **DASH-03**: Dashboard shows current alert count with tap to view details
-- [ ] **DASH-04**: Health scores update in real-time or near-real-time
+- [x] **DASH-01**: User can view department health scores on Home tab
+- [x] **DASH-02**: User can pull-to-refresh to update dashboard data
+- [x] **DASH-03**: Dashboard shows current alert count with tap to view details
+- [x] **DASH-04**: Health scores update in real-time or near-real-time
 
 ### iOS App - AI Chat
 
@@ -53,9 +53,9 @@ Requirements for iOS app milestone. Each maps to roadmap phases.
 
 ### API Backend - Health
 
-- [ ] **API-01**: GET /api/mobile/health returns department health scores as JSON
-- [ ] **API-02**: Health endpoint aggregates data from Supabase/n8n into unified response
-- [ ] **API-03**: Health endpoint requires valid API key authentication
+- [x] **API-01**: GET /api/mobile/health returns department health scores as JSON
+- [x] **API-02**: Health endpoint aggregates data from Supabase/n8n into unified response
+- [x] **API-03**: Health endpoint requires valid API key authentication
 
 ### API Backend - Chat
 
@@ -126,10 +126,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AUTH-02 | Phase 6 | Complete |
 | AUTH-03 | Phase 6 | Complete |
 | AUTH-04 | Phase 6 | Complete |
-| DASH-01 | Phase 7 | Pending |
-| DASH-02 | Phase 7 | Pending |
-| DASH-03 | Phase 7 | Pending |
-| DASH-04 | Phase 7 | Pending |
+| DASH-01 | Phase 7 | Complete |
+| DASH-02 | Phase 7 | Complete |
+| DASH-03 | Phase 7 | Complete |
+| DASH-04 | Phase 7 | Complete |
 | CHAT-01 | Phase 9 | Pending |
 | CHAT-02 | Phase 9 | Pending |
 | CHAT-03 | Phase 9 | Pending |
@@ -145,9 +145,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | NOTIF-03 | Phase 12 | Pending |
 | NOTIF-04 | Phase 12 | Pending |
 | NOTIF-05 | Phase 12 | Pending |
-| API-01 | Phase 7 | Pending |
-| API-02 | Phase 7 | Pending |
-| API-03 | Phase 7 | Pending |
+| API-01 | Phase 7 | Complete |
+| API-02 | Phase 7 | Complete |
+| API-03 | Phase 7 | Complete |
 | API-04 | Phase 8 | Pending |
 | API-05 | Phase 8 | Pending |
 | API-06 | Phase 8 | Pending |
@@ -168,4 +168,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-20*
-*Last updated: 2026-01-20 after roadmap creation*
+*Last updated: 2026-01-20 after Phase 7 completion*

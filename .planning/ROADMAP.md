@@ -158,10 +158,10 @@ Plans:
 **Plans:** 4 plans in 3 waves
 
 Plans:
-- [ ] 07-01-PLAN.md — Health API endpoint with auth and data aggregation (Wave 1)
-- [ ] 07-02-PLAN.md — iOS networking layer with Codable models (Wave 2)
-- [ ] 07-03-PLAN.md — Dashboard UI with health score cards and pull-to-refresh (Wave 3)
-- [ ] 07-04-PLAN.md — Alert count display with tap-to-view details (Wave 3)
+- [x] 07-01-PLAN.md — Health API endpoint with auth and data aggregation (Wave 1)
+- [x] 07-02-PLAN.md — iOS networking layer with Codable models (Wave 2)
+- [x] 07-03-PLAN.md — Dashboard UI with health score cards and pull-to-refresh (Wave 3)
+- [x] 07-04-PLAN.md — Alert count display with tap-to-view details (Wave 3)
 
 ---
 
@@ -303,7 +303,7 @@ Plans:
 |-------|-----------|----------------|--------|-----------|
 | 1-5 | v1.0 | - | Complete | - |
 | 6. Foundation & Security | v2.0 | 4/4 | Complete | 2026-01-20 |
-| 7. Health API & Dashboard | v2.0 | 0/4 | Planned | - |
+| 7. Health API & Dashboard | v2.0 | 4/4 | Complete | 2026-01-20 |
 | 8. Chat API | v2.0 | 0/4 | Not started | - |
 | 9. Chat UI | v2.0 | 0/5 | Not started | - |
 | 10. Workflow API & Quick Actions | v2.0 | 0/5 | Not started | - |
@@ -313,4 +313,4 @@ Plans:
 
 ---
 *Roadmap created: 2026-01-20*
-*Last updated: 2026-01-20 after Phase 7 planning*
+*Last updated: 2026-01-20 after Phase 7 completion*
