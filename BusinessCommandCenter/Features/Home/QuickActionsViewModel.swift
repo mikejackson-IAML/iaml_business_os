@@ -17,6 +17,8 @@ final class QuickActionsViewModel: ObservableObject {
     @Published var toast: Toast?
     /// Action awaiting confirmation (for risky/destructive actions).
     @Published var confirmationAction: QuickAction?
+    /// Whether to show the notification permission sheet
+    @Published var showPermissionSheet = false
 
     /// Maximum number of actions to display in the grid.
     private let maxActions = 6
@@ -110,6 +112,13 @@ final class QuickActionsViewModel: ObservableObject {
 
             if response.success {
                 toast = Toast(message: "Sent!", type: .success)
+
+                // Check if we should prompt for notifications (first successful trigger)
+                if PushNotificationService.shared.shouldPromptForPermission {
+                    // Small delay for toast to show first
+                    try? await Task.sleep(for: .seconds(0.5))
+                    showPermissionSheet = true
+                }
             } else {
                 toast = Toast(message: response.message, type: .error)
             }
@@ -120,5 +129,14 @@ final class QuickActionsViewModel: ObservableObject {
         }
 
         loadingActionId = nil
+    }
+
+    /// Called when permission sheet is dismissed.
+    func handlePermissionResult(granted: Bool, context: LAContext) {
+        if granted {
+            Task {
+                await PushNotificationService.shared.registerTokenWithBackend(context: context)
+            }
+        }
     }
 }
