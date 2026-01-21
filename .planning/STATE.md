@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-20)
 ## Current Position
 
 Phase: 11 of 13 (Push Notification API)
-Plan: 4 of 4 complete
+Plan: 5 of 5 complete
 Status: Phase complete
-Last activity: 2026-01-21 - Completed 11-04-PLAN.md (Notification Send Endpoint)
+Last activity: 2026-01-21 - Completed 11-05-PLAN.md (Daily Digest Cron)
 
-Progress: [█████████████████] 79%
+Progress: [█████████████████] 81%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 25
-- Average duration: 2.7 min
-- Total execution time: 1.15 hours
+- Total plans completed: 26
+- Average duration: 2.6 min
+- Total execution time: 1.18 hours
 
 **By Phase:**
 
@@ -32,10 +32,10 @@ Progress: [█████████████████] 79%
 | 8 | 4 | 11 min | 2.8 min |
 | 9 | 5 | 10 min | 2.0 min |
 | 10 | 6 | 10 min | 1.7 min |
-| 11 | 4 | 8 min | 2.0 min |
+| 11 | 5 | 10 min | 2.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 10-06 (2 min), 11-01 (1 min), 11-03 (1 min), 11-02 (3 min), 11-04 (3 min)
+- Last 5 plans: 11-01 (1 min), 11-03 (1 min), 11-02 (3 min), 11-04 (3 min), 11-05 (2 min)
 - Trend: Consistently fast execution
 
 *Updated after each plan completion*
@@ -130,6 +130,9 @@ Recent decisions affecting current work:
 - [11-04]: Dual auth (X-API-Key + X-Webhook-Secret) allows both mobile app and n8n to send notifications
 - [11-04]: critical_alert type automatically bypasses quiet hours without explicit flag
 - [11-04]: Category set to type.toUpperCase() for iOS notification grouping
+- [11-05]: Hourly cron checks all user timezones to find whose digest_hour matches
+- [11-05]: formatDigestNotification returns null for 'all quiet' days (no activity + healthy)
+- [11-05]: CRON_SECRET validation in production, no auth required in development
 
 ### Pending Todos
 
@@ -141,8 +144,8 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-21T06:13:00Z
-Stopped at: Completed 11-04-PLAN.md (Notification Send Endpoint) - Phase 11 complete
+Last session: 2026-01-21T06:30:00Z
+Stopped at: Completed 11-05-PLAN.md (Daily Digest Cron) - Phase 11 complete
 Resume file: None
 
 ---
