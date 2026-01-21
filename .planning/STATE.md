@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-20)
 ## Current Position
 
 Phase: 12 of 13 (Push Notification UI)
-Plan: 1 of 5 complete
+Plan: 3 of 5 complete
 Status: In progress
-Last activity: 2026-01-21 - Completed 12-01-PLAN.md (AppDelegate & Entitlements)
+Last activity: 2026-01-21 - Completed 12-03-PLAN.md (Deep Link Navigation)
 
-Progress: [██████████████████] 84%
+Progress: [███████████████████] 88%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 27
+- Total plans completed: 29
 - Average duration: 2.6 min
-- Total execution time: 1.23 hours
+- Total execution time: 1.33 hours
 
 **By Phase:**
 
@@ -33,10 +33,10 @@ Progress: [██████████████████] 84%
 | 9 | 5 | 10 min | 2.0 min |
 | 10 | 6 | 10 min | 1.7 min |
 | 11 | 5 | 10 min | 2.0 min |
-| 12 | 1 | 3 min | 3.0 min |
+| 12 | 3 | 9 min | 3.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 11-02 (3 min), 11-04 (3 min), 11-05 (2 min), 12-01 (3 min)
+- Last 5 plans: 11-04 (3 min), 11-05 (2 min), 12-01 (3 min), 12-02 (3 min), 12-03 (3 min)
 - Trend: Consistently fast execution
 
 *Updated after each plan completion*
@@ -137,6 +137,9 @@ Recent decisions affecting current work:
 - [12-01]: UNUserNotificationCenterDelegate set in willFinishLaunchingWithOptions (not didFinish) for cold-launch tap handling
 - [12-01]: NotificationCenter posts for device token and notification taps enable decoupled handling
 - [12-01]: Async delegate methods (iOS 15+) for modern Swift concurrency
+- [12-03]: CRITICAL_ALERT type maps to homeWithAlerts destination for auto-opening alerts sheet
+- [12-03]: 100ms delay before showing alerts sheet ensures tab switch completes first
+- [12-03]: showAlerts state lifted from HomeView to AppState for ContentView control
 
 ### Pending Todos
 
@@ -148,8 +151,8 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-21T06:38:00Z
-Stopped at: Completed 12-01-PLAN.md (AppDelegate & Entitlements)
+Last session: 2026-01-21T16:49:30Z
+Stopped at: Completed 12-03-PLAN.md (Deep Link Navigation)
 Resume file: None
 
 ---
@@ -169,7 +172,7 @@ Resume file: None
 | 9 | Chat UI | Complete |
 | 10 | Workflow API & Quick Actions | Complete |
 | 11 | Push Notification API | Complete |
-| 12 | Push Notification UI | In progress (1/5) |
+| 12 | Push Notification UI | In progress (3/5) |
 | 13 | Polish & App Store | Not started |
 
-**Next step:** `/gsd:execute-phase 12` to continue with plan 02
+**Next step:** `/gsd:execute-phase 12` to continue with plan 04
