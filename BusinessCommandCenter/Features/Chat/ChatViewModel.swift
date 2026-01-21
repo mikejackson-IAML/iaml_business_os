@@ -5,6 +5,12 @@ import LocalAuthentication
 
 /// Manages chat conversation state and streaming for ChatView.
 /// Follows MVVM pattern established in Phase 7 (HomeViewModel).
+///
+/// NOTE: Phase 8 API executes tools immediately server-side.
+/// Full confirmation flow (pause execution until user approves)
+/// requires API changes in Phase 10.
+/// Current implementation shows confirmation UI for transparency
+/// but tool has already executed.
 @MainActor
 final class ChatViewModel: ObservableObject {
     // MARK: - Published State
@@ -148,27 +154,20 @@ final class ChatViewModel: ObservableObject {
         case .toolUse(let id, let name, let input):
             // Tool call complete with input
             // Check if this is a high-risk action requiring confirmation
-            if name == "trigger_workflow" {
-                // Extract workflow info from input for confirmation dialog
-                let workflowId = (input["workflow_id"]?.value as? String) ?? "Unknown"
-                let description = (input["description"]?.value as? String)
-                    ?? "Trigger workflow \(workflowId)"
-
-                pendingConfirmation = ConfirmationAction(
+            if isHighRiskTool(name) {
+                pendingConfirmation = createConfirmation(
                     toolId: id,
                     toolName: name,
-                    description: description,
-                    confirmLabel: "Run Workflow",
-                    isDestructive: false,
-                    details: [
-                        ConfirmationAction.Detail(key: "Workflow ID", value: workflowId)
-                    ]
+                    input: input
                 )
             }
 
         case .toolResult(let id, let content):
-            // Tool execution result - could update UI to show result
-            _ = (id, content)
+            // Tool execution result - clear any pending confirmation for this tool
+            if pendingConfirmation?.toolId == id {
+                pendingConfirmation = nil
+            }
+            _ = content
 
         case .done(let stopReason):
             // Stream complete
@@ -178,6 +177,70 @@ final class ChatViewModel: ObservableObject {
             // Server-side error
             self.error = .serverError(500)
             _ = message
+        }
+    }
+
+    // MARK: - High-Risk Tool Detection
+
+    /// Determine if a tool is high-risk and needs confirmation.
+    /// High-risk tools are those that modify data or trigger external actions.
+    private func isHighRiskTool(_ name: String) -> Bool {
+        let highRiskTools = [
+            "trigger_workflow",
+            "send_emails",
+            "delete_records",
+            "update_contacts",
+        ]
+        return highRiskTools.contains(name)
+    }
+
+    /// Create confirmation action from tool use event.
+    private func createConfirmation(
+        toolId: String,
+        toolName: String,
+        input: [String: AnyCodable]
+    ) -> ConfirmationAction {
+        switch toolName {
+        case "trigger_workflow":
+            let workflowName = input["workflow_name"]?.stringValue ?? "Unknown workflow"
+            let workflowId = input["workflow_id"]?.stringValue ?? ""
+            return ConfirmationAction(
+                toolId: toolId,
+                toolName: toolName,
+                description: "Run the \"\(workflowName)\" workflow?",
+                confirmLabel: "Run Workflow",
+                isDestructive: false,
+                details: [
+                    .init(key: "Workflow", value: workflowName),
+                    .init(key: "ID", value: workflowId),
+                ]
+            )
+
+        case "send_emails":
+            let recipients = input["recipient_count"]?.stringValue ?? "Unknown"
+            let template = input["template"]?.stringValue ?? "Email"
+            return ConfirmationAction(
+                toolId: toolId,
+                toolName: toolName,
+                description: "Send \(template) to \(recipients) recipients?",
+                confirmLabel: "Send Emails",
+                isDestructive: true,
+                details: [
+                    .init(key: "Recipients", value: recipients),
+                    .init(key: "Template", value: template),
+                ]
+            )
+
+        default:
+            // Generic confirmation for unknown high-risk tools
+            return ConfirmationAction(
+                toolId: toolId,
+                toolName: toolName,
+                description: "Execute \(toolName)?",
+                confirmLabel: "Confirm",
+                isDestructive: true,
+                details: []
+            )
         }
     }
 

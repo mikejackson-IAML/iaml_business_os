@@ -114,6 +114,25 @@ struct ChatView: View {
                             .id("skeleton")
                     }
 
+                    // Pending confirmation (if any)
+                    if let confirmation = viewModel.pendingConfirmation {
+                        ConfirmationBubble(
+                            action: confirmation,
+                            onApprove: {
+                                HapticManager.shared.success()
+                                Task {
+                                    await viewModel.approveConfirmation()
+                                }
+                            },
+                            onReject: {
+                                HapticManager.shared.tap()
+                                viewModel.rejectConfirmation()
+                            }
+                        )
+                        .id("confirmation")
+                        .transition(.opacity.combined(with: .move(edge: .bottom)))
+                    }
+
                     // Invisible anchor at bottom
                     Color.clear
                         .frame(height: 1)
@@ -144,6 +163,16 @@ struct ChatView: View {
                     }
                 }
             }
+            // Scroll to confirmation when it appears
+            .onChange(of: viewModel.pendingConfirmation != nil) { _, hasConfirmation in
+                if hasConfirmation {
+                    withAnimation(.easeOut(duration: 0.2)) {
+                        proxy.scrollTo("confirmation", anchor: .bottom)
+                    }
+                }
+            }
+            // Animate confirmation appearance/disappearance
+            .animation(.easeInOut(duration: 0.2), value: viewModel.pendingConfirmation != nil)
         }
     }
 
