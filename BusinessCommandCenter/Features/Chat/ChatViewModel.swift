@@ -93,7 +93,7 @@ final class ChatViewModel: ObservableObject {
 
         // Stream response from API
         do {
-            for try await event in chatService.streamChat(messages: messages, apiKey: apiKey) {
+            for try await event in await chatService.streamChat(messages: messages, apiKey: apiKey) {
                 handleEvent(event)
             }
         } catch {
