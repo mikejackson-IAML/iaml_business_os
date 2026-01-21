@@ -20,7 +20,7 @@ struct AIAvatarView: View {
                     .overlay {
                         Image(systemName: "brain.head.profile")
                             .font(.system(size: 18))
-                            .foregroundStyle(.accentColor)
+                            .foregroundStyle(Color.accentColor)
                     }
             }
     }

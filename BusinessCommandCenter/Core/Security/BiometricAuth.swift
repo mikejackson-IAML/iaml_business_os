@@ -23,6 +23,8 @@ final class BiometricAuth {
             return .touchID
         case .opticID:
             return .opticID
+        case .none:
+            return .none
         @unknown default:
             return .none
         }

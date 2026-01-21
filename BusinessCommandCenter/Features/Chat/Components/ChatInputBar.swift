@@ -52,7 +52,7 @@ struct ChatInputBar: View {
                 Button(action: onSend) {
                     Image(systemName: "arrow.up.circle.fill")
                         .font(.system(size: 36))
-                        .foregroundStyle(.accentColor)
+                        .foregroundStyle(Color.accentColor)
                 }
                 .transition(.scale.combined(with: .opacity))
             }
