@@ -10968,6 +10968,18 @@ input[type="radio"].session-radio {
   margin: 0;
 }
 
+/* Consultation section button with arrow */
+.pp-consultation-content .btn-register::after {
+  content: " \2192";
+  margin-left: 8px;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+.pp-consultation-content .btn-register:hover::after {
+  transform: translateX(4px);
+}
+
 /* Responsive: stack on tablet/mobile */
 @media (max-width: 768px) {
   .pp-consultation-section {
