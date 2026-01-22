@@ -215,3 +215,96 @@ FROM program_stats ps
 CROSS JOIN urgent_programs up
 CROSS JOIN notification_stats ns
 CROSS JOIN response_stats rs;
+
+-- ============================================================================
+-- FUNCTION: Assign Instructor (Admin Override)
+-- Manually assigns an instructor to a block, bypassing tier eligibility
+-- ============================================================================
+CREATE OR REPLACE FUNCTION faculty_scheduler.assign_instructor(
+  p_block_id UUID,
+  p_instructor_id UUID
+)
+RETURNS TABLE (
+  success BOOLEAN,
+  error_message TEXT,
+  claim_id UUID
+) AS $$
+DECLARE
+  v_block RECORD;
+  v_instructor RECORD;
+  v_claim_id UUID;
+BEGIN
+  -- Get block details
+  SELECT pb.*, sp.id as program_id
+  INTO v_block
+  FROM faculty_scheduler.program_blocks pb
+  JOIN faculty_scheduler.scheduled_programs sp ON sp.id = pb.scheduled_program_id
+  WHERE pb.id = p_block_id
+  FOR UPDATE;
+
+  -- Verify block exists
+  IF v_block IS NULL THEN
+    RETURN QUERY SELECT FALSE, 'Block not found.'::TEXT, NULL::UUID;
+    RETURN;
+  END IF;
+
+  -- Verify block is open
+  IF v_block.status != 'open' THEN
+    RETURN QUERY SELECT FALSE, ('Block is not open (current status: ' || v_block.status || ').')::TEXT, NULL::UUID;
+    RETURN;
+  END IF;
+
+  -- Get instructor details
+  SELECT * INTO v_instructor
+  FROM faculty
+  WHERE id = p_instructor_id;
+
+  -- Verify instructor exists
+  IF v_instructor IS NULL THEN
+    RETURN QUERY SELECT FALSE, 'Instructor not found.'::TEXT, NULL::UUID;
+    RETURN;
+  END IF;
+
+  -- Verify instructor is active
+  IF v_instructor.faculty_status != 'active' THEN
+    RETURN QUERY SELECT FALSE, ('Instructor is not active (status: ' || v_instructor.faculty_status || ').')::TEXT, NULL::UUID;
+    RETURN;
+  END IF;
+
+  -- Create claim record (status='confirmed' for admin assignment)
+  INSERT INTO faculty_scheduler.claims (
+    instructor_id,
+    block_id,
+    status,
+    claimed_at
+  ) VALUES (
+    p_instructor_id,
+    p_block_id,
+    'confirmed',
+    NOW()
+  )
+  RETURNING id INTO v_claim_id;
+
+  -- Update block
+  UPDATE faculty_scheduler.program_blocks
+  SET
+    instructor_id = p_instructor_id,
+    claimed_at = NOW(),
+    status = 'claimed',
+    updated_at = NOW()
+  WHERE id = p_block_id;
+
+  -- Check if all blocks are filled and update program status
+  IF NOT EXISTS (
+    SELECT 1 FROM faculty_scheduler.program_blocks
+    WHERE scheduled_program_id = v_block.scheduled_program_id
+      AND status = 'open'
+  ) THEN
+    UPDATE faculty_scheduler.scheduled_programs
+    SET status = 'filled', updated_at = NOW()
+    WHERE id = v_block.scheduled_program_id;
+  END IF;
+
+  RETURN QUERY SELECT TRUE, NULL::TEXT, v_claim_id;
+END;
+$$ LANGUAGE plpgsql;
