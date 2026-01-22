@@ -213,3 +213,24 @@ export async function releaseAllPrograms(): Promise<ActionResult> {
     },
   };
 }
+
+/**
+ * Dismiss an alert from the dashboard.
+ * Soft-deletes the alert so it won't reappear for the same event.
+ */
+export async function dismissAlert(alertId: string): Promise<ActionResult> {
+  const supabase = getServerClient();
+
+  const { error } = await supabase.rpc('faculty_scheduler.dismiss_alert', {
+    p_alert_id: alertId,
+    p_dismissed_by: 'dashboard',
+  });
+
+  if (error) {
+    console.error('Error dismissing alert:', error);
+    return { success: false, error: error.message };
+  }
+
+  revalidatePath('/dashboard/faculty-scheduler');
+  return { success: true };
+}

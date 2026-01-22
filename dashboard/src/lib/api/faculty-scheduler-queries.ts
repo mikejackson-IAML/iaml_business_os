@@ -143,6 +143,21 @@ export interface EligibleInstructorWithHistory extends EligibleInstructor {
 }
 
 /**
+ * Dashboard alert from active_alerts view.
+ * Represents a program at risk or unresponsive VIP instructor.
+ */
+export interface FacultySchedulerAlert {
+  id: string;
+  alert_type: 'tier_ending' | 'vip_non_response';
+  scheduled_program_id: string;
+  instructor_id: string | null;
+  severity: 'warning' | 'critical';
+  title: string;
+  description: string | null;
+  triggered_at: string;
+}
+
+/**
  * Full dashboard data bundle.
  * Returned by getFacultySchedulerDashboardData for parallel fetching.
  */
@@ -150,6 +165,7 @@ export interface FacultySchedulerDashboardData {
   programs: RecruitmentPipelineProgram[];
   notResponded: NotRespondedInstructor[];
   summaryStats: DashboardSummaryStats;
+  alerts: FacultySchedulerAlert[];
 }
 
 // ============================================
@@ -366,24 +382,49 @@ export async function getEligibleInstructorsWithHistory(
   }));
 }
 
+/**
+ * Fetch active alerts for the dashboard.
+ * Calls refresh_alerts() first to ensure up-to-date alerts.
+ * Returns alerts sorted by severity (critical first) then by triggered_at.
+ */
+export async function getAlerts(): Promise<FacultySchedulerAlert[]> {
+  const supabase = getServerClient();
+
+  // Refresh alerts before fetching
+  await supabase.rpc('faculty_scheduler.refresh_alerts');
+
+  const { data, error } = await supabase
+    .from('faculty_scheduler.active_alerts')
+    .select('*');
+
+  if (error) {
+    console.error('Error fetching alerts:', error);
+    return [];
+  }
+
+  return (data || []) as FacultySchedulerAlert[];
+}
+
 // ============================================
 // Main Dashboard Data Fetcher
 // ============================================
 
 /**
  * Fetch all Faculty Scheduler dashboard data in parallel.
- * Returns programs, not-responded list, and summary stats.
+ * Returns programs, not-responded list, summary stats, and alerts.
  */
 export async function getFacultySchedulerDashboardData(): Promise<FacultySchedulerDashboardData> {
-  const [programs, notResponded, summaryStats] = await Promise.all([
+  const [programs, notResponded, summaryStats, alerts] = await Promise.all([
     getRecruitmentPipeline(),
     getNotRespondedInstructors(),
     getDashboardSummaryStats(),
+    getAlerts(),
   ]);
 
   return {
     programs,
     notResponded,
     summaryStats,
+    alerts,
   };
 }
