@@ -98,11 +98,29 @@ export function NotRespondedList({ instructors }: NotRespondedListProps) {
                         key={instructor.instructor_id}
                         className="flex items-center justify-between text-sm"
                       >
-                        <div>
+                        <div className="flex items-center gap-2">
                           <span className="font-medium">{instructor.full_name}</span>
-                          <span className="text-muted-foreground ml-2">
+                          <span className="text-muted-foreground">
                             ({getTierLabel(instructor.tier_when_notified)})
                           </span>
+                          {instructor.viewed_at && (
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Badge
+                                    variant="outline"
+                                    className="text-xs text-muted-foreground border-muted-foreground/30"
+                                  >
+                                    <Eye className="h-3 w-3 mr-1" />
+                                    Viewed
+                                  </Badge>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>Viewed {formatViewedAt(instructor.viewed_at)}</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          )}
                         </div>
                         <span className="text-xs text-muted-foreground">
                           {formatTimeAgo(instructor.notified_at)}
