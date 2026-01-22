@@ -1,0 +1,12 @@
+{
+  "project": "Action Center",
+  "current_milestone": "v1.0",
+  "workflow": {
+    "mode": "yolo",
+    "depth": "comprehensive",
+    "parallelization": true,
+    "commit_docs": true
+  },
+  "created": "2026-01-22",
+  "notes": "Unified task management system - web-first, iOS deferred to v1.1"
+}
