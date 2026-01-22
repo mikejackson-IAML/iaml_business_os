@@ -143,6 +143,50 @@ The testing agent:
 
 **Architecture:** `business-os/docs/architecture/N8N-WORKFLOW-TESTING-AGENT.md`
 
+## Understanding Confirmation (Auto-Trigger)
+
+Before starting any ambiguous coding task, **automatically invoke the `/understand` skill** to confirm interpretation. This prevents wasted effort from misunderstood requirements.
+
+### When to Auto-Trigger
+
+Proactively use `/understand` when the request has:
+
+| Signal | Example |
+|--------|---------|
+| Ambiguous scope | "Add authentication" (where? how?) |
+| Multiple valid approaches | "Add caching" (Redis? memory? file?) |
+| Vague verbs | "improve", "fix", "refactor", "optimize" |
+| Broad impact | Will touch 4+ files |
+| Missing specifics | No file paths, function names, or error messages |
+
+### When to Skip
+
+Don't trigger when:
+- User gives explicit file + change: "Change color in Button.tsx to blue"
+- Detailed specs provided: "Use JWT, httpOnly cookie, add /api/auth/login"
+- Tiny scope: "Fix typo in README"
+- User says "just do it" or "skip confirmation"
+
+### What It Does
+
+1. Reads back interpretation in plain English
+2. Maps user language to technical terms (teaches vocabulary)
+3. Shows planned approach and files to touch
+4. If confidence < 80%, asks clarifying questions
+5. Waits for user confirmation before building
+
+### Confidence Thresholds
+
+| Confidence | Behavior |
+|------------|----------|
+| 80-100% | Confirm understanding, proceed on approval |
+| 50-79% | Confirm + ask 2-3 specific questions |
+| < 50% | Ask fundamental questions before planning |
+
+Reference: `.claude/skills/understand.md`
+
+---
+
 ## Documentation Requirements (MANDATORY)
 
 All Business OS components MUST include documentation with CEO summaries. This is non-negotiable.
