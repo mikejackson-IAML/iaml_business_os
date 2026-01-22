@@ -1,0 +1,11 @@
+-- ============================================================================
+-- MIGRATION: Faculty Scheduler Phase 6 - Response Tracking
+-- ============================================================================
+-- Adds view tracking to notifications:
+-- - viewed_at column on notifications table
+-- - record_notification_view() helper function
+-- - Updated not_responded_instructors view with viewed_at
+-- - Updated dashboard_summary_stats with viewed_count
+--
+-- Date: 2026-01-22
+-- ============================================================================
