@@ -84,9 +84,9 @@ Plans:
 **Plans:** TBD (estimated 2-3 plans)
 
 Plans:
-- [ ] 07-01-PLAN.md — Database migration: Create teaching_history table, populate from claims
-- [ ] 07-02-PLAN.md — Dashboard query and types for instructor history
-- [ ] 07-03-PLAN.md — Dashboard UI: History display in instructor details and assign modal
+- [x] 07-01-PLAN.md — Database migration: Create teaching_history table, populate from claims (Wave 1)
+- [x] 07-02-PLAN.md — Dashboard query and types for instructor history (Wave 2)
+- [x] 07-03-PLAN.md — Dashboard UI: History display in instructor details and assign modal (Wave 2)
 
 ---
 
@@ -117,9 +117,9 @@ Plans:
 |-------|-----------|----------------|--------|-----------|
 | 1-5 | v1.0 | 17/17 | Complete | 2026-01-22 |
 | 6. Response Tracking | v1.1 | 3/3 | Complete | 2026-01-22 |
-| 7. Instructor History | v1.1 | 0/3 | Ready to plan | - |
+| 7. Instructor History | v1.1 | 3/3 | Complete | 2026-01-22 |
 | 8. Dashboard Alerts | v1.1 | 0/4 | Planned | - |
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-22 after Phase 6 complete*
+*Last updated: 2026-01-22 after Phase 7 complete*

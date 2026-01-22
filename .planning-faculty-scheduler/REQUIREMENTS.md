@@ -15,9 +15,9 @@ Requirements for Analytics & Insights milestone. Each maps to roadmap phases.
 
 ### Instructor History
 
-- [ ] **IH-01**: Database stores historical teaching records (instructor_id, program_id, dates, completed)
-- [ ] **IH-02**: Dashboard displays instructor's past programs when viewing instructor details
-- [ ] **IH-03**: Instructor history shows in assign modal when selecting who to assign
+- [x] **IH-01**: Database stores historical teaching records (instructor_id, program_id, dates, completed)
+- [x] **IH-02**: Dashboard displays instructor's past programs when viewing instructor details
+- [x] **IH-03**: Instructor history shows in assign modal when selecting who to assign
 
 ### Dashboard Alerts
 
@@ -68,9 +68,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | RT-01 | Phase 6 | Complete |
 | RT-02 | Phase 6 | Complete |
 | RT-03 | Phase 6 | Complete |
-| IH-01 | Phase 7 | Pending |
-| IH-02 | Phase 7 | Pending |
-| IH-03 | Phase 7 | Pending |
+| IH-01 | Phase 7 | Complete |
+| IH-02 | Phase 7 | Complete |
+| IH-03 | Phase 7 | Complete |
 | DA-01 | Phase 8 | Pending |
 | DA-02 | Phase 8 | Pending |
 | DA-03 | Phase 8 | Pending |
@@ -83,4 +83,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-22*
-*Last updated: 2026-01-22 after Phase 6 complete*
+*Last updated: 2026-01-22 after Phase 7 complete*
