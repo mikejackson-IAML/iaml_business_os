@@ -51,6 +51,7 @@ export interface NotRespondedInstructor {
   program_state: string | null;
   notified_at: string;
   tier_when_notified: number;
+  viewed_at: string | null;  // null = not yet viewed
 }
 
 /**
