@@ -86,6 +86,14 @@ export interface EligibleInstructor {
 }
 
 /**
+ * Eligible instructor with optional history summary.
+ * Used in assign modal to display experience info.
+ */
+export interface EligibleInstructorWithHistory extends EligibleInstructor {
+  history?: InstructorHistorySummary;
+}
+
+/**
  * Program block for assignment modal.
  * Individual teaching slots within a scheduled program.
  */
@@ -98,6 +106,40 @@ export interface ProgramBlock {
   status: 'open' | 'claimed' | 'confirmed' | 'completed';
   instructor_id: string | null;
   instructor_name: string | null;
+}
+
+/**
+ * Teaching history record for a single program.
+ * One record per instructor per program, with block count.
+ */
+export interface TeachingHistoryRecord {
+  id: string;
+  instructor_id: string;
+  scheduled_program_id: string;
+  program_name: string;
+  program_type: string | null;
+  city: string | null;
+  state: string | null;
+  start_date: string;
+  end_date: string | null;
+  block_count: number;
+  status: 'pending' | 'completed' | 'cancelled';
+  claimed_at: string;
+  completed_at: string | null;
+  cancelled_at: string | null;
+}
+
+/**
+ * Summary of instructor's teaching history for quick display.
+ * Used in assign modal and instructor list headers.
+ */
+export interface InstructorHistorySummary {
+  instructor_id: string;
+  total_programs: number;
+  completed_count: number;
+  pending_count: number;
+  cancelled_count: number;
+  last_program_date: string | null;
 }
 
 /**
@@ -247,6 +289,81 @@ export async function getProgramBlocks(
     instructor_id: block.instructor_id,
     instructor_name: (block.instructor as { full_name: string } | null)?.full_name || null,
   })) as ProgramBlock[];
+}
+
+/**
+ * Fetch teaching history for a specific instructor.
+ * Returns all programs they've taught/are scheduled to teach, most recent first.
+ */
+export async function getInstructorHistory(
+  instructorId: string,
+  limit: number = 20
+): Promise<TeachingHistoryRecord[]> {
+  const supabase = getServerClient();
+
+  const { data, error } = await supabase
+    .from('faculty_scheduler.teaching_history')
+    .select('*')
+    .eq('instructor_id', instructorId)
+    .order('start_date', { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    console.error('Error fetching instructor history:', error);
+    return [];
+  }
+
+  return (data || []) as TeachingHistoryRecord[];
+}
+
+/**
+ * Fetch history summaries for multiple instructors.
+ * Used in assign modal to show experience alongside instructor list.
+ */
+export async function getInstructorHistorySummaries(
+  instructorIds: string[]
+): Promise<InstructorHistorySummary[]> {
+  if (instructorIds.length === 0) return [];
+
+  const supabase = getServerClient();
+
+  const { data, error } = await supabase
+    .from('faculty_scheduler.instructor_history_summary')
+    .select('*')
+    .in('instructor_id', instructorIds);
+
+  if (error) {
+    console.error('Error fetching instructor history summaries:', error);
+    return [];
+  }
+
+  return (data || []) as InstructorHistorySummary[];
+}
+
+/**
+ * Fetch eligible instructors for a program with their teaching history summaries.
+ * Combines getEligibleInstructors + getInstructorHistorySummaries in parallel.
+ */
+export async function getEligibleInstructorsWithHistory(
+  scheduledProgramId: string
+): Promise<EligibleInstructorWithHistory[]> {
+  // Fetch eligible instructors first
+  const instructors = await getEligibleInstructors(scheduledProgramId);
+
+  if (instructors.length === 0) return [];
+
+  // Fetch history summaries for all eligible instructors in parallel
+  const instructorIds = instructors.map(i => i.instructor_id);
+  const summaries = await getInstructorHistorySummaries(instructorIds);
+
+  // Create lookup map for O(1) access
+  const summaryMap = new Map(summaries.map(s => [s.instructor_id, s]));
+
+  // Merge history into instructors
+  return instructors.map(instructor => ({
+    ...instructor,
+    history: summaryMap.get(instructor.instructor_id),
+  }));
 }
 
 // ============================================
