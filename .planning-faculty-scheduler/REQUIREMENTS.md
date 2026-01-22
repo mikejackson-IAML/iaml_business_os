@@ -21,10 +21,10 @@ Requirements for Analytics & Insights milestone. Each maps to roadmap phases.
 
 ### Dashboard Alerts
 
-- [ ] **DA-01**: Alert when program approaching tier end with no claims (configurable threshold, e.g., 24h before)
-- [ ] **DA-02**: Alert when VIP instructor hasn't viewed after N days of notification (configurable)
-- [ ] **DA-03**: Alerts displayed as badge/banner in faculty scheduler dashboard
-- [ ] **DA-04**: Alerts list with dismiss/acknowledge action
+- [x] **DA-01**: Alert when program approaching tier end with no claims (configurable threshold, e.g., 24h before)
+- [x] **DA-02**: Alert when VIP instructor hasn't viewed after N days of notification (configurable)
+- [x] **DA-03**: Alerts displayed as badge/banner in faculty scheduler dashboard
+- [x] **DA-04**: Alerts list with dismiss/acknowledge action
 
 ## v2+ Requirements (Future)
 
@@ -71,10 +71,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | IH-01 | Phase 7 | Complete |
 | IH-02 | Phase 7 | Complete |
 | IH-03 | Phase 7 | Complete |
-| DA-01 | Phase 8 | Pending |
-| DA-02 | Phase 8 | Pending |
-| DA-03 | Phase 8 | Pending |
-| DA-04 | Phase 8 | Pending |
+| DA-01 | Phase 8 | Complete |
+| DA-02 | Phase 8 | Complete |
+| DA-03 | Phase 8 | Complete |
+| DA-04 | Phase 8 | Complete |
 
 **Coverage:**
 - v1.1 requirements: 10 total
@@ -83,4 +83,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-22*
-*Last updated: 2026-01-22 after Phase 7 complete*
+*Last updated: 2026-01-22 after Phase 8 complete*
