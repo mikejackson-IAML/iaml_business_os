@@ -9,9 +9,9 @@ Requirements for Analytics & Insights milestone. Each maps to roadmap phases.
 
 ### Response Tracking
 
-- [ ] **RT-01**: System records when instructor clicks magic link (portal entry)
-- [ ] **RT-02**: Notification record updated with viewed_at timestamp when link clicked
-- [ ] **RT-03**: Dashboard shows "Viewed" vs "Not Viewed" status per instructor notification
+- [x] **RT-01**: System records when instructor clicks magic link (portal entry)
+- [x] **RT-02**: Notification record updated with viewed_at timestamp when link clicked
+- [x] **RT-03**: Dashboard shows "Viewed" vs "Not Viewed" status per instructor notification
 
 ### Instructor History
 
@@ -65,9 +65,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| RT-01 | Phase 6 | Pending |
-| RT-02 | Phase 6 | Pending |
-| RT-03 | Phase 6 | Pending |
+| RT-01 | Phase 6 | Complete |
+| RT-02 | Phase 6 | Complete |
+| RT-03 | Phase 6 | Complete |
 | IH-01 | Phase 7 | Pending |
 | IH-02 | Phase 7 | Pending |
 | IH-03 | Phase 7 | Pending |
@@ -83,4 +83,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-22*
-*Last updated: 2026-01-22 after initial definition*
+*Last updated: 2026-01-22 after Phase 6 complete*
