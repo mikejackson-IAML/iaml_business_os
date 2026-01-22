@@ -8,65 +8,54 @@ A tiered instructor assignment system that automatically notifies qualified facu
 
 Faculty members receive magic-link emails when programs become available to their tier, view a personalized list of claimable blocks, and instantly lock in teaching assignments — while IAML monitors the entire process from a Business OS dashboard.
 
-## Current Milestone: v1.0 MVP
+## Current State
 
-**Goal:** Build the complete Faculty Program Scheduler from foundation to dashboard integration.
+**Version:** v1.0 MVP (Shipped 2026-01-22)
 
-**Target features:**
+**What shipped:**
 - Supabase database with programs, instructors, claims, and tier logic
-- Automated tier advancement (VIP 7d → Local 5d → Open)
+- Automated tier advancement (VIP 7d -> Local 5d -> Open)
 - Magic link authentication (no passwords)
-- Faculty-facing sign-up page at faculty.iaml.com
-- Email notifications via SendGrid (release, confirmation, reminders)
-- n8n workflows for automation
-- Business OS dashboard widget for admin management
+- Faculty sign-up portal (Next.js) at faculty-portal/
+- Email notifications via SendGrid (release, confirmation, reminders, re-release)
+- 5 n8n workflows for automation
+- Business OS dashboard with full admin controls
 
-**Key constraints:**
-- Must integrate with existing Supabase infrastructure
-- Automations via n8n
-- Faculty data migrated from Airtable
-- Frontend hosted at faculty.iaml.com subdomain
+**Key metrics:**
+- 38 requirements shipped
+- 5 phases, 17 plans
+- ~2,900 lines of TypeScript/SQL
 
 ---
 
 ## Requirements
 
-### Validated
+### Validated (v1.0)
 
-*Decisions locked in:*
+*Shipped and confirmed:*
 
-- Frontend: Next.js 14+ App Router + shadcn/ui (Radix + CVA + Tailwind)
-- Backend: Supabase PostgreSQL
-- Automations: n8n
-- Email: SendGrid (transactional)
-- Hosting: Vercel (frontend), Supabase (backend)
-- Authentication: Magic links (no passwords)
-- Tier structure: VIP (7d) → Local (5d) → Open
-- Local definition: Same state as program location
-- Claim model: Instant, first-come-first-served
-- View format: List only (no calendar)
+- Database schema: programs, program_blocks, instructors, claims, notifications, magic_tokens - v1.0
+- Data migration from Airtable to Supabase - v1.0
+- Tier engine with automatic advancement - v1.0
+- Email notification system (tier release, confirmation, reminders) - v1.0
+- Magic link generation and validation - v1.0
+- Faculty sign-up page (Next.js) - v1.0
+- Admin release controls - v1.0
+- Business OS dashboard widget - v1.0
 
-### Active
+### Active (v1.1)
 
-*Current scope (v1.0 MVP):*
+*Next milestone scope:*
 
-- [ ] Database schema: programs, program_blocks, instructors, claims, notifications, magic_tokens
-- [ ] Data migration from Airtable to Supabase
-- [ ] Tier engine with automatic advancement
-- [ ] Email notification system (tier release, confirmation, reminders)
-- [ ] Magic link generation and validation
-- [ ] Faculty sign-up page (Next.js)
-- [ ] Admin release controls
-- [ ] Business OS dashboard widget
+- [ ] Instructor response tracking (viewed but not claimed)
+- [ ] Historical teaching record display
+- [ ] Dashboard alerts (unfilled programs, unresponsive VIPs)
 
 ### Deferred (v2+)
 
-- Instructor response tracking (viewed but not claimed)
-- Historical teaching record display
 - Instructor preference capture
 - Waitlist functionality
 - Travel distance calculation (replace state-based)
-- Dashboard alerts (unfilled programs, unresponsive VIPs)
 
 ---
 
