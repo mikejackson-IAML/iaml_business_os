@@ -6,6 +6,7 @@
 -- - record_notification_view() helper function
 -- - Updated not_responded_instructors view with viewed_at
 -- - Updated dashboard_summary_stats with viewed_count
+-- - Updated validate_magic_token() to record views on magic link click
 --
 -- Date: 2026-01-22
 -- ============================================================================
@@ -162,3 +163,51 @@ CROSS JOIN response_stats rs;
 
 COMMENT ON VIEW faculty_scheduler.dashboard_summary_stats IS
   'Single-row view providing real-time counts for dashboard summary cards. Includes total_viewed count for response tracking.';
+
+-- ============================================================================
+-- FUNCTION: Validate Magic Token (Updated for Response Tracking)
+-- Records notification view on every token validation attempt
+-- ============================================================================
+CREATE OR REPLACE FUNCTION faculty_scheduler.validate_magic_token(
+  p_token TEXT
+)
+RETURNS TABLE (
+  instructor_id UUID,
+  first_name TEXT,
+  last_name TEXT,
+  email TEXT,
+  firm_state TEXT,
+  tier_designation INTEGER
+) AS $$
+DECLARE
+  v_instructor_id UUID;
+BEGIN
+  -- Get instructor_id from token first (before any validation)
+  SELECT mt.instructor_id INTO v_instructor_id
+  FROM faculty_scheduler.magic_tokens mt
+  WHERE mt.token = p_token;
+
+  -- Record notification view if we found an instructor
+  -- This happens even if token is expired or instructor inactive
+  -- (instructor saw the notification, even if they can't act on it)
+  IF v_instructor_id IS NOT NULL THEN
+    PERFORM faculty_scheduler.record_notification_view(v_instructor_id);
+  END IF;
+
+  -- Update usage stats (existing behavior)
+  UPDATE faculty_scheduler.magic_tokens
+  SET last_used_at = NOW(), use_count = use_count + 1
+  WHERE token = p_token;
+
+  -- Return instructor info (existing behavior)
+  RETURN QUERY
+  SELECT f.id, f.first_name, f.last_name, f.email, f.firm_state, f.tier_designation
+  FROM faculty_scheduler.magic_tokens mt
+  JOIN faculty f ON f.id = mt.instructor_id
+  WHERE mt.token = p_token
+    AND f.faculty_status = 'active';
+END;
+$$ LANGUAGE plpgsql;
+
+COMMENT ON FUNCTION faculty_scheduler.validate_magic_token IS
+  'Validates a magic token and returns instructor info. Records notification view on first access (even if token expired). Updates usage stats.';

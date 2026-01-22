@@ -1,6 +1,12 @@
-import { User, MapPin } from 'lucide-react';
+import { User, MapPin, Eye } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/dashboard-kit/components/ui/card';
 import { Badge } from '@/dashboard-kit/components/ui/badge';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/dashboard-kit/components/ui/tooltip';
 import type { NotRespondedInstructor } from '@/lib/api/faculty-scheduler-queries';
 
 interface NotRespondedListProps {
