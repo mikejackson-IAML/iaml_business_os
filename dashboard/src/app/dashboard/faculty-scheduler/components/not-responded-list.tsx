@@ -34,6 +34,16 @@ function formatTimeAgo(dateStr: string): string {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
+function formatViewedAt(dateStr: string): string {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  });
+}
+
 export function NotRespondedList({ instructors }: NotRespondedListProps) {
   // Group by program for better organization
   const groupedByProgram = instructors.reduce<Record<string, NotRespondedInstructor[]>>(
