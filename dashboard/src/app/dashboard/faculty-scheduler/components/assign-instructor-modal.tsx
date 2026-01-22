@@ -6,9 +6,9 @@ import { Button } from '@/dashboard-kit/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/dashboard-kit/components/ui/card';
 import { assignInstructor } from '../actions';
 import {
-  getEligibleInstructors,
+  getEligibleInstructorsWithHistory,
   getProgramBlocks,
-  type EligibleInstructor,
+  type EligibleInstructorWithHistory,
   type ProgramBlock,
 } from '@/lib/api/faculty-scheduler-queries';
 
@@ -20,7 +20,7 @@ interface AssignInstructorModalProps {
 
 export function AssignInstructorModal({ programId, isOpen, onClose }: AssignInstructorModalProps) {
   const [isPending, startTransition] = useTransition();
-  const [instructors, setInstructors] = useState<EligibleInstructor[]>([]);
+  const [instructors, setInstructors] = useState<EligibleInstructorWithHistory[]>([]);
   const [blocks, setBlocks] = useState<ProgramBlock[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedBlock, setSelectedBlock] = useState<string | null>(null);
@@ -34,7 +34,7 @@ export function AssignInstructorModal({ programId, isOpen, onClose }: AssignInst
       setLoading(true);
       try {
         const [instructorData, blockData] = await Promise.all([
-          getEligibleInstructors(programId),
+          getEligibleInstructorsWithHistory(programId),
           getProgramBlocks(programId),
         ]);
         setInstructors(instructorData);
@@ -164,6 +164,12 @@ export function AssignInstructorModal({ programId, isOpen, onClose }: AssignInst
                             <div className="text-sm text-muted-foreground">
                               {instructor.email}
                             </div>
+                            {instructor.history && instructor.history.total_programs > 0 && (
+                              <div className="text-xs text-muted-foreground mt-1">
+                                {instructor.history.completed_count} program{instructor.history.completed_count !== 1 ? 's' : ''} completed
+                                {instructor.history.pending_count > 0 && `, ${instructor.history.pending_count} scheduled`}
+                              </div>
+                            )}
                           </div>
                           <div className="text-xs text-muted-foreground">
                             {instructor.reason}
