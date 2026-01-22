@@ -65,9 +65,9 @@ This milestone adds analytics and insights capabilities to the existing Faculty 
 **Plans:** TBD (estimated 2-3 plans)
 
 Plans:
-- [ ] 06-01-PLAN.md — Database migration: Add viewed_at to notifications, update token validation
-- [ ] 06-02-PLAN.md — Faculty portal: Record view on magic link validation
-- [ ] 06-03-PLAN.md — Dashboard: Update not_responded view and UI to show viewed status
+- [x] 06-01-PLAN.md — Database migration: Add viewed_at to notifications, update views (Wave 1)
+- [x] 06-02-PLAN.md — Token validation: Record view on magic link click (Wave 2)
+- [x] 06-03-PLAN.md — Dashboard: Viewed badge with tooltip, Not Viewed first sort (Wave 2)
 
 ---
 
@@ -116,10 +116,10 @@ Plans:
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 1-5 | v1.0 | 17/17 | Complete | 2026-01-22 |
-| 6. Response Tracking | v1.1 | 0/3 | Planned | - |
-| 7. Instructor History | v1.1 | 0/3 | Planned | - |
+| 6. Response Tracking | v1.1 | 3/3 | Complete | 2026-01-22 |
+| 7. Instructor History | v1.1 | 0/3 | Ready to plan | - |
 | 8. Dashboard Alerts | v1.1 | 0/4 | Planned | - |
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-22 after v1.1 initialization*
+*Last updated: 2026-01-22 after Phase 6 complete*
