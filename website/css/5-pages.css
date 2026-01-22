@@ -9631,12 +9631,13 @@ input[type="radio"].session-radio {
   line-height: 1.6;
 }
 
-.ct-benefits-grid {
+.ct-benefits-section .ct-benefits-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 24px;
+  grid-template-columns: 1fr;
+  gap: 32px;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 20px;
 }
 
 .ct-benefit-card {
@@ -10186,7 +10187,7 @@ input[type="radio"].session-radio {
     font-size: 2rem;
   }
 
-  .ct-benefits-grid {
+  .ct-benefits-section .ct-benefits-grid {
     grid-template-columns: 1fr;
   }
 
@@ -10239,8 +10240,14 @@ input[type="radio"].session-radio {
   }
 }
 
+@media (min-width: 768px) {
+  .ct-benefits-section .ct-benefits-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (min-width: 1024px) {
-  .ct-benefits-grid {
+  .ct-benefits-section .ct-benefits-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }

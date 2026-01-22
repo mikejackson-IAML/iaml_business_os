@@ -12987,12 +12987,13 @@ button#applyCouponBtn.btn-coupon {
   line-height: 1.6;
 }
 
-.ct-benefits-grid {
+.ct-benefits-section .ct-benefits-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 24px;
+  grid-template-columns: 1fr;
+  gap: 32px;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 20px;
 }
 
 .ct-benefit-card {
@@ -13321,20 +13322,20 @@ button#applyCouponBtn.btn-coupon {
   font-style: italic;
 }
 
-/* ===== CT PROGRAMS SECTION ===== */
+/* ===== CT PROGRAMS SECTION (Grid Layout) ===== */
 .ct-programs-section {
-  background: var(--black);
-  padding: 80px 20px;
+  background: linear-gradient(180deg, #171717 0%, #0a0a0a 100%);
+  padding: 80px 24px;
 }
 
 .ct-programs-container {
-  max-width: 1200px;
+  max-width: 1320px;
   margin: 0 auto;
 }
 
 .ct-programs-headline {
   font-family: "Playfair Display", serif;
-  font-size: 2.75rem;
+  font-size: 2.5rem;
   font-weight: 600;
   color: white;
   text-align: center;
@@ -13343,76 +13344,84 @@ button#applyCouponBtn.btn-coupon {
 
 .ct-programs-subheadline {
   font-family: "Lato", sans-serif;
-  font-size: 1.125rem;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.0625rem;
+  color: rgba(255, 255, 255, 0.6);
   text-align: center;
-  max-width: 700px;
-  margin: 0 auto 50px;
+  max-width: 640px;
+  margin: 0 auto 48px;
   line-height: 1.6;
 }
 
-/* Edge fade gradient mask on carousel track */
-#ct-programs-splide .splide__track {
-  -webkit-mask-image: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 1) 10%,
-    rgba(0, 0, 0, 1) 90%,
-    rgba(0, 0, 0, 0) 100%
-  );
-  mask-image: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 1) 10%,
-    rgba(0, 0, 0, 1) 90%,
-    rgba(0, 0, 0, 0) 100%
-  );
+/* Programs Grid */
+.ct-programs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
 }
 
-/* Non-active slides: blurry and faded */
-#ct-programs-splide .splide__slide {
-  opacity: 0.5;
-  filter: blur(2px);
-  transform: scale(0.95);
-  transition: all 0.4s ease;
+@media (max-width: 1200px) {
+  .ct-programs-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
-/* Active/center slide: clear and prominent */
-#ct-programs-splide .splide__slide.is-active {
-  opacity: 1;
-  filter: blur(0);
-  transform: scale(1);
+@media (max-width: 900px) {
+  .ct-programs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-/* Program Cards in Carousel */
+@media (max-width: 600px) {
+  .ct-programs-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Program Cards */
 .ct-program-card {
-  background: white;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
-  padding: 32px;
-  height: 100%;
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
 }
 
-/* Card color schemes - subtle neutral gradients */
-.ct-program-card.blue {
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-  border: 1px solid rgba(148, 163, 184, 0.3);
+.ct-program-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #3b82f6, #a855f7);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-.ct-program-card.red {
-  background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
-  border: 1px solid rgba(163, 163, 163, 0.3);
+.ct-program-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-4px);
+}
+
+.ct-program-card:hover::before {
+  opacity: 1;
 }
 
 .ct-program-icon {
-  width: 56px;
-  height: 56px;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
   margin-bottom: 20px;
+  font-size: 1.25rem;
 }
 
 .ct-program-icon.blue {
@@ -13446,63 +13455,87 @@ button#applyCouponBtn.btn-coupon {
 }
 
 .ct-program-icon i {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
 }
 
 .ct-program-title {
   font-family: "Playfair Display", serif;
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 600;
-  color: #1f2937;
+  color: white;
   margin-bottom: 8px;
+  line-height: 1.3;
 }
 
 .ct-program-duration {
   font-family: "Lato", sans-serif;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   color: #3b82f6;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .ct-program-description {
   font-family: "Lato", sans-serif;
-  font-size: 0.9375rem;
-  color: #4b5563;
-  line-height: 1.6;
-  margin-bottom: 20px;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.55;
+  margin-bottom: 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
   flex-grow: 1;
 }
 
 .ct-program-audience {
   font-family: "Lato", sans-serif;
-  font-size: 0.875rem;
-  color: #64748b;
-  margin-bottom: 24px;
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.4);
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  margin-bottom: 0;
+}
+
+.ct-program-card:hover .ct-program-audience {
+  opacity: 1;
+  max-height: 100px;
+  margin-bottom: 16px;
 }
 
 .ct-program-audience-label {
-  font-weight: 700;
-  color: #1f2937;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .ct-program-btn {
   width: 100%;
-  padding: 14px 24px;
-  background: #188bf6;
+  padding: 12px 20px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
   color: white;
-  border: none;
-  border-radius: 10px;
   font-family: "Lato", sans-serif;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.ct-program-card:hover .ct-program-btn {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .ct-program-btn:hover {
-  background: #1478d1;
-  transform: translateY(-1px);
+  background: white;
+  color: #171717;
 }
 
 /* ===== CT RESPONSIVE STYLES ===== */
@@ -13542,7 +13575,7 @@ button#applyCouponBtn.btn-coupon {
     font-size: 2rem;
   }
 
-  .ct-benefits-grid {
+  .ct-benefits-section .ct-benefits-grid {
     grid-template-columns: 1fr;
   }
 
@@ -13595,8 +13628,14 @@ button#applyCouponBtn.btn-coupon {
   }
 }
 
+@media (min-width: 768px) {
+  .ct-benefits-section .ct-benefits-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (min-width: 1024px) {
-  .ct-benefits-grid {
+  .ct-benefits-section .ct-benefits-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
