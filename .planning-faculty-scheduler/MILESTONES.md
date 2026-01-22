@@ -24,6 +24,21 @@
 
 **Git range:** Initial faculty scheduler commits -> `658d0ce`
 
-**What's next:** v1.1 - Analytics & Insights (response tracking, instructor history, dashboard alerts)
+---
+
+## v1.1 Analytics & Insights (In Progress)
+
+**Started:** 2026-01-22
+
+**Goal:** Add response tracking, instructor history, and dashboard alerts to give IAML visibility into instructor engagement and recruitment health.
+
+**Target features:**
+- Track when instructors view their magic links (portal entry)
+- Display instructor teaching history in dashboard
+- Alert when programs approaching tier end without claims
+- Alert when VIP instructors haven't viewed notifications
+
+**Phases:** 6-8 (continuing from v1.0)
+**Requirements:** 10 total
 
 ---
