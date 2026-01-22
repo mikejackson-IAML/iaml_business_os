@@ -3,7 +3,7 @@
 ## Milestones
 
 - ✅ **v1.0 MVP** - Phases 1-5 (SHIPPED 2026-01-22)
-- 🚧 **v1.1 Analytics & Insights** - Phases 6-8 (in progress)
+- ✅ **v1.1 Analytics & Insights** - Phases 6-8 (SHIPPED 2026-01-22)
 
 ---
 
@@ -104,10 +104,10 @@ Plans:
 **Plans:** TBD (estimated 3-4 plans)
 
 Plans:
-- [ ] 08-01-PLAN.md — Database migration: Create alerts table with configurable thresholds
-- [ ] 08-02-PLAN.md — Supabase functions: Generate alerts for tier-end and VIP non-response
-- [ ] 08-03-PLAN.md — Dashboard query and types for alerts
-- [ ] 08-04-PLAN.md — Dashboard UI: Alert badge, alert list, dismiss action
+- [x] 08-01-PLAN.md — Database migration: Create alerts table with configurable thresholds (Wave 1)
+- [x] 08-02-PLAN.md — Dashboard query and types for alerts (Wave 2)
+- [x] 08-03-PLAN.md — Dashboard UI: Alert badge, alert list, dismiss action (Wave 2)
+- [x] 08-04-PLAN.md — Documentation: Alert refresh workflow specification (Wave 3)
 
 ---
 
@@ -118,8 +118,8 @@ Plans:
 | 1-5 | v1.0 | 17/17 | Complete | 2026-01-22 |
 | 6. Response Tracking | v1.1 | 3/3 | Complete | 2026-01-22 |
 | 7. Instructor History | v1.1 | 3/3 | Complete | 2026-01-22 |
-| 8. Dashboard Alerts | v1.1 | 0/4 | Planned | - |
+| 8. Dashboard Alerts | v1.1 | 4/4 | Complete | 2026-01-22 |
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-22 after Phase 7 complete*
+*Last updated: 2026-01-22 after Phase 8 complete (v1.1 milestone complete)*
