@@ -26,19 +26,29 @@
 
 ---
 
-## v1.1 Analytics & Insights (In Progress)
+## v1.1 Analytics & Insights (Shipped: 2026-01-22)
 
-**Started:** 2026-01-22
+**Delivered:** Analytics and insights capabilities including response tracking, instructor teaching history, and configurable dashboard alerts for recruitment health monitoring.
 
-**Goal:** Add response tracking, instructor history, and dashboard alerts to give IAML visibility into instructor engagement and recruitment health.
+**Phases completed:** 6-8 (10 plans total)
 
-**Target features:**
-- Track when instructors view their magic links (portal entry)
-- Display instructor teaching history in dashboard
-- Alert when programs approaching tier end without claims
-- Alert when VIP instructors haven't viewed notifications
+**Key accomplishments:**
 
-**Phases:** 6-8 (continuing from v1.0)
-**Requirements:** 10 total
+- Response tracking: viewed_at timestamps recorded when instructors click magic links
+- "Viewed" badge in dashboard showing instructor engagement before claiming
+- Teaching history table with trigger-based population from confirmed claims
+- Expandable instructor rows showing past teaching assignments
+- Alert system for tier-ending programs and VIP non-response
+- Configurable alert thresholds via n8n_brain.preferences
+- Optimistic UI for alert dismissal with 10-second undo
+
+**Stats:**
+
+- ~1,150 lines of SQL/TypeScript
+- 3 phases, 10 plans
+- 10 requirements shipped
+- 30+ commits
+
+**Git range:** `9ad07e4` (phase-6 start) → `8ba588b` (phase-8 complete)
 
 ---

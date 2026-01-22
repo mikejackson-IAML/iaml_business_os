@@ -8,35 +8,31 @@ A tiered instructor assignment system that automatically notifies qualified facu
 
 Faculty members receive magic-link emails when programs become available to their tier, view a personalized list of claimable blocks, and instantly lock in teaching assignments — while IAML monitors the entire process from a Business OS dashboard.
 
-## Current Milestone: v1.1 Analytics & Insights
+## Current Milestone: v1.1 Analytics & Insights — SHIPPED
 
-**Goal:** Add response tracking, instructor history, and dashboard alerts to give IAML visibility into instructor engagement and recruitment health.
+**Shipped:** 2026-01-22
 
-**Target features:**
-- Track when instructors view notifications (magic link clicks)
-- Display instructor teaching history in dashboard
-- Alert when programs are approaching tier end unfilled
-- Alert when VIP instructors haven't responded
+**Delivered:**
+- Response tracking (magic link click timestamps)
+- Instructor teaching history in dashboard
+- Configurable alerts for tier deadlines and VIP non-response
 
 ---
 
 ## Current State
 
-**Version:** v1.0 MVP (Shipped 2026-01-22)
+**Version:** v1.1 Analytics & Insights (Shipped 2026-01-22)
 
-**What shipped:**
-- Supabase database with programs, instructors, claims, and tier logic
-- Automated tier advancement (VIP 7d -> Local 5d -> Open)
-- Magic link authentication (no passwords)
-- Faculty sign-up portal (Next.js) at faculty-portal/
-- Email notifications via SendGrid (release, confirmation, reminders, re-release)
-- 5 n8n workflows for automation
-- Business OS dashboard with full admin controls
+**What shipped in v1.1:**
+- Response tracking (viewed_at timestamps on notifications)
+- Instructor teaching history table and dashboard UI
+- Dashboard alerts for tier deadlines and VIP non-response
+- Configurable alert thresholds via preferences
 
-**Key metrics:**
-- 38 requirements shipped
-- 5 phases, 17 plans
-- ~2,900 lines of TypeScript/SQL
+**Cumulative (v1.0 + v1.1):**
+- 48 requirements shipped (38 + 10)
+- 8 phases, 27 plans
+- ~4,050 lines of TypeScript/SQL
 
 ---
 
@@ -55,20 +51,20 @@ Faculty members receive magic-link emails when programs become available to thei
 - Admin release controls - v1.0
 - Business OS dashboard widget - v1.0
 
-### Active (v1.1)
+### Validated (v1.1)
 
-*Current milestone scope — Analytics & Insights:*
+*Shipped 2026-01-22:*
 
-- [ ] RT-01: System records when instructor clicks magic link (portal entry)
-- [ ] RT-02: Notification record updated with viewed_at timestamp
-- [ ] RT-03: Dashboard shows "Viewed" vs "Not Viewed" status per instructor
-- [ ] IH-01: Database stores historical teaching records
-- [ ] IH-02: Dashboard displays instructor's past programs
-- [ ] IH-03: Instructor history shows in assign modal
-- [ ] DA-01: Alert when program approaching tier end with no claims
-- [ ] DA-02: Alert when VIP instructor hasn't viewed after N days
-- [ ] DA-03: Alerts displayed as badge/banner in dashboard
-- [ ] DA-04: Alerts list with dismiss/acknowledge action
+- [x] RT-01: System records when instructor clicks magic link (portal entry)
+- [x] RT-02: Notification record updated with viewed_at timestamp
+- [x] RT-03: Dashboard shows "Viewed" vs "Not Viewed" status per instructor
+- [x] IH-01: Database stores historical teaching records
+- [x] IH-02: Dashboard displays instructor's past programs
+- [x] IH-03: Instructor history shows in assign modal
+- [x] DA-01: Alert when program approaching tier end with no claims
+- [x] DA-02: Alert when VIP instructor hasn't viewed after N days
+- [x] DA-03: Alerts displayed as badge/banner in dashboard
+- [x] DA-04: Alerts list with dismiss/acknowledge action
 
 ### Deferred (v2+)
 
