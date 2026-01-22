@@ -8,6 +8,7 @@ import { UserMenu } from '@/components/UserMenu';
 import { SummaryCards } from './components/summary-cards';
 import { RecruitmentPipelineTable } from './components/recruitment-pipeline-table';
 import { NotRespondedList } from './components/not-responded-list';
+import { InstructorList } from './components/instructor-list';
 import { AssignInstructorModal } from './components/assign-instructor-modal';
 import { OverrideClaimModal } from './components/override-claim-modal';
 import type { FacultySchedulerDashboardData } from '@/lib/api/faculty-scheduler-queries';
@@ -83,9 +84,10 @@ export function FacultySchedulerContent({ data }: ContentProps) {
             />
           </div>
 
-          {/* Not Responded List - 4 cols (B7 requirement) */}
-          <div className="col-span-12 lg:col-span-4">
+          {/* Sidebar - 4 cols */}
+          <div className="col-span-12 lg:col-span-4 space-y-6">
             <NotRespondedList instructors={notResponded} />
+            <InstructorList instructors={notResponded} />
           </div>
         </div>
       </div>
