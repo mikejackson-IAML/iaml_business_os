@@ -308,3 +308,89 @@ BEGIN
   RETURN QUERY SELECT TRUE, NULL::TEXT, v_claim_id;
 END;
 $$ LANGUAGE plpgsql;
+
+-- ============================================================================
+-- FUNCTION: Override Claim (Admin Cancellation)
+-- Cancels an existing claim and re-opens the block for re-release
+-- ============================================================================
+CREATE OR REPLACE FUNCTION faculty_scheduler.override_claim(
+  p_claim_id UUID,
+  p_reason TEXT
+)
+RETURNS TABLE (
+  success BOOLEAN,
+  error_message TEXT,
+  block_id UUID,
+  program_id UUID
+) AS $$
+DECLARE
+  v_claim RECORD;
+  v_program RECORD;
+  v_new_status TEXT;
+BEGIN
+  -- Get claim with block and program info
+  SELECT
+    c.*,
+    pb.id as block_id,
+    pb.scheduled_program_id,
+    sp.status as program_status,
+    sp.tier_0_ends_at,
+    sp.tier_1_ends_at
+  INTO v_claim
+  FROM faculty_scheduler.claims c
+  JOIN faculty_scheduler.program_blocks pb ON pb.id = c.block_id
+  JOIN faculty_scheduler.scheduled_programs sp ON sp.id = pb.scheduled_program_id
+  WHERE c.id = p_claim_id
+  FOR UPDATE;
+
+  -- Verify claim exists
+  IF v_claim IS NULL THEN
+    RETURN QUERY SELECT FALSE, 'Claim not found.'::TEXT, NULL::UUID, NULL::UUID;
+    RETURN;
+  END IF;
+
+  -- Verify claim is active
+  IF v_claim.status NOT IN ('confirmed', 'claimed') THEN
+    RETURN QUERY SELECT FALSE, ('Claim is not active (current status: ' || v_claim.status || ').')::TEXT, NULL::UUID, NULL::UUID;
+    RETURN;
+  END IF;
+
+  -- Update claim to cancelled
+  UPDATE faculty_scheduler.claims
+  SET
+    status = 'cancelled',
+    cancelled_at = NOW(),
+    cancelled_by = 'admin',
+    cancelled_reason = p_reason
+  WHERE id = p_claim_id;
+
+  -- Re-open the block
+  UPDATE faculty_scheduler.program_blocks
+  SET
+    instructor_id = NULL,
+    claimed_at = NULL,
+    status = 'open',
+    updated_at = NOW()
+  WHERE id = v_claim.block_id;
+
+  -- Determine correct tier status based on current time
+  IF v_claim.program_status = 'filled' THEN
+    -- Recalculate what tier we should be in
+    IF v_claim.tier_0_ends_at > NOW() THEN
+      v_new_status := 'tier_0';
+    ELSIF v_claim.tier_1_ends_at > NOW() THEN
+      v_new_status := 'tier_1';
+    ELSE
+      v_new_status := 'tier_2';
+    END IF;
+
+    UPDATE faculty_scheduler.scheduled_programs
+    SET
+      status = v_new_status,
+      updated_at = NOW()
+    WHERE id = v_claim.scheduled_program_id;
+  END IF;
+
+  RETURN QUERY SELECT TRUE, NULL::TEXT, v_claim.block_id, v_claim.scheduled_program_id;
+END;
+$$ LANGUAGE plpgsql;
