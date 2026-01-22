@@ -3,22 +3,48 @@
 import { useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { cn } from '@/dashboard-kit/lib/utils';
 import { FallingPattern } from '@/components/ui/falling-pattern';
 import { UserMenu } from '@/components/UserMenu';
 import { SummaryCards } from './components/summary-cards';
 import { RecruitmentPipelineTable } from './components/recruitment-pipeline-table';
 import { NotRespondedList } from './components/not-responded-list';
 import { InstructorList } from './components/instructor-list';
+import { AlertSection } from './components/alert-section';
 import { AssignInstructorModal } from './components/assign-instructor-modal';
 import { OverrideClaimModal } from './components/override-claim-modal';
 import type { FacultySchedulerDashboardData } from '@/lib/api/faculty-scheduler-queries';
+
+interface AlertBadgeProps {
+  count: number;
+  hasCritical: boolean;
+  onClick: () => void;
+}
+
+function AlertBadge({ count, hasCritical, onClick }: AlertBadgeProps) {
+  if (count === 0) return null;
+
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        'inline-flex items-center justify-center rounded-full px-2 py-0.5 text-xs font-semibold min-w-[1.5rem]',
+        hasCritical
+          ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+          : 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400'
+      )}
+    >
+      {count}
+    </button>
+  );
+}
 
 interface ContentProps {
   data: FacultySchedulerDashboardData;
 }
 
 export function FacultySchedulerContent({ data }: ContentProps) {
-  const { programs, notResponded, summaryStats } = data;
+  const { programs, notResponded, summaryStats, alerts } = data;
 
   // Modal state
   const [assignModalOpen, setAssignModalOpen] = useState(false);
@@ -36,6 +62,14 @@ export function FacultySchedulerContent({ data }: ContentProps) {
     setOverrideModalClaimId(claimId);
     setOverrideModalOpen(true);
   };
+
+  // Scroll to alerts section
+  const scrollToAlerts = () => {
+    document.getElementById('alerts-section')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // Check if any alerts are critical
+  const hasCriticalAlert = alerts.some((a) => a.severity === 'critical');
 
   return (
     <div className="relative min-h-screen">
@@ -62,6 +96,11 @@ export function FacultySchedulerContent({ data }: ContentProps) {
               </Link>
               <span className="badge-live">LIVE</span>
               <h1 className="text-display-sm text-foreground">Faculty Scheduler</h1>
+              <AlertBadge
+                count={alerts.length}
+                hasCritical={hasCriticalAlert}
+                onClick={scrollToAlerts}
+              />
             </div>
             <UserMenu />
           </div>
@@ -72,6 +111,13 @@ export function FacultySchedulerContent({ data }: ContentProps) {
 
         {/* Summary Cards (B1 requirement) */}
         <SummaryCards stats={summaryStats} />
+
+        {/* Alert Section */}
+        {alerts.length > 0 && (
+          <div className="mb-6">
+            <AlertSection alerts={alerts} />
+          </div>
+        )}
 
         {/* Main Grid */}
         <div className="grid grid-cols-12 gap-6 mt-6">
