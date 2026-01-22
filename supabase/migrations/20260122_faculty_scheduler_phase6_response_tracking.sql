@@ -58,3 +58,45 @@ $$ LANGUAGE plpgsql;
 
 COMMENT ON FUNCTION faculty_scheduler.record_notification_view IS
   'Records first view timestamp when instructor clicks magic link. Returns notification ID or NULL if already viewed.';
+
+-- ============================================================================
+-- VIEW: Not Responded Instructors (Updated with viewed_at)
+-- Instructors who were notified but haven't claimed any blocks
+-- ============================================================================
+CREATE OR REPLACE VIEW faculty_scheduler.not_responded_instructors AS
+SELECT
+  f.id as instructor_id,
+  f.full_name,
+  f.email,
+  f.firm_state,
+  f.tier_designation,
+  sp.id as scheduled_program_id,
+  sp.name as program_name,
+  sp.city as program_city,
+  sp.state as program_state,
+  n.created_at as notified_at,
+  n.tier as tier_when_notified,
+  n.viewed_at
+FROM faculty_scheduler.notifications n
+JOIN faculty f ON f.id = n.instructor_id
+JOIN faculty_scheduler.scheduled_programs sp ON sp.id = n.scheduled_program_id
+WHERE n.notification_type = 'tier_release'
+  AND n.email_status = 'sent'
+  -- Only active programs (still in recruitment)
+  AND sp.status IN ('tier_0', 'tier_1', 'tier_2')
+  -- No claim exists for this instructor on this program
+  AND NOT EXISTS (
+    SELECT 1
+    FROM faculty_scheduler.claims c
+    JOIN faculty_scheduler.program_blocks pb ON pb.id = c.block_id
+    WHERE c.instructor_id = n.instructor_id
+      AND pb.scheduled_program_id = n.scheduled_program_id
+      AND c.status IN ('confirmed', 'completed')
+  )
+ORDER BY
+  -- Not Viewed first (NULL viewed_at), then by notified_at DESC
+  n.viewed_at IS NOT NULL,
+  n.created_at DESC;
+
+COMMENT ON VIEW faculty_scheduler.not_responded_instructors IS
+  'Instructors who received tier_release notifications but have not claimed. Includes viewed_at to distinguish between viewed-no-claim and not-yet-viewed. Sorted with Not Viewed first.';
