@@ -1,0 +1,12 @@
+-- ============================================================================
+-- MIGRATION: Faculty Scheduler Phase 5 - Business OS Dashboard Views
+-- ============================================================================
+-- Creates enhanced Supabase views for the Business OS dashboard integration:
+-- - dashboard_recruitment_pipeline: Aggregated program view with notification/response counts
+-- - not_responded_instructors: Instructors who were notified but haven't claimed
+-- - dashboard_summary_stats: Single-row summary statistics for dashboard cards
+-- - assign_instructor(): Manual assignment function (bypasses tier eligibility)
+-- - override_claim(): Cancel claim and re-open block for re-release
+--
+-- Date: 2026-01-22
+-- ============================================================================
