@@ -90,11 +90,53 @@
 - RPC: `faculty_scheduler.get_eligible_instructors`
 - Table: `faculty_scheduler.program_blocks`
 
+---
+
+### 05-03: Server Actions for Dashboard
+
+**Status:** Complete
+**Commit:** `9c01833` feat(faculty-scheduler): add server actions for dashboard admin operations
+
+**Files Created:**
+- `dashboard/src/app/dashboard/faculty-scheduler/actions.ts`
+
+**What Was Built:**
+
+1. **ActionResult Type** - Consistent return type for all server actions:
+   ```typescript
+   interface ActionResult {
+     success: boolean;
+     error?: string;
+     data?: Record<string, unknown>;
+   }
+   ```
+
+2. **Server Actions** - Next.js 14 'use server' functions:
+
+   | Action | Purpose | RPC Called |
+   |--------|---------|------------|
+   | `skipTier` | Advance program to tier_1 or tier_2 | `skip_tier` |
+   | `assignInstructor` | Manual instructor assignment | `assign_instructor` |
+   | `sendNudge` | Trigger reminder for non-responders | `get_instructors_needing_reminder` + webhook |
+   | `overrideClaim` | Cancel claim and re-release | `override_claim` + webhook |
+   | `releaseAllPrograms` | Bulk release draft programs | `release_all` |
+
+3. **Webhook Integration:**
+   - `sendNudge`: Uses `N8N_REMINDER_WEBHOOK_URL` env var
+   - `overrideClaim`: Uses `N8N_RERELEASE_WEBHOOK_URL` (defaults to production URL)
+
+4. **Path Revalidation:**
+   - All actions call `revalidatePath('/dashboard/faculty-scheduler')` for fresh data
+
+**Dependencies:**
+- Supabase RPC functions from Phase 4: `skip_tier`, `release_all`, `get_instructors_needing_reminder`
+- Supabase RPC functions from 05-01: `assign_instructor`, `override_claim`
+- n8n webhooks: Reminder workflow, Re-release workflow
+
 ## Remaining Plans
 
 | Plan | Wave | Description | Status |
 |------|------|-------------|--------|
-| 05-03-PLAN.md | 2 | Server actions (skip tier, assign, nudge, override) | Pending |
 | 05-04-PLAN.md | 2 | Dashboard page and skeleton | Pending |
 | 05-05-PLAN.md | 3 | Content component and summary cards | Pending |
 | 05-06-PLAN.md | 3 | Recruitment pipeline table | Pending |
