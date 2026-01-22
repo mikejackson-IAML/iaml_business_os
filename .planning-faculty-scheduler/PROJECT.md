@@ -8,6 +8,18 @@ A tiered instructor assignment system that automatically notifies qualified facu
 
 Faculty members receive magic-link emails when programs become available to their tier, view a personalized list of claimable blocks, and instantly lock in teaching assignments — while IAML monitors the entire process from a Business OS dashboard.
 
+## Current Milestone: v1.1 Analytics & Insights
+
+**Goal:** Add response tracking, instructor history, and dashboard alerts to give IAML visibility into instructor engagement and recruitment health.
+
+**Target features:**
+- Track when instructors view notifications (magic link clicks)
+- Display instructor teaching history in dashboard
+- Alert when programs are approaching tier end unfilled
+- Alert when VIP instructors haven't responded
+
+---
+
 ## Current State
 
 **Version:** v1.0 MVP (Shipped 2026-01-22)
@@ -45,11 +57,18 @@ Faculty members receive magic-link emails when programs become available to thei
 
 ### Active (v1.1)
 
-*Next milestone scope:*
+*Current milestone scope — Analytics & Insights:*
 
-- [ ] Instructor response tracking (viewed but not claimed)
-- [ ] Historical teaching record display
-- [ ] Dashboard alerts (unfilled programs, unresponsive VIPs)
+- [ ] RT-01: System records when instructor clicks magic link (portal entry)
+- [ ] RT-02: Notification record updated with viewed_at timestamp
+- [ ] RT-03: Dashboard shows "Viewed" vs "Not Viewed" status per instructor
+- [ ] IH-01: Database stores historical teaching records
+- [ ] IH-02: Dashboard displays instructor's past programs
+- [ ] IH-03: Instructor history shows in assign modal
+- [ ] DA-01: Alert when program approaching tier end with no claims
+- [ ] DA-02: Alert when VIP instructor hasn't viewed after N days
+- [ ] DA-03: Alerts displayed as badge/banner in dashboard
+- [ ] DA-04: Alerts list with dismiss/acknowledge action
 
 ### Deferred (v2+)
 
