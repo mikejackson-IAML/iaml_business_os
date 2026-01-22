@@ -2,13 +2,51 @@
 
 ## Current Position
 - **Milestone:** 1 - Faculty Program Scheduler MVP
-- **Phase:** 4 - Release Controls & Reminders
-- **Status:** ✅ COMPLETE
+- **Phase:** 5 - Business OS Dashboard Integration
+- **Status:** IN PROGRESS (Wave 1 complete, Wave 2-4 pending)
 
 ## Last Session
 - **Date:** 2026-01-22
-- **Activity:** Executed Phase 4 - Built admin functions and notification workflows
-- **Next Action:** Move to Phase 5 (Business OS Dashboard Integration)
+- **Activity:** Executed plan 05-01 - Supabase Dashboard Views
+- **Next Action:** Execute remaining plans (05-03 through 05-07)
+
+## Phase 5 Plan Summary
+
+| Plan | Wave | Description | Status |
+|------|------|-------------|--------|
+| 05-01-PLAN.md | 1 | Supabase dashboard views and admin functions | ✅ Complete |
+| 05-02-PLAN.md | 1 | Query file with TypeScript types | ✅ Complete |
+| 05-03-PLAN.md | 2 | Server actions (skip tier, assign, nudge, override) | Pending |
+| 05-04-PLAN.md | 2 | Dashboard page and skeleton | Pending |
+| 05-05-PLAN.md | 3 | Content component and summary cards | Pending |
+| 05-06-PLAN.md | 3 | Recruitment pipeline table | Pending |
+| 05-07-PLAN.md | 4 | Not responded list and modals | Pending |
+
+### Wave 1 Deliverables (Complete)
+
+| Deliverable | Location |
+|-------------|----------|
+| Phase 5 Migration | `supabase/migrations/20260122_faculty_scheduler_phase5_dashboard.sql` |
+| Query File | `dashboard/src/lib/api/faculty-scheduler-queries.ts` |
+
+**Views Created:**
+- `dashboard_recruitment_pipeline` - Enhanced pipeline with notification/response counts
+- `not_responded_instructors` - Instructors needing follow-up
+- `dashboard_summary_stats` - Summary card totals and response rate
+
+**Functions Created:**
+- `assign_instructor(p_block_id, p_instructor_id)` - Manual assignment (admin override)
+- `override_claim(p_claim_id, p_reason)` - Cancel claim and re-open block
+
+**Requirements Coverage:**
+- B1: Summary widget → SummaryCards component
+- B2: Status per program → Table tier badges
+- B3: Required columns → Table columns
+- B4: Manually assign → AssignInstructorModal
+- B5: Skip tier early → Table action dropdown
+- B6: Send reminder nudge → Table action dropdown
+- B7: Not responded view → NotRespondedList component
+- B8: Override claim → OverrideClaimModal
 
 ## Phase 4 Status: COMPLETE
 
@@ -100,6 +138,8 @@ This project creates a tiered instructor assignment system for IAML. Key points:
 | Schema Migration | `supabase/migrations/20260120_create_faculty_scheduler_schema.sql` |
 | Phase 2 Migration | `supabase/migrations/20260121_faculty_scheduler_phase2.sql` |
 | Phase 4 Migration | `supabase/migrations/20260121_faculty_scheduler_phase4.sql` |
+| Phase 5 Migration | `supabase/migrations/20260122_faculty_scheduler_phase5_dashboard.sql` |
+| Query File | `dashboard/src/lib/api/faculty-scheduler-queries.ts` |
 | Frontend | `faculty.iaml.com` (Vercel) - TBD |
 | Database | Supabase project (existing) |
 | Automations | n8n instance at n8n.realtyamp.ai |
