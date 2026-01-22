@@ -394,3 +394,21 @@ BEGIN
   RETURN QUERY SELECT TRUE, NULL::TEXT, v_claim.block_id, v_claim.scheduled_program_id;
 END;
 $$ LANGUAGE plpgsql;
+
+-- ============================================================================
+-- DOCUMENTATION COMMENTS
+-- ============================================================================
+COMMENT ON VIEW faculty_scheduler.dashboard_recruitment_pipeline IS
+  'Enhanced pipeline view for Business OS dashboard. Includes notification counts, response tracking, assigned instructor details, and last activity timestamps.';
+
+COMMENT ON VIEW faculty_scheduler.not_responded_instructors IS
+  'Instructors who received tier_release notifications but have not submitted any claims for active programs. Used for follow-up and nudge functionality.';
+
+COMMENT ON VIEW faculty_scheduler.dashboard_summary_stats IS
+  'Single-row view providing real-time counts for dashboard summary cards: program counts by status, notification/response totals, and overall response rate.';
+
+COMMENT ON FUNCTION faculty_scheduler.assign_instructor IS
+  'Admin function to manually assign an instructor to a block, bypassing tier eligibility checks. Creates confirmed claim and marks program filled if all blocks claimed.';
+
+COMMENT ON FUNCTION faculty_scheduler.override_claim IS
+  'Admin function to cancel an existing claim and re-open the block for re-release. Recalculates program tier status based on current time if previously filled.';
