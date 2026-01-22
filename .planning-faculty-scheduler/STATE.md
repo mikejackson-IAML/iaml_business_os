@@ -10,13 +10,13 @@ See: .planning-faculty-scheduler/PROJECT.md (updated 2026-01-22)
 ## Current Position
 
 Phase: 7 of 8 (Instructor History)
-Plan: 1 of 3 complete
+Plan: 2 of 3 complete
 Status: In progress
-Last activity: 2026-01-22 — Plan 07-01 complete (teaching_history migration)
+Last activity: 2026-01-22 — Plan 07-02 complete (query layer and types)
 
-Progress: [██████░░░░░░░░░░░░░░] 33%
+Progress: [████████████░░░░░░░░] 67%
 
-**Next step:** Execute Plan 07-02 (Dashboard UI)
+**Next step:** Execute Plan 07-03 (Dashboard UI components)
 
 ## Milestone Context
 
@@ -77,4 +77,4 @@ None currently.
 | Cancellation Re-release | `FCUm05vNbAmi6vdd` | Webhook | Verified |
 
 ---
-*Last updated: 2026-01-22 after Plan 07-01 execution (teaching_history migration)*
+*Last updated: 2026-01-22 after Plan 07-02 execution (query layer and types)*
