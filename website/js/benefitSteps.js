@@ -22,7 +22,7 @@ function initializeBenefitStepsObserver() {
 
 function initBenefitSteps() {
   const FRAME_MS = 40; // ~25fps
-  const DURATION = 24000; // ms for full vertical sweep (6 seconds per tab)
+  const DURATION = 16800; // ms for full vertical sweep (~4.2 seconds per tab)
 
   const benefitStepsSection = document.getElementById("benefitSteps");
   if (!benefitStepsSection) {
