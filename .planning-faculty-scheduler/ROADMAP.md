@@ -96,7 +96,7 @@
 ---
 
 ### Phase 5: Business OS Dashboard Integration
-**Status:** Not Started
+**Status:** ✅ COMPLETE
 **Goal:** Build the admin dashboard widget for monitoring and managing the recruitment pipeline.
 
 **Deliverables:**
@@ -115,6 +115,15 @@
 - [ ] Admin can skip tier early from dashboard
 - [ ] Admin can send reminder nudge from dashboard
 - [ ] Admin can remove/override existing claim from dashboard
+
+**Plans:**
+- [x] 05-01-PLAN.md — Supabase dashboard views (Wave 1)
+- [x] 05-02-PLAN.md — Query file with TypeScript types (Wave 1)
+- [x] 05-03-PLAN.md — Server actions for admin operations (Wave 2)
+- [x] 05-04-PLAN.md — Dashboard page and skeleton (Wave 2)
+- [x] 05-05-PLAN.md — Content component and summary cards (Wave 3)
+- [x] 05-06-PLAN.md — Recruitment pipeline table (Wave 3)
+- [x] 05-07-PLAN.md — Not responded list and modals (Wave 4)
 
 ---
 
