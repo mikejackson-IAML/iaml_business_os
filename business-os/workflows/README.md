@@ -90,3 +90,74 @@ HeyReach Webhook → Normalize URL → Check Duplicate → Lookup/Create Contact
 - Supabase (contact & activity storage)
 - Gemini AI (reply classification)
 - GHL (CRM routing)
+
+---
+
+## Faculty Scheduler - Cancellation Re-release
+
+**n8n Workflow ID:** TBD (import pending)
+**Status:** Ready to Import
+**Trigger:** Webhook (POST)
+**URL:** `https://n8n.realtyamp.ai/webhook/faculty-scheduler-rerelease`
+**Documentation:** [README-faculty-scheduler-rerelease.md](README-faculty-scheduler-rerelease.md)
+
+Instantly notifies all qualified instructors when a teaching spot opens up due to cancellation, giving them a chance to claim the newly available block.
+
+### How It Works
+
+```
+Webhook (cancel event) → Get Program Details → Check Active Tier
+                                                      ↓
+                         Program Active? → Get Eligible Instructors
+                                                      ↓
+                         Loop → SendGrid Email → Log Notification
+                                                      ↓
+                         Return count notified
+```
+
+### Webhook Payload
+
+```json
+{
+  "program_id": "uuid",
+  "block_id": "uuid",
+  "block_name": "Block 1",
+  "cancelled_by": "admin"
+}
+```
+
+### Services
+
+- Supabase (program data, instructor lookup, notification logging)
+- SendGrid (email delivery)
+- Slack (error alerts)
+
+---
+
+## Faculty Scheduler - Dashboard Alerts
+
+**n8n Workflow ID:** TBD (optional workflow)
+**Status:** Recommended (not required)
+**Trigger:** Schedule (every 15 minutes)
+**Documentation:** [README-faculty-scheduler-alerts.md](README-faculty-scheduler-alerts.md)
+
+Automatically checks for programs at risk and unresponsive VIP instructors, keeping dashboard alerts up-to-date.
+
+### How It Works
+
+```
+Schedule (15 min) → Call refresh_alerts() → Log Results
+                                                ↓
+                            Creates tier_ending alerts (critical)
+                            Creates vip_non_response alerts (warning)
+                            Auto-resolves when conditions change
+```
+
+### Note
+
+This workflow is **optional**. The dashboard queries already call `refresh_alerts()` on page load for on-demand refresh. The periodic workflow provides belt-and-suspenders coverage for time-based alerts.
+
+### Services
+
+- Supabase (RPC call to refresh_alerts function)
+- Slack (error alerts)
