@@ -1,0 +1,679 @@
+{
+  "name": "Faculty Scheduler - Cancellation Re-release",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "faculty-scheduler-rerelease",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [220, 300],
+      "webhookId": "faculty-scheduler-rerelease"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "program_id",
+              "name": "program_id",
+              "value": "={{ $json.body.program_id }}",
+              "type": "string"
+            },
+            {
+              "id": "block_id",
+              "name": "block_id",
+              "value": "={{ $json.body.block_id }}",
+              "type": "string"
+            },
+            {
+              "id": "block_name",
+              "name": "block_name",
+              "value": "={{ $json.body.block_name }}",
+              "type": "string"
+            },
+            {
+              "id": "cancelled_by",
+              "name": "cancelled_by",
+              "value": "={{ $json.body.cancelled_by }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "extract-webhook-data",
+      "name": "Extract Webhook Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [440, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT\n  sp.id,\n  sp.name,\n  sp.city,\n  sp.state,\n  sp.status,\n  sp.start_date,\n  CASE sp.status\n    WHEN 'tier_0' THEN 0\n    WHEN 'tier_1' THEN 1\n    WHEN 'tier_2' THEN 2\n    ELSE -1\n  END as current_tier\nFROM faculty_scheduler.scheduled_programs sp\nWHERE sp.id = '{{ $json.program_id }}'::UUID",
+        "options": {
+          "queryReplacement": "={{ $json.program_id }}"
+        }
+      },
+      "id": "get-program-details",
+      "name": "Get Program Details",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [660, 300],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "program-active-check",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "tier_0,tier_1,tier_2",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-program-active",
+      "name": "Program Active?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [880, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: false, error: \"Program not in active tier, no notifications sent\", program_status: $('Get Program Details').item.json.status }) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "respond-inactive",
+      "name": "Respond Inactive",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1100, 500]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM faculty_scheduler.get_instructors_for_rerelease('{{ $('Get Program Details').item.json.id }}'::UUID)",
+        "options": {}
+      },
+      "id": "get-instructors",
+      "name": "Get Instructors for Re-release",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1100, 300],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "has-instructors-check",
+              "leftValue": "={{ $json.instructor_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-has-instructors",
+      "name": "Has Instructors?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1320, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: true, instructors_notified: 0, message: \"No eligible instructors to notify\" }) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "respond-no-instructors",
+      "name": "Respond No Instructors",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1540, 500]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "instructor_count",
+              "name": "instructor_count",
+              "value": "={{ $input.all().length }}",
+              "type": "number"
+            },
+            {
+              "id": "program_id",
+              "name": "program_id",
+              "value": "={{ $('Get Program Details').item.json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "program_name",
+              "name": "program_name",
+              "value": "={{ $('Get Program Details').item.json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "city",
+              "name": "city",
+              "value": "={{ $('Get Program Details').item.json.city }}",
+              "type": "string"
+            },
+            {
+              "id": "state",
+              "name": "state",
+              "value": "={{ $('Get Program Details').item.json.state }}",
+              "type": "string"
+            },
+            {
+              "id": "start_date",
+              "name": "start_date",
+              "value": "={{ $('Get Program Details').item.json.start_date }}",
+              "type": "string"
+            },
+            {
+              "id": "current_tier",
+              "name": "current_tier",
+              "value": "={{ $('Get Program Details').item.json.current_tier }}",
+              "type": "number"
+            },
+            {
+              "id": "block_name",
+              "name": "block_name",
+              "value": "={{ $('Extract Webhook Data').item.json.block_name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "count-instructors",
+      "name": "Count & Capture Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1540, 300]
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "id": "loop-instructors",
+      "name": "Loop Over Instructors",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [1760, 300]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "email",
+              "name": "email",
+              "value": "={{ $json.email }}",
+              "type": "string"
+            },
+            {
+              "id": "first_name",
+              "name": "first_name",
+              "value": "={{ $json.first_name }}",
+              "type": "string"
+            },
+            {
+              "id": "instructor_id",
+              "name": "instructor_id",
+              "value": "={{ $json.instructor_id }}",
+              "type": "string"
+            },
+            {
+              "id": "magic_token",
+              "name": "magic_token",
+              "value": "={{ $json.magic_token }}",
+              "type": "string"
+            },
+            {
+              "id": "instructor_count",
+              "name": "instructor_count",
+              "value": "={{ $('Count & Capture Data').item.json.instructor_count }}",
+              "type": "number"
+            },
+            {
+              "id": "program_id",
+              "name": "program_id",
+              "value": "={{ $('Count & Capture Data').item.json.program_id }}",
+              "type": "string"
+            },
+            {
+              "id": "program_name",
+              "name": "program_name",
+              "value": "={{ $('Count & Capture Data').item.json.program_name }}",
+              "type": "string"
+            },
+            {
+              "id": "city",
+              "name": "city",
+              "value": "={{ $('Count & Capture Data').item.json.city }}",
+              "type": "string"
+            },
+            {
+              "id": "state",
+              "name": "state",
+              "value": "={{ $('Count & Capture Data').item.json.state }}",
+              "type": "string"
+            },
+            {
+              "id": "start_date",
+              "name": "start_date",
+              "value": "={{ $('Count & Capture Data').item.json.start_date }}",
+              "type": "string"
+            },
+            {
+              "id": "current_tier",
+              "name": "current_tier",
+              "value": "={{ $('Count & Capture Data').item.json.current_tier }}",
+              "type": "number"
+            },
+            {
+              "id": "block_name",
+              "name": "block_name",
+              "value": "={{ $('Count & Capture Data').item.json.block_name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "prepare-email-data",
+      "name": "Prepare Email Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1980, 300]
+    },
+    {
+      "parameters": {
+        "resource": "mail",
+        "operation": "send",
+        "fromEmail": "faculty@iaml.com",
+        "toEmail": "={{ $json.email }}",
+        "subject": "=New Opening: {{ $json.program_name }} - {{ $json.block_name }}",
+        "emailType": "html",
+        "message": "=<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; }\n    .header { background: #1a365d; color: white; padding: 20px; text-align: center; }\n    .content { padding: 30px; }\n    .program-details { background: #f7fafc; border-left: 4px solid #3182ce; padding: 15px; margin: 20px 0; }\n    .cta-button { display: inline-block; background: #3182ce; color: white !important; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; margin: 20px 0; }\n    .urgency { background: #fed7d7; border-left: 4px solid #c53030; padding: 12px 15px; margin: 20px 0; color: #742a2a; }\n    .footer { color: #718096; font-size: 12px; padding: 20px; border-top: 1px solid #e2e8f0; }\n  </style>\n</head>\n<body>\n  <div class=\"header\">\n    <h1 style=\"margin: 0;\">Teaching Opportunity Just Opened!</h1>\n  </div>\n  <div class=\"content\">\n    <p>Hi {{ $json.first_name }},</p>\n    \n    <p><strong>Great news!</strong> A teaching spot has just become available.</p>\n    \n    <div class=\"program-details\">\n      <p style=\"margin: 0 0 10px 0;\"><strong>Program:</strong> {{ $json.program_name }}</p>\n      <p style=\"margin: 0 0 10px 0;\"><strong>Location:</strong> {{ $json.city }}, {{ $json.state }}</p>\n      <p style=\"margin: 0 0 10px 0;\"><strong>Block:</strong> {{ $json.block_name }}</p>\n      <p style=\"margin: 0;\"><strong>Start Date:</strong> {{ $json.start_date }}</p>\n    </div>\n    \n    <div class=\"urgency\">\n      <strong>Act Fast!</strong> This spot was just released and is available on a first-come, first-served basis.\n    </div>\n    \n    <p style=\"text-align: center;\">\n      <a href=\"https://faculty.iaml.com/schedule?token={{ $json.magic_token }}\" class=\"cta-button\">Claim This Spot</a>\n    </p>\n    \n    <p>If you're interested in this teaching opportunity, click the button above to claim it before someone else does.</p>\n    \n    <p>Best regards,<br>IAML Faculty Scheduling</p>\n  </div>\n  <div class=\"footer\">\n    <p>This email was sent because you are qualified to teach this program. If you no longer wish to receive teaching opportunity notifications, please contact us.</p>\n  </div>\n</body>\n</html>",
+        "options": {}
+      },
+      "id": "send-email",
+      "name": "Send Re-release Email",
+      "type": "n8n-nodes-base.sendGrid",
+      "typeVersion": 1,
+      "position": [2200, 300],
+      "credentials": {
+        "sendGridApi": {
+          "id": "sendgrid-api",
+          "name": "SendGrid API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=SELECT faculty_scheduler.log_notification(\n  '{{ $json.instructor_id }}'::UUID,\n  '{{ $json.program_id }}'::UUID,\n  'rerelease',\n  {{ $json.current_tier }},\n  '{{ $json.email }}',\n  'New Opening: {{ $json.program_name.replace(/'/g, \"''\") }} - {{ $json.block_name.replace(/'/g, \"''\") }}',\n  'sent',\n  NULL,\n  '{\"block_name\": \"{{ $json.block_name.replace(/'/g, \"''\") }}\"}'::JSONB\n)",
+        "options": {}
+      },
+      "id": "log-notification",
+      "name": "Log Notification",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [2420, 300],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: true, instructors_notified: $('Count & Capture Data').first().json.instructor_count }) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "respond-success",
+      "name": "Success Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [2420, 100]
+    },
+    {
+      "parameters": {},
+      "id": "error-trigger",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [220, 600]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "error_message",
+              "name": "error_message",
+              "value": "={{ $json.error?.message || $json.message || 'Unknown error' }}",
+              "type": "string"
+            },
+            {
+              "id": "error_node",
+              "name": "error_node",
+              "value": "={{ $json.error?.node?.name || $json.node?.name || 'Unknown' }}",
+              "type": "string"
+            },
+            {
+              "id": "error_type",
+              "name": "error_type",
+              "value": "={{ $json.error?.name || 'Error' }}",
+              "type": "string"
+            },
+            {
+              "id": "workflow_name",
+              "name": "workflow_name",
+              "value": "Faculty Scheduler - Cancellation Re-release",
+              "type": "string"
+            },
+            {
+              "id": "timestamp",
+              "name": "timestamp",
+              "value": "={{ new Date().toISOString() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-error-context",
+      "name": "Set Error Context",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [440, 600]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=INSERT INTO n8n_brain.workflow_errors (\n  workflow_name,\n  node_name,\n  error_type,\n  error_message,\n  execution_id,\n  created_at\n) VALUES (\n  '{{ $json.workflow_name }}',\n  '{{ $json.error_node }}',\n  '{{ $json.error_type }}',\n  '{{ $json.error_message.replace(/'/g, \"''\") }}',\n  '{{ $execution.id }}',\n  NOW()\n) RETURNING id",
+        "options": {}
+      },
+      "id": "log-error-db",
+      "name": "Log Error to DB",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [660, 600],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \":rotating_light: *Workflow Error*\",\n  \"blocks\": [\n    {\n      \"type\": \"header\",\n      \"text\": {\n        \"type\": \"plain_text\",\n        \"text\": \":rotating_light: Workflow Error\"\n      }\n    },\n    {\n      \"type\": \"section\",\n      \"fields\": [\n        { \"type\": \"mrkdwn\", \"text\": \"*Workflow:*\\n{{ $('Set Error Context').item.json.workflow_name }}\" },\n        { \"type\": \"mrkdwn\", \"text\": \"*Node:*\\n{{ $('Set Error Context').item.json.error_node }}\" },\n        { \"type\": \"mrkdwn\", \"text\": \"*Error Type:*\\n{{ $('Set Error Context').item.json.error_type }}\" },\n        { \"type\": \"mrkdwn\", \"text\": \"*Time:*\\n{{ $('Set Error Context').item.json.timestamp }}\" }\n      ]\n    },\n    {\n      \"type\": \"section\",\n      \"text\": {\n        \"type\": \"mrkdwn\",\n        \"text\": \"*Error Message:*\\n```{{ $('Set Error Context').item.json.error_message }}```\"\n      }\n    },\n    {\n      \"type\": \"actions\",\n      \"elements\": [\n        {\n          \"type\": \"button\",\n          \"text\": { \"type\": \"plain_text\", \"text\": \"View Execution\" },\n          \"url\": \"https://n8n.realtyamp.ai/workflow/{{ $workflow.id }}/executions/{{ $execution.id }}\"\n        }\n      ]\n    }\n  ]\n}",
+        "options": {}
+      },
+      "id": "slack-alert",
+      "name": "Slack Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, 600]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extract Webhook Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Webhook Data": {
+      "main": [
+        [
+          {
+            "node": "Get Program Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Program Details": {
+      "main": [
+        [
+          {
+            "node": "Program Active?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Program Active?": {
+      "main": [
+        [
+          {
+            "node": "Get Instructors for Re-release",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond Inactive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Instructors for Re-release": {
+      "main": [
+        [
+          {
+            "node": "Has Instructors?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Instructors?": {
+      "main": [
+        [
+          {
+            "node": "Count & Capture Data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond No Instructors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Count & Capture Data": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Instructors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Instructors": {
+      "main": [
+        [
+          {
+            "node": "Success Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Email Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Email Data": {
+      "main": [
+        [
+          {
+            "node": "Send Re-release Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Re-release Email": {
+      "main": [
+        [
+          {
+            "node": "Log Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Notification": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Instructors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set Error Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Error Context": {
+      "main": [
+        [
+          {
+            "node": "Log Error to DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Error to DB": {
+      "main": [
+        [
+          {
+            "node": "Slack Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "faculty-scheduler"
+    },
+    {
+      "name": "business-os"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-01-21T00:00:00.000Z",
+  "versionId": "1"
+}
