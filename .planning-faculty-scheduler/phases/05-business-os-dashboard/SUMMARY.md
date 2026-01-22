@@ -133,11 +133,47 @@
 - Supabase RPC functions from 05-01: `assign_instructor`, `override_claim`
 - n8n webhooks: Reminder workflow, Re-release workflow
 
+### 05-04: Dashboard Page and Skeleton
+
+**Status:** Complete
+**Commit:** `45c17f6` feat(faculty-scheduler): add dashboard page with Suspense and skeleton
+
+**Files Created:**
+- `dashboard/src/app/dashboard/faculty-scheduler/page.tsx`
+- `dashboard/src/app/dashboard/faculty-scheduler/faculty-scheduler-skeleton.tsx`
+
+**What Was Built:**
+
+1. **page.tsx** - Server component with Next.js 14+ App Router pattern:
+   - `metadata` export for SEO (title, description)
+   - `revalidate = 300` for 5-minute ISR cache
+   - Async `FacultySchedulerDataLoader` function for server-side data fetching
+   - `Suspense` wrapper with skeleton fallback for streaming
+
+2. **faculty-scheduler-skeleton.tsx** - Loading UI matching final layout:
+   - `FallingPattern` background (consistent with other dashboards)
+   - Header skeleton with icon, badge, and title placeholders
+   - 6-column grid of summary card skeletons
+   - 12-column main grid:
+     - 8-column recruitment pipeline table skeleton (9 header columns, 8 data rows)
+     - 4-column not-responded list skeleton (5 instructor cards)
+
+**Pattern Alignment:**
+- Follows established pattern from `leads/page.tsx` and `programs/page.tsx`
+- Uses `@/dashboard-kit/components/ui/skeleton` and `Card` components
+- Uses `@/components/ui/falling-pattern` for background
+- Consistent spacing and responsive breakpoints
+
+**Dependencies:**
+- 05-02 query file: `getFacultySchedulerDashboardData` function
+- 05-05 content component: `FacultySchedulerContent` (to be created)
+
+---
+
 ## Remaining Plans
 
 | Plan | Wave | Description | Status |
 |------|------|-------------|--------|
-| 05-04-PLAN.md | 2 | Dashboard page and skeleton | Pending |
 | 05-05-PLAN.md | 3 | Content component and summary cards | Pending |
 | 05-06-PLAN.md | 3 | Recruitment pipeline table | Pending |
 | 05-07-PLAN.md | 4 | Not responded list and modals | Pending |

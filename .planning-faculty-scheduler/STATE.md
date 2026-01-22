@@ -3,12 +3,12 @@
 ## Current Position
 - **Milestone:** 1 - Faculty Program Scheduler MVP
 - **Phase:** 5 - Business OS Dashboard Integration
-- **Status:** IN PROGRESS (Wave 1 complete, Wave 2-4 pending)
+- **Status:** IN PROGRESS (Wave 1-2 complete, Wave 3-4 pending)
 
 ## Last Session
 - **Date:** 2026-01-22
-- **Activity:** Executed plan 05-01 - Supabase Dashboard Views
-- **Next Action:** Execute remaining plans (05-03 through 05-07)
+- **Activity:** Executed plan 05-04 - Dashboard Page and Skeleton
+- **Next Action:** Execute remaining plans (05-05 through 05-07)
 
 ## Phase 5 Plan Summary
 
@@ -16,8 +16,8 @@
 |------|------|-------------|--------|
 | 05-01-PLAN.md | 1 | Supabase dashboard views and admin functions | ✅ Complete |
 | 05-02-PLAN.md | 1 | Query file with TypeScript types | ✅ Complete |
-| 05-03-PLAN.md | 2 | Server actions (skip tier, assign, nudge, override) | Pending |
-| 05-04-PLAN.md | 2 | Dashboard page and skeleton | Pending |
+| 05-03-PLAN.md | 2 | Server actions (skip tier, assign, nudge, override) | ✅ Complete |
+| 05-04-PLAN.md | 2 | Dashboard page and skeleton | ✅ Complete |
 | 05-05-PLAN.md | 3 | Content component and summary cards | Pending |
 | 05-06-PLAN.md | 3 | Recruitment pipeline table | Pending |
 | 05-07-PLAN.md | 4 | Not responded list and modals | Pending |
@@ -28,6 +28,14 @@
 |-------------|----------|
 | Phase 5 Migration | `supabase/migrations/20260122_faculty_scheduler_phase5_dashboard.sql` |
 | Query File | `dashboard/src/lib/api/faculty-scheduler-queries.ts` |
+
+### Wave 2 Deliverables (Complete)
+
+| Deliverable | Location |
+|-------------|----------|
+| Server Actions | `dashboard/src/lib/actions/faculty-scheduler-actions.ts` |
+| Dashboard Page | `dashboard/src/app/dashboard/faculty-scheduler/page.tsx` |
+| Loading Skeleton | `dashboard/src/app/dashboard/faculty-scheduler/faculty-scheduler-skeleton.tsx` |
 
 **Views Created:**
 - `dashboard_recruitment_pipeline` - Enhanced pipeline with notification/response counts
@@ -140,6 +148,9 @@ This project creates a tiered instructor assignment system for IAML. Key points:
 | Phase 4 Migration | `supabase/migrations/20260121_faculty_scheduler_phase4.sql` |
 | Phase 5 Migration | `supabase/migrations/20260122_faculty_scheduler_phase5_dashboard.sql` |
 | Query File | `dashboard/src/lib/api/faculty-scheduler-queries.ts` |
+| Server Actions | `dashboard/src/lib/actions/faculty-scheduler-actions.ts` |
+| Dashboard Page | `dashboard/src/app/dashboard/faculty-scheduler/page.tsx` |
+| Dashboard Skeleton | `dashboard/src/app/dashboard/faculty-scheduler/faculty-scheduler-skeleton.tsx` |
 | Frontend | `faculty.iaml.com` (Vercel) - TBD |
 | Database | Supabase project (existing) |
 | Automations | n8n instance at n8n.realtyamp.ai |
