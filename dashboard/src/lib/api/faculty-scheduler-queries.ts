@@ -67,6 +67,7 @@ export interface DashboardSummaryStats {
   draft_programs: number;
   programs_needing_attention: number;
   total_notified: number;
+  total_viewed: number;  // count of instructors who viewed notification
   total_responded: number;
   response_rate: number;
 }
@@ -176,6 +177,7 @@ export async function getDashboardSummaryStats(): Promise<DashboardSummaryStats>
       draft_programs: 0,
       programs_needing_attention: 0,
       total_notified: 0,
+      total_viewed: 0,
       total_responded: 0,
       response_rate: 0,
     };
