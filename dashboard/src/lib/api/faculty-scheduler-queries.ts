@@ -86,14 +86,6 @@ export interface EligibleInstructor {
 }
 
 /**
- * Eligible instructor with optional history summary.
- * Used in assign modal to display experience info.
- */
-export interface EligibleInstructorWithHistory extends EligibleInstructor {
-  history?: InstructorHistorySummary;
-}
-
-/**
  * Program block for assignment modal.
  * Individual teaching slots within a scheduled program.
  */
@@ -140,6 +132,14 @@ export interface InstructorHistorySummary {
   pending_count: number;
   cancelled_count: number;
   last_program_date: string | null;
+}
+
+/**
+ * Eligible instructor with optional history summary.
+ * Used in assign modal to display experience info.
+ */
+export interface EligibleInstructorWithHistory extends EligibleInstructor {
+  history?: InstructorHistorySummary;
 }
 
 /**
