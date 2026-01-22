@@ -158,3 +158,60 @@ WHERE n.notification_type = 'tier_release'
       AND c.status IN ('confirmed', 'completed')
   )
 ORDER BY n.created_at DESC;
+
+-- ============================================================================
+-- VIEW: Dashboard Summary Stats
+-- Single-row view for dashboard summary cards
+-- ============================================================================
+CREATE OR REPLACE VIEW faculty_scheduler.dashboard_summary_stats AS
+WITH program_stats AS (
+  SELECT
+    COUNT(*) FILTER (WHERE status != 'draft') as total_programs,
+    COUNT(*) FILTER (WHERE status = 'tier_0') as awaiting_tier_0,
+    COUNT(*) FILTER (WHERE status = 'tier_1') as awaiting_tier_1,
+    COUNT(*) FILTER (WHERE status = 'tier_2') as open_programs,
+    COUNT(*) FILTER (WHERE status IN ('filled', 'claimed', 'confirmed')) as filled_programs,
+    COUNT(*) FILTER (WHERE status = 'draft') as draft_programs
+  FROM faculty_scheduler.scheduled_programs
+),
+urgent_programs AS (
+  SELECT COUNT(*) as programs_needing_attention
+  FROM faculty_scheduler.scheduled_programs sp
+  WHERE sp.status IN ('tier_0', 'tier_1', 'tier_2')
+    AND (
+      (sp.status = 'tier_0' AND EXTRACT(EPOCH FROM (sp.tier_0_ends_at - NOW())) / 86400 < 2)
+      OR (sp.status = 'tier_1' AND EXTRACT(EPOCH FROM (sp.tier_1_ends_at - NOW())) / 86400 < 2)
+      OR (sp.status = 'tier_2')  -- All tier_2 programs need attention (no deadline)
+    )
+),
+notification_stats AS (
+  SELECT
+    COUNT(DISTINCT instructor_id) as total_notified
+  FROM faculty_scheduler.notifications
+  WHERE notification_type = 'tier_release'
+    AND email_status = 'sent'
+),
+response_stats AS (
+  SELECT
+    COUNT(DISTINCT c.instructor_id) as total_responded
+  FROM faculty_scheduler.claims c
+  WHERE c.status IN ('confirmed', 'completed')
+)
+SELECT
+  COALESCE(ps.total_programs, 0)::INTEGER as total_programs,
+  COALESCE(ps.awaiting_tier_0, 0)::INTEGER as awaiting_tier_0,
+  COALESCE(ps.awaiting_tier_1, 0)::INTEGER as awaiting_tier_1,
+  COALESCE(ps.open_programs, 0)::INTEGER as open_programs,
+  COALESCE(ps.filled_programs, 0)::INTEGER as filled_programs,
+  COALESCE(ps.draft_programs, 0)::INTEGER as draft_programs,
+  COALESCE(up.programs_needing_attention, 0)::INTEGER as programs_needing_attention,
+  COALESCE(ns.total_notified, 0)::INTEGER as total_notified,
+  COALESCE(rs.total_responded, 0)::INTEGER as total_responded,
+  CASE
+    WHEN COALESCE(ns.total_notified, 0) = 0 THEN 0
+    ELSE ROUND((COALESCE(rs.total_responded, 0)::NUMERIC / ns.total_notified) * 100, 1)
+  END as response_rate
+FROM program_stats ps
+CROSS JOIN urgent_programs up
+CROSS JOIN notification_stats ns
+CROSS JOIN response_stats rs;
