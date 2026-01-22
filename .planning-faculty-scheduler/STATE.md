@@ -5,26 +5,26 @@
 See: .planning-faculty-scheduler/PROJECT.md (updated 2026-01-22)
 
 **Core value:** Faculty members receive magic-link emails when programs become available to their tier, view a personalized list of claimable blocks, and instantly lock in teaching assignments — while IAML monitors the entire process from a Business OS dashboard.
-**Current focus:** v1.1 Analytics & Insights
+**Current focus:** Planning next milestone
 
 ## Current Position
 
-Phase: 8 of 8 (Dashboard Alerts)
-Plan: 4 of 4 complete
-Status: Complete
-Last activity: 2026-01-22 — Phase 8 complete (Dashboard Alerts)
+Phase: v1.1 complete
+Plan: All plans complete
+Status: Milestone shipped
+Last activity: 2026-01-22 — v1.1 milestone archived and tagged
 
-Progress: [████████████████████] 100%
+Progress: [████████████████████] 100% (v1.1)
 
-**Next step:** v1.1 milestone complete. Ready for milestone audit or archive.
+**Next step:** Run `/gsd:new-milestone` to define v1.2 or v2.0 scope.
 
 ## Milestone Context
 
-**Milestone:** v1.1 Analytics & Insights
-**Phases:** Starting at Phase 6 (continues from v1.0)
-**Requirements:** 10 total
+**Last completed:** v1.1 Analytics & Insights (shipped 2026-01-22)
+**Phases completed:** 8 total (5 in v1.0, 3 in v1.1)
+**Requirements shipped:** 48 total (38 in v1.0, 10 in v1.1)
 
-**Previous milestone:** v1.0 MVP (5 phases, 38 requirements)
+**Next milestone:** TBD — run `/gsd:new-milestone` to define
 
 ## Accumulated Context
 
@@ -78,4 +78,4 @@ None currently.
 | Cancellation Re-release | `FCUm05vNbAmi6vdd` | Webhook | Verified |
 
 ---
-*Last updated: 2026-01-22 after Phase 8 execution (Dashboard Alerts complete, v1.1 milestone complete)*
+*Last updated: 2026-01-22 after v1.1 milestone archived and tagged*
