@@ -5,8 +5,9 @@ import { TaskExtended } from '@/lib/api/task-types';
 import { ViewTabs, ViewPreset, viewPresetFilters } from './components/view-tabs';
 import { TaskFilterToolbar, TaskFilters, emptyFilters } from './components/task-filters';
 import { TaskTable } from './components/task-table';
+import { CreateTaskModal } from './components/create-task-modal';
 import { Button } from '@/dashboard-kit/components/ui/button';
-import { RefreshCw } from 'lucide-react';
+import { RefreshCw, Plus } from 'lucide-react';
 
 interface ActionCenterContentProps {
   initialTasks: TaskExtended[];
@@ -21,6 +22,7 @@ export default function ActionCenterContent({
   const [activeView, setActiveView] = useState<ViewPreset>('my-focus');
   const [filters, setFilters] = useState<TaskFilters>(emptyFilters);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   // Apply view preset when tab changes
   const handleViewChange = useCallback((view: ViewPreset) => {
@@ -172,15 +174,25 @@ export default function ActionCenterContent({
       {/* Header */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-semibold">Action Center</h1>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleRefresh}
-          disabled={isRefreshing}
-        >
-          <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
-          Refresh
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="default"
+            size="sm"
+            onClick={() => setShowCreateModal(true)}
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Create Task
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleRefresh}
+            disabled={isRefreshing}
+          >
+            <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+            Refresh
+          </Button>
+        </div>
       </div>
 
       {/* View Tabs */}
@@ -209,6 +221,13 @@ export default function ActionCenterContent({
       <div className="text-sm text-muted-foreground">
         Showing {filteredTasks.length} of {tasks.length} tasks
       </div>
+
+      {/* Create Task Modal */}
+      <CreateTaskModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        departments={departments}
+      />
     </div>
   );
 }
