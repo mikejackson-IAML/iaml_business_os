@@ -160,7 +160,20 @@ Plans:
 10. Create task modal works with all fields
 11. Approval tasks show recommendation and have correct action buttons
 
-**Plans:** TBD
+**Plans:** 11 plans in 7 waves
+
+Plans:
+- [x] 05-01-PLAN.md — Server actions (Wave 1)
+- [x] 05-02-PLAN.md — Detail page route with skeleton (Wave 1)
+- [x] 05-03-PLAN.md — Task detail content with two-column layout (Wave 2)
+- [x] 05-04-PLAN.md — Metadata sidebar component (Wave 2)
+- [x] 05-05-PLAN.md — Complete and dismiss dialogs (Wave 3)
+- [x] 05-06-PLAN.md — Comments tab (Wave 4)
+- [x] 05-07-PLAN.md — Activity tab (Wave 4)
+- [x] 05-08-PLAN.md — Create task modal (Wave 5)
+- [x] 05-09-PLAN.md — Approval task UI (Wave 6)
+- [x] 05-10-PLAN.md — Workflow context component (Wave 6)
+- [x] 05-11-PLAN.md — Final integration (Wave 7)
 
 ---
 
@@ -304,7 +317,7 @@ Plans:
 | 2. Task API | 8/8 | COMPLETE |
 | 3. Workflow & SOP API | 9/9 | COMPLETE |
 | 4. Task UI - List | 5/5 | COMPLETE |
-| 5. Task UI - Detail & Create | 0/? | Not started |
+| 5. Task UI - Detail & Create | 11/11 | COMPLETE |
 | 6. SOP Templates | 0/? | Not started |
 | 7. Workflows & Dependencies | 0/? | Not started |
 | 8. Alert Integration | 0/? | Not started |
@@ -315,4 +328,4 @@ Plans:
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-22 after completing Phase 4*
+*Last updated: 2026-01-23 after completing Phase 5*
