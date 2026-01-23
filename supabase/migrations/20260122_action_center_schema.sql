@@ -108,3 +108,56 @@ CREATE INDEX idx_tasks_type ON action_center.tasks(task_type);
 CREATE INDEX idx_tasks_created ON action_center.tasks(created_at DESC);
 CREATE INDEX idx_tasks_depends_on ON action_center.tasks USING GIN (depends_on);
 CREATE INDEX idx_tasks_related_entity ON action_center.tasks(related_entity_type, related_entity_id);
+
+-- ============================================
+-- WORKFLOWS TABLE
+-- Groups related tasks with dependencies
+-- ============================================
+CREATE TABLE action_center.workflows (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+  -- Identity
+  name TEXT NOT NULL,
+  description TEXT,
+
+  -- Classification
+  workflow_type TEXT,  -- 'program_prep', 'onboarding', 'campaign', etc.
+  department TEXT,
+
+  -- Status (computed from tasks, but cached for performance)
+  status TEXT NOT NULL DEFAULT 'not_started' CHECK (status IN (
+    'not_started',  -- No tasks started
+    'in_progress',  -- Some tasks in progress
+    'blocked',      -- Has blocked tasks
+    'completed'     -- All tasks done
+  )),
+
+  -- Related entity (what triggered this workflow)
+  related_entity_type TEXT,
+  related_entity_id UUID,
+
+  -- Template reference (if created from template)
+  template_id UUID,  -- References action_center.workflow_templates(id)
+
+  -- Progress tracking
+  total_tasks INTEGER DEFAULT 0,
+  completed_tasks INTEGER DEFAULT 0,
+
+  -- Timeline
+  started_at TIMESTAMPTZ,
+  completed_at TIMESTAMPTZ,
+  target_completion_date DATE,
+
+  -- Audit columns
+  created_by UUID,
+  updated_by UUID,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Indexes
+CREATE INDEX idx_workflows_status ON action_center.workflows(status);
+CREATE INDEX idx_workflows_department ON action_center.workflows(department);
+CREATE INDEX idx_workflows_type ON action_center.workflows(workflow_type);
+CREATE INDEX idx_workflows_related_entity ON action_center.workflows(related_entity_type, related_entity_id);
+CREATE INDEX idx_workflows_created ON action_center.workflows(created_at DESC);
