@@ -5,14 +5,14 @@
 See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 **Core value:** Nothing falls through the cracks. Every action item flows to one place.
-**Current focus:** Phase 2 - Task API (Plan 04 complete)
+**Current focus:** Phase 2 - Task API (Plan 06 complete)
 
 ## Current Status
 
 **Milestone:** v1.0 Action Center
 **Phase:** 2 of 12 (Task API)
-**Plan:** 4 of 8 complete
-**Status:** GET, POST, and task detail endpoints implemented
+**Plan:** 6 of 8 complete
+**Status:** Full CRUD + actions (complete/dismiss) implemented
 
 ## Progress Overview
 
@@ -33,8 +33,8 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 ## Context for Next Session
 
-**Last action:** Completed plan 02-04 (GET /api/tasks/:id - Task Detail)
-**Next action:** Execute plan 02-05 (PATCH /api/tasks/:id - Update task)
+**Last action:** Completed plan 02-06 (Task Actions - complete/dismiss)
+**Next action:** Execute plan 02-07 (Comments API)
 
 ## Key Decisions Made
 
@@ -62,8 +62,8 @@ Phase 2 (Task API) in progress:
 | 02-02 | GET /api/tasks - List with Filters | COMPLETE |
 | 02-03 | POST /api/tasks - Create Task | COMPLETE |
 | 02-04 | GET /api/tasks/:id - Task Detail | COMPLETE |
-| 02-05 | PATCH /api/tasks/:id - Update Task | Not Started |
-| 02-06 | Task Actions (complete/dismiss) | Not Started |
+| 02-05 | PATCH /api/tasks/:id - Update Task | COMPLETE |
+| 02-06 | Task Actions (complete/dismiss) | COMPLETE |
 | 02-07 | Comments API | Not Started |
 | 02-08 | Activity Logging | Not Started |
 
@@ -75,7 +75,9 @@ Phase 2 (Task API) in progress:
 - `dashboard/src/lib/api/task-queries.ts` - Database query functions (list, get, comments, activity)
 - `dashboard/src/lib/api/task-mutations.ts` - Database mutation functions (create, update, complete, dismiss)
 - `dashboard/src/app/api/tasks/route.ts` - GET /api/tasks and POST /api/tasks endpoints
-- `dashboard/src/app/api/tasks/[id]/route.ts` - GET /api/tasks/:id endpoint
+- `dashboard/src/app/api/tasks/[id]/route.ts` - GET/PATCH /api/tasks/:id endpoints
+- `dashboard/src/app/api/tasks/[id]/complete/route.ts` - POST /api/tasks/:id/complete endpoint
+- `dashboard/src/app/api/tasks/[id]/dismiss/route.ts` - POST /api/tasks/:id/dismiss endpoint
 
 ---
-*Last updated: 2026-01-22 after completing plan 02-04*
+*Last updated: 2026-01-22 after completing plan 02-06*
