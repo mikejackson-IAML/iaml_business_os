@@ -205,3 +205,12 @@ CREATE INDEX idx_sop_templates_category ON action_center.sop_templates(category)
 CREATE INDEX idx_sop_templates_department ON action_center.sop_templates(department);
 CREATE INDEX idx_sop_templates_active ON action_center.sop_templates(is_active);
 CREATE INDEX idx_sop_templates_name ON action_center.sop_templates USING GIN (to_tsvector('english', name));
+
+-- Add foreign key constraints after all tables exist
+ALTER TABLE action_center.tasks
+  ADD CONSTRAINT fk_tasks_workflow
+  FOREIGN KEY (workflow_id) REFERENCES action_center.workflows(id) ON DELETE SET NULL;
+
+ALTER TABLE action_center.tasks
+  ADD CONSTRAINT fk_tasks_sop_template
+  FOREIGN KEY (sop_template_id) REFERENCES action_center.sop_templates(id) ON DELETE SET NULL;
