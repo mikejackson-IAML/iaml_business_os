@@ -183,3 +183,90 @@ LEFT JOIN action_center.tasks t ON t.assignee_id = p.id
 GROUP BY p.id, p.email, p.full_name;
 
 COMMENT ON VIEW action_center.user_task_summary IS 'Summary statistics per user: counts by status, overdue, due dates, priority, completion metrics';
+
+-- ============================================
+-- VIEW: department_task_summary
+-- Summary of tasks per department
+-- ============================================
+CREATE OR REPLACE VIEW action_center.department_task_summary AS
+SELECT
+  t.department,
+
+  -- Total counts by status
+  COUNT(*) FILTER (WHERE t.status = 'open') AS open_count,
+  COUNT(*) FILTER (WHERE t.status = 'in_progress') AS in_progress_count,
+  COUNT(*) FILTER (WHERE t.status = 'waiting') AS waiting_count,
+  COUNT(*) FILTER (WHERE t.status = 'done') AS done_count,
+  COUNT(*) FILTER (WHERE t.status = 'dismissed') AS dismissed_count,
+
+  -- Actionable (open + in_progress)
+  COUNT(*) FILTER (WHERE t.status IN ('open', 'in_progress')) AS actionable_count,
+
+  -- Overdue count
+  COUNT(*) FILTER (
+    WHERE t.status NOT IN ('done', 'dismissed')
+      AND t.due_date < CURRENT_DATE
+  ) AS overdue_count,
+
+  -- Due today count
+  COUNT(*) FILTER (
+    WHERE t.status NOT IN ('done', 'dismissed')
+      AND t.due_date = CURRENT_DATE
+  ) AS due_today_count,
+
+  -- Critical priority count
+  COUNT(*) FILTER (
+    WHERE t.status IN ('open', 'in_progress')
+      AND t.priority = 'critical'
+  ) AS critical_count,
+
+  -- High priority count
+  COUNT(*) FILTER (
+    WHERE t.status IN ('open', 'in_progress')
+      AND t.priority = 'high'
+  ) AS high_priority_count,
+
+  -- Created last 7 days
+  COUNT(*) FILTER (
+    WHERE t.created_at >= CURRENT_DATE - INTERVAL '7 days'
+  ) AS created_last_7_days,
+
+  -- Completed last 7 days
+  COUNT(*) FILTER (
+    WHERE t.status = 'done'
+      AND t.completed_at >= CURRENT_DATE - INTERVAL '7 days'
+  ) AS completed_last_7_days,
+
+  -- Completion rate last 30 days
+  ROUND(
+    (
+      COUNT(*) FILTER (
+        WHERE t.status = 'done'
+          AND t.completed_at >= CURRENT_DATE - INTERVAL '30 days'
+      )::NUMERIC /
+      NULLIF(
+        COUNT(*) FILTER (
+          WHERE t.created_at >= CURRENT_DATE - INTERVAL '30 days'
+        ),
+        0
+      )
+    ) * 100,
+    1
+  ) AS completion_rate_30d,
+
+  -- Average completion time (days) for tasks completed in last 30 days
+  ROUND(
+    AVG(
+      EXTRACT(EPOCH FROM (t.completed_at - t.created_at)) / 86400
+    ) FILTER (
+      WHERE t.status = 'done'
+        AND t.completed_at >= CURRENT_DATE - INTERVAL '30 days'
+    )::NUMERIC,
+    1
+  ) AS avg_completion_days_30d
+
+FROM action_center.tasks t
+WHERE t.department IS NOT NULL
+GROUP BY t.department;
+
+COMMENT ON VIEW action_center.department_task_summary IS 'Summary statistics per department: counts by status, overdue, priority, completion rate';
