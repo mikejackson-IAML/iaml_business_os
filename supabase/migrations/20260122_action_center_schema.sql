@@ -214,3 +214,27 @@ ALTER TABLE action_center.tasks
 ALTER TABLE action_center.tasks
   ADD CONSTRAINT fk_tasks_sop_template
   FOREIGN KEY (sop_template_id) REFERENCES action_center.sop_templates(id) ON DELETE SET NULL;
+
+-- ============================================
+-- UPDATED_AT TRIGGER FUNCTION
+-- ============================================
+CREATE OR REPLACE FUNCTION action_center.update_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Apply trigger to tables
+CREATE TRIGGER tasks_updated_at
+  BEFORE UPDATE ON action_center.tasks
+  FOR EACH ROW EXECUTE FUNCTION action_center.update_updated_at();
+
+CREATE TRIGGER workflows_updated_at
+  BEFORE UPDATE ON action_center.workflows
+  FOR EACH ROW EXECUTE FUNCTION action_center.update_updated_at();
+
+CREATE TRIGGER sop_templates_updated_at
+  BEFORE UPDATE ON action_center.sop_templates
+  FOR EACH ROW EXECUTE FUNCTION action_center.update_updated_at();
