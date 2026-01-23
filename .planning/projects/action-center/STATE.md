@@ -5,20 +5,21 @@
 See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 **Core value:** Nothing falls through the cracks. Every action item flows to one place.
-**Current focus:** Phase 1 Complete - Ready for Phase 2
+**Current focus:** Phase 2 - Task API (Plan 01 complete)
 
 ## Current Status
 
 **Milestone:** v1.0 Action Center
-**Phase:** 1 of 12 (COMPLETE)
-**Status:** Phase 1 Database Schema complete, ready for Phase 2 Task API
+**Phase:** 2 of 12 (Task API)
+**Plan:** 1 of 8 complete
+**Status:** TypeScript types and validation utilities created
 
 ## Progress Overview
 
 | Phase | Name | Status |
 |-------|------|--------|
 | 1 | Database Schema | COMPLETE |
-| 2 | Task API | Not Started |
+| 2 | Task API | In Progress (1/8) |
 | 3 | Workflow & SOP API | Not Started |
 | 4 | Task UI - List | Not Started |
 | 5 | Task UI - Detail & Create | Not Started |
@@ -32,8 +33,8 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 ## Context for Next Session
 
-**Last action:** Completed plan 01-06 (RLS Policies and Permissions)
-**Next action:** Begin Phase 2 - Task API
+**Last action:** Completed plan 02-01 (TypeScript Types and Validation Utilities)
+**Next action:** Execute plan 02-02 (Core CRUD endpoints)
 
 ## Key Decisions Made
 
@@ -41,61 +42,34 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 - Single-user (CEO) for v1, schema supports multi-user
 - SOPs stored in Supabase, not Notion
 - Soft dependency enforcement (warning, not blocking)
+- [02-01]: API Key reuse - same MOBILE_API_KEY for consistency
+- [02-01]: User-friendly verbose validation error messages
+- [02-01]: Cannot PATCH status='dismissed' - must use /dismiss endpoint
 
 ## Blockers
 
 None.
 
-## Phase 1 Summary
+## Phase 2 Progress
 
-Phase 1 (Database Schema) is complete with 6 migration files:
+Phase 2 (Task API) in progress:
 
-| Plan | Name | Migration File |
-|------|------|----------------|
-| 01-01 | Core Tables | `20260122_action_center_schema.sql` |
-| 01-02 | Supporting Tables | `20260122_action_center_supporting_tables.sql` |
-| 01-03 | User Mastery | `20260122_action_center_user_mastery.sql` |
-| 01-04 | Views | `20260122_action_center_views.sql` |
-| 01-05 | Triggers | `20260122_action_center_triggers.sql` |
-| 01-06 | RLS Policies | `20260122_action_center_rls.sql` |
+| Plan | Name | Status |
+|------|------|--------|
+| 02-01 | TypeScript Types and Validation | COMPLETE |
+| 02-02 | Core CRUD Endpoints | Not Started |
+| 02-03 | Task Actions | Not Started |
+| 02-04 | Task Queries | Not Started |
+| 02-05 | Comments API | Not Started |
+| 02-06 | Activity API | Not Started |
+| 02-07 | Batch Operations | Not Started |
+| 02-08 | Deduplication | Not Started |
 
-### Tables Created
+### Files Created (02-01)
 
-- `action_center.tasks` - Central task table (30+ columns, 11 indexes)
-- `action_center.workflows` - Task grouping with progress tracking
-- `action_center.sop_templates` - SOP definitions with JSONB steps
-- `action_center.task_rules` - Automatic task generation rules
-- `action_center.workflow_templates` - Workflow instantiation templates
-- `action_center.task_comments` - Task collaboration
-- `action_center.task_activity` - Full audit trail
-
-### Views Created
-
-- `tasks_extended` - Extended task view with computed fields
-- `user_task_summary` - Per-user task statistics
-- `department_task_summary` - Per-department statistics
-- `system_task_summary` - System-wide dashboard stats
-
-### Functions Created
-
-- `compute_workflow_status` - Compute workflow status from tasks
-- `check_task_blocked` - Check if task has incomplete dependencies
-- `get_user_mastery` - Get user's task mastery level
-- `get_mastery_tier` - Convert mastery score to tier name
-- `increment_user_mastery` - Increment mastery after task completion
-
-### Triggers Created
-
-- `trigger_update_workflow_status` - Auto-update workflow on task change
-- `trigger_increment_mastery` - Auto-increment mastery on task complete
-- `trigger_log_task_activity` - Auto-log all task changes
-- `trigger_update_dependent_tasks` - Unblock waiting tasks
-
-### RLS Policies
-
-- 25 policies created for all tables
-- v1 permissive: authenticated users have full access
-- service_role has full access for n8n/background jobs
+- `dashboard/src/lib/api/task-types.ts` - Core type definitions (Task, TaskExtended, etc.)
+- `dashboard/src/lib/api/task-validation.ts` - Request validators with user-friendly errors
+- `dashboard/src/lib/api/task-auth.ts` - API key authentication helper
 
 ---
-*Last updated: 2026-01-22 after completing plan 01-06*
+*Last updated: 2026-01-22 after completing plan 02-01*
