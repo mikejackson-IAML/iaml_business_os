@@ -1,0 +1,13 @@
+{
+  "project": "Development Dashboard",
+  "project_key": "dev-dashboard",
+  "current_milestone": "v1.0",
+  "workflow": {
+    "mode": "yolo",
+    "depth": "standard",
+    "parallelization": true,
+    "commit_docs": true
+  },
+  "created": "2026-01-23",
+  "notes": "Development department for CEO dashboard - parallel project visibility"
+}
