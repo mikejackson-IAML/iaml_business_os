@@ -13,7 +13,6 @@ import {
   XCircle,
   Play,
   AlertTriangle,
-  Lightbulb,
   ExternalLink,
 } from 'lucide-react';
 import { Button } from '@/dashboard-kit/components/ui/button';
@@ -24,13 +23,13 @@ import { FallingPattern } from '@/components/ui/falling-pattern';
 import type { TaskExtended, TaskComment, TaskActivity } from '@/lib/api/task-types';
 import { format, isToday, isTomorrow, isPast, formatDistanceToNow } from 'date-fns';
 
-// Components implemented in later plans
+// Components for task detail page
 import { TaskComments } from '../../components/task-comments';
 import { TaskActivityList } from '../../components/task-activity';
-// Components to be implemented in later plans (05-09, 05-10)
-// import { TaskMetadataSidebar } from './task-metadata-sidebar';
-// import { ApprovalActions } from './approval-actions';
-// import { WorkflowContext } from './workflow-context';
+import { CompleteTaskDialog } from '../../components/complete-task-dialog';
+import { DismissTaskDialog } from '../../components/dismiss-task-dialog';
+import { ApprovalActions, RecommendationCallout } from '../../components/approval-actions';
+import { WorkflowContext } from '../../components/workflow-context';
 
 interface TaskDetailContentProps {
   task: TaskExtended;
@@ -203,20 +202,7 @@ export function TaskDetailContent({ task, comments, activity }: TaskDetailConten
               )}
 
               {canTakeAction && isApprovalTask && (
-                // ApprovalActions component placeholder - will be implemented in 05-10
-                <div className="flex items-center gap-2">
-                  <Button variant="success" size="sm">
-                    <CheckCircle className="h-4 w-4 mr-1" />
-                    Approve
-                  </Button>
-                  <Button variant="warning" size="sm">
-                    Approve with Changes
-                  </Button>
-                  <Button variant="destructive" size="sm">
-                    <XCircle className="h-4 w-4 mr-1" />
-                    Reject
-                  </Button>
-                </div>
+                <ApprovalActions task={task} />
               )}
             </div>
           </div>
@@ -238,51 +224,11 @@ export function TaskDetailContent({ task, comments, activity }: TaskDetailConten
               </Card>
             )}
 
-            {/* Recommendation Callout (for approval tasks) */}
-            {task.recommendation && (
-              <Card className="border-amber-200 bg-amber-50 dark:border-amber-900 dark:bg-amber-950/30">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg flex items-center gap-2 text-amber-800 dark:text-amber-200">
-                    <Lightbulb className="h-5 w-5" />
-                    AI Recommendation
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <p className="font-medium text-amber-900 dark:text-amber-100">{task.recommendation}</p>
-                  {task.recommendation_reasoning && (
-                    <p className="text-sm text-amber-700 dark:text-amber-300">{task.recommendation_reasoning}</p>
-                  )}
-                  {task.ai_confidence !== null && (
-                    <p className="text-xs text-amber-600 dark:text-amber-400">
-                      Confidence: {Math.round(task.ai_confidence * 100)}%
-                    </p>
-                  )}
-                </CardContent>
-              </Card>
-            )}
+            {/* Recommendation Callout (for approval tasks with recommendations) */}
+            <RecommendationCallout task={task} />
 
             {/* Workflow Context (if task has workflow) */}
-            {task.workflow_id && task.workflow_name && (
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <Workflow className="h-5 w-5" />
-                    Workflow Context
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">{task.workflow_name}</p>
-                      {task.workflow_status && (
-                        <p className="text-sm text-muted-foreground">Status: {task.workflow_status}</p>
-                      )}
-                    </div>
-                    {/* TODO: Link to workflow detail when available */}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
+            <WorkflowContext task={task} />
 
             {/* Dependencies Section */}
             {(task.blocked_by_count > 0 || task.blocking_count > 0) && (
@@ -458,48 +404,21 @@ export function TaskDetailContent({ task, comments, activity }: TaskDetailConten
           </div>
         </div>
 
-        {/* Dialog placeholders - will be fully implemented in 05-09, 05-10 */}
-        {showCompleteDialog && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <Card className="w-full max-w-md mx-4">
-              <CardHeader>
-                <CardTitle>Complete Task</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-muted-foreground">Complete task dialog coming in plan 05-09</p>
-                <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={() => setShowCompleteDialog(false)}>
-                    Cancel
-                  </Button>
-                  <Button variant="success" onClick={() => setShowCompleteDialog(false)}>
-                    Complete
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
+        {/* Complete Task Dialog */}
+        <CompleteTaskDialog
+          taskId={task.id}
+          taskTitle={task.title}
+          isOpen={showCompleteDialog}
+          onClose={() => setShowCompleteDialog(false)}
+        />
 
-        {showDismissDialog && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <Card className="w-full max-w-md mx-4">
-              <CardHeader>
-                <CardTitle>Dismiss Task</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-muted-foreground">Dismiss task dialog coming in plan 05-09</p>
-                <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={() => setShowDismissDialog(false)}>
-                    Cancel
-                  </Button>
-                  <Button variant="destructive" onClick={() => setShowDismissDialog(false)}>
-                    Dismiss
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
+        {/* Dismiss Task Dialog */}
+        <DismissTaskDialog
+          taskId={task.id}
+          taskTitle={task.title}
+          isOpen={showDismissDialog}
+          onClose={() => setShowDismissDialog(false)}
+        />
       </div>
     </div>
   );
