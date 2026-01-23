@@ -827,6 +827,26 @@ EOF
 )"
 ```
 
+**Register project in dashboard (optional):**
+
+If the helper script exists, register this project for dashboard visibility:
+
+```bash
+# Extract project info
+PROJECT_KEY=$(basename "$(pwd)" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
+PROJECT_NAME=$(grep -m1 "^# " .planning/PROJECT.md | sed 's/^# //')
+PROJECT_PATH=".planning"
+TOTAL_PHASES=$(grep -c "^## Phase" .planning/ROADMAP.md 2>/dev/null || echo "0")
+
+# Register in Supabase (silent failure if not configured)
+if [ -f "./scripts/gsd-supabase.sh" ]; then
+  ./scripts/gsd-supabase.sh register "$PROJECT_KEY" "$PROJECT_NAME" "$PROJECT_PATH" 2>/dev/null || true
+  ./scripts/gsd-supabase.sh phase "$PROJECT_KEY" 0 "$TOTAL_PHASES" 2>/dev/null || true
+fi
+```
+
+This enables the CEO dashboard to track this project.
+
 ## Phase 10: Done
 
 Present completion with next steps:
@@ -903,6 +923,7 @@ Present completion with next steps:
 - [ ] STATE.md initialized
 - [ ] REQUIREMENTS.md traceability updated
 - [ ] User knows next step is `/gsd:discuss-phase 1`
+- [ ] Project registered in dashboard (if scripts/gsd-supabase.sh exists)
 
 **Atomic commits:** Each phase commits its artifacts immediately. If context is lost, artifacts persist.
 

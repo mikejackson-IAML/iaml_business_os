@@ -9,6 +9,7 @@ The orchestrator's job is coordination, not execution. Each subagent loads the f
 <required_reading>
 Read STATE.md before any operation to load project context.
 Read config.json for planning behavior settings.
+Read supabase-integration.md for dashboard integration hooks (optional).
 </required_reading>
 
 <process>
@@ -67,6 +68,41 @@ fi
 ```
 
 Report: "Found {N} plans in {phase_dir}"
+</step>
+
+<step name="dashboard_integration">
+**Optional:** Update project status in dashboard for visibility.
+
+**Extract project key from --project flag or auto-detect:**
+
+```bash
+# From --project flag (if provided)
+PROJECT_KEY=$(echo "$ARGUMENTS" | grep -oE '\-\-project[[:space:]]+[a-z0-9-]+' | cut -d' ' -f2)
+
+# Auto-detect from directory structure
+if [ -z "$PROJECT_KEY" ]; then
+  # Check for sub-project by looking at phase path
+  if [[ "$PHASE_DIR" == *"/projects/"* ]]; then
+    PROJECT_KEY=$(echo "$PHASE_DIR" | grep -oE 'projects/[^/]+' | cut -d'/' -f2)
+  else
+    # Root project - use directory name
+    PROJECT_KEY=$(basename "$(pwd)" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
+  fi
+fi
+
+# Get total phases from ROADMAP.md
+TOTAL_PHASES=$(grep -c "^## Phase" .planning/ROADMAP.md 2>/dev/null || echo "0")
+```
+
+**Update dashboard status to executing:**
+
+```bash
+# Update status (silent failure if not configured)
+./scripts/gsd-supabase.sh status "$PROJECT_KEY" "executing" "Executing Phase $PHASE_NUM" 2>/dev/null || true
+./scripts/gsd-supabase.sh phase "$PROJECT_KEY" "$PHASE_NUM" "$TOTAL_PHASES" 2>/dev/null || true
+```
+
+This allows the CEO dashboard to show real-time phase execution status.
 </step>
 
 <step name="discover_plans">
@@ -288,6 +324,15 @@ Plans with `autonomous: false` require user interaction.
    [Awaiting section from agent return]
    ```
 
+   **Dashboard integration (checkpoint):**
+   ```bash
+   # Add pending decision to dashboard
+   ./scripts/gsd-supabase.sh decision "$PROJECT_KEY" "checkpoint" "$CHECKPOINT_QUESTION" 2>/dev/null || true
+   ./scripts/gsd-supabase.sh status "$PROJECT_KEY" "needs_input" "Checkpoint in Phase $PHASE_NUM" 2>/dev/null || true
+   # Send macOS notification
+   ./scripts/gsd-supabase.sh notify "$PROJECT_KEY" "Decision needed: $CHECKPOINT_TITLE" "Ping" 2>/dev/null || true
+   ```
+
 5. **User responds:**
    - "approved" / "done" → spawn continuation agent
    - Description of issues → spawn continuation agent with feedback
@@ -488,7 +533,17 @@ git commit -m "docs(phase-{X}): complete phase execution"
 </step>
 
 <step name="offer_next">
-Present next steps based on milestone status:
+Present next steps based on milestone status.
+
+**Dashboard integration (phase complete):**
+```bash
+# Update status to idle (phase complete)
+./scripts/gsd-supabase.sh status "$PROJECT_KEY" "idle" "Phase $PHASE_NUM complete" 2>/dev/null || true
+# Clear any pending decisions
+./scripts/gsd-supabase.sh resolve-decisions "$PROJECT_KEY" 2>/dev/null || true
+# Send macOS notification
+./scripts/gsd-supabase.sh notify "$PROJECT_KEY" "Phase $PHASE_NUM complete. Ready for Phase $((PHASE_NUM+1))." 2>/dev/null || true
+```
 
 **If more phases remain:**
 ```
@@ -502,6 +557,14 @@ Present next steps based on milestone status:
 ```
 
 **If milestone complete:**
+
+```bash
+# Update status to complete
+./scripts/gsd-supabase.sh status "$PROJECT_KEY" "complete" "Milestone complete" 2>/dev/null || true
+# Send milestone complete notification
+./scripts/gsd-supabase.sh notify "$PROJECT_KEY" "Milestone complete! All phases finished." "Hero" 2>/dev/null || true
+```
+
 ```
 MILESTONE COMPLETE!
 
@@ -539,6 +602,12 @@ Each subagent: Fresh 200k context
 - SUMMARY.md won't exist
 - Orchestrator detects missing SUMMARY
 - Reports failure, asks user how to proceed
+- **Dashboard:** Update status to blocked
+
+```bash
+./scripts/gsd-supabase.sh status "$PROJECT_KEY" "blocked" "Plan failed: $PLAN_NAME" 2>/dev/null || true
+./scripts/gsd-supabase.sh notify "$PROJECT_KEY" "Blocked: Plan failed in Phase $PHASE_NUM" "Basso" 2>/dev/null || true
+```
 
 **Dependency chain breaks:**
 - Wave 1 plan fails
@@ -550,6 +619,12 @@ Each subagent: Fresh 200k context
 - Something systemic (git issues, permissions, etc.)
 - Stop execution
 - Report for manual investigation
+- **Dashboard:** Update status to blocked
+
+```bash
+./scripts/gsd-supabase.sh status "$PROJECT_KEY" "blocked" "Systemic failure in Phase $PHASE_NUM" 2>/dev/null || true
+./scripts/gsd-supabase.sh notify "$PROJECT_KEY" "Blocked: Systemic failure - manual investigation needed" "Basso" 2>/dev/null || true
+```
 
 **Checkpoint fails to resolve:**
 - User can't approve or provides repeated issues

@@ -10,7 +10,7 @@ See: .planning/projects/dev-dashboard/PROJECT.md (updated 2026-01-23)
 ## Current State
 
 **Milestone:** v1.0
-**Phase:** 6 of 7 complete
+**Phase:** 6 of 7 complete (Phase 2 also complete)
 **Status:** Ready for testing
 
 ## Session Log
@@ -51,9 +51,33 @@ See: .planning/projects/dev-dashboard/PROJECT.md (updated 2026-01-23)
 
 ## What's Not Yet Done
 
-1. **Phase 2: GSD Integration** - Commands need to write to Supabase
+1. ~~**Phase 2: GSD Integration** - Commands need to write to Supabase~~ ✓ Complete
 2. **Phase 7: Polish** - Real-time subscriptions, edge cases
-3. **macOS Notifications** - Not yet wired up
+
+## What Was Implemented in Phase 2
+
+1. **Helper Script** (`scripts/gsd-supabase.sh`)
+   - `register` - Register new projects in Supabase
+   - `status` - Update project status (idle, executing, needs_input, blocked, complete)
+   - `phase` - Update phase progress
+   - `decision` - Add pending decisions
+   - `resolve-decisions` - Clear pending decisions
+   - `notify` - Send macOS notifications
+
+2. **GSD Workflow Integration** (`.claude/get-shit-done/workflows/execute-phase.md`)
+   - Dashboard integration step after validate_phase
+   - Checkpoint notification hooks
+   - Phase completion notification hooks
+   - Blocker notification hooks
+
+3. **GSD Command Updates**
+   - `new-project.md` - Registers project in Supabase after creation
+   - `execute-phase.md` - References supabase-integration.md
+
+4. **Reference Documentation** (`.claude/get-shit-done/references/supabase-integration.md`)
+   - All integration hooks documented
+   - Project key extraction patterns
+   - Silent failure behavior documented
 
 ## Next Steps
 
