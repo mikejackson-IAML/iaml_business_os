@@ -161,3 +161,47 @@ CREATE INDEX idx_workflows_department ON action_center.workflows(department);
 CREATE INDEX idx_workflows_type ON action_center.workflows(workflow_type);
 CREATE INDEX idx_workflows_related_entity ON action_center.workflows(related_entity_type, related_entity_id);
 CREATE INDEX idx_workflows_created ON action_center.workflows(created_at DESC);
+
+-- ============================================
+-- SOP TEMPLATES TABLE
+-- Standard Operating Procedure definitions with steps
+-- ============================================
+CREATE TABLE action_center.sop_templates (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+  -- Identity
+  name TEXT NOT NULL,
+  description TEXT,
+  category TEXT,  -- 'operations', 'marketing', 'finance', etc.
+  department TEXT,
+
+  -- Steps stored as JSONB array
+  -- Each step: {order, title, description, estimated_minutes, links[], notes}
+  steps JSONB NOT NULL DEFAULT '[]',
+
+  -- Versioning (simple increment)
+  version INTEGER NOT NULL DEFAULT 1,
+
+  -- Status
+  is_active BOOLEAN DEFAULT TRUE,
+
+  -- Usage tracking
+  times_used INTEGER DEFAULT 0,
+  last_used_at TIMESTAMPTZ,
+
+  -- Variable definitions (for substitution)
+  -- Format: {variable_name: {description, example}}
+  variables JSONB DEFAULT '{}',
+
+  -- Audit columns
+  created_by UUID,
+  updated_by UUID,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Indexes
+CREATE INDEX idx_sop_templates_category ON action_center.sop_templates(category);
+CREATE INDEX idx_sop_templates_department ON action_center.sop_templates(department);
+CREATE INDEX idx_sop_templates_active ON action_center.sop_templates(is_active);
+CREATE INDEX idx_sop_templates_name ON action_center.sop_templates USING GIN (to_tsvector('english', name));
