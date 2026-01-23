@@ -161,10 +161,20 @@ send_notification() {
     return 0
   fi
 
-  if [ -n "$sound" ]; then
-    osascript -e "display notification \"${message}\" with title \"${title}\" sound name \"${sound}\""
+  # Prefer terminal-notifier if available (more reliable)
+  if command -v terminal-notifier &> /dev/null; then
+    if [ -n "$sound" ]; then
+      terminal-notifier -title "$title" -message "$message" -sound "$sound"
+    else
+      terminal-notifier -title "$title" -message "$message"
+    fi
   else
-    osascript -e "display notification \"${message}\" with title \"${title}\""
+    # Fall back to osascript
+    if [ -n "$sound" ]; then
+      osascript -e "display notification \"${message}\" with title \"${title}\" sound name \"${sound}\""
+    else
+      osascript -e "display notification \"${message}\" with title \"${title}\""
+    fi
   fi
 }
 
