@@ -233,17 +233,33 @@ Explicitly excluded. Documented to prevent scope creep.
 
 ## Traceability
 
-Which phases cover which requirements. Updated during roadmap creation.
+Which phases cover which requirements.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (To be filled after roadmap creation) | | |
+| DB-01 to DB-10 | Phase 1 | Pending |
+| API-01 to API-08 | Phase 2 | Pending |
+| API-09 to API-20 | Phase 3 | Pending |
+| UI-01 to UI-10 | Phase 4 | Pending |
+| UI-11 to UI-22 | Phase 5 | Pending |
+| APPR-01 to APPR-04 | Phase 5 | Pending |
+| SOP-01 to SOP-05 | Phase 6 | Pending |
+| PROG-01 to PROG-08 | Phase 6 | Pending |
+| WF-01 to WF-06 | Phase 7 | Pending |
+| DEP-01 to DEP-06 | Phase 7 | Pending |
+| ALERT-01 to ALERT-06 | Phase 8 | Pending |
+| TMPL-01 to TMPL-08 | Phase 9 | Pending |
+| RULE-01 to RULE-07 | Phase 9 | Pending |
+| DASH-01 to DASH-05 | Phase 10 | Pending |
+| NOTIF-01 to NOTIF-04 | Phase 10 | Pending |
+| AI-01 to AI-08 | Phase 11 | Pending |
+| MET-01 to MET-04 | Phase 12 | Pending |
 
 **Coverage:**
 - v1.0 requirements: 87 total
-- Mapped to phases: 0 (pending roadmap)
-- Unmapped: 87
+- Mapped to phases: 87
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-01-22*
-*Last updated: 2026-01-22 after definition*
+*Last updated: 2026-01-22 after roadmap creation*
