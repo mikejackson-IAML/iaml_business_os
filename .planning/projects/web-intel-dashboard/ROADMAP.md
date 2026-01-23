@@ -46,7 +46,13 @@ This project adds a `/dashboard/web-intel` section to the existing Business OS d
 3. TypeScript types exist for all major web_intel tables (daily_traffic, tracked_keywords, daily_rankings, core_web_vitals, alerts, etc.)
 4. Supabase query functions can fetch data from web_intel schema and return typed results
 
-**Plans:** 3-4 plans
+**Plans:** 4 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — TypeScript types for web_intel schema
+- [ ] 01-02-PLAN.md — Supabase query functions
+- [ ] 01-03-PLAN.md — Dashboard route and page structure
+- [ ] 01-04-PLAN.md — Navigation integration
 
 ---
 
@@ -79,7 +85,7 @@ This project adds a `/dashboard/web-intel` section to the existing Business OS d
 
 **Success Criteria** (what must be TRUE):
 1. Keywords table displays keyword, current position, and target URL
-2. Position changes show directional arrows (↑ green, ↓ red) with delta value
+2. Position changes show directional arrows (up green, down red) with delta value
 3. Filter dropdown allows selecting by priority level
 4. Table columns are sortable by clicking headers
 5. SERP features column shows icons for featured snippet, PAA, etc.
@@ -170,7 +176,7 @@ This project adds a `/dashboard/web-intel` section to the existing Business OS d
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/4 | Not started | - |
+| 1. Foundation | 0/4 | Planned | - |
 | 2. Traffic Overview | 0/4 | Not started | - |
 | 3. Rankings Tracker | 0/5 | Not started | - |
 | 4. Technical Health | 0/5 | Not started | - |
@@ -180,4 +186,4 @@ This project adds a `/dashboard/web-intel` section to the existing Business OS d
 
 ---
 *Roadmap created: 2026-01-23*
-*Last updated: 2026-01-23 after initial creation*
+*Last updated: 2026-01-23 — Phase 1 plans created*
