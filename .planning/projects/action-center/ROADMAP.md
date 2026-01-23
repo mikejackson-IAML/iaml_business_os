@@ -77,7 +77,17 @@ Plans:
 6. POST /api/tasks/:id/dismiss marks task dismissed with required reason
 7. Comments and activity endpoints work correctly
 
-**Plans:** TBD
+**Plans:** 8 plans in 4 waves
+
+Plans:
+- [x] 02-01-PLAN.md — Types and validation (Wave 1)
+- [x] 02-02-PLAN.md — Auth helpers (Wave 1)
+- [x] 02-03-PLAN.md — Query functions (Wave 2)
+- [x] 02-04-PLAN.md — Mutation functions (Wave 2)
+- [x] 02-05-PLAN.md — List and create endpoints (Wave 3)
+- [x] 02-06-PLAN.md — Get and update endpoints (Wave 3)
+- [x] 02-07-PLAN.md — Complete, dismiss, and comments endpoints (Wave 4)
+- [x] 02-08-PLAN.md — Activity endpoint (Wave 4)
 
 ---
 
@@ -273,7 +283,7 @@ Plans:
 | Phase | Plans Complete | Status |
 |-------|----------------|--------|
 | 1. Database Schema | 6/6 | COMPLETE |
-| 2. Task API | 0/? | Not started |
+| 2. Task API | 8/8 | COMPLETE |
 | 3. Workflow & SOP API | 0/? | Not started |
 | 4. Task UI - List | 0/? | Not started |
 | 5. Task UI - Detail & Create | 0/? | Not started |
@@ -287,4 +297,4 @@ Plans:
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-22 after completing Phase 1*
+*Last updated: 2026-01-22 after completing Phase 2*

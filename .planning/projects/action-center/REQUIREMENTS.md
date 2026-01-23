@@ -237,8 +237,8 @@ Which phases cover which requirements.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DB-01 to DB-10 | Phase 1 | Pending |
-| API-01 to API-08 | Phase 2 | Pending |
+| DB-01 to DB-10 | Phase 1 | Complete |
+| API-01 to API-08 | Phase 2 | Complete |
 | API-09 to API-20 | Phase 3 | Pending |
 | UI-01 to UI-10 | Phase 4 | Pending |
 | UI-11 to UI-22 | Phase 5 | Pending |
