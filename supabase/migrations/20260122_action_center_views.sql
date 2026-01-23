@@ -270,3 +270,75 @@ WHERE t.department IS NOT NULL
 GROUP BY t.department;
 
 COMMENT ON VIEW action_center.department_task_summary IS 'Summary statistics per department: counts by status, overdue, priority, completion rate';
+
+-- ============================================
+-- VIEW: system_task_summary
+-- System-wide task summary for dashboard
+-- ============================================
+CREATE OR REPLACE VIEW action_center.system_task_summary AS
+SELECT
+  -- Total counts by status
+  COUNT(*) FILTER (WHERE status = 'open') AS open_count,
+  COUNT(*) FILTER (WHERE status = 'in_progress') AS in_progress_count,
+  COUNT(*) FILTER (WHERE status = 'waiting') AS waiting_count,
+  COUNT(*) FILTER (WHERE status = 'done') AS done_count,
+  COUNT(*) FILTER (WHERE status = 'dismissed') AS dismissed_count,
+
+  -- Actionable (open + in_progress)
+  COUNT(*) FILTER (WHERE status IN ('open', 'in_progress')) AS actionable_count,
+
+  -- Overdue count
+  COUNT(*) FILTER (
+    WHERE status NOT IN ('done', 'dismissed')
+      AND due_date < CURRENT_DATE
+  ) AS overdue_count,
+
+  -- Due today count
+  COUNT(*) FILTER (
+    WHERE status NOT IN ('done', 'dismissed')
+      AND due_date = CURRENT_DATE
+  ) AS due_today_count,
+
+  -- Critical priority count
+  COUNT(*) FILTER (
+    WHERE status IN ('open', 'in_progress')
+      AND priority = 'critical'
+  ) AS critical_count,
+
+  -- High priority count
+  COUNT(*) FILTER (
+    WHERE status IN ('open', 'in_progress')
+      AND priority = 'high'
+  ) AS high_priority_count,
+
+  -- Created last 7 days
+  COUNT(*) FILTER (
+    WHERE created_at >= CURRENT_DATE - INTERVAL '7 days'
+  ) AS created_last_7_days,
+
+  -- Completed last 7 days
+  COUNT(*) FILTER (
+    WHERE status = 'done'
+      AND completed_at >= CURRENT_DATE - INTERVAL '7 days'
+  ) AS completed_last_7_days,
+
+  -- Completion rate last 7 days
+  ROUND(
+    (
+      COUNT(*) FILTER (
+        WHERE status = 'done'
+          AND completed_at >= CURRENT_DATE - INTERVAL '7 days'
+      )::NUMERIC /
+      NULLIF(
+        COUNT(*) FILTER (
+          WHERE created_at >= CURRENT_DATE - INTERVAL '7 days'
+        ),
+        0
+      )
+    ) * 100,
+    1
+  ) AS completion_rate_7d
+
+FROM action_center.tasks;
+
+COMMENT ON VIEW action_center.system_task_summary IS 'System-wide task summary for dashboard: total counts, overdue, priority, weekly metrics';
