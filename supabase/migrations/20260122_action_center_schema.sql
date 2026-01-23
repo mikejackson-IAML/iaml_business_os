@@ -238,3 +238,16 @@ CREATE TRIGGER workflows_updated_at
 CREATE TRIGGER sop_templates_updated_at
   BEFORE UPDATE ON action_center.sop_templates
   FOR EACH ROW EXECUTE FUNCTION action_center.update_updated_at();
+
+-- ============================================
+-- COMMENTS
+-- ============================================
+COMMENT ON SCHEMA action_center IS 'Unified task management system for the IAML Business OS';
+COMMENT ON TABLE action_center.tasks IS 'Central table for all actionable items - alerts, approvals, manual tasks, AI suggestions';
+COMMENT ON TABLE action_center.workflows IS 'Groups of related tasks with dependencies and progress tracking';
+COMMENT ON TABLE action_center.sop_templates IS 'Standard Operating Procedure templates with ordered steps for progressive instruction display';
+
+COMMENT ON COLUMN action_center.tasks.depends_on IS 'Array of task UUIDs that must be completed before this task';
+COMMENT ON COLUMN action_center.tasks.dedupe_key IS 'Unique key to prevent duplicate task creation from rules/alerts';
+COMMENT ON COLUMN action_center.sop_templates.steps IS 'JSONB array of steps: [{order, title, description, estimated_minutes, links[], notes}]';
+COMMENT ON COLUMN action_center.sop_templates.variables IS 'Variable definitions for substitution: {name: {description, example}}';
