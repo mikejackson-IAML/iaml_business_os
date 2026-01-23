@@ -11,13 +11,13 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 **Milestone:** v1.0 Action Center
 **Phase:** 1 of 12
-**Status:** In Progress (plans 01-01, 01-02, 01-03 complete, 3 remaining)
+**Status:** In Progress (plans 01-01 through 01-05 complete, 1 remaining)
 
 ## Progress Overview
 
 | Phase | Name | Status |
 |-------|------|--------|
-| 1 | Database Schema | In Progress (01-01, 01-02, 01-03 done) |
+| 1 | Database Schema | In Progress (01-01 through 01-05 done) |
 | 2 | Task API | — |
 | 3 | Workflow & SOP API | — |
 | 4 | Task UI - List | — |
@@ -32,8 +32,8 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 ## Context for Next Session
 
-**Last action:** Completed plan 01-02 (Supporting Tables)
-**Next action:** Execute plan 01-04 (Views and Functions)
+**Last action:** Completed plan 01-05 (Triggers and Functions)
+**Next action:** Execute plan 01-06 (RLS Policies)
 
 ## Key Decisions Made
 
@@ -74,5 +74,27 @@ Created `action_center` schema with three core tables:
 
 Migration file: `supabase/migrations/20260122_action_center_schema.sql`
 
+## Plan 01-04 Summary
+
+Created four views for the Action Center:
+- `tasks_extended` - Extended task view with computed fields (is_overdue, is_blocked, due_category) and joined data
+- `user_task_summary` - Per-user task statistics for personal dashboard
+- `department_task_summary` - Per-department task statistics
+- `system_task_summary` - System-wide task statistics for dashboard
+
+Migration file: `supabase/migrations/20260122_action_center_views.sql`
+
+## Plan 01-05 Summary
+
+Created triggers and functions for Action Center automation:
+- `compute_workflow_status` - Computes workflow status from task states
+- `trigger_update_workflow_status` - Updates workflow status/progress when tasks change
+- `trigger_increment_mastery` - Increments user mastery when task with SOP is completed
+- `trigger_log_task_activity` - Automatically logs all task changes for audit trail
+- `check_task_blocked` - Checks if task has incomplete dependencies
+- `trigger_update_dependent_tasks` - Unblocks waiting tasks when dependencies complete
+
+Migration file: `supabase/migrations/20260122_action_center_triggers.sql`
+
 ---
-*Last updated: 2026-01-22 after completing plan 01-02*
+*Last updated: 2026-01-22 after completing plan 01-05*
