@@ -1,0 +1,4 @@
+-- Action Center: Views
+-- Migration: Create tasks_extended, user_task_summary, department_task_summary views
+-- Date: 2026-01-22
+-- Depends on: 20260122_action_center_schema.sql, 20260122_action_center_user_mastery.sql
