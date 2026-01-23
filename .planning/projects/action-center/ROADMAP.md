@@ -103,7 +103,18 @@ Plans:
 4. Task rules CRUD endpoints work
 5. All endpoints require authentication
 
-**Plans:** TBD
+**Plans:** 9 plans in 5 waves
+
+Plans:
+- [x] 03-01-PLAN.md — Workflow types and validation (Wave 1)
+- [x] 03-02-PLAN.md — SOP types and validation (Wave 1)
+- [x] 03-03-PLAN.md — Task rule types and validation (Wave 1)
+- [x] 03-04-PLAN.md — Workflow queries and mutations (Wave 2)
+- [x] 03-05-PLAN.md — SOP queries and mutations (Wave 2)
+- [x] 03-06-PLAN.md — Task rule queries and mutations (Wave 2)
+- [x] 03-07-PLAN.md — Workflow CRUD endpoints (Wave 3)
+- [x] 03-08-PLAN.md — Workflow tasks + SOP CRUD endpoints (Wave 4)
+- [x] 03-09-PLAN.md — Task rules CRUD endpoints (Wave 5)
 
 ---
 
@@ -284,7 +295,7 @@ Plans:
 |-------|----------------|--------|
 | 1. Database Schema | 6/6 | COMPLETE |
 | 2. Task API | 8/8 | COMPLETE |
-| 3. Workflow & SOP API | 0/? | Not started |
+| 3. Workflow & SOP API | 9/9 | COMPLETE |
 | 4. Task UI - List | 0/? | Not started |
 | 5. Task UI - Detail & Create | 0/? | Not started |
 | 6. SOP Templates | 0/? | Not started |
@@ -297,4 +308,4 @@ Plans:
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-22 after completing Phase 2*
+*Last updated: 2026-01-22 after completing Phase 3*
