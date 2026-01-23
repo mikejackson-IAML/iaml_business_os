@@ -9,10 +9,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Foundation
 
-- [ ] **FOUND-01**: Dashboard route exists at `/dashboard/web-intel` and renders content
-- [ ] **FOUND-02**: Web Intel appears in dashboard navigation with appropriate icon
-- [ ] **FOUND-03**: TypeScript types defined for all web_intel data models
-- [ ] **FOUND-04**: Supabase query functions created for web_intel schema
+- [x] **FOUND-01**: Dashboard route exists at `/dashboard/web-intel` and renders content
+- [x] **FOUND-02**: Web Intel appears in dashboard navigation with appropriate icon
+- [x] **FOUND-03**: TypeScript types defined for all web_intel data models
+- [x] **FOUND-04**: Supabase query functions created for web_intel schema
 
 ### Traffic Overview
 
@@ -115,10 +115,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FOUND-01 | Phase 1 | Pending |
-| FOUND-02 | Phase 1 | Pending |
-| FOUND-03 | Phase 1 | Pending |
-| FOUND-04 | Phase 1 | Pending |
+| FOUND-01 | Phase 1 | Complete |
+| FOUND-02 | Phase 1 | Complete |
+| FOUND-03 | Phase 1 | Complete |
+| FOUND-04 | Phase 1 | Complete |
 | TRAF-01 | Phase 2 | Pending |
 | TRAF-02 | Phase 2 | Pending |
 | TRAF-03 | Phase 2 | Pending |
@@ -163,4 +163,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-23*
-*Last updated: 2026-01-23 after initial definition*
+*Last updated: 2026-01-23 after Phase 1 completion*

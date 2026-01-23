@@ -49,10 +49,10 @@ This project adds a `/dashboard/web-intel` section to the existing Business OS d
 **Plans:** 4 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — TypeScript types for web_intel schema
-- [ ] 01-02-PLAN.md — Supabase query functions
-- [ ] 01-03-PLAN.md — Dashboard route and page structure
-- [ ] 01-04-PLAN.md — Navigation integration
+- [x] 01-01-PLAN.md — TypeScript types for web_intel schema
+- [x] 01-02-PLAN.md — Supabase query functions
+- [x] 01-03-PLAN.md — Dashboard route and page structure
+- [x] 01-04-PLAN.md — Navigation integration
 
 ---
 
@@ -176,7 +176,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/4 | Planned | - |
+| 1. Foundation | 4/4 | Complete | 2026-01-23 |
 | 2. Traffic Overview | 0/4 | Not started | - |
 | 3. Rankings Tracker | 0/5 | Not started | - |
 | 4. Technical Health | 0/5 | Not started | - |
@@ -186,4 +186,4 @@ Plans:
 
 ---
 *Roadmap created: 2026-01-23*
-*Last updated: 2026-01-23 — Phase 1 plans created*
+*Last updated: 2026-01-23 — Phase 1 complete*
