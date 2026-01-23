@@ -1,6 +1,6 @@
 'use client';
 
-import { Users, Target, TrendingUp, MessageSquare, Mail, Phone, Linkedin, Monitor, BarChart3, GraduationCap, ArrowRight } from 'lucide-react';
+import { Users, Target, TrendingUp, MessageSquare, Mail, Phone, Linkedin, Monitor, BarChart3, GraduationCap, ArrowRight, CheckSquare } from 'lucide-react';
 import Link from 'next/link';
 import { MetricCard } from '@/dashboard-kit/components/dashboard/metric-card';
 import { HealthScore } from '@/dashboard-kit/components/dashboard/health-score';
@@ -122,7 +122,15 @@ export function DashboardContent({ metrics, campaigns, activities }: DashboardCo
           </p>
 
           {/* Quick Links to Department Dashboards */}
-          <div className="flex gap-3 mt-4">
+          <div className="flex flex-wrap gap-3 mt-4">
+            <Link
+              href="/dashboard/action-center"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-orange-500/10 hover:bg-orange-500/20 text-orange-600 dark:text-orange-400 transition-colors"
+            >
+              <CheckSquare className="h-4 w-4" />
+              <span className="text-sm font-medium">Action Center</span>
+              <ArrowRight className="h-3 w-3" />
+            </Link>
             <Link
               href="/dashboard/digital"
               className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400 transition-colors"
