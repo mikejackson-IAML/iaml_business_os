@@ -103,3 +103,83 @@ LEFT JOIN action_center.sop_templates s ON t.sop_template_id = s.id
 LEFT JOIN public.profiles p ON t.assignee_id = p.id;
 
 COMMENT ON VIEW action_center.tasks_extended IS 'Extended task view with computed fields (is_overdue, is_blocked, due_category) and joined data (workflow, SOP, assignee)';
+
+-- ============================================
+-- VIEW: user_task_summary
+-- Summary of tasks per user for personal stats
+-- ============================================
+CREATE OR REPLACE VIEW action_center.user_task_summary AS
+SELECT
+  p.id AS user_id,
+  p.email,
+  p.full_name,
+
+  -- Total counts by status
+  COUNT(*) FILTER (WHERE t.status = 'open') AS open_count,
+  COUNT(*) FILTER (WHERE t.status = 'in_progress') AS in_progress_count,
+  COUNT(*) FILTER (WHERE t.status = 'waiting') AS waiting_count,
+  COUNT(*) FILTER (WHERE t.status = 'done') AS done_count,
+  COUNT(*) FILTER (WHERE t.status = 'dismissed') AS dismissed_count,
+
+  -- Actionable (open + in_progress)
+  COUNT(*) FILTER (WHERE t.status IN ('open', 'in_progress')) AS actionable_count,
+
+  -- Overdue count
+  COUNT(*) FILTER (
+    WHERE t.status NOT IN ('done', 'dismissed')
+      AND t.due_date < CURRENT_DATE
+  ) AS overdue_count,
+
+  -- Due today count
+  COUNT(*) FILTER (
+    WHERE t.status NOT IN ('done', 'dismissed')
+      AND t.due_date = CURRENT_DATE
+  ) AS due_today_count,
+
+  -- Due this week count
+  COUNT(*) FILTER (
+    WHERE t.status NOT IN ('done', 'dismissed')
+      AND t.due_date > CURRENT_DATE
+      AND t.due_date <= CURRENT_DATE + INTERVAL '7 days'
+  ) AS due_this_week_count,
+
+  -- Critical priority count (open/in_progress)
+  COUNT(*) FILTER (
+    WHERE t.status IN ('open', 'in_progress')
+      AND t.priority = 'critical'
+  ) AS critical_count,
+
+  -- High priority count (open/in_progress)
+  COUNT(*) FILTER (
+    WHERE t.status IN ('open', 'in_progress')
+      AND t.priority = 'high'
+  ) AS high_priority_count,
+
+  -- Completed this week
+  COUNT(*) FILTER (
+    WHERE t.status = 'done'
+      AND t.completed_at >= DATE_TRUNC('week', CURRENT_DATE)
+  ) AS completed_this_week,
+
+  -- Completed last 7 days
+  COUNT(*) FILTER (
+    WHERE t.status = 'done'
+      AND t.completed_at >= CURRENT_DATE - INTERVAL '7 days'
+  ) AS completed_last_7_days,
+
+  -- Average completion time (days) for tasks completed in last 30 days
+  ROUND(
+    AVG(
+      EXTRACT(EPOCH FROM (t.completed_at - t.created_at)) / 86400
+    ) FILTER (
+      WHERE t.status = 'done'
+        AND t.completed_at >= CURRENT_DATE - INTERVAL '30 days'
+    )::NUMERIC,
+    1
+  ) AS avg_completion_days_30d
+
+FROM public.profiles p
+LEFT JOIN action_center.tasks t ON t.assignee_id = p.id
+GROUP BY p.id, p.email, p.full_name;
+
+COMMENT ON VIEW action_center.user_task_summary IS 'Summary statistics per user: counts by status, overdue, due dates, priority, completion metrics';
