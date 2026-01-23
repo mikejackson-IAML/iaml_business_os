@@ -5,21 +5,21 @@
 See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 **Core value:** Nothing falls through the cracks. Every action item flows to one place.
-**Current focus:** Phase 2 - Task API (Plan 06 complete)
+**Current focus:** Phase 2 - Task API (Plan 07 complete)
 
 ## Current Status
 
 **Milestone:** v1.0 Action Center
 **Phase:** 2 of 12 (Task API)
-**Plan:** 6 of 8 complete
-**Status:** Full CRUD + actions (complete/dismiss) implemented
+**Plan:** 7 of 8 complete
+**Status:** Full CRUD + actions + comments implemented
 
 ## Progress Overview
 
 | Phase | Name | Status |
 |-------|------|--------|
 | 1 | Database Schema | COMPLETE |
-| 2 | Task API | In Progress (4/8) |
+| 2 | Task API | In Progress (7/8) |
 | 3 | Workflow & SOP API | Not Started |
 | 4 | Task UI - List | Not Started |
 | 5 | Task UI - Detail & Create | Not Started |
@@ -33,8 +33,8 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 ## Context for Next Session
 
-**Last action:** Completed plan 02-06 (Task Actions - complete/dismiss)
-**Next action:** Execute plan 02-07 (Comments API)
+**Last action:** Completed plan 02-07 (Comments API)
+**Next action:** Execute plan 02-08 (Activity Logging)
 
 ## Key Decisions Made
 
@@ -64,7 +64,7 @@ Phase 2 (Task API) in progress:
 | 02-04 | GET /api/tasks/:id - Task Detail | COMPLETE |
 | 02-05 | PATCH /api/tasks/:id - Update Task | COMPLETE |
 | 02-06 | Task Actions (complete/dismiss) | COMPLETE |
-| 02-07 | Comments API | Not Started |
+| 02-07 | Comments API | COMPLETE |
 | 02-08 | Activity Logging | Not Started |
 
 ### Files Created (Phase 2)
@@ -78,6 +78,7 @@ Phase 2 (Task API) in progress:
 - `dashboard/src/app/api/tasks/[id]/route.ts` - GET/PATCH /api/tasks/:id endpoints
 - `dashboard/src/app/api/tasks/[id]/complete/route.ts` - POST /api/tasks/:id/complete endpoint
 - `dashboard/src/app/api/tasks/[id]/dismiss/route.ts` - POST /api/tasks/:id/dismiss endpoint
+- `dashboard/src/app/api/tasks/[id]/comments/route.ts` - POST /api/tasks/:id/comments endpoint
 
 ---
-*Last updated: 2026-01-22 after completing plan 02-06*
+*Last updated: 2026-01-22 after completing plan 02-07*
