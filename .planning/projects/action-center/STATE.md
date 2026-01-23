@@ -5,14 +5,14 @@
 See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 **Core value:** Nothing falls through the cracks. Every action item flows to one place.
-**Current focus:** Phase 4 Complete - Ready for Phase 5
+**Current focus:** Phase 6 - SOP Templates (Not Started)
 
 ## Current Status
 
 **Milestone:** v1.0 Action Center
-**Phase:** 4 of 12 (Task UI - List) - COMPLETE
-**Plan:** 5/5 complete
-**Status:** Phase verified, ready for Phase 5
+**Phase:** 5 of 12 (Task UI - Detail & Create) - COMPLETE
+**Plan:** 11/11 complete
+**Status:** Phase 5 Complete - Ready for Phase 6
 
 ## Progress Overview
 
@@ -22,7 +22,7 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 | 2 | Task API | COMPLETE |
 | 3 | Workflow & SOP API | COMPLETE |
 | 4 | Task UI - List | COMPLETE |
-| 5 | Task UI - Detail & Create | Not Started |
+| 5 | Task UI - Detail & Create | COMPLETE |
 | 6 | SOP Templates | Not Started |
 | 7 | Workflows & Dependencies | Not Started |
 | 8 | Alert Integration | Not Started |
@@ -33,8 +33,8 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 ## Context for Next Session
 
-**Last action:** Completed Phase 4 (Task UI - List) - 5 plans across 3 waves
-**Next action:** Plan Phase 5 - run `/gsd:discuss-phase 5 action-center` or `/gsd:plan-phase 5 action-center`
+**Last action:** Completed Plan 05-11 (Final Integration) - Phase 5 Complete
+**Next action:** Start Phase 6 (SOP Templates)
 
 ## Key Decisions Made
 
@@ -48,7 +48,10 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 - [02-02]: PostgreSQL alphabetical sort for priority (critical < high < low < normal)
 - [02-04]: Activity limit default 10, max 500 for full history
 - [03-04]: Workflow files named `action-center-workflow-*.ts` to avoid conflict with n8n workflow files
-- [04-04]: Task row expands inline rather than navigating to detail page (per CONTEXT.md decision)
+- [04-04]: Task row originally expanded inline; changed in 05-11 to navigate to detail page
+- [05-01]: Extended UpdateTaskRequest to support approval_outcome and approval_modifications fields
+- [05-03]: Inline placeholder rendering for comments/activity/dialogs - to be replaced by dedicated components in later plans
+- [05-06]: Enter key submits comment form (Shift+Enter for new line), system comments rendered at opacity-70
 
 ## Blockers
 
@@ -101,5 +104,65 @@ Phase 4 (Task UI - List) complete:
 
 - **Supabase Types:** The generated types.ts doesn't include action_center schema. TypeScript shows type errors but code works at runtime. Should regenerate types to include action_center schema.
 
+## Files Created (Phase 5)
+
+**Task Detail Page:**
+- `dashboard/src/app/dashboard/action-center/tasks/[id]/page.tsx`
+- `dashboard/src/app/dashboard/action-center/tasks/[id]/task-detail-skeleton.tsx`
+- `dashboard/src/app/dashboard/action-center/tasks/[id]/task-detail-content.tsx`
+
+**Server Actions:**
+- `dashboard/src/app/dashboard/action-center/actions.ts`
+
+**Dialog Components:**
+- `dashboard/src/app/dashboard/action-center/components/complete-task-dialog.tsx`
+- `dashboard/src/app/dashboard/action-center/components/dismiss-task-dialog.tsx`
+
+**Comment Components:**
+- `dashboard/src/app/dashboard/action-center/components/task-comments.tsx`
+
+**Activity Components:**
+- `dashboard/src/app/dashboard/action-center/components/task-activity.tsx`
+
+**Create Task Components:**
+- `dashboard/src/app/dashboard/action-center/components/create-task-modal.tsx`
+
+**Approval Components:**
+- `dashboard/src/app/dashboard/action-center/components/approval-actions.tsx`
+
+**Workflow Components:**
+- `dashboard/src/app/dashboard/action-center/components/workflow-context.tsx`
+
+## Phase 5 Summary
+
+Phase 5 (Task UI - Detail & Create) complete:
+
+| Plan | Name | Wave | Status |
+|------|------|------|--------|
+| 05-01 | Server Actions | 1 | COMPLETE |
+| 05-02 | Detail Page Route with Skeleton | 1 | COMPLETE |
+| 05-03 | Task Detail Content | 2 | COMPLETE |
+| 05-04 | Metadata Sidebar | 2 | COMPLETE |
+| 05-05 | Complete and Dismiss Dialogs | 3 | COMPLETE |
+| 05-06 | Comments Tab | 4 | COMPLETE |
+| 05-07 | Activity Tab | 4 | COMPLETE |
+| 05-08 | Create Task Modal | 5 | COMPLETE |
+| 05-09 | Approval Task UI | 6 | COMPLETE |
+| 05-10 | Workflow Context Component | 6 | COMPLETE |
+| 05-11 | Final Integration | 7 | COMPLETE |
+
+### Requirements Covered (Phase 5)
+
+- UI-11: Task detail page with header section
+- UI-12: Task detail page with main content
+- UI-13: Task detail page with sidebar
+- UI-14: Comment thread with add comment
+- UI-15: Activity timeline
+- UI-16: Complete/Dismiss dialogs with notes
+- UI-17: Dependencies section (blocked by / blocking)
+- UI-18: Approval actions (approve, modify, reject)
+- UI-19: Workflow context display
+- UI-20: Create task modal
+
 ---
-*Last updated: 2026-01-22 after completing Phase 4 (Task UI - List)*
+*Last updated: 2026-01-23 after completing Plan 05-11 (Final Integration) - Phase 5 Complete*
