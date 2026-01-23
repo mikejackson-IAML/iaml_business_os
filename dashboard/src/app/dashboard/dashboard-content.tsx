@@ -1,6 +1,6 @@
 'use client';
 
-import { Users, Target, TrendingUp, MessageSquare, Mail, Phone, Linkedin, Monitor, BarChart3, GraduationCap, ArrowRight, CheckSquare } from 'lucide-react';
+import { Users, Target, TrendingUp, MessageSquare, Mail, Phone, Linkedin, Monitor, BarChart3, GraduationCap, ArrowRight, CheckSquare, FolderCode } from 'lucide-react';
 import Link from 'next/link';
 import { MetricCard } from '@/dashboard-kit/components/dashboard/metric-card';
 import { HealthScore } from '@/dashboard-kit/components/dashboard/health-score';
@@ -153,6 +153,14 @@ export function DashboardContent({ metrics, campaigns, activities }: DashboardCo
             >
               <GraduationCap className="h-4 w-4" />
               <span className="text-sm font-medium">Programs</span>
+              <ArrowRight className="h-3 w-3" />
+            </Link>
+            <Link
+              href="/dashboard/development"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 text-purple-600 dark:text-purple-400 transition-colors"
+            >
+              <FolderCode className="h-4 w-4" />
+              <span className="text-sm font-medium">Development</span>
               <ArrowRight className="h-3 w-3" />
             </Link>
           </div>
