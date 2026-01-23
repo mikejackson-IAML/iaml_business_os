@@ -10,8 +10,8 @@ See: .planning/projects/dev-dashboard/PROJECT.md (updated 2026-01-23)
 ## Current State
 
 **Milestone:** v1.0
-**Phase:** 6 of 7
-**Status:** Testing needed
+**Phase:** 6 of 7 complete
+**Status:** Ready for testing
 
 ## Session Log
 
@@ -55,11 +55,22 @@ See: .planning/projects/dev-dashboard/PROJECT.md (updated 2026-01-23)
 2. **Phase 7: Polish** - Real-time subscriptions, edge cases
 3. **macOS Notifications** - Not yet wired up
 
-## Next Action
+## Next Steps
 
-1. Run the database migration in Supabase
-2. Test the dashboard at /dashboard/development
-3. Implement GSD integration to write status to Supabase
+1. **Run the database migration:**
+   ```bash
+   # Apply migration in Supabase dashboard or:
+   supabase db push
+   ```
+
+2. **Test the dashboard:**
+   - Navigate to `/dashboard/development`
+   - Verify all three views render correctly
+   - Test launch modal copy functionality
+
+3. **Optional: Implement GSD integration (Phase 2)**
+   - Modify GSD commands to write status to Supabase
+   - Add macOS notifications on completion/blocker
 
 ---
-*Last updated: 2026-01-23 after implementation*
+*Last updated: 2026-01-23 after Phases 1, 3-6 implementation*
