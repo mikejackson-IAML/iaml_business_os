@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { Card } from '@/dashboard-kit/components/ui/card';
 import { TaskExtended } from '@/lib/api/task-types';
 import { TaskRow } from './task-row';
@@ -22,12 +21,6 @@ export function TaskTable({
   onClearFilters,
   onViewAllTasks,
 }: TaskTableProps) {
-  const [expandedTaskId, setExpandedTaskId] = useState<string | null>(null);
-
-  const handleRowClick = (taskId: string) => {
-    setExpandedTaskId(prev => prev === taskId ? null : taskId);
-  };
-
   if (tasks.length === 0 && !isLoading) {
     return (
       <Card className="p-12">
@@ -57,8 +50,6 @@ export function TaskTable({
           <TaskRow
             key={task.id}
             task={task}
-            isExpanded={expandedTaskId === task.id}
-            onClick={() => handleRowClick(task.id)}
           />
         ))}
       </div>
