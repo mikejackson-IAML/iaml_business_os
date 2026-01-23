@@ -24,13 +24,11 @@ import { FallingPattern } from '@/components/ui/falling-pattern';
 import type { TaskExtended, TaskComment, TaskActivity } from '@/lib/api/task-types';
 import { format, isToday, isTomorrow, isPast, formatDistanceToNow } from 'date-fns';
 
-// Components to be implemented in later plans (05-05, 05-06, 05-09, 05-10)
-// For now, using inline implementations
+// Components implemented in later plans
+import { TaskComments } from '../../components/task-comments';
+import { TaskActivityList } from '../../components/task-activity';
+// Components to be implemented in later plans (05-09, 05-10)
 // import { TaskMetadataSidebar } from './task-metadata-sidebar';
-// import { TaskComments } from './task-comments';
-// import { TaskActivityList } from './task-activity-list';
-// import { CompleteTaskDialog } from './complete-task-dialog';
-// import { DismissTaskDialog } from './dismiss-task-dialog';
 // import { ApprovalActions } from './approval-actions';
 // import { WorkflowContext } from './workflow-context';
 
@@ -343,77 +341,11 @@ export function TaskDetailContent({ task, comments, activity }: TaskDetailConten
               </TabsList>
 
               <TabsContent value="comments" className="mt-4">
-                {/* TaskComments placeholder - will be fully implemented in 05-05 */}
-                <Card>
-                  <CardContent className="pt-6">
-                    {comments.length === 0 ? (
-                      <p className="text-muted-foreground text-center py-4">
-                        No comments yet. Be the first to add one.
-                      </p>
-                    ) : (
-                      <div className="space-y-4">
-                        {comments.map((comment) => (
-                          <div key={comment.id} className="border-b border-border last:border-0 pb-4 last:pb-0">
-                            <div className="flex items-center justify-between mb-2">
-                              <span className="font-medium text-sm">
-                                {comment.author_name || 'Anonymous'}
-                              </span>
-                              <span className="text-xs text-muted-foreground">
-                                {formatDistanceToNow(new Date(comment.created_at), { addSuffix: true })}
-                              </span>
-                            </div>
-                            <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-                              {comment.content}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    {/* Add comment form placeholder */}
-                    <div className="mt-4 pt-4 border-t border-border">
-                      <p className="text-sm text-muted-foreground">
-                        Comment form coming in plan 05-05
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
+                <TaskComments taskId={task.id} comments={comments} />
               </TabsContent>
 
               <TabsContent value="activity" className="mt-4">
-                {/* TaskActivityList placeholder - will be fully implemented in 05-06 */}
-                <Card>
-                  <CardContent className="pt-6">
-                    {activity.length === 0 ? (
-                      <p className="text-muted-foreground text-center py-4">
-                        No activity recorded yet.
-                      </p>
-                    ) : (
-                      <div className="space-y-3">
-                        {activity.map((item) => (
-                          <div key={item.id} className="flex items-start gap-3 text-sm">
-                            <div className="w-2 h-2 rounded-full bg-muted-foreground mt-2 flex-shrink-0" />
-                            <div className="flex-1">
-                              <p>
-                                <span className="font-medium">{item.actor_name || 'System'}</span>
-                                {' '}
-                                <span className="text-muted-foreground">{item.activity_type.replace(/_/g, ' ')}</span>
-                                {item.new_value && (
-                                  <>
-                                    {' to '}
-                                    <span className="font-medium">{item.new_value}</span>
-                                  </>
-                                )}
-                              </p>
-                              <p className="text-xs text-muted-foreground">
-                                {formatDistanceToNow(new Date(item.created_at), { addSuffix: true })}
-                              </p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
+                <TaskActivityList activity={activity} />
               </TabsContent>
             </Tabs>
           </div>
