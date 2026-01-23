@@ -1,4 +1,4 @@
-import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { createServerClient } from '@/lib/supabase/server';
 import type {
   DevProject,
   DevProjectPhase,
@@ -12,7 +12,7 @@ import type {
  * Fetch all dev projects summary
  */
 export async function getDevProjects(): Promise<DevProjectSummary[]> {
-  const supabase = await createServerSupabaseClient();
+  const supabase = createServerClient();
 
   const { data, error } = await supabase
     .from('dev_project_summary')
@@ -31,7 +31,7 @@ export async function getDevProjects(): Promise<DevProjectSummary[]> {
  * Fetch projects needing attention
  */
 export async function getProjectsNeedingAttention(): Promise<DevProjectNeedingAttention[]> {
-  const supabase = await createServerSupabaseClient();
+  const supabase = createServerClient();
 
   const { data, error } = await supabase
     .from('dev_projects_needing_attention')
@@ -49,7 +49,7 @@ export async function getProjectsNeedingAttention(): Promise<DevProjectNeedingAt
  * Fetch a single project by key
  */
 export async function getDevProject(projectKey: string): Promise<DevProject | null> {
-  const supabase = await createServerSupabaseClient();
+  const supabase = createServerClient();
 
   const { data, error } = await supabase
     .from('dev_projects')
@@ -69,7 +69,7 @@ export async function getDevProject(projectKey: string): Promise<DevProject | nu
  * Fetch phases for a project
  */
 export async function getProjectPhases(projectId: string): Promise<DevProjectPhase[]> {
-  const supabase = await createServerSupabaseClient();
+  const supabase = createServerClient();
 
   const { data, error } = await supabase
     .from('dev_project_phases')
@@ -89,7 +89,7 @@ export async function getProjectPhases(projectId: string): Promise<DevProjectPha
  * Fetch phases for multiple projects
  */
 export async function getAllProjectPhases(): Promise<Record<string, DevProjectPhase[]>> {
-  const supabase = await createServerSupabaseClient();
+  const supabase = createServerClient();
 
   // Get all projects first to map IDs to keys
   const { data: projects, error: projectsError } = await supabase
@@ -137,7 +137,7 @@ export async function getAllProjectPhases(): Promise<Record<string, DevProjectPh
  * Fetch ideas for a project
  */
 export async function getProjectIdeas(projectId: string): Promise<DevProjectIdea[]> {
-  const supabase = await createServerSupabaseClient();
+  const supabase = createServerClient();
 
   const { data, error } = await supabase
     .from('dev_project_ideas')
@@ -157,7 +157,7 @@ export async function getProjectIdeas(projectId: string): Promise<DevProjectIdea
  * Fetch all ideas grouped by project
  */
 export async function getAllProjectIdeas(): Promise<Record<string, DevProjectIdea[]>> {
-  const supabase = await createServerSupabaseClient();
+  const supabase = createServerClient();
 
   // Get all projects first to map IDs to keys
   const { data: projects, error: projectsError } = await supabase
@@ -241,7 +241,7 @@ export async function createIdea(
   targetMilestone?: string,
   priority?: number
 ): Promise<DevProjectIdea | null> {
-  const supabase = await createServerSupabaseClient();
+  const supabase = createServerClient();
 
   const { data, error } = await supabase
     .from('dev_project_ideas')
@@ -270,7 +270,7 @@ export async function updateIdea(
   ideaId: string,
   updates: Partial<Pick<DevProjectIdea, 'title' | 'description' | 'target_milestone' | 'priority' | 'status'>>
 ): Promise<DevProjectIdea | null> {
-  const supabase = await createServerSupabaseClient();
+  const supabase = createServerClient();
 
   const { data, error } = await supabase
     .from('dev_project_ideas')
@@ -291,7 +291,7 @@ export async function updateIdea(
  * Delete an idea
  */
 export async function deleteIdea(ideaId: string): Promise<boolean> {
-  const supabase = await createServerSupabaseClient();
+  const supabase = createServerClient();
 
   const { error } = await supabase
     .from('dev_project_ideas')
@@ -314,7 +314,7 @@ export async function updateProjectStatus(
   status: string,
   activityDescription?: string
 ): Promise<boolean> {
-  const supabase = await createServerSupabaseClient();
+  const supabase = createServerClient();
 
   const { error } = await supabase.rpc('update_dev_project_status', {
     p_project_key: projectKey,
