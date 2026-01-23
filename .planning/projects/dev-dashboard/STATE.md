@@ -57,11 +57,7 @@ See: .planning/projects/dev-dashboard/PROJECT.md (updated 2026-01-23)
 
 ## Next Steps
 
-1. **Run the database migration:**
-   ```bash
-   # Apply migration in Supabase dashboard or:
-   supabase db push
-   ```
+1. ~~**Run the database migration**~~ ✓ Complete (2026-01-23)
 
 2. **Test the dashboard:**
    - Navigate to `/dashboard/development`
