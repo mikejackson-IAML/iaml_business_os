@@ -1,14 +1,12 @@
 'use client';
 
+import Link from 'next/link';
 import { TaskExtended } from '@/lib/api/task-types';
-import { TaskRowExpanded } from './task-row-expanded';
-import { ChevronRight, ChevronDown, AlertCircle, Clock, Workflow, Bot, User } from 'lucide-react';
+import { ChevronRight, AlertCircle, Clock, Workflow, Bot, User } from 'lucide-react';
 import { format, isToday, isTomorrow, isPast } from 'date-fns';
 
 interface TaskRowProps {
   task: TaskExtended;
-  isExpanded: boolean;
-  onClick: () => void;
 }
 
 const priorityConfig = {
@@ -26,7 +24,7 @@ const sourceIcons = {
   rule: Workflow,
 };
 
-export function TaskRow({ task, isExpanded, onClick }: TaskRowProps) {
+export function TaskRow({ task }: TaskRowProps) {
   const priority = priorityConfig[task.priority as keyof typeof priorityConfig] || priorityConfig.normal;
   const SourceIcon = sourceIcons[task.source as keyof typeof sourceIcons] || User;
 
@@ -47,9 +45,9 @@ export function TaskRow({ task, isExpanded, onClick }: TaskRowProps) {
 
   return (
     <div className="border-b border-border last:border-0">
-      {/* Main row */}
-      <button
-        onClick={onClick}
+      {/* Main row - navigates to task detail */}
+      <Link
+        href={`/dashboard/action-center/tasks/${task.id}`}
         className="w-full grid grid-cols-[100px_1fr_120px_120px_100px] gap-4 px-6 py-4 hover:bg-muted/50 transition-colors text-left items-center"
       >
         {/* Priority */}
@@ -60,11 +58,7 @@ export function TaskRow({ task, isExpanded, onClick }: TaskRowProps) {
 
         {/* Title */}
         <div className="flex items-center gap-2">
-          {isExpanded ? (
-            <ChevronDown className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-          ) : (
-            <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-          )}
+          <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
           <span className="font-medium truncate">{task.title}</span>
           {task.is_blocked && (
             <span className="px-1.5 py-0.5 text-xs rounded bg-warning/20 text-warning">
@@ -89,12 +83,7 @@ export function TaskRow({ task, isExpanded, onClick }: TaskRowProps) {
           <SourceIcon className="h-3.5 w-3.5" />
           <span className="capitalize">{task.source || 'Manual'}</span>
         </div>
-      </button>
-
-      {/* Expanded content */}
-      {isExpanded && (
-        <TaskRowExpanded task={task} />
-      )}
+      </Link>
     </div>
   );
 }
