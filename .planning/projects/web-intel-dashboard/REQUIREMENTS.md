@@ -1,0 +1,166 @@
+# Requirements: Web Intel Dashboard
+
+**Defined:** 2026-01-23
+**Core Value:** See website health and SEO performance at a glance without logging into multiple tools.
+
+## v1 Requirements
+
+Requirements for initial release. Each maps to roadmap phases.
+
+### Foundation
+
+- [ ] **FOUND-01**: Dashboard route exists at `/dashboard/web-intel` and renders content
+- [ ] **FOUND-02**: Web Intel appears in dashboard navigation with appropriate icon
+- [ ] **FOUND-03**: TypeScript types defined for all web_intel data models
+- [ ] **FOUND-04**: Supabase query functions created for web_intel schema
+
+### Traffic Overview
+
+- [ ] **TRAF-01**: User can view total sessions for current period with trend vs previous
+- [ ] **TRAF-02**: User can view total users with new vs returning breakdown
+- [ ] **TRAF-03**: User can view pageviews with pages per session metric
+- [ ] **TRAF-04**: User can view bounce rate with status indicator (good/warning/poor)
+- [ ] **TRAF-05**: User can view traffic source breakdown (organic, direct, referral, social)
+- [ ] **TRAF-06**: User can select date range for traffic data (7d, 30d, 90d)
+
+### Rankings
+
+- [ ] **RANK-01**: User can view table of tracked keywords with current positions
+- [ ] **RANK-02**: User can see position change (up/down arrows with delta)
+- [ ] **RANK-03**: User can filter keywords by priority (critical, high, medium, low)
+- [ ] **RANK-04**: User can sort keywords table by position, change, or priority
+- [ ] **RANK-05**: User can see SERP features presence (featured snippet, PAA, etc.)
+- [ ] **RANK-06**: User can view sparkline showing position history (7 days)
+
+### Core Web Vitals
+
+- [ ] **CWV-01**: User can view LCP score with good/needs-improvement/poor status
+- [ ] **CWV-02**: User can view CLS score with status indicator
+- [ ] **CWV-03**: User can view INP score with status indicator
+- [ ] **CWV-04**: User can toggle between mobile and desktop vitals
+- [ ] **CWV-05**: User can see overall Core Web Vitals pass/fail status
+
+### GSC Performance
+
+- [ ] **GSC-01**: User can view total clicks for period
+- [ ] **GSC-02**: User can view total impressions for period
+- [ ] **GSC-03**: User can view average CTR with benchmark comparison
+- [ ] **GSC-04**: User can view average position with trend
+- [ ] **GSC-05**: User can see top queries by clicks (top 10)
+
+### Alerts
+
+- [ ] **ALERT-01**: User can view list of active alerts sorted by severity
+- [ ] **ALERT-02**: User can see alert count in section header/tab
+- [ ] **ALERT-03**: User can acknowledge alerts (marks as acknowledged)
+- [ ] **ALERT-04**: Alerts are color-coded by severity (critical=red, warning=yellow, info=blue)
+- [ ] **ALERT-05**: User can filter alerts by type (traffic, ranking, technical)
+
+### Content Health
+
+- [ ] **CONT-01**: User can view content decay warnings (pages losing traffic)
+- [ ] **CONT-02**: User can see thin content flags
+- [ ] **CONT-03**: User can view content inventory summary (total pages, avg word count)
+
+### Competitors
+
+- [ ] **COMP-01**: User can view list of tracked competitors
+- [ ] **COMP-02**: User can see competitor positions for shared keywords
+- [ ] **COMP-03**: User can view SERP share of voice comparison
+
+### AI Recommendations
+
+- [ ] **AI-01**: User can view AI-generated recommendations list
+- [ ] **AI-02**: Recommendations show priority and category
+- [ ] **AI-03**: User can mark recommendations as completed or dismissed
+
+## v2 Requirements
+
+Deferred to future release. Tracked but not in current roadmap.
+
+### Advanced Analytics
+
+- **ADV-01**: Historical trend charts with interactive zoom
+- **ADV-02**: Custom date range picker (beyond presets)
+- **ADV-03**: Export data to CSV
+- **ADV-04**: Email report scheduling
+
+### Enhanced Rankings
+
+- **RANK-07**: Competitor ranking overlay on sparklines
+- **RANK-08**: Keyword grouping/tagging
+- **RANK-09**: Position distribution chart
+
+### Advanced Content
+
+- **CONT-04**: Content gap analysis display
+- **CONT-05**: Internal linking visualization
+
+## Out of Scope
+
+Explicitly excluded. Documented to prevent scope creep.
+
+| Feature | Reason |
+|---------|--------|
+| Data editing | Dashboard is read-only; data management via direct Supabase or workflows |
+| SEO audit tools | Workflows handle auditing; dashboard only displays results |
+| Direct API connections | All data flows through n8n workflows to Supabase |
+| Custom report builder | Fixed layouts for v1; complexity not justified |
+| Real-time updates | Daily workflow runs are sufficient; polling on refresh adequate |
+| Backlink management | Display only; outreach tracking is separate concern |
+
+## Traceability
+
+Which phases cover which requirements. Updated during roadmap creation.
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| FOUND-01 | Phase 1 | Pending |
+| FOUND-02 | Phase 1 | Pending |
+| FOUND-03 | Phase 1 | Pending |
+| FOUND-04 | Phase 1 | Pending |
+| TRAF-01 | Phase 2 | Pending |
+| TRAF-02 | Phase 2 | Pending |
+| TRAF-03 | Phase 2 | Pending |
+| TRAF-04 | Phase 2 | Pending |
+| TRAF-05 | Phase 2 | Pending |
+| TRAF-06 | Phase 2 | Pending |
+| RANK-01 | Phase 3 | Pending |
+| RANK-02 | Phase 3 | Pending |
+| RANK-03 | Phase 3 | Pending |
+| RANK-04 | Phase 3 | Pending |
+| RANK-05 | Phase 3 | Pending |
+| RANK-06 | Phase 3 | Pending |
+| CWV-01 | Phase 4 | Pending |
+| CWV-02 | Phase 4 | Pending |
+| CWV-03 | Phase 4 | Pending |
+| CWV-04 | Phase 4 | Pending |
+| CWV-05 | Phase 4 | Pending |
+| GSC-01 | Phase 4 | Pending |
+| GSC-02 | Phase 4 | Pending |
+| GSC-03 | Phase 4 | Pending |
+| GSC-04 | Phase 4 | Pending |
+| GSC-05 | Phase 4 | Pending |
+| ALERT-01 | Phase 5 | Pending |
+| ALERT-02 | Phase 5 | Pending |
+| ALERT-03 | Phase 5 | Pending |
+| ALERT-04 | Phase 5 | Pending |
+| ALERT-05 | Phase 5 | Pending |
+| CONT-01 | Phase 6 | Pending |
+| CONT-02 | Phase 6 | Pending |
+| CONT-03 | Phase 6 | Pending |
+| COMP-01 | Phase 6 | Pending |
+| COMP-02 | Phase 6 | Pending |
+| COMP-03 | Phase 6 | Pending |
+| AI-01 | Phase 7 | Pending |
+| AI-02 | Phase 7 | Pending |
+| AI-03 | Phase 7 | Pending |
+
+**Coverage:**
+- v1 requirements: 39 total
+- Mapped to phases: 39
+- Unmapped: 0 ✓
+
+---
+*Requirements defined: 2026-01-23*
+*Last updated: 2026-01-23 after initial definition*

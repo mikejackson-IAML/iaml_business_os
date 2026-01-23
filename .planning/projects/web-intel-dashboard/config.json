@@ -1,0 +1,12 @@
+{
+  "project": "Web Intel Dashboard",
+  "location": ".planning/projects/web-intel-dashboard/",
+  "workflow": {
+    "mode": "yolo",
+    "depth": "standard",
+    "parallelization": true,
+    "commit_docs": true
+  },
+  "created": "2026-01-23",
+  "notes": "Dashboard section for SEO/web intelligence visualization - uses web_intel Supabase schema"
+}
