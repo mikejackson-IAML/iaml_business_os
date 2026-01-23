@@ -54,16 +54,16 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Task UI - List
 
-- [ ] **UI-01**: Task list page with table/list view
-- [ ] **UI-02**: Filter by status (open, in_progress, waiting, done, dismissed)
-- [ ] **UI-03**: Filter by priority (critical, high, normal, low)
-- [ ] **UI-04**: Filter by due date (overdue, today, this week, later)
-- [ ] **UI-05**: Filter by department
-- [ ] **UI-06**: Filter by task type (standard, approval, decision, review)
-- [ ] **UI-07**: Filter by source (alert, workflow, manual, AI)
-- [ ] **UI-08**: Search by title and description
-- [ ] **UI-09**: Default views: My Focus, Overdue, Waiting, Approvals, AI Suggested
-- [ ] **UI-10**: Task row shows: priority icon, title, due date, department, source indicator
+- [x] **UI-01**: Task list page with table/list view
+- [x] **UI-02**: Filter by status (open, in_progress, waiting, done, dismissed)
+- [x] **UI-03**: Filter by priority (critical, high, normal, low)
+- [x] **UI-04**: Filter by due date (overdue, today, this week, later)
+- [x] **UI-05**: Filter by department
+- [x] **UI-06**: Filter by task type (standard, approval, decision, review)
+- [x] **UI-07**: Filter by source (alert, workflow, manual, AI)
+- [x] **UI-08**: Search by title and description
+- [x] **UI-09**: Default views: My Focus, Overdue, Waiting, Approvals, AI Suggested
+- [x] **UI-10**: Task row shows: priority icon, title, due date, department, source indicator
 
 ### Task UI - Detail
 

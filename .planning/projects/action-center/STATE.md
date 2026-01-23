@@ -5,14 +5,14 @@
 See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 **Core value:** Nothing falls through the cracks. Every action item flows to one place.
-**Current focus:** Phase 3 Complete - Ready for Phase 4
+**Current focus:** Phase 4 Complete - Ready for Phase 5
 
 ## Current Status
 
 **Milestone:** v1.0 Action Center
-**Phase:** 3 of 12 (Workflow & SOP API) - COMPLETE
-**Plan:** 9/9 complete
-**Status:** Phase verified, ready for Phase 4
+**Phase:** 4 of 12 (Task UI - List) - COMPLETE
+**Plan:** 5/5 complete
+**Status:** Phase verified, ready for Phase 5
 
 ## Progress Overview
 
@@ -21,7 +21,7 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 | 1 | Database Schema | COMPLETE |
 | 2 | Task API | COMPLETE |
 | 3 | Workflow & SOP API | COMPLETE |
-| 4 | Task UI - List | Not Started |
+| 4 | Task UI - List | COMPLETE |
 | 5 | Task UI - Detail & Create | Not Started |
 | 6 | SOP Templates | Not Started |
 | 7 | Workflows & Dependencies | Not Started |
@@ -33,8 +33,8 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 ## Context for Next Session
 
-**Last action:** Completed Phase 3 (Workflow & SOP API) - 9 plans across 5 waves
-**Next action:** Plan Phase 4 - run `/gsd:discuss-phase 4 action-center` or `/gsd:plan-phase 4 action-center`
+**Last action:** Completed Phase 4 (Task UI - List) - 5 plans across 3 waves
+**Next action:** Plan Phase 5 - run `/gsd:discuss-phase 5 action-center` or `/gsd:plan-phase 5 action-center`
 
 ## Key Decisions Made
 
@@ -48,72 +48,58 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 - [02-02]: PostgreSQL alphabetical sort for priority (critical < high < low < normal)
 - [02-04]: Activity limit default 10, max 500 for full history
 - [03-04]: Workflow files named `action-center-workflow-*.ts` to avoid conflict with n8n workflow files
+- [04-04]: Task row expands inline rather than navigating to detail page (per CONTEXT.md decision)
 
 ## Blockers
 
 None.
 
-## Phase 3 Summary
+## Phase 4 Summary
 
-Phase 3 (Workflow & SOP API) complete:
+Phase 4 (Task UI - List) complete:
 
 | Plan | Name | Wave | Status |
 |------|------|------|--------|
-| 03-01 | Workflow Types & Validation | 1 | COMPLETE |
-| 03-02 | SOP Types & Validation | 1 | COMPLETE |
-| 03-03 | Task Rule Types & Validation | 1 | COMPLETE |
-| 03-04 | Workflow Queries & Mutations | 2 | COMPLETE |
-| 03-05 | SOP Queries & Mutations | 2 | COMPLETE |
-| 03-06 | Task Rule Queries & Mutations | 2 | COMPLETE |
-| 03-07 | Workflow CRUD Endpoints | 3 | COMPLETE |
-| 03-08 | Workflow Tasks + SOP CRUD | 4 | COMPLETE |
-| 03-09 | Task Rules CRUD | 5 | COMPLETE |
+| 04-01 | Page Foundation and Skeleton | 1 | COMPLETE |
+| 04-02 | View Tabs Component | 1 | COMPLETE |
+| 04-03 | Filter Toolbar Component | 1 | COMPLETE |
+| 04-04 | Task Table and Row Components | 2 | COMPLETE |
+| 04-05 | Content Integration and State Management | 3 | COMPLETE |
 
-### Files Created (Phase 3)
+### Files Created (Phase 4)
 
-**Types & Validation:**
-- `dashboard/src/lib/api/workflow-types.ts`
-- `dashboard/src/lib/api/workflow-validation.ts`
-- `dashboard/src/lib/api/sop-types.ts`
-- `dashboard/src/lib/api/sop-validation.ts`
-- `dashboard/src/lib/api/task-rule-types.ts`
-- `dashboard/src/lib/api/task-rule-validation.ts`
+**Page Structure:**
+- `dashboard/src/app/dashboard/action-center/page.tsx`
+- `dashboard/src/app/dashboard/action-center/action-center-skeleton.tsx`
+- `dashboard/src/app/dashboard/action-center/action-center-data-loader.tsx`
+- `dashboard/src/app/dashboard/action-center/action-center-content.tsx`
 
-**Queries & Mutations:**
-- `dashboard/src/lib/api/action-center-workflow-queries.ts`
-- `dashboard/src/lib/api/action-center-workflow-mutations.ts`
-- `dashboard/src/lib/api/sop-queries.ts`
-- `dashboard/src/lib/api/sop-mutations.ts`
-- `dashboard/src/lib/api/task-rule-queries.ts`
-- `dashboard/src/lib/api/task-rule-mutations.ts`
+**Components:**
+- `dashboard/src/app/dashboard/action-center/components/view-tabs.tsx`
+- `dashboard/src/app/dashboard/action-center/components/task-filters.tsx`
+- `dashboard/src/app/dashboard/action-center/components/task-table.tsx`
+- `dashboard/src/app/dashboard/action-center/components/task-row.tsx`
+- `dashboard/src/app/dashboard/action-center/components/task-row-expanded.tsx`
 
-**API Endpoints:**
-- `dashboard/src/app/api/workflows/route.ts` (GET list, POST create)
-- `dashboard/src/app/api/workflows/[id]/route.ts` (GET detail, PATCH update)
-- `dashboard/src/app/api/workflows/[id]/tasks/route.ts` (POST add task)
-- `dashboard/src/app/api/sops/route.ts` (GET list, POST create)
-- `dashboard/src/app/api/sops/[id]/route.ts` (GET detail, PATCH update)
-- `dashboard/src/app/api/task-rules/route.ts` (GET list, POST create)
-- `dashboard/src/app/api/task-rules/[id]/route.ts` (GET detail, PATCH update)
+**Dashboard Update:**
+- `dashboard/src/app/dashboard/dashboard-content.tsx` (added Action Center link)
 
-### Requirements Covered (Phase 3)
+### Requirements Covered (Phase 4)
 
-- API-09: GET /api/workflows (list)
-- API-10: POST /api/workflows (create)
-- API-11: GET /api/workflows/:id (detail with tasks)
-- API-12: PATCH /api/workflows/:id (update)
-- API-13: POST /api/workflows/:id/tasks (add task)
-- API-14: GET /api/sops (list)
-- API-15: POST /api/sops (create)
-- API-16: GET /api/sops/:id (detail)
-- API-17: PATCH /api/sops/:id (update)
-- API-18: GET /api/task-rules (list)
-- API-19: POST /api/task-rules (create)
-- API-20: PATCH /api/task-rules/:id (update)
+- UI-01: Task list page with table/list view
+- UI-02: Filter by status
+- UI-03: Filter by priority
+- UI-04: Filter by due date
+- UI-05: Filter by department
+- UI-06: Filter by task type
+- UI-07: Filter by source
+- UI-08: Search by title and description
+- UI-09: Saved view presets (All, My Focus, Overdue, Waiting, Approvals, AI Suggested)
+- UI-10: Task row shows priority icon, title, due date, department, source indicator
 
 ## Known Technical Debt
 
 - **Supabase Types:** The generated types.ts doesn't include action_center schema. TypeScript shows type errors but code works at runtime. Should regenerate types to include action_center schema.
 
 ---
-*Last updated: 2026-01-22 after completing Phase 3 (Workflow & SOP API)*
+*Last updated: 2026-01-22 after completing Phase 4 (Task UI - List)*

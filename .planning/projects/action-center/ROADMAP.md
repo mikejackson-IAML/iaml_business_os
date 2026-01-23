@@ -131,7 +131,14 @@ Plans:
 5. Task row shows all key info (priority, title, due, department, source)
 6. Clicking task row navigates to detail
 
-**Plans:** TBD
+**Plans:** 5 plans in 3 waves
+
+Plans:
+- [x] 04-01-PLAN.md — Page foundation and skeleton (Wave 1)
+- [x] 04-02-PLAN.md — View tabs component (Wave 1)
+- [x] 04-03-PLAN.md — Filter toolbar component (Wave 1)
+- [x] 04-04-PLAN.md — Task table and row components (Wave 2)
+- [x] 04-05-PLAN.md — Content integration and state management (Wave 3)
 
 ---
 
@@ -296,7 +303,7 @@ Plans:
 | 1. Database Schema | 6/6 | COMPLETE |
 | 2. Task API | 8/8 | COMPLETE |
 | 3. Workflow & SOP API | 9/9 | COMPLETE |
-| 4. Task UI - List | 0/? | Not started |
+| 4. Task UI - List | 5/5 | COMPLETE |
 | 5. Task UI - Detail & Create | 0/? | Not started |
 | 6. SOP Templates | 0/? | Not started |
 | 7. Workflows & Dependencies | 0/? | Not started |
@@ -308,4 +315,4 @@ Plans:
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-22 after completing Phase 3*
+*Last updated: 2026-01-22 after completing Phase 4*
