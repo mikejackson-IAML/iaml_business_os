@@ -1,545 +1,371 @@
 ---
 name: test-workflow
-description: Automated n8n workflow testing with diagnosis and self-repair. Use this skill to test n8n workflows, diagnose failures, apply fixes automatically, and learn from resolutions. Invoked via /test-workflow <workflow_id_or_name>.
+description: Automated n8n workflow testing with diagnosis and self-repair. Tests only unverified workflows from Supabase registry. Updates test status after completion.
+allowed-tools: [Read, Write, Bash, Grep, Glob, mcp__n8n-mcp__*, mcp__n8n-brain__*]
 ---
 
-# Test Workflow Skill
+# Test Workflow Command
 
-> Automated n8n workflow testing with diagnosis and self-repair capabilities.
+> Automated n8n workflow testing with Supabase integration. Only tests workflows that haven't been verified.
 
 ## Invocation
 
 ```
-/test-workflow <workflow_id_or_name> [options]
+/test-workflow [workflow_id_or_name] [options]
 ```
 
 ## Options
 
-- `--test-case <name>` - Run a specific test case only
-- `--all` - Run all test cases in the spec
-- `--create-spec` - Interactive test specification creation
-- `--dry-run` - Validate spec and show plan without executing
-- `--verbose` - Show detailed execution logs
+| Option | Description |
+|--------|-------------|
+| `--bulk N` | Test N unverified workflows from Supabase registry |
+| `--test-case <name>` | Run a specific test case only |
+| `--create-spec` | Interactive test specification creation |
+| `--dry-run` | Show what would be tested without executing |
+| `--verbose` | Show detailed execution logs |
 
 ## Examples
 
 ```bash
-# Test a workflow by ID
+# Test next 5 unverified workflows from registry
+/test-workflow --bulk 5
+
+# Test a specific workflow by ID
 /test-workflow HnZQopXL7xjZnX3O
 
 # Test by name
 /test-workflow "Airtable to GHL Sync"
 
-# Run specific test case
-/test-workflow HnZQopXL7xjZnX3O --test-case happy_path
-
-# Create a new test spec interactively
-/test-workflow --create-spec
-
-# Dry run to validate
-/test-workflow HnZQopXL7xjZnX3O --dry-run
+# Dry run to see what would be tested
+/test-workflow --bulk 10 --dry-run
 ```
 
 ---
 
 ## Orchestration Instructions
 
-When this skill is invoked, follow this orchestration flow:
-
 <orchestration>
+
+### Step 0: Supabase Connection
+
+**CRITICAL:** All workflow selection MUST come from Supabase, not n8n directly.
+
+Use this SQL via the n8n-brain MCP or direct Supabase query to get unverified workflows:
+
+```sql
+-- Get workflows needing testing (prioritized)
+SELECT
+  workflow_id,
+  workflow_name,
+  workflow_url,
+  category,
+  test_status,
+  is_active,
+  priority
+FROM n8n_brain.workflows_needing_attention
+WHERE test_status != 'verified'
+ORDER BY
+  CASE
+    WHEN test_status = 'broken' THEN 1
+    WHEN test_status = 'needs_review' THEN 2
+    WHEN is_active AND test_status = 'untested' THEN 3
+    WHEN test_status = 'untested' THEN 4
+    ELSE 5
+  END
+LIMIT {N};
+```
+
+If the workflow_registry table is empty or missing workflows, first sync from n8n:
+
+```sql
+-- Register a workflow (auto-creates if missing)
+SELECT n8n_brain.register_workflow(
+  '{workflow_id}'::TEXT,
+  '{workflow_name}'::TEXT,
+  '{category}'::TEXT,
+  '{department}'::TEXT,
+  '{trigger_type}'::TEXT,
+  '{schedule}'::TEXT,
+  '{description}'::TEXT,
+  ARRAY[{services}]::TEXT[],
+  {has_error_handling}::BOOLEAN,
+  {has_slack_alerts}::BOOLEAN,
+  {has_dashboard_logging}::BOOLEAN
+);
+```
 
 ### Step 1: Parse Arguments
 
 Extract from the user's command:
-- `workflow_id_or_name`: The target workflow identifier
+- `workflow_id_or_name`: Target workflow (optional if using --bulk)
+- `bulk_count`: Number of workflows to test (from --bulk N)
 - `test_case`: Specific test case to run (optional)
 - `create_spec`: Whether to create a new spec
 - `dry_run`: Whether to skip execution
 - `verbose`: Detailed logging flag
 
-### Step 2: Load MCP Tools
+### Step 2: Get Workflows to Test
 
-First, load the required MCP tools:
+**If `--bulk N` specified:**
 
+1. Query Supabase for N unverified workflows:
+   ```sql
+   SELECT workflow_id, workflow_name, test_status, is_active, category
+   FROM n8n_brain.workflows_needing_attention
+   WHERE test_status IN ('untested', 'broken', 'needs_review', 'in_progress')
+   LIMIT {N};
+   ```
+
+2. If no workflows found in registry, inform user:
+   ```
+   No unverified workflows found in registry.
+
+   To populate the registry, either:
+   1. Run the workflow sync: /sync-workflows
+   2. Manually register: SELECT n8n_brain.register_workflow(...)
+   ```
+
+3. Display the queue:
+   ```
+   Found {N} workflows to test:
+
+   | # | Workflow | Status | Priority |
+   |---|----------|--------|----------|
+   | 1 | {name} | {status} | {priority} |
+   ...
+   ```
+
+**If specific workflow provided:**
+
+1. First check if it exists in Supabase registry:
+   ```sql
+   SELECT workflow_id, workflow_name, test_status
+   FROM n8n_brain.workflow_registry
+   WHERE workflow_id = '{id}' OR workflow_name ILIKE '%{name}%';
+   ```
+
+2. If not in registry, register it first from n8n data
+
+3. Verify it's not already verified:
+   ```
+   Workflow "{name}" is already verified (tested {date}).
+   Use --force to re-test, or choose an unverified workflow.
+   ```
+
+### Step 3: Mark Test In Progress
+
+Before testing each workflow, update Supabase:
+
+```sql
+SELECT n8n_brain.mark_workflow_tested(
+  '{workflow_id}',
+  'in_progress',
+  'claude-testing-agent',
+  'Test started at {timestamp}'
+);
 ```
-MCPSearch: select:mcp__n8n__get_workflow
-MCPSearch: select:mcp__n8n__list_workflows
-MCPSearch: select:mcp__n8n__update_workflow
-MCPSearch: select:mcp__n8n__run_webhook
-MCPSearch: select:mcp__n8n__list_executions
-MCPSearch: select:mcp__n8n__get_execution
-MCPSearch: select:mcp__n8n-brain__lookup_error_fix
-MCPSearch: select:mcp__n8n-brain__store_error_fix
-MCPSearch: select:mcp__n8n-brain__calculate_confidence
-MCPSearch: select:mcp__n8n-brain__record_action
-MCPSearch: select:mcp__n8n-brain__get_credential
-```
-
-### Step 3: Resolve Workflow
-
-If `workflow_id_or_name` looks like an ID (alphanumeric, ~16 chars):
-1. Call `mcp__n8n__get_workflow(workflowId=id)`
-2. Extract workflow details
-
-If it looks like a name:
-1. Call `mcp__n8n__list_workflows()`
-2. Find workflow by name (case-insensitive match)
-3. Get the workflow ID
-
-Store: `workflow_id`, `workflow_name`, `workflow_json`
 
 ### Step 4: Load or Create Test Specification
 
-Check for existing spec:
+Check for existing spec in `.planning/workflow-tests/specs/`:
+
 ```bash
-ls -la ".planning/workflow-tests/specs/${workflow_id}.yaml" 2>/dev/null || \
-ls -la ".planning/workflow-tests/specs/${workflow_name// /-}.yaml" 2>/dev/null
+ls -la ".planning/workflow-tests/specs/${workflow_id}.yaml" 2>/dev/null
 ```
 
 **If spec exists:**
 - Read and parse the YAML spec
 - Validate against schema
 
-**If no spec and `--create-spec` flag:**
-- Run interactive spec creation (see Step 4a)
+**If no spec:**
+- Auto-generate basic spec from workflow structure
+- Or run interactive creation with `--create-spec`
 
-**If no spec and no flag:**
-- Output error with instructions:
-```
-No test specification found for workflow "{name}"
+### Step 5: Execute Test
 
-To create one:
-  /test-workflow {id} --create-spec
-
-Or manually create:
-  .planning/workflow-tests/specs/{id}.yaml
-```
-
-#### Step 4a: Interactive Spec Creation
-
-If creating a new spec:
-
-1. Analyze the workflow JSON to identify:
-   - Trigger type (Webhook, Schedule, Manual)
-   - Input schema (from webhook or manual trigger node)
-   - Services used (from node types)
-   - Critical nodes (HTTP Request, database, external API nodes)
-
-2. Ask user for test cases:
-   - Prompt for happy path input data
-   - Prompt for edge cases
-   - Prompt for expected outputs
-
-3. Generate YAML spec:
-
-```yaml
-# Test specification for: {workflow_name}
-# Generated: {date}
-# Workflow ID: {workflow_id}
-
-workflow_id: "{workflow_id}"
-workflow_name: "{workflow_name}"
-execution_method: "{webhook|poll_history|manual}"
-
-test_cases:
-  - name: "happy_path"
-    description: "Standard successful execution"
-    input:
-      # Generated from workflow analysis
-    expected:
-      status: "success"
-
-  - name: "{edge_case_name}"
-    description: "{user provided}"
-    input:
-      # User provided
-    expected:
-      status: "{success|error}"
-
-max_fix_iterations: 5
-timeout_seconds: 60
-
-critical_nodes:
-  # Identified from workflow analysis
-```
-
-4. Write spec to `.planning/workflow-tests/specs/{workflow_id}.yaml`
-
-### Step 5: Pre-Flight Checks
-
-Before executing tests:
-
-1. **Calculate confidence:**
+1. Get workflow from n8n:
    ```
-   mcp__n8n-brain__calculate_confidence({
-     task_description: "Test workflow: {name}",
-     services: [{extracted_services}],
-     node_types: [{extracted_node_types}]
+   mcp__n8n-mcp__n8n_get_workflow({ id: "{workflow_id}" })
+   ```
+
+2. Identify trigger type and test accordingly:
+
+   **Webhook triggers:**
+   ```
+   mcp__n8n-mcp__n8n_test_workflow({
+     workflowId: "{workflow_id}",
+     data: {test_payload},
+     waitForResponse: true
    })
    ```
 
-   Report confidence level:
-   - 0-39: "Low confidence - will ask before making changes"
-   - 40-79: "Medium confidence - will test and verify before activating"
-   - 80-100: "High confidence - can proceed autonomously"
+   **Schedule/Manual triggers:**
+   - Check recent executions
+   - Analyze last execution for success/failure
 
-2. **Check credentials:**
-   For each service in the workflow:
+3. Get execution result:
    ```
-   mcp__n8n-brain__get_credential({service_name: service})
-   ```
-
-   Report any missing credential mappings.
-
-3. **Lookup common errors:**
-   ```
-   mcp__n8n-brain__lookup_error_fix({
-     error_message: "common {service} errors",
-     node_type: "{node_type}"
+   mcp__n8n-mcp__n8n_executions({
+     action: "list",
+     workflowId: "{workflow_id}",
+     limit: 1
    })
    ```
 
-   Pre-load known issues for awareness.
+### Step 6: Evaluate Results
 
-### Step 6: Execute Test Loop
+Parse execution result and determine status:
 
-Initialize state:
-```json
-{
-  "iteration": 0,
-  "max_iterations": {from_spec},
-  "fix_history": [],
-  "current_test_case": "{test_case_name}"
-}
+| Execution Status | Test Result | Next Action |
+|------------------|-------------|-------------|
+| Success | PASS | Mark verified |
+| Error (known fix) | RETRY | Apply fix, re-test |
+| Error (unknown) | FAIL | Mark broken, escalate |
+| Timeout | FAIL | Mark needs_review |
+
+### Step 7: Update Supabase with Results
+
+**On SUCCESS:**
+
+```sql
+SELECT n8n_brain.mark_workflow_tested(
+  '{workflow_id}',
+  'verified',
+  'claude-testing-agent',
+  'Test passed: {summary}. Execution ID: {exec_id}'
+);
 ```
 
-**For each test case:**
+**On FAILURE:**
 
-#### 6a: Execute Workflow
-
-**If execution_method == "webhook":**
+```sql
+SELECT n8n_brain.mark_workflow_tested(
+  '{workflow_id}',
+  'broken',
+  'claude-testing-agent',
+  'Test failed: {error_message}. Node: {failed_node}'
+);
 ```
-mcp__n8n__run_webhook({
-  workflowName: "{workflow_name}",
-  data: {test_input},
-  headers: {}
+
+**On PARTIAL (needs human review):**
+
+```sql
+SELECT n8n_brain.mark_workflow_tested(
+  '{workflow_id}',
+  'needs_review',
+  'claude-testing-agent',
+  'Requires manual verification: {reason}'
+);
+```
+
+### Step 8: Record to n8n-brain
+
+Store the action for confidence calibration:
+
+```
+mcp__n8n-brain__record_action({
+  task_description: "Test workflow: {name}",
+  services_involved: [{services}],
+  node_types_involved: [{node_types}],
+  outcome: "{success|failure|partial}",
+  outcome_notes: "{summary}"
 })
 ```
 
-Wait for response.
+If errors were fixed, store the fix:
 
-**If execution_method == "poll_history":**
-1. Get current execution count:
-   ```
-   mcp__n8n__list_executions({workflowId: id, limit: 1})
-   ```
-2. Instruct user to trigger workflow (or wait for schedule)
-3. Poll for new execution:
-   ```
-   mcp__n8n__list_executions({workflowId: id, limit: 5})
-   ```
-4. When new execution appears, get details:
-   ```
-   mcp__n8n__get_execution({executionId: new_exec_id})
-   ```
-
-#### 6b: Evaluate Results
-
-Parse execution result:
-```javascript
-execution = {
-  status: "success" | "error",
-  data: { resultData: { runData: {...} } },
-  error: { message: "...", node: {...} }
-}
 ```
-
-Compare against expected:
-- Check `status` matches
-- Check `output_contains` if specified
-- Check `error_contains` if expecting error
-
-**If SUCCESS:**
-- Log: "Test case '{name}' PASSED"
-- Continue to next test case or finish
-
-**If FAILURE:**
-- Proceed to diagnosis (Step 6c)
-
-#### 6c: Diagnose Failure
-
-Extract error context:
-```javascript
-error_context = {
-  error_message: execution.error.message,
-  failed_node: execution.error.node.name,
-  failed_node_type: execution.error.node.type,
-  input_data: // data sent to failed node
-}
-```
-
-**First: Check n8n-brain for known fix:**
-```
-mcp__n8n-brain__lookup_error_fix({
-  error_message: "{error_message}",
-  node_type: "{failed_node_type}"
+mcp__n8n-brain__store_error_fix({
+  error_message: "{error}",
+  node_type: "{node_type}",
+  fix_description: "{what fixed it}",
+  fix_example: {example_config}
 })
 ```
 
-**If known fix found:**
-- Report: "Found known fix: {fix_description}"
-- Apply fix (Step 6d)
+### Step 9: Generate Report
 
-**If no known fix:**
-- Run pattern diagnosis (Step 6c-patterns)
+After testing all workflows, output summary:
 
-#### 6c-patterns: Pattern-Based Diagnosis
+```markdown
+## Workflow Testing Complete
 
-Analyze error against known patterns:
+**Tested:** {total} workflows
+**Passed:** {passed}
+**Failed:** {failed}
+**Needs Review:** {review}
 
-**Pattern 1: Property Access Error**
-```regex
-Cannot read propert(y|ies) ['"]?(\w+)['"]? of (undefined|null)
+### Results
+
+| Workflow | Status | Notes |
+|----------|--------|-------|
+| {name} | PASS | Verified |
+| {name} | FAIL | {error} |
+
+### Supabase Updated
+- {N} workflows marked as verified
+- {N} workflows marked as broken
+- {N} workflows marked as needs_review
+
+### Next Steps
+{If failures, list recommended actions}
 ```
-Diagnosis: Expression references non-existent field
-Fix: Compare expression path to actual input structure
-
-**Pattern 2: Empty Input**
-```regex
-No items|Nothing to iterate|Items must be
-```
-Diagnosis: Previous node returned empty array
-Fix: Add IF node or "Always Output Data" setting
-
-**Pattern 3: Authentication Error**
-```regex
-401|403|Unauthorized|Authentication|Invalid (API )?[Kk]ey
-```
-Diagnosis: Credential issue
-Action: **ESCALATE** - requires human intervention
-
-**Pattern 4: JSON Parse Error**
-```regex
-Unexpected token|Invalid JSON|JSON\.parse
-```
-Diagnosis: Malformed JSON in expression
-Fix: Review and fix JSON syntax
-
-**Pattern 5: Required Field Missing**
-```regex
-required|mandatory|must (be |have |provide)
-```
-Diagnosis: Node configuration incomplete
-Fix: Check node schema, add missing field
-
-**Pattern 6: Resource Not Found**
-```regex
-404|not found|does not exist|No (record|contact|item)
-```
-Diagnosis: Referenced entity doesn't exist
-Action: May need to create entity first or fix ID reference
-
-**If pattern matched:**
-- Generate fix based on diagnosis
-- Report diagnosis and proposed fix
-
-**If no pattern matched:**
-- **ESCALATE** with full context
-
-#### 6d: Apply Fix
-
-1. Get current workflow:
-   ```
-   mcp__n8n__get_workflow({workflowId: id})
-   ```
-
-2. Modify workflow JSON based on diagnosis:
-   - Update node parameters
-   - Fix expressions
-   - Add error handling nodes
-
-3. Update workflow:
-   ```
-   mcp__n8n__update_workflow({
-     workflowId: id,
-     nodes: [modified_nodes],
-     connections: {if_changed}
-   })
-   ```
-
-4. Log fix to history:
-   ```javascript
-   fix_history.push({
-     iteration: current,
-     error: error_message,
-     diagnosis: diagnosis_type,
-     fix_applied: fix_description,
-     fix_source: "n8n-brain" | "pattern-match"
-   })
-   ```
-
-5. Increment iteration and loop back to 6a
-
-#### 6e: Iteration Check
-
-Before looping:
-- If `iteration >= max_iterations` → ESCALATE
-- If same error 2+ times in a row → ESCALATE (circular fix)
-- Otherwise → Continue loop
-
-### Step 7: Finalize
-
-**On SUCCESS (all test cases pass):**
-
-1. Store any new error fixes:
-   ```
-   mcp__n8n-brain__store_error_fix({
-     error_message: "{error}",
-     node_type: "{node_type}",
-     fix_description: "{what fixed it}",
-     fix_example: {example_config}
-   })
-   ```
-
-2. Record successful action:
-   ```
-   mcp__n8n-brain__record_action({
-     task_description: "Test workflow: {name}",
-     services_involved: [{services}],
-     outcome: "success",
-     outcome_notes: "All {N} test cases passed after {M} fixes"
-   })
-   ```
-
-3. Update workflow registry (via Supabase if available):
-   ```sql
-   SELECT n8n_brain.mark_workflow_tested(
-     '{workflow_id}',
-     'verified',
-     'testing-agent',
-     'Test cases: {list}. Fixes applied: {count}'
-   );
-   ```
-
-4. Generate success report:
-   ```markdown
-   ## Workflow Test Complete
-
-   **Workflow:** {name} ({id})
-   **Status:** PASSED
-   **Test Cases:** {passed}/{total}
-
-   ### Results
-   | Test Case | Status | Notes |
-   |-----------|--------|-------|
-   | happy_path | PASS | - |
-   | edge_case | PASS | Fixed field mapping |
-
-   ### Fixes Applied
-   | Error | Fix | Source |
-   |-------|-----|--------|
-   | {error} | {fix} | {n8n-brain|pattern} |
-
-   ### Learning
-   - Stored {N} new error→fix mappings
-   - Updated workflow registry status
-   ```
-
-**On ESCALATION:**
-
-1. Record failed action:
-   ```
-   mcp__n8n-brain__record_action({
-     task_description: "Test workflow: {name}",
-     outcome: "failure",
-     outcome_notes: "Escalated after {N} iterations"
-   })
-   ```
-
-2. Generate escalation report:
-   ```markdown
-   ## ESCALATION: Workflow Test Failed
-
-   **Workflow:** {name} ({id})
-   **Test Case:** {test_case_name}
-   **Iterations Attempted:** {count}
-
-   ### Final Error
-   ```
-   {error_message}
-   ```
-
-   ### Failed Node
-   **Name:** {node_name}
-   **Type:** {node_type}
-
-   ### Input Data to Failed Node
-   ```json
-   {input_data}
-   ```
-
-   ### Fix Attempts
-   | # | Error | Fix Attempted | Result |
-   |---|-------|---------------|--------|
-   {fix_history_table}
-
-   ### Diagnosis
-   {Why fixes didn't work or why escalated}
-
-   ### Recommended Investigation
-   1. Check {specific things to look at}
-   2. Verify {credentials/config}
-   3. Consider {alternative approaches}
-
-   ### Files
-   - Test spec: .planning/workflow-tests/specs/{id}.yaml
-   - Escalation: .planning/workflow-tests/escalations/{date}/{id}.md
-   ```
-
-3. Save escalation report to file
 
 </orchestration>
 
 ---
 
-## Test Specification Schema
+## Test Status Values
 
-```yaml
-# Required fields
-workflow_id: string       # n8n workflow ID
-workflow_name: string     # Human-readable name
-execution_method: string  # "webhook" | "poll_history" | "manual"
-
-# Test cases (at least one required)
-test_cases:
-  - name: string          # Unique identifier
-    description: string   # What this tests
-    input: object         # Payload to send
-    expected:
-      status: string      # "success" | "error"
-      output_contains: object  # Optional: fields to check in output
-      error_contains: string   # Optional: if expecting error
-
-# Settings
-max_fix_iterations: number  # Default: 5
-timeout_seconds: number     # Default: 60
-
-# Optional
-critical_nodes: string[]    # Nodes that must succeed
-skip_learning: boolean      # Don't store fixes (for testing)
-```
+| Status | Meaning | After Test |
+|--------|---------|------------|
+| `untested` | Never tested | First in queue |
+| `in_progress` | Currently testing | Set during test |
+| `tested` | Tested, not prod-verified | Rare |
+| `verified` | Confirmed working | Success |
+| `needs_review` | Needs human check | Partial/unclear |
+| `broken` | Known broken | Failed |
 
 ---
 
-## Common Issues and Resolutions
+## Supabase Queries Reference
 
-| Issue | Resolution |
-|-------|------------|
-| "Workflow not found" | Check ID/name spelling, ensure workflow exists |
-| "No webhook trigger" | Use `execution_method: poll_history` or add webhook node |
-| "Credential error" | Register credential with n8n-brain first |
-| "Timeout" | Increase `timeout_seconds` in spec |
-| "Circular fix" | Manual investigation needed - escalation generated |
+### Get unverified workflows
+```sql
+SELECT * FROM n8n_brain.workflows_needing_attention LIMIT 10;
+```
+
+### Get test summary
+```sql
+SELECT * FROM n8n_brain.workflow_test_summary;
+```
+
+### Mark workflow tested
+```sql
+SELECT n8n_brain.mark_workflow_tested(
+  'workflow_id',
+  'verified',  -- or 'broken', 'needs_review'
+  'claude',
+  'Test notes here'
+);
+```
+
+### Register new workflow
+```sql
+SELECT n8n_brain.register_workflow(
+  'workflow_id',
+  'Workflow Name',
+  'category',
+  'department',
+  'webhook',
+  NULL,
+  'Description',
+  ARRAY['service1', 'service2'],
+  true,  -- has_error_handling
+  true,  -- has_slack_alerts
+  true   -- has_dashboard_logging
+);
+```
 
 ---
 
@@ -547,4 +373,4 @@ skip_learning: boolean      # Don't store fixes (for testing)
 
 - Architecture: @business-os/docs/architecture/N8N-WORKFLOW-TESTING-AGENT.md
 - n8n-brain: @mcp-servers/n8n-brain/
-- Workflow Registry: @CLAUDE.md#workflow-testing-registry
+- Workflow Registry Schema: @supabase/migrations/20260111_create_n8n_brain_schema.sql
