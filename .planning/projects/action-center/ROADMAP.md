@@ -51,7 +51,15 @@ This roadmap builds the Action Center in 12 phases, ordered by technical depende
 5. Workflow status trigger fires on task status change
 6. Mastery increment trigger fires on task completion
 
-**Plans:** TBD
+**Plans:** 6 plans in 4 waves
+
+Plans:
+- [x] 01-01-PLAN.md — Schema and core tables (tasks, workflows, sop_templates) (Wave 1)
+- [x] 01-02-PLAN.md — Supporting tables (task_rules, workflow_templates, comments, activity) (Wave 2)
+- [x] 01-03-PLAN.md — User task mastery (task_mastery JSONB + helper functions) (Wave 2)
+- [x] 01-04-PLAN.md — Views (tasks_extended, user_task_summary, department_task_summary) (Wave 3)
+- [x] 01-05-PLAN.md — Triggers and functions (workflow status, mastery increment, activity logging) (Wave 3)
+- [x] 01-06-PLAN.md — RLS policies and permissions (Wave 4)
 
 ---
 
@@ -264,7 +272,7 @@ This roadmap builds the Action Center in 12 phases, ordered by technical depende
 
 | Phase | Plans Complete | Status |
 |-------|----------------|--------|
-| 1. Database Schema | 0/? | Not started |
+| 1. Database Schema | 6/6 | COMPLETE |
 | 2. Task API | 0/? | Not started |
 | 3. Workflow & SOP API | 0/? | Not started |
 | 4. Task UI - List | 0/? | Not started |
@@ -279,4 +287,4 @@ This roadmap builds the Action Center in 12 phases, ordered by technical depende
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-22 after creation*
+*Last updated: 2026-01-22 after completing Phase 1*
