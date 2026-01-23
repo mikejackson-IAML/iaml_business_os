@@ -152,6 +152,8 @@ export interface UpdateTaskRequest {
   department?: string;
   assignee_id?: string | null;
   workflow_id?: string | null;
+  approval_outcome?: 'approved' | 'modified' | 'rejected';
+  approval_modifications?: string | null;
 }
 
 export interface CompleteTaskRequest {

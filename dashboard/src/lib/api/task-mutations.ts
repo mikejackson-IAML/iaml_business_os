@@ -89,6 +89,8 @@ export async function updateTask(
   if (data.department !== undefined) updateData.department = data.department;
   if (data.assignee_id !== undefined) updateData.assignee_id = data.assignee_id;
   if (data.workflow_id !== undefined) updateData.workflow_id = data.workflow_id;
+  if (data.approval_outcome !== undefined) updateData.approval_outcome = data.approval_outcome;
+  if (data.approval_modifications !== undefined) updateData.approval_modifications = data.approval_modifications;
 
   const { error } = await supabase
     .from('tasks')
