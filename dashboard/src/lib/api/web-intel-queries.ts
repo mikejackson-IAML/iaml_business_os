@@ -46,6 +46,23 @@ export interface PageTrafficDb {
 }
 
 /**
+ * Traffic by source/medium from GA4
+ */
+export interface TrafficSourceDb {
+  id: string;
+  collected_date: string;
+  source: string;
+  medium: string;
+  sessions: number;
+  users: number;
+  new_users: number;
+  bounce_rate: number | null;
+  pages_per_session: number | null;
+  avg_session_duration: number | null;
+  created_at: string;
+}
+
+/**
  * Keywords to track for rankings
  */
 export interface TrackedKeywordDb {
@@ -235,6 +252,19 @@ export interface PageTraffic {
   entrances: number;
 }
 
+export interface TrafficSource {
+  id: string;
+  collectedDate: Date;
+  source: string;
+  medium: string;
+  sessions: number;
+  users: number;
+  newUsers: number;
+  bounceRate: number | null;
+  pagesPerSession: number | null;
+  avgSessionDuration: number | null;
+}
+
 export interface TrackedKeyword {
   id: string;
   keyword: string;
@@ -347,6 +377,7 @@ export interface WebIntelMetrics {
 export interface WebIntelDashboardData {
   metrics: WebIntelMetrics;
   dailyTraffic: DailyTraffic[];
+  trafficSources: TrafficSource[];
   topPages: PageTraffic[];
   keywords: TrackedKeyword[];
   rankings: DailyRanking[];
@@ -408,6 +439,28 @@ export async function getTopPages(days: number = 7, limit: number = 10): Promise
   }
 
   return (data as PageTrafficDb[]) || [];
+}
+
+/**
+ * Fetch traffic by source/medium
+ */
+export async function getTrafficSources(days: number = 30): Promise<TrafficSourceDb[]> {
+  const supabase = getServerClient();
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - days);
+
+  const { data, error } = await supabase
+    .from('web_intel.traffic_sources')
+    .select('*')
+    .gte('collected_date', startDate.toISOString().split('T')[0])
+    .order('collected_date', { ascending: true });
+
+  if (error) {
+    console.error('Error fetching traffic sources:', error);
+    return [];
+  }
+
+  return (data as TrafficSourceDb[]) || [];
 }
 
 /**
@@ -681,6 +734,24 @@ export function transformPageTraffic(data: PageTrafficDb[]): PageTraffic[] {
     bounceRate: item.bounce_rate ? Number(item.bounce_rate) : null,
     exitRate: item.exit_rate ? Number(item.exit_rate) : null,
     entrances: item.entrances,
+  }));
+}
+
+/**
+ * Transform traffic sources to frontend format
+ */
+export function transformTrafficSources(data: TrafficSourceDb[]): TrafficSource[] {
+  return data.map((item) => ({
+    id: item.id,
+    collectedDate: new Date(item.collected_date),
+    source: item.source,
+    medium: item.medium,
+    sessions: item.sessions,
+    users: item.users,
+    newUsers: item.new_users,
+    bounceRate: item.bounce_rate ? Number(item.bounce_rate) : null,
+    pagesPerSession: item.pages_per_session ? Number(item.pages_per_session) : null,
+    avgSessionDuration: item.avg_session_duration ? Number(item.avg_session_duration) : null,
   }));
 }
 
@@ -983,10 +1054,11 @@ export function buildWebIntelMetrics(
 /**
  * Fetch all Web Intel dashboard data
  */
-export async function getWebIntelDashboardData(): Promise<WebIntelDashboardData> {
+export async function getWebIntelDashboardData(days: number = 30): Promise<WebIntelDashboardData> {
   // Fetch all data in parallel
   const [
     dailyTrafficDb,
+    trafficSourcesDb,
     topPagesDb,
     keywordsDb,
     rankingsDb,
@@ -998,14 +1070,15 @@ export async function getWebIntelDashboardData(): Promise<WebIntelDashboardData>
     backlinkProfileDb,
     alertsDb,
   ] = await Promise.all([
-    getDailyTraffic(30),
-    getTopPages(7, 10),
+    getDailyTraffic(days),
+    getTrafficSources(days),
+    getTopPages(days, 10),
     getTrackedKeywords('active'),
-    getDailyRankings(7),
-    getRankingChanges(7, false),
+    getDailyRankings(days),
+    getRankingChanges(days, false),
     getCoreWebVitals(),
     getIndexCoverage(),
-    getSearchPerformance(7, 20),
+    getSearchPerformance(days, 20),
     getContentDecay(true),
     getBacklinkProfile(),
     getWebIntelAlerts(true),
@@ -1013,6 +1086,7 @@ export async function getWebIntelDashboardData(): Promise<WebIntelDashboardData>
 
   // Transform all data
   const dailyTraffic = transformDailyTraffic(dailyTrafficDb);
+  const trafficSources = transformTrafficSources(trafficSourcesDb);
   const topPages = transformPageTraffic(topPagesDb);
   const keywords = transformKeywords(keywordsDb);
   const rankings = transformRankings(rankingsDb);
@@ -1041,6 +1115,7 @@ export async function getWebIntelDashboardData(): Promise<WebIntelDashboardData>
   return {
     metrics,
     dailyTraffic,
+    trafficSources,
     topPages,
     keywords,
     rankings,
