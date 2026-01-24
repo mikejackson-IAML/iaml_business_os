@@ -1,13 +1,15 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { TaskExtended } from '@/lib/api/task-types';
 import { ViewTabs, ViewPreset, viewPresetFilters } from './components/view-tabs';
 import { TaskFilterToolbar, TaskFilters, emptyFilters } from './components/task-filters';
 import { TaskTable } from './components/task-table';
 import { CreateTaskModal } from './components/create-task-modal';
 import { Button } from '@/dashboard-kit/components/ui/button';
-import { RefreshCw, Plus } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { RefreshCw, Plus, X, FileText } from 'lucide-react';
 
 interface ActionCenterContentProps {
   initialTasks: TaskExtended[];
@@ -18,11 +20,21 @@ export default function ActionCenterContent({
   initialTasks,
   departments,
 }: ActionCenterContentProps) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [tasks] = useState<TaskExtended[]>(initialTasks);
   const [activeView, setActiveView] = useState<ViewPreset>('my-focus');
   const [filters, setFilters] = useState<TaskFilters>(emptyFilters);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
+
+  // SOP template filter from URL
+  const sopTemplateId = searchParams.get('sop_template_id');
+
+  // Clear SOP filter
+  const clearSopFilter = useCallback(() => {
+    router.push('/dashboard/action-center');
+  }, [router]);
 
   // Apply view preset when tab changes
   const handleViewChange = useCallback((view: ViewPreset) => {
@@ -48,6 +60,11 @@ export default function ActionCenterContent({
   // Client-side filtering
   const filteredTasks = useMemo(() => {
     return tasks.filter(task => {
+      // SOP template filter (from URL param)
+      if (sopTemplateId && task.sop_template_id !== sopTemplateId) {
+        return false;
+      }
+
       // Status filter
       if (effectiveFilters.status.length > 0 && !effectiveFilters.status.includes(task.status || '')) {
         return false;
@@ -93,7 +110,7 @@ export default function ActionCenterContent({
 
       return true;
     });
-  }, [tasks, effectiveFilters]);
+  }, [tasks, effectiveFilters, sopTemplateId]);
 
   // Calculate counts for view tabs
   const viewCounts = useMemo(() => {
@@ -194,6 +211,30 @@ export default function ActionCenterContent({
           </Button>
         </div>
       </div>
+
+      {/* SOP Filter Banner */}
+      {sopTemplateId && (
+        <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border">
+          <div className="flex items-center gap-2">
+            <FileText className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm">
+              Showing tasks using SOP template
+            </span>
+            <Badge variant="secondary" className="text-xs">
+              {filteredTasks.length} task{filteredTasks.length !== 1 ? 's' : ''}
+            </Badge>
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={clearSopFilter}
+            className="h-7 px-2"
+          >
+            <X className="h-4 w-4 mr-1" />
+            Clear filter
+          </Button>
+        </div>
+      )}
 
       {/* View Tabs */}
       <ViewTabs
