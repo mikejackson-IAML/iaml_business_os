@@ -10,15 +10,18 @@ import type { WebIntelDashboardData } from '@/lib/api/web-intel-queries';
 import { DateRangeSelector, rangeToDays, type DateRange } from './components/date-range-selector';
 import { TrafficMetricsRow } from './components/traffic-metrics-row';
 import { TrafficSourcesChart } from './components/traffic-sources-chart';
+import { PriorityFilter, type KeywordPriorityFilter } from './components/priority-filter';
+import { KeywordsTable } from './components/keywords-table';
 
 interface WebIntelContentProps {
   data: WebIntelDashboardData;
   range: DateRange;
+  priorityFilter: KeywordPriorityFilter;
 }
 
-export function WebIntelContent({ data, range }: WebIntelContentProps) {
+export function WebIntelContent({ data, range, priorityFilter }: WebIntelContentProps) {
   const days = rangeToDays(range);
-  const { dailyTraffic, trafficSources, topPages, alerts, health } = data;
+  const { dailyTraffic, trafficSources, topPages, alerts, health, keywords, rankings } = data;
 
   return (
     <div className="p-6 lg:p-8 space-y-6">
@@ -142,17 +145,19 @@ export function WebIntelContent({ data, range }: WebIntelContentProps) {
           </div>
         </TabsContent>
 
-        <TabsContent value="rankings">
-          <Card>
-            <CardHeader>
-              <CardTitle>Keyword Rankings</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                Rankings tab content will be implemented in Phase 3.
-              </p>
-            </CardContent>
-          </Card>
+        <TabsContent value="rankings" className="space-y-4">
+          {/* Filter toolbar */}
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold">Keyword Rankings</h2>
+            <PriorityFilter currentPriority={priorityFilter} />
+          </div>
+
+          {/* Keywords table */}
+          <KeywordsTable
+            keywords={keywords}
+            rankings={rankings}
+            priorityFilter={priorityFilter}
+          />
         </TabsContent>
 
         <TabsContent value="technical">

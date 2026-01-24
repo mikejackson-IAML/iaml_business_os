@@ -4,8 +4,8 @@ import { useState, useMemo } from 'react';
 import { Card, CardContent } from '@/dashboard-kit/components/ui/card';
 import { TrackedKeyword, DailyRanking } from '@/lib/api/web-intel-queries';
 import { KeywordPriorityFilter } from './priority-filter';
-import { PositionChange } from './position-change';
 import { SortableHeader } from './sortable-header';
+import { KeywordRow } from './keyword-row';
 
 interface KeywordsTableProps {
   keywords: TrackedKeyword[];
@@ -17,14 +17,6 @@ interface KeywordsTableProps {
 type SortKey = 'priority' | 'keyword' | 'position' | 'change';
 type SortDir = 'asc' | 'desc';
 
-// Priority display config matching action-center/task-row.tsx pattern
-const priorityConfig = {
-  critical: { color: 'bg-red-500', text: 'Critical' },
-  high: { color: 'bg-orange-500', text: 'High' },
-  medium: { color: 'bg-yellow-500', text: 'Medium' },
-  low: { color: 'bg-blue-500', text: 'Low' },
-};
-
 // Priority sort order (critical = 0 is highest priority)
 const priorityOrder: Record<string, number> = {
   critical: 0,
@@ -34,10 +26,7 @@ const priorityOrder: Record<string, number> = {
 };
 
 interface KeywordWithRanking {
-  id: string;
-  keyword: string;
-  priority: 'critical' | 'high' | 'medium' | 'low';
-  targetUrl: string | null;
+  keyword: TrackedKeyword;
   currentPosition: number | null;
   change: number | null;
 }
@@ -45,6 +34,7 @@ interface KeywordWithRanking {
 /**
  * Main keywords ranking table with sorting and filtering.
  * Displays keyword, position, change, priority, and URL columns.
+ * Rows expand to show sparkline and SERP features.
  */
 export function KeywordsTable({
   keywords,
@@ -54,24 +44,25 @@ export function KeywordsTable({
 }: KeywordsTableProps) {
   const [sortBy, setSortBy] = useState<SortKey>('priority');
   const [sortDir, setSortDir] = useState<SortDir>('asc'); // asc for priority means critical first
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  // Group rankings by keywordId for quick lookup
+  const rankingsByKeyword = useMemo(() => {
+    const grouped = new Map<string, DailyRanking[]>();
+    for (const r of rankings) {
+      const existing = grouped.get(r.keywordId) || [];
+      existing.push(r);
+      grouped.set(r.keywordId, existing);
+    }
+    // Sort each group by date descending (most recent first)
+    for (const [, list] of grouped) {
+      list.sort((a, b) => new Date(b.collectedDate).getTime() - new Date(a.collectedDate).getTime());
+    }
+    return grouped;
+  }, [rankings]);
 
   // Join keywords with their most recent rankings and calculate changes
   const keywordsWithRankings = useMemo(() => {
-    // Group rankings by keywordId, sorted by date (most recent first)
-    const rankingsByKeyword = new Map<string, DailyRanking[]>();
-    for (const ranking of rankings) {
-      const existing = rankingsByKeyword.get(ranking.keywordId) || [];
-      existing.push(ranking);
-      rankingsByKeyword.set(ranking.keywordId, existing);
-    }
-
-    // Sort each keyword's rankings by date (most recent first)
-    rankingsByKeyword.forEach((keywordRankings, keywordId) => {
-      keywordRankings.sort((a, b) =>
-        new Date(b.collectedDate).getTime() - new Date(a.collectedDate).getTime()
-      );
-    });
-
     return keywords.map((kw): KeywordWithRanking => {
       const keywordRankings = rankingsByKeyword.get(kw.id) || [];
       const mostRecent = keywordRankings[0];
@@ -85,22 +76,19 @@ export function KeywordsTable({
       }
 
       return {
-        id: kw.id,
-        keyword: kw.keyword,
-        priority: kw.priority,
-        targetUrl: kw.targetUrl,
+        keyword: kw,
         currentPosition: mostRecent?.position ?? null,
         change,
       };
     });
-  }, [keywords, rankings]);
+  }, [keywords, rankingsByKeyword]);
 
   // Filter by priority
   const filteredKeywords = useMemo(() => {
     if (priorityFilter === 'all') {
       return keywordsWithRankings;
     }
-    return keywordsWithRankings.filter((kw) => kw.priority === priorityFilter);
+    return keywordsWithRankings.filter((kw) => kw.keyword.priority === priorityFilter);
   }, [keywordsWithRankings, priorityFilter]);
 
   // Sort keywords
@@ -112,7 +100,7 @@ export function KeywordsTable({
 
       switch (sortBy) {
         case 'keyword':
-          comparison = a.keyword.localeCompare(b.keyword);
+          comparison = a.keyword.keyword.localeCompare(b.keyword.keyword);
           break;
         case 'position':
           // Null positions sort to bottom (use 101 as max)
@@ -128,7 +116,7 @@ export function KeywordsTable({
           break;
         case 'priority':
         default:
-          comparison = priorityOrder[a.priority] - priorityOrder[b.priority];
+          comparison = priorityOrder[a.keyword.priority] - priorityOrder[b.keyword.priority];
           break;
       }
 
@@ -204,27 +192,29 @@ export function KeywordsTable({
         </div>
 
         {/* Data rows */}
-        {sortedKeywords.map((kw) => (
-          <div
-            key={kw.id}
-            className="grid grid-cols-[1fr_80px_80px_100px_200px] gap-4 px-6 py-3 border-b border-border last:border-0 hover:bg-muted/50 items-center"
-          >
-            <span className="font-medium truncate">{kw.keyword}</span>
-            <span className="text-sm">
-              {kw.currentPosition !== null ? kw.currentPosition : '—'}
-            </span>
-            <PositionChange change={kw.change} />
-            <div className="flex items-center gap-2">
-              <span
-                className={`w-2 h-2 rounded-full ${priorityConfig[kw.priority].color}`}
-              />
-              <span className="text-sm">{priorityConfig[kw.priority].text}</span>
-            </div>
-            <span className="text-sm text-muted-foreground truncate">
-              {kw.targetUrl ?? '—'}
-            </span>
-          </div>
-        ))}
+        {sortedKeywords.map((item) => {
+          const kwRankings = rankingsByKeyword.get(item.keyword.id) || [];
+          const rankingHistory = kwRankings.slice(0, 7).map((r) => ({
+            date: r.collectedDate.toISOString().split('T')[0],
+            position: r.position,
+          }));
+          const latestRanking = kwRankings[0] ?? null;
+
+          return (
+            <KeywordRow
+              key={item.keyword.id}
+              keyword={item.keyword}
+              currentPosition={item.currentPosition}
+              positionChange={item.change}
+              rankingHistory={rankingHistory}
+              latestRanking={latestRanking}
+              isExpanded={expandedId === item.keyword.id}
+              onToggleExpand={() =>
+                setExpandedId(expandedId === item.keyword.id ? null : item.keyword.id)
+              }
+            />
+          );
+        })}
 
         {/* Empty state */}
         {sortedKeywords.length === 0 && (

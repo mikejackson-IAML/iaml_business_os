@@ -3,6 +3,7 @@ import { WebIntelSkeleton } from './web-intel-skeleton';
 import { WebIntelContent } from './web-intel-content';
 import { getWebIntelDashboardData } from '@/lib/api/web-intel-queries';
 import { parseDateRange, rangeToDays, type DateRange } from './components/date-range-selector';
+import { parsePriorityFilter } from './components/priority-filter';
 
 export const metadata = {
   title: 'Web Intelligence | IAML Business OS',
@@ -16,22 +17,29 @@ export const revalidate = 3600;
 export const dynamic = 'force-dynamic';
 
 interface PageProps {
-  searchParams: Promise<{ range?: string }>;
+  searchParams: Promise<{ range?: string; priority?: string }>;
 }
 
-async function WebIntelDataLoader({ range }: { range: DateRange }) {
+async function WebIntelDataLoader({
+  range,
+  priorityFilter,
+}: {
+  range: DateRange;
+  priorityFilter: ReturnType<typeof parsePriorityFilter>;
+}) {
   const days = rangeToDays(range);
   const data = await getWebIntelDashboardData(days);
-  return <WebIntelContent data={data} range={range} />;
+  return <WebIntelContent data={data} range={range} priorityFilter={priorityFilter} />;
 }
 
 export default async function WebIntelDashboardPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const range = parseDateRange(params.range);
+  const priorityFilter = parsePriorityFilter(params.priority);
 
   return (
     <Suspense fallback={<WebIntelSkeleton />}>
-      <WebIntelDataLoader range={range} />
+      <WebIntelDataLoader range={range} priorityFilter={priorityFilter} />
     </Suspense>
   );
 }
