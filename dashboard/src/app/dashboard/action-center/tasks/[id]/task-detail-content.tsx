@@ -21,6 +21,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/dashboard-kit/compon
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/dashboard-kit/components/ui/tabs';
 import { FallingPattern } from '@/components/ui/falling-pattern';
 import type { TaskExtended, TaskComment, TaskActivity } from '@/lib/api/task-types';
+import type { SOPTemplate } from '@/lib/api/sop-types';
+import { ProgressiveInstructions, MasteryBadge } from '../../components';
 import { format, isToday, isTomorrow, isPast, formatDistanceToNow } from 'date-fns';
 
 // Components for task detail page
@@ -35,6 +37,48 @@ interface TaskDetailContentProps {
   task: TaskExtended;
   comments: TaskComment[];
   activity: TaskActivity[];
+  sop: SOPTemplate | null;
+  sopMastery: { mastery_level: number; mastery_tier: string };
+}
+
+/**
+ * Build variable substitution context from task data
+ * Variables not found in context will remain as {{variable_name}} in the output.
+ */
+function buildVariableContext(task: TaskExtended): Record<string, string> {
+  const context: Record<string, string> = {};
+
+  // Task-level variables
+  context.task_title = task.title;
+  context.task_id = task.id;
+
+  // Related entity variables (if exists)
+  if (task.related_entity_type && task.related_entity_id) {
+    context.entity_type = task.related_entity_type;
+    context.entity_id = task.related_entity_id;
+  }
+
+  // Common entity type mappings based on related_entity_type
+  if (task.related_entity_type === 'program_instance') {
+    // If we had denormalized entity data, we'd use it here
+    context.program_name = 'Program'; // Placeholder - would come from join
+  }
+
+  if (task.related_entity_type === 'campaign') {
+    context.campaign_name = 'Campaign'; // Placeholder - would come from join
+  }
+
+  // Department context
+  if (task.department) {
+    context.department = task.department;
+  }
+
+  // Assignee context
+  if (task.assignee_name) {
+    context.assignee_name = task.assignee_name;
+  }
+
+  return context;
 }
 
 // Config for priority display (reused from task-row)
@@ -93,7 +137,7 @@ function formatDueDate(date: string | null): React.ReactNode {
  * TaskDetailContent - Main content component for task detail page
  * Displays task information, actions, comments, and activity in a two-column layout.
  */
-export function TaskDetailContent({ task, comments, activity }: TaskDetailContentProps) {
+export function TaskDetailContent({ task, comments, activity, sop, sopMastery }: TaskDetailContentProps) {
   // State for action dialogs
   const [showCompleteDialog, setShowCompleteDialog] = useState(false);
   const [showDismissDialog, setShowDismissDialog] = useState(false);
@@ -222,6 +266,16 @@ export function TaskDetailContent({ task, comments, activity }: TaskDetailConten
                   <p className="text-muted-foreground whitespace-pre-wrap">{task.description}</p>
                 </CardContent>
               </Card>
+            )}
+
+            {/* Progressive Instructions (if task has SOP) */}
+            {sop && (
+              <ProgressiveInstructions
+                sop={sop}
+                masteryLevel={sopMastery.mastery_level}
+                variables={buildVariableContext(task)}
+                sopDetailUrl={`/dashboard/action-center/sops/${sop.id}`}
+              />
             )}
 
             {/* Recommendation Callout (for approval tasks with recommendations) */}
