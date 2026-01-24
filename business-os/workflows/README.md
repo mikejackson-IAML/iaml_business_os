@@ -161,3 +161,40 @@ This workflow is **optional**. The dashboard queries already call `refresh_alert
 
 - Supabase (RPC call to refresh_alerts function)
 - Slack (error alerts)
+
+---
+
+## Alert-to-Task Processor
+
+**n8n Workflow ID:** TBD (import pending)
+**Status:** Ready to Import
+**Trigger:** Webhook (POST)
+**URL:** `https://n8n.realtyamp.ai/webhook/alert-to-task`
+**Documentation:** [README-alert-to-task.md](README-alert-to-task.md)
+
+Automatically converts system alerts into trackable tasks in the Action Center. Critical issues become high-priority tasks due immediately; warnings become tasks due this week.
+
+### How It Works
+
+```
+Alert Webhook → Validate → Get Config → Record Occurrence
+                                              ↓
+                          Route by Severity → Check Duplicates
+                                              ↓
+                          AI Transform Title → Calculate Due Date
+                                              ↓
+                          Create Task → Return Response
+```
+
+### Key Features
+
+- **AI-powered titles** - Transforms alert titles into actionable task titles
+- **Smart deduplication** - Prevents duplicate tasks, escalates priority if needed
+- **Business hours** - Critical alerts after 6pm due next business day 9am
+- **Accumulation** - Info alerts create task after 3 occurrences in 24 hours
+
+### Services
+
+- Anthropic Claude (AI title transformation)
+- Supabase (task creation, deduplication, configuration)
+- Slack (error alerts)
