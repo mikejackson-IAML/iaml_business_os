@@ -79,3 +79,25 @@ export interface UpdateSOPRequest {
   is_active?: boolean;
   variables?: Record<string, { description: string; example: string }>;
 }
+
+// ==================== Mastery Types ====================
+
+export type MasteryTier = 'novice' | 'developing' | 'proficient' | 'expert';
+
+export interface SOPMastery {
+  mastery_level: number;
+  mastery_tier: MasteryTier;
+}
+
+// ==================== Usage Types ====================
+
+export interface TaskUsingSOP {
+  id: string;
+  title: string;
+  status: string;
+}
+
+export interface SOPUsageStats {
+  count: number;
+  tasks: TaskUsingSOP[];
+}
