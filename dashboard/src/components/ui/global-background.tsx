@@ -2,7 +2,7 @@
 
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
-import { CodeRain } from './code-rain';
+import { FallingPattern } from './falling-pattern';
 import { AuroraBackground } from './aurora-background';
 
 export function GlobalBackground() {
@@ -29,12 +29,12 @@ export function GlobalBackground() {
   }
 
   return (
-    <CodeRain
-      style="matrix"
-      color="hsl(189 100% 55%)"
-      opacity={0.7}
-      speed={0.8}
-      columnGap={18}
+    <FallingPattern
+      color="hsl(var(--accent-primary))"
+      backgroundColor="hsl(var(--background))"
+      duration={150}
+      blurIntensity="1em"
+      density={1}
       className="fixed inset-0 -z-10"
     />
   );
