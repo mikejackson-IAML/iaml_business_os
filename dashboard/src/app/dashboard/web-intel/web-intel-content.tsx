@@ -12,6 +12,7 @@ import { TrafficMetricsRow } from './components/traffic-metrics-row';
 import { TrafficSourcesChart } from './components/traffic-sources-chart';
 import { PriorityFilter, type KeywordPriorityFilter } from './components/priority-filter';
 import { KeywordsTable } from './components/keywords-table';
+import { CoreWebVitalsCard } from './components/core-web-vitals-card';
 
 interface WebIntelContentProps {
   data: WebIntelDashboardData;
@@ -21,7 +22,7 @@ interface WebIntelContentProps {
 
 export function WebIntelContent({ data, range, priorityFilter }: WebIntelContentProps) {
   const days = rangeToDays(range);
-  const { dailyTraffic, trafficSources, topPages, alerts, health, keywords, rankings } = data;
+  const { dailyTraffic, trafficSources, topPages, alerts, health, keywords, rankings, coreWebVitals } = data;
 
   return (
     <div className="p-6 lg:p-8 space-y-6">
@@ -160,17 +161,9 @@ export function WebIntelContent({ data, range, priorityFilter }: WebIntelContent
           />
         </TabsContent>
 
-        <TabsContent value="technical">
-          <Card>
-            <CardHeader>
-              <CardTitle>Technical SEO Health</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                Technical health tab will be implemented in Phase 4.
-              </p>
-            </CardContent>
-          </Card>
+        <TabsContent value="technical" className="space-y-6">
+          {/* Core Web Vitals Card - temporary integration for testing */}
+          <CoreWebVitalsCard coreWebVitals={coreWebVitals} />
         </TabsContent>
 
         <TabsContent value="content">
