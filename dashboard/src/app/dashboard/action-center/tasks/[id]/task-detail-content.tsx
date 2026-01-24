@@ -385,13 +385,28 @@ export function TaskDetailContent({ task, comments, activity, sop, sopMastery }:
                 </div>
 
                 {/* SOP */}
-                {task.sop_name && (
-                  <div>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">SOP</p>
-                    <p className="text-sm">{task.sop_name}</p>
+                {task.sop_name && sop && (
+                  <div className="space-y-2">
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide">SOP</p>
+                    <Link
+                      href={`/dashboard/action-center/sops/${task.sop_template_id}`}
+                      className="text-primary hover:underline flex items-center gap-1"
+                    >
+                      {task.sop_name}
+                      <ExternalLink className="h-3 w-3" />
+                    </Link>
                     {task.sop_category && (
-                      <p className="text-xs text-muted-foreground">{task.sop_category}</p>
+                      <p className="text-sm text-muted-foreground">{task.sop_category}</p>
                     )}
+                    <div className="flex items-center gap-2">
+                      <MasteryBadge
+                        level={sopMastery.mastery_level}
+                        tier={sopMastery.mastery_tier as 'novice' | 'developing' | 'proficient' | 'expert'}
+                      />
+                      <span className="text-xs text-muted-foreground">
+                        Your mastery
+                      </span>
+                    </div>
                   </div>
                 )}
 
