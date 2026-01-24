@@ -15,6 +15,10 @@ export { WorkflowTable } from "./workflow-table";
 export { WorkflowRow, workflowStatusConfig } from "./workflow-row";
 export { WorkflowProgress } from "./workflow-progress";
 
+// Workflow Detail
+export { WorkflowTaskList } from "./workflow-task-list";
+export { WorkflowTaskRow } from "./workflow-task-row";
+
 // Task Detail
 export { TaskMetadataSidebar } from "./task-metadata-sidebar";
 export { TaskComments } from "./task-comments";
