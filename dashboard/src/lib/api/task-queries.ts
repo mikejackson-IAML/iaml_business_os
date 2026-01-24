@@ -53,6 +53,10 @@ export async function listTasks(params: TaskListParams): Promise<ListTasksResult
     query = query.eq('workflow_id', params.workflow_id);
   }
 
+  if (params.no_workflow === true) {
+    query = query.is('workflow_id', null);
+  }
+
   if (params.is_blocked !== undefined) {
     query = query.eq('is_blocked', params.is_blocked);
   }

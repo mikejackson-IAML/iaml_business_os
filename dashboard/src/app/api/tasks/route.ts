@@ -79,6 +79,9 @@ export async function GET(request: NextRequest) {
     const workflowId = searchParams.get('workflow_id');
     if (workflowId) params.workflow_id = workflowId;
 
+    const noWorkflow = searchParams.get('no_workflow');
+    if (noWorkflow === 'true') params.no_workflow = true;
+
     const isBlocked = searchParams.get('is_blocked');
     if (isBlocked !== null) params.is_blocked = isBlocked === 'true';
 

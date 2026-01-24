@@ -98,6 +98,7 @@ export interface TaskListFilters {
   source?: TaskSource[];
   due_category?: DueCategory[];
   workflow_id?: string;
+  no_workflow?: boolean;
   is_blocked?: boolean;
   search?: string;
 }
