@@ -828,6 +828,170 @@ export async function getWebIntelAlerts(unresolvedOnly: boolean = true): Promise
   return sorted || [];
 }
 
+/**
+ * Fetch content decay with joined inventory data (URL, title, word_count)
+ */
+export async function getContentDecayWithInventory(
+  limit: number = 5
+): Promise<ContentDecayWithInventory[]> {
+  const supabase = getServerClient();
+
+  const { data, error } = await (
+    supabase.from('web_intel.content_decay') as any
+  )
+    .select(
+      `
+      *,
+      content_inventory:content_id (
+        url,
+        title,
+        word_count
+      )
+    `
+    )
+    .eq('is_addressed', false)
+    .order('decay_percentage', { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    console.error('Error fetching content decay with inventory:', error);
+    return [];
+  }
+
+  // Transform and flatten
+  return (data || []).map((item: any) => ({
+    id: item.id,
+    contentId: item.content_id,
+    detectedDate: new Date(item.detected_date),
+    baselineSessions: item.baseline_sessions,
+    currentSessions: item.current_sessions,
+    decayPercentage: item.decay_percentage ? Number(item.decay_percentage) : null,
+    severity: item.severity,
+    isAddressed: item.is_addressed,
+    url: item.content_inventory?.url || '',
+    title: item.content_inventory?.title || null,
+    wordCount: item.content_inventory?.word_count || null,
+  }));
+}
+
+/**
+ * Fetch thin content with joined inventory data (URL, title)
+ */
+export async function getThinContentWithInventory(
+  limit: number = 5
+): Promise<ThinContentWithInventory[]> {
+  const supabase = getServerClient();
+
+  const { data, error } = await (
+    supabase.from('web_intel.thin_content') as any
+  )
+    .select(
+      `
+      *,
+      content_inventory:content_id (
+        url,
+        title
+      )
+    `
+    )
+    .eq('is_addressed', false)
+    .order('bounce_rate', { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    console.error('Error fetching thin content with inventory:', error);
+    return [];
+  }
+
+  // Transform and flatten
+  return (data || []).map((item: any) => ({
+    id: item.id,
+    contentId: item.content_id,
+    detectedDate: new Date(item.detected_date),
+    wordCount: item.word_count,
+    avgTimeOnPage: item.avg_time_on_page ? Number(item.avg_time_on_page) : null,
+    bounceRate: item.bounce_rate ? Number(item.bounce_rate) : null,
+    reason: item.reason,
+    recommendation: item.recommendation,
+    isAddressed: item.is_addressed,
+    url: item.content_inventory?.url || '',
+    title: item.content_inventory?.title || null,
+  }));
+}
+
+/**
+ * Fetch content summary stats (total indexed pages, average word count)
+ */
+export async function getContentSummary(): Promise<ContentSummary> {
+  const supabase = getServerClient();
+
+  const { data, error } = await (
+    supabase.from('web_intel.content_inventory') as any
+  )
+    .select('word_count')
+    .eq('status', 'active');
+
+  if (error) {
+    console.error('Error fetching content summary:', error);
+    return { totalIndexed: 0, avgWordCount: 0 };
+  }
+
+  const wordCounts = (data || [])
+    .map((d: any) => d.word_count)
+    .filter((wc: number | null): wc is number => wc !== null);
+
+  return {
+    totalIndexed: data?.length || 0,
+    avgWordCount:
+      wordCounts.length > 0
+        ? Math.round(wordCounts.reduce((a: number, b: number) => a + b, 0) / wordCounts.length)
+        : 0,
+  };
+}
+
+/**
+ * Fetch active competitors
+ */
+export async function getCompetitors(): Promise<Competitor[]> {
+  const supabase = getServerClient();
+
+  const { data, error } = await (supabase.from('web_intel.competitors') as any)
+    .select('*')
+    .eq('is_active', true)
+    .order('domain', { ascending: true });
+
+  if (error) {
+    console.error('Error fetching competitors:', error);
+    return [];
+  }
+
+  return transformCompetitors(data || []);
+}
+
+/**
+ * Fetch latest SERP share data
+ */
+export async function getSerpShare(): Promise<SerpShare | null> {
+  const supabase = getServerClient();
+
+  const { data, error } = await (supabase.from('web_intel.serp_share') as any)
+    .select('*')
+    .order('collected_date', { ascending: false })
+    .limit(1)
+    .single();
+
+  if (error) {
+    // No data yet is expected
+    if (error.code === 'PGRST116') {
+      return null;
+    }
+    console.error('Error fetching SERP share:', error);
+    return null;
+  }
+
+  return transformSerpShare(data);
+}
+
 // ============================================
 // Transform Functions (snake_case to camelCase)
 // ============================================
