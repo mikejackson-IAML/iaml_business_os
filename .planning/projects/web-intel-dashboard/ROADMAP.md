@@ -174,7 +174,13 @@ Plans:
 5. Shared keywords table shows our position vs competitor positions
 6. SERP share chart shows our visibility % vs competitors
 
-**Plans:** 3-4 plans
+**Plans:** 4 plans
+
+Plans:
+- [ ] 06-01-PLAN.md — Query functions for content and competitor data
+- [ ] 06-02-PLAN.md — ContentHealthSection (decay + thin content lists)
+- [ ] 06-03-PLAN.md — CompetitorsSection (list + SERP share chart)
+- [ ] 06-04-PLAN.md — Content tab integration
 
 ---
 
@@ -204,9 +210,9 @@ Plans:
 | 3. Rankings Tracker | 5/5 | Complete | 2026-01-24 |
 | 4. Technical Health | 4/4 | Complete | 2026-01-24 |
 | 5. Alerts System | 3/3 | Complete | 2026-01-24 |
-| 6. Content & Competitors | 0/4 | Not started | - |
+| 6. Content & Competitors | 0/4 | Planned | - |
 | 7. AI Recommendations | 0/2 | Not started | - |
 
 ---
 *Roadmap created: 2026-01-23*
-*Last updated: 2026-01-24 — Phase 5 complete*
+*Last updated: 2026-01-24 — Phase 6 planned*
