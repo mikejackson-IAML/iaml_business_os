@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { X, XCircle } from 'lucide-react';
+import { X, XCircle, AlertTriangle } from 'lucide-react';
 import { Button } from '@/dashboard-kit/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/dashboard-kit/components/ui/card';
 import { dismissTaskAction } from '../actions';
@@ -16,15 +16,20 @@ const dismissReasons = [
 interface DismissTaskDialogProps {
   taskId: string;
   taskTitle: string;
+  blockingCount?: number;
   isOpen: boolean;
   onClose: () => void;
+  /** Called when task has dependents and enhanced dialog should be shown */
+  onShowDependentsDialog?: () => void;
 }
 
 export function DismissTaskDialog({
   taskId,
   taskTitle,
+  blockingCount = 0,
   isOpen,
   onClose,
+  onShowDependentsDialog,
 }: DismissTaskDialogProps) {
   const [isPending, startTransition] = useTransition();
   const [reason, setReason] = useState<string>('');
@@ -62,6 +67,9 @@ export function DismissTaskDialog({
     onClose();
   };
 
+  // If task has blocking dependents and callback provided, show redirect prompt
+  const hasDependents = blockingCount > 0 && onShowDependentsDialog;
+
   if (!isOpen) return null;
 
   return (
@@ -95,6 +103,34 @@ export function DismissTaskDialog({
               <p className="text-sm text-muted-foreground">Task</p>
               <p className="font-medium">{taskTitle}</p>
             </div>
+
+            {/* Warning for tasks with dependents - soft enforcement (DEP-03) */}
+            {hasDependents && (
+              <div className="rounded-lg border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 p-4">
+                <div className="flex items-start gap-3">
+                  <AlertTriangle className="h-5 w-5 text-amber-500 flex-shrink-0 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="font-medium text-amber-700 dark:text-amber-300">
+                      This task has {blockingCount} dependent task{blockingCount !== 1 ? 's' : ''}
+                    </p>
+                    <p className="text-sm text-amber-600 dark:text-amber-400 mt-1">
+                      You can still dismiss this task, or use the enhanced dialog to handle dependents.
+                    </p>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        handleClose();
+                        onShowDependentsDialog?.();
+                      }}
+                      className="mt-3"
+                    >
+                      Handle Dependents
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Reason Selection (Required) */}
             <div>
