@@ -5,7 +5,7 @@
 See: `.planning/projects/web-intel-dashboard/PROJECT.md` (updated 2026-01-23)
 
 **Core value:** See website health and SEO performance at a glance
-**Current focus:** Phase 4 - Technical Health (COMPLETE)
+**Current focus:** Phase 5 - Alerts System (ready to start)
 
 ## Current State
 
@@ -156,7 +156,7 @@ None
 
 - **Last session:** 2026-01-24T16:44:42Z
 - **Stopped at:** Completed 04-04-PLAN.md (Phase 4 complete)
-- **Next step:** Phase 5 - Content Performance
+- **Next step:** `/gsd:discuss-phase 5 --project web-intel-dashboard` or `/gsd:plan-phase 5 --project web-intel-dashboard`
 
 ## Notes
 

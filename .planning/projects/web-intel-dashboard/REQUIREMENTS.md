@@ -34,19 +34,19 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Core Web Vitals
 
-- [ ] **CWV-01**: User can view LCP score with good/needs-improvement/poor status
-- [ ] **CWV-02**: User can view CLS score with status indicator
-- [ ] **CWV-03**: User can view INP score with status indicator
-- [ ] **CWV-04**: User can toggle between mobile and desktop vitals
-- [ ] **CWV-05**: User can see overall Core Web Vitals pass/fail status
+- [x] **CWV-01**: User can view LCP score with good/needs-improvement/poor status
+- [x] **CWV-02**: User can view CLS score with status indicator
+- [x] **CWV-03**: User can view INP score with status indicator
+- [x] **CWV-04**: User can toggle between mobile and desktop vitals
+- [x] **CWV-05**: User can see overall Core Web Vitals pass/fail status
 
 ### GSC Performance
 
-- [ ] **GSC-01**: User can view total clicks for period
-- [ ] **GSC-02**: User can view total impressions for period
-- [ ] **GSC-03**: User can view average CTR with benchmark comparison
-- [ ] **GSC-04**: User can view average position with trend
-- [ ] **GSC-05**: User can see top queries by clicks (top 10)
+- [x] **GSC-01**: User can view total clicks for period
+- [x] **GSC-02**: User can view total impressions for period
+- [x] **GSC-03**: User can view average CTR with benchmark comparison
+- [x] **GSC-04**: User can view average position with trend
+- [x] **GSC-05**: User can see top queries by clicks (top 10)
 
 ### Alerts
 
@@ -131,16 +131,16 @@ Which phases cover which requirements. Updated during roadmap creation.
 | RANK-04 | Phase 3 | Complete |
 | RANK-05 | Phase 3 | Complete |
 | RANK-06 | Phase 3 | Complete |
-| CWV-01 | Phase 4 | Pending |
-| CWV-02 | Phase 4 | Pending |
-| CWV-03 | Phase 4 | Pending |
-| CWV-04 | Phase 4 | Pending |
-| CWV-05 | Phase 4 | Pending |
-| GSC-01 | Phase 4 | Pending |
-| GSC-02 | Phase 4 | Pending |
-| GSC-03 | Phase 4 | Pending |
-| GSC-04 | Phase 4 | Pending |
-| GSC-05 | Phase 4 | Pending |
+| CWV-01 | Phase 4 | Complete |
+| CWV-02 | Phase 4 | Complete |
+| CWV-03 | Phase 4 | Complete |
+| CWV-04 | Phase 4 | Complete |
+| CWV-05 | Phase 4 | Complete |
+| GSC-01 | Phase 4 | Complete |
+| GSC-02 | Phase 4 | Complete |
+| GSC-03 | Phase 4 | Complete |
+| GSC-04 | Phase 4 | Complete |
+| GSC-05 | Phase 4 | Complete |
 | ALERT-01 | Phase 5 | Pending |
 | ALERT-02 | Phase 5 | Pending |
 | ALERT-03 | Phase 5 | Pending |
@@ -163,4 +163,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-23*
-*Last updated: 2026-01-24 after Phase 3 completion*
+*Last updated: 2026-01-24 after Phase 4 completion*
