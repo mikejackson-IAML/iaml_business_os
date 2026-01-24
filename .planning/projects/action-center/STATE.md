@@ -5,14 +5,14 @@
 See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 **Core value:** Nothing falls through the cracks. Every action item flows to one place.
-**Current focus:** Phase 6 - SOP Templates (In Progress)
+**Current focus:** Phase 7 Complete - Ready for Phase 8
 
 ## Current Status
 
 **Milestone:** v1.0 Action Center
-**Phase:** 6 of 12 (SOP Templates) - COMPLETE
+**Phase:** 7 of 12 (Workflows & Dependencies) - COMPLETE
 **Plan:** 10/10 complete
-**Status:** Phase 6 Complete - Ready for Phase 7
+**Status:** Phase 7 Complete - Ready for Phase 8
 
 ## Progress Overview
 
@@ -24,7 +24,7 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 | 4 | Task UI - List | COMPLETE |
 | 5 | Task UI - Detail & Create | COMPLETE |
 | 6 | SOP Templates | COMPLETE |
-| 7 | Workflows & Dependencies | Not Started |
+| 7 | Workflows & Dependencies | COMPLETE |
 | 8 | Alert Integration | Not Started |
 | 9 | Workflow Templates & Rules | Not Started |
 | 10 | Dashboard & Notifications | Not Started |
@@ -33,8 +33,8 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 ## Context for Next Session
 
-**Last action:** Completed Plan 06-10 (Task Detail Integration) - Phase 6 Complete
-**Next action:** Start Phase 7 (Workflows & Dependencies)
+**Last action:** Completed Phase 7 (Workflows & Dependencies) - 10/10 plans executed
+**Next action:** Start Phase 8 (Alert Integration)
 
 ## Key Decisions Made
 
@@ -52,237 +52,91 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 - [05-01]: Extended UpdateTaskRequest to support approval_outcome and approval_modifications fields
 - [05-03]: Inline placeholder rendering for comments/activity/dialogs - to be replaced by dedicated components in later plans
 - [05-06]: Enter key submits comment form (Shift+Enter for new line), system comments rendered at opacity-70
+- [07-01]: Decision tasks use `source: 'workflow'` to indicate workflow origin
+- [07-02]: getTasksBlocking uses Supabase `contains()` filter on depends_on array
+- [07-02]: TaskDependencies interface with `blockedBy` and `blocking` arrays
+- [07-04]: Workflow status colors: gray (not_started), blue (in_progress), amber (blocked), green (completed)
+- [07-07]: Kahn's algorithm for topological sort of tasks by dependencies
+- [07-07]: Dependency depth capped at 2 levels for visual hierarchy
+- [07-08]: TaskDependencies component uses lazy loading via server action
+- [07-09]: `no_workflow` filter shows tasks not already in a workflow
+- [07-10]: Soft enforcement: DismissTaskDialog shows warning but allows proceeding (DEP-03)
+- [07-10]: Dismiss with dependents can create decision task for cascade handling (DEP-06)
 
 ## Blockers
 
 None.
 
-## Phase 4 Summary
+## Phase 7 Summary
 
-Phase 4 (Task UI - List) complete:
+Phase 7 (Workflows & Dependencies) complete:
 
 | Plan | Name | Wave | Status |
 |------|------|------|--------|
-| 04-01 | Page Foundation and Skeleton | 1 | COMPLETE |
-| 04-02 | View Tabs Component | 1 | COMPLETE |
-| 04-03 | Filter Toolbar Component | 1 | COMPLETE |
-| 04-04 | Task Table and Row Components | 2 | COMPLETE |
-| 04-05 | Content Integration and State Management | 3 | COMPLETE |
+| 07-01 | Workflow Server Actions | 1 | COMPLETE |
+| 07-02 | Dependency Query Functions | 1 | COMPLETE |
+| 07-03 | Workflow List Page Foundation | 2 | COMPLETE |
+| 07-04 | Workflow Table and Row Components | 3 | COMPLETE |
+| 07-05 | Workflow Detail Page Skeleton | 3 | COMPLETE |
+| 07-06 | Workflow Header with Progress | 3 | COMPLETE |
+| 07-07 | Workflow Task List with Dependencies | 4 | COMPLETE |
+| 07-08 | Enhanced Dependency Section | 4 | COMPLETE |
+| 07-09 | Add Task to Workflow Modal | 5 | COMPLETE |
+| 07-10 | Dismiss with Dependents Dialog | 5 | COMPLETE |
 
-### Files Created (Phase 4)
+### Files Created (Phase 7)
 
-**Page Structure:**
-- `dashboard/src/app/dashboard/action-center/page.tsx`
-- `dashboard/src/app/dashboard/action-center/action-center-skeleton.tsx`
-- `dashboard/src/app/dashboard/action-center/action-center-data-loader.tsx`
-- `dashboard/src/app/dashboard/action-center/action-center-content.tsx`
+**Server Actions:**
+- `dashboard/src/app/dashboard/action-center/workflow-actions.ts`
+
+**API Queries:**
+- `dashboard/src/lib/api/task-queries.ts` (updated with dependency functions)
+
+**Workflow List Page:**
+- `dashboard/src/app/dashboard/action-center/workflows/page.tsx`
+- `dashboard/src/app/dashboard/action-center/workflows/workflow-list-skeleton.tsx`
+- `dashboard/src/app/dashboard/action-center/workflows/workflow-list-data-loader.tsx`
+- `dashboard/src/app/dashboard/action-center/workflows/workflow-list-content.tsx`
+
+**Workflow Detail Page:**
+- `dashboard/src/app/dashboard/action-center/workflows/[id]/page.tsx`
+- `dashboard/src/app/dashboard/action-center/workflows/[id]/workflow-detail-skeleton.tsx`
+- `dashboard/src/app/dashboard/action-center/workflows/[id]/workflow-detail-content.tsx`
+- `dashboard/src/app/dashboard/action-center/workflows/[id]/not-found.tsx`
 
 **Components:**
-- `dashboard/src/app/dashboard/action-center/components/view-tabs.tsx`
-- `dashboard/src/app/dashboard/action-center/components/task-filters.tsx`
-- `dashboard/src/app/dashboard/action-center/components/task-table.tsx`
-- `dashboard/src/app/dashboard/action-center/components/task-row.tsx`
-- `dashboard/src/app/dashboard/action-center/components/task-row-expanded.tsx`
+- `dashboard/src/app/dashboard/action-center/components/workflow-table.tsx`
+- `dashboard/src/app/dashboard/action-center/components/workflow-row.tsx`
+- `dashboard/src/app/dashboard/action-center/components/workflow-progress.tsx`
+- `dashboard/src/app/dashboard/action-center/components/workflow-task-list.tsx`
+- `dashboard/src/app/dashboard/action-center/components/workflow-task-row.tsx`
+- `dashboard/src/app/dashboard/action-center/components/task-dependencies.tsx`
+- `dashboard/src/app/dashboard/action-center/components/add-task-to-workflow-modal.tsx`
+- `dashboard/src/app/dashboard/action-center/components/dismiss-with-dependents-dialog.tsx`
 
-**Dashboard Update:**
-- `dashboard/src/app/dashboard/dashboard-content.tsx` (added Action Center link)
+**Modified:**
+- `dashboard/src/app/dashboard/action-center/components/dismiss-task-dialog.tsx` (soft enforcement warning)
+- `dashboard/src/app/dashboard/action-center/tasks/[id]/task-detail-content.tsx` (dependency section)
+- `dashboard/src/app/dashboard/action-center/components/index.ts` (exports)
 
-### Requirements Covered (Phase 4)
+### Requirements Covered (Phase 7)
 
-- UI-01: Task list page with table/list view
-- UI-02: Filter by status
-- UI-03: Filter by priority
-- UI-04: Filter by due date
-- UI-05: Filter by department
-- UI-06: Filter by task type
-- UI-07: Filter by source
-- UI-08: Search by title and description
-- UI-09: Saved view presets (All, My Focus, Overdue, Waiting, Approvals, AI Suggested)
-- UI-10: Task row shows priority icon, title, due date, department, source indicator
+- WF-01: Workflow list page shows all workflows
+- WF-02: Workflow detail shows tasks in dependency order
+- WF-03: Progress indicator shows X of Y complete
+- WF-04: Blocked tasks are highlighted
+- WF-05: Can add task to workflow
+- WF-06: Workflow status computed correctly
+- DEP-01: Tasks can have multiple dependencies
+- DEP-02: Dependent tasks show blocked indicator
+- DEP-03: Soft enforcement with warning works
+- DEP-04: Blocked By section shows task links
+- DEP-05: Blocking section shows waiting tasks
+- DEP-06: Dismissing task with dependents creates decision task
 
 ## Known Technical Debt
 
 - **Supabase Types:** The generated types.ts doesn't include action_center schema. TypeScript shows type errors but code works at runtime. Should regenerate types to include action_center schema.
 
-## Files Created (Phase 5)
-
-**Task Detail Page:**
-- `dashboard/src/app/dashboard/action-center/tasks/[id]/page.tsx`
-- `dashboard/src/app/dashboard/action-center/tasks/[id]/task-detail-skeleton.tsx`
-- `dashboard/src/app/dashboard/action-center/tasks/[id]/task-detail-content.tsx`
-
-**Server Actions:**
-- `dashboard/src/app/dashboard/action-center/actions.ts`
-
-**Dialog Components:**
-- `dashboard/src/app/dashboard/action-center/components/complete-task-dialog.tsx`
-- `dashboard/src/app/dashboard/action-center/components/dismiss-task-dialog.tsx`
-
-**Comment Components:**
-- `dashboard/src/app/dashboard/action-center/components/task-comments.tsx`
-
-**Activity Components:**
-- `dashboard/src/app/dashboard/action-center/components/task-activity.tsx`
-
-**Create Task Components:**
-- `dashboard/src/app/dashboard/action-center/components/create-task-modal.tsx`
-
-**Approval Components:**
-- `dashboard/src/app/dashboard/action-center/components/approval-actions.tsx`
-
-**Workflow Components:**
-- `dashboard/src/app/dashboard/action-center/components/workflow-context.tsx`
-
-## Phase 5 Summary
-
-Phase 5 (Task UI - Detail & Create) complete:
-
-| Plan | Name | Wave | Status |
-|------|------|------|--------|
-| 05-01 | Server Actions | 1 | COMPLETE |
-| 05-02 | Detail Page Route with Skeleton | 1 | COMPLETE |
-| 05-03 | Task Detail Content | 2 | COMPLETE |
-| 05-04 | Metadata Sidebar | 2 | COMPLETE |
-| 05-05 | Complete and Dismiss Dialogs | 3 | COMPLETE |
-| 05-06 | Comments Tab | 4 | COMPLETE |
-| 05-07 | Activity Tab | 4 | COMPLETE |
-| 05-08 | Create Task Modal | 5 | COMPLETE |
-| 05-09 | Approval Task UI | 6 | COMPLETE |
-| 05-10 | Workflow Context Component | 6 | COMPLETE |
-| 05-11 | Final Integration | 7 | COMPLETE |
-
-### Requirements Covered (Phase 5)
-
-- UI-11: Task detail page with header section
-- UI-12: Task detail page with main content
-- UI-13: Task detail page with sidebar
-- UI-14: Comment thread with add comment
-- UI-15: Activity timeline
-- UI-16: Complete/Dismiss dialogs with notes
-- UI-17: Dependencies section (blocked by / blocking)
-- UI-18: Approval actions (approve, modify, reject)
-- UI-19: Workflow context display
-- UI-20: Create task modal
-
-## Phase 6 Progress
-
-| Plan | Name | Wave | Status |
-|------|------|------|--------|
-| 06-01 | SOP Server Actions | 1 | COMPLETE |
-| 06-02 | Progressive Instructions Component | 1 | COMPLETE |
-| 06-03 | SOP List Page Foundation | 2 | COMPLETE |
-| 06-04 | SOP Category Group and Row Components | 2 | COMPLETE |
-| 06-05 | SOP Detail Page Skeleton | 3 | COMPLETE |
-| 06-06 | Step Editor Component | 4 | COMPLETE |
-| 06-07 | Step List with Reordering | 4 | COMPLETE |
-| 06-08 | SOP Edit Mode | 5 | COMPLETE |
-| 06-09 | Mastery Preview and Usage Stats | 5 | COMPLETE |
-| 06-10 | Task Detail Integration | 6 | COMPLETE |
-
-### Files Created (Phase 6)
-
-**Server Actions:**
-- `dashboard/src/app/dashboard/action-center/sop-actions.ts`
-
-**API Types:**
-- `dashboard/src/lib/api/sop-types.ts` (updated with mastery and usage types)
-
-**API Queries:**
-- `dashboard/src/lib/api/sop-queries.ts` (updated with mastery and usage functions)
-
-**Components (06-02):**
-- `dashboard/src/app/dashboard/action-center/components/mastery-badge.tsx`
-- `dashboard/src/app/dashboard/action-center/components/progressive-instructions.tsx`
-- `dashboard/src/app/dashboard/action-center/components/index.ts` (barrel export)
-
-**SOP List Page (06-03):**
-- `dashboard/src/app/dashboard/action-center/sops/page.tsx`
-- `dashboard/src/app/dashboard/action-center/sops/sop-list-skeleton.tsx`
-- `dashboard/src/app/dashboard/action-center/sops/sop-list-data-loader.tsx`
-- `dashboard/src/app/dashboard/action-center/sops/sop-list-content.tsx`
-
-**Components (06-04):**
-- `dashboard/src/app/dashboard/action-center/components/sop-category-group.tsx`
-- `dashboard/src/app/dashboard/action-center/components/sop-row.tsx`
-
-**Modified (06-04):**
-- `dashboard/src/app/dashboard/action-center/action-center-content.tsx` (SOP filter support)
-- `dashboard/src/app/dashboard/action-center/components/index.ts` (added exports)
-
-**SOP Detail Page (06-05):**
-- `dashboard/src/app/dashboard/action-center/sops/[id]/page.tsx`
-- `dashboard/src/app/dashboard/action-center/sops/[id]/sop-detail-skeleton.tsx`
-- `dashboard/src/app/dashboard/action-center/sops/[id]/sop-detail-content.tsx`
-- `dashboard/src/app/dashboard/action-center/sops/[id]/not-found.tsx`
-
-**Step Components (06-06):**
-- `dashboard/src/app/dashboard/action-center/components/sop-step-editor.tsx`
-- `dashboard/src/app/dashboard/action-center/components/sop-step-display.tsx`
-
-**Modified (06-06):**
-- `dashboard/src/app/dashboard/action-center/components/index.ts` (added exports)
-
-**Step List Components (06-07):**
-- `dashboard/src/app/dashboard/action-center/components/sop-step-list.tsx`
-- `dashboard/src/app/dashboard/action-center/components/sortable-step.tsx`
-
-**Modified (06-07):**
-- `dashboard/package.json` (added @dnd-kit/core, @dnd-kit/sortable, @dnd-kit/utilities)
-- `dashboard/src/app/dashboard/action-center/components/index.ts` (added exports)
-
-**Edit Form Component (06-08):**
-- `dashboard/src/app/dashboard/action-center/components/sop-edit-form.tsx`
-
-**Modified (06-08):**
-- `dashboard/src/app/dashboard/action-center/sops/[id]/sop-detail-content.tsx` (integrated SOPEditForm)
-- `dashboard/src/app/dashboard/action-center/components/index.ts` (added exports)
-
-**Preview/Usage Components (06-09):**
-- `dashboard/src/app/dashboard/action-center/components/sop-preview-panel.tsx`
-- `dashboard/src/app/dashboard/action-center/components/sop-usage-stats.tsx`
-
-**Modified (06-09):**
-- `dashboard/src/app/dashboard/action-center/sops/[id]/sop-detail-content.tsx` (integrated preview panel and usage stats)
-- `dashboard/src/app/dashboard/action-center/components/index.ts` (added exports)
-
-**Modified (06-10):**
-- `dashboard/src/app/dashboard/action-center/tasks/[id]/page.tsx` (SOP and mastery fetching)
-- `dashboard/src/app/dashboard/action-center/tasks/[id]/task-detail-content.tsx` (progressive instructions, SOP sidebar link, mastery badge)
-
-## Phase 6 Summary
-
-Phase 6 (SOP Templates) complete:
-
-| Plan | Name | Wave | Status |
-|------|------|------|--------|
-| 06-01 | SOP Server Actions | 1 | COMPLETE |
-| 06-02 | Progressive Instructions Component | 1 | COMPLETE |
-| 06-03 | SOP List Page Foundation | 2 | COMPLETE |
-| 06-04 | SOP Category Group and Row Components | 2 | COMPLETE |
-| 06-05 | SOP Detail Page Skeleton | 3 | COMPLETE |
-| 06-06 | Step Editor Component | 4 | COMPLETE |
-| 06-07 | Step List with Reordering | 4 | COMPLETE |
-| 06-08 | SOP Edit Mode | 5 | COMPLETE |
-| 06-09 | Mastery Preview and Usage Stats | 5 | COMPLETE |
-| 06-10 | Task Detail Integration | 6 | COMPLETE |
-
-### Requirements Covered (Phase 6)
-
-- SOP-01: SOP list page with category grouping
-- SOP-02: SOP detail page with step display
-- SOP-03: SOP edit mode with step reordering (drag-and-drop)
-- SOP-04: SOP step editor with all fields
-- PROG-01: Progressive instructions in task detail
-- PROG-02: Novice shows full step-by-step checklist
-- PROG-03: Developing shows condensed steps
-- PROG-04: Proficient shows summary + link
-- PROG-05: Expert shows minimal acknowledgment
-- PROG-06: Show more/less toggle
-- PROG-07: Mastery auto-increment (verified)
-- PROG-08: Variable substitution from task context
-- Mastery badge display in task detail sidebar
-- Mastery preview slider in SOP detail page
-- SOP usage statistics display
-
 ---
-*Last updated: 2026-01-24 after Phase 6 verification passed*
+*Last updated: 2026-01-24 after Phase 7 verification passed*

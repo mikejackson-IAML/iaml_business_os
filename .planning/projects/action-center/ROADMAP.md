@@ -225,7 +225,19 @@ Plans:
 9. Soft enforcement with warning works
 10. Dismissing task with dependents creates decision task
 
-**Plans:** TBD
+**Plans:** 10 plans in 5 waves
+
+Plans:
+- [x] 07-01-PLAN.md — Workflow server actions (Wave 1)
+- [x] 07-02-PLAN.md — Dependency query functions (Wave 1)
+- [x] 07-03-PLAN.md — Workflow list page foundation (Wave 2)
+- [x] 07-04-PLAN.md — Workflow table and row components (Wave 3)
+- [x] 07-05-PLAN.md — Workflow detail page skeleton (Wave 3)
+- [x] 07-06-PLAN.md — Workflow header with progress (Wave 3)
+- [x] 07-07-PLAN.md — Workflow task list with dependencies (Wave 4)
+- [x] 07-08-PLAN.md — Enhanced dependency section (Wave 4)
+- [x] 07-09-PLAN.md — Add task to workflow modal (Wave 5)
+- [x] 07-10-PLAN.md — Dismiss with dependents dialog (Wave 5)
 
 ---
 
@@ -331,7 +343,7 @@ Plans:
 | 4. Task UI - List | 5/5 | COMPLETE |
 | 5. Task UI - Detail & Create | 11/11 | COMPLETE |
 | 6. SOP Templates | 10/10 | COMPLETE |
-| 7. Workflows & Dependencies | 0/? | Not started |
+| 7. Workflows & Dependencies | 10/10 | COMPLETE |
 | 8. Alert Integration | 0/? | Not started |
 | 9. Workflow Templates & Rules | 0/? | Not started |
 | 10. Dashboard & Notifications | 0/? | Not started |
@@ -340,4 +352,4 @@ Plans:
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-23 after completing Phase 5*
+*Last updated: 2026-01-24 after completing Phase 7*
