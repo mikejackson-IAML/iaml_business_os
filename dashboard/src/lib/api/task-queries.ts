@@ -210,3 +210,28 @@ export async function getTasksBlockedBy(taskId: string): Promise<TaskExtended[]>
 
   return (data || []) as TaskExtended[];
 }
+
+/**
+ * Get tasks that are waiting on this task (blocking)
+ * Returns incomplete tasks that have this task's ID in their depends_on array
+ */
+export async function getTasksBlocking(taskId: string): Promise<TaskExtended[]> {
+  const supabase = getServerClient();
+
+  // Find tasks where depends_on array contains this taskId
+  // and status is not done or dismissed (incomplete tasks only)
+  const { data, error } = await supabase
+    .from('tasks_extended')
+    .select('*')
+    .contains('depends_on', [taskId])
+    .not('status', 'in', '("done","dismissed")')
+    .order('priority', { ascending: true })
+    .order('due_date', { ascending: true, nullsFirst: false });
+
+  if (error) {
+    console.error('Error fetching blocking tasks:', error);
+    throw new Error('Failed to fetch blocking tasks');
+  }
+
+  return (data || []) as TaskExtended[];
+}
