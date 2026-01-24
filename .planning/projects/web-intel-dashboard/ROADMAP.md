@@ -124,7 +124,13 @@ Plans:
 6. GSC cards show clicks, impressions, CTR, and avg position
 7. Top queries list shows 10 highest-click queries
 
-**Plans:** 4-5 plans
+**Plans:** 4 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — Device toggle + CWV metric components
+- [ ] 04-02-PLAN.md — Core Web Vitals unified card
+- [ ] 04-03-PLAN.md — GSC metrics row + top queries list
+- [ ] 04-04-PLAN.md — Technical tab integration + verification
 
 ---
 
@@ -191,11 +197,11 @@ Plans:
 | 1. Foundation | 4/4 | Complete | 2026-01-23 |
 | 2. Traffic Overview | 3/3 | Complete | 2026-01-24 |
 | 3. Rankings Tracker | 5/5 | Complete | 2026-01-24 |
-| 4. Technical Health | 0/5 | Not started | - |
+| 4. Technical Health | 0/4 | Planned | - |
 | 5. Alerts System | 0/3 | Not started | - |
 | 6. Content & Competitors | 0/4 | Not started | - |
 | 7. AI Recommendations | 0/2 | Not started | - |
 
 ---
 *Roadmap created: 2026-01-23*
-*Last updated: 2026-01-24 — Phase 3 complete (5 plans)*
+*Last updated: 2026-01-24 — Phase 4 planned (4 plans)*
