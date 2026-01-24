@@ -353,7 +353,7 @@ Write file.
 </step>
 
 <step name="confirm_creation">
-Present summary and next steps:
+Present summary:
 
 ```
 Created: .planning/phases/${PADDED_PHASE}-${SLUG}/${PADDED_PHASE}-CONTEXT.md
@@ -369,24 +369,45 @@ Created: .planning/phases/${PADDED_PHASE}-${SLUG}/${PADDED_PHASE}-CONTEXT.md
 [If deferred ideas exist:]
 ## Noted for Later
 - [Deferred idea] — future phase
+```
 
+Then immediately proceed to offer_continue step.
+</step>
+
+<step name="offer_continue">
+**Offer to auto-continue to plan-phase.**
+
+Use AskUserQuestion:
+- header: "Continue"
+- question: "Continue to plan-phase now? (Discussion was light — safe to skip /clear)"
+- options:
+  - "Yes, continue" — Proceed directly to plan-phase
+  - "No, I'll run it later" — Show manual command and exit
+
+**If "Yes, continue":**
+1. Output: "Continuing to plan-phase..."
+2. Invoke the Skill tool with skill: "gsd:plan-phase" and args: "${PHASE} --project ${PROJECT}"
+   - Note: ${PROJECT} comes from the --project argument passed to discuss-phase
+   - If no --project was specified, omit the --project flag
+
+**If "No, I'll run it later":**
+Output the manual instructions:
+```
 ---
 
 ## ▶ Next Up
 
 **Phase ${PHASE}: [Name]** — [Goal from ROADMAP.md]
 
-`/gsd:plan-phase ${PHASE}`
+`/gsd:plan-phase ${PHASE} [--project ${PROJECT}]`
 
-<sub>`/clear` first → fresh context window</sub>
+<sub>`/clear` first if you want a fresh context window</sub>
 
 ---
 
 **Also available:**
 - `/gsd:plan-phase ${PHASE} --skip-research` — plan without research
 - Review/edit CONTEXT.md before continuing
-
----
 ```
 </step>
 
@@ -429,5 +450,5 @@ Confirm: "Committed: docs(${PADDED_PHASE}): capture phase context"
 - Scope creep redirected to deferred ideas
 - CONTEXT.md captures actual decisions, not vague vision
 - Deferred ideas preserved for future phases
-- User knows next steps
+- User offered seamless continue to plan-phase (or manual command if declined)
 </success_criteria>
