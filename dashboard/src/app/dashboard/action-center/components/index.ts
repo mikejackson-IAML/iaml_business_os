@@ -21,6 +21,7 @@ export { TaskComments } from "./task-comments";
 export { TaskActivity } from "./task-activity";
 export { WorkflowContext } from "./workflow-context";
 export { ApprovalActions } from "./approval-actions";
+export { TaskDependencies } from "./task-dependencies";
 
 // Dialogs
 export { CompleteTaskDialog } from "./complete-task-dialog";
