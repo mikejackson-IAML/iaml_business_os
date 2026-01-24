@@ -184,3 +184,53 @@ function getMasteryTier(level: number): 'novice' | 'developing' | 'proficient' |
   if (level >= 3) return 'developing';
   return 'novice';
 }
+
+// ==================== Get Tasks Using SOP ====================
+
+export interface TaskUsingSOP {
+  id: string;
+  title: string;
+  status: string;
+}
+
+export interface TasksUsingSOPResult {
+  count: number;
+  tasks: TaskUsingSOP[];
+}
+
+/**
+ * Get tasks that reference a specific SOP template.
+ * Returns both the count and a list of tasks (limited to 100).
+ */
+export async function getTasksUsingSOP(sopId: string): Promise<TasksUsingSOPResult> {
+  const supabase = getServerClient();
+
+  // Get total count
+  const { count, error: countError } = await supabase
+    .from('tasks')
+    .select('*', { count: 'exact', head: true })
+    .eq('sop_template_id', sopId);
+
+  if (countError) {
+    console.error('Error counting tasks using SOP:', countError);
+    return { count: 0, tasks: [] };
+  }
+
+  // Get task details (limit to 100)
+  const { data, error } = await supabase
+    .from('tasks')
+    .select('id, title, status')
+    .eq('sop_template_id', sopId)
+    .order('created_at', { ascending: false })
+    .limit(100);
+
+  if (error) {
+    console.error('Error fetching tasks using SOP:', error);
+    return { count: count || 0, tasks: [] };
+  }
+
+  return {
+    count: count || 0,
+    tasks: (data || []) as TaskUsingSOP[],
+  };
+}
