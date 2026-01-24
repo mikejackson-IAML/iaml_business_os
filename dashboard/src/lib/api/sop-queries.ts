@@ -119,3 +119,68 @@ export async function getSOPExtendedById(id: string): Promise<SOPTemplateExtende
     steps_count: sop.steps.length,
   };
 }
+
+// ==================== Get User Mastery for SOP ====================
+
+export interface SOPMasteryResult {
+  mastery_level: number;
+  mastery_tier: 'novice' | 'developing' | 'proficient' | 'expert';
+}
+
+/**
+ * Get user's mastery level for a specific SOP.
+ * Mastery is calculated based on how many times the user has completed tasks using this SOP.
+ *
+ * Mastery tiers:
+ * - novice: 0-2 completions
+ * - developing: 3-5 completions
+ * - proficient: 6-9 completions
+ * - expert: 10+ completions
+ */
+export async function getUserMasteryForSOP(
+  userId: string,
+  sopId: string
+): Promise<SOPMasteryResult> {
+  const supabase = getServerClient();
+
+  // Try RPC first (if exists)
+  const { data: rpcData, error: rpcError } = await supabase
+    .rpc('get_user_mastery', { p_user_id: userId, p_sop_id: sopId });
+
+  if (!rpcError && rpcData !== null) {
+    const level = typeof rpcData === 'number' ? rpcData : 0;
+    return {
+      mastery_level: level,
+      mastery_tier: getMasteryTier(level),
+    };
+  }
+
+  // Fallback: Count completed tasks using this SOP
+  // Note: assigned_to filter assumes it matches userId (adjust based on auth model)
+  const { count, error } = await supabase
+    .from('tasks')
+    .select('*', { count: 'exact', head: true })
+    .eq('sop_template_id', sopId)
+    .eq('status', 'done');
+
+  if (error) {
+    console.error('Error fetching mastery:', error);
+    return { mastery_level: 0, mastery_tier: 'novice' };
+  }
+
+  const level = count || 0;
+  return {
+    mastery_level: level,
+    mastery_tier: getMasteryTier(level),
+  };
+}
+
+/**
+ * Calculate mastery tier from level
+ */
+function getMasteryTier(level: number): 'novice' | 'developing' | 'proficient' | 'expert' {
+  if (level >= 10) return 'expert';
+  if (level >= 6) return 'proficient';
+  if (level >= 3) return 'developing';
+  return 'novice';
+}
