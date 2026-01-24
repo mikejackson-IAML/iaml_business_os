@@ -1,0 +1,282 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import { Button } from "@/dashboard-kit/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/dashboard-kit/components/ui/card";
+import { ChevronDown, ChevronUp, ExternalLink, Clock, BookOpen } from "lucide-react";
+import { MasteryBadge, getMasteryTier } from "./mastery-badge";
+import type { SOPTemplate } from "@/lib/api/sop-types";
+
+interface ProgressiveInstructionsProps {
+  sop: SOPTemplate;
+  masteryLevel: number;
+  variables?: Record<string, string>;
+  sopDetailUrl?: string;
+}
+
+export function ProgressiveInstructions({
+  sop,
+  masteryLevel,
+  variables = {},
+  sopDetailUrl,
+}: ProgressiveInstructionsProps) {
+  const tier = getMasteryTier(masteryLevel);
+  const [expanded, setExpanded] = useState(false);
+  const [checkedSteps, setCheckedSteps] = useState<Set<number>>(new Set());
+
+  // Determine if we should show more detail
+  const showingMore = expanded;
+  const effectiveTier = showingMore ? 'novice' : tier;
+
+  // Variable substitution helper
+  const substituteVariables = (text: string | null): string => {
+    if (!text) return '';
+    return text.replace(/\{\{(\w+)\}\}/g, (_, key) => variables[key] || `{{${key}}}`);
+  };
+
+  // Calculate total time
+  const totalMinutes = sop.steps.reduce((sum, step) => sum + (step.estimated_minutes || 0), 0);
+
+  // Toggle step completion (for novice view checklist)
+  const toggleStep = (order: number) => {
+    const newChecked = new Set(checkedSteps);
+    if (newChecked.has(order)) {
+      newChecked.delete(order);
+    } else {
+      newChecked.add(order);
+    }
+    setCheckedSteps(newChecked);
+  };
+
+  // Render based on effective tier
+  const renderContent = () => {
+    switch (effectiveTier) {
+      case 'expert':
+        return <ExpertView sop={sop} sopDetailUrl={sopDetailUrl} />;
+      case 'proficient':
+        return <ProficientView sop={sop} substituteVariables={substituteVariables} sopDetailUrl={sopDetailUrl} />;
+      case 'developing':
+        return <DevelopingView sop={sop} substituteVariables={substituteVariables} />;
+      case 'novice':
+      default:
+        return (
+          <NoviceView
+            sop={sop}
+            substituteVariables={substituteVariables}
+            checkedSteps={checkedSteps}
+            toggleStep={toggleStep}
+          />
+        );
+    }
+  };
+
+  return (
+    <Card>
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <BookOpen className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-base">Instructions</CardTitle>
+            <MasteryBadge level={masteryLevel} tier={tier} />
+          </div>
+          {totalMinutes > 0 && (
+            <div className="flex items-center gap-1 text-sm text-muted-foreground">
+              <Clock className="h-3 w-3" />
+              <span>~{totalMinutes} min</span>
+            </div>
+          )}
+        </div>
+      </CardHeader>
+      <CardContent>
+        {renderContent()}
+
+        {/* Show more/less toggle */}
+        {tier !== 'novice' && (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="mt-3 w-full"
+            onClick={() => setExpanded(!expanded)}
+          >
+            {expanded ? (
+              <>
+                <ChevronUp className="h-4 w-4 mr-1" />
+                Show less detail
+              </>
+            ) : (
+              <>
+                <ChevronDown className="h-4 w-4 mr-1" />
+                Show more detail
+              </>
+            )}
+          </Button>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+// Expert View - Minimal acknowledgment
+function ExpertView({
+  sop,
+  sopDetailUrl
+}: {
+  sop: SOPTemplate;
+  sopDetailUrl?: string;
+}) {
+  return (
+    <div className="flex items-center justify-between py-2">
+      <p className="text-sm text-muted-foreground">
+        You know this task.
+      </p>
+      {sopDetailUrl && (
+        <Link
+          href={sopDetailUrl}
+          className="text-sm text-primary hover:underline flex items-center gap-1"
+        >
+          View full SOP
+          <ExternalLink className="h-3 w-3" />
+        </Link>
+      )}
+    </div>
+  );
+}
+
+// Proficient View - Summary bullets + link
+function ProficientView({
+  sop,
+  substituteVariables,
+  sopDetailUrl
+}: {
+  sop: SOPTemplate;
+  substituteVariables: (text: string | null) => string;
+  sopDetailUrl?: string;
+}) {
+  // Show first 3 steps as key points
+  const keySteps = sop.steps.slice(0, 3);
+
+  return (
+    <div className="space-y-3">
+      <ul className="list-disc list-inside space-y-1 text-sm">
+        {keySteps.map((step) => (
+          <li key={step.order}>
+            {substituteVariables(step.title)}
+          </li>
+        ))}
+        {sop.steps.length > 3 && (
+          <li className="text-muted-foreground">
+            +{sop.steps.length - 3} more steps
+          </li>
+        )}
+      </ul>
+      {sopDetailUrl && (
+        <Link
+          href={sopDetailUrl}
+          className="text-sm text-primary hover:underline flex items-center gap-1"
+        >
+          View full SOP
+          <ExternalLink className="h-3 w-3" />
+        </Link>
+      )}
+    </div>
+  );
+}
+
+// Developing View - Condensed key steps
+function DevelopingView({
+  sop,
+  substituteVariables
+}: {
+  sop: SOPTemplate;
+  substituteVariables: (text: string | null) => string;
+}) {
+  return (
+    <div className="space-y-3">
+      {sop.steps.map((step) => (
+        <div key={step.order} className="flex gap-3">
+          <div className="flex-shrink-0 w-6 h-6 rounded-full bg-muted flex items-center justify-center text-xs font-medium">
+            {step.order}
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="font-medium text-sm">{substituteVariables(step.title)}</p>
+            {step.description && (
+              <p className="text-sm text-muted-foreground line-clamp-1">
+                {substituteVariables(step.description)}
+              </p>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// Novice View - Full step-by-step checklist
+function NoviceView({
+  sop,
+  substituteVariables,
+  checkedSteps,
+  toggleStep
+}: {
+  sop: SOPTemplate;
+  substituteVariables: (text: string | null) => string;
+  checkedSteps: Set<number>;
+  toggleStep: (order: number) => void;
+}) {
+  return (
+    <div className="space-y-4">
+      {sop.steps.map((step) => (
+        <div key={step.order} className="flex gap-3">
+          <input
+            type="checkbox"
+            checked={checkedSteps.has(step.order)}
+            onChange={() => toggleStep(step.order)}
+            className="mt-0.5 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+          />
+          <div className="flex-1 min-w-0 space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-medium text-muted-foreground">
+                Step {step.order}
+              </span>
+              {step.estimated_minutes && (
+                <span className="text-xs text-muted-foreground">
+                  ~{step.estimated_minutes} min
+                </span>
+              )}
+            </div>
+            <p className={`font-medium text-sm ${checkedSteps.has(step.order) ? "line-through text-muted-foreground" : ""}`}>
+              {substituteVariables(step.title)}
+            </p>
+            {step.description && (
+              <p className="text-sm text-muted-foreground">
+                {substituteVariables(step.description)}
+              </p>
+            )}
+            {step.links && step.links.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-2">
+                {step.links.map((link, i) => (
+                  <a
+                    key={i}
+                    href={link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-primary hover:underline flex items-center gap-1"
+                  >
+                    <ExternalLink className="h-3 w-3" />
+                    {new URL(link).hostname}
+                  </a>
+                ))}
+              </div>
+            )}
+            {step.notes && (
+              <p className="text-xs text-muted-foreground italic mt-1">
+                Note: {substituteVariables(step.notes)}
+              </p>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
