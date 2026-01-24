@@ -5,6 +5,7 @@ import { ArrowLeft, Calendar, Building2, Clock, PlayCircle, CheckCircle2 } from 
 import { format } from 'date-fns';
 import { Badge } from '@/dashboard-kit/components/ui/badge';
 import { WorkflowProgress } from '../../components/workflow-progress';
+import { WorkflowTaskList } from '../../components/workflow-task-list';
 import type { WorkflowDetail, WorkflowStatus } from '@/lib/api/workflow-types';
 
 interface WorkflowDetailContentProps {
@@ -44,7 +45,7 @@ const taskStatusConfig: Record<
  * - Description (if exists)
  * - Metadata row: target date, department, timestamps
  * - Task count breakdown badges
- * - Placeholder for task list (07-07)
+ * - Task list sorted by dependency order
  */
 export function WorkflowDetailContent({ workflow }: WorkflowDetailContentProps) {
   const statusConfig = workflowStatusConfig[workflow.status] || workflowStatusConfig.not_started;
@@ -182,52 +183,8 @@ export function WorkflowDetailContent({ workflow }: WorkflowDetailContentProps) 
       {/* Divider */}
       <hr className="border-border" />
 
-      {/* Tasks section - placeholder for WorkflowTaskList (07-07) */}
-      <section>
-        <h2 className="text-lg font-semibold mb-4">Tasks</h2>
-        {/* TODO: Replace with WorkflowTaskList component in 07-07 */}
-        <div className="border rounded-lg divide-y">
-          {workflow.tasks.length === 0 ? (
-            <div className="p-8 text-center text-muted-foreground">
-              <p>No tasks in this workflow yet.</p>
-              <p className="text-sm mt-1">Tasks will appear here once added to the workflow.</p>
-            </div>
-          ) : (
-            /* Temporary task list - will be replaced by WorkflowTaskList in 07-07 */
-            workflow.tasks.map((task) => {
-              const taskStatus = taskStatusConfig[task.status] || taskStatusConfig.open;
-              return (
-                <div key={task.id} className="p-4 flex items-center gap-4 hover:bg-muted/50">
-                  <div
-                    className={`w-3 h-3 rounded-full flex-shrink-0 ${
-                      task.status === 'done'
-                        ? 'bg-emerald-500'
-                        : task.status === 'in_progress'
-                        ? 'bg-blue-500'
-                        : task.status === 'waiting'
-                        ? 'bg-amber-500'
-                        : task.status === 'dismissed'
-                        ? 'bg-gray-400'
-                        : 'bg-gray-300'
-                    }`}
-                  />
-                  <div className="flex-1 min-w-0">
-                    <Link
-                      href={`/dashboard/action-center/tasks/${task.id}`}
-                      className="font-medium hover:underline truncate block"
-                    >
-                      {task.title}
-                    </Link>
-                  </div>
-                  <Badge variant={taskStatus.variant} className="text-xs flex-shrink-0">
-                    {taskStatus.text}
-                  </Badge>
-                </div>
-              );
-            })
-          )}
-        </div>
-      </section>
+      {/* Tasks section - ordered by dependency */}
+      <WorkflowTaskList tasks={workflow.tasks} />
     </div>
   );
 }
