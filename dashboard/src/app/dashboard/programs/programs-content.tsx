@@ -26,6 +26,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/dashboard-kit/compon
 import { Progress } from '@/dashboard-kit/components/ui/progress';
 import { FallingPattern } from '@/components/ui/falling-pattern';
 import { UserMenu } from '@/components/UserMenu';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import type { HealthStatus, AlertItem, ActivityItem } from '@/dashboard-kit/types';
 import type {
   ProgramsDashboardData,
@@ -162,7 +163,10 @@ export function ProgramsContent({ data, recentRegistrations }: ProgramsContentPr
               <span className="badge-live">LIVE</span>
               <h1 className="text-display-sm text-foreground">Programs & Operations</h1>
             </div>
-            <UserMenu />
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <UserMenu />
+            </div>
           </div>
           <p className="text-muted-foreground ml-12">
             Program readiness • Enrollment tracking • Faculty & logistics • Next 90 days

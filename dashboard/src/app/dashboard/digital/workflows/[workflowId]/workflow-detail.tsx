@@ -21,6 +21,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/dashboard-kit/compon
 import { MetricCard } from '@/dashboard-kit/components/dashboard/metric-card';
 import { FallingPattern } from '@/components/ui/falling-pattern';
 import { UserMenu } from '@/components/UserMenu';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import type {
   WorkflowDetail as WorkflowDetailType,
   WorkflowExecution,
@@ -156,6 +157,7 @@ export function WorkflowDetailContent({ workflow, executions, errorSummary }: Wo
                   <ExternalLink className="h-3 w-3" />
                 </a>
               )}
+              <ThemeToggle />
               <UserMenu />
             </div>
           </div>

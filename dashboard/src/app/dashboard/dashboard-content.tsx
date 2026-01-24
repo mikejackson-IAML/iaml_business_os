@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/dashboard-kit/compon
 import { Progress } from '@/dashboard-kit/components/ui/progress';
 import { FallingPattern } from '@/components/ui/falling-pattern';
 import { UserMenu } from '@/components/UserMenu';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { ConversionFunnelChart } from './components/conversion-funnel-chart';
 import { ChannelPerformanceChart } from './components/channel-performance-chart';
 import type { Campaign, CampaignActivity, ChannelPerformance } from '@/lib/supabase/types';
@@ -115,7 +116,10 @@ export function DashboardContent({ metrics, campaigns, activities }: DashboardCo
               <span className="badge-live">LIVE</span>
               <h1 className="text-display-sm text-foreground">CEO Dashboard</h1>
             </div>
-            <UserMenu />
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <UserMenu />
+            </div>
           </div>
           <p className="text-muted-foreground">
             Business operations overview • Campaign performance • Real-time metrics

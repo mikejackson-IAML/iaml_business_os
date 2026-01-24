@@ -16,6 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/dashboard-kit/compon
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/dashboard-kit/components/ui/tabs';
 import { FallingPattern } from '@/components/ui/falling-pattern';
 import { UserMenu } from '@/components/UserMenu';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { ProjectCard } from './components/project-card';
 import { RoadmapView } from './components/roadmap-view';
 import { IdeasBacklog } from './components/ideas-backlog';
@@ -75,7 +76,10 @@ export function DevelopmentContent({ data }: DevelopmentContentProps) {
               <span className="badge-live">DEV</span>
               <h1 className="text-display-sm text-foreground">Development</h1>
             </div>
-            <UserMenu />
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <UserMenu />
+            </div>
           </div>
           <p className="text-muted-foreground">
             Parallel project management - Track progress, roadmaps, and ideas

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { cn } from '@/dashboard-kit/lib/utils';
 import { FallingPattern } from '@/components/ui/falling-pattern';
 import { UserMenu } from '@/components/UserMenu';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { SummaryCards } from './components/summary-cards';
 import { RecruitmentPipelineTable } from './components/recruitment-pipeline-table';
 import { NotRespondedList } from './components/not-responded-list';
@@ -102,7 +103,10 @@ export function FacultySchedulerContent({ data }: ContentProps) {
                 onClick={scrollToAlerts}
               />
             </div>
-            <UserMenu />
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <UserMenu />
+            </div>
           </div>
           <p className="text-muted-foreground ml-12">
             Instructor recruitment pipeline &bull; Tier management &bull; Assignment tracking

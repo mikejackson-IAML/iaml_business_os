@@ -1,6 +1,8 @@
 'use client';
 
 import { Globe, TrendingUp, Activity, FileText, Link2, AlertTriangle } from 'lucide-react';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
+import { UserMenu } from '@/components/UserMenu';
 import { MetricCard } from '@/dashboard-kit/components/dashboard/metric-card';
 import { HealthScore } from '@/dashboard-kit/components/dashboard/health-score';
 import { Card, CardContent, CardHeader, CardTitle } from '@/dashboard-kit/components/ui/card';
@@ -33,10 +35,16 @@ export function WebIntelContent({ data }: WebIntelContentProps) {
   return (
     <div className="p-6 lg:p-8 space-y-6">
       {/* Header */}
-      <header>
-        <div className="flex items-center gap-3 mb-2">
-          <Globe className="h-8 w-8 text-blue-500" />
-          <h1 className="text-display-sm text-foreground">Web Intelligence</h1>
+      <header className="mb-8">
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-3">
+            <Globe className="h-8 w-8 text-blue-500" />
+            <h1 className="text-display-sm text-foreground">Web Intelligence</h1>
+          </div>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <UserMenu />
+          </div>
         </div>
         <p className="text-muted-foreground">
           Traffic analytics, keyword rankings, technical SEO health, and content performance

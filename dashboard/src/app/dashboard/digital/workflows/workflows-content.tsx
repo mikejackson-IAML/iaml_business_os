@@ -17,6 +17,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/dashboard-kit/compon
 import { MetricCard } from '@/dashboard-kit/components/dashboard/metric-card';
 import { FallingPattern } from '@/components/ui/falling-pattern';
 import { UserMenu } from '@/components/UserMenu';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import type { WorkflowRegistry } from '@/lib/api/workflow-queries';
 import {
   getWorkflowHealthStatus,
@@ -131,7 +132,10 @@ export function WorkflowsContent({ workflows, stats }: WorkflowsContentProps) {
               <span className="badge-live">LIVE</span>
               <h1 className="text-display-sm text-foreground">Workflow Health</h1>
             </div>
-            <UserMenu />
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <UserMenu />
+            </div>
           </div>
           <p className="text-muted-foreground">
             Monitor and manage all n8n workflow automations

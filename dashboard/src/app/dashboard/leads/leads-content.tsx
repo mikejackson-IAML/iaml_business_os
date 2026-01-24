@@ -20,6 +20,7 @@ import { CapacityGauge } from './components/capacity-gauge';
 import { LeadPipelineChart } from './components/lead-pipeline-chart';
 import { FallingPattern } from '@/components/ui/falling-pattern';
 import { UserMenu } from '@/components/UserMenu';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import type { LeadIntelligenceDashboardData } from '@/dashboard-kit/types/departments/lead-intelligence';
 import type { HealthStatus } from '@/dashboard-kit/types';
 
@@ -67,7 +68,10 @@ export function LeadsContent({ data }: LeadsContentProps) {
               <span className="badge-live">LIVE</span>
               <h1 className="text-display-sm text-foreground">Lead Intelligence</h1>
             </div>
-            <UserMenu />
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <UserMenu />
+            </div>
           </div>
           <p className="text-muted-foreground">
             Email capacity &bull; Domain health &bull; Lead pipeline &bull; Platform status

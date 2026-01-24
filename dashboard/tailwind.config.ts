@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss';
 import { fontFamily } from 'tailwindcss/defaultTheme';
+import flattenColorPalette from 'tailwindcss/lib/util/flattenColorPalette';
 
 const config: Config = {
   content: [
@@ -85,19 +86,34 @@ const config: Config = {
           from: { transform: 'translateX(100%)' },
           to: { transform: 'translateX(0)' },
         },
+        aurora: {
+          from: { backgroundPosition: '50% 50%, 50% 50%' },
+          to: { backgroundPosition: '350% 50%, 350% 50%' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'fade-in': 'fade-in 0.2s ease-out',
         'slide-in-from-right': 'slide-in-from-right 0.3s ease-out',
+        aurora: 'aurora 60s linear infinite',
       },
     },
   },
   plugins: [
     require('tailwindcss-animate'),
     require('@tailwindcss/forms'),
+    addVariablesForColors,
   ],
 };
+
+// Plugin to add Tailwind colors as CSS variables
+function addVariablesForColors({ addBase, theme }: { addBase: Function; theme: Function }) {
+  const allColors = flattenColorPalette(theme('colors'));
+  const newVars = Object.fromEntries(
+    Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+  );
+  addBase({ ':root': newVars });
+}
 
 export default config;
