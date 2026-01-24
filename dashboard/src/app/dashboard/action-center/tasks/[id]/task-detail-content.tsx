@@ -30,6 +30,7 @@ import { TaskComments } from '../../components/task-comments';
 import { TaskActivityList } from '../../components/task-activity';
 import { CompleteTaskDialog } from '../../components/complete-task-dialog';
 import { DismissTaskDialog } from '../../components/dismiss-task-dialog';
+import { DismissWithDependentsDialog } from '../../components/dismiss-with-dependents-dialog';
 import { ApprovalActions, RecommendationCallout } from '../../components/approval-actions';
 import { WorkflowContext } from '../../components/workflow-context';
 
@@ -141,6 +142,7 @@ export function TaskDetailContent({ task, comments, activity, sop, sopMastery }:
   // State for action dialogs
   const [showCompleteDialog, setShowCompleteDialog] = useState(false);
   const [showDismissDialog, setShowDismissDialog] = useState(false);
+  const [showDismissWithDependentsDialog, setShowDismissWithDependentsDialog] = useState(false);
 
   const priority = priorityConfig[task.priority as keyof typeof priorityConfig] || priorityConfig.normal;
   const status = statusConfig[task.status as keyof typeof statusConfig] || statusConfig.open;
@@ -469,8 +471,22 @@ export function TaskDetailContent({ task, comments, activity, sop, sopMastery }:
         <DismissTaskDialog
           taskId={task.id}
           taskTitle={task.title}
+          blockingCount={task.blocking_count}
           isOpen={showDismissDialog}
           onClose={() => setShowDismissDialog(false)}
+          onShowDependentsDialog={() => setShowDismissWithDependentsDialog(true)}
+        />
+
+        {/* Dismiss With Dependents Dialog (for tasks with blocking_count > 0) */}
+        <DismissWithDependentsDialog
+          taskId={task.id}
+          taskTitle={task.title}
+          blockingCount={task.blocking_count}
+          priority={task.priority}
+          department={task.department}
+          workflowId={task.workflow_id}
+          isOpen={showDismissWithDependentsDialog}
+          onClose={() => setShowDismissWithDependentsDialog(false)}
         />
       </div>
     </div>
