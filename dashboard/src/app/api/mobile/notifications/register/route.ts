@@ -73,7 +73,8 @@ export async function POST(request: NextRequest): Promise<NextResponse<RegisterT
     const supabase = getServerClient();
 
     // Upsert device token (update if exists, insert if new)
-    const { error } = await supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase as any)
       .from('mobile_device_tokens')
       .upsert({
         device_token: body.device_token,
