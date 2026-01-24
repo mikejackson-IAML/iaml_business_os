@@ -489,42 +489,138 @@
       }
     },
     {
-      "id": "create-task-placeholder",
-      "name": "Create Task (Placeholder)",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
+      "id": "transform-with-claude",
+      "name": "Transform with Claude",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [2860, 100],
+      "continueOnFail": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "anthropic-api",
+          "name": "Anthropic API"
+        }
+      },
       "parameters": {
-        "mode": "manual",
-        "duplicateItem": false,
-        "assignments": {
-          "assignments": [
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
             {
-              "id": "task_payload",
-              "name": "task_payload",
-              "value": "={\n  \"title\": \"{{ $json.title }}\",\n  \"description\": \"{{ $json.description }}\",\n  \"priority\": \"{{ $json.task_priority }}\",\n  \"department\": \"{{ $json.config.default_department || '' }}\",\n  \"source\": \"alert\",\n  \"dedupe_key\": \"{{ $json.dedupe_key }}\",\n  \"related_entity_type\": \"{{ $json.source_system || 'alert' }}\",\n  \"related_entity_id\": \"{{ $json.source_alert_id || $json.occurrence_id }}\"\n}",
-              "type": "string"
+              "name": "anthropic-version",
+              "value": "2023-06-01"
             },
             {
-              "id": "ready_for_ai_transform",
-              "name": "ready_for_ai_transform",
-              "value": true,
-              "type": "boolean"
+              "name": "content-type",
+              "value": "application/json"
             }
           ]
         },
-        "includeOtherFields": true,
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"claude-3-haiku-20240307\",\n  \"max_tokens\": 500,\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Transform this alert into an actionable task.\\n\\nAlert Type: {{ $json.alert_type }}\\nAlert Title: {{ $json.title }}\\nAlert Description: {{ $json.description }}\\nAffected Resource: {{ $json.affected_resource }}\\n\\nRespond with JSON only:\\n{\\n  \\\"task_title\\\": \\\"Action-oriented title starting with a verb (e.g., 'Renew SSL Certificate', 'Investigate Domain Health Issue')\\\",\\n  \\\"task_description\\\": \\\"2-3 sentence actionable summary of what needs to be done and key context. Do not include the full alert details, just the essential action items.\\\"\\n}\"\n    }\n  ]\n}",
+        "options": {
+          "timeout": 30000
+        }
+      }
+    },
+    {
+      "id": "parse-claude-response",
+      "name": "Parse Claude Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3080, 100],
+      "continueOnFail": true,
+      "parameters": {
+        "jsCode": "// Parse Claude API response and extract task_title and task_description\nconst prevData = $('Handle Duplicate Check').first().json;\nconst claudeResponse = $input.first().json;\n\ntry {\n  // Check if Claude request failed\n  if (!claudeResponse || !claudeResponse.content || !claudeResponse.content[0]) {\n    throw new Error('Invalid Claude response structure');\n  }\n  \n  // Extract text from Claude response\n  const responseText = claudeResponse.content[0].text;\n  \n  // Parse JSON from response (handle markdown code blocks if present)\n  let jsonText = responseText;\n  if (responseText.includes('```json')) {\n    jsonText = responseText.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n  } else if (responseText.includes('```')) {\n    jsonText = responseText.replace(/```\\n?/g, '').trim();\n  }\n  \n  const parsed = JSON.parse(jsonText);\n  \n  if (!parsed.task_title || !parsed.task_description) {\n    throw new Error('Missing task_title or task_description in Claude response');\n  }\n  \n  return [{\n    json: {\n      ...prevData,\n      task_title: parsed.task_title,\n      task_description: parsed.task_description,\n      ai_transform_success: true\n    }\n  }];\n} catch (error) {\n  // Return with flag for fallback processing\n  return [{\n    json: {\n      ...prevData,\n      ai_transform_success: false,\n      ai_error: error.message\n    }\n  }];\n}"
+      }
+    },
+    {
+      "id": "check-ai-success",
+      "name": "AI Transform Successful?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [3300, 100],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-ai-success",
+              "leftValue": "={{ $json.ai_transform_success }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
         "options": {}
+      }
+    },
+    {
+      "id": "fallback-transform",
+      "name": "Fallback Transform",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3520, 200],
+      "parameters": {
+        "jsCode": "// Fallback transformation when Claude API fails\nconst data = $input.first().json;\n\n// Simple transformation patterns based on alert type\nconst actionVerbs = {\n  'ssl_expiry': 'Renew',\n  'domain_health': 'Investigate',\n  'uptime_down': 'Restore',\n  'payment_failed': 'Resolve',\n  'tier_ending': 'Address',\n  'vip_non_response': 'Follow up on',\n  'link_broken': 'Fix',\n  'lighthouse_issue': 'Optimize'\n};\n\nconst verb = actionVerbs[data.alert_type] || 'Address';\n\n// Generate fallback title\nlet taskTitle = data.title;\nif (!taskTitle.toLowerCase().startsWith(verb.toLowerCase())) {\n  taskTitle = `${verb}: ${data.title}`;\n}\n\n// Generate fallback description\nlet taskDescription = data.description || '';\nif (data.affected_resource) {\n  taskDescription += taskDescription ? `\\n\\nAffected: ${data.affected_resource}` : `Affected: ${data.affected_resource}`;\n}\n\nreturn [{\n  json: {\n    ...data,\n    task_title: taskTitle,\n    task_description: taskDescription,\n    ai_transform_success: false,\n    used_fallback: true\n  }\n}];"
+      }
+    },
+    {
+      "id": "merge-transform-paths",
+      "name": "Merge Transform Paths",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [3740, 100],
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      }
+    },
+    {
+      "id": "map-department",
+      "name": "Map Department",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3960, 100],
+      "parameters": {
+        "jsCode": "// Map department from config or defaults\nconst data = $input.first().json;\nconst configDepartment = data.config?.default_department;\n\n// Use config department if available, otherwise map defaults\nconst departmentMap = {\n  'ssl_expiry': 'Digital',\n  'domain_health': 'Digital',\n  'uptime_down': 'Digital',\n  'payment_failed': 'Operations',\n  'tier_ending': 'Programs',\n  'vip_non_response': 'Programs',\n  'link_broken': 'Digital',\n  'lighthouse_issue': 'Digital'\n};\n\nconst department = configDepartment || departmentMap[data.alert_type] || 'Operations';\n\n// Calculate due date based on priority\nlet dueDate = new Date();\nlet dueTime = null;\n\nswitch (data.task_priority) {\n  case 'critical':\n    // Due today, within 4 hours\n    dueDate.setHours(dueDate.getHours() + 4);\n    dueTime = dueDate.toTimeString().slice(0, 5);\n    break;\n  case 'high':\n    // Due end of next business day\n    dueDate.setDate(dueDate.getDate() + 1);\n    dueTime = '17:00';\n    break;\n  case 'normal':\n    // Due in 3 days\n    dueDate.setDate(dueDate.getDate() + 3);\n    break;\n  case 'low':\n    // Due in 7 days\n    dueDate.setDate(dueDate.getDate() + 7);\n    break;\n}\n\nreturn [{\n  json: {\n    ...data,\n    department: department,\n    calculated_due_date: dueDate.toISOString().split('T')[0],\n    calculated_due_time: dueTime\n  }\n}];"
+      }
+    },
+    {
+      "id": "create-task",
+      "name": "Create Task",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [4180, 100],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
       },
-      "notesInFlow": true,
-      "notes": "PLACEHOLDER: This node will be replaced in 08-04 with AI title transformation and actual Task API call"
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO action_center.tasks (\n  title,\n  description,\n  priority,\n  due_date,\n  due_time,\n  department,\n  source,\n  related_entity_type,\n  related_entity_id,\n  related_entity_url,\n  dedupe_key,\n  status\n) VALUES (\n  '{{ $json.task_title }}',\n  '{{ $json.task_description }}',\n  '{{ $json.task_priority }}',\n  {{ $json.calculated_due_date ? \"'\" + $json.calculated_due_date + \"'\" : 'NULL' }},\n  {{ $json.calculated_due_time ? \"'\" + $json.calculated_due_time + \"'\" : 'NULL' }},\n  '{{ $json.department }}',\n  'alert',\n  '{{ $json.alert_type }}',\n  '{{ $json.source_alert_id || $json.occurrence_id }}',\n  '/alerts/{{ $json.source_alert_id || $json.occurrence_id }}',\n  '{{ $json.dedupe_key }}',\n  'open'\n)\nRETURNING id, title, priority, status, created_at;",
+        "options": {}
+      }
     },
     {
       "id": "create-task-response",
       "name": "Create Task Response",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [3080, 100],
+      "position": [4400, 100],
       "parameters": {
         "mode": "manual",
         "duplicateItem": false,
@@ -545,20 +641,32 @@
             {
               "id": "task_id",
               "name": "task_id",
-              "value": "placeholder-task-id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "task_title",
+              "name": "task_title",
+              "value": "={{ $json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "task_priority",
+              "name": "task_priority",
+              "value": "={{ $json.priority }}",
               "type": "string"
             },
             {
               "id": "occurrence_id",
               "name": "occurrence_id",
-              "value": "={{ $json.occurrence_id }}",
+              "value": "={{ $('Map Department').first().json.occurrence_id }}",
               "type": "string"
             },
             {
-              "id": "note",
-              "name": "note",
-              "value": "Placeholder response - task creation will be implemented in 08-04",
-              "type": "string"
+              "id": "ai_transformed",
+              "name": "ai_transformed",
+              "value": "={{ $('Map Department').first().json.ai_transform_success }}",
+              "type": "boolean"
             }
           ]
         },
@@ -808,7 +916,7 @@
       "main": [
         [
           {
-            "node": "Create Task (Placeholder)",
+            "node": "Transform with Claude",
             "type": "main",
             "index": 0
           }
@@ -829,7 +937,80 @@
         ]
       ]
     },
-    "Create Task (Placeholder)": {
+    "Transform with Claude": {
+      "main": [
+        [
+          {
+            "node": "Parse Claude Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Claude Response": {
+      "main": [
+        [
+          {
+            "node": "AI Transform Successful?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Transform Successful?": {
+      "main": [
+        [
+          {
+            "node": "Merge Transform Paths",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fallback Transform",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fallback Transform": {
+      "main": [
+        [
+          {
+            "node": "Merge Transform Paths",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge Transform Paths": {
+      "main": [
+        [
+          {
+            "node": "Map Department",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Map Department": {
+      "main": [
+        [
+          {
+            "node": "Create Task",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Task": {
       "main": [
         [
           {
