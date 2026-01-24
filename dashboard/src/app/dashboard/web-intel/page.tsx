@@ -1,7 +1,14 @@
 import { Suspense } from 'react';
 import { WebIntelSkeleton } from './web-intel-skeleton';
 import { WebIntelContent } from './web-intel-content';
-import { getWebIntelDashboardData } from '@/lib/api/web-intel-queries';
+import {
+  getWebIntelDashboardData,
+  getContentDecayWithInventory,
+  getThinContentWithInventory,
+  getContentSummary,
+  getCompetitors,
+  getSerpShare,
+} from '@/lib/api/web-intel-queries';
 import { parseDateRange, rangeToDays, type DateRange } from './components/date-range-selector';
 import { parsePriorityFilter } from './components/priority-filter';
 import { parseAlertTypeFilter } from './components/alert-type-filter';
@@ -31,8 +38,30 @@ async function WebIntelDataLoader({
   alertTypeFilter: ReturnType<typeof parseAlertTypeFilter>;
 }) {
   const days = rangeToDays(range);
-  const data = await getWebIntelDashboardData(days);
-  return <WebIntelContent data={data} range={range} priorityFilter={priorityFilter} alertTypeFilter={alertTypeFilter} />;
+
+  // Fetch all data in parallel
+  const [data, contentDecay, thinContent, contentSummary, competitors, serpShare] = await Promise.all([
+    getWebIntelDashboardData(days),
+    getContentDecayWithInventory(5),
+    getThinContentWithInventory(5),
+    getContentSummary(),
+    getCompetitors(),
+    getSerpShare(),
+  ]);
+
+  return (
+    <WebIntelContent
+      data={data}
+      range={range}
+      priorityFilter={priorityFilter}
+      alertTypeFilter={alertTypeFilter}
+      contentDecay={contentDecay}
+      thinContent={thinContent}
+      contentSummary={contentSummary}
+      competitors={competitors}
+      serpShare={serpShare}
+    />
+  );
 }
 
 export default async function WebIntelDashboardPage({ searchParams }: PageProps) {
