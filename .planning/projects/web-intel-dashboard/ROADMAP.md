@@ -96,7 +96,14 @@ Plans:
 5. SERP features column shows icons for featured snippet, PAA, etc.
 6. Sparkline in each row shows 7-day position history
 
-**Plans:** 4-5 plans (sparklines add complexity)
+**Plans:** 5 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — Position change indicator + priority filter components
+- [ ] 03-02-PLAN.md — SERP features icons + ranking sparkline components
+- [ ] 03-03-PLAN.md — Keywords table with sorting
+- [ ] 03-04-PLAN.md — Expandable row with sparkline + SERP features
+- [ ] 03-05-PLAN.md — Integration into web-intel page + verification
 
 ---
 
@@ -183,7 +190,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete | 2026-01-23 |
 | 2. Traffic Overview | 3/3 | Complete | 2026-01-24 |
-| 3. Rankings Tracker | 0/5 | Not started | - |
+| 3. Rankings Tracker | 0/5 | Planned | - |
 | 4. Technical Health | 0/5 | Not started | - |
 | 5. Alerts System | 0/3 | Not started | - |
 | 6. Content & Competitors | 0/4 | Not started | - |
@@ -191,4 +198,4 @@ Plans:
 
 ---
 *Roadmap created: 2026-01-23*
-*Last updated: 2026-01-24 — Phase 2 complete*
+*Last updated: 2026-01-24 — Phase 3 planned (5 plans)*
