@@ -30,6 +30,7 @@ export { TaskDependencies } from "./task-dependencies";
 // Dialogs
 export { CompleteTaskDialog } from "./complete-task-dialog";
 export { DismissTaskDialog } from "./dismiss-task-dialog";
+export { DismissWithDependentsDialog } from "./dismiss-with-dependents-dialog";
 export { CreateTaskModal } from "./create-task-modal";
 export { AddTaskToWorkflowModal } from "./add-task-to-workflow-modal";
 
