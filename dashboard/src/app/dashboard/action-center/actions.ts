@@ -8,6 +8,7 @@ import {
   addTaskComment,
   createTask,
 } from '@/lib/api/task-mutations';
+import { getTaskDependencies } from '@/lib/api/task-queries';
 import type { CreateTaskRequest, TaskStatus } from '@/lib/api/task-types';
 
 /**
@@ -170,6 +171,31 @@ export async function approveTaskAction(
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to record approval',
+    };
+  }
+}
+
+/**
+ * Get task dependencies (blocked by and blocking tasks)
+ * Used for lazy-loading dependency details in task detail view
+ */
+export async function getTaskDependenciesAction(
+  taskId: string
+): Promise<ActionResult> {
+  try {
+    const dependencies = await getTaskDependencies(taskId);
+    return {
+      success: true,
+      data: {
+        blockedBy: dependencies.blockedBy,
+        blocking: dependencies.blocking,
+      },
+    };
+  } catch (error) {
+    console.error('Error fetching task dependencies:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to fetch dependencies',
     };
   }
 }
