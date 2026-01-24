@@ -1,0 +1,888 @@
+{
+  "name": "Alert-to-Task Processor",
+  "active": false,
+  "nodes": [
+    {
+      "id": "alert-webhook",
+      "name": "Alert Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 300],
+      "webhookId": "alert-to-task",
+      "parameters": {
+        "path": "alert-to-task",
+        "httpMethod": "POST",
+        "responseMode": "lastNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "validate-payload",
+      "name": "Validate Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [220, 300],
+      "parameters": {
+        "jsCode": "// Validate required fields in alert webhook payload\nconst payload = $input.first().json;\n\nconst requiredFields = ['alert_type', 'severity', 'title', 'affected_resource'];\nconst missing = requiredFields.filter(field => !payload[field]);\n\nif (missing.length > 0) {\n  throw new Error(`Missing required fields: ${missing.join(', ')}`);\n}\n\n// Validate severity enum\nconst validSeverities = ['critical', 'warning', 'info'];\nif (!validSeverities.includes(payload.severity)) {\n  throw new Error(`Invalid severity: ${payload.severity}. Must be one of: ${validSeverities.join(', ')}`);\n}\n\n// Pass through validated payload\nreturn [{\n  json: {\n    alert_type: payload.alert_type,\n    severity: payload.severity,\n    title: payload.title,\n    description: payload.description || '',\n    affected_resource: payload.affected_resource,\n    source_system: payload.source_system || null,\n    source_alert_id: payload.source_alert_id || null,\n    metadata: payload.metadata || {}\n  }\n}];"
+      }
+    },
+    {
+      "id": "get-config",
+      "name": "Get Alert Config",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [440, 300],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n  id,\n  alert_type,\n  display_name,\n  creates_tasks,\n  default_department,\n  task_title_template,\n  info_creates_task,\n  accumulation_threshold,\n  accumulation_window_hours,\n  cooldown_after_completion_hours,\n  dismissed_cooldown_days\nFROM action_center.alert_config \nWHERE alert_type = '{{ $json.alert_type }}'\nLIMIT 1;",
+        "options": {}
+      }
+    },
+    {
+      "id": "merge-config",
+      "name": "Merge Config with Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 300],
+      "parameters": {
+        "jsCode": "// Merge config with payload, using defaults if config not found\nconst payload = $('Validate Payload').first().json;\nconst configResult = $input.first().json;\n\n// Default config if none found in database\nconst defaultConfig = {\n  creates_tasks: true,\n  default_department: null,\n  task_title_template: null,\n  info_creates_task: false,\n  accumulation_threshold: 3,\n  accumulation_window_hours: 24,\n  cooldown_after_completion_hours: 24,\n  dismissed_cooldown_days: 7\n};\n\n// Use database config if found, otherwise defaults\nconst config = configResult.id ? configResult : defaultConfig;\n\nreturn [{\n  json: {\n    ...payload,\n    config: config\n  }\n}];"
+      }
+    },
+    {
+      "id": "record-occurrence",
+      "name": "Record Occurrence",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [880, 300],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM action_center.record_alert_occurrence(\n  '{{ $json.alert_type }}'::TEXT,\n  '{{ $json.affected_resource }}'::TEXT,\n  '{{ $json.severity }}'::TEXT,\n  '{{ $json.title }}'::TEXT,\n  {{ $json.source_alert_id ? \"'\" + $json.source_alert_id + \"'\" : 'NULL' }}::TEXT,\n  {{ $json.source_system ? \"'\" + $json.source_system + \"'\" : 'NULL' }}::TEXT\n);",
+        "options": {}
+      }
+    },
+    {
+      "id": "merge-occurrence",
+      "name": "Merge Occurrence Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1100, 300],
+      "parameters": {
+        "jsCode": "// Merge occurrence result with previous data\nconst prevData = $('Merge Config with Payload').first().json;\nconst occurrenceResult = $input.first().json;\n\nreturn [{\n  json: {\n    ...prevData,\n    occurrence_id: occurrenceResult.occurrence_id,\n    should_create_task_from_accumulation: occurrenceResult.should_create_task,\n    occurrence_count: occurrenceResult.occurrence_count\n  }\n}];"
+      }
+    },
+    {
+      "id": "severity-router",
+      "name": "Route by Severity",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [1320, 300],
+      "parameters": {
+        "rules": {
+          "rules": [
+            {
+              "outputKey": "critical",
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.severity }}",
+                    "rightValue": "critical",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "outputKey": "warning",
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.severity }}",
+                    "rightValue": "warning",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "outputKey": "info",
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.severity }}",
+                    "rightValue": "info",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "none"
+        }
+      }
+    },
+    {
+      "id": "critical-set-priority",
+      "name": "Set Critical Priority",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1540, 100],
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "task_priority",
+              "name": "task_priority",
+              "value": "critical",
+              "type": "string"
+            },
+            {
+              "id": "proceed_to_task",
+              "name": "proceed_to_task",
+              "value": true,
+              "type": "boolean"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      }
+    },
+    {
+      "id": "warning-set-priority",
+      "name": "Set Warning Priority",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1540, 300],
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "task_priority",
+              "name": "task_priority",
+              "value": "high",
+              "type": "string"
+            },
+            {
+              "id": "proceed_to_task",
+              "name": "proceed_to_task",
+              "value": true,
+              "type": "boolean"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      }
+    },
+    {
+      "id": "info-handler",
+      "name": "Check Info Exceptions",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1540, 500],
+      "parameters": {
+        "jsCode": "// Check if info alert should create a task\n// Exception 1: info_creates_task config flag is true\n// Exception 2: accumulation threshold reached (3x in 24h)\n\nconst data = $input.first().json;\nconst config = data.config;\n\nconst shouldProceed = \n  config.info_creates_task === true || \n  data.should_create_task_from_accumulation === true;\n\nreturn [{\n  json: {\n    ...data,\n    task_priority: 'low',\n    proceed_to_task: shouldProceed,\n    skip_reason: shouldProceed ? null : 'Info alert - no exceptions triggered'\n  }\n}];"
+      }
+    },
+    {
+      "id": "info-proceed-check",
+      "name": "Should Proceed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [1760, 500],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-proceed",
+              "leftValue": "={{ $json.proceed_to_task }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "info-skip-response",
+      "name": "Skip - No Task Needed",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1980, 600],
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "success",
+              "name": "success",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "action",
+              "name": "action",
+              "value": "skipped",
+              "type": "string"
+            },
+            {
+              "id": "reason",
+              "name": "reason",
+              "value": "={{ $json.skip_reason }}",
+              "type": "string"
+            },
+            {
+              "id": "occurrence_id",
+              "name": "occurrence_id",
+              "value": "={{ $json.occurrence_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      }
+    },
+    {
+      "id": "merge-paths",
+      "name": "Merge All Paths",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [1980, 300],
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      }
+    },
+    {
+      "id": "check-dedupe",
+      "name": "Check for Duplicate",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [2200, 300],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- Check for existing open task with same dedupe_key\n-- Also respect dismissed task cooldown\nWITH dedupe_key AS (\n  SELECT '{{ $json.alert_type }}:{{ $json.affected_resource }}' AS key\n)\nSELECT \n  t.id,\n  t.title,\n  t.priority,\n  t.status,\n  t.completed_at,\n  t.dismissed_at,\n  CASE \n    WHEN t.status IN ('open', 'in_progress') THEN 'duplicate_open'\n    WHEN t.dismissed_at IS NOT NULL \n      AND t.dismissed_at > NOW() - INTERVAL '{{ $json.config.dismissed_cooldown_days }} days' \n    THEN 'dismissed_recently'\n    WHEN t.completed_at IS NOT NULL \n      AND t.completed_at > NOW() - INTERVAL '{{ $json.config.cooldown_after_completion_hours }} hours' \n    THEN 'completed_recently'\n    ELSE 'none'\n  END AS duplicate_status\nFROM action_center.tasks t, dedupe_key\nWHERE t.dedupe_key = dedupe_key.key\n  AND (\n    t.status IN ('open', 'in_progress')\n    OR (t.dismissed_at > NOW() - INTERVAL '{{ $json.config.dismissed_cooldown_days }} days')\n    OR (t.completed_at > NOW() - INTERVAL '{{ $json.config.cooldown_after_completion_hours }} hours')\n  )\nORDER BY t.created_at DESC\nLIMIT 1;",
+        "options": {}
+      }
+    },
+    {
+      "id": "dedupe-handler",
+      "name": "Handle Duplicate Check",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2420, 300],
+      "parameters": {
+        "jsCode": "// Handle dedupe check result\nconst prevData = $('Merge All Paths').first().json;\nconst dupeResult = $input.first().json;\n\n// Build dedupe_key for new task\nconst dedupeKey = `${prevData.alert_type}:${prevData.affected_resource}`;\n\n// Check if we found a duplicate\nconst hasDuplicate = dupeResult && dupeResult.id;\nconst duplicateStatus = hasDuplicate ? dupeResult.duplicate_status : 'none';\n\nlet action = 'create';\nlet existingTaskId = null;\nlet shouldEscalate = false;\n\nif (hasDuplicate) {\n  existingTaskId = dupeResult.id;\n  \n  if (duplicateStatus === 'duplicate_open') {\n    // Check if we should escalate priority\n    const priorityOrder = { 'low': 0, 'normal': 1, 'high': 2, 'critical': 3 };\n    const existingPriority = priorityOrder[dupeResult.priority] || 0;\n    const newPriority = priorityOrder[prevData.task_priority] || 0;\n    \n    if (newPriority > existingPriority) {\n      action = 'escalate';\n      shouldEscalate = true;\n    } else {\n      action = 'skip_duplicate';\n    }\n  } else if (duplicateStatus === 'dismissed_recently') {\n    action = 'skip_dismissed';\n  } else if (duplicateStatus === 'completed_recently') {\n    action = 'skip_cooldown';\n  }\n}\n\nreturn [{\n  json: {\n    ...prevData,\n    dedupe_key: dedupeKey,\n    action: action,\n    existing_task_id: existingTaskId,\n    should_escalate: shouldEscalate,\n    existing_priority: hasDuplicate ? dupeResult.priority : null\n  }\n}];"
+      }
+    },
+    {
+      "id": "action-router",
+      "name": "Route by Action",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [2640, 300],
+      "parameters": {
+        "rules": {
+          "rules": [
+            {
+              "outputKey": "create",
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "create",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "outputKey": "escalate",
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "escalate",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "outputKey": "skip",
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "skip",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "none"
+        }
+      }
+    },
+    {
+      "id": "escalate-priority",
+      "name": "Escalate Priority",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [2860, 300],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- Escalate task priority\nUPDATE action_center.tasks\nSET \n  priority = '{{ $json.task_priority }}',\n  updated_at = NOW()\nWHERE id = '{{ $json.existing_task_id }}'::UUID\nRETURNING id, title, priority;",
+        "options": {}
+      }
+    },
+    {
+      "id": "escalate-response",
+      "name": "Escalate Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [3080, 300],
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "success",
+              "name": "success",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "action",
+              "name": "action",
+              "value": "escalated",
+              "type": "string"
+            },
+            {
+              "id": "task_id",
+              "name": "task_id",
+              "value": "={{ $('Handle Duplicate Check').first().json.existing_task_id }}",
+              "type": "string"
+            },
+            {
+              "id": "new_priority",
+              "name": "new_priority",
+              "value": "={{ $('Handle Duplicate Check').first().json.task_priority }}",
+              "type": "string"
+            },
+            {
+              "id": "occurrence_id",
+              "name": "occurrence_id",
+              "value": "={{ $('Handle Duplicate Check').first().json.occurrence_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      }
+    },
+    {
+      "id": "skip-response",
+      "name": "Skip Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [2860, 500],
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "success",
+              "name": "success",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "action",
+              "name": "action",
+              "value": "={{ $json.action }}",
+              "type": "string"
+            },
+            {
+              "id": "existing_task_id",
+              "name": "existing_task_id",
+              "value": "={{ $json.existing_task_id }}",
+              "type": "string"
+            },
+            {
+              "id": "occurrence_id",
+              "name": "occurrence_id",
+              "value": "={{ $json.occurrence_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      }
+    },
+    {
+      "id": "create-task-placeholder",
+      "name": "Create Task (Placeholder)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [2860, 100],
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "task_payload",
+              "name": "task_payload",
+              "value": "={\n  \"title\": \"{{ $json.title }}\",\n  \"description\": \"{{ $json.description }}\",\n  \"priority\": \"{{ $json.task_priority }}\",\n  \"department\": \"{{ $json.config.default_department || '' }}\",\n  \"source\": \"alert\",\n  \"dedupe_key\": \"{{ $json.dedupe_key }}\",\n  \"related_entity_type\": \"{{ $json.source_system || 'alert' }}\",\n  \"related_entity_id\": \"{{ $json.source_alert_id || $json.occurrence_id }}\"\n}",
+              "type": "string"
+            },
+            {
+              "id": "ready_for_ai_transform",
+              "name": "ready_for_ai_transform",
+              "value": true,
+              "type": "boolean"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "notesInFlow": true,
+      "notes": "PLACEHOLDER: This node will be replaced in 08-04 with AI title transformation and actual Task API call"
+    },
+    {
+      "id": "create-task-response",
+      "name": "Create Task Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [3080, 100],
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "success",
+              "name": "success",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "action",
+              "name": "action",
+              "value": "created",
+              "type": "string"
+            },
+            {
+              "id": "task_id",
+              "name": "task_id",
+              "value": "placeholder-task-id",
+              "type": "string"
+            },
+            {
+              "id": "occurrence_id",
+              "name": "occurrence_id",
+              "value": "={{ $json.occurrence_id }}",
+              "type": "string"
+            },
+            {
+              "id": "note",
+              "name": "note",
+              "value": "Placeholder response - task creation will be implemented in 08-04",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      }
+    },
+    {
+      "id": "error-handler",
+      "name": "Error Handler",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2200, 600],
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "jsCode": "// Error handler - extract error details\nconst error = $execution.customData?.error || $input.first()?.error || 'Unknown error';\nconst errorMessage = typeof error === 'string' ? error : error.message || JSON.stringify(error);\n\nreturn [{\n  json: {\n    success: false,\n    action: 'error',\n    error: errorMessage,\n    timestamp: new Date().toISOString()\n  }\n}];"
+      }
+    },
+    {
+      "id": "slack-error-alert",
+      "name": "Slack Error Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2420, 600],
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \":x: *Alert-to-Task Workflow Error*\\n\\n*Error:* {{ $json.error }}\\n*Timestamp:* {{ $json.timestamp }}\\n\\nCheck n8n execution logs for details.\"\n}",
+        "options": {}
+      }
+    },
+    {
+      "id": "error-response",
+      "name": "Error Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [2640, 600],
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "success",
+              "name": "success",
+              "value": false,
+              "type": "boolean"
+            },
+            {
+              "id": "action",
+              "name": "action",
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "id": "error",
+              "name": "error",
+              "value": "={{ $('Error Handler').first().json.error }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Alert Webhook": {
+      "main": [
+        [
+          {
+            "node": "Validate Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Payload": {
+      "main": [
+        [
+          {
+            "node": "Get Alert Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Alert Config": {
+      "main": [
+        [
+          {
+            "node": "Merge Config with Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Config with Payload": {
+      "main": [
+        [
+          {
+            "node": "Record Occurrence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Record Occurrence": {
+      "main": [
+        [
+          {
+            "node": "Merge Occurrence Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Occurrence Result": {
+      "main": [
+        [
+          {
+            "node": "Route by Severity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Severity": {
+      "main": [
+        [
+          {
+            "node": "Set Critical Priority",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set Warning Priority",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check Info Exceptions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Critical Priority": {
+      "main": [
+        [
+          {
+            "node": "Merge All Paths",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Warning Priority": {
+      "main": [
+        [
+          {
+            "node": "Merge All Paths",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Check Info Exceptions": {
+      "main": [
+        [
+          {
+            "node": "Should Proceed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Should Proceed?": {
+      "main": [
+        [
+          {
+            "node": "Merge All Paths",
+            "type": "main",
+            "index": 2
+          }
+        ],
+        [
+          {
+            "node": "Skip - No Task Needed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge All Paths": {
+      "main": [
+        [
+          {
+            "node": "Check for Duplicate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check for Duplicate": {
+      "main": [
+        [
+          {
+            "node": "Handle Duplicate Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Handle Duplicate Check": {
+      "main": [
+        [
+          {
+            "node": "Route by Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Action": {
+      "main": [
+        [
+          {
+            "node": "Create Task (Placeholder)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Escalate Priority",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Skip Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Task (Placeholder)": {
+      "main": [
+        [
+          {
+            "node": "Create Task Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Escalate Priority": {
+      "main": [
+        [
+          {
+            "node": "Escalate Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Handler": {
+      "main": [
+        [
+          {
+            "node": "Slack Error Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack Error Alert": {
+      "main": [
+        [
+          {
+            "node": "Error Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "tags": []
+}
