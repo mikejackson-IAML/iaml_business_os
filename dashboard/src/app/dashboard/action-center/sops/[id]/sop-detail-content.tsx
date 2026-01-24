@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import type { SOPTemplate } from "@/lib/api/sop-types";
 import type { SOPMasteryResult } from "@/lib/api/sop-queries";
+import { SOPEditForm } from "../../components/sop-edit-form";
 
 interface SOPDetailContentProps {
   sop: SOPTemplate;
@@ -124,17 +125,7 @@ export function SOPDetailContent({ sop, userMastery }: SOPDetailContentProps) {
             </TabsContent>
 
             <TabsContent value="edit" className="m-0">
-              {/* Edit content - will be implemented in 06-08 */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-base">Edit SOP</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground text-sm">
-                    Edit form will be implemented in plan 06-08.
-                  </p>
-                </CardContent>
-              </Card>
+              <SOPEditForm sop={sop} />
             </TabsContent>
           </div>
 
