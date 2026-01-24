@@ -11,9 +11,9 @@ See: `.planning/projects/web-intel-dashboard/PROJECT.md` (updated 2026-01-23)
 
 **Phase:** 3 of 7 (Rankings Tracker) - IN PROGRESS
 **Status:** Phase 3 in progress
-**Plans completed:** 10 (4 from Phase 1 + 3 from Phase 2 + 3 from Phase 3)
+**Plans completed:** 11 (4 from Phase 1 + 3 from Phase 2 + 4 from Phase 3)
 
-Progress: [=========-] 90% (Phase 3: 3/? plans)
+Progress: [=========-] 90% (Phase 3: 4/? plans)
 
 ## Phase 3: Rankings Tracker (IN PROGRESS)
 
@@ -22,6 +22,7 @@ Progress: [=========-] 90% (Phase 3: 3/? plans)
 **Plans:**
 - [x] 03-01-PLAN.md - Position change + priority filter components (COMPLETE - 1 min)
 - [x] 03-02-PLAN.md - SERP features + ranking sparkline components (COMPLETE - 1 min)
+- [x] 03-03-PLAN.md - Keywords table + sortable header components (COMPLETE - 1 min)
 - [x] 03-04-PLAN.md - Expandable keyword rows (COMPLETE - 2 min)
 - [ ] Additional plans TBD
 
@@ -82,6 +83,8 @@ Progress: [=========-] 90% (Phase 3: 3/? plans)
 | 2026-01-24 | 101 - position formula for sparkline | Makes position 1 appear at top of chart |
 | 2026-01-24 | Parent controls expand state via props | Enables single-row expansion or multiple |
 | 2026-01-24 | SERP features extracted from DailyRanking | Full type support for all 6 SERP features |
+| 2026-01-24 | Default sort by priority ascending | Critical keywords need attention first |
+| 2026-01-24 | Null positions treated as 101 for sorting | Ensures unranked keywords sort to bottom |
 
 ## Session Log
 
@@ -97,6 +100,7 @@ Progress: [=========-] 90% (Phase 3: 3/? plans)
 | 2026-01-24 | Completed 02-03-PLAN.md | Traffic overview integration (2 min) |
 | 2026-01-24 | Completed 03-01-PLAN.md | PositionChange and PriorityFilter components (1 min) |
 | 2026-01-24 | Completed 03-02-PLAN.md | SerpFeatures and RankingSparkline components (1 min) |
+| 2026-01-24 | Completed 03-03-PLAN.md | KeywordsTable and SortableHeader components (1 min) |
 | 2026-01-24 | Completed 03-04-PLAN.md | KeywordRow and KeywordRowExpanded components (2 min) |
 
 ## Blockers
