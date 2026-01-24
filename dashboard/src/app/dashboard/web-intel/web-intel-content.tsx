@@ -1,38 +1,24 @@
 'use client';
 
-import { Globe, TrendingUp, Activity, FileText, Link2, AlertTriangle } from 'lucide-react';
+import { Globe, AlertTriangle } from 'lucide-react';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { UserMenu } from '@/components/UserMenu';
-import { MetricCard } from '@/dashboard-kit/components/dashboard/metric-card';
 import { HealthScore } from '@/dashboard-kit/components/dashboard/health-score';
 import { Card, CardContent, CardHeader, CardTitle } from '@/dashboard-kit/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/dashboard-kit/components/ui/tabs';
 import type { WebIntelDashboardData } from '@/lib/api/web-intel-queries';
-import type { HealthStatus } from '@/dashboard-kit/types';
-import { DateRangeSelector, type DateRange } from './components/date-range-selector';
+import { DateRangeSelector, rangeToDays, type DateRange } from './components/date-range-selector';
+import { TrafficMetricsRow } from './components/traffic-metrics-row';
+import { TrafficSourcesChart } from './components/traffic-sources-chart';
 
 interface WebIntelContentProps {
   data: WebIntelDashboardData;
-  range?: DateRange;
+  range: DateRange;
 }
 
-// Helper to determine metric status based on thresholds
-function getMetricStatus(value: number, warningThreshold?: number, criticalThreshold?: number): HealthStatus {
-  if (criticalThreshold !== undefined && value >= criticalThreshold) return 'critical';
-  if (warningThreshold !== undefined && value >= warningThreshold) return 'warning';
-  return 'healthy';
-}
-
-// Position status - lower is better for rankings
-function getPositionStatus(avgPosition: number): HealthStatus {
-  if (avgPosition === 0) return 'healthy'; // No data
-  if (avgPosition <= 10) return 'healthy';
-  if (avgPosition <= 20) return 'warning';
-  return 'critical';
-}
-
-export function WebIntelContent({ data, range = '30d' }: WebIntelContentProps) {
-  const { metrics, dailyTraffic, topPages, alerts, health } = data;
+export function WebIntelContent({ data, range }: WebIntelContentProps) {
+  const days = rangeToDays(range);
+  const { dailyTraffic, trafficSources, topPages, alerts, health } = data;
 
   return (
     <div className="p-6 lg:p-8 space-y-6">
@@ -43,10 +29,12 @@ export function WebIntelContent({ data, range = '30d' }: WebIntelContentProps) {
             <Globe className="h-8 w-8 text-blue-500" />
             <h1 className="text-display-sm text-foreground">Web Intelligence</h1>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
             <DateRangeSelector currentRange={range} />
-            <ThemeToggle />
-            <UserMenu />
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <UserMenu />
+            </div>
           </div>
         </div>
         <p className="text-muted-foreground">
@@ -54,37 +42,8 @@ export function WebIntelContent({ data, range = '30d' }: WebIntelContentProps) {
         </p>
       </header>
 
-      {/* Key Metrics Row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <MetricCard
-          label="Daily Sessions"
-          value={metrics.dailySessions}
-          icon={TrendingUp}
-          format="number"
-          status="healthy"
-        />
-        <MetricCard
-          label="Avg Position"
-          value={metrics.avgKeywordPosition || '-'}
-          icon={Activity}
-          format="number"
-          status={getPositionStatus(metrics.avgKeywordPosition)}
-        />
-        <MetricCard
-          label="Indexed Pages"
-          value={metrics.indexedPages}
-          icon={FileText}
-          format="number"
-          status="healthy"
-        />
-        <MetricCard
-          label="Backlinks"
-          value={metrics.backlinkCount}
-          icon={Link2}
-          format="number"
-          status="healthy"
-        />
-      </div>
+      {/* Traffic Metrics Row (TRAF-01 through TRAF-04) */}
+      <TrafficMetricsRow dailyTraffic={dailyTraffic} days={days} />
 
       {/* Main Content with Tabs */}
       <Tabs defaultValue="overview" className="space-y-6">
@@ -99,22 +58,8 @@ export function WebIntelContent({ data, range = '30d' }: WebIntelContentProps) {
           <div className="grid grid-cols-12 gap-6">
             {/* Left column */}
             <div className="col-span-12 lg:col-span-8 space-y-6">
-              {/* Traffic Overview Card */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Traffic Overview</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
-                    Traffic chart will be implemented in Phase 2.
-                    {dailyTraffic.length > 0 && (
-                      <span className="block mt-2">
-                        Latest: {dailyTraffic[0]?.sessions?.toLocaleString() ?? 0} sessions
-                      </span>
-                    )}
-                  </p>
-                </CardContent>
-              </Card>
+              {/* Traffic Sources Chart (TRAF-05) */}
+              <TrafficSourcesChart trafficSources={trafficSources} />
 
               {/* Top Pages Card */}
               <Card>
