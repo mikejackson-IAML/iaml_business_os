@@ -22,7 +22,8 @@ export async function skipTier(
 ): Promise<ActionResult> {
   const supabase = getServerClient();
 
-  const { data, error } = await supabase.rpc('skip_tier', {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data, error } = await (supabase as any).rpc('skip_tier', {
     p_program_id: programId,
     p_target_tier: targetTier,
   });
@@ -54,7 +55,8 @@ export async function assignInstructor(
 ): Promise<ActionResult> {
   const supabase = getServerClient();
 
-  const { data, error } = await supabase.rpc('assign_instructor', {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data, error } = await (supabase as any).rpc('assign_instructor', {
     p_block_id: blockId,
     p_instructor_id: instructorId,
   });
@@ -81,7 +83,8 @@ export async function sendNudge(programId: string): Promise<ActionResult> {
   const supabase = getServerClient();
 
   // Get instructors needing reminder for this specific program
-  const { data: instructors, error: fetchError } = await supabase.rpc(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: instructors, error: fetchError } = await (supabase as any).rpc(
     'get_instructors_needing_reminder',
     {
       p_scheduled_program_id: programId,
@@ -146,7 +149,8 @@ export async function overrideClaim(
 
   const supabase = getServerClient();
 
-  const { data, error } = await supabase.rpc('override_claim', {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data, error } = await (supabase as any).rpc('override_claim', {
     p_claim_id: claimId,
     p_reason: reason.trim(),
   });
@@ -195,7 +199,8 @@ export async function overrideClaim(
 export async function releaseAllPrograms(): Promise<ActionResult> {
   const supabase = getServerClient();
 
-  const { data, error } = await supabase.rpc('release_all', {});
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data, error } = await (supabase as any).rpc('release_all', {});
 
   if (error) {
     console.error('Error releasing programs:', error);
@@ -221,7 +226,8 @@ export async function releaseAllPrograms(): Promise<ActionResult> {
 export async function dismissAlert(alertId: string): Promise<ActionResult> {
   const supabase = getServerClient();
 
-  const { error } = await supabase.rpc('faculty_scheduler.dismiss_alert', {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error } = await (supabase as any).rpc('faculty_scheduler.dismiss_alert', {
     p_alert_id: alertId,
     p_dismissed_by: 'dashboard',
   });

@@ -32,7 +32,8 @@ export async function createWorkflow(
     updated_by: createdBy,
   };
 
-  const { data: result, error } = await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: result, error } = await (supabase as any)
     .from('workflows')
     .insert(insertData)
     .select('id')
@@ -71,7 +72,8 @@ export async function updateWorkflow(
   if (data.department !== undefined) updateData.department = data.department;
   if (data.target_completion_date !== undefined) updateData.target_completion_date = data.target_completion_date;
 
-  const { error } = await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error } = await (supabase as any)
     .from('workflows')
     .update(updateData)
     .eq('id', id);
@@ -105,7 +107,8 @@ export async function addTaskToWorkflow(
   }
 
   // Update the task to belong to this workflow
-  const { error: taskError } = await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error: taskError } = await (supabase as any)
     .from('tasks')
     .update({
       workflow_id: workflowId,
@@ -120,7 +123,8 @@ export async function addTaskToWorkflow(
 
   // Update workflow task counts
   // Re-count all tasks in the workflow
-  const { count: totalCount, error: countError } = await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { count: totalCount, error: countError } = await (supabase as any)
     .from('tasks')
     .select('*', { count: 'exact', head: true })
     .eq('workflow_id', workflowId);
@@ -131,14 +135,16 @@ export async function addTaskToWorkflow(
     return;
   }
 
-  const { count: completedCount } = await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { count: completedCount } = await (supabase as any)
     .from('tasks')
     .select('*', { count: 'exact', head: true })
     .eq('workflow_id', workflowId)
     .eq('status', 'done');
 
   // Update workflow progress
-  await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  await (supabase as any)
     .from('workflows')
     .update({
       total_tasks: totalCount || 0,
@@ -155,7 +161,8 @@ export async function recomputeWorkflowStatus(workflowId: string): Promise<void>
   const supabase = getServerClient();
 
   // Get all tasks in the workflow
-  const { data: tasks, error } = await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: tasks, error } = await (supabase as any)
     .from('tasks')
     .select('status, depends_on')
     .eq('workflow_id', workflowId);
@@ -170,19 +177,21 @@ export async function recomputeWorkflowStatus(workflowId: string): Promise<void>
   if (tasks.length === 0) {
     newStatus = 'not_started';
   } else {
-    const statuses = tasks.map(t => t.status);
-    const hasBlocked = tasks.some(t =>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const statuses = tasks.map((t: any) => t.status);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const hasBlocked = tasks.some((t: any) =>
       (t.depends_on as string[] || []).length > 0 &&
       !['done', 'dismissed'].includes(t.status)
     );
 
-    if (statuses.every(s => s === 'done' || s === 'dismissed')) {
+    if (statuses.every((s: string) => s === 'done' || s === 'dismissed')) {
       newStatus = 'completed';
     } else if (hasBlocked) {
       newStatus = 'blocked';
-    } else if (statuses.some(s => s === 'in_progress' || s === 'waiting')) {
+    } else if (statuses.some((s: string) => s === 'in_progress' || s === 'waiting')) {
       newStatus = 'in_progress';
-    } else if (statuses.every(s => s === 'open')) {
+    } else if (statuses.every((s: string) => s === 'open')) {
       newStatus = 'not_started';
     } else {
       newStatus = 'in_progress';
@@ -190,10 +199,12 @@ export async function recomputeWorkflowStatus(workflowId: string): Promise<void>
   }
 
   // Count completed
-  const completedCount = tasks.filter(t => t.status === 'done').length;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const completedCount = tasks.filter((t: any) => t.status === 'done').length;
 
   // Get current workflow to check if we need to set timestamps
-  const { data: currentWorkflow } = await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: currentWorkflow } = await (supabase as any)
     .from('workflows')
     .select('started_at')
     .eq('id', workflowId)
@@ -219,7 +230,8 @@ export async function recomputeWorkflowStatus(workflowId: string): Promise<void>
   }
 
   // Update workflow
-  await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  await (supabase as any)
     .from('workflows')
     .update(updateObj)
     .eq('id', workflowId);
