@@ -429,6 +429,68 @@ export interface BacklinkProfile {
   lostLinks7d: number;
 }
 
+export interface ContentInventory {
+  id: string;
+  url: string;
+  title: string | null;
+  metaDescription: string | null;
+  h1: string | null;
+  wordCount: number | null;
+  publishDate: Date | null;
+  lastModified: Date | null;
+  lastCrawled: Date | null;
+  contentType: string | null;
+  category: string | null;
+  status: 'active' | 'redirect' | 'removed' | 'draft';
+  avgMonthlySessions: number | null;
+  avgMonthlyPageviews: number | null;
+}
+
+export interface ThinContent {
+  id: string;
+  contentId: string;
+  detectedDate: Date;
+  wordCount: number | null;
+  avgTimeOnPage: number | null;
+  bounceRate: number | null;
+  reason: string | null;
+  recommendation: string | null;
+  isAddressed: boolean;
+}
+
+export interface ContentDecayWithInventory extends ContentDecay {
+  url: string;
+  title: string | null;
+  wordCount: number | null;
+}
+
+export interface ThinContentWithInventory extends ThinContent {
+  url: string;
+  title: string | null;
+}
+
+export interface ContentSummary {
+  totalIndexed: number;
+  avgWordCount: number;
+}
+
+export interface Competitor {
+  id: string;
+  domain: string;
+  name: string | null;
+  isActive: boolean;
+  notes: string | null;
+}
+
+export interface SerpShare {
+  id: string;
+  collectedDate: Date;
+  ourShare: number | null;
+  competitorShares: Record<string, number>;
+  keywordsTracked: number | null;
+  keywordsRanking: number | null;
+}
+
 // ============================================
 // Web Intel Dashboard Data Structure
 // ============================================
@@ -977,6 +1039,72 @@ export function transformAlerts(data: WebIntelAlertDb[]): AlertItem[] {
     timestamp: new Date(item.created_at),
     dismissable: true,
   }));
+}
+
+/**
+ * Transform content inventory to frontend format
+ */
+export function transformContentInventory(data: ContentInventoryDb[]): ContentInventory[] {
+  return data.map((item) => ({
+    id: item.id,
+    url: item.url,
+    title: item.title,
+    metaDescription: item.meta_description,
+    h1: item.h1,
+    wordCount: item.word_count,
+    publishDate: item.publish_date ? new Date(item.publish_date) : null,
+    lastModified: item.last_modified ? new Date(item.last_modified) : null,
+    lastCrawled: item.last_crawled ? new Date(item.last_crawled) : null,
+    contentType: item.content_type,
+    category: item.category,
+    status: item.status,
+    avgMonthlySessions: item.avg_monthly_sessions,
+    avgMonthlyPageviews: item.avg_monthly_pageviews,
+  }));
+}
+
+/**
+ * Transform thin content to frontend format
+ */
+export function transformThinContent(data: ThinContentDb[]): ThinContent[] {
+  return data.map((item) => ({
+    id: item.id,
+    contentId: item.content_id,
+    detectedDate: new Date(item.detected_date),
+    wordCount: item.word_count,
+    avgTimeOnPage: item.avg_time_on_page ? Number(item.avg_time_on_page) : null,
+    bounceRate: item.bounce_rate ? Number(item.bounce_rate) : null,
+    reason: item.reason,
+    recommendation: item.recommendation,
+    isAddressed: item.is_addressed,
+  }));
+}
+
+/**
+ * Transform competitors to frontend format
+ */
+export function transformCompetitors(data: CompetitorDb[]): Competitor[] {
+  return data.map((item) => ({
+    id: item.id,
+    domain: item.domain,
+    name: item.name,
+    isActive: item.is_active,
+    notes: item.notes,
+  }));
+}
+
+/**
+ * Transform SERP share to frontend format
+ */
+export function transformSerpShare(data: SerpShareDb): SerpShare {
+  return {
+    id: data.id,
+    collectedDate: new Date(data.collected_date),
+    ourShare: data.our_share ? Number(data.our_share) : null,
+    competitorShares: data.competitor_shares || {},
+    keywordsTracked: data.keywords_tracked,
+    keywordsRanking: data.keywords_ranking,
+  };
 }
 
 // ============================================
