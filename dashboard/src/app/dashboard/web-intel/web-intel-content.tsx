@@ -6,8 +6,17 @@ import { UserMenu } from '@/components/UserMenu';
 import { HealthScore } from '@/dashboard-kit/components/dashboard/health-score';
 import { Card, CardContent, CardHeader, CardTitle } from '@/dashboard-kit/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/dashboard-kit/components/ui/tabs';
-import type { WebIntelDashboardData } from '@/lib/api/web-intel-queries';
+import type {
+  WebIntelDashboardData,
+  ContentDecayWithInventory,
+  ThinContentWithInventory,
+  ContentSummary,
+  Competitor,
+  SerpShare,
+} from '@/lib/api/web-intel-queries';
 import { DateRangeSelector, rangeToDays, type DateRange } from './components/date-range-selector';
+import { ContentHealthSection } from './components/content-health-section';
+import { CompetitorsSection } from './components/competitors-section';
 import { TrafficMetricsRow } from './components/traffic-metrics-row';
 import { TrafficSourcesChart } from './components/traffic-sources-chart';
 import { PriorityFilter, type KeywordPriorityFilter } from './components/priority-filter';
@@ -24,9 +33,24 @@ interface WebIntelContentProps {
   range: DateRange;
   priorityFilter: KeywordPriorityFilter;
   alertTypeFilter: AlertTypeFilterValue;
+  contentDecay: ContentDecayWithInventory[];
+  thinContent: ThinContentWithInventory[];
+  contentSummary: ContentSummary;
+  competitors: Competitor[];
+  serpShare: SerpShare | null;
 }
 
-export function WebIntelContent({ data, range, priorityFilter, alertTypeFilter }: WebIntelContentProps) {
+export function WebIntelContent({
+  data,
+  range,
+  priorityFilter,
+  alertTypeFilter,
+  contentDecay,
+  thinContent,
+  contentSummary,
+  competitors,
+  serpShare,
+}: WebIntelContentProps) {
   const days = rangeToDays(range);
   const { dailyTraffic, trafficSources, topPages, alerts, health, keywords, rankings, coreWebVitals, searchPerformance } = data;
   const alertCount = alerts.length;
@@ -180,23 +204,31 @@ export function WebIntelContent({ data, range, priorityFilter, alertTypeFilter }
               message: a.description ?? '',
               severity: a.severity as 'info' | 'warning' | 'critical',
               alertType: a.category ?? 'technical',
-              createdAt: a.timestamp,
+              createdAt: a.timestamp ?? new Date(),
             }))}
             currentFilter={alertTypeFilter}
           />
         </TabsContent>
 
-        <TabsContent value="content">
-          <Card>
-            <CardHeader>
-              <CardTitle>Content Performance</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                Content tab will be implemented in Phase 6.
-              </p>
-            </CardContent>
-          </Card>
+        <TabsContent value="content" className="space-y-6">
+          <div className="grid grid-cols-12 gap-6">
+            {/* Content Health - left side */}
+            <div className="col-span-12 lg:col-span-6">
+              <ContentHealthSection
+                summary={contentSummary}
+                decayPages={contentDecay}
+                thinPages={thinContent}
+              />
+            </div>
+
+            {/* Competitors - right side */}
+            <div className="col-span-12 lg:col-span-6">
+              <CompetitorsSection
+                competitors={competitors}
+                serpShare={serpShare}
+              />
+            </div>
+          </div>
         </TabsContent>
       </Tabs>
     </div>
