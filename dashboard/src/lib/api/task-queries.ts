@@ -165,3 +165,48 @@ export async function getTaskActivity(
 
   return (data || []) as TaskActivity[];
 }
+
+// ==================== Dependency Queries ====================
+
+/**
+ * Get tasks that this task depends on (blocked by)
+ * Returns the actual task objects from the depends_on UUID array
+ */
+export async function getTasksBlockedBy(taskId: string): Promise<TaskExtended[]> {
+  const supabase = getServerClient();
+
+  // First, get the task to find its depends_on array
+  const { data: task, error: taskError } = await supabase
+    .from('tasks')
+    .select('depends_on')
+    .eq('id', taskId)
+    .single();
+
+  if (taskError) {
+    if (taskError.code === 'PGRST116') {
+      return []; // Task not found
+    }
+    console.error('Error fetching task dependencies:', taskError);
+    throw new Error('Failed to fetch task dependencies');
+  }
+
+  const dependsOn = task?.depends_on || [];
+  if (dependsOn.length === 0) {
+    return [];
+  }
+
+  // Fetch the actual tasks this task depends on
+  const { data, error } = await supabase
+    .from('tasks_extended')
+    .select('*')
+    .in('id', dependsOn)
+    .order('priority', { ascending: true })
+    .order('due_date', { ascending: true, nullsFirst: false });
+
+  if (error) {
+    console.error('Error fetching blocked-by tasks:', error);
+    throw new Error('Failed to fetch blocked-by tasks');
+  }
+
+  return (data || []) as TaskExtended[];
+}
