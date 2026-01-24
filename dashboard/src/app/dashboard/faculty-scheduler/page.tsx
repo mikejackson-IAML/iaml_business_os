@@ -3,13 +3,12 @@ import { FacultySchedulerSkeleton } from './faculty-scheduler-skeleton';
 import { FacultySchedulerContent } from './content';
 import { getFacultySchedulerDashboardData } from '@/lib/api/faculty-scheduler-queries';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: 'Faculty Scheduler | IAML Business OS',
   description: 'Instructor recruitment pipeline - tier management, assignment, and notifications',
 };
-
-// Revalidate every 5 minutes
-export const revalidate = 300;
 
 async function FacultySchedulerDataLoader() {
   const data = await getFacultySchedulerDashboardData();
