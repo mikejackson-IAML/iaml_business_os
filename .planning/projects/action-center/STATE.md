@@ -5,14 +5,14 @@
 See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 **Core value:** Nothing falls through the cracks. Every action item flows to one place.
-**Current focus:** Phase 8 - Alert Integration
+**Current focus:** Phase 9 - Workflow Templates & Rules (ready to start)
 
 ## Current Status
 
 **Milestone:** v1.0 Action Center
-**Phase:** 8 of 12 (Alert Integration) - IN PROGRESS
-**Plan:** 6/7 complete
-**Status:** 08-05 complete - Deduplication functions and workflow integration added
+**Phase:** 8 of 12 (Alert Integration) - COMPLETE
+**Plan:** 7/7 complete
+**Status:** Phase 8 complete - Alert Integration fully implemented
 
 ## Progress Overview
 
@@ -25,7 +25,7 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 | 5 | Task UI - Detail & Create | COMPLETE |
 | 6 | SOP Templates | COMPLETE |
 | 7 | Workflows & Dependencies | COMPLETE |
-| 8 | Alert Integration | IN PROGRESS |
+| 8 | Alert Integration | COMPLETE |
 | 9 | Workflow Templates & Rules | Not Started |
 | 10 | Dashboard & Notifications | Not Started |
 | 11 | AI Integration | Not Started |
@@ -33,8 +33,8 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 ## Context for Next Session
 
-**Last action:** Completed 08-05 (Duplicate Detection and Priority Escalation)
-**Next action:** Execute 08-07 (Connect Existing Monitors)
+**Last action:** Completed 08-07 (Alert Resolution and Documentation)
+**Next action:** Plan Phase 9 (Workflow Templates & Rules)
 
 ## Key Decisions Made
 
@@ -67,78 +67,9 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 None.
 
-## Phase 7 Summary
+## Phase 8 Summary
 
-Phase 7 (Workflows & Dependencies) complete:
-
-| Plan | Name | Wave | Status |
-|------|------|------|--------|
-| 07-01 | Workflow Server Actions | 1 | COMPLETE |
-| 07-02 | Dependency Query Functions | 1 | COMPLETE |
-| 07-03 | Workflow List Page Foundation | 2 | COMPLETE |
-| 07-04 | Workflow Table and Row Components | 3 | COMPLETE |
-| 07-05 | Workflow Detail Page Skeleton | 3 | COMPLETE |
-| 07-06 | Workflow Header with Progress | 3 | COMPLETE |
-| 07-07 | Workflow Task List with Dependencies | 4 | COMPLETE |
-| 07-08 | Enhanced Dependency Section | 4 | COMPLETE |
-| 07-09 | Add Task to Workflow Modal | 5 | COMPLETE |
-| 07-10 | Dismiss with Dependents Dialog | 5 | COMPLETE |
-
-### Files Created (Phase 7)
-
-**Server Actions:**
-- `dashboard/src/app/dashboard/action-center/workflow-actions.ts`
-
-**API Queries:**
-- `dashboard/src/lib/api/task-queries.ts` (updated with dependency functions)
-
-**Workflow List Page:**
-- `dashboard/src/app/dashboard/action-center/workflows/page.tsx`
-- `dashboard/src/app/dashboard/action-center/workflows/workflow-list-skeleton.tsx`
-- `dashboard/src/app/dashboard/action-center/workflows/workflow-list-data-loader.tsx`
-- `dashboard/src/app/dashboard/action-center/workflows/workflow-list-content.tsx`
-
-**Workflow Detail Page:**
-- `dashboard/src/app/dashboard/action-center/workflows/[id]/page.tsx`
-- `dashboard/src/app/dashboard/action-center/workflows/[id]/workflow-detail-skeleton.tsx`
-- `dashboard/src/app/dashboard/action-center/workflows/[id]/workflow-detail-content.tsx`
-- `dashboard/src/app/dashboard/action-center/workflows/[id]/not-found.tsx`
-
-**Components:**
-- `dashboard/src/app/dashboard/action-center/components/workflow-table.tsx`
-- `dashboard/src/app/dashboard/action-center/components/workflow-row.tsx`
-- `dashboard/src/app/dashboard/action-center/components/workflow-progress.tsx`
-- `dashboard/src/app/dashboard/action-center/components/workflow-task-list.tsx`
-- `dashboard/src/app/dashboard/action-center/components/workflow-task-row.tsx`
-- `dashboard/src/app/dashboard/action-center/components/task-dependencies.tsx`
-- `dashboard/src/app/dashboard/action-center/components/add-task-to-workflow-modal.tsx`
-- `dashboard/src/app/dashboard/action-center/components/dismiss-with-dependents-dialog.tsx`
-
-**Modified:**
-- `dashboard/src/app/dashboard/action-center/components/dismiss-task-dialog.tsx` (soft enforcement warning)
-- `dashboard/src/app/dashboard/action-center/tasks/[id]/task-detail-content.tsx` (dependency section)
-- `dashboard/src/app/dashboard/action-center/components/index.ts` (exports)
-
-### Requirements Covered (Phase 7)
-
-- WF-01: Workflow list page shows all workflows
-- WF-02: Workflow detail shows tasks in dependency order
-- WF-03: Progress indicator shows X of Y complete
-- WF-04: Blocked tasks are highlighted
-- WF-05: Can add task to workflow
-- WF-06: Workflow status computed correctly
-- DEP-01: Tasks can have multiple dependencies
-- DEP-02: Dependent tasks show blocked indicator
-- DEP-03: Soft enforcement with warning works
-- DEP-04: Blocked By section shows task links
-- DEP-05: Blocking section shows waiting tasks
-- DEP-06: Dismissing task with dependents creates decision task
-
-## Known Technical Debt
-
-- **Supabase Types:** The generated types.ts doesn't include action_center schema. TypeScript shows type errors but code works at runtime. Should regenerate types to include action_center schema.
-
-## Phase 8 Progress
+Phase 8 (Alert Integration) complete:
 
 | Plan | Name | Wave | Status |
 |------|------|------|--------|
@@ -148,18 +79,26 @@ Phase 7 (Workflows & Dependencies) complete:
 | 08-04 | AI Title Transformation | 2 | COMPLETE |
 | 08-05 | Full Duplicate Detection Logic | 2 | COMPLETE |
 | 08-06 | Business Hours Due Date Calculation | 3 | COMPLETE |
-| 08-07 | Connect Existing Monitors | 3 | NOT STARTED |
+| 08-07 | Alert Resolution and Documentation | 4 | COMPLETE |
 
 ### Files Created (Phase 8)
 
-**Database:**
-- `supabase/migrations/20260124_alert_webhook_schema.sql`
-- `supabase/migrations/20260124_alert_accumulation.sql`
-- `supabase/migrations/20260124_alert_dedupe_functions.sql`
-- `supabase/migrations/20260124_due_date_calculation.sql`
+**Database Migrations:**
+- `supabase/migrations/20260124_alert_webhook_schema.sql` - alert_config table
+- `supabase/migrations/20260124_alert_accumulation.sql` - alert_occurrences table and functions
+- `supabase/migrations/20260124_alert_dedupe_functions.sql` - check_alert_dedupe, escalate_task_priority
+- `supabase/migrations/20260124_due_date_calculation.sql` - calculate_alert_due_date, is_business_hours
+- `supabase/migrations/20260124_alert_resolution_trigger.sql` - task_alert_resolution trigger
 
 **n8n Workflows:**
-- `business-os/workflows/alert-to-task.json`
+- `business-os/workflows/alert-to-task.json` - Complete workflow JSON
+
+**Documentation:**
+- `business-os/workflows/README-alert-to-task.md` - Comprehensive workflow documentation
+- `business-os/workflows/README.md` - Updated with Alert-to-Task entry
+
+**Scripts:**
+- `supabase/scripts/register-alert-to-task-workflow.sql` - Workflow registration template
 
 ### Key Decisions (Phase 8)
 
@@ -173,6 +112,22 @@ Phase 7 (Workflows & Dependencies) complete:
 - [08-06]: Business hours = 9am-6pm CT, weekdays only
 - [08-06]: Critical alerts after hours due next business day 9am
 - [08-06]: Warning alerts default to Friday 5pm if no metadata offset
+- [08-07]: Added `alert_resolved` and `alert_escalation` to task_activity constraint
+- [08-07]: Graceful handling when faculty_scheduler.alerts table doesn't exist
+
+### Requirements Covered (Phase 8)
+
+- ALT-01: System alerts create tasks automatically
+- ALT-02: AI transforms alert titles to action-oriented task titles
+- ALT-03: Deduplication prevents duplicate tasks for same issue
+- ALT-04: Priority escalation when higher severity alert for existing task
+- ALT-05: Info alerts accumulate (3x/24h) before creating task
+- ALT-06: Business hours respected for due date calculation
+- ALT-07: Completing alert task resolves source alert
+
+## Known Technical Debt
+
+- **Supabase Types:** The generated types.ts doesn't include action_center schema. TypeScript shows type errors but code works at runtime. Should regenerate types to include action_center schema.
 
 ---
-*Last updated: 2026-01-24 after 08-05 complete*
+*Last updated: 2026-01-24 after 08-07 complete*
