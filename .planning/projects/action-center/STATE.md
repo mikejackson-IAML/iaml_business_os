@@ -5,14 +5,14 @@
 See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 **Core value:** Nothing falls through the cracks. Every action item flows to one place.
-**Current focus:** Phase 6 - SOP Templates (Not Started)
+**Current focus:** Phase 6 - SOP Templates (In Progress)
 
 ## Current Status
 
 **Milestone:** v1.0 Action Center
-**Phase:** 5 of 12 (Task UI - Detail & Create) - COMPLETE
-**Plan:** 11/11 complete
-**Status:** Phase 5 Complete - Ready for Phase 6
+**Phase:** 6 of 12 (SOP Templates) - IN PROGRESS
+**Plan:** 1/10 complete
+**Status:** Phase 6 In Progress - Plan 06-01 Complete
 
 ## Progress Overview
 
@@ -23,7 +23,7 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 | 3 | Workflow & SOP API | COMPLETE |
 | 4 | Task UI - List | COMPLETE |
 | 5 | Task UI - Detail & Create | COMPLETE |
-| 6 | SOP Templates | Not Started |
+| 6 | SOP Templates | In Progress (1/10) |
 | 7 | Workflows & Dependencies | Not Started |
 | 8 | Alert Integration | Not Started |
 | 9 | Workflow Templates & Rules | Not Started |
@@ -33,8 +33,8 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 ## Context for Next Session
 
-**Last action:** Completed Plan 05-11 (Final Integration) - Phase 5 Complete
-**Next action:** Start Phase 6 (SOP Templates)
+**Last action:** Completed Plan 06-01 (SOP Server Actions)
+**Next action:** Continue with Plan 06-02 (SOP List Page)
 
 ## Key Decisions Made
 
@@ -164,5 +164,31 @@ Phase 5 (Task UI - Detail & Create) complete:
 - UI-19: Workflow context display
 - UI-20: Create task modal
 
+## Phase 6 Progress
+
+| Plan | Name | Wave | Status |
+|------|------|------|--------|
+| 06-01 | SOP Server Actions | 1 | COMPLETE |
+| 06-02 | SOP List Page | 1 | Pending |
+| 06-03 | SOP Card Component | 1 | Pending |
+| 06-04 | SOP Detail Page | 2 | Pending |
+| 06-05 | Step Checklist Component | 2 | Pending |
+| 06-06 | Mastery Indicator | 3 | Pending |
+| 06-07 | SOP Variables Support | 3 | Pending |
+| 06-08 | SOP Quick Actions | 4 | Pending |
+| 06-09 | SOP Execution Mode | 5 | Pending |
+| 06-10 | Final Integration | 6 | Pending |
+
+### Files Created (Phase 6)
+
+**Server Actions:**
+- `dashboard/src/app/dashboard/action-center/sop-actions.ts`
+
+**API Types:**
+- `dashboard/src/lib/api/sop-types.ts` (updated with mastery and usage types)
+
+**API Queries:**
+- `dashboard/src/lib/api/sop-queries.ts` (updated with mastery and usage functions)
+
 ---
-*Last updated: 2026-01-23 after completing Plan 05-11 (Final Integration) - Phase 5 Complete*
+*Last updated: 2026-01-24 after completing Plan 06-01 (SOP Server Actions)*
