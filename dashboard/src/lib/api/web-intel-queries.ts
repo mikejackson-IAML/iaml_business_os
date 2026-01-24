@@ -285,6 +285,11 @@ export interface DailyRanking {
   rankingUrl: string | null;
   hasFeaturedSnippet: boolean;
   featuredSnippetOwner: string | null;
+  hasPeopleAlsoAsk: boolean;
+  hasLocalPack: boolean;
+  hasKnowledgePanel: boolean;
+  hasVideoResults: boolean;
+  hasImagePack: boolean;
   competitorPositions: Array<{ domain: string; position: number }>;
 }
 
@@ -784,6 +789,11 @@ export function transformRankings(data: DailyRankingDb[]): DailyRanking[] {
     rankingUrl: item.ranking_url,
     hasFeaturedSnippet: item.has_featured_snippet,
     featuredSnippetOwner: item.featured_snippet_owner,
+    hasPeopleAlsoAsk: item.has_people_also_ask,
+    hasLocalPack: item.has_local_pack,
+    hasKnowledgePanel: item.has_knowledge_panel,
+    hasVideoResults: item.has_video_results,
+    hasImagePack: item.has_image_pack,
     competitorPositions: item.competitor_positions || [],
   }));
 }
