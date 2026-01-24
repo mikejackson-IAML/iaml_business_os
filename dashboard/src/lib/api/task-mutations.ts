@@ -23,7 +23,7 @@ export async function createTask(
     title: data.title,
     description: data.description || null,
     task_type: data.task_type || 'standard',
-    source: 'manual',  // API-created tasks are manual
+    source: data.source || 'manual',  // Default to manual if not specified
     status: 'open',
     priority: data.priority || 'normal',
     due_date: data.due_date || null,

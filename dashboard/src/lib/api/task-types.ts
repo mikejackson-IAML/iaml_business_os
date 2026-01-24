@@ -127,6 +127,7 @@ export interface CreateTaskRequest {
   title: string;
   description?: string;
   task_type?: TaskType;
+  source?: TaskSource;
   priority?: TaskPriority;
   due_date?: string;
   due_time?: string;
