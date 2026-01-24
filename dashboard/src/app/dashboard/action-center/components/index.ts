@@ -10,6 +10,10 @@ export { TaskTable } from "./task-table";
 export { TaskRow } from "./task-row";
 export { TaskRowExpanded } from "./task-row-expanded";
 
+// Workflow List
+export { WorkflowTable } from "./workflow-table";
+export { WorkflowRow, workflowStatusConfig } from "./workflow-row";
+
 // Task Detail
 export { TaskMetadataSidebar } from "./task-metadata-sidebar";
 export { TaskComments } from "./task-comments";
