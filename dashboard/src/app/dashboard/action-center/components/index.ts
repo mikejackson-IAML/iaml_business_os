@@ -27,3 +27,5 @@ export { ProgressiveInstructions } from "./progressive-instructions";
 export { MasteryBadge, getMasteryTier } from "./mastery-badge";
 export { SOPCategoryGroup } from "./sop-category-group";
 export { SOPRow } from "./sop-row";
+export { SOPStepEditor } from "./sop-step-editor";
+export { SOPStepDisplay } from "./sop-step-display";
