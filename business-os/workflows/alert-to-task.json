@@ -588,13 +588,41 @@
       }
     },
     {
+      "id": "calculate-due-date",
+      "name": "Calculate Due Date",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [3960, 100],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM action_center.calculate_alert_due_date(\n  '{{ $json.severity }}',\n  '{{ JSON.stringify($json.metadata || {}) }}'::JSONB,\n  'America/Chicago'\n);",
+        "options": {}
+      }
+    },
+    {
+      "id": "merge-due-date",
+      "name": "Merge Due Date Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [4180, 100],
+      "parameters": {
+        "jsCode": "// Merge due date calculation with previous data\nconst prevData = $('Merge Transform Paths').first().json;\nconst dueDateResult = $input.first().json;\n\nreturn [{\n  json: {\n    ...prevData,\n    calculated_due_date: dueDateResult.due_date,\n    calculated_due_time: dueDateResult.due_time,\n    due_date_reasoning: dueDateResult.reasoning\n  }\n}];"
+      }
+    },
+    {
       "id": "map-department",
       "name": "Map Department",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [3960, 100],
+      "position": [4400, 100],
       "parameters": {
-        "jsCode": "// Map department from config or defaults\nconst data = $input.first().json;\nconst configDepartment = data.config?.default_department;\n\n// Use config department if available, otherwise map defaults\nconst departmentMap = {\n  'ssl_expiry': 'Digital',\n  'domain_health': 'Digital',\n  'uptime_down': 'Digital',\n  'payment_failed': 'Operations',\n  'tier_ending': 'Programs',\n  'vip_non_response': 'Programs',\n  'link_broken': 'Digital',\n  'lighthouse_issue': 'Digital'\n};\n\nconst department = configDepartment || departmentMap[data.alert_type] || 'Operations';\n\n// Calculate due date based on priority\nlet dueDate = new Date();\nlet dueTime = null;\n\nswitch (data.task_priority) {\n  case 'critical':\n    // Due today, within 4 hours\n    dueDate.setHours(dueDate.getHours() + 4);\n    dueTime = dueDate.toTimeString().slice(0, 5);\n    break;\n  case 'high':\n    // Due end of next business day\n    dueDate.setDate(dueDate.getDate() + 1);\n    dueTime = '17:00';\n    break;\n  case 'normal':\n    // Due in 3 days\n    dueDate.setDate(dueDate.getDate() + 3);\n    break;\n  case 'low':\n    // Due in 7 days\n    dueDate.setDate(dueDate.getDate() + 7);\n    break;\n}\n\nreturn [{\n  json: {\n    ...data,\n    department: department,\n    calculated_due_date: dueDate.toISOString().split('T')[0],\n    calculated_due_time: dueTime\n  }\n}];"
+        "jsCode": "// Map department from config or defaults\nconst data = $input.first().json;\nconst configDepartment = data.config?.default_department;\n\n// Use config department if available, otherwise map defaults\nconst departmentMap = {\n  'ssl_expiry': 'Digital',\n  'domain_health': 'Digital',\n  'uptime_down': 'Digital',\n  'payment_failed': 'Operations',\n  'tier_ending': 'Programs',\n  'vip_non_response': 'Programs',\n  'link_broken': 'Digital',\n  'lighthouse_issue': 'Digital'\n};\n\nconst department = configDepartment || departmentMap[data.alert_type] || 'Operations';\n\n// Map priority using database function result\nconst priorityMap = {\n  'critical': 'critical',\n  'warning': 'high',\n  'info': 'low'\n};\nconst mappedPriority = priorityMap[data.severity] || 'normal';\n\nreturn [{\n  json: {\n    ...data,\n    department: department,\n    task_priority: mappedPriority\n  }\n}];"
       }
     },
     {
@@ -602,7 +630,7 @@
       "name": "Create Task",
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
-      "position": [4180, 100],
+      "position": [4620, 100],
       "credentials": {
         "postgres": {
           "id": "EgmvZHbvINHsh6PR",
@@ -620,7 +648,7 @@
       "name": "Create Task Response",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [4400, 100],
+      "position": [4840, 100],
       "parameters": {
         "mode": "manual",
         "duplicateItem": false,
@@ -989,6 +1017,28 @@
       ]
     },
     "Merge Transform Paths": {
+      "main": [
+        [
+          {
+            "node": "Calculate Due Date",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate Due Date": {
+      "main": [
+        [
+          {
+            "node": "Merge Due Date Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Due Date Result": {
       "main": [
         [
           {
