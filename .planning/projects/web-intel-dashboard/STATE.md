@@ -11,9 +11,9 @@ See: `.planning/projects/web-intel-dashboard/PROJECT.md` (updated 2026-01-23)
 
 **Phase:** 3 of 7 (Rankings Tracker) - IN PROGRESS
 **Status:** Phase 3 in progress
-**Plans completed:** 9 (4 from Phase 1 + 3 from Phase 2 + 2 from Phase 3)
+**Plans completed:** 10 (4 from Phase 1 + 3 from Phase 2 + 3 from Phase 3)
 
-Progress: [=========-] 90% (Phase 3: 2/? plans)
+Progress: [=========-] 90% (Phase 3: 3/? plans)
 
 ## Phase 3: Rankings Tracker (IN PROGRESS)
 
@@ -22,6 +22,7 @@ Progress: [=========-] 90% (Phase 3: 2/? plans)
 **Plans:**
 - [x] 03-01-PLAN.md - Position change + priority filter components (COMPLETE - 1 min)
 - [x] 03-02-PLAN.md - SERP features + ranking sparkline components (COMPLETE - 1 min)
+- [x] 03-04-PLAN.md - Expandable keyword rows (COMPLETE - 2 min)
 - [ ] Additional plans TBD
 
 ## Phase 2: Traffic Overview (COMPLETE)
@@ -79,6 +80,8 @@ Progress: [=========-] 90% (Phase 3: 2/? plans)
 | 2026-01-24 | Remove 'all' priority from URL params | Cleaner default URLs |
 | 2026-01-24 | ImageIcon alias from lucide | Avoid conflict with HTML Image element |
 | 2026-01-24 | 101 - position formula for sparkline | Makes position 1 appear at top of chart |
+| 2026-01-24 | Parent controls expand state via props | Enables single-row expansion or multiple |
+| 2026-01-24 | SERP features extracted from DailyRanking | Full type support for all 6 SERP features |
 
 ## Session Log
 
@@ -94,6 +97,7 @@ Progress: [=========-] 90% (Phase 3: 2/? plans)
 | 2026-01-24 | Completed 02-03-PLAN.md | Traffic overview integration (2 min) |
 | 2026-01-24 | Completed 03-01-PLAN.md | PositionChange and PriorityFilter components (1 min) |
 | 2026-01-24 | Completed 03-02-PLAN.md | SerpFeatures and RankingSparkline components (1 min) |
+| 2026-01-24 | Completed 03-04-PLAN.md | KeywordRow and KeywordRowExpanded components (2 min) |
 
 ## Blockers
 
@@ -101,9 +105,9 @@ None
 
 ## Session Continuity
 
-- **Last session:** 2026-01-24T16:02:33Z
-- **Stopped at:** Completed 03-02-PLAN.md (SerpFeatures and RankingSparkline components)
-- **Resume file:** 03-03-PLAN.md (next plan in Phase 3)
+- **Last session:** 2026-01-24T16:06:30Z
+- **Stopped at:** Completed 03-04-PLAN.md (KeywordRow and KeywordRowExpanded components)
+- **Resume file:** 03-05-PLAN.md (next plan in Phase 3)
 
 ## Notes
 
@@ -113,7 +117,7 @@ None
 - Data source is `web_intel` schema in Supabase
 - Phase 1 complete: types, queries, route, and navigation all in place
 - Phase 2 complete: Date range selector, metrics row, sources chart, and Top Pages integrated
-- Phase 3 in progress: PositionChange, PriorityFilter, SerpFeatures, RankingSparkline components ready for keywords table
+- Phase 3 in progress: PositionChange, PriorityFilter, SerpFeatures, RankingSparkline, KeywordRow, and KeywordRowExpanded components ready for keywords table
 
 ---
 *Last updated: 2026-01-24*
