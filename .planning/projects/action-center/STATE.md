@@ -11,8 +11,8 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 **Milestone:** v1.0 Action Center
 **Phase:** 6 of 12 (SOP Templates) - IN PROGRESS
-**Plan:** 4/10 complete
-**Status:** Phase 6 In Progress - Plan 06-04 Complete
+**Plan:** 6/10 complete
+**Status:** Phase 6 In Progress - Plan 06-06 Complete
 
 ## Progress Overview
 
@@ -23,7 +23,7 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 | 3 | Workflow & SOP API | COMPLETE |
 | 4 | Task UI - List | COMPLETE |
 | 5 | Task UI - Detail & Create | COMPLETE |
-| 6 | SOP Templates | In Progress (4/10) |
+| 6 | SOP Templates | In Progress (6/10) |
 | 7 | Workflows & Dependencies | Not Started |
 | 8 | Alert Integration | Not Started |
 | 9 | Workflow Templates & Rules | Not Started |
@@ -33,8 +33,8 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 ## Context for Next Session
 
-**Last action:** Completed Plan 06-04 (SOP Category Group and Row Components)
-**Next action:** Continue with Plan 06-05 (Step Checklist Component)
+**Last action:** Completed Plan 06-06 (Step Editor Component)
+**Next action:** Continue with Plan 06-07 (Step List with Reordering)
 
 ## Key Decisions Made
 
@@ -170,14 +170,14 @@ Phase 5 (Task UI - Detail & Create) complete:
 |------|------|------|--------|
 | 06-01 | SOP Server Actions | 1 | COMPLETE |
 | 06-02 | Progressive Instructions Component | 1 | COMPLETE |
-| 06-03 | SOP List Page Foundation | 1 | COMPLETE |
+| 06-03 | SOP List Page Foundation | 2 | COMPLETE |
 | 06-04 | SOP Category Group and Row Components | 2 | COMPLETE |
-| 06-05 | Step Checklist Component | 2 | Pending |
-| 06-06 | Mastery Indicator | 3 | Pending |
-| 06-07 | SOP Variables Support | 3 | Pending |
-| 06-08 | SOP Quick Actions | 4 | Pending |
-| 06-09 | SOP Execution Mode | 5 | Pending |
-| 06-10 | Final Integration | 6 | Pending |
+| 06-05 | SOP Detail Page Skeleton | 3 | COMPLETE |
+| 06-06 | Step Editor Component | 4 | COMPLETE |
+| 06-07 | Step List with Reordering | 4 | Pending |
+| 06-08 | SOP Edit Mode | 5 | Pending |
+| 06-09 | Mastery Preview and Usage Stats | 5 | Pending |
+| 06-10 | Task Detail Integration | 6 | Pending |
 
 ### Files Created (Phase 6)
 
@@ -209,5 +209,18 @@ Phase 5 (Task UI - Detail & Create) complete:
 - `dashboard/src/app/dashboard/action-center/action-center-content.tsx` (SOP filter support)
 - `dashboard/src/app/dashboard/action-center/components/index.ts` (added exports)
 
+**SOP Detail Page (06-05):**
+- `dashboard/src/app/dashboard/action-center/sops/[id]/page.tsx`
+- `dashboard/src/app/dashboard/action-center/sops/[id]/sop-detail-skeleton.tsx`
+- `dashboard/src/app/dashboard/action-center/sops/[id]/sop-detail-content.tsx`
+- `dashboard/src/app/dashboard/action-center/sops/[id]/not-found.tsx`
+
+**Step Components (06-06):**
+- `dashboard/src/app/dashboard/action-center/components/sop-step-editor.tsx`
+- `dashboard/src/app/dashboard/action-center/components/sop-step-display.tsx`
+
+**Modified (06-06):**
+- `dashboard/src/app/dashboard/action-center/components/index.ts` (added exports)
+
 ---
-*Last updated: 2026-01-24 after completing Plan 06-04 (SOP Category Group and Row Components)*
+*Last updated: 2026-01-24 after completing Plan 06-06 (Step Editor Component)*
