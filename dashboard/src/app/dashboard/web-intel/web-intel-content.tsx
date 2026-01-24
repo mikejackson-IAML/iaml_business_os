@@ -15,16 +15,21 @@ import { KeywordsTable } from './components/keywords-table';
 import { CoreWebVitalsCard } from './components/core-web-vitals-card';
 import { GscMetricsRow } from './components/gsc-metrics-row';
 import { TopQueriesList } from './components/top-queries-list';
+import { AlertsSection } from './components/alerts-section';
+import type { AlertTypeFilterValue } from './components/alert-type-filter';
+import { Badge } from '@/dashboard-kit/components/ui/badge';
 
 interface WebIntelContentProps {
   data: WebIntelDashboardData;
   range: DateRange;
   priorityFilter: KeywordPriorityFilter;
+  alertTypeFilter: AlertTypeFilterValue;
 }
 
-export function WebIntelContent({ data, range, priorityFilter }: WebIntelContentProps) {
+export function WebIntelContent({ data, range, priorityFilter, alertTypeFilter }: WebIntelContentProps) {
   const days = rangeToDays(range);
   const { dailyTraffic, trafficSources, topPages, alerts, health, keywords, rankings, coreWebVitals, searchPerformance } = data;
+  const alertCount = alerts.length;
 
   return (
     <div className="p-6 lg:p-8 space-y-6">
@@ -57,6 +62,14 @@ export function WebIntelContent({ data, range, priorityFilter }: WebIntelContent
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="rankings">Rankings</TabsTrigger>
           <TabsTrigger value="technical">Technical</TabsTrigger>
+          <TabsTrigger value="alerts" className="relative">
+            Alerts
+            {alertCount > 0 && (
+              <Badge variant="destructive" className="ml-2 h-5 min-w-5 px-1.5">
+                {alertCount}
+              </Badge>
+            )}
+          </TabsTrigger>
           <TabsTrigger value="content">Content</TabsTrigger>
         </TabsList>
 
@@ -106,40 +119,25 @@ export function WebIntelContent({ data, range, priorityFilter }: WebIntelContent
                 description="Based on rankings, technical health, and content quality"
               />
 
-              {/* Alerts */}
+              {/* Alerts Summary */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <AlertTriangle className="h-4 w-4" />
-                    Active Alerts
+                    Alerts
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  {alerts.length === 0 ? (
+                  {alertCount === 0 ? (
                     <p className="text-muted-foreground text-center py-4">
                       No active alerts.
                     </p>
                   ) : (
-                    <div className="space-y-2">
-                      {alerts.slice(0, 5).map((alert) => (
-                        <div
-                          key={alert.id}
-                          className={`p-3 rounded border-l-4 ${
-                            alert.severity === 'critical'
-                              ? 'border-red-500 bg-red-500/10'
-                              : alert.severity === 'warning'
-                              ? 'border-yellow-500 bg-yellow-500/10'
-                              : 'border-blue-500 bg-blue-500/10'
-                          }`}
-                        >
-                          <p className="font-medium text-sm">{alert.title}</p>
-                          {alert.description && (
-                            <p className="text-xs text-muted-foreground mt-1">
-                              {alert.description}
-                            </p>
-                          )}
-                        </div>
-                      ))}
+                    <div className="text-center py-4">
+                      <p className="text-3xl font-semibold text-foreground">{alertCount}</p>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        active {alertCount === 1 ? 'alert' : 'alerts'}
+                      </p>
                     </div>
                   )}
                 </CardContent>
@@ -174,6 +172,20 @@ export function WebIntelContent({ data, range, priorityFilter }: WebIntelContent
           <TopQueriesList searchPerformance={searchPerformance} />
         </TabsContent>
 
+        <TabsContent value="alerts">
+          <AlertsSection
+            alerts={alerts.map((a) => ({
+              id: a.id,
+              title: a.title,
+              message: a.description ?? '',
+              severity: a.severity as 'info' | 'warning' | 'critical',
+              alertType: a.category ?? 'technical',
+              createdAt: a.timestamp,
+            }))}
+            currentFilter={alertTypeFilter}
+          />
+        </TabsContent>
+
         <TabsContent value="content">
           <Card>
             <CardHeader>
@@ -181,7 +193,7 @@ export function WebIntelContent({ data, range, priorityFilter }: WebIntelContent
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground">
-                Content tab will be implemented in Phase 5.
+                Content tab will be implemented in Phase 6.
               </p>
             </CardContent>
           </Card>
