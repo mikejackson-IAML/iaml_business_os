@@ -5,25 +5,31 @@
 See: `.planning/projects/web-intel-dashboard/PROJECT.md` (updated 2026-01-23)
 
 **Core value:** See website health and SEO performance at a glance
-**Current focus:** Phase 5 - Alerts System (in progress)
+**Current focus:** Phase 6 - Content & Competitors (ready to start)
 
 ## Current State
 
-**Phase:** 5 of 7 (Alerts System) - IN PROGRESS
-**Status:** Plans 05-01, 05-02, and 05-03 complete
+**Phase:** 5 of 7 (Alerts System) - COMPLETE
+**Status:** Phase 5 complete, ready for Phase 6
 **Plans completed:** 20 total (17 from Phases 1-4 + 3 from Phase 5)
 
-Progress: [==========      ] 75% (Phase 5: 3/4 plans complete)
+Progress: [================] 100% (Phase 5: 3/3 plans complete)
 
-## Phase 5: Alerts System (IN PROGRESS)
+## Phase 5: Alerts System (COMPLETE)
 
-**Goal:** Display and manage web intelligence alerts with filtering and acknowledgment
+**Goal:** Users can see and manage web intelligence alerts
+
+**Requirements:**
+- [x] ALERT-01: Alert list shows all unacknowledged alerts sorted by severity
+- [x] ALERT-02: Tab or badge shows count of active alerts
+- [x] ALERT-03: Acknowledge button marks alert as acknowledged
+- [x] ALERT-04: Critical alerts have red indicator, warnings yellow, info blue
+- [x] ALERT-05: Filter buttons allow viewing only specific alert types
 
 **Plans:**
 - [x] 05-01-PLAN.md - Mutations and server actions (COMPLETE - 3 min)
 - [x] 05-02-PLAN.md - AlertTypeFilter and AlertCard components (COMPLETE - 2 min)
 - [x] 05-03-PLAN.md - AlertsSection and tab integration (COMPLETE - 4 min)
-- [ ] 05-04-PLAN.md - Final integration polish (PENDING)
 
 ## Phase 4: Technical Health (COMPLETE)
 
@@ -175,9 +181,9 @@ None
 
 ## Session Continuity
 
-- **Last session:** 2026-01-24T18:51:49Z
-- **Stopped at:** Completed 05-03-PLAN.md (AlertsSection and tab integration)
-- **Next step:** Execute 05-04-PLAN.md (Final integration polish)
+- **Last session:** 2026-01-24
+- **Stopped at:** Completed Phase 5 (Alerts System) - verified
+- **Next step:** `/gsd:discuss-phase 6 --project web-intel-dashboard` or `/gsd:plan-phase 6 --project web-intel-dashboard`
 
 ## Notes
 
@@ -189,7 +195,7 @@ None
 - Phase 2 complete: Date range selector, metrics row, sources chart, and Top Pages integrated
 - Phase 3 complete: Rankings tab with sortable table, priority filter, expandable rows, sparklines, SERP features
 - Phase 4 complete: Technical tab with CoreWebVitalsCard (device toggle), GscMetricsRow, TopQueriesList
-- Phase 5 in progress: Mutations, actions, AlertTypeFilter, AlertCard, AlertsSection, and tab integration complete
+- Phase 5 complete: Alerts tab with AlertTypeFilter, AlertCard, AlertsSection, tab badge with count
 
 ---
-*Last updated: 2026-01-24T18:51:49Z*
+*Last updated: 2026-01-24*

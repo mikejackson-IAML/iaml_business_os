@@ -50,11 +50,11 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Alerts
 
-- [ ] **ALERT-01**: User can view list of active alerts sorted by severity
-- [ ] **ALERT-02**: User can see alert count in section header/tab
-- [ ] **ALERT-03**: User can acknowledge alerts (marks as acknowledged)
-- [ ] **ALERT-04**: Alerts are color-coded by severity (critical=red, warning=yellow, info=blue)
-- [ ] **ALERT-05**: User can filter alerts by type (traffic, ranking, technical)
+- [x] **ALERT-01**: User can view list of active alerts sorted by severity
+- [x] **ALERT-02**: User can see alert count in section header/tab
+- [x] **ALERT-03**: User can acknowledge alerts (marks as acknowledged)
+- [x] **ALERT-04**: Alerts are color-coded by severity (critical=red, warning=yellow, info=blue)
+- [x] **ALERT-05**: User can filter alerts by type (traffic, ranking, technical)
 
 ### Content Health
 
@@ -141,11 +141,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | GSC-03 | Phase 4 | Complete |
 | GSC-04 | Phase 4 | Complete |
 | GSC-05 | Phase 4 | Complete |
-| ALERT-01 | Phase 5 | Pending |
-| ALERT-02 | Phase 5 | Pending |
-| ALERT-03 | Phase 5 | Pending |
-| ALERT-04 | Phase 5 | Pending |
-| ALERT-05 | Phase 5 | Pending |
+| ALERT-01 | Phase 5 | Complete |
+| ALERT-02 | Phase 5 | Complete |
+| ALERT-03 | Phase 5 | Complete |
+| ALERT-04 | Phase 5 | Complete |
+| ALERT-05 | Phase 5 | Complete |
 | CONT-01 | Phase 6 | Pending |
 | CONT-02 | Phase 6 | Pending |
 | CONT-03 | Phase 6 | Pending |
@@ -163,4 +163,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-23*
-*Last updated: 2026-01-24 after Phase 4 completion*
+*Last updated: 2026-01-24 after Phase 5 completion*

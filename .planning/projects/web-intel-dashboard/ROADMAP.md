@@ -152,9 +152,9 @@ Plans:
 **Plans:** 3 plans
 
 Plans:
-- [ ] 05-01-PLAN.md — Mutation function and server action for acknowledge
-- [ ] 05-02-PLAN.md — AlertTypeFilter and AlertCard components
-- [ ] 05-03-PLAN.md — AlertsSection integration with tab badge
+- [x] 05-01-PLAN.md — Mutation function and server action for acknowledge
+- [x] 05-02-PLAN.md — AlertTypeFilter and AlertCard components
+- [x] 05-03-PLAN.md — AlertsSection integration with tab badge
 
 ---
 
@@ -203,10 +203,10 @@ Plans:
 | 2. Traffic Overview | 3/3 | Complete | 2026-01-24 |
 | 3. Rankings Tracker | 5/5 | Complete | 2026-01-24 |
 | 4. Technical Health | 4/4 | Complete | 2026-01-24 |
-| 5. Alerts System | 0/3 | Planned | - |
+| 5. Alerts System | 3/3 | Complete | 2026-01-24 |
 | 6. Content & Competitors | 0/4 | Not started | - |
 | 7. AI Recommendations | 0/2 | Not started | - |
 
 ---
 *Roadmap created: 2026-01-23*
-*Last updated: 2026-01-24 — Phase 5 planned*
+*Last updated: 2026-01-24 — Phase 5 complete*
