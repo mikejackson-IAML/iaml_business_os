@@ -235,3 +235,26 @@ export async function getTasksBlocking(taskId: string): Promise<TaskExtended[]> 
 
   return (data || []) as TaskExtended[];
 }
+
+/**
+ * Result type for getTaskDependencies
+ */
+export interface TaskDependencies {
+  blockedBy: TaskExtended[];
+  blocking: TaskExtended[];
+}
+
+/**
+ * Get both dependency directions for a task in a single call
+ * - blockedBy: tasks this task depends on
+ * - blocking: tasks waiting on this task
+ */
+export async function getTaskDependencies(taskId: string): Promise<TaskDependencies> {
+  // Execute both queries in parallel for efficiency
+  const [blockedBy, blocking] = await Promise.all([
+    getTasksBlockedBy(taskId),
+    getTasksBlocking(taskId),
+  ]);
+
+  return { blockedBy, blocking };
+}
