@@ -13,6 +13,7 @@ export { TaskRowExpanded } from "./task-row-expanded";
 // Workflow List
 export { WorkflowTable } from "./workflow-table";
 export { WorkflowRow, workflowStatusConfig } from "./workflow-row";
+export { WorkflowProgress } from "./workflow-progress";
 
 // Task Detail
 export { TaskMetadataSidebar } from "./task-metadata-sidebar";
