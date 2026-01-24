@@ -9,9 +9,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/dashboard-kit/compon
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/dashboard-kit/components/ui/tabs';
 import type { WebIntelDashboardData } from '@/lib/api/web-intel-queries';
 import type { HealthStatus } from '@/dashboard-kit/types';
+import { DateRangeSelector, type DateRange } from './components/date-range-selector';
 
 interface WebIntelContentProps {
   data: WebIntelDashboardData;
+  range?: DateRange;
 }
 
 // Helper to determine metric status based on thresholds
@@ -29,7 +31,7 @@ function getPositionStatus(avgPosition: number): HealthStatus {
   return 'critical';
 }
 
-export function WebIntelContent({ data }: WebIntelContentProps) {
+export function WebIntelContent({ data, range = '30d' }: WebIntelContentProps) {
   const { metrics, dailyTraffic, topPages, alerts, health } = data;
 
   return (
@@ -42,6 +44,7 @@ export function WebIntelContent({ data }: WebIntelContentProps) {
             <h1 className="text-display-sm text-foreground">Web Intelligence</h1>
           </div>
           <div className="flex items-center gap-2">
+            <DateRangeSelector currentRange={range} />
             <ThemeToggle />
             <UserMenu />
           </div>
