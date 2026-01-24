@@ -32,3 +32,5 @@ export { SOPStepDisplay } from "./sop-step-display";
 export { SOPStepList } from "./sop-step-list";
 export { SortableStep } from "./sortable-step";
 export { SOPEditForm } from "./sop-edit-form";
+export { SOPPreviewPanel } from "./sop-preview-panel";
+export { SOPUsageStats } from "./sop-usage-stats";

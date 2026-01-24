@@ -16,6 +16,8 @@ import {
 import type { SOPTemplate } from "@/lib/api/sop-types";
 import type { SOPMasteryResult } from "@/lib/api/sop-queries";
 import { SOPEditForm } from "../../components/sop-edit-form";
+import { SOPPreviewPanel } from "../../components/sop-preview-panel";
+import { SOPUsageStats } from "../../components/sop-usage-stats";
 
 interface SOPDetailContentProps {
   sop: SOPTemplate;
@@ -92,36 +94,7 @@ export function SOPDetailContent({ sop, userMastery }: SOPDetailContentProps) {
           {/* Main Content */}
           <div className="lg:col-span-2">
             <TabsContent value="preview" className="m-0">
-              {/* Preview content - will be implemented in 06-09 */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-base">Steps Preview</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground text-sm">
-                    Preview at different mastery levels will be implemented in
-                    plan 06-09.
-                  </p>
-                  {/* Placeholder for steps list */}
-                  <div className="mt-4 space-y-3">
-                    {sop.steps.map((step) => (
-                      <div key={step.order} className="flex gap-3">
-                        <div className="w-6 h-6 rounded-full bg-muted flex items-center justify-center text-xs font-medium">
-                          {step.order}
-                        </div>
-                        <div>
-                          <p className="font-medium text-sm">{step.title}</p>
-                          {step.description && (
-                            <p className="text-sm text-muted-foreground">
-                              {step.description}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+              <SOPPreviewPanel sop={sop} currentMasteryLevel={userMastery.mastery_level} />
             </TabsContent>
 
             <TabsContent value="edit" className="m-0">
@@ -198,6 +171,9 @@ export function SOPDetailContent({ sop, userMastery }: SOPDetailContentProps) {
                 </p>
               </CardContent>
             </Card>
+
+            {/* Usage Stats Card */}
+            <SOPUsageStats sopId={sop.id} timesUsed={sop.times_used} />
           </div>
         </div>
       </Tabs>
