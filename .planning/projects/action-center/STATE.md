@@ -5,14 +5,14 @@
 See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 **Core value:** Nothing falls through the cracks. Every action item flows to one place.
-**Current focus:** Phase 7 Complete - Ready for Phase 8
+**Current focus:** Phase 8 - Alert Integration
 
 ## Current Status
 
 **Milestone:** v1.0 Action Center
-**Phase:** 7 of 12 (Workflows & Dependencies) - COMPLETE
-**Plan:** 10/10 complete
-**Status:** Phase 7 Complete - Ready for Phase 8
+**Phase:** 8 of 12 (Alert Integration) - IN PROGRESS
+**Plan:** 1/? complete
+**Status:** 08-01 complete - alert_config table created
 
 ## Progress Overview
 
@@ -25,7 +25,7 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 | 5 | Task UI - Detail & Create | COMPLETE |
 | 6 | SOP Templates | COMPLETE |
 | 7 | Workflows & Dependencies | COMPLETE |
-| 8 | Alert Integration | Not Started |
+| 8 | Alert Integration | IN PROGRESS |
 | 9 | Workflow Templates & Rules | Not Started |
 | 10 | Dashboard & Notifications | Not Started |
 | 11 | AI Integration | Not Started |
@@ -33,8 +33,8 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 ## Context for Next Session
 
-**Last action:** Completed Phase 7 (Workflows & Dependencies) - 10/10 plans executed
-**Next action:** Start Phase 8 (Alert Integration)
+**Last action:** Completed 08-01 (Alert Webhook Schema and Standardization)
+**Next action:** Execute 08-02 (next plan in Phase 8)
 
 ## Key Decisions Made
 
@@ -138,5 +138,16 @@ Phase 7 (Workflows & Dependencies) complete:
 
 - **Supabase Types:** The generated types.ts doesn't include action_center schema. TypeScript shows type errors but code works at runtime. Should regenerate types to include action_center schema.
 
+## Phase 8 Progress
+
+| Plan | Name | Wave | Status |
+|------|------|------|--------|
+| 08-01 | Alert Webhook Schema and Standardization | 1 | COMPLETE |
+
+### Files Created (Phase 8)
+
+**Database:**
+- `supabase/migrations/20260124_alert_webhook_schema.sql`
+
 ---
-*Last updated: 2026-01-24 after Phase 7 verification passed*
+*Last updated: 2026-01-24 after 08-01 complete*
