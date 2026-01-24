@@ -11,9 +11,9 @@ See: `.planning/projects/web-intel-dashboard/PROJECT.md` (updated 2026-01-23)
 
 **Phase:** 3 of 7 (Rankings Tracker) - IN PROGRESS
 **Status:** Phase 3 in progress
-**Plans completed:** 11 (4 from Phase 1 + 3 from Phase 2 + 4 from Phase 3)
+**Plans completed:** 12 (4 from Phase 1 + 3 from Phase 2 + 5 from Phase 3)
 
-Progress: [=========-] 90% (Phase 3: 4/? plans)
+Progress: [=========-] 90% (Phase 3: 5/? plans)
 
 ## Phase 3: Rankings Tracker (IN PROGRESS)
 
@@ -24,6 +24,7 @@ Progress: [=========-] 90% (Phase 3: 4/? plans)
 - [x] 03-02-PLAN.md - SERP features + ranking sparkline components (COMPLETE - 1 min)
 - [x] 03-03-PLAN.md - Keywords table + sortable header components (COMPLETE - 1 min)
 - [x] 03-04-PLAN.md - Expandable keyword rows (COMPLETE - 2 min)
+- [x] 03-05-PLAN.md - Rankings integration (COMPLETE - 2 min)
 - [ ] Additional plans TBD
 
 ## Phase 2: Traffic Overview (COMPLETE)
@@ -85,6 +86,8 @@ Progress: [=========-] 90% (Phase 3: 4/? plans)
 | 2026-01-24 | SERP features extracted from DailyRanking | Full type support for all 6 SERP features |
 | 2026-01-24 | Default sort by priority ascending | Critical keywords need attention first |
 | 2026-01-24 | Null positions treated as 101 for sorting | Ensures unranked keywords sort to bottom |
+| 2026-01-24 | Single-row expansion via parent expandedId state | Clicking new row closes previous |
+| 2026-01-24 | KeywordWithRanking stores TrackedKeyword reference | Cleaner data flow, avoids flattening |
 
 ## Session Log
 
@@ -102,6 +105,7 @@ Progress: [=========-] 90% (Phase 3: 4/? plans)
 | 2026-01-24 | Completed 03-02-PLAN.md | SerpFeatures and RankingSparkline components (1 min) |
 | 2026-01-24 | Completed 03-03-PLAN.md | KeywordsTable and SortableHeader components (1 min) |
 | 2026-01-24 | Completed 03-04-PLAN.md | KeywordRow and KeywordRowExpanded components (2 min) |
+| 2026-01-24 | Completed 03-05-PLAN.md | Rankings integration with PriorityFilter and KeywordsTable (2 min) |
 
 ## Blockers
 
@@ -109,9 +113,9 @@ None
 
 ## Session Continuity
 
-- **Last session:** 2026-01-24T16:06:30Z
-- **Stopped at:** Completed 03-04-PLAN.md (KeywordRow and KeywordRowExpanded components)
-- **Resume file:** 03-05-PLAN.md (next plan in Phase 3)
+- **Last session:** 2026-01-24T16:12:00Z
+- **Stopped at:** Completed 03-05-PLAN.md (Rankings integration)
+- **Resume file:** 03-06-PLAN.md or Phase 4 (if Phase 3 complete)
 
 ## Notes
 
@@ -121,7 +125,7 @@ None
 - Data source is `web_intel` schema in Supabase
 - Phase 1 complete: types, queries, route, and navigation all in place
 - Phase 2 complete: Date range selector, metrics row, sources chart, and Top Pages integrated
-- Phase 3 in progress: PositionChange, PriorityFilter, SerpFeatures, RankingSparkline, KeywordRow, and KeywordRowExpanded components ready for keywords table
+- Phase 3 nearly complete: Rankings tab fully integrated with filtering, sorting, expandable rows, sparklines, and SERP features (RANK-01 through RANK-06 satisfied)
 
 ---
 *Last updated: 2026-01-24*
