@@ -31,6 +31,7 @@ export { TaskDependencies } from "./task-dependencies";
 export { CompleteTaskDialog } from "./complete-task-dialog";
 export { DismissTaskDialog } from "./dismiss-task-dialog";
 export { CreateTaskModal } from "./create-task-modal";
+export { AddTaskToWorkflowModal } from "./add-task-to-workflow-modal";
 
 // SOP / Instructions
 export { ProgressiveInstructions } from "./progressive-instructions";
