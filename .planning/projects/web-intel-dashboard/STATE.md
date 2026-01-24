@@ -10,10 +10,10 @@ See: `.planning/projects/web-intel-dashboard/PROJECT.md` (updated 2026-01-23)
 ## Current State
 
 **Phase:** 6 of 7 (Content & Competitors) - IN PROGRESS
-**Status:** Phase 6 plan 1 complete
-**Plans completed:** 21 total (17 from Phases 1-4 + 3 from Phase 5 + 1 from Phase 6)
+**Status:** Phase 6 plan 3 complete
+**Plans completed:** 23 total (17 from Phases 1-4 + 3 from Phase 5 + 3 from Phase 6)
 
-Progress: [=================] 100% (Phase 6: 1/4 plans complete)
+Progress: [====================] 100% (Phase 6: 3/4 plans complete)
 
 ## Phase 6: Content & Competitors (IN PROGRESS)
 
@@ -28,8 +28,8 @@ Progress: [=================] 100% (Phase 6: 1/4 plans complete)
 
 **Plans:**
 - [x] 06-01-PLAN.md - Query functions for content and competitor data (COMPLETE - 2 min)
-- [ ] 06-02-PLAN.md - ContentHealthSection component
-- [ ] 06-03-PLAN.md - CompetitorsSection and SerpShareChart
+- [x] 06-02-PLAN.md - ContentHealthSection component (COMPLETE - 2 min)
+- [x] 06-03-PLAN.md - CompetitorsSection and SerpShareChart (COMPLETE - 2 min)
 - [ ] 06-04-PLAN.md - Content tab integration
 
 ## Phase 5: Alerts System (COMPLETE)
@@ -169,6 +169,9 @@ Progress: [=================] 100% (Phase 6: 1/4 plans complete)
 | 2026-01-24 | Supabase nested select for content joins | content_inventory:content_id syntax matches existing patterns |
 | 2026-01-24 | Content summary from content_inventory | totalIndexed from tracked pages, not GSC index_coverage |
 | 2026-01-24 | SERP share returns null for no data | PGRST116 handled gracefully, matches getIndexCoverage pattern |
+| 2026-01-24 | Cyan color for SERP share BarList | Matches web intel theme |
+| 2026-01-24 | "Our Site" as default domain label | Generic fallback when domain not provided |
+| 2026-01-24 | Empty state prompts competitor tracking | Guide users toward action |
 
 ## Session Log
 
@@ -195,6 +198,8 @@ Progress: [=================] 100% (Phase 6: 1/4 plans complete)
 | 2026-01-24 | Completed 05-01-PLAN.md | Mutations and server actions (3 min) |
 | 2026-01-24 | Completed 05-03-PLAN.md | AlertsSection and tab integration (4 min) |
 | 2026-01-24 | Completed 06-01-PLAN.md | Query functions for content and competitor data (2 min) |
+| 2026-01-24 | Completed 06-02-PLAN.md | ContentHealthSection with decay and thin content (2 min) |
+| 2026-01-24 | Completed 06-03-PLAN.md | CompetitorsSection, SerpShareChart, CompetitorList (2 min) |
 
 ## Blockers
 
@@ -203,8 +208,8 @@ None
 ## Session Continuity
 
 - **Last session:** 2026-01-24
-- **Stopped at:** Completed 06-01-PLAN.md (query functions for content and competitor data)
-- **Next step:** Execute 06-02-PLAN.md (ContentHealthSection component)
+- **Stopped at:** Completed 06-03-PLAN.md (CompetitorsSection and SerpShareChart)
+- **Next step:** Execute 06-04-PLAN.md (Content tab integration)
 
 ## Notes
 
@@ -217,7 +222,7 @@ None
 - Phase 3 complete: Rankings tab with sortable table, priority filter, expandable rows, sparklines, SERP features
 - Phase 4 complete: Technical tab with CoreWebVitalsCard (device toggle), GscMetricsRow, TopQueriesList
 - Phase 5 complete: Alerts tab with AlertTypeFilter, AlertCard, AlertsSection, tab badge with count
-- Phase 6 in progress: Query functions for content/competitor data complete
+- Phase 6 in progress: Query functions, ContentHealthSection, and CompetitorsSection complete
 
 ---
 *Last updated: 2026-01-24*
