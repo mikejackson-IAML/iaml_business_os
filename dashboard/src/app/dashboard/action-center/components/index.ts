@@ -29,3 +29,5 @@ export { SOPCategoryGroup } from "./sop-category-group";
 export { SOPRow } from "./sop-row";
 export { SOPStepEditor } from "./sop-step-editor";
 export { SOPStepDisplay } from "./sop-step-display";
+export { SOPStepList } from "./sop-step-list";
+export { SortableStep } from "./sortable-step";
