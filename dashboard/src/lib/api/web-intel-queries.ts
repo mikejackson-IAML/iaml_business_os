@@ -205,6 +205,71 @@ export interface BacklinkProfileDb {
 }
 
 /**
+ * Content inventory - tracked pages
+ */
+export interface ContentInventoryDb {
+  id: string;
+  url: string;
+  title: string | null;
+  meta_description: string | null;
+  h1: string | null;
+  word_count: number | null;
+  publish_date: string | null;
+  last_modified: string | null;
+  last_crawled: string | null;
+  content_type: string | null;
+  category: string | null;
+  status: 'active' | 'redirect' | 'removed' | 'draft';
+  avg_monthly_sessions: number | null;
+  avg_monthly_pageviews: number | null;
+  created_at: string;
+  updated_at: string;
+}
+
+/**
+ * Thin content flags
+ */
+export interface ThinContentDb {
+  id: string;
+  content_id: string;
+  detected_date: string;
+  word_count: number | null;
+  avg_time_on_page: number | null;
+  bounce_rate: number | null;
+  reason: string | null;
+  recommendation: string | null;
+  is_addressed: boolean;
+  addressed_at: string | null;
+  created_at: string;
+}
+
+/**
+ * Tracked competitors
+ */
+export interface CompetitorDb {
+  id: string;
+  domain: string;
+  name: string | null;
+  is_active: boolean;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+/**
+ * SERP share of voice
+ */
+export interface SerpShareDb {
+  id: string;
+  collected_date: string;
+  our_share: number | null;
+  competitor_shares: Record<string, number>;
+  keywords_tracked: number | null;
+  keywords_ranking: number | null;
+  created_at: string;
+}
+
+/**
  * Web Intel alerts
  */
 export interface WebIntelAlertDb {
