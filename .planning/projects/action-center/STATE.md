@@ -11,8 +11,8 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 **Milestone:** v1.0 Action Center
 **Phase:** 6 of 12 (SOP Templates) - IN PROGRESS
-**Plan:** 1/10 complete
-**Status:** Phase 6 In Progress - Plan 06-01 Complete
+**Plan:** 4/10 complete
+**Status:** Phase 6 In Progress - Plan 06-04 Complete
 
 ## Progress Overview
 
@@ -23,7 +23,7 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 | 3 | Workflow & SOP API | COMPLETE |
 | 4 | Task UI - List | COMPLETE |
 | 5 | Task UI - Detail & Create | COMPLETE |
-| 6 | SOP Templates | In Progress (1/10) |
+| 6 | SOP Templates | In Progress (4/10) |
 | 7 | Workflows & Dependencies | Not Started |
 | 8 | Alert Integration | Not Started |
 | 9 | Workflow Templates & Rules | Not Started |
@@ -33,8 +33,8 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 ## Context for Next Session
 
-**Last action:** Completed Plan 06-01 (SOP Server Actions)
-**Next action:** Continue with Plan 06-02 (SOP List Page)
+**Last action:** Completed Plan 06-04 (SOP Category Group and Row Components)
+**Next action:** Continue with Plan 06-05 (Step Checklist Component)
 
 ## Key Decisions Made
 
@@ -169,9 +169,9 @@ Phase 5 (Task UI - Detail & Create) complete:
 | Plan | Name | Wave | Status |
 |------|------|------|--------|
 | 06-01 | SOP Server Actions | 1 | COMPLETE |
-| 06-02 | SOP List Page | 1 | Pending |
-| 06-03 | SOP Card Component | 1 | Pending |
-| 06-04 | SOP Detail Page | 2 | Pending |
+| 06-02 | Progressive Instructions Component | 1 | COMPLETE |
+| 06-03 | SOP List Page Foundation | 1 | COMPLETE |
+| 06-04 | SOP Category Group and Row Components | 2 | COMPLETE |
 | 06-05 | Step Checklist Component | 2 | Pending |
 | 06-06 | Mastery Indicator | 3 | Pending |
 | 06-07 | SOP Variables Support | 3 | Pending |
@@ -190,5 +190,24 @@ Phase 5 (Task UI - Detail & Create) complete:
 **API Queries:**
 - `dashboard/src/lib/api/sop-queries.ts` (updated with mastery and usage functions)
 
+**Components (06-02):**
+- `dashboard/src/app/dashboard/action-center/components/mastery-badge.tsx`
+- `dashboard/src/app/dashboard/action-center/components/progressive-instructions.tsx`
+- `dashboard/src/app/dashboard/action-center/components/index.ts` (barrel export)
+
+**SOP List Page (06-03):**
+- `dashboard/src/app/dashboard/action-center/sops/page.tsx`
+- `dashboard/src/app/dashboard/action-center/sops/sop-list-skeleton.tsx`
+- `dashboard/src/app/dashboard/action-center/sops/sop-list-data-loader.tsx`
+- `dashboard/src/app/dashboard/action-center/sops/sop-list-content.tsx`
+
+**Components (06-04):**
+- `dashboard/src/app/dashboard/action-center/components/sop-category-group.tsx`
+- `dashboard/src/app/dashboard/action-center/components/sop-row.tsx`
+
+**Modified (06-04):**
+- `dashboard/src/app/dashboard/action-center/action-center-content.tsx` (SOP filter support)
+- `dashboard/src/app/dashboard/action-center/components/index.ts` (added exports)
+
 ---
-*Last updated: 2026-01-24 after completing Plan 06-01 (SOP Server Actions)*
+*Last updated: 2026-01-24 after completing Plan 06-04 (SOP Category Group and Row Components)*
