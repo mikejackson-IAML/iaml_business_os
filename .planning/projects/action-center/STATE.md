@@ -10,9 +10,9 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 ## Current Status
 
 **Milestone:** v1.0 Action Center
-**Phase:** 6 of 12 (SOP Templates) - IN PROGRESS
-**Plan:** 9/10 complete
-**Status:** Phase 6 In Progress - Plan 06-09 Complete
+**Phase:** 6 of 12 (SOP Templates) - COMPLETE
+**Plan:** 10/10 complete
+**Status:** Phase 6 Complete - Ready for Phase 7
 
 ## Progress Overview
 
@@ -23,7 +23,7 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 | 3 | Workflow & SOP API | COMPLETE |
 | 4 | Task UI - List | COMPLETE |
 | 5 | Task UI - Detail & Create | COMPLETE |
-| 6 | SOP Templates | In Progress (9/10) |
+| 6 | SOP Templates | COMPLETE |
 | 7 | Workflows & Dependencies | Not Started |
 | 8 | Alert Integration | Not Started |
 | 9 | Workflow Templates & Rules | Not Started |
@@ -33,8 +33,8 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 ## Context for Next Session
 
-**Last action:** Completed Plan 06-09 (Mastery Preview and Usage Stats)
-**Next action:** Continue with Plan 06-10 (Task Detail Integration)
+**Last action:** Completed Plan 06-10 (Task Detail Integration) - Phase 6 Complete
+**Next action:** Start Phase 7 (Workflows & Dependencies)
 
 ## Key Decisions Made
 
@@ -177,7 +177,7 @@ Phase 5 (Task UI - Detail & Create) complete:
 | 06-07 | Step List with Reordering | 4 | COMPLETE |
 | 06-08 | SOP Edit Mode | 5 | COMPLETE |
 | 06-09 | Mastery Preview and Usage Stats | 5 | COMPLETE |
-| 06-10 | Task Detail Integration | 6 | Pending |
+| 06-10 | Task Detail Integration | 6 | COMPLETE |
 
 ### Files Created (Phase 6)
 
@@ -245,5 +245,44 @@ Phase 5 (Task UI - Detail & Create) complete:
 - `dashboard/src/app/dashboard/action-center/sops/[id]/sop-detail-content.tsx` (integrated preview panel and usage stats)
 - `dashboard/src/app/dashboard/action-center/components/index.ts` (added exports)
 
+**Modified (06-10):**
+- `dashboard/src/app/dashboard/action-center/tasks/[id]/page.tsx` (SOP and mastery fetching)
+- `dashboard/src/app/dashboard/action-center/tasks/[id]/task-detail-content.tsx` (progressive instructions, SOP sidebar link, mastery badge)
+
+## Phase 6 Summary
+
+Phase 6 (SOP Templates) complete:
+
+| Plan | Name | Wave | Status |
+|------|------|------|--------|
+| 06-01 | SOP Server Actions | 1 | COMPLETE |
+| 06-02 | Progressive Instructions Component | 1 | COMPLETE |
+| 06-03 | SOP List Page Foundation | 2 | COMPLETE |
+| 06-04 | SOP Category Group and Row Components | 2 | COMPLETE |
+| 06-05 | SOP Detail Page Skeleton | 3 | COMPLETE |
+| 06-06 | Step Editor Component | 4 | COMPLETE |
+| 06-07 | Step List with Reordering | 4 | COMPLETE |
+| 06-08 | SOP Edit Mode | 5 | COMPLETE |
+| 06-09 | Mastery Preview and Usage Stats | 5 | COMPLETE |
+| 06-10 | Task Detail Integration | 6 | COMPLETE |
+
+### Requirements Covered (Phase 6)
+
+- SOP-01: SOP list page with category grouping
+- SOP-02: SOP detail page with step display
+- SOP-03: SOP edit mode with step reordering (drag-and-drop)
+- SOP-04: SOP step editor with all fields
+- PROG-01: Progressive instructions in task detail
+- PROG-02: Novice shows full step-by-step checklist
+- PROG-03: Developing shows condensed steps
+- PROG-04: Proficient shows summary + link
+- PROG-05: Expert shows minimal acknowledgment
+- PROG-06: Show more/less toggle
+- PROG-07: Mastery auto-increment (verified)
+- PROG-08: Variable substitution from task context
+- Mastery badge display in task detail sidebar
+- Mastery preview slider in SOP detail page
+- SOP usage statistics display
+
 ---
-*Last updated: 2026-01-24 after completing Plan 06-09 (Mastery Preview and Usage Stats)*
+*Last updated: 2026-01-24 after completing Plan 06-10 (Task Detail Integration) - Phase 6 Complete*
