@@ -5,15 +5,32 @@
 See: `.planning/projects/web-intel-dashboard/PROJECT.md` (updated 2026-01-23)
 
 **Core value:** See website health and SEO performance at a glance
-**Current focus:** Phase 6 - Content & Competitors (ready to start)
+**Current focus:** Phase 6 - Content & Competitors (in progress)
 
 ## Current State
 
-**Phase:** 5 of 7 (Alerts System) - COMPLETE
-**Status:** Phase 5 complete, ready for Phase 6
-**Plans completed:** 20 total (17 from Phases 1-4 + 3 from Phase 5)
+**Phase:** 6 of 7 (Content & Competitors) - IN PROGRESS
+**Status:** Phase 6 plan 1 complete
+**Plans completed:** 21 total (17 from Phases 1-4 + 3 from Phase 5 + 1 from Phase 6)
 
-Progress: [================] 100% (Phase 5: 3/3 plans complete)
+Progress: [=================] 100% (Phase 6: 1/4 plans complete)
+
+## Phase 6: Content & Competitors (IN PROGRESS)
+
+**Goal:** Show content health warnings and competitor SERP share
+
+**Requirements:**
+- [ ] CONTENT-01: Content tab shows indexed page count and average word count
+- [ ] CONTENT-02: Decaying content list with traffic drop percentage
+- [ ] CONTENT-03: Thin content warnings with recommendations
+- [ ] CONTENT-04: Competitor domain list
+- [ ] CONTENT-05: SERP share bar chart showing our share vs competitors
+
+**Plans:**
+- [x] 06-01-PLAN.md - Query functions for content and competitor data (COMPLETE - 2 min)
+- [ ] 06-02-PLAN.md - ContentHealthSection component
+- [ ] 06-03-PLAN.md - CompetitorsSection and SerpShareChart
+- [ ] 06-04-PLAN.md - Content tab integration
 
 ## Phase 5: Alerts System (COMPLETE)
 
@@ -149,6 +166,9 @@ Progress: [================] 100% (Phase 5: 3/3 plans complete)
 | 2026-01-24 | Dismiss All dismisses visible (filtered) alerts | Per CONTEXT.md guidance |
 | 2026-01-24 | Overview tab shows clean count card | No border stripes per CONTEXT.md |
 | 2026-01-24 | Alerts tab before Content in tab order | Logical grouping of features |
+| 2026-01-24 | Supabase nested select for content joins | content_inventory:content_id syntax matches existing patterns |
+| 2026-01-24 | Content summary from content_inventory | totalIndexed from tracked pages, not GSC index_coverage |
+| 2026-01-24 | SERP share returns null for no data | PGRST116 handled gracefully, matches getIndexCoverage pattern |
 
 ## Session Log
 
@@ -174,6 +194,7 @@ Progress: [================] 100% (Phase 5: 3/3 plans complete)
 | 2026-01-24 | Completed 05-02-PLAN.md | AlertTypeFilter and AlertCard components (2 min) |
 | 2026-01-24 | Completed 05-01-PLAN.md | Mutations and server actions (3 min) |
 | 2026-01-24 | Completed 05-03-PLAN.md | AlertsSection and tab integration (4 min) |
+| 2026-01-24 | Completed 06-01-PLAN.md | Query functions for content and competitor data (2 min) |
 
 ## Blockers
 
@@ -182,8 +203,8 @@ None
 ## Session Continuity
 
 - **Last session:** 2026-01-24
-- **Stopped at:** Completed Phase 5 (Alerts System) - verified
-- **Next step:** `/gsd:discuss-phase 6 --project web-intel-dashboard` or `/gsd:plan-phase 6 --project web-intel-dashboard`
+- **Stopped at:** Completed 06-01-PLAN.md (query functions for content and competitor data)
+- **Next step:** Execute 06-02-PLAN.md (ContentHealthSection component)
 
 ## Notes
 
@@ -196,6 +217,7 @@ None
 - Phase 3 complete: Rankings tab with sortable table, priority filter, expandable rows, sparklines, SERP features
 - Phase 4 complete: Technical tab with CoreWebVitalsCard (device toggle), GscMetricsRow, TopQueriesList
 - Phase 5 complete: Alerts tab with AlertTypeFilter, AlertCard, AlertsSection, tab badge with count
+- Phase 6 in progress: Query functions for content/competitor data complete
 
 ---
 *Last updated: 2026-01-24*
