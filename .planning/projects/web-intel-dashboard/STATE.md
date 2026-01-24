@@ -10,17 +10,17 @@ See: `.planning/projects/web-intel-dashboard/PROJECT.md` (updated 2026-01-23)
 ## Current State
 
 **Phase:** 5 of 7 (Alerts System) - IN PROGRESS
-**Status:** Plan 05-02 complete
-**Plans completed:** 18 total (17 from Phases 1-4 + 1 from Phase 5)
+**Status:** Plans 05-01 and 05-02 complete
+**Plans completed:** 19 total (17 from Phases 1-4 + 2 from Phase 5)
 
-Progress: [====            ] 25% (Phase 5: 1/4 plans complete)
+Progress: [========        ] 50% (Phase 5: 2/4 plans complete)
 
 ## Phase 5: Alerts System (IN PROGRESS)
 
 **Goal:** Display and manage web intelligence alerts with filtering and acknowledgment
 
 **Plans:**
-- [ ] 05-01-PLAN.md - Mutations and server actions (SKIPPED - created in 05-02)
+- [x] 05-01-PLAN.md - Mutations and server actions (COMPLETE - 3 min)
 - [x] 05-02-PLAN.md - AlertTypeFilter and AlertCard components (COMPLETE - 2 min)
 - [ ] 05-03-PLAN.md - AlertsSection and DismissAll (PENDING)
 - [ ] 05-04-PLAN.md - Alerts tab integration (PENDING)
@@ -138,6 +138,8 @@ Progress: [====            ] 25% (Phase 5: 1/4 plans complete)
 | 2026-01-24 | Chip UI for alert filter (not dropdown) | Horizontal bar matches CONTEXT.md spec |
 | 2026-01-24 | Icon-only severity indication | No border stripes per explicit CONTEXT.md guidance |
 | 2026-01-24 | Hover-reveal dismiss button | Cleaner default look per CONTEXT.md |
+| 2026-01-24 | any cast for web_intel schema tables | Supabase types not generated for web_intel schema |
+| 2026-01-24 | ActionResult pattern for server actions | Consistency with action-center |
 
 ## Session Log
 
@@ -161,6 +163,7 @@ Progress: [====            ] 25% (Phase 5: 1/4 plans complete)
 | 2026-01-24 | Completed 04-02-PLAN.md | CoreWebVitalsCard component (2 min) |
 | 2026-01-24 | Completed 04-04-PLAN.md | Technical tab integration (2 min) |
 | 2026-01-24 | Completed 05-02-PLAN.md | AlertTypeFilter and AlertCard components (2 min) |
+| 2026-01-24 | Completed 05-01-PLAN.md | Mutations and server actions (3 min) |
 
 ## Blockers
 
@@ -168,8 +171,8 @@ None
 
 ## Session Continuity
 
-- **Last session:** 2026-01-24T18:44:57Z
-- **Stopped at:** Completed 05-02-PLAN.md (AlertTypeFilter and AlertCard)
+- **Last session:** 2026-01-24T12:48:00Z
+- **Stopped at:** Completed 05-01-PLAN.md (Mutations and server actions)
 - **Next step:** Execute 05-03-PLAN.md (AlertsSection and DismissAll)
 
 ## Notes
@@ -182,7 +185,7 @@ None
 - Phase 2 complete: Date range selector, metrics row, sources chart, and Top Pages integrated
 - Phase 3 complete: Rankings tab with sortable table, priority filter, expandable rows, sparklines, SERP features
 - Phase 4 complete: Technical tab with CoreWebVitalsCard (device toggle), GscMetricsRow, TopQueriesList
-- Phase 5 in progress: AlertTypeFilter and AlertCard ready, actions.ts created
+- Phase 5 in progress: Mutations, actions, AlertTypeFilter, and AlertCard complete
 
 ---
-*Last updated: 2026-01-24T18:44:57Z*
+*Last updated: 2026-01-24T12:48:00Z*
