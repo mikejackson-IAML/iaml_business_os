@@ -11,8 +11,8 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 **Milestone:** v1.0 Action Center
 **Phase:** 8 of 12 (Alert Integration) - IN PROGRESS
-**Plan:** 4/7 complete
-**Status:** 08-04 complete - Claude AI title transformation added to workflow
+**Plan:** 5/7 complete
+**Status:** 08-06 complete - Business hours due date calculation added
 
 ## Progress Overview
 
@@ -33,8 +33,8 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 ## Context for Next Session
 
-**Last action:** Completed 08-04 (AI Title Transformation)
-**Next action:** Execute 08-05 (Full Duplicate Detection Logic)
+**Last action:** Completed 08-06 (Business Hours Due Date Calculation)
+**Next action:** Execute 08-05 (Full Duplicate Detection Logic) or 08-07 (Connect Existing Monitors)
 
 ## Key Decisions Made
 
@@ -147,7 +147,7 @@ Phase 7 (Workflows & Dependencies) complete:
 | 08-03 | Alert-to-Task n8n Workflow Skeleton | 2 | COMPLETE |
 | 08-04 | AI Title Transformation | 2 | COMPLETE |
 | 08-05 | Full Duplicate Detection Logic | 2 | NOT STARTED |
-| 08-06 | Business Hours Due Date Calculation | 3 | NOT STARTED |
+| 08-06 | Business Hours Due Date Calculation | 3 | COMPLETE |
 | 08-07 | Connect Existing Monitors | 3 | NOT STARTED |
 
 ### Files Created (Phase 8)
@@ -159,12 +159,18 @@ Phase 7 (Workflows & Dependencies) complete:
 **n8n Workflows:**
 - `business-os/workflows/alert-to-task.json`
 
+**Database (08-06):**
+- `supabase/migrations/20260124_due_date_calculation.sql`
+
 ### Key Decisions (Phase 8)
 
 - [08-04]: Claude 3 Haiku selected for fast, cost-effective AI transformation
 - [08-04]: Fallback verb mapping for 8 alert types when AI fails
 - [08-04]: Priority-based due date: critical=4h, high=next day 17:00, normal=3d, low=7d
 - [08-04]: Task created via direct Supabase INSERT (not Dashboard API)
+- [08-06]: Business hours = 9am-6pm CT, weekdays only
+- [08-06]: Critical alerts after hours due next business day 9am
+- [08-06]: Warning alerts default to Friday 5pm if no metadata offset
 
 ---
-*Last updated: 2026-01-24 after 08-04 complete*
+*Last updated: 2026-01-24 after 08-06 complete*
