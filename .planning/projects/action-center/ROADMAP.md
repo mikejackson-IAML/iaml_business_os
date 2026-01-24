@@ -192,7 +192,19 @@ Plans:
 7. Mastery auto-increments on completion
 8. Variable substitution works in instructions
 
-**Plans:** TBD
+**Plans:** 10 plans in 6 waves
+
+Plans:
+- [x] 06-01-PLAN.md — SOP server actions (Wave 1)
+- [x] 06-02-PLAN.md — Progressive instructions component (Wave 1)
+- [x] 06-03-PLAN.md — SOP list page foundation (Wave 2)
+- [x] 06-04-PLAN.md — SOP category group and row components (Wave 2)
+- [x] 06-05-PLAN.md — SOP detail page skeleton (Wave 3)
+- [x] 06-06-PLAN.md — Step editor component (Wave 4)
+- [x] 06-07-PLAN.md — Step list with reordering (Wave 4)
+- [x] 06-08-PLAN.md — SOP edit mode (Wave 5)
+- [x] 06-09-PLAN.md — Mastery preview and usage stats (Wave 5)
+- [x] 06-10-PLAN.md — Task detail integration (Wave 6)
 
 ---
 
@@ -318,7 +330,7 @@ Plans:
 | 3. Workflow & SOP API | 9/9 | COMPLETE |
 | 4. Task UI - List | 5/5 | COMPLETE |
 | 5. Task UI - Detail & Create | 11/11 | COMPLETE |
-| 6. SOP Templates | 0/? | Not started |
+| 6. SOP Templates | 10/10 | COMPLETE |
 | 7. Workflows & Dependencies | 0/? | Not started |
 | 8. Alert Integration | 0/? | Not started |
 | 9. Workflow Templates & Rules | 0/? | Not started |
