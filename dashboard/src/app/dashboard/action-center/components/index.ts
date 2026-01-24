@@ -25,3 +25,5 @@ export { CreateTaskModal } from "./create-task-modal";
 // SOP / Instructions
 export { ProgressiveInstructions } from "./progressive-instructions";
 export { MasteryBadge, getMasteryTier } from "./mastery-badge";
+export { SOPCategoryGroup } from "./sop-category-group";
+export { SOPRow } from "./sop-row";
