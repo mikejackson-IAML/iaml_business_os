@@ -257,13 +257,13 @@ Plans:
 **Plans:** 7 plans in 4 waves
 
 Plans:
-- [ ] 08-01-PLAN.md — Alert config table and seed data (Wave 1)
-- [ ] 08-02-PLAN.md — Alert accumulation tracking for 3x/24h rule (Wave 1)
-- [ ] 08-03-PLAN.md — n8n workflow skeleton with webhook and routing (Wave 2)
-- [ ] 08-04-PLAN.md — Claude AI transformation for titles/descriptions (Wave 2)
-- [ ] 08-05-PLAN.md — Duplicate detection and priority escalation (Wave 3)
-- [ ] 08-06-PLAN.md — Business hours aware due date calculation (Wave 3)
-- [ ] 08-07-PLAN.md — Alert resolution trigger and documentation (Wave 4)
+- [x] 08-01-PLAN.md — Alert config table and seed data (Wave 1)
+- [x] 08-02-PLAN.md — Alert accumulation tracking for 3x/24h rule (Wave 1)
+- [x] 08-03-PLAN.md — n8n workflow skeleton with webhook and routing (Wave 2)
+- [x] 08-04-PLAN.md — Claude AI transformation for titles/descriptions (Wave 2)
+- [x] 08-05-PLAN.md — Duplicate detection and priority escalation (Wave 3)
+- [x] 08-06-PLAN.md — Business hours aware due date calculation (Wave 3)
+- [x] 08-07-PLAN.md — Alert resolution trigger and documentation (Wave 4)
 
 ---
 
@@ -353,7 +353,7 @@ Plans:
 | 5. Task UI - Detail & Create | 11/11 | COMPLETE |
 | 6. SOP Templates | 10/10 | COMPLETE |
 | 7. Workflows & Dependencies | 10/10 | COMPLETE |
-| 8. Alert Integration | 0/7 | Planned |
+| 8. Alert Integration | 7/7 | COMPLETE |
 | 9. Workflow Templates & Rules | 0/? | Not started |
 | 10. Dashboard & Notifications | 0/? | Not started |
 | 11. AI Integration | 0/? | Not started |
@@ -361,4 +361,4 @@ Plans:
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-24 after completing Phase 7*
+*Last updated: 2026-01-24 after completing Phase 8 Alert Integration*
