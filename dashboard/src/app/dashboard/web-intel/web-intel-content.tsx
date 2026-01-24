@@ -13,6 +13,8 @@ import { TrafficSourcesChart } from './components/traffic-sources-chart';
 import { PriorityFilter, type KeywordPriorityFilter } from './components/priority-filter';
 import { KeywordsTable } from './components/keywords-table';
 import { CoreWebVitalsCard } from './components/core-web-vitals-card';
+import { GscMetricsRow } from './components/gsc-metrics-row';
+import { TopQueriesList } from './components/top-queries-list';
 
 interface WebIntelContentProps {
   data: WebIntelDashboardData;
@@ -22,7 +24,7 @@ interface WebIntelContentProps {
 
 export function WebIntelContent({ data, range, priorityFilter }: WebIntelContentProps) {
   const days = rangeToDays(range);
-  const { dailyTraffic, trafficSources, topPages, alerts, health, keywords, rankings, coreWebVitals } = data;
+  const { dailyTraffic, trafficSources, topPages, alerts, health, keywords, rankings, coreWebVitals, searchPerformance } = data;
 
   return (
     <div className="p-6 lg:p-8 space-y-6">
@@ -162,8 +164,14 @@ export function WebIntelContent({ data, range, priorityFilter }: WebIntelContent
         </TabsContent>
 
         <TabsContent value="technical" className="space-y-6">
-          {/* Core Web Vitals Card - temporary integration for testing */}
+          {/* Core Web Vitals Card (CWV-01 through CWV-05) */}
           <CoreWebVitalsCard coreWebVitals={coreWebVitals} />
+
+          {/* GSC Summary Metrics (GSC-01 through GSC-04) */}
+          <GscMetricsRow searchPerformance={searchPerformance} days={days} />
+
+          {/* Top Queries List (GSC-05) */}
+          <TopQueriesList searchPerformance={searchPerformance} />
         </TabsContent>
 
         <TabsContent value="content">
