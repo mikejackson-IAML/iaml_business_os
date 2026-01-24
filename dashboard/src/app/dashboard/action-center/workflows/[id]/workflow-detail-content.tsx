@@ -1,11 +1,15 @@
 'use client';
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Calendar, Building2, Clock, PlayCircle, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, Calendar, Building2, Clock, PlayCircle, CheckCircle2, Plus } from 'lucide-react';
 import { format } from 'date-fns';
 import { Badge } from '@/dashboard-kit/components/ui/badge';
+import { Button } from '@/dashboard-kit/components/ui/button';
 import { WorkflowProgress } from '../../components/workflow-progress';
 import { WorkflowTaskList } from '../../components/workflow-task-list';
+import { AddTaskToWorkflowModal } from '../../components/add-task-to-workflow-modal';
 import type { WorkflowDetail, WorkflowStatus } from '@/lib/api/workflow-types';
 
 interface WorkflowDetailContentProps {
@@ -48,6 +52,8 @@ const taskStatusConfig: Record<
  * - Task list sorted by dependency order
  */
 export function WorkflowDetailContent({ workflow }: WorkflowDetailContentProps) {
+  const router = useRouter();
+  const [isAddTaskModalOpen, setIsAddTaskModalOpen] = useState(false);
   const statusConfig = workflowStatusConfig[workflow.status] || workflowStatusConfig.not_started;
 
   // Task count by status (with defaults for missing keys)
@@ -83,7 +89,7 @@ export function WorkflowDetailContent({ workflow }: WorkflowDetailContentProps) 
 
       {/* Header section */}
       <header className="space-y-4">
-        {/* Title row with status badge */}
+        {/* Title row with status badge and Add Task button */}
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-1 flex-1 min-w-0">
             <h1 className="text-2xl font-bold tracking-tight">{workflow.name}</h1>
@@ -91,9 +97,19 @@ export function WorkflowDetailContent({ workflow }: WorkflowDetailContentProps) 
               <p className="text-muted-foreground">{workflow.description}</p>
             )}
           </div>
-          <Badge variant={statusConfig.variant} className="flex-shrink-0">
-            {statusConfig.text}
-          </Badge>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsAddTaskModalOpen(true)}
+            >
+              <Plus className="h-4 w-4 mr-1" />
+              Add Task
+            </Button>
+            <Badge variant={statusConfig.variant}>
+              {statusConfig.text}
+            </Badge>
+          </div>
         </div>
 
         {/* Progress indicator */}
@@ -185,6 +201,14 @@ export function WorkflowDetailContent({ workflow }: WorkflowDetailContentProps) 
 
       {/* Tasks section - ordered by dependency */}
       <WorkflowTaskList tasks={workflow.tasks} />
+
+      {/* Add Task Modal */}
+      <AddTaskToWorkflowModal
+        workflowId={workflow.id}
+        isOpen={isAddTaskModalOpen}
+        onClose={() => setIsAddTaskModalOpen(false)}
+        onSuccess={() => router.refresh()}
+      />
     </div>
   );
 }
