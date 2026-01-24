@@ -22,7 +22,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/dashboard-kit/compon
 import { FallingPattern } from '@/components/ui/falling-pattern';
 import type { TaskExtended, TaskComment, TaskActivity } from '@/lib/api/task-types';
 import type { SOPTemplate } from '@/lib/api/sop-types';
-import { ProgressiveInstructions, MasteryBadge } from '../../components';
+import { ProgressiveInstructions, MasteryBadge, TaskDependencies } from '../../components';
 import { format, isToday, isTomorrow, isPast, formatDistanceToNow } from 'date-fns';
 
 // Components for task detail page
@@ -284,28 +284,12 @@ export function TaskDetailContent({ task, comments, activity, sop, sopMastery }:
             {/* Workflow Context (if task has workflow) */}
             <WorkflowContext task={task} />
 
-            {/* Dependencies Section */}
-            {(task.blocked_by_count > 0 || task.blocking_count > 0) && (
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">Dependencies</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  {task.blocked_by_count > 0 && (
-                    <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
-                      <AlertTriangle className="h-4 w-4" />
-                      <span>Blocked by {task.blocked_by_count} task{task.blocked_by_count > 1 ? 's' : ''}</span>
-                    </div>
-                  )}
-                  {task.blocking_count > 0 && (
-                    <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
-                      <AlertCircle className="h-4 w-4" />
-                      <span>Blocking {task.blocking_count} task{task.blocking_count > 1 ? 's' : ''}</span>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            )}
+            {/* Dependencies Section - Enhanced with actual task links */}
+            <TaskDependencies
+              taskId={task.id}
+              blockedByCount={task.blocked_by_count}
+              blockingCount={task.blocking_count}
+            />
 
             {/* Related Entity Link */}
             {task.related_entity_url && (
