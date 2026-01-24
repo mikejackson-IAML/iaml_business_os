@@ -11,8 +11,8 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 **Milestone:** v1.0 Action Center
 **Phase:** 8 of 12 (Alert Integration) - IN PROGRESS
-**Plan:** 5/7 complete
-**Status:** 08-06 complete - Business hours due date calculation added
+**Plan:** 6/7 complete
+**Status:** 08-05 complete - Deduplication functions and workflow integration added
 
 ## Progress Overview
 
@@ -33,8 +33,8 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 ## Context for Next Session
 
-**Last action:** Completed 08-06 (Business Hours Due Date Calculation)
-**Next action:** Execute 08-05 (Full Duplicate Detection Logic) or 08-07 (Connect Existing Monitors)
+**Last action:** Completed 08-05 (Duplicate Detection and Priority Escalation)
+**Next action:** Execute 08-07 (Connect Existing Monitors)
 
 ## Key Decisions Made
 
@@ -146,7 +146,7 @@ Phase 7 (Workflows & Dependencies) complete:
 | 08-02 | Alert Accumulation Tracking | 1 | COMPLETE |
 | 08-03 | Alert-to-Task n8n Workflow Skeleton | 2 | COMPLETE |
 | 08-04 | AI Title Transformation | 2 | COMPLETE |
-| 08-05 | Full Duplicate Detection Logic | 2 | NOT STARTED |
+| 08-05 | Full Duplicate Detection Logic | 2 | COMPLETE |
 | 08-06 | Business Hours Due Date Calculation | 3 | COMPLETE |
 | 08-07 | Connect Existing Monitors | 3 | NOT STARTED |
 
@@ -155,12 +155,11 @@ Phase 7 (Workflows & Dependencies) complete:
 **Database:**
 - `supabase/migrations/20260124_alert_webhook_schema.sql`
 - `supabase/migrations/20260124_alert_accumulation.sql`
+- `supabase/migrations/20260124_alert_dedupe_functions.sql`
+- `supabase/migrations/20260124_due_date_calculation.sql`
 
 **n8n Workflows:**
 - `business-os/workflows/alert-to-task.json`
-
-**Database (08-06):**
-- `supabase/migrations/20260124_due_date_calculation.sql`
 
 ### Key Decisions (Phase 8)
 
@@ -168,9 +167,12 @@ Phase 7 (Workflows & Dependencies) complete:
 - [08-04]: Fallback verb mapping for 8 alert types when AI fails
 - [08-04]: Priority-based due date: critical=4h, high=next day 17:00, normal=3d, low=7d
 - [08-04]: Task created via direct Supabase INSERT (not Dashboard API)
+- [08-05]: Dedupe key format: `{alert_type}:{affected_resource}`
+- [08-05]: `check_alert_dedupe()` returns structured result with escalation recommendation
+- [08-05]: `escalate_task_priority()` logs activity with `alert_escalation` source
 - [08-06]: Business hours = 9am-6pm CT, weekdays only
 - [08-06]: Critical alerts after hours due next business day 9am
 - [08-06]: Warning alerts default to Friday 5pm if no metadata offset
 
 ---
-*Last updated: 2026-01-24 after 08-06 complete*
+*Last updated: 2026-01-24 after 08-05 complete*
