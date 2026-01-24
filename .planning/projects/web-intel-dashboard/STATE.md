@@ -5,15 +5,24 @@
 See: `.planning/projects/web-intel-dashboard/PROJECT.md` (updated 2026-01-23)
 
 **Core value:** See website health and SEO performance at a glance
-**Current focus:** Phase 2 - Health Score Dashboard
+**Current focus:** Phase 2 - Traffic Overview
 
 ## Current State
 
-**Phase:** 1 of 7 (COMPLETE)
-**Status:** Phase 1 complete, ready for Phase 2
-**Plans completed:** 4/4
+**Phase:** 2 of 7 (Traffic Overview)
+**Status:** In progress - Plan 1 complete
+**Plans completed:** 5/7 (4 from Phase 1 + 1 from Phase 2)
 
-Progress: [====] 100% (Phase 1)
+Progress: [=====---] 62% (Phase 2: 1/3 plans)
+
+## Phase 2: Traffic Overview (IN PROGRESS)
+
+**Goal:** Build traffic overview section with charts and source breakdown
+
+**Plans:**
+- [x] 02-01-PLAN.md - Date range infrastructure (COMPLETE - 3 min)
+- [ ] 02-02-PLAN.md - Traffic chart and source breakdown
+- [ ] 02-03-PLAN.md - Top pages table
 
 ## Phase 1: Foundation (COMPLETE)
 
@@ -42,6 +51,9 @@ Progress: [====] 100% (Phase 1)
 | 2026-01-23 | Separate DB types (snake_case) from frontend types (camelCase) | Clean transformation layer |
 | 2026-01-23 | Equal 25% weight for health score components | CWV, rankings, index coverage, alerts |
 | 2026-01-23 | Cyan color scheme for Web Intel | Differentiates from other departments in navigation |
+| 2026-01-24 | URL state for date range (7d/30d/90d) | Enables shareable links and browser history |
+| 2026-01-24 | Promise-based searchParams for Next.js 15+ | Compatibility with latest Next.js patterns |
+| 2026-01-24 | force-dynamic export for pages with searchParams | Required for URL parameter support |
 
 ## Session Log
 
@@ -52,6 +64,7 @@ Progress: [====] 100% (Phase 1)
 | 2026-01-23 | Completed 01-02-PLAN.md | Query functions for web_intel (8 min) |
 | 2026-01-23 | Completed 01-03-PLAN.md | Route and navigation (see 01-03-SUMMARY.md) |
 | 2026-01-23 | Completed 01-04-PLAN.md | Dashboard navigation link (2 min) |
+| 2026-01-24 | Completed 02-01-PLAN.md | Date range infrastructure (3 min) |
 
 ## Blockers
 
@@ -59,9 +72,9 @@ None
 
 ## Session Continuity
 
-- **Last session:** 2026-01-23T20:36:00Z
-- **Stopped at:** Completed 01-04-PLAN.md (Phase 1 complete)
-- **Resume file:** Phase 2 plans (02-01-PLAN.md through 02-04-PLAN.md)
+- **Last session:** 2026-01-24T15:26:58Z
+- **Stopped at:** Completed 02-01-PLAN.md
+- **Resume file:** 02-02-PLAN.md (Traffic chart and source breakdown)
 
 ## Notes
 
@@ -70,6 +83,7 @@ None
 - Use dashboard-kit components exclusively
 - Data source is `web_intel` schema in Supabase
 - Phase 1 complete: types, queries, route, and navigation all in place
+- Phase 2 in progress: Date range selector added, charts next
 
 ---
-*Last updated: 2026-01-23*
+*Last updated: 2026-01-24*
