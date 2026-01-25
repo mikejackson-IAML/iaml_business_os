@@ -149,6 +149,18 @@ export interface AIAnalysisResult {
 }
 
 /**
+ * Result of creating AI suggestions as tasks
+ */
+export interface SuggestionsCreatedResult {
+  /** Number of suggestions successfully created as tasks */
+  created: number;
+  /** Number skipped due to duplicate dedupe_key (same week) */
+  skipped: number;
+  /** Error messages for failed creations */
+  errors: string[];
+}
+
+/**
  * API response wrapper for AI analysis
  */
 export interface AIAnalysisResponse {
@@ -160,6 +172,9 @@ export interface AIAnalysisResponse {
 
   /** Error message (when success is false) */
   error?: string;
+
+  /** Result of suggestion creation (when create_suggestions is true) */
+  suggestions_created?: SuggestionsCreatedResult;
 
   /** Additional metadata */
   meta?: {
@@ -183,4 +198,7 @@ export interface AIAnalysisRequest {
 
   /** Maximum number of suggestions to return (default: 10) */
   max_suggestions?: number;
+
+  /** If true, create tasks from suggestions (default: false) */
+  create_suggestions?: boolean;
 }

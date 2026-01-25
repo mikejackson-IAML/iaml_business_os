@@ -15,7 +15,8 @@ import {
   callClaudeAPI,
   parseAnalysisResponse,
 } from '@/lib/action-center/ai-analysis';
-import type { AIAnalysisResponse } from '@/lib/action-center/ai-analysis-types';
+import { createAISuggestions } from '@/lib/action-center/ai-suggestion-service';
+import type { AIAnalysisResponse, SuggestionsCreatedResult } from '@/lib/action-center/ai-analysis-types';
 
 // Use same API key auth as other action-center endpoints
 const API_KEY = process.env.MOBILE_API_KEY;
@@ -31,6 +32,7 @@ const LOOKBACK_DAYS = 90;
 const requestSchema = z.object({
   mode: z.enum(['planning', 'recap']),
   max_suggestions: z.number().int().min(1).max(MAX_SUGGESTIONS_CAP).optional(),
+  create_suggestions: z.boolean().optional(),
 });
 
 /**
@@ -39,11 +41,13 @@ const requestSchema = z.object({
  * Request body:
  * - mode: "planning" | "recap" (Sunday vs Friday)
  * - max_suggestions?: number (default: 10, max: 20)
+ * - create_suggestions?: boolean (default: false) - If true, creates tasks from suggestions
  *
  * Response:
  * - success: boolean
  * - data?: AIAnalysisResult (when success is true)
  * - error?: string (when success is false)
+ * - suggestions_created?: { created, skipped, errors } (when create_suggestions is true)
  * - meta?: { duration_ms, tasks_analyzed, model }
  */
 export async function POST(request: NextRequest) {
@@ -74,8 +78,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { mode, max_suggestions } = parseResult.data;
+    const { mode, max_suggestions, create_suggestions } = parseResult.data;
     const maxSuggestions = max_suggestions ?? DEFAULT_MAX_SUGGESTIONS;
+    const shouldCreateSuggestions = create_suggestions ?? false;
 
     // Fetch task history (90 days)
     // Note: userId is placeholder for single-user system
@@ -123,9 +128,19 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Optionally create tasks from suggestions
+    let suggestionsCreated: SuggestionsCreatedResult | undefined;
+    if (shouldCreateSuggestions && analysisResult.suggestions.length > 0) {
+      suggestionsCreated = await createAISuggestions(
+        analysisResult.suggestions,
+        maxSuggestions
+      );
+    }
+
     const response: AIAnalysisResponse = {
       success: true,
       data: analysisResult,
+      ...(suggestionsCreated && { suggestions_created: suggestionsCreated }),
       meta: {
         duration_ms: Date.now() - startTime,
         tasks_analyzed: tasks.length,
