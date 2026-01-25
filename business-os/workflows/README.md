@@ -252,3 +252,40 @@ Schedule (7:05am CT) → Call Execute Rules API → Process Active Rules
 - Dashboard API (execute rules endpoint)
 - Supabase (task storage, condition queries)
 - Slack (error alerts)
+
+---
+
+## Daily Digest Sender
+
+**File:** `daily-digest-sender.json`
+**n8n Workflow ID:** TBD (import pending)
+**Status:** Ready to Import
+**Trigger:** Schedule (Hourly 6-9am CT Weekdays)
+**Documentation:** [README-daily-digest.md](README-daily-digest.md)
+
+Sends daily email summaries of critical, overdue, and due-today tasks to each user at their preferred time.
+
+### How It Works
+
+```
+Schedule (hourly) --> Call Digest API --> Filter by User Time
+                                                   |
+                      No Eligible Users <--------- Has Eligible?
+                                                   |
+                      Generate Digest --> Send Email --> Log Results
+                                                   |
+                      Failures? --> Slack Alert
+```
+
+### Key Features
+
+- **Timezone-aware delivery** - Emails sent at each user's preferred time in their timezone
+- **Smart filtering** - Skips users with no urgent items (nothing critical/overdue/due-today)
+- **Batch processing** - Rate-limited to avoid overwhelming email service
+
+### Services
+
+- Dashboard API (digest generation and sending)
+- Resend (email delivery via API)
+- Supabase (user preferences, task data via API)
+- Slack (error alerts, success logging)
