@@ -1,82 +1,31 @@
 # Requirements: Web Intel Dashboard
 
-**Defined:** 2026-01-23
 **Core Value:** See website health and SEO performance at a glance without logging into multiple tools.
 
-## v1 Requirements
+## Shipped Requirements
 
-Requirements for initial release. Each maps to roadmap phases.
+### v1.0 MVP (39 requirements — shipped 2026-01-25)
 
-### Foundation
+All v1.0 requirements have been satisfied and archived.
 
-- [x] **FOUND-01**: Dashboard route exists at `/dashboard/web-intel` and renders content
-- [x] **FOUND-02**: Web Intel appears in dashboard navigation with appropriate icon
-- [x] **FOUND-03**: TypeScript types defined for all web_intel data models
-- [x] **FOUND-04**: Supabase query functions created for web_intel schema
+**Full details:** `milestones/v1.0-REQUIREMENTS.md`
 
-### Traffic Overview
+**Summary:**
+- Foundation: 4 requirements
+- Traffic: 6 requirements
+- Rankings: 6 requirements
+- Core Web Vitals: 5 requirements
+- GSC: 5 requirements
+- Alerts: 5 requirements
+- Content: 3 requirements
+- Competitors: 3 requirements
+- AI Recommendations: 3 requirements
 
-- [x] **TRAF-01**: User can view total sessions for current period with trend vs previous
-- [x] **TRAF-02**: User can view total users with new vs returning breakdown
-- [x] **TRAF-03**: User can view pageviews with pages per session metric
-- [x] **TRAF-04**: User can view bounce rate with status indicator (good/warning/poor)
-- [x] **TRAF-05**: User can view traffic source breakdown (organic, direct, referral, social)
-- [x] **TRAF-06**: User can select date range for traffic data (7d, 30d, 90d)
+## Active Requirements
 
-### Rankings
+(None — planning next milestone)
 
-- [x] **RANK-01**: User can view table of tracked keywords with current positions
-- [x] **RANK-02**: User can see position change (up/down arrows with delta)
-- [x] **RANK-03**: User can filter keywords by priority (critical, high, medium, low)
-- [x] **RANK-04**: User can sort keywords table by position, change, or priority
-- [x] **RANK-05**: User can see SERP features presence (featured snippet, PAA, etc.)
-- [x] **RANK-06**: User can view sparkline showing position history (7 days)
-
-### Core Web Vitals
-
-- [x] **CWV-01**: User can view LCP score with good/needs-improvement/poor status
-- [x] **CWV-02**: User can view CLS score with status indicator
-- [x] **CWV-03**: User can view INP score with status indicator
-- [x] **CWV-04**: User can toggle between mobile and desktop vitals
-- [x] **CWV-05**: User can see overall Core Web Vitals pass/fail status
-
-### GSC Performance
-
-- [x] **GSC-01**: User can view total clicks for period
-- [x] **GSC-02**: User can view total impressions for period
-- [x] **GSC-03**: User can view average CTR with benchmark comparison
-- [x] **GSC-04**: User can view average position with trend
-- [x] **GSC-05**: User can see top queries by clicks (top 10)
-
-### Alerts
-
-- [x] **ALERT-01**: User can view list of active alerts sorted by severity
-- [x] **ALERT-02**: User can see alert count in section header/tab
-- [x] **ALERT-03**: User can acknowledge alerts (marks as acknowledged)
-- [x] **ALERT-04**: Alerts are color-coded by severity (critical=red, warning=yellow, info=blue)
-- [x] **ALERT-05**: User can filter alerts by type (traffic, ranking, technical)
-
-### Content Health
-
-- [x] **CONT-01**: User can view content decay warnings (pages losing traffic)
-- [x] **CONT-02**: User can see thin content flags
-- [x] **CONT-03**: User can view content inventory summary (total pages, avg word count)
-
-### Competitors
-
-- [x] **COMP-01**: User can view list of tracked competitors
-- [x] **COMP-02**: User can see competitor positions for shared keywords
-- [x] **COMP-03**: User can view SERP share of voice comparison
-
-### AI Recommendations
-
-- [x] **AI-01**: User can view AI-generated recommendations list
-- [x] **AI-02**: Recommendations show priority and category
-- [x] **AI-03**: User can mark recommendations as completed or dismissed
-
-## v2 Requirements
-
-Deferred to future release. Tracked but not in current roadmap.
+## v2 Candidates
 
 ### Advanced Analytics
 
@@ -98,69 +47,13 @@ Deferred to future release. Tracked but not in current roadmap.
 
 ## Out of Scope
 
-Explicitly excluded. Documented to prevent scope creep.
-
 | Feature | Reason |
 |---------|--------|
 | Data editing | Dashboard is read-only; data management via direct Supabase or workflows |
 | SEO audit tools | Workflows handle auditing; dashboard only displays results |
 | Direct API connections | All data flows through n8n workflows to Supabase |
-| Custom report builder | Fixed layouts for v1; complexity not justified |
-| Real-time updates | Daily workflow runs are sufficient; polling on refresh adequate |
-| Backlink management | Display only; outreach tracking is separate concern |
-
-## Traceability
-
-Which phases cover which requirements. Updated during roadmap creation.
-
-| Requirement | Phase | Status |
-|-------------|-------|--------|
-| FOUND-01 | Phase 1 | Complete |
-| FOUND-02 | Phase 1 | Complete |
-| FOUND-03 | Phase 1 | Complete |
-| FOUND-04 | Phase 1 | Complete |
-| TRAF-01 | Phase 2 | Complete |
-| TRAF-02 | Phase 2 | Complete |
-| TRAF-03 | Phase 2 | Complete |
-| TRAF-04 | Phase 2 | Complete |
-| TRAF-05 | Phase 2 | Complete |
-| TRAF-06 | Phase 2 | Complete |
-| RANK-01 | Phase 3 | Complete |
-| RANK-02 | Phase 3 | Complete |
-| RANK-03 | Phase 3 | Complete |
-| RANK-04 | Phase 3 | Complete |
-| RANK-05 | Phase 3 | Complete |
-| RANK-06 | Phase 3 | Complete |
-| CWV-01 | Phase 4 | Complete |
-| CWV-02 | Phase 4 | Complete |
-| CWV-03 | Phase 4 | Complete |
-| CWV-04 | Phase 4 | Complete |
-| CWV-05 | Phase 4 | Complete |
-| GSC-01 | Phase 4 | Complete |
-| GSC-02 | Phase 4 | Complete |
-| GSC-03 | Phase 4 | Complete |
-| GSC-04 | Phase 4 | Complete |
-| GSC-05 | Phase 4 | Complete |
-| ALERT-01 | Phase 5 | Complete |
-| ALERT-02 | Phase 5 | Complete |
-| ALERT-03 | Phase 5 | Complete |
-| ALERT-04 | Phase 5 | Complete |
-| ALERT-05 | Phase 5 | Complete |
-| CONT-01 | Phase 6 | Complete |
-| CONT-02 | Phase 6 | Complete |
-| CONT-03 | Phase 6 | Complete |
-| COMP-01 | Phase 6 | Complete |
-| COMP-02 | Phase 6 | Complete |
-| COMP-03 | Phase 6 | Complete |
-| AI-01 | Phase 7 | Complete |
-| AI-02 | Phase 7 | Complete |
-| AI-03 | Phase 7 | Complete |
-
-**Coverage:**
-- v1 requirements: 39 total
-- Mapped to phases: 39
-- Unmapped: 0 ✓
+| Custom report builder | Fixed layouts; complexity not justified |
+| Real-time updates | Daily workflow runs are sufficient |
 
 ---
-*Requirements defined: 2026-01-23*
-*Last updated: 2026-01-25 after Phase 7 completion (ALL COMPLETE)*
+*Last updated: 2026-01-25 after v1.0 milestone*
