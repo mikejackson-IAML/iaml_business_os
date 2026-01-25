@@ -315,15 +315,15 @@ Plans:
 **Plans:** 9 plans in 5 waves
 
 Plans:
-- [ ] 10-01-PLAN.md — Database migration for notification preferences and task count RPC (Wave 1)
-- [ ] 10-02-PLAN.md — Install dependencies - Resend and Sonner (Wave 1)
-- [ ] 10-03-PLAN.md — Action Center dashboard widget component (Wave 2)
-- [ ] 10-04-PLAN.md — Navigation badge with real-time subscription (Wave 2)
-- [ ] 10-05-PLAN.md — Widget integration on main dashboard (Wave 2)
-- [ ] 10-06-PLAN.md — Notification preferences form in Settings (Wave 3)
-- [ ] 10-07-PLAN.md — Resend email service and digest template (Wave 4)
-- [ ] 10-08-PLAN.md — Digest generation function and API endpoint (Wave 4)
-- [ ] 10-09-PLAN.md — n8n workflow for daily digest scheduling (Wave 5)
+- [x] 10-01-PLAN.md — Database migration for notification preferences and task count RPC (Wave 1)
+- [x] 10-02-PLAN.md — Install dependencies - Resend and Sonner (Wave 1)
+- [x] 10-03-PLAN.md — Action Center dashboard widget component (Wave 2)
+- [x] 10-04-PLAN.md — Navigation badge with real-time subscription (Wave 2)
+- [x] 10-05-PLAN.md — Widget integration on main dashboard (Wave 2)
+- [x] 10-06-PLAN.md — Notification preferences form in Settings (Wave 3)
+- [x] 10-07-PLAN.md — Resend email service and digest template (Wave 4)
+- [x] 10-08-PLAN.md — Digest generation function and API endpoint (Wave 4)
+- [x] 10-09-PLAN.md — n8n workflow for daily digest scheduling (Wave 5)
 
 ---
 
@@ -376,10 +376,10 @@ Plans:
 | 7. Workflows & Dependencies | 10/10 | COMPLETE |
 | 8. Alert Integration | 7/7 | COMPLETE |
 | 9. Workflow Templates & Rules | 8/8 | COMPLETE |
-| 10. Dashboard & Notifications | 0/9 | Planned |
+| 10. Dashboard & Notifications | 9/9 | COMPLETE |
 | 11. AI Integration | 0/? | Not started |
 | 12. Metrics & Polish | 0/? | Not started |
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-25 after Phase 9 execution complete*
+*Last updated: 2026-01-25 after Phase 10 execution complete*

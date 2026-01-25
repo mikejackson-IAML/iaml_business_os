@@ -5,14 +5,14 @@
 See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 **Core value:** Nothing falls through the cracks. Every action item flows to one place.
-**Current focus:** Phase 10 - Dashboard & Notifications
+**Current focus:** Phase 11 - AI Integration
 
 ## Current Status
 
 **Milestone:** v1.0 Action Center
-**Phase:** 10 of 12 (Dashboard & Notifications) - NOT STARTED
+**Phase:** 11 of 12 (AI Integration) - NOT STARTED
 **Plan:** 0/? complete
-**Status:** Phase 9 complete, ready for Phase 10
+**Status:** Phase 10 complete, ready for Phase 11
 
 ## Progress Overview
 
@@ -27,14 +27,14 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 | 7 | Workflows & Dependencies | COMPLETE |
 | 8 | Alert Integration | COMPLETE |
 | 9 | Workflow Templates & Rules | COMPLETE |
-| 10 | Dashboard & Notifications | Not Started |
+| 10 | Dashboard & Notifications | COMPLETE |
 | 11 | AI Integration | Not Started |
 | 12 | Metrics & Polish | Not Started |
 
 ## Context for Next Session
 
-**Last action:** Completed Phase 9 (Workflow Templates & Rules)
-**Next action:** Run `/gsd:discuss-phase 10 --project action-center` to plan Dashboard & Notifications
+**Last action:** Completed Phase 10 (Dashboard & Notifications)
+**Next action:** Run `/gsd:discuss-phase 11 --project action-center` to plan AI Integration
 
 ## Key Decisions Made
 
@@ -124,6 +124,72 @@ Phase 8 (Alert Integration) complete:
 - ALT-05: Info alerts accumulate (3x/24h) before creating task
 - ALT-06: Business hours respected for due date calculation
 - ALT-07: Completing alert task resolves source alert
+
+## Phase 10 Summary
+
+Phase 10 (Dashboard & Notifications) COMPLETE:
+
+| Plan | Name | Wave | Status |
+|------|------|------|--------|
+| 10-01 | Database Migration for Notification Preferences | 1 | COMPLETE |
+| 10-02 | Install Dependencies - Resend and Sonner | 1 | COMPLETE |
+| 10-03 | Action Center Dashboard Widget Component | 2 | COMPLETE |
+| 10-04 | Navigation Badge with Real-time Subscription | 2 | COMPLETE |
+| 10-05 | Widget Integration on Main Dashboard | 2 | COMPLETE |
+| 10-06 | Notification Preferences Form in Settings | 3 | COMPLETE |
+| 10-07 | Resend Email Service and Digest Template | 4 | COMPLETE |
+| 10-08 | Digest Generation Function and API Endpoint | 4 | COMPLETE |
+| 10-09 | n8n Workflow for Daily Digest Scheduling | 5 | COMPLETE |
+
+### Files Created (Phase 10)
+
+**Database Migrations:**
+- `supabase/migrations/20260125_notification_prefs_task_counts.sql` - notification preferences columns, get_task_counts() RPC
+
+**Dashboard Components:**
+- `dashboard/src/components/widgets/action-center-widget.tsx` - Dashboard widget with count chips
+- `dashboard/src/components/nav/action-center-badge.tsx` - Navigation badge component
+- `dashboard/src/hooks/use-task-badge-count.ts` - Real-time task count hook
+- `dashboard/src/components/ui/toggle.tsx` - Reusable toggle switch component
+
+**Email System:**
+- `dashboard/src/lib/email/resend.ts` - Resend client utility
+- `dashboard/src/lib/email/templates/daily-digest.tsx` - React Email digest template
+- `dashboard/src/lib/email/send-digest.ts` - Digest sending function
+- `dashboard/src/lib/email/generate-digest-data.ts` - Digest data generation
+- `dashboard/src/app/api/digest/send/route.ts` - Digest API endpoint
+
+**n8n Workflows:**
+- `business-os/workflows/daily-digest-sender.json` - Daily digest scheduling workflow
+- `business-os/workflows/README-daily-digest.md` - Workflow documentation
+- `supabase/scripts/register-daily-digest-workflow.sql` - Workflow registration script
+
+**Modified Files:**
+- `dashboard/src/app/dashboard/dashboard-content.tsx` - Widget and badge integration
+- `dashboard/src/app/dashboard/page.tsx` - Task counts fetch
+- `dashboard/src/app/settings/page.tsx` - Notification preferences section
+- `dashboard/src/lib/supabase/types.ts` - Profile type with notification fields
+- `dashboard/src/lib/api/task-queries.ts` - getTaskCounts() function
+
+### Key Decisions (Phase 10)
+
+- [10-01]: get_task_counts() returns badge_count as critical_count + overdue_count
+- [10-02]: Sonner toasts with richColors and top-right position
+- [10-03]: Count chips link to filtered task list views
+- [10-04]: Real-time subscription with 1-minute polling fallback
+- [10-04]: Badge hidden when count is 0 or loading
+- [10-05]: Widget placed as first element in dashboard left column
+- [10-06]: Toggle component uses semantic role="switch" and aria-checked
+- [10-07]: Daily digest uses React Email with inline CSS for compatibility
+- [10-07]: Digest skipped when no urgent items (configurable via forceSend)
+- [10-08]: API supports single-user and batch mode with rate limiting
+- [10-08]: Batch mode respects user timezone and digest_time preferences
+- [10-09]: Workflow runs hourly 6-9am CT weekdays
+
+### Requirements Covered (Phase 10)
+
+- DASH-01 through DASH-05: Dashboard widget, task counts, navigation, badge
+- NOTIF-01 through NOTIF-04: Daily digest, notification preferences, email template
 
 ## Phase 9 Summary
 
