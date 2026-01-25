@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { TaskExtended } from '@/lib/api/task-types';
 import { ChevronRight, AlertCircle, Clock, Workflow, Bot, User } from 'lucide-react';
 import { format, isToday, isTomorrow, isPast } from 'date-fns';
+import { ConfidenceBadge } from './confidence-badge';
 
 interface TaskRowProps {
   task: TaskExtended;
@@ -82,6 +83,14 @@ export function TaskRow({ task }: TaskRowProps) {
         <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
           <SourceIcon className="h-3.5 w-3.5" />
           <span className="capitalize">{task.source || 'Manual'}</span>
+          {/* Confidence (AI tasks only) */}
+          {task.source === 'ai' && task.ai_confidence !== null && (
+            <ConfidenceBadge
+              confidence={task.ai_confidence}
+              showLabel={false}
+              size="sm"
+            />
+          )}
         </div>
       </Link>
     </div>
