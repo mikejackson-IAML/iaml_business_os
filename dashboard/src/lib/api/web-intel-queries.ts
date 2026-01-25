@@ -188,6 +188,25 @@ export interface ContentDecayDb {
 }
 
 /**
+ * AI-generated SEO recommendations
+ */
+export interface RecommendationDb {
+  id: string;
+  title: string;
+  description: string;
+  category: string | null;  // 'content', 'technical', 'rankings', 'backlinks'
+  priority: string;  // 'high', 'medium', 'low'
+  estimated_impact: string | null;
+  source_workflow: string | null;
+  source_data: Record<string, unknown>;
+  status: 'new' | 'in_progress' | 'completed' | 'dismissed';
+  assigned_to: string | null;
+  completed_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+/**
  * Backlink profile snapshots
  */
 export interface BacklinkProfileDb {
@@ -427,6 +446,20 @@ export interface BacklinkProfile {
   domainRating: number | null;
   newLinks7d: number;
   lostLinks7d: number;
+}
+
+/**
+ * AI-generated SEO recommendation (frontend format)
+ */
+export interface Recommendation {
+  id: string;
+  title: string;
+  description: string;
+  category: string | null;
+  priority: 'high' | 'medium' | 'low';
+  estimatedImpact: string | null;
+  status: 'new' | 'in_progress' | 'completed' | 'dismissed';
+  createdAt: Date;
 }
 
 /**
@@ -1072,6 +1105,38 @@ export async function getSharedKeywords(limit: number = 10): Promise<SharedKeywo
   return results.slice(0, limit);
 }
 
+/**
+ * Fetch AI recommendations
+ * Returns recommendations sorted by priority (high > medium > low) then by created_at descending
+ */
+export async function getRecommendations(activeOnly: boolean = true): Promise<RecommendationDb[]> {
+  const supabase = getServerClient();
+
+  let query = (supabase.from('web_intel.recommendations') as any).select('*');
+
+  if (activeOnly) {
+    query = query.in('status', ['new', 'in_progress']);
+  }
+
+  const { data, error } = await query.order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching recommendations:', error);
+    return [];
+  }
+
+  // Sort by priority manually (high > medium > low), then by created_at descending
+  const priorityOrder: Record<string, number> = { high: 0, medium: 1, low: 2 };
+  const sorted = (data as RecommendationDb[])?.sort((a, b) => {
+    const aPriority = priorityOrder[a.priority] ?? 3;
+    const bPriority = priorityOrder[b.priority] ?? 3;
+    if (aPriority !== bPriority) return aPriority - bPriority;
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+  });
+
+  return sorted || [];
+}
+
 // ============================================
 // Transform Functions (snake_case to camelCase)
 // ============================================
@@ -1349,6 +1414,22 @@ export function transformSerpShare(data: SerpShareDb): SerpShare {
     keywordsTracked: data.keywords_tracked,
     keywordsRanking: data.keywords_ranking,
   };
+}
+
+/**
+ * Transform recommendations to frontend format
+ */
+export function transformRecommendations(data: RecommendationDb[]): Recommendation[] {
+  return data.map((item) => ({
+    id: item.id,
+    title: item.title,
+    description: item.description,
+    category: item.category,
+    priority: item.priority as 'high' | 'medium' | 'low',
+    estimatedImpact: item.estimated_impact,
+    status: item.status,
+    createdAt: new Date(item.created_at),
+  }));
 }
 
 // ============================================
