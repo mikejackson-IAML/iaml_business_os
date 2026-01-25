@@ -38,6 +38,9 @@ export async function createTask(
     related_entity_id: data.related_entity_id || null,
     related_entity_url: data.related_entity_url || null,
     dedupe_key: data.dedupe_key || null,
+    // AI suggestion fields
+    ai_confidence: data.ai_confidence ?? null,
+    ai_suggested_at: data.ai_suggested_at ?? (data.source === 'ai' ? new Date().toISOString() : null),
     created_by: createdBy,
     updated_by: createdBy,
   };

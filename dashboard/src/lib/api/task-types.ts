@@ -142,6 +142,9 @@ export interface CreateTaskRequest {
   related_entity_id?: string;
   related_entity_url?: string;
   dedupe_key?: string;
+  // AI suggestion fields
+  ai_confidence?: number;      // 0.00-1.00 confidence score
+  ai_suggested_at?: string;    // ISO timestamp when AI suggested this
 }
 
 export interface UpdateTaskRequest {

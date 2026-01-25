@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { getDashboardMetrics, getCampaigns, getRecentActivity } from '@/lib/supabase/queries';
-import { getTaskCounts } from '@/lib/api/task-queries';
+import { getTaskCounts, getLatestWeeklyFocus, getAISuggestionCount } from '@/lib/api/task-queries';
 import { DashboardContent } from './dashboard-content';
 import { DashboardSkeleton } from './dashboard-skeleton';
 
@@ -22,11 +22,24 @@ async function DashboardDataLoader() {
     return null;
   });
 
-  const [metrics, campaigns, activities, taskCounts] = await Promise.all([
+  // Weekly focus and AI suggestion count wrapped for graceful degradation
+  const weeklyFocusPromise = getLatestWeeklyFocus().catch((error) => {
+    console.error('Failed to fetch weekly focus:', error);
+    return null;
+  });
+
+  const aiSuggestionCountPromise = getAISuggestionCount().catch((error) => {
+    console.error('Failed to fetch AI suggestion count:', error);
+    return 0;
+  });
+
+  const [metrics, campaigns, activities, taskCounts, weeklyFocusTask, aiSuggestionCount] = await Promise.all([
     getDashboardMetrics(),
     getCampaigns(),
     getRecentActivity(10),
     taskCountsPromise,
+    weeklyFocusPromise,
+    aiSuggestionCountPromise,
   ]);
 
   return (
@@ -35,6 +48,8 @@ async function DashboardDataLoader() {
       campaigns={campaigns}
       activities={activities}
       taskCounts={taskCounts}
+      weeklyFocusTask={weeklyFocusTask}
+      aiSuggestionCount={aiSuggestionCount}
     />
   );
 }
