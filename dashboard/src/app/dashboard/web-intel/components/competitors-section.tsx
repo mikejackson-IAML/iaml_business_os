@@ -1,19 +1,21 @@
 'use client';
 
-import { Trophy, Users2 } from 'lucide-react';
+import { Trophy, Users2, Target } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/dashboard-kit/components/ui/card';
-import type { Competitor, SerpShare } from '@/lib/api/web-intel-queries';
+import type { Competitor, SerpShare, SharedKeyword } from '@/lib/api/web-intel-queries';
 import { CompetitorList } from './competitor-list';
 import { SerpShareChart } from './serp-share-chart';
+import { SharedKeywordsTable } from './shared-keywords-table';
 
 interface CompetitorsSectionProps {
   competitors: Competitor[];
   serpShare: SerpShare | null;
+  sharedKeywords: SharedKeyword[];
 }
 
-export function CompetitorsSection({ competitors, serpShare }: CompetitorsSectionProps) {
-  // Check if both are empty - show helpful message
-  const isEmpty = competitors.length === 0 && !serpShare;
+export function CompetitorsSection({ competitors, serpShare, sharedKeywords }: CompetitorsSectionProps) {
+  // Check if all are empty - show helpful message
+  const isEmpty = competitors.length === 0 && !serpShare && sharedKeywords.length === 0;
 
   if (isEmpty) {
     return (
@@ -51,6 +53,17 @@ export function CompetitorsSection({ competitors, serpShare }: CompetitorsSectio
           </h3>
           <SerpShareChart serpShare={serpShare} />
         </div>
+
+        {/* Shared Keywords section */}
+        {sharedKeywords.length > 0 && (
+          <div>
+            <h3 className="text-sm font-medium mb-3 flex items-center gap-2">
+              <Target className="h-4 w-4 text-cyan-500" />
+              Shared Keywords
+            </h3>
+            <SharedKeywordsTable keywords={sharedKeywords} />
+          </div>
+        )}
 
         {/* Competitor list section */}
         <div>
