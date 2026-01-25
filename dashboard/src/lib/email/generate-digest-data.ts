@@ -9,12 +9,14 @@ import { getServerClient } from '@/lib/supabase/server';
 import type { TaskExtended } from '@/lib/api/task-types';
 
 /**
- * Minimal task data needed for digest email
+ * Task data needed for digest email
  */
 export interface DigestTask {
   id: string;
   title: string;
   due_date: string | null;
+  due_time: string | null;
+  priority: 'critical' | 'high' | 'normal' | 'low';
 }
 
 /**
@@ -36,13 +38,15 @@ export interface DigestData {
 }
 
 /**
- * Convert TaskExtended to minimal DigestTask
+ * Convert TaskExtended to DigestTask
  */
 function toDigestTask(task: TaskExtended): DigestTask {
   return {
     id: task.id,
     title: task.title,
     due_date: task.due_date,
+    due_time: task.due_time,
+    priority: task.priority,
   };
 }
 

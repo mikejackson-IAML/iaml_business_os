@@ -17,21 +17,10 @@ import {
   Hr,
   Preview,
 } from '@react-email/components';
+import type { DigestTask, DigestStats } from '../generate-digest-data';
 
-// ==================== Types ====================
-
-export interface DigestTask {
-  id: string;
-  title: string;
-  due_date: string | null;
-  due_time: string | null;
-  priority: 'critical' | 'high' | 'normal' | 'low';
-}
-
-export interface DigestStats {
-  totalActive: number;
-  completedThisWeek: number;
-}
+// Re-export for convenience
+export type { DigestTask, DigestStats };
 
 export interface DailyDigestEmailProps {
   recipientName: string;
