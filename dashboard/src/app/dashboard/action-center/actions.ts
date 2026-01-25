@@ -199,3 +199,44 @@ export async function getTaskDependenciesAction(
     };
   }
 }
+
+/**
+ * Accept an AI suggestion - marks as in_progress so user can work on it
+ */
+export async function acceptSuggestionAction(id: string): Promise<ActionResult> {
+  try {
+    await updateTask(id, { status: 'in_progress' });
+    revalidatePath('/dashboard/action-center');
+    return { success: true };
+  } catch (error) {
+    console.error('Error accepting suggestion:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to accept suggestion',
+    };
+  }
+}
+
+/**
+ * Reject an AI suggestion - dismisses with optional reason for learning
+ */
+export async function rejectSuggestionAction(
+  id: string,
+  reason?: string
+): Promise<ActionResult> {
+  try {
+    const dismissedReason = reason
+      ? `ai_rejected: ${reason}`
+      : 'ai_rejected: No reason provided';
+
+    await dismissTask(id, dismissedReason);
+    revalidatePath('/dashboard/action-center');
+    return { success: true };
+  } catch (error) {
+    console.error('Error rejecting suggestion:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to reject suggestion',
+    };
+  }
+}
