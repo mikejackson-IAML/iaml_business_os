@@ -1,0 +1,339 @@
+/**
+ * Workflow Template Instantiation
+ *
+ * Logic for instantiating workflow templates into actual workflows and tasks.
+ * Handles:
+ * - Variable substitution in titles/descriptions
+ * - Due date calculation for workflow and tasks
+ * - Dependency mapping from template order to actual task IDs
+ * - Deduplication checks
+ */
+
+import { SupabaseClient } from '@supabase/supabase-js';
+import {
+  substituteVariables,
+  calculateDueDate,
+  calculateTaskDueDate,
+  workflowTemplateDedupeKey,
+} from './template-utils';
+import { WorkflowTemplate, InstantiationResult } from './workflow-template-types';
+
+/**
+ * Check if a workflow already exists for this template + entity
+ */
+async function checkWorkflowDuplicate(
+  supabase: SupabaseClient,
+  templateId: string,
+  entityId: string
+): Promise<boolean> {
+  // Check for existing workflow with matching source
+  const { data } = await supabase
+    .from('workflows')
+    .select('id')
+    .eq('source', 'template')
+    .eq('source_id', templateId)
+    .eq('entity_id', entityId)
+    .limit(1)
+    .single();
+
+  return !!data;
+}
+
+/**
+ * Check if a task with this dedupe key already exists
+ */
+async function checkTaskDuplicate(
+  supabase: SupabaseClient,
+  dedupeKey: string
+): Promise<boolean> {
+  const { data } = await supabase
+    .from('tasks')
+    .select('id')
+    .eq('dedupe_key', dedupeKey)
+    .limit(1)
+    .single();
+
+  return !!data;
+}
+
+/**
+ * Instantiate a workflow template into an actual workflow with tasks
+ */
+export async function instantiateWorkflowTemplate(
+  supabase: SupabaseClient,
+  template: WorkflowTemplate,
+  entityId: string,
+  payload: Record<string, unknown>,
+  force: boolean = false
+): Promise<InstantiationResult> {
+  try {
+    // Check for duplicate (unless force flag)
+    if (!force) {
+      const isDuplicate = await checkWorkflowDuplicate(supabase, template.id, entityId);
+      if (isDuplicate) {
+        return {
+          success: false,
+          skipped_reason: 'duplicate',
+        };
+      }
+    }
+
+    // Calculate workflow target date
+    const targetDate = calculateDueDate(
+      {
+        reference: template.target_date_field,
+        offset_days: template.target_date_offset_days,
+      },
+      payload
+    );
+
+    if (!targetDate) {
+      return {
+        success: false,
+        skipped_reason: 'error',
+        error: `Could not calculate target date from ${template.target_date_field}`,
+      };
+    }
+
+    // Create the workflow
+    const workflowName = substituteVariables(
+      template.name,
+      template.variable_mapping,
+      payload
+    );
+
+    const workflowDescription = template.description
+      ? substituteVariables(template.description, template.variable_mapping, payload)
+      : null;
+
+    const { data: workflow, error: workflowError } = await supabase
+      .from('workflows')
+      .insert({
+        name: workflowName,
+        description: workflowDescription,
+        status: 'not_started',
+        target_completion_date: targetDate,
+        department: template.department,
+        entity_type: getEntityTypeFromEvent(template.trigger_event),
+        entity_id: entityId,
+        source: 'template',
+        source_id: template.id,
+      })
+      .select('id')
+      .single();
+
+    if (workflowError || !workflow) {
+      return {
+        success: false,
+        skipped_reason: 'error',
+        error: `Failed to create workflow: ${workflowError?.message}`,
+      };
+    }
+
+    // Create tasks from templates
+    // Sort by order to ensure dependencies are created first
+    const sortedTemplates = [...template.task_templates].sort((a, b) => a.order - b.order);
+
+    // Map from template order to created task ID
+    const orderToTaskId: Map<number, string> = new Map();
+    const createdTaskIds: string[] = [];
+
+    for (const taskTemplate of sortedTemplates) {
+      // Generate dedupe key
+      const dedupeKey = workflowTemplateDedupeKey(
+        template.id,
+        entityId,
+        taskTemplate.order
+      );
+
+      // Check for duplicate task (skip if exists)
+      if (!force) {
+        const taskExists = await checkTaskDuplicate(supabase, dedupeKey);
+        if (taskExists) {
+          console.log(`Task with dedupe_key ${dedupeKey} already exists, skipping`);
+          continue;
+        }
+      }
+
+      // Substitute variables in title and description
+      const taskTitle = substituteVariables(
+        taskTemplate.title,
+        template.variable_mapping,
+        payload
+      );
+
+      const taskDescription = taskTemplate.description
+        ? substituteVariables(taskTemplate.description, template.variable_mapping, payload)
+        : null;
+
+      // Calculate task due date relative to workflow target
+      const taskDueDate = calculateTaskDueDate(targetDate, taskTemplate.days_before_due);
+
+      // Map dependencies from order to actual task IDs
+      let dependsOn: string[] | null = null;
+      if (taskTemplate.depends_on_order && taskTemplate.depends_on_order.length > 0) {
+        dependsOn = taskTemplate.depends_on_order
+          .map(order => orderToTaskId.get(order))
+          .filter((id): id is string => id !== undefined);
+      }
+
+      // Create the task
+      const { data: task, error: taskError } = await supabase
+        .from('tasks')
+        .insert({
+          title: taskTitle,
+          description: taskDescription,
+          task_type: taskTemplate.task_type,
+          status: 'open',
+          priority: taskTemplate.priority,
+          due_date: taskDueDate,
+          department: template.department,
+          workflow_id: workflow.id,
+          sop_template_id: taskTemplate.sop_template_id || null,
+          depends_on: dependsOn,
+          entity_type: getEntityTypeFromEvent(template.trigger_event),
+          entity_id: entityId,
+          source: 'workflow',
+          source_id: template.id,
+          dedupe_key: dedupeKey,
+          assignee_id: taskTemplate.assignee_id || null,
+        })
+        .select('id')
+        .single();
+
+      if (taskError || !task) {
+        console.error(`Failed to create task for order ${taskTemplate.order}:`, taskError);
+        continue; // Continue with other tasks
+      }
+
+      orderToTaskId.set(taskTemplate.order, task.id);
+      createdTaskIds.push(task.id);
+    }
+
+    return {
+      success: true,
+      workflow_id: workflow.id,
+      task_ids: createdTaskIds,
+    };
+  } catch (error) {
+    console.error('Error in instantiateWorkflowTemplate:', error);
+    return {
+      success: false,
+      skipped_reason: 'error',
+      error: error instanceof Error ? error.message : 'Unknown error',
+    };
+  }
+}
+
+/**
+ * Extract entity type from event type
+ * e.g., "program_instance.created" -> "program_instance"
+ */
+function getEntityTypeFromEvent(eventType: string): string {
+  return eventType.split('.')[0];
+}
+
+// ============================================
+// DRY RUN MODE
+// ============================================
+
+/**
+ * Result of dry run (no database changes)
+ */
+export interface DryRunResult {
+  would_create_workflow: {
+    name: string;
+    description: string | null;
+    target_completion_date: string;
+    department: string;
+  };
+  would_create_tasks: Array<{
+    order: number;
+    title: string;
+    description: string | null;
+    due_date: string;
+    priority: string;
+    depends_on_order: number[] | null;
+  }>;
+  validation_errors: string[];
+}
+
+/**
+ * Dry run - show what would be created without actually creating
+ */
+export async function dryRunWorkflowTemplate(
+  template: WorkflowTemplate,
+  payload: Record<string, unknown>
+): Promise<DryRunResult> {
+  const errors: string[] = [];
+
+  // Calculate workflow target date
+  const targetDate = calculateDueDate(
+    {
+      reference: template.target_date_field,
+      offset_days: template.target_date_offset_days,
+    },
+    payload
+  );
+
+  if (!targetDate) {
+    errors.push(`Could not calculate target date from ${template.target_date_field}`);
+  }
+
+  // Substitute variables in workflow name
+  const workflowName = substituteVariables(
+    template.name,
+    template.variable_mapping,
+    payload
+  );
+
+  // Check if any variables weren't substituted
+  if (workflowName.includes('${')) {
+    errors.push(`Unresolved variables in workflow name: ${workflowName}`);
+  }
+
+  const workflowDescription = template.description
+    ? substituteVariables(template.description, template.variable_mapping, payload)
+    : null;
+
+  // Process task templates
+  const wouldCreateTasks = template.task_templates.map(taskTemplate => {
+    const taskTitle = substituteVariables(
+      taskTemplate.title,
+      template.variable_mapping,
+      payload
+    );
+
+    if (taskTitle.includes('${')) {
+      errors.push(`Unresolved variables in task ${taskTemplate.order} title: ${taskTitle}`);
+    }
+
+    const taskDescription = taskTemplate.description
+      ? substituteVariables(taskTemplate.description, template.variable_mapping, payload)
+      : null;
+
+    const taskDueDate = targetDate
+      ? calculateTaskDueDate(targetDate, taskTemplate.days_before_due)
+      : 'UNKNOWN';
+
+    return {
+      order: taskTemplate.order,
+      title: taskTitle,
+      description: taskDescription,
+      due_date: taskDueDate,
+      priority: taskTemplate.priority,
+      depends_on_order: taskTemplate.depends_on_order || null,
+    };
+  });
+
+  return {
+    would_create_workflow: {
+      name: workflowName,
+      description: workflowDescription,
+      target_completion_date: targetDate || 'UNKNOWN',
+      department: template.department,
+    },
+    would_create_tasks: wouldCreateTasks,
+    validation_errors: errors,
+  };
+}
