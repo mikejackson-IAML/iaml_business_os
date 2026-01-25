@@ -13,6 +13,7 @@ import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { ConversionFunnelChart } from './components/conversion-funnel-chart';
 import { ChannelPerformanceChart } from './components/channel-performance-chart';
 import { ActionCenterWidget } from '@/components/widgets/action-center-widget';
+import { ActionCenterBadge } from '@/components/nav/action-center-badge';
 import type { Campaign, CampaignActivity, ChannelPerformance } from '@/lib/supabase/types';
 import type { HealthStatus, ActivityItem } from '@/dashboard-kit/types';
 import type { TaskCounts } from '@/lib/api/task-queries';
@@ -132,11 +133,12 @@ export function DashboardContent({ metrics, campaigns, activities, taskCounts }:
           <div className="flex flex-wrap gap-3 mt-4">
             <Link
               href="/dashboard/action-center"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-orange-500/10 hover:bg-orange-500/20 text-orange-600 dark:text-orange-400 transition-colors"
+              className="relative flex items-center gap-2 px-4 py-2 rounded-lg bg-orange-500/10 hover:bg-orange-500/20 text-orange-600 dark:text-orange-400 transition-colors"
             >
               <CheckSquare className="h-4 w-4" />
               <span className="text-sm font-medium">Action Center</span>
               <ArrowRight className="h-3 w-3" />
+              <ActionCenterBadge />
             </Link>
             <Link
               href="/dashboard/digital"
