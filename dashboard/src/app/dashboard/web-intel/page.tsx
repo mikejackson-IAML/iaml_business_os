@@ -8,6 +8,7 @@ import {
   getContentSummary,
   getCompetitors,
   getSerpShare,
+  getSharedKeywords,
 } from '@/lib/api/web-intel-queries';
 import { parseDateRange, rangeToDays, type DateRange } from './components/date-range-selector';
 import { parsePriorityFilter } from './components/priority-filter';
@@ -40,13 +41,14 @@ async function WebIntelDataLoader({
   const days = rangeToDays(range);
 
   // Fetch all data in parallel
-  const [data, contentDecay, thinContent, contentSummary, competitors, serpShare] = await Promise.all([
+  const [data, contentDecay, thinContent, contentSummary, competitors, serpShare, sharedKeywords] = await Promise.all([
     getWebIntelDashboardData(days),
     getContentDecayWithInventory(5),
     getThinContentWithInventory(5),
     getContentSummary(),
     getCompetitors(),
     getSerpShare(),
+    getSharedKeywords(),
   ]);
 
   return (
@@ -60,6 +62,7 @@ async function WebIntelDataLoader({
       contentSummary={contentSummary}
       competitors={competitors}
       serpShare={serpShare}
+      sharedKeywords={sharedKeywords}
     />
   );
 }
