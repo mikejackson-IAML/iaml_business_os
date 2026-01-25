@@ -294,3 +294,52 @@ export async function getTaskCounts(): Promise<TaskCounts> {
   // The RPC returns JSON which Supabase parses automatically
   return data as TaskCounts;
 }
+
+// ==================== Weekly Focus Queries ====================
+
+/**
+ * Get the latest Weekly Focus Review task created by AI
+ * Returns the most recent task where task_type='review', source='ai', and title starts with 'Weekly Focus Review'
+ */
+export async function getLatestWeeklyFocus(): Promise<TaskExtended | null> {
+  const supabase = getServerClient();
+
+  const { data, error } = await supabase
+    .from('tasks_extended')
+    .select('*')
+    .eq('task_type', 'review')
+    .eq('source', 'ai')
+    .like('title', 'Weekly Focus Review%')
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .single();
+
+  if (error) {
+    if (error.code === 'PGRST116') return null; // Not found
+    console.error('Error fetching weekly focus:', error);
+    throw new Error('Failed to fetch weekly focus');
+  }
+
+  return data as TaskExtended;
+}
+
+/**
+ * Get count of open AI-suggested tasks
+ * Used to show how many AI suggestions are waiting for review
+ */
+export async function getAISuggestionCount(): Promise<number> {
+  const supabase = getServerClient();
+
+  const { count, error } = await supabase
+    .from('tasks')
+    .select('id', { count: 'exact', head: true })
+    .eq('source', 'ai')
+    .eq('status', 'open');
+
+  if (error) {
+    console.error('Error fetching AI suggestion count:', error);
+    throw new Error('Failed to fetch AI suggestion count');
+  }
+
+  return count || 0;
+}
