@@ -9,10 +9,12 @@ import {
   getCompetitors,
   getSerpShare,
   getSharedKeywords,
+  getRecommendations,
 } from '@/lib/api/web-intel-queries';
 import { parseDateRange, rangeToDays, type DateRange } from './components/date-range-selector';
 import { parsePriorityFilter } from './components/priority-filter';
 import { parseAlertTypeFilter } from './components/alert-type-filter';
+import { parseRecommendationPriorityFilter } from './components/recommendation-priority-filter';
 
 export const metadata = {
   title: 'Web Intelligence | IAML Business OS',
@@ -26,22 +28,24 @@ export const revalidate = 3600;
 export const dynamic = 'force-dynamic';
 
 interface PageProps {
-  searchParams: Promise<{ range?: string; priority?: string; alertType?: string }>;
+  searchParams: Promise<{ range?: string; priority?: string; alertType?: string; recPriority?: string }>;
 }
 
 async function WebIntelDataLoader({
   range,
   priorityFilter,
   alertTypeFilter,
+  recPriorityFilter,
 }: {
   range: DateRange;
   priorityFilter: ReturnType<typeof parsePriorityFilter>;
   alertTypeFilter: ReturnType<typeof parseAlertTypeFilter>;
+  recPriorityFilter: ReturnType<typeof parseRecommendationPriorityFilter>;
 }) {
   const days = rangeToDays(range);
 
   // Fetch all data in parallel
-  const [data, contentDecay, thinContent, contentSummary, competitors, serpShare, sharedKeywords] = await Promise.all([
+  const [data, contentDecay, thinContent, contentSummary, competitors, serpShare, sharedKeywords, recommendations] = await Promise.all([
     getWebIntelDashboardData(days),
     getContentDecayWithInventory(5),
     getThinContentWithInventory(5),
@@ -49,6 +53,7 @@ async function WebIntelDataLoader({
     getCompetitors(),
     getSerpShare(),
     getSharedKeywords(),
+    getRecommendations(true), // activeOnly=true
   ]);
 
   return (
@@ -63,6 +68,8 @@ async function WebIntelDataLoader({
       competitors={competitors}
       serpShare={serpShare}
       sharedKeywords={sharedKeywords}
+      recommendations={recommendations}
+      recPriorityFilter={recPriorityFilter}
     />
   );
 }
@@ -72,10 +79,16 @@ export default async function WebIntelDashboardPage({ searchParams }: PageProps)
   const range = parseDateRange(params.range);
   const priorityFilter = parsePriorityFilter(params.priority);
   const alertTypeFilter = parseAlertTypeFilter(params.alertType);
+  const recPriorityFilter = parseRecommendationPriorityFilter(params.recPriority);
 
   return (
     <Suspense fallback={<WebIntelSkeleton />}>
-      <WebIntelDataLoader range={range} priorityFilter={priorityFilter} alertTypeFilter={alertTypeFilter} />
+      <WebIntelDataLoader
+        range={range}
+        priorityFilter={priorityFilter}
+        alertTypeFilter={alertTypeFilter}
+        recPriorityFilter={recPriorityFilter}
+      />
     </Suspense>
   );
 }

@@ -14,6 +14,7 @@ import type {
   Competitor,
   SerpShare,
   SharedKeyword,
+  RecommendationDb,
 } from '@/lib/api/web-intel-queries';
 import { DateRangeSelector, rangeToDays, type DateRange } from './components/date-range-selector';
 import { ContentHealthSection } from './components/content-health-section';
@@ -27,6 +28,8 @@ import { GscMetricsRow } from './components/gsc-metrics-row';
 import { TopQueriesList } from './components/top-queries-list';
 import { AlertsSection } from './components/alerts-section';
 import type { AlertTypeFilterValue } from './components/alert-type-filter';
+import { RecommendationsSection } from './components/recommendations-section';
+import type { RecommendationPriorityFilterValue } from './components/recommendation-priority-filter';
 import { Badge } from '@/dashboard-kit/components/ui/badge';
 
 interface WebIntelContentProps {
@@ -40,6 +43,8 @@ interface WebIntelContentProps {
   competitors: Competitor[];
   serpShare: SerpShare | null;
   sharedKeywords: SharedKeyword[];
+  recommendations: RecommendationDb[];
+  recPriorityFilter: RecommendationPriorityFilterValue;
 }
 
 export function WebIntelContent({
@@ -53,10 +58,23 @@ export function WebIntelContent({
   competitors,
   serpShare,
   sharedKeywords,
+  recommendations,
+  recPriorityFilter,
 }: WebIntelContentProps) {
   const days = rangeToDays(range);
   const { dailyTraffic, trafficSources, topPages, alerts, health, keywords, rankings, coreWebVitals, searchPerformance } = data;
   const alertCount = alerts.length;
+
+  // Transform recommendations to frontend format
+  const transformedRecs = recommendations.map((r) => ({
+    id: r.id,
+    title: r.title,
+    description: r.description,
+    category: r.category,
+    priority: r.priority as 'high' | 'medium' | 'low',
+    createdAt: new Date(r.created_at),
+  }));
+  const recommendationCount = transformedRecs.length;
 
   return (
     <div className="p-6 lg:p-8 space-y-6">
@@ -98,6 +116,14 @@ export function WebIntelContent({
             )}
           </TabsTrigger>
           <TabsTrigger value="content">Content</TabsTrigger>
+          <TabsTrigger value="recommendations" className="relative">
+            Recommendations
+            {recommendationCount > 0 && (
+              <Badge variant="secondary" className="ml-2 h-5 min-w-5 px-1.5">
+                {recommendationCount}
+              </Badge>
+            )}
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
@@ -233,6 +259,13 @@ export function WebIntelContent({
               />
             </div>
           </div>
+        </TabsContent>
+
+        <TabsContent value="recommendations">
+          <RecommendationsSection
+            recommendations={transformedRecs}
+            currentFilter={recPriorityFilter}
+          />
         </TabsContent>
       </Tabs>
     </div>
