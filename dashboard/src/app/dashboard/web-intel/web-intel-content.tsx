@@ -13,6 +13,7 @@ import type {
   ContentSummary,
   Competitor,
   SerpShare,
+  SharedKeyword,
 } from '@/lib/api/web-intel-queries';
 import { DateRangeSelector, rangeToDays, type DateRange } from './components/date-range-selector';
 import { ContentHealthSection } from './components/content-health-section';
@@ -38,6 +39,7 @@ interface WebIntelContentProps {
   contentSummary: ContentSummary;
   competitors: Competitor[];
   serpShare: SerpShare | null;
+  sharedKeywords: SharedKeyword[];
 }
 
 export function WebIntelContent({
@@ -50,6 +52,7 @@ export function WebIntelContent({
   contentSummary,
   competitors,
   serpShare,
+  sharedKeywords,
 }: WebIntelContentProps) {
   const days = rangeToDays(range);
   const { dailyTraffic, trafficSources, topPages, alerts, health, keywords, rankings, coreWebVitals, searchPerformance } = data;
@@ -226,6 +229,7 @@ export function WebIntelContent({
               <CompetitorsSection
                 competitors={competitors}
                 serpShare={serpShare}
+                sharedKeywords={sharedKeywords}
               />
             </div>
           </div>
