@@ -429,6 +429,17 @@ export interface BacklinkProfile {
   lostLinks7d: number;
 }
 
+/**
+ * Shared keyword with our position vs competitor positions
+ */
+export interface SharedKeyword {
+  keywordId: string;
+  keyword: string;
+  ourPosition: number | null;
+  competitorPositions: Array<{ domain: string; position: number }>;
+  priority: 'low' | 'medium' | 'high' | 'critical';
+}
+
 export interface ContentInventory {
   id: string;
   url: string;
@@ -990,6 +1001,75 @@ export async function getSerpShare(): Promise<SerpShare | null> {
   }
 
   return transformSerpShare(data);
+}
+
+/**
+ * Fetch shared keywords with our position and competitor positions
+ * Joins daily_rankings (latest) with tracked_keywords
+ */
+export async function getSharedKeywords(limit: number = 10): Promise<SharedKeyword[]> {
+  const supabase = getServerClient();
+
+  // Get latest rankings with competitor positions joined to tracked_keywords
+  const { data, error } = await (
+    supabase.from('web_intel.daily_rankings') as any
+  )
+    .select(`
+      keyword_id,
+      position,
+      competitor_positions,
+      collected_date,
+      tracked_keywords:keyword_id (
+        id,
+        keyword,
+        priority
+      )
+    `)
+    .order('collected_date', { ascending: false })
+    .limit(limit * 2); // Fetch extra to handle deduplication
+
+  if (error) {
+    console.error('Error fetching shared keywords:', error);
+    return [];
+  }
+
+  // Deduplicate by keyword_id (keep latest entry for each keyword)
+  const latestByKeyword = new Map<string, any>();
+  for (const item of data || []) {
+    if (!latestByKeyword.has(item.keyword_id)) {
+      latestByKeyword.set(item.keyword_id, item);
+    }
+  }
+
+  // Transform and filter to only those with competitor data
+  const results: SharedKeyword[] = [];
+  for (const item of Array.from(latestByKeyword.values())) {
+    const competitors = item.competitor_positions || [];
+    // Only include keywords that have at least one competitor position
+    if (competitors.length > 0 && item.tracked_keywords) {
+      results.push({
+        keywordId: item.keyword_id,
+        keyword: item.tracked_keywords.keyword,
+        ourPosition: item.position,
+        competitorPositions: competitors,
+        priority: item.tracked_keywords.priority,
+      });
+    }
+  }
+
+  // Sort by priority (critical first) then by ourPosition
+  const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
+  results.sort((a, b) => {
+    const pA = priorityOrder[a.priority] ?? 4;
+    const pB = priorityOrder[b.priority] ?? 4;
+    if (pA !== pB) return pA - pB;
+    // Then by position (null positions last)
+    const posA = a.ourPosition ?? 101;
+    const posB = b.ourPosition ?? 101;
+    return posA - posB;
+  });
+
+  return results.slice(0, limit);
 }
 
 // ============================================
