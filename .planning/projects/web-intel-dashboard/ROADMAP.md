@@ -200,6 +200,10 @@ Plans:
 
 **Plans:** 2 plans
 
+Plans:
+- [ ] 07-01-PLAN.md — Data layer (types, query, mutations, server actions)
+- [ ] 07-02-PLAN.md — UI components and tab integration
+
 ---
 
 ## Progress
@@ -212,8 +216,8 @@ Plans:
 | 4. Technical Health | 4/4 | Complete | 2026-01-24 |
 | 5. Alerts System | 3/3 | Complete | 2026-01-24 |
 | 6. Content & Competitors | 5/5 | Complete | 2026-01-25 |
-| 7. AI Recommendations | 0/2 | Not started | - |
+| 7. AI Recommendations | 0/2 | Planned | - |
 
 ---
 *Roadmap created: 2026-01-23*
-*Last updated: 2026-01-25 — Phase 6 complete*
+*Last updated: 2026-01-25 — Phase 7 planned*
