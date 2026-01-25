@@ -33,6 +33,7 @@ import { DismissTaskDialog } from '../../components/dismiss-task-dialog';
 import { DismissWithDependentsDialog } from '../../components/dismiss-with-dependents-dialog';
 import { ApprovalActions, RecommendationCallout } from '../../components/approval-actions';
 import { WorkflowContext } from '../../components/workflow-context';
+import { AISuggestionActions } from '../../components/ai-suggestion-actions';
 
 interface TaskDetailContentProps {
   task: TaskExtended;
@@ -224,7 +225,13 @@ export function TaskDetailContent({ task, comments, activity, sop, sopMastery }:
 
             {/* Right: Action Buttons */}
             <div className="flex flex-wrap items-center gap-2">
-              {canTakeAction && !isApprovalTask && (
+              {/* AI Suggestion Actions */}
+              {task.source === 'ai' && task.status === 'open' && (
+                <AISuggestionActions task={task} variant="full" />
+              )}
+
+              {/* Standard Actions (for non-AI tasks or accepted AI tasks) */}
+              {canTakeAction && !isApprovalTask && !(task.source === 'ai' && task.status === 'open') && (
                 <>
                   {task.status === 'open' && (
                     <Button
