@@ -57,3 +57,52 @@ export async function acknowledgeAlerts(
 
   return count ?? ids.length;
 }
+
+/**
+ * Mark a recommendation as completed
+ * Sets status to 'completed' and records completion timestamp
+ */
+export async function completeRecommendation(id: string): Promise<void> {
+  // Cast to any for web_intel schema tables (not in generated types)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const supabase = getServerClient() as any;
+
+  const { error } = await supabase
+    .from('web_intel.recommendations')
+    .update({
+      status: 'completed',
+      completed_at: new Date().toISOString(),
+    })
+    .eq('id', id);
+
+  if (error) {
+    throw new Error(`Failed to complete recommendation: ${error.message}`);
+  }
+}
+
+/**
+ * Snooze a recommendation
+ * Marks as dismissed with snooze duration stored for potential future use.
+ * A scheduled workflow could restore 'new' status after the snooze period if needed.
+ * @param id - Recommendation ID
+ * @param days - Number of days to snooze (1, 7, or 30)
+ */
+export async function snoozeRecommendation(id: string, days: number): Promise<void> {
+  // Cast to any for web_intel schema tables (not in generated types)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const supabase = getServerClient() as any;
+
+  // Snooze is implemented as dismiss with snooze metadata stored in source_data
+  // A scheduled workflow could restore 'new' status after the snooze period
+  const { error } = await supabase
+    .from('web_intel.recommendations')
+    .update({
+      status: 'dismissed',
+      source_data: { snoozed_for_days: days, snoozed_at: new Date().toISOString() },
+    })
+    .eq('id', id);
+
+  if (error) {
+    throw new Error(`Failed to snooze recommendation: ${error.message}`);
+  }
+}
