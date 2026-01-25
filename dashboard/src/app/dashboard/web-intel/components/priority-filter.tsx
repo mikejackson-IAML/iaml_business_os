@@ -2,21 +2,10 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { cn } from '@/dashboard-kit/lib/utils';
+import { type KeywordPriorityFilter } from '../utils/filters';
 
-/**
- * Valid keyword priority filter values
- */
-export type KeywordPriorityFilter = 'all' | 'critical' | 'high' | 'medium' | 'low';
-
-/**
- * Parse priority filter from URL or return default
- */
-export function parsePriorityFilter(value: string | undefined): KeywordPriorityFilter {
-  if (value === 'critical' || value === 'high' || value === 'medium' || value === 'low') {
-    return value;
-  }
-  return 'all';
-}
+// Re-export for convenience
+export { parsePriorityFilter, type KeywordPriorityFilter } from '../utils/filters';
 
 const priorities: Array<{ value: KeywordPriorityFilter; label: string }> = [
   { value: 'all', label: 'All Priorities' },

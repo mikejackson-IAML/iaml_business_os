@@ -11,10 +11,8 @@ import {
   getSharedKeywords,
   getRecommendations,
 } from '@/lib/api/web-intel-queries';
-import { parseDateRange, rangeToDays, type DateRange } from './components/date-range-selector';
-import { parsePriorityFilter } from './components/priority-filter';
-import { parseAlertTypeFilter } from './components/alert-type-filter';
-import { parseRecommendationPriorityFilter } from './components/recommendation-priority-filter';
+import { parseDateRange, rangeToDays, type DateRange } from './utils/date-range';
+import { parsePriorityFilter, parseAlertTypeFilter, parseRecommendationPriorityFilter } from './utils/filters';
 
 export const metadata = {
   title: 'Web Intelligence | IAML Business OS',

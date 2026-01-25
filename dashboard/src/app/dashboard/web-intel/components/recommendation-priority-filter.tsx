@@ -2,20 +2,10 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { cn } from '@/dashboard-kit/lib/utils';
+import { type RecommendationPriorityFilterValue } from '../utils/filters';
 
-export type RecommendationPriorityFilterValue = 'all' | 'high' | 'medium' | 'low';
-
-/**
- * Parse URL param to RecommendationPriorityFilterValue
- */
-export function parseRecommendationPriorityFilter(
-  value: string | undefined
-): RecommendationPriorityFilterValue {
-  if (value === 'high' || value === 'medium' || value === 'low') {
-    return value;
-  }
-  return 'all';
-}
+// Re-export for convenience
+export { parseRecommendationPriorityFilter, type RecommendationPriorityFilterValue } from '../utils/filters';
 
 interface RecommendationPriorityFilterProps {
   currentPriority: RecommendationPriorityFilterValue;

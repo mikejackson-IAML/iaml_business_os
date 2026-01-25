@@ -2,18 +2,10 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { cn } from '@/dashboard-kit/lib/utils';
+import { type AlertTypeFilterValue } from '../utils/filters';
 
-export type AlertTypeFilterValue = 'all' | 'traffic' | 'ranking' | 'technical';
-
-/**
- * Parse URL param to AlertTypeFilterValue
- */
-export function parseAlertTypeFilter(value: string | undefined): AlertTypeFilterValue {
-  if (value === 'traffic' || value === 'ranking' || value === 'technical') {
-    return value;
-  }
-  return 'all';
-}
+// Re-export for convenience
+export { parseAlertTypeFilter, type AlertTypeFilterValue } from '../utils/filters';
 
 interface AlertTypeFilterProps {
   currentType: AlertTypeFilterValue;
