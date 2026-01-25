@@ -12,8 +12,10 @@ import { UserMenu } from '@/components/UserMenu';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { ConversionFunnelChart } from './components/conversion-funnel-chart';
 import { ChannelPerformanceChart } from './components/channel-performance-chart';
+import { ActionCenterWidget } from '@/components/widgets/action-center-widget';
 import type { Campaign, CampaignActivity, ChannelPerformance } from '@/lib/supabase/types';
 import type { HealthStatus, ActivityItem } from '@/dashboard-kit/types';
+import type { TaskCounts } from '@/lib/api/task-queries';
 
 interface DashboardContentProps {
   metrics: {
@@ -26,6 +28,7 @@ interface DashboardContentProps {
   };
   campaigns: Campaign[];
   activities: CampaignActivity[];
+  taskCounts: TaskCounts | null;
 }
 
 // Convert CampaignActivity to ActivityItem format
@@ -92,7 +95,7 @@ function getChannelIcon(channel: string | null) {
   }
 }
 
-export function DashboardContent({ metrics, campaigns, activities }: DashboardContentProps) {
+export function DashboardContent({ metrics, campaigns, activities, taskCounts }: DashboardContentProps) {
   const healthData = calculateHealthScore(metrics);
   const activityItems = mapActivitiesToFeed(activities);
 
@@ -182,6 +185,9 @@ export function DashboardContent({ metrics, campaigns, activities }: DashboardCo
         <div className="grid grid-cols-12 gap-6">
           {/* Left Column - Main Metrics */}
           <div className="col-span-12 lg:col-span-8 space-y-6">
+            {/* Action Center Widget */}
+            <ActionCenterWidget counts={taskCounts} />
+
             {/* KPI Row */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <MetricCard
