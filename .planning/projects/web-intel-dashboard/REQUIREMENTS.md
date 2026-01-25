@@ -58,15 +58,15 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Content Health
 
-- [ ] **CONT-01**: User can view content decay warnings (pages losing traffic)
-- [ ] **CONT-02**: User can see thin content flags
-- [ ] **CONT-03**: User can view content inventory summary (total pages, avg word count)
+- [x] **CONT-01**: User can view content decay warnings (pages losing traffic)
+- [x] **CONT-02**: User can see thin content flags
+- [x] **CONT-03**: User can view content inventory summary (total pages, avg word count)
 
 ### Competitors
 
-- [ ] **COMP-01**: User can view list of tracked competitors
-- [ ] **COMP-02**: User can see competitor positions for shared keywords
-- [ ] **COMP-03**: User can view SERP share of voice comparison
+- [x] **COMP-01**: User can view list of tracked competitors
+- [x] **COMP-02**: User can see competitor positions for shared keywords
+- [x] **COMP-03**: User can view SERP share of voice comparison
 
 ### AI Recommendations
 
@@ -146,12 +146,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ALERT-03 | Phase 5 | Complete |
 | ALERT-04 | Phase 5 | Complete |
 | ALERT-05 | Phase 5 | Complete |
-| CONT-01 | Phase 6 | Pending |
-| CONT-02 | Phase 6 | Pending |
-| CONT-03 | Phase 6 | Pending |
-| COMP-01 | Phase 6 | Pending |
-| COMP-02 | Phase 6 | Pending |
-| COMP-03 | Phase 6 | Pending |
+| CONT-01 | Phase 6 | Complete |
+| CONT-02 | Phase 6 | Complete |
+| CONT-03 | Phase 6 | Complete |
+| COMP-01 | Phase 6 | Complete |
+| COMP-02 | Phase 6 | Complete |
+| COMP-03 | Phase 6 | Complete |
 | AI-01 | Phase 7 | Pending |
 | AI-02 | Phase 7 | Pending |
 | AI-03 | Phase 7 | Pending |
@@ -163,4 +163,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-23*
-*Last updated: 2026-01-24 after Phase 5 completion*
+*Last updated: 2026-01-25 after Phase 6 completion*
