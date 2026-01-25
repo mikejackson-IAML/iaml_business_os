@@ -198,3 +198,57 @@ Alert Webhook → Validate → Get Config → Record Occurrence
 - Anthropic Claude (AI title transformation)
 - Supabase (task creation, deduplication, configuration)
 - Slack (error alerts)
+
+---
+
+## Recurring Rules Executor
+
+**n8n Workflow ID:** TBD (import pending)
+**Status:** Ready to Import
+**Trigger:** Schedule (Daily 7:00 AM CT)
+**Documentation:** [README-task-rules-executor.md](README-task-rules-executor.md)
+
+Executes daily/weekly/monthly task rules from the Action Center. Creates tasks on schedule for things like daily standup, weekly review, and monthly reports.
+
+### How It Works
+
+```
+Schedule (7am CT) → Call Execute Rules API → Process Active Rules
+                                                      ↓
+                          For each rule → Check dedupe key → Create task
+                                                      ↓
+                          Errors? → Slack Alert
+```
+
+### Services
+
+- Dashboard API (execute rules endpoint)
+- Supabase (task storage)
+- Slack (error alerts)
+
+---
+
+## Condition Rules Executor
+
+**n8n Workflow ID:** TBD (import pending)
+**Status:** Ready to Import
+**Trigger:** Schedule (Daily 7:05 AM CT)
+**Documentation:** [README-task-rules-executor.md](README-task-rules-executor.md)
+
+Creates tasks when database conditions are met. Runs SQL queries daily and creates tasks for matching rows (overdue invoices, stale leads, etc.).
+
+### How It Works
+
+```
+Schedule (7:05am CT) → Call Execute Rules API → Process Active Rules
+                                                      ↓
+                          For each rule → Execute SQL query → Create task per row
+                                                      ↓
+                          Errors? → Slack Alert
+```
+
+### Services
+
+- Dashboard API (execute rules endpoint)
+- Supabase (task storage, condition queries)
+- Slack (error alerts)
