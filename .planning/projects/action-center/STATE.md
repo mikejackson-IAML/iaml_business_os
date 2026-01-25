@@ -5,14 +5,14 @@
 See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 **Core value:** Nothing falls through the cracks. Every action item flows to one place.
-**Current focus:** Phase 9 - Workflow Templates & Rules (in progress)
+**Current focus:** Phase 10 - Dashboard & Notifications
 
 ## Current Status
 
 **Milestone:** v1.0 Action Center
-**Phase:** 9 of 12 (Workflow Templates & Rules) - IN PROGRESS
-**Plan:** 3/8 complete
-**Status:** Event webhook endpoint created
+**Phase:** 10 of 12 (Dashboard & Notifications) - NOT STARTED
+**Plan:** 0/? complete
+**Status:** Phase 9 complete, ready for Phase 10
 
 ## Progress Overview
 
@@ -26,15 +26,15 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 | 6 | SOP Templates | COMPLETE |
 | 7 | Workflows & Dependencies | COMPLETE |
 | 8 | Alert Integration | COMPLETE |
-| 9 | Workflow Templates & Rules | IN PROGRESS |
+| 9 | Workflow Templates & Rules | COMPLETE |
 | 10 | Dashboard & Notifications | Not Started |
 | 11 | AI Integration | Not Started |
 | 12 | Metrics & Polish | Not Started |
 
 ## Context for Next Session
 
-**Last action:** Completed 09-03 (Event Webhook Endpoint)
-**Next action:** Execute 09-04 (Workflow Template Instantiation)
+**Last action:** Completed Phase 9 (Workflow Templates & Rules)
+**Next action:** Run `/gsd:discuss-phase 10 --project action-center` to plan Dashboard & Notifications
 
 ## Key Decisions Made
 
@@ -125,41 +125,66 @@ Phase 8 (Alert Integration) complete:
 - ALT-06: Business hours respected for due date calculation
 - ALT-07: Completing alert task resolves source alert
 
-## Phase 9 Progress
+## Phase 9 Summary
 
-Phase 9 (Workflow Templates & Rules) in progress:
+Phase 9 (Workflow Templates & Rules) COMPLETE:
 
 | Plan | Name | Wave | Status |
 |------|------|------|--------|
 | 09-01 | Core Utilities | 1 | COMPLETE |
 | 09-02 | Workflow Template Types and Validation | 1 | COMPLETE |
 | 09-03 | Event Webhook Endpoint | 2 | COMPLETE |
-| 09-04 | Workflow Template Instantiation | 2 | Not Started |
-| 09-05 | Task Rule Execution | 2 | Not Started |
-| 09-06 | Task Rule Types and Validation | 2 | Not Started |
-| 09-07 | Task Rule API | 3 | Not Started |
-| 09-08 | Task Rule Evaluation | 3 | Not Started |
+| 09-04 | Workflow Template Instantiation | 2 | COMPLETE |
+| 09-05 | Task Rule Execution | 2 | COMPLETE |
+| 09-06 | Task Rules API Extensions | 3 | COMPLETE |
+| 09-07 | Workflow Templates API | 3 | COMPLETE |
+| 09-08 | n8n Workflows for Scheduled Rules | 4 | COMPLETE |
 
 ### Files Created (Phase 9)
 
-**Core Utilities:**
-- `dashboard/src/lib/action-center/template-utils.ts` - Condition evaluation, variable substitution, due date calculation
-
-**Types and Validation:**
+**Core Libraries:**
+- `dashboard/src/lib/action-center/template-utils.ts` - Condition evaluation, variable substitution, due date calculation, dedupe keys
 - `dashboard/src/lib/action-center/workflow-template-types.ts` - TypeScript interfaces for workflow templates
 - `dashboard/src/lib/action-center/workflow-template-validation.ts` - Zod schemas and validation functions
+- `dashboard/src/lib/action-center/workflow-template-instantiation.ts` - Template to workflow/task conversion
+- `dashboard/src/lib/action-center/task-rule-types.ts` - Rule types and Zod validation
+- `dashboard/src/lib/action-center/task-rule-execution.ts` - Rule execution logic for all 3 rule types
 
 **API Endpoints:**
-- `dashboard/src/app/api/action-center/events/route.ts` - Event webhook endpoint (POST receives events, GET lists handlers)
+- `dashboard/src/app/api/action-center/events/route.ts` - Event webhook (GET, POST)
+- `dashboard/src/app/api/action-center/execute-rules/route.ts` - Execute scheduled rules (POST)
+- `dashboard/src/app/api/action-center/workflow-templates/route.ts` - List, Create (GET, POST)
+- `dashboard/src/app/api/action-center/workflow-templates/[id]/route.ts` - Get, Update, Delete (GET, PATCH, DELETE)
+- `dashboard/src/app/api/action-center/workflow-templates/[id]/toggle/route.ts` - Toggle active (POST)
+- `dashboard/src/app/api/action-center/workflow-templates/[id]/test/route.ts` - Dry run (GET, POST)
+- `dashboard/src/app/api/action-center/task-rules/[id]/toggle/route.ts` - Toggle active (POST)
+- `dashboard/src/app/api/action-center/task-rules/[id]/test/route.ts` - Dry run (GET, POST)
+
+**Database Migrations:**
+- `supabase/migrations/20260125_condition_query_rpc.sql` - Safe SQL execution RPC for condition rules
+
+**n8n Workflows:**
+- `business-os/workflows/recurring-rules-executor.json` - Daily 7:00 AM CT execution
+- `business-os/workflows/condition-rules-executor.json` - Daily 7:05 AM CT execution
+- `business-os/workflows/README-task-rules-executor.md` - Documentation
 
 ### Key Decisions (Phase 9)
 
-- [09-02]: Defined shared types (Condition, VariableMapping, DueDateConfig) in workflow-template-types.ts for self-contained usage
+- [09-01]: 6 condition operators: equals, not_equals, in, not_in, exists, not_exists
+- [09-01]: Dedupe key format: `wt:{template_id}:{entity_id}` or `tr:{rule_id}:{entity_id}`
+- [09-02]: Trigger event format: `entity.action` (e.g., `program_instance.created`)
 - [09-02]: Used `z.record(z.string(), z.unknown())` for Zod v4 compatibility
-- [09-02]: Trigger event format enforced as `entity.action` (e.g., `program_instance.created`)
-- [09-03]: Event webhook uses dynamic imports for workflow-template-instantiation and task-rule-execution (implemented in later plans)
 - [09-03]: One event can trigger multiple templates - all matching ones fire
-- [09-03]: GET endpoint provides list of registered event types and their handlers for debugging
+- [09-04]: Dependencies mapped from template order to actual task IDs after creation
+- [09-04]: dryRunWorkflowTemplate() for testing without DB changes
+- [09-05]: Three rule types: event, recurring (cron), condition (SQL query)
+- [09-06]: Test endpoints show what would be created without persisting
+- [09-08]: Recurring rules at 7:00 AM, condition rules at 7:05 AM to stagger load
+
+### Requirements Covered (Phase 9)
+
+- TMPL-01 through TMPL-08: Workflow template storage, triggers, conditions, instantiation
+- RULE-01 through RULE-07: Task rules for event/recurring/condition triggers with deduplication
 
 ## Known Technical Debt
 

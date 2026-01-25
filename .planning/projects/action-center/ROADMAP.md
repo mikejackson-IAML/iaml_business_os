@@ -286,14 +286,14 @@ Plans:
 **Plans:** 8 plans in 4 waves
 
 Plans:
-- [ ] 09-01-PLAN.md — Core utilities (condition eval, variable substitution, due date) (Wave 1)
-- [ ] 09-02-PLAN.md — Workflow template types and validation (Wave 1)
-- [ ] 09-03-PLAN.md — Event webhook endpoint (Wave 2)
-- [ ] 09-04-PLAN.md — Workflow template instantiation logic (Wave 2)
-- [ ] 09-05-PLAN.md — Task rule execution logic (Wave 2)
-- [ ] 09-06-PLAN.md — Task rules API extensions (toggle/test) (Wave 3)
-- [ ] 09-07-PLAN.md — Workflow templates API (CRUD, toggle, test) (Wave 3)
-- [ ] 09-08-PLAN.md — n8n workflows for scheduled rule execution (Wave 4)
+- [x] 09-01-PLAN.md — Core utilities (condition eval, variable substitution, due date) (Wave 1)
+- [x] 09-02-PLAN.md — Workflow template types and validation (Wave 1)
+- [x] 09-03-PLAN.md — Event webhook endpoint (Wave 2)
+- [x] 09-04-PLAN.md — Workflow template instantiation logic (Wave 2)
+- [x] 09-05-PLAN.md — Task rule execution logic (Wave 2)
+- [x] 09-06-PLAN.md — Task rules API extensions (toggle/test) (Wave 3)
+- [x] 09-07-PLAN.md — Workflow templates API (CRUD, toggle, test) (Wave 3)
+- [x] 09-08-PLAN.md — n8n workflows for scheduled rule execution (Wave 4)
 
 ---
 
@@ -364,11 +364,11 @@ Plans:
 | 6. SOP Templates | 10/10 | COMPLETE |
 | 7. Workflows & Dependencies | 10/10 | COMPLETE |
 | 8. Alert Integration | 7/7 | COMPLETE |
-| 9. Workflow Templates & Rules | 0/8 | Planned |
+| 9. Workflow Templates & Rules | 8/8 | COMPLETE |
 | 10. Dashboard & Notifications | 0/? | Not started |
 | 11. AI Integration | 0/? | Not started |
 | 12. Metrics & Polish | 0/? | Not started |
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-25 after planning Phase 9*
+*Last updated: 2026-01-25 after Phase 9 execution complete*

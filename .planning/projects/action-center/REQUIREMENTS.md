@@ -138,24 +138,24 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Workflow Templates
 
-- [ ] **TMPL-01**: Workflow template definition with trigger config
-- [ ] **TMPL-02**: Event triggers (e.g., program_instance.created)
-- [ ] **TMPL-03**: Trigger conditions (e.g., format = 'in-person')
-- [ ] **TMPL-04**: Due date calculation from reference field + offset
-- [ ] **TMPL-05**: Task templates with relative timing (days_before_due)
-- [ ] **TMPL-06**: Dependency mapping within template
-- [ ] **TMPL-07**: Role-based assignment
-- [ ] **TMPL-08**: Variable substitution in title/description
+- [x] **TMPL-01**: Workflow template definition with trigger config
+- [x] **TMPL-02**: Event triggers (e.g., program_instance.created)
+- [x] **TMPL-03**: Trigger conditions (e.g., format = 'in-person')
+- [x] **TMPL-04**: Due date calculation from reference field + offset
+- [x] **TMPL-05**: Task templates with relative timing (days_before_due)
+- [x] **TMPL-06**: Dependency mapping within template
+- [x] **TMPL-07**: Role-based assignment
+- [x] **TMPL-08**: Variable substitution in title/description
 
 ### Task Rules
 
-- [ ] **RULE-01**: Recurring rules (daily, weekly schedule)
-- [ ] **RULE-02**: Event-triggered rules
-- [ ] **RULE-03**: Condition-based rules (checked daily)
-- [ ] **RULE-04**: n8n workflow: execute recurring rules on schedule
-- [ ] **RULE-05**: n8n workflow: execute condition checks daily
-- [ ] **RULE-06**: Duplicate prevention with dedupe_key
-- [ ] **RULE-07**: Enable/disable rules
+- [x] **RULE-01**: Recurring rules (daily, weekly schedule)
+- [x] **RULE-02**: Event-triggered rules
+- [x] **RULE-03**: Condition-based rules (checked daily)
+- [x] **RULE-04**: n8n workflow: execute recurring rules on schedule
+- [x] **RULE-05**: n8n workflow: execute condition checks daily
+- [x] **RULE-06**: Duplicate prevention with dedupe_key
+- [x] **RULE-07**: Enable/disable rules
 
 ### Dashboard Widget
 
