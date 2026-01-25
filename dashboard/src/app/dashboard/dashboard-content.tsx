@@ -13,10 +13,12 @@ import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { ConversionFunnelChart } from './components/conversion-funnel-chart';
 import { ChannelPerformanceChart } from './components/channel-performance-chart';
 import { ActionCenterWidget } from '@/components/widgets/action-center-widget';
+import { WeeklyFocusWidget } from '@/components/widgets/weekly-focus-widget';
 import { ActionCenterBadge } from '@/components/nav/action-center-badge';
 import type { Campaign, CampaignActivity, ChannelPerformance } from '@/lib/supabase/types';
 import type { HealthStatus, ActivityItem } from '@/dashboard-kit/types';
 import type { TaskCounts } from '@/lib/api/task-queries';
+import type { TaskExtended } from '@/lib/api/task-types';
 
 interface DashboardContentProps {
   metrics: {
@@ -30,6 +32,8 @@ interface DashboardContentProps {
   campaigns: Campaign[];
   activities: CampaignActivity[];
   taskCounts: TaskCounts | null;
+  weeklyFocusTask: TaskExtended | null;
+  aiSuggestionCount: number;
 }
 
 // Convert CampaignActivity to ActivityItem format
@@ -96,7 +100,7 @@ function getChannelIcon(channel: string | null) {
   }
 }
 
-export function DashboardContent({ metrics, campaigns, activities, taskCounts }: DashboardContentProps) {
+export function DashboardContent({ metrics, campaigns, activities, taskCounts, weeklyFocusTask, aiSuggestionCount }: DashboardContentProps) {
   const healthData = calculateHealthScore(metrics);
   const activityItems = mapActivitiesToFeed(activities);
 
@@ -189,6 +193,12 @@ export function DashboardContent({ metrics, campaigns, activities, taskCounts }:
           <div className="col-span-12 lg:col-span-8 space-y-6">
             {/* Action Center Widget */}
             <ActionCenterWidget counts={taskCounts} />
+
+            {/* Weekly Focus Widget */}
+            <WeeklyFocusWidget
+              focusTask={weeklyFocusTask}
+              suggestionCount={aiSuggestionCount}
+            />
 
             {/* KPI Row */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
