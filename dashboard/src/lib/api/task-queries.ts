@@ -262,3 +262,35 @@ export async function getTaskDependencies(taskId: string): Promise<TaskDependenc
 
   return { blockedBy, blocking };
 }
+
+// ==================== Task Counts ====================
+
+/**
+ * Task counts returned by the RPC
+ */
+export interface TaskCounts {
+  critical_count: number;
+  due_today_count: number;
+  overdue_count: number;
+  total_active_count: number;
+  badge_count: number;
+  generated_at: string;
+}
+
+/**
+ * Get task counts for dashboard widget and nav badge
+ * Calls action_center.get_task_counts() RPC
+ */
+export async function getTaskCounts(): Promise<TaskCounts> {
+  const supabase = getServerClient();
+
+  const { data, error } = await supabase.rpc('get_task_counts');
+
+  if (error) {
+    console.error('Error fetching task counts:', error);
+    throw new Error('Failed to fetch task counts');
+  }
+
+  // The RPC returns JSON which Supabase parses automatically
+  return data as TaskCounts;
+}
