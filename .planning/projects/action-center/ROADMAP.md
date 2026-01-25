@@ -333,16 +333,29 @@ Plans:
 **Requirements:** AI-01, AI-02, AI-03, AI-04, AI-05, AI-06, AI-07, AI-08
 
 **Success Criteria:**
-1. Weekly AI Focus runs Monday 7am
-2. AI analyzes open tasks, overdue, patterns
-3. Creates "Weekly Focus Review" task
-4. AI-suggested tasks have status = 'suggested'
+1. Weekly AI Focus runs Sunday evening + Friday recap
+2. AI analyzes open tasks, overdue, patterns (90-day lookback)
+3. Creates "Weekly Focus Review" task with full analysis
+4. AI-suggested tasks have status='open', source='ai', ai_confidence set
 5. AI Suggested view shows pending suggestions
-6. Accept/Reject/Modify flow works
+6. Accept/Reject flow works (individual, optional rejection reason)
 7. Confidence score displays
 8. At least 2 pattern detection types working
+9. Cap at 10 suggestions per week
+10. Auto-expire suggestions after 7 days
+11. Dashboard widget shows weekly focus (encouraging coach tone)
 
-**Plans:** TBD
+**Plans:** 8 plans in 5 waves
+
+Plans:
+- [ ] 11-01-PLAN.md — AI Analysis API Endpoint (Wave 1)
+- [ ] 11-02-PLAN.md — Weekly Focus n8n Workflow (Wave 1)
+- [ ] 11-03-PLAN.md — Weekly Focus Dashboard Widget (Wave 2)
+- [ ] 11-04-PLAN.md — AI Suggestion Creation and Storage (Wave 2)
+- [ ] 11-05-PLAN.md — Confidence Score Display (Wave 3)
+- [ ] 11-06-PLAN.md — Accept/Reject Flow (Wave 3)
+- [ ] 11-07-PLAN.md — Pattern Detection Algorithms (Wave 4)
+- [ ] 11-08-PLAN.md — Suggestion Expiry and Final Integration (Wave 5)
 
 ---
 
@@ -377,9 +390,9 @@ Plans:
 | 8. Alert Integration | 7/7 | COMPLETE |
 | 9. Workflow Templates & Rules | 8/8 | COMPLETE |
 | 10. Dashboard & Notifications | 9/9 | COMPLETE |
-| 11. AI Integration | 0/? | Not started |
+| 11. AI Integration | 0/8 | Planned |
 | 12. Metrics & Polish | 0/? | Not started |
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-25 after Phase 10 execution complete*
+*Last updated: 2026-01-25 after Phase 11 planning complete*
