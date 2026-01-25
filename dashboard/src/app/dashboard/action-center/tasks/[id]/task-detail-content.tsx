@@ -22,7 +22,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/dashboard-kit/compon
 import { FallingPattern } from '@/components/ui/falling-pattern';
 import type { TaskExtended, TaskComment, TaskActivity } from '@/lib/api/task-types';
 import type { SOPTemplate } from '@/lib/api/sop-types';
-import { ProgressiveInstructions, MasteryBadge, TaskDependencies } from '../../components';
+import { ProgressiveInstructions, MasteryBadge, TaskDependencies, ConfidenceBadge } from '../../components';
 import { format, isToday, isTomorrow, isPast, formatDistanceToNow } from 'date-fns';
 
 // Components for task detail page
@@ -201,6 +201,16 @@ export function TaskDetailContent({ task, comments, activity, sop, sopMastery }:
                   <SourceIcon className="h-3 w-3" />
                   <span className="capitalize">{task.source || 'Manual'}</span>
                 </Badge>
+
+                {/* AI Confidence (for AI-suggested tasks) */}
+                {task.source === 'ai' && task.ai_confidence !== null && (
+                  <ConfidenceBadge
+                    confidence={task.ai_confidence}
+                    reasoning={task.description?.match(/\*\*Why AI suggests this:\*\* (.+)/)?.[1] || null}
+                    showLabel={true}
+                    size="md"
+                  />
+                )}
 
                 {/* Blocked Badge */}
                 {task.is_blocked && (
@@ -404,6 +414,19 @@ export function TaskDetailContent({ task, comments, activity, sop, sopMastery }:
                     {formatDistanceToNow(new Date(task.created_at), { addSuffix: true })}
                   </p>
                 </div>
+
+                {/* AI Suggested (for AI tasks) */}
+                {task.source === 'ai' && task.ai_suggested_at && (
+                  <div>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">AI Suggested</p>
+                    <p className="text-sm">{format(new Date(task.ai_suggested_at), 'MMM d, yyyy')}</p>
+                    {task.ai_confidence !== null && (
+                      <div className="mt-1">
+                        <ConfidenceBadge confidence={task.ai_confidence} showLabel={true} />
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 {/* Last Updated */}
                 <div>
