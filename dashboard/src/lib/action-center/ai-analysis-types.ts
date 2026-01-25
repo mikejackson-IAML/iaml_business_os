@@ -104,6 +104,16 @@ export type AIPatternType =
 export type AIPatternSeverity = 'info' | 'warning' | 'concern';
 
 /**
+ * Item affected by a detected pattern (used by pattern detection algorithms)
+ */
+export interface DetectedPatternItem {
+  /** Task ID */
+  id: string;
+  /** Task title */
+  title: string;
+}
+
+/**
  * AI-identified pattern insight
  */
 export interface AIPatternInsight {
@@ -116,8 +126,8 @@ export interface AIPatternInsight {
   /** Severity level of this pattern */
   severity: AIPatternSeverity;
 
-  /** Task IDs or titles affected by this pattern */
-  affected_items: string[];
+  /** Tasks affected by this pattern - can be string[] (from AI) or DetectedPatternItem[] (from pattern detection) */
+  affected_items: string[] | DetectedPatternItem[];
 
   /** Optional recommendation for addressing the pattern */
   recommendation?: string;
