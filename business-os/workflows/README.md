@@ -289,3 +289,44 @@ Schedule (hourly) --> Call Digest API --> Filter by User Time
 - Resend (email delivery via API)
 - Supabase (user preferences, task data via API)
 - Slack (error alerts, success logging)
+
+---
+
+## Weekly AI Focus Generator
+
+**File:** `weekly-ai-focus.json`
+**n8n Workflow ID:** TBD (import pending)
+**Status:** Ready to Import
+**Trigger:** Schedule (Sunday 7pm CT + Friday 5pm CT)
+**Documentation:** [README-weekly-ai-focus.md](README-weekly-ai-focus.md)
+
+AI-powered weekly planning and task suggestions with pattern detection. Runs Sunday evening for planning mode and Friday afternoon for recap mode.
+
+### How It Works
+
+```
+Schedule (Sun/Fri) --> Determine Mode --> Call AI Analysis API
+                                                   |
+                       API Success? -------------- |
+                            |                      |
+                       Build Content --> Create Weekly Focus Task
+                            |
+                       Create AI Suggestions --> Slack Success
+                            |
+                       API Failed? --> Slack Error Alert
+```
+
+### Key Features
+
+- **Dual schedule** - Sunday evening planning, Friday afternoon recap
+- **Pattern detection** - Identifies procrastination, workload imbalance, velocity trends
+- **AI suggestions** - Creates tasks with confidence scores (0-100)
+- **Deduplication** - Week-based dedupe keys prevent duplicates
+- **Encouraging tone** - AI acts as supportive coach, not harsh critic
+
+### Services
+
+- Dashboard API (AI analysis endpoint)
+- Claude (AI analysis and suggestions)
+- Supabase (task creation via Postgres)
+- Slack (success logging and error alerts)
