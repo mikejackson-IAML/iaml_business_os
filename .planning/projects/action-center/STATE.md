@@ -5,14 +5,14 @@
 See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 **Core value:** Nothing falls through the cracks. Every action item flows to one place.
-**Current focus:** Phase 9 - Workflow Templates & Rules (ready to start)
+**Current focus:** Phase 9 - Workflow Templates & Rules (in progress)
 
 ## Current Status
 
 **Milestone:** v1.0 Action Center
-**Phase:** 8 of 12 (Alert Integration) - COMPLETE
-**Plan:** 7/7 complete
-**Status:** Phase 8 complete - Alert Integration fully implemented
+**Phase:** 9 of 12 (Workflow Templates & Rules) - IN PROGRESS
+**Plan:** 2/8 complete
+**Status:** Core utilities and types created
 
 ## Progress Overview
 
@@ -26,15 +26,15 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 | 6 | SOP Templates | COMPLETE |
 | 7 | Workflows & Dependencies | COMPLETE |
 | 8 | Alert Integration | COMPLETE |
-| 9 | Workflow Templates & Rules | Not Started |
+| 9 | Workflow Templates & Rules | IN PROGRESS |
 | 10 | Dashboard & Notifications | Not Started |
 | 11 | AI Integration | Not Started |
 | 12 | Metrics & Polish | Not Started |
 
 ## Context for Next Session
 
-**Last action:** Completed 08-07 (Alert Resolution and Documentation)
-**Next action:** Plan Phase 9 (Workflow Templates & Rules)
+**Last action:** Completed 09-02 (Workflow Template Types and Validation)
+**Next action:** Execute 09-03 (Workflow Template API)
 
 ## Key Decisions Made
 
@@ -125,9 +125,39 @@ Phase 8 (Alert Integration) complete:
 - ALT-06: Business hours respected for due date calculation
 - ALT-07: Completing alert task resolves source alert
 
+## Phase 9 Progress
+
+Phase 9 (Workflow Templates & Rules) in progress:
+
+| Plan | Name | Wave | Status |
+|------|------|------|--------|
+| 09-01 | Core Utilities | 1 | COMPLETE |
+| 09-02 | Workflow Template Types and Validation | 1 | COMPLETE |
+| 09-03 | Workflow Template API | 1 | Not Started |
+| 09-04 | Event Webhook | 2 | Not Started |
+| 09-05 | Workflow Instantiation | 2 | Not Started |
+| 09-06 | Task Rule Types and Validation | 2 | Not Started |
+| 09-07 | Task Rule API | 3 | Not Started |
+| 09-08 | Task Rule Evaluation | 3 | Not Started |
+
+### Files Created (Phase 9)
+
+**Core Utilities:**
+- `dashboard/src/lib/action-center/template-utils.ts` - Condition evaluation, variable substitution, due date calculation
+
+**Types and Validation:**
+- `dashboard/src/lib/action-center/workflow-template-types.ts` - TypeScript interfaces for workflow templates
+- `dashboard/src/lib/action-center/workflow-template-validation.ts` - Zod schemas and validation functions
+
+### Key Decisions (Phase 9)
+
+- [09-02]: Defined shared types (Condition, VariableMapping, DueDateConfig) in workflow-template-types.ts for self-contained usage
+- [09-02]: Used `z.record(z.string(), z.unknown())` for Zod v4 compatibility
+- [09-02]: Trigger event format enforced as `entity.action` (e.g., `program_instance.created`)
+
 ## Known Technical Debt
 
 - **Supabase Types:** The generated types.ts doesn't include action_center schema. TypeScript shows type errors but code works at runtime. Should regenerate types to include action_center schema.
 
 ---
-*Last updated: 2026-01-24 after Phase 8 verified and complete*
+*Last updated: 2026-01-25 after 09-02 complete*
