@@ -11,8 +11,8 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 **Milestone:** v1.0 Action Center
 **Phase:** 9 of 12 (Workflow Templates & Rules) - IN PROGRESS
-**Plan:** 2/8 complete
-**Status:** Core utilities and types created
+**Plan:** 3/8 complete
+**Status:** Event webhook endpoint created
 
 ## Progress Overview
 
@@ -33,8 +33,8 @@ See: .planning/projects/action-center/PROJECT.md (updated 2026-01-22)
 
 ## Context for Next Session
 
-**Last action:** Completed 09-02 (Workflow Template Types and Validation)
-**Next action:** Execute 09-03 (Workflow Template API)
+**Last action:** Completed 09-03 (Event Webhook Endpoint)
+**Next action:** Execute 09-04 (Workflow Template Instantiation)
 
 ## Key Decisions Made
 
@@ -133,9 +133,9 @@ Phase 9 (Workflow Templates & Rules) in progress:
 |------|------|------|--------|
 | 09-01 | Core Utilities | 1 | COMPLETE |
 | 09-02 | Workflow Template Types and Validation | 1 | COMPLETE |
-| 09-03 | Workflow Template API | 1 | Not Started |
-| 09-04 | Event Webhook | 2 | Not Started |
-| 09-05 | Workflow Instantiation | 2 | Not Started |
+| 09-03 | Event Webhook Endpoint | 2 | COMPLETE |
+| 09-04 | Workflow Template Instantiation | 2 | Not Started |
+| 09-05 | Task Rule Execution | 2 | Not Started |
 | 09-06 | Task Rule Types and Validation | 2 | Not Started |
 | 09-07 | Task Rule API | 3 | Not Started |
 | 09-08 | Task Rule Evaluation | 3 | Not Started |
@@ -149,15 +149,21 @@ Phase 9 (Workflow Templates & Rules) in progress:
 - `dashboard/src/lib/action-center/workflow-template-types.ts` - TypeScript interfaces for workflow templates
 - `dashboard/src/lib/action-center/workflow-template-validation.ts` - Zod schemas and validation functions
 
+**API Endpoints:**
+- `dashboard/src/app/api/action-center/events/route.ts` - Event webhook endpoint (POST receives events, GET lists handlers)
+
 ### Key Decisions (Phase 9)
 
 - [09-02]: Defined shared types (Condition, VariableMapping, DueDateConfig) in workflow-template-types.ts for self-contained usage
 - [09-02]: Used `z.record(z.string(), z.unknown())` for Zod v4 compatibility
 - [09-02]: Trigger event format enforced as `entity.action` (e.g., `program_instance.created`)
+- [09-03]: Event webhook uses dynamic imports for workflow-template-instantiation and task-rule-execution (implemented in later plans)
+- [09-03]: One event can trigger multiple templates - all matching ones fire
+- [09-03]: GET endpoint provides list of registered event types and their handlers for debugging
 
 ## Known Technical Debt
 
 - **Supabase Types:** The generated types.ts doesn't include action_center schema. TypeScript shows type errors but code works at runtime. Should regenerate types to include action_center schema.
 
 ---
-*Last updated: 2026-01-25 after 09-02 complete*
+*Last updated: 2026-01-25 after 09-03 complete*
