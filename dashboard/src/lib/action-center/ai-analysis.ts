@@ -14,6 +14,7 @@ import type {
   AITaskSuggestion,
   AIPatternInsight,
 } from './ai-analysis-types';
+import { detectPatterns } from './pattern-detection';
 
 // ==================== Constants ====================
 
@@ -63,7 +64,7 @@ export async function fetchAnalysisData(
 /**
  * System prompt establishing the AI's role and tone
  */
-const SYSTEM_PROMPT = `You are an encouraging productivity coach helping a busy CEO manage their tasks and priorities. Your role is to:
+const BASE_SYSTEM_PROMPT = `You are an encouraging productivity coach helping a busy CEO manage their tasks and priorities. Your role is to:
 
 1. Analyze task patterns and provide actionable insights
 2. Suggest improvements to task organization and prioritization
@@ -80,20 +81,55 @@ You communicate with:
 IMPORTANT: Always respond with valid JSON matching the expected schema. Do not include any text outside the JSON object.`;
 
 /**
- * Build the analysis prompt with task data
+ * Build the full system prompt including detected patterns context
+ *
+ * @param detectedPatterns - Patterns detected from task analysis
+ * @returns Full system prompt with pattern context
+ */
+function buildSystemPrompt(detectedPatterns: AIPatternInsight[]): string {
+  if (detectedPatterns.length === 0) {
+    return BASE_SYSTEM_PROMPT;
+  }
+
+  const patternContext = detectedPatterns
+    .map(p => `- ${p.type}: ${p.description}`)
+    .join('\n');
+
+  return `${BASE_SYSTEM_PROMPT}
+
+When analyzing tasks, consider these detected patterns from algorithmic analysis:
+${patternContext}
+
+Synthesize these patterns with your own observations. You may confirm, expand on, or provide alternative interpretations of these patterns in your response.`;
+}
+
+/**
+ * Result of building analysis prompts
+ */
+export interface AnalysisPrompts {
+  systemPrompt: string;
+  userPrompt: string;
+  detectedPatterns: AIPatternInsight[];
+}
+
+/**
+ * Build the analysis prompts with task data and detected patterns
  *
  * @param tasks - Array of tasks to analyze
  * @param mode - Analysis mode (planning or recap)
  * @param maxSuggestions - Maximum suggestions to return
- * @returns Formatted prompt string
+ * @returns System prompt, user prompt, and detected patterns
  */
 export function buildAnalysisPrompt(
   tasks: TaskExtended[],
   mode: AIAnalysisMode,
   maxSuggestions: number = 10
-): string {
+): AnalysisPrompts {
   const now = new Date();
   const dayOfWeek = now.toLocaleDateString('en-US', { weekday: 'long' });
+
+  // Detect patterns from task history (runs the 4 pattern algorithms)
+  const detectedPatterns = detectPatterns(tasks);
 
   // Categorize tasks for analysis
   const openTasks = tasks.filter(t => t.status === 'open' || t.status === 'in_progress' || t.status === 'waiting');
@@ -147,7 +183,18 @@ export function buildAnalysisPrompt(
 - Gentle observations about what could improve
 - Building momentum for next week`;
 
-  const prompt = `Analyze the following task data and provide productivity insights.
+  // Build detected patterns section for the prompt
+  const detectedPatternsSection = detectedPatterns.length > 0
+    ? `
+
+## Detected Patterns (from algorithmic analysis)
+The following patterns were detected by our pattern detection algorithms.
+Synthesize these with your own observations:
+${JSON.stringify(detectedPatterns, null, 2)}
+`
+    : '';
+
+  const userPrompt = `Analyze the following task data and provide productivity insights.
 
 ## Context
 ${modeInstructions}
@@ -159,7 +206,7 @@ ${JSON.stringify(taskSummary, null, 2)}
 
 ## Task Data
 ${JSON.stringify(taskData, null, 2)}
-
+${detectedPatternsSection}
 ## Required Response Format
 Respond with a JSON object matching this exact structure:
 {
@@ -195,10 +242,15 @@ Respond with a JSON object matching this exact structure:
 - Only suggest high-confidence new tasks (>60 confidence)
 - Include reasoning when confidence < 80
 - Patterns should be based on actual data, not speculation
+- You may confirm, expand on, or reframe the detected patterns in your response
 - Be encouraging but honest
 - Keep summary and review concise (2-3 sentences each)`;
 
-  return prompt;
+  return {
+    systemPrompt: buildSystemPrompt(detectedPatterns),
+    userPrompt,
+    detectedPatterns,
+  };
 }
 
 /**
@@ -228,12 +280,12 @@ function formatTaskForAnalysis(task: TaskExtended): Record<string, unknown> {
  * Call Claude API for analysis
  *
  * @param prompt - The user prompt with task data
- * @param systemPrompt - The system prompt (optional, uses default)
+ * @param systemPrompt - The system prompt (optional, uses default base prompt)
  * @returns Raw response text from Claude
  */
 export async function callClaudeAPI(
   prompt: string,
-  systemPrompt: string = SYSTEM_PROMPT
+  systemPrompt: string = BASE_SYSTEM_PROMPT
 ): Promise<string> {
   if (!ANTHROPIC_API_KEY) {
     throw new Error('ANTHROPIC_API_KEY environment variable is not set');

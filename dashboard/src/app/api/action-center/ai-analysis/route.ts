@@ -107,11 +107,14 @@ export async function POST(request: NextRequest) {
       } as AIAnalysisResponse);
     }
 
-    // Build prompt with task data
-    const prompt = buildAnalysisPrompt(tasks, mode, maxSuggestions);
+    // Build prompts with task data and detected patterns
+    const { systemPrompt, userPrompt, detectedPatterns } = buildAnalysisPrompt(tasks, mode, maxSuggestions);
 
-    // Call Claude API
-    const rawResponse = await callClaudeAPI(prompt);
+    // Log detected patterns count for observability
+    console.log(`AI analysis: detected ${detectedPatterns.length} patterns from task history`);
+
+    // Call Claude API with enriched prompts
+    const rawResponse = await callClaudeAPI(userPrompt, systemPrompt);
 
     // Parse and validate response
     const analysisResult = parseAnalysisResponse(rawResponse);
