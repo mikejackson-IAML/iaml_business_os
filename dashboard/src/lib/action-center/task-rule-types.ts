@@ -98,7 +98,7 @@ export const createTaskRuleSchema = z.object({
   })).optional(),
   condition_query: z.string().optional(),
   task_template: ruleTaskTemplateSchema,
-  variable_mapping: z.record(z.string()).optional(),
+  variable_mapping: z.record(z.string(), z.string()).optional(),
   dedupe_key_template: z.string().optional(),
   is_active: z.boolean().default(true),
 }).refine(
