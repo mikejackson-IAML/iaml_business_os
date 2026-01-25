@@ -5,6 +5,7 @@ import { TaskExtended } from '@/lib/api/task-types';
 import { ChevronRight, AlertCircle, Clock, Workflow, Bot, User } from 'lucide-react';
 import { format, isToday, isTomorrow, isPast } from 'date-fns';
 import { ConfidenceBadge } from './confidence-badge';
+import { AISuggestionActions } from './ai-suggestion-actions';
 
 interface TaskRowProps {
   task: TaskExtended;
@@ -29,6 +30,9 @@ export function TaskRow({ task }: TaskRowProps) {
   const priority = priorityConfig[task.priority as keyof typeof priorityConfig] || priorityConfig.normal;
   const SourceIcon = sourceIcons[task.source as keyof typeof sourceIcons] || User;
 
+  // Check if this is an AI suggestion that can be actioned
+  const isAISuggestion = task.source === 'ai' && task.status === 'open';
+
   const formatDueDate = (date: string | null) => {
     if (!date) return '—';
     const d = new Date(date);
@@ -47,18 +51,18 @@ export function TaskRow({ task }: TaskRowProps) {
   return (
     <div className="border-b border-border last:border-0">
       {/* Main row - navigates to task detail */}
-      <Link
-        href={`/dashboard/action-center/tasks/${task.id}`}
-        className="w-full grid grid-cols-[100px_1fr_120px_120px_100px] gap-4 px-6 py-4 hover:bg-muted/50 transition-colors text-left items-center"
-      >
+      <div className="w-full grid grid-cols-[100px_1fr_120px_120px_100px_auto] gap-4 px-6 py-4 hover:bg-muted/50 transition-colors text-left items-center">
         {/* Priority */}
         <div className="flex items-center gap-2">
           <span className={`w-2.5 h-2.5 rounded-full ${priority.color}`} />
           <span className="text-sm">{priority.text}</span>
         </div>
 
-        {/* Title */}
-        <div className="flex items-center gap-2">
+        {/* Title - link to detail page */}
+        <Link
+          href={`/dashboard/action-center/tasks/${task.id}`}
+          className="flex items-center gap-2 hover:underline"
+        >
           <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
           <span className="font-medium truncate">{task.title}</span>
           {task.is_blocked && (
@@ -66,7 +70,7 @@ export function TaskRow({ task }: TaskRowProps) {
               Blocked
             </span>
           )}
-        </div>
+        </Link>
 
         {/* Due Date */}
         <div className="text-sm flex items-center gap-1.5">
@@ -92,7 +96,14 @@ export function TaskRow({ task }: TaskRowProps) {
             />
           )}
         </div>
-      </Link>
+
+        {/* Quick Actions (for AI suggestions) */}
+        <div className="flex items-center justify-end min-w-[60px]">
+          {isAISuggestion && (
+            <AISuggestionActions task={task} variant="inline" />
+          )}
+        </div>
+      </div>
     </div>
   );
 }
