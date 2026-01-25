@@ -76,7 +76,7 @@ export const updateWorkflowTemplateSchema = z.object({
 export const eventPayloadSchema = z.object({
   event_type: z.string().min(1).max(100),
   entity_id: z.string().min(1).max(100),
-  payload: z.record(z.unknown()),
+  payload: z.record(z.string(), z.unknown()),
   force: z.boolean().optional().default(false),
   timestamp: z.string().datetime().optional(),
 });
