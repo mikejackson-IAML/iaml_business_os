@@ -87,6 +87,10 @@ export type Database = {
           avatar_url: string | null;
           role: 'admin' | 'viewer';
           is_active: boolean;
+          notification_daily_digest: boolean;
+          notification_digest_time: string;
+          notification_critical_alerts: boolean;
+          timezone: string;
           created_at: string;
           updated_at: string;
         };
@@ -97,6 +101,10 @@ export type Database = {
           avatar_url?: string | null;
           role?: 'admin' | 'viewer';
           is_active?: boolean;
+          notification_daily_digest?: boolean;
+          notification_digest_time?: string;
+          notification_critical_alerts?: boolean;
+          timezone?: string;
           created_at?: string;
           updated_at?: string;
         };
@@ -106,6 +114,10 @@ export type Database = {
           avatar_url?: string | null;
           role?: 'admin' | 'viewer';
           is_active?: boolean;
+          notification_daily_digest?: boolean;
+          notification_digest_time?: string;
+          notification_critical_alerts?: boolean;
+          timezone?: string;
           updated_at?: string;
         };
       };
