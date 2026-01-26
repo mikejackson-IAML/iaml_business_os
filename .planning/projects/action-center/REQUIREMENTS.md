@@ -174,14 +174,14 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### AI Integration
 
-- [ ] **AI-01**: Weekly AI Focus generation (Monday 7am)
-- [ ] **AI-02**: AI analyzes open tasks, overdue items, patterns
-- [ ] **AI-03**: Creates "Weekly Focus Review" task with prioritized list
-- [ ] **AI-04**: AI-suggested tasks with status = 'suggested'
-- [ ] **AI-05**: AI Suggested view shows pending suggestions
-- [ ] **AI-06**: Accept/Reject/Modify flow for suggestions
-- [ ] **AI-07**: Confidence score display
-- [ ] **AI-08**: Pattern detection: idle segment, repeated task type, opportunity
+- [x] **AI-01**: Weekly AI Focus generation (Sunday 7pm CT + Friday 5pm CT)
+- [x] **AI-02**: AI analyzes open tasks, overdue items, patterns (90-day lookback)
+- [x] **AI-03**: Creates "Weekly Focus Review" task with prioritized list
+- [x] **AI-04**: AI-suggested tasks with source='ai', ai_confidence set (cap 10/week, 7-day expiry)
+- [x] **AI-05**: AI Suggested view shows pending suggestions
+- [x] **AI-06**: Accept/Reject/Modify flow for suggestions (with optional rejection reason)
+- [x] **AI-07**: Confidence score display (color-coded badge with reasoning tooltip)
+- [x] **AI-08**: Pattern detection: recurring_neglect, workload_imbalance, velocity_trend, deadline_clustering
 
 ### Metrics
 
