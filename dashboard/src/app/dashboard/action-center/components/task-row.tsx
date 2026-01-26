@@ -26,6 +26,15 @@ const sourceIcons = {
   rule: Workflow,
 };
 
+// Calculate days until AI suggestion expires (7 days from ai_suggested_at)
+const getDaysUntilExpiry = (suggestedAt: string | null): number | null => {
+  if (!suggestedAt) return null;
+  const suggested = new Date(suggestedAt);
+  const expiryDate = new Date(suggested.getTime() + 7 * 24 * 60 * 60 * 1000);
+  const now = new Date();
+  return Math.ceil((expiryDate.getTime() - now.getTime()) / (24 * 60 * 60 * 1000));
+};
+
 export function TaskRow({ task }: TaskRowProps) {
   const priority = priorityConfig[task.priority as keyof typeof priorityConfig] || priorityConfig.normal;
   const SourceIcon = sourceIcons[task.source as keyof typeof sourceIcons] || User;
@@ -69,6 +78,20 @@ export function TaskRow({ task }: TaskRowProps) {
             <span className="px-1.5 py-0.5 text-xs rounded bg-warning/20 text-warning">
               Blocked
             </span>
+          )}
+          {/* AI suggestion expiry warning (2 days or less) */}
+          {task.source === 'ai' && task.status === 'open' && task.ai_suggested_at && (
+            (() => {
+              const daysLeft = getDaysUntilExpiry(task.ai_suggested_at);
+              if (daysLeft !== null && daysLeft <= 2) {
+                return (
+                  <span className="px-1.5 py-0.5 text-xs rounded bg-amber-100 text-amber-700">
+                    Expires in {daysLeft}d
+                  </span>
+                );
+              }
+              return null;
+            })()
           )}
         </Link>
 
