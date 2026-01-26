@@ -24,13 +24,31 @@
     },
     {
       "parameters": {
-        "jsCode": "// Determine mode based on day of week\n// Sunday = 0, Friday = 5\nconst now = new Date();\nconst dayOfWeek = now.getDay();\n\nlet mode = 'planning';\nif (dayOfWeek === 5) {\n  mode = 'recap';\n} else if (dayOfWeek === 0) {\n  mode = 'planning';\n}\n\n// Get ISO week number for dedupe key\nconst getWeekNumber = (d) => {\n  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));\n  const dayNum = date.getUTCDay() || 7;\n  date.setUTCDate(date.getUTCDate() + 4 - dayNum);\n  const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));\n  return Math.ceil((((date - yearStart) / 86400000) + 1) / 7);\n};\n\nconst weekNumber = getWeekNumber(now);\nconst year = now.getFullYear();\nconst weekKey = `${year}-W${String(weekNumber).padStart(2, '0')}`;\n\nreturn [{\n  json: {\n    mode: mode,\n    weekKey: weekKey,\n    timestamp: now.toISOString()\n  }\n}];"
+        "operation": "executeQuery",
+        "query": "SELECT action_center.expire_ai_suggestions() as expired_count;",
+        "options": {}
+      },
+      "id": "expire-old-suggestions",
+      "name": "Expire Old Suggestions",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [360, 300],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Determine mode based on day of week\n// Sunday = 0, Friday = 5\nconst now = new Date();\nconst dayOfWeek = now.getDay();\n\nlet mode = 'planning';\nif (dayOfWeek === 5) {\n  mode = 'recap';\n} else if (dayOfWeek === 0) {\n  mode = 'planning';\n}\n\n// Get ISO week number for dedupe key\nconst getWeekNumber = (d) => {\n  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));\n  const dayNum = date.getUTCDay() || 7;\n  date.setUTCDate(date.getUTCDate() + 4 - dayNum);\n  const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));\n  return Math.ceil((((date - yearStart) / 86400000) + 1) / 7);\n};\n\nconst weekNumber = getWeekNumber(now);\nconst year = now.getFullYear();\nconst weekKey = `${year}-W${String(weekNumber).padStart(2, '0')}`;\n\n// Get expired count from previous node\nconst expiredCount = $('Expire Old Suggestions').first().json.expired_count || 0;\n\nreturn [{\n  json: {\n    mode: mode,\n    weekKey: weekKey,\n    timestamp: now.toISOString(),\n    expiredCount: expiredCount\n  }\n}];"
       },
       "id": "determine-mode",
       "name": "Determine Mode",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [460, 300]
+      "position": [560, 300]
     },
     {
       "parameters": {
@@ -58,7 +76,7 @@
       "name": "Call AI Analysis API",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [680, 300],
+      "position": [780, 300],
       "continueOnFail": true,
       "credentials": {
         "httpHeaderAuth": {
@@ -94,7 +112,7 @@
       "name": "API Success?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [900, 300]
+      "position": [1000, 300]
     },
     {
       "parameters": {
@@ -104,7 +122,7 @@
       "name": "Build Task Content",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1120, 200]
+      "position": [1220, 200]
     },
     {
       "parameters": {
@@ -116,7 +134,7 @@
       "name": "Create Weekly Focus Task",
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
-      "position": [1340, 200],
+      "position": [1440, 200],
       "credentials": {
         "postgres": {
           "id": "EgmvZHbvINHsh6PR",
@@ -132,7 +150,7 @@
       "name": "Prepare AI Suggestions",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1560, 200]
+      "position": [1660, 200]
     },
     {
       "parameters": {
@@ -161,7 +179,7 @@
       "name": "Has Suggestions?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [1780, 200]
+      "position": [1880, 200]
     },
     {
       "parameters": {
@@ -173,7 +191,7 @@
       "name": "Create Suggestion Task",
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
-      "position": [2000, 100],
+      "position": [2100, 100],
       "credentials": {
         "postgres": {
           "id": "EgmvZHbvINHsh6PR",
@@ -189,7 +207,7 @@
       "name": "No New Suggestions",
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
-      "position": [2000, 300]
+      "position": [2100, 300]
     },
     {
       "parameters": {
@@ -201,29 +219,29 @@
       "name": "Merge Suggestion Results",
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
-      "position": [2220, 200]
+      "position": [2320, 200]
     },
     {
       "parameters": {
-        "jsCode": "// Count created suggestions from all items\nconst allItems = $input.all();\nlet createdCount = 0;\nlet skippedCount = 0;\n\nallItems.forEach(item => {\n  if (item.json.id) {\n    createdCount++;\n  } else if (item.json.hasSuggestions === false) {\n    // No suggestions to create\n  } else {\n    skippedCount++; // Duplicate, skipped by ON CONFLICT DO NOTHING\n  }\n});\n\nconst modeData = $('Determine Mode').first().json;\nconst taskCreated = $('Create Weekly Focus Task').first().json;\n\nreturn [{\n  json: {\n    success: true,\n    mode: modeData.mode,\n    weekKey: modeData.weekKey,\n    weeklyFocusTaskId: taskCreated.id,\n    weeklyFocusTaskTitle: taskCreated.title,\n    suggestionsCreated: createdCount,\n    suggestionsSkipped: skippedCount\n  }\n}];"
+        "jsCode": "// Count created suggestions from all items\nconst allItems = $input.all();\nlet createdCount = 0;\nlet skippedCount = 0;\n\nallItems.forEach(item => {\n  if (item.json.id) {\n    createdCount++;\n  } else if (item.json.hasSuggestions === false) {\n    // No suggestions to create\n  } else {\n    skippedCount++; // Duplicate, skipped by ON CONFLICT DO NOTHING\n  }\n});\n\nconst modeData = $('Determine Mode').first().json;\nconst taskCreated = $('Create Weekly Focus Task').first().json;\n\nreturn [{\n  json: {\n    success: true,\n    mode: modeData.mode,\n    weekKey: modeData.weekKey,\n    weeklyFocusTaskId: taskCreated.id,\n    weeklyFocusTaskTitle: taskCreated.title,\n    suggestionsCreated: createdCount,\n    suggestionsSkipped: skippedCount,\n    suggestionsExpired: modeData.expiredCount || 0\n  }\n}];"
       },
       "id": "summarize-results",
       "name": "Summarize Results",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2440, 200]
+      "position": [2540, 200]
     },
     {
       "parameters": {
         "channel": "#ai-focus",
-        "text": "=:brain: *Weekly AI Focus Generated*\n\n*Mode:* {{ $json.mode === 'planning' ? 'Sunday Planning' : 'Friday Recap' }}\n*Week:* {{ $json.weekKey }}\n\n:white_check_mark: Weekly Focus Review task created\n:bulb: {{ $json.suggestionsCreated }} AI suggestions created{{ $json.suggestionsSkipped > 0 ? ' (' + $json.suggestionsSkipped + ' duplicates skipped)' : '' }}",
+        "text": "=:brain: *Weekly AI Focus Generated*\n\n*Mode:* {{ $json.mode === 'planning' ? 'Sunday Planning' : 'Friday Recap' }}\n*Week:* {{ $json.weekKey }}\n\n:white_check_mark: Weekly Focus Review task created\n:bulb: {{ $json.suggestionsCreated }} AI suggestions created{{ $json.suggestionsSkipped > 0 ? ' (' + $json.suggestionsSkipped + ' duplicates skipped)' : '' }}{{ $json.suggestionsExpired > 0 ? '\\n:hourglass: ' + $json.suggestionsExpired + ' old suggestions expired' : '' }}",
         "otherOptions": {}
       },
       "id": "slack-success",
       "name": "Slack Success Log",
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.2,
-      "position": [2660, 200],
+      "position": [2760, 200],
       "credentials": {
         "slackApi": {
           "id": "{{SLACK_CREDENTIAL_ID}}",
@@ -239,7 +257,7 @@
       "name": "Capture Error",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1120, 400]
+      "position": [1220, 400]
     },
     {
       "parameters": {
@@ -251,7 +269,7 @@
       "name": "Slack Error Alert",
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.2,
-      "position": [1340, 400],
+      "position": [1440, 400],
       "credentials": {
         "slackApi": {
           "id": "{{SLACK_CREDENTIAL_ID}}",
@@ -262,6 +280,17 @@
   ],
   "connections": {
     "Weekly Planning and Recap": {
+      "main": [
+        [
+          {
+            "node": "Expire Old Suggestions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Expire Old Suggestions": {
       "main": [
         [
           {
