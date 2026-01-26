@@ -27,6 +27,8 @@ export { WorkflowContext } from "./workflow-context";
 export { ApprovalActions } from "./approval-actions";
 export { TaskDependencies } from "./task-dependencies";
 export { ConfidenceBadge } from "./confidence-badge";
+export { AISuggestionActions } from "./ai-suggestion-actions";
+export { RejectSuggestionDialog } from "./reject-suggestion-dialog";
 
 // Dialogs
 export { CompleteTaskDialog } from "./complete-task-dialog";
