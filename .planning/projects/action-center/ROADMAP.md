@@ -372,7 +372,19 @@ Plans:
 5. Edge cases handled (deleted entity, chain dismissal, overdue handling)
 6. Completed task reopening within 7 days
 
-**Plans:** TBD
+**Plans:** 10 plans in 5 waves
+
+Plans:
+- [ ] 12-01-PLAN.md — Database Migration - Task Preferences (Wave 1)
+- [ ] 12-02-PLAN.md — Task Metrics Query Functions (Wave 1)
+- [ ] 12-03-PLAN.md — Personal Stats Banner Component (Wave 2)
+- [ ] 12-04-PLAN.md — Personal Stats Dashboard Widget (Wave 2)
+- [ ] 12-05-PLAN.md — Weekly Goal Modal and Preferences (Wave 2)
+- [ ] 12-06-PLAN.md — Department Metrics Display (Wave 3)
+- [ ] 12-07-PLAN.md — System Metrics Display (Wave 3)
+- [ ] 12-08-PLAN.md — Task Health Score Integration (Wave 4)
+- [ ] 12-09-PLAN.md — Task Reopen Functionality (Wave 5)
+- [ ] 12-10-PLAN.md — Edge Case Handling (Wave 5)
 
 ---
 
@@ -391,8 +403,8 @@ Plans:
 | 9. Workflow Templates & Rules | 8/8 | COMPLETE |
 | 10. Dashboard & Notifications | 9/9 | COMPLETE |
 | 11. AI Integration | 8/8 | COMPLETE |
-| 12. Metrics & Polish | 0/? | Not started |
+| 12. Metrics & Polish | 0/10 | Planned |
 
 ---
 *Roadmap created: 2026-01-22*
-*Last updated: 2026-01-25 after Phase 11 execution complete*
+*Last updated: 2026-01-26 after Phase 12 planning*
