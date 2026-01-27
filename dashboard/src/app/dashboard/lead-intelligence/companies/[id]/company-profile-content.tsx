@@ -7,6 +7,7 @@ import { Breadcrumbs } from '../../components/breadcrumbs';
 import type { Company } from '@/lib/api/lead-intelligence-companies-types';
 
 const ContactsTab = lazy(() => import('./tabs/contacts-tab').then(m => ({ default: m.ContactsTab })));
+const OpportunitiesTab = lazy(() => import('./tabs/opportunities-tab').then(m => ({ default: m.OpportunitiesTab })));
 const NotesTab = lazy(() => import('./tabs/notes-tab').then(m => ({ default: m.NotesTab })));
 const EnrichmentTab = lazy(() => import('./tabs/enrichment-tab').then(m => ({ default: m.EnrichmentTab })));
 
@@ -20,12 +21,13 @@ interface MetricsSummary {
   totalAttendance: number;
 }
 
-const TABS = ['Contacts', 'Notes', 'Enrichment Data'] as const;
+const TABS = ['Contacts', 'Opportunities', 'Notes', 'Enrichment Data'] as const;
 type TabName = (typeof TABS)[number];
 
 export function CompanyProfileContent({ company }: CompanyProfileContentProps) {
   const [activeTab, setActiveTab] = useState<TabName>('Contacts');
   const [metrics, setMetrics] = useState<MetricsSummary>({ totalContacts: 0, customers: 0, totalAttendance: 0 });
+  const [activeOpportunities, setActiveOpportunities] = useState(0);
 
   useEffect(() => {
     async function fetchMetrics() {
@@ -44,7 +46,21 @@ export function CompanyProfileContent({ company }: CompanyProfileContentProps) {
         // Metrics are non-critical; fail silently
       }
     }
+    async function fetchOpportunityCount() {
+      try {
+        const res = await fetch(`/api/lead-intelligence/opportunities?company_id=${company.id}&limit=50`);
+        if (res.ok) {
+          const json = await res.json();
+          const opps = json.data ?? [];
+          const active = opps.filter((o: { stage: string }) => o.stage !== 'won' && o.stage !== 'lost').length;
+          setActiveOpportunities(active);
+        }
+      } catch {
+        // fail silently
+      }
+    }
     fetchMetrics();
+    fetchOpportunityCount();
   }, [company.id]);
 
   return (
@@ -100,7 +116,7 @@ export function CompanyProfileContent({ company }: CompanyProfileContentProps) {
         <MetricCard label="Contacts in DB" value={metrics.totalContacts} />
         <MetricCard label="Customers" value={metrics.customers} />
         <MetricCard label="Total Attendance" value={metrics.totalAttendance} />
-        <MetricCard label="Active Opportunities" value="0" description="Coming Phase 5" />
+        <MetricCard label="Active Opportunities" value={activeOpportunities} />
       </div>
 
       {/* Tab Bar */}
@@ -125,6 +141,7 @@ export function CompanyProfileContent({ company }: CompanyProfileContentProps) {
       {/* Tab Content */}
       <Suspense fallback={<div className="py-8 text-center text-muted-foreground">Loading...</div>}>
         {activeTab === 'Contacts' && <ContactsTab companyId={company.id} />}
+        {activeTab === 'Opportunities' && <OpportunitiesTab companyId={company.id} companyName={company.name} />}
         {activeTab === 'Notes' && <NotesTab companyId={company.id} />}
         {activeTab === 'Enrichment Data' && <EnrichmentTab companyId={company.id} company={company} />}
       </Suspense>

@@ -24,6 +24,8 @@ interface CreateOpportunityModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   defaultType?: 'in_house' | 'individual';
+  defaultCompanyId?: string;
+  defaultCompanyName?: string;
   onCreated: () => void;
 }
 
@@ -36,6 +38,8 @@ export function CreateOpportunityModal({
   open,
   onOpenChange,
   defaultType = 'in_house',
+  defaultCompanyId,
+  defaultCompanyName,
   onCreated,
 }: CreateOpportunityModalProps) {
   const [title, setTitle] = useState('');
@@ -56,14 +60,14 @@ export function CreateOpportunityModal({
       setTitle('');
       setType(defaultType);
       setValue('');
-      setCompanySearch('');
+      setCompanySearch(defaultCompanyName || '');
       setContactSearch('');
       setCompanyResults([]);
       setContactResults([]);
-      setSelectedCompanyId(null);
+      setSelectedCompanyId(defaultCompanyId || null);
       setSelectedContactId(null);
     }
-  }, [open, defaultType]);
+  }, [open, defaultType, defaultCompanyId, defaultCompanyName]);
 
   // Company search
   useEffect(() => {
