@@ -5,16 +5,16 @@
 See: .planning/lead-intelligence/PROJECT.md (updated 2026-01-27)
 
 **Core value:** Users can find any contact, understand their full relationship with IAML, and take immediate action.
-**Current focus:** Phase 2 in progress — Shared UI components built
+**Current focus:** Phase 2 in progress — Contact profile tabs being built
 
 ## Current Position
 
 Phase: 2 of 5 (Contact List, Profiles & Company Pages)
-Plan: 2 of 6 complete (02-01 done, 02-02 done)
+Plan: 3 of 6 complete (02-01 done, 02-02 done, 02-05 done)
 Status: In progress
-Last activity: 2026-01-27 - Completed 02-01-PLAN.md (Extended API Layer)
+Last activity: 2026-01-27 - Completed 02-05-PLAN.md (Company, Notes & Enrichment Tabs)
 
-Progress: [████░░░░░░] 27%
+Progress: [█████░░░░░] 36%
 
 ## Accumulated Decisions
 
@@ -37,7 +37,7 @@ Progress: [████░░░░░░] 27%
 ## Session Continuity
 
 Last session: 2026-01-27
-Stopped at: Completed 02-01-PLAN.md (Extended API Layer)
+Stopped at: Completed 02-05-PLAN.md (Company, Notes & Enrichment Tabs)
 Resume file: None
 
 ## Session Log
@@ -51,6 +51,7 @@ Resume file: None
 | 2026-01-27 | Phase 1 verified | 5/5 must-haves passed |
 | 2026-01-27 | 02-02 complete | 5 shared UI components: avatar, breadcrumbs, status badge, metrics bar, data health |
 | 2026-01-27 | 02-01 complete | Extended API: 15 contact filters, data health endpoint, 7 sub-resource routes |
+| 2026-01-27 | 02-05 complete | 3 profile tabs: Company (card + colleagues), Notes (form + timeline), Enrichment (status + fields + JSON) |
 
 ---
-*Last updated: 2026-01-27 after 02-01 execution*
+*Last updated: 2026-01-27 after 02-05 execution*
