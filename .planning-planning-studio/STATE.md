@@ -3,17 +3,17 @@
 ## Current Status
 
 - **Milestone:** v1.0
-- **Current Phase:** 3 (Project Detail View — Layout) - In Progress
-- **Current Plan:** 2 of 3 complete
-- **Status:** In Progress
+- **Current Phase:** 3 (Project Detail View — Layout) - Complete
+- **Current Plan:** 3 of 3 complete
+- **Status:** Phase Complete
 
 ## Progress
 
 ```
 Phase 1: [████████████████] 4/4 plans COMPLETE
 Phase 2: [████████████████] 3/3 plans COMPLETE
-Phase 3: [██████████------] 2/3 plans IN PROGRESS
-Overall:  [████████-----] 9/36 plans (~25%)
+Phase 3: [████████████████] 3/3 plans COMPLETE
+Overall:  [█████████----] 10/36 plans (~28%)
 ```
 
 ## Phase Progress
@@ -22,7 +22,7 @@ Overall:  [████████-----] 9/36 plans (~25%)
 |-------|------|--------|
 | 1 | Database Foundation & Core UI Shell | Complete (4/4 plans) |
 | 2 | Pipeline View (Main Dashboard) | Complete (3/3 plans) |
-| 3 | Project Detail View — Layout | In Progress (2/3 plans) |
+| 3 | Project Detail View — Layout | Complete (3/3 plans) |
 | 4 | Conversation Engine | Not Started |
 | 5 | Phase Transitions & Incubation | Not Started |
 | 6 | Memory System | Not Started |
@@ -55,6 +55,8 @@ Overall:  [████████-----] 9/36 plans (~25%)
 | 02 | 03 | Followed create-task-modal pattern | Consistency with existing action-center modal |
 | 03 | 02 | Inline formatRelativeTime per panel | Matches project-card pattern; shared util not needed yet |
 | 03 | 02 | Custom CSS classes for status badges | Specific colors with dark mode + pulse animation for running |
+| 03 | 03 | Disabled conversation input as placeholder | Phase 4 will wire real functionality |
+| 03 | 03 | Warm/amber tone for incubation overlay | CONTEXT.md specifies incubation as positive feature |
 
 ## MVP Checkpoint
 
@@ -69,14 +71,14 @@ Phases 1-7 constitute the MVP. After Phase 7:
 ## Session Continuity
 
 - **Last session:** 2026-01-27
-- **Stopped at:** Completed 03-02-PLAN.md
+- **Stopped at:** Completed 03-03-PLAN.md (Phase 3 complete)
 - **Resume file:** None
 
 ## Last Activity
 
 - **Date:** 2026-01-27
-- **Activity:** Completed Plan 03-02 (Sidebar Panels)
-- **Notes:** Built Sessions, Documents, and Research panels with typed props, metadata display, empty states, and status badges.
+- **Activity:** Completed Plan 03-03 (Conversation Shell & Layout Wiring)
+- **Notes:** Built conversation shell with disabled input, incubation overlay with skip confirmation dialog, and wired all components into project-content layout. Phase 3 fully complete.
 
 ## Phase 1 Deliverables
 
@@ -92,3 +94,10 @@ All 3 plans complete:
 - **02-01:** Pipeline board with drag-and-drop (COMPLETE)
 - **02-02:** Search and filter bar (COMPLETE)
 - **02-03:** Quick capture modal (COMPLETE)
+
+## Phase 3 Deliverables
+
+All 3 plans complete:
+- **03-01:** Project detail shell with header, phase progress bar, grid layout
+- **03-02:** Sidebar panels (sessions, documents, research) with typed props and empty states
+- **03-03:** Conversation shell, incubation overlay, and full layout wiring
