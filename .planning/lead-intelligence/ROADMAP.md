@@ -121,10 +121,17 @@ Plans:
 **Goal:** Users can create and manage sales opportunities through stage-based pipelines for both in-house training and individual programs
 **Depends on:** Phase 1 (schema), Phase 2 (company pages)
 **Requirements:** COMP-04, OPP-01, OPP-02, OPP-03, OPP-04, OPP-05, OPP-06, API-03, API-11, API-12
+**Plans:** 4 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — Opportunities CRUD API (types, validation, queries, mutations, routes + attachments)
+- [ ] 05-02-PLAN.md — Kanban board + table view + pipeline tabs + create modal
+- [ ] 05-03-PLAN.md — Opportunity detail page (stage viz, contacts, notes, attachments)
+- [ ] 05-04-PLAN.md — Company profile integration + build verification checkpoint
 
 **Success Criteria** (what must be TRUE):
 1. /dashboard/lead-intelligence/opportunities shows filterable list of all opportunities
-2. In-house pipeline visualization displays stage counts across 9 stages
+2. In-house pipeline visualization displays stage counts across 7 stages
 3. User can create both in-house (company-level) and individual (contact-level) opportunities
 4. User can advance opportunities through stage-specific pipelines with stage buttons
 5. Opportunity detail view shows stage visualization, attached contacts with roles, notes, and file attachments
@@ -140,8 +147,8 @@ Plans:
 | 2. Contact List, Profiles & Company Pages | 7/7 | Complete | 2026-01-27 |
 | 3. AI Search & Intelligence | 3/3 | Complete | 2026-01-27 |
 | 4. Integrations & Bulk Actions | 5/5 | Complete | 2026-01-27 |
-| 5. Opportunities Pipeline | 0/? | Not started | - |
+| 5. Opportunities Pipeline | 0/4 | Planning complete | - |
 
 ---
 *Roadmap created: 2026-01-27*
-*Last updated: 2026-01-27 after Phase 4 execution*
+*Last updated: 2026-01-27 after Phase 5 planning*
