@@ -24,6 +24,7 @@ import { AISearchBar } from './components/ai-search-bar';
 import { FilterPills } from './components/filter-pills';
 import { BulkActionsBar } from './components/bulk-actions-bar';
 import { AddToCampaignModal } from './components/add-to-campaign-modal';
+import { FollowUpForm } from './components/follow-up-form';
 import type { Contact, ContactListParams, ContactListResponse } from '@/lib/api/lead-intelligence-contacts-types';
 
 interface LeadIntelligenceContentProps {
@@ -62,6 +63,8 @@ export function LeadIntelligenceContent({
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [campaignModalOpen, setCampaignModalOpen] = useState(false);
   const [campaignContactIds, setCampaignContactIds] = useState<string[]>([]);
+  const [enrichConfirmOpen, setEnrichConfirmOpen] = useState(false);
+  const [followUpOpen, setFollowUpOpen] = useState(false);
 
   // Count active filters (excluding page, limit, sort, order, search)
   const activeFilterCount = useMemo(() => {
@@ -166,6 +169,30 @@ export function LeadIntelligenceContent({
     setSelectedIds(new Set());
     fetchContacts();
   }, [fetchContacts]);
+
+  const handleBulkEnrich = useCallback(async () => {
+    const ids = Array.from(selectedIds);
+    setEnrichConfirmOpen(false);
+    const promise = fetch('/api/lead-intelligence/bulk/enrich', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contactIds: ids }),
+    }).then(async (res) => {
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? 'Bulk enrichment failed');
+      const successCount = data.results.filter((r: { error?: string }) => !r.error).length;
+      const totalUpdates = data.results.reduce((sum: number, r: { updates_applied: number }) => sum + r.updates_applied, 0);
+      return `${successCount}/${ids.length} contacts processed, ${totalUpdates} fields updated`;
+    });
+    toast.promise(promise, {
+      loading: `Enriching ${ids.length} contact${ids.length !== 1 ? 's' : ''}...`,
+      success: (msg) => msg as string,
+      error: (err) => (err as Error).message ?? 'Bulk enrichment failed',
+    });
+    await promise.catch(() => {});
+    setSelectedIds(new Set());
+    fetchContacts();
+  }, [selectedIds, fetchContacts]);
 
   // Refetch on URL param changes or AI filter changes
   useEffect(() => {
@@ -288,8 +315,8 @@ export function LeadIntelligenceContent({
           selectedCount={selectedIds.size}
           onClear={handleClearSelection}
           onAddToCampaign={() => handleAddToCampaign(Array.from(selectedIds))}
-          onBulkEnrich={() => {}}
-          onBulkFollowUp={() => {}}
+          onBulkEnrich={() => setEnrichConfirmOpen(true)}
+          onBulkFollowUp={() => setFollowUpOpen(true)}
         />
       )}
 
@@ -300,6 +327,36 @@ export function LeadIntelligenceContent({
         contactIds={campaignContactIds}
         onSuccess={handleCampaignSuccess}
       />
+
+      {/* Bulk Follow-up Form */}
+      <FollowUpForm
+        open={followUpOpen}
+        onOpenChange={setFollowUpOpen}
+        contactIds={Array.from(selectedIds)}
+        onSuccess={() => {
+          setSelectedIds(new Set());
+          fetchContacts();
+        }}
+      />
+
+      {/* Bulk Enrich Confirmation */}
+      <AlertDialog open={enrichConfirmOpen} onOpenChange={setEnrichConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Enrich {selectedIds.size} contact{selectedIds.size !== 1 ? 's' : ''}?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will fill missing data without overwriting existing fields.
+              Contacts will be processed sequentially and may take a moment.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleBulkEnrich}>
+              Enrich Selected
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

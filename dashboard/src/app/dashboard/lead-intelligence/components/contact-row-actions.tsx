@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { MoreHorizontal, User, Rocket, Sparkles, Clock, Users, Star, Ban } from 'lucide-react';
 import { toast } from 'sonner';
@@ -17,11 +18,14 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/dashboard-kit/components/ui/tooltip';
+import { FollowUpForm } from './follow-up-form';
+import { FindColleaguesModal } from './find-colleagues-modal';
 import type { Contact } from '@/lib/api/lead-intelligence-contacts-types';
 
 interface ContactRowActionsProps {
   contact: Contact;
   onAddToCampaign?: (contactId: string) => void;
+  onContactsChanged?: () => void;
 }
 
 function DisabledItem({
@@ -50,77 +54,110 @@ function DisabledItem({
   );
 }
 
-export function ContactRowActions({ contact, onAddToCampaign }: ContactRowActionsProps) {
+export function ContactRowActions({ contact, onAddToCampaign, onContactsChanged }: ContactRowActionsProps) {
+  const [followUpOpen, setFollowUpOpen] = useState(false);
+  const [colleaguesOpen, setColleaguesOpen] = useState(false);
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-          <MoreHorizontal className="h-4 w-4" />
-          <span className="sr-only">Open menu</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48">
-        <DropdownMenuItem asChild>
-          <Link href={`/dashboard/lead-intelligence/contacts/${contact.id}`}>
-            <User className="h-4 w-4 mr-2" />
-            View Profile
-          </Link>
-        </DropdownMenuItem>
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+            <MoreHorizontal className="h-4 w-4" />
+            <span className="sr-only">Open menu</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-48">
+          <DropdownMenuItem asChild>
+            <Link href={`/dashboard/lead-intelligence/contacts/${contact.id}`}>
+              <User className="h-4 w-4 mr-2" />
+              View Profile
+            </Link>
+          </DropdownMenuItem>
 
-        <DropdownMenuItem
-          onClick={() => onAddToCampaign?.(contact.id)}
-        >
-          <Rocket className="h-4 w-4 mr-2" />
-          Add to Campaign
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={async () => {
-            const promise = fetch(`/api/lead-intelligence/contacts/${contact.id}/enrich`, {
-              method: 'POST',
-            }).then(async (res) => {
-              const data = await res.json();
-              if (!res.ok || !data.success) throw new Error(data.error ?? 'No enrichment data found');
-              return data;
-            });
-            toast.promise(promise, {
-              loading: 'Enriching contact...',
-              success: (data) =>
-                data.updates_applied > 0
-                  ? `Updated ${data.updates_applied} field${data.updates_applied !== 1 ? 's' : ''}`
-                  : 'No new data to fill',
-              error: (err) => err.message ?? 'Enrichment failed',
-            });
-          }}
-        >
-          <Sparkles className="h-4 w-4 mr-2" />
-          Enrich Contact
-        </DropdownMenuItem>
-        <DisabledItem icon={Clock} label="Set Follow-up" tooltip="Coming in Phase 4" />
-        <DisabledItem icon={Users} label="Find Colleagues" tooltip="Coming in Phase 4" />
+          <DropdownMenuItem
+            onClick={() => onAddToCampaign?.(contact.id)}
+          >
+            <Rocket className="h-4 w-4 mr-2" />
+            Add to Campaign
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={async () => {
+              const promise = fetch(`/api/lead-intelligence/contacts/${contact.id}/enrich`, {
+                method: 'POST',
+              }).then(async (res) => {
+                const data = await res.json();
+                if (!res.ok || !data.success) throw new Error(data.error ?? 'No enrichment data found');
+                return data;
+              });
+              toast.promise(promise, {
+                loading: 'Enriching contact...',
+                success: (data) =>
+                  data.updates_applied > 0
+                    ? `Updated ${data.updates_applied} field${data.updates_applied !== 1 ? 's' : ''}`
+                    : 'No new data to fill',
+                error: (err) => err.message ?? 'Enrichment failed',
+              });
+            }}
+          >
+            <Sparkles className="h-4 w-4 mr-2" />
+            Enrich Contact
+          </DropdownMenuItem>
 
-        <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={() => setFollowUpOpen(true)}>
+            <Clock className="h-4 w-4 mr-2" />
+            Set Follow-up
+          </DropdownMenuItem>
 
-        <DropdownMenuItem
-          onClick={() => {
-            // TODO: Implement VIP toggle
-            console.log('Mark as VIP:', contact.id);
-          }}
-        >
-          <Star className="h-4 w-4 mr-2" />
-          Mark as VIP
-        </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => setColleaguesOpen(true)}
+            disabled={!contact.company_id}
+          >
+            <Users className="h-4 w-4 mr-2" />
+            Find Colleagues
+          </DropdownMenuItem>
 
-        <DropdownMenuItem
-          className="text-destructive"
-          onClick={() => {
-            // TODO: Implement DNC toggle
-            console.log('Mark Do Not Contact:', contact.id);
-          }}
-        >
-          <Ban className="h-4 w-4 mr-2" />
-          Mark Do Not Contact
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+          <DropdownMenuSeparator />
+
+          <DropdownMenuItem
+            onClick={() => {
+              // TODO: Implement VIP toggle
+              console.log('Mark as VIP:', contact.id);
+            }}
+          >
+            <Star className="h-4 w-4 mr-2" />
+            Mark as VIP
+          </DropdownMenuItem>
+
+          <DropdownMenuItem
+            className="text-destructive"
+            onClick={() => {
+              // TODO: Implement DNC toggle
+              console.log('Mark Do Not Contact:', contact.id);
+            }}
+          >
+            <Ban className="h-4 w-4 mr-2" />
+            Mark Do Not Contact
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <FollowUpForm
+        open={followUpOpen}
+        onOpenChange={setFollowUpOpen}
+        contactIds={[contact.id]}
+        onSuccess={() => onContactsChanged?.()}
+      />
+
+      {contact.company_id && (
+        <FindColleaguesModal
+          open={colleaguesOpen}
+          onOpenChange={setColleaguesOpen}
+          companyId={contact.company_id}
+          companyName="Company"
+          onContactsAdded={() => onContactsChanged?.()}
+        />
+      )}
+    </>
   );
 }
