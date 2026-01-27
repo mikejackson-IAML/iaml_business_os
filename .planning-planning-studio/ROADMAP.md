@@ -240,6 +240,15 @@ Plans:
 
 **Goal:** Generate and manage planning documents
 
+**Plans:** 5 plans
+
+Plans:
+- [ ] 07-01-PLAN.md — Document templates and generation library
+- [ ] 07-02-PLAN.md — API routes for generation, fetch, and edit
+- [ ] 07-03-PLAN.md — Chat integration with marker detection and suggestion cards
+- [ ] 07-04-PLAN.md — Document preview modal, editor, and version history UI
+- [ ] 07-05-PLAN.md — GSD package export (ZIP download + Claude Code command)
+
 ### Requirements Covered
 - REQ-DOCS: Document generation
 - REQ-GSD: GSD package output
