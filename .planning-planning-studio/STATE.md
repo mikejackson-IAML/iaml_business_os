@@ -3,16 +3,17 @@
 ## Current Status
 
 - **Milestone:** v1.0
-- **Current Phase:** 2 (Pipeline View - Main Dashboard) - COMPLETE
-- **Current Plan:** 3 of 3 complete
-- **Status:** Phase Complete
+- **Current Phase:** 3 (Project Detail View — Layout) - In Progress
+- **Current Plan:** 2 of 3 complete
+- **Status:** In Progress
 
 ## Progress
 
 ```
 Phase 1: [████████████████] 4/4 plans COMPLETE
 Phase 2: [████████████████] 3/3 plans COMPLETE
-Overall:  [██████-------] 7/36 plans (~19%)
+Phase 3: [██████████------] 2/3 plans IN PROGRESS
+Overall:  [████████-----] 9/36 plans (~25%)
 ```
 
 ## Phase Progress
@@ -21,7 +22,7 @@ Overall:  [██████-------] 7/36 plans (~19%)
 |-------|------|--------|
 | 1 | Database Foundation & Core UI Shell | Complete (4/4 plans) |
 | 2 | Pipeline View (Main Dashboard) | Complete (3/3 plans) |
-| 3 | Project Detail View — Layout | Not Started |
+| 3 | Project Detail View — Layout | In Progress (2/3 plans) |
 | 4 | Conversation Engine | Not Started |
 | 5 | Phase Transitions & Incubation | Not Started |
 | 6 | Memory System | Not Started |
@@ -52,6 +53,8 @@ Overall:  [██████-------] 7/36 plans (~19%)
 | 02 | 01 | Inline formatRelativeTime in project-card | Simple utility, shared module not needed yet |
 | 02 | 02 | Native select over shadcn Select | Avoids adding radix-ui/select dependency for simple dropdowns |
 | 02 | 03 | Followed create-task-modal pattern | Consistency with existing action-center modal |
+| 03 | 02 | Inline formatRelativeTime per panel | Matches project-card pattern; shared util not needed yet |
+| 03 | 02 | Custom CSS classes for status badges | Specific colors with dark mode + pulse animation for running |
 
 ## MVP Checkpoint
 
@@ -66,14 +69,14 @@ Phases 1-7 constitute the MVP. After Phase 7:
 ## Session Continuity
 
 - **Last session:** 2026-01-27
-- **Stopped at:** Completed 02-03-PLAN.md (Phase 02 complete)
+- **Stopped at:** Completed 03-02-PLAN.md
 - **Resume file:** None
 
 ## Last Activity
 
 - **Date:** 2026-01-27
-- **Activity:** Completed Plan 02-03 (Quick Capture Modal) -- Phase 02 complete
-- **Notes:** Built capture modal with title + one-liner fields, toast feedback via sonner. Added "+ Capture Idea" button to pipeline header.
+- **Activity:** Completed Plan 03-02 (Sidebar Panels)
+- **Notes:** Built Sessions, Documents, and Research panels with typed props, metadata display, empty states, and status badges.
 
 ## Phase 1 Deliverables
 
