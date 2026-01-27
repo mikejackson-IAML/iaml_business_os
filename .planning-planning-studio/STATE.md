@@ -3,9 +3,9 @@
 ## Current Status
 
 - **Milestone:** v1.0
-- **Current Phase:** 6 (Memory System) - Complete
+- **Current Phase:** 6 (Memory System) - Complete, verified
 - **Current Plan:** 4 of 4
-- **Status:** Phase complete
+- **Status:** Phase complete — next: Phase 7 (Document Generation)
 
 ## Progress
 

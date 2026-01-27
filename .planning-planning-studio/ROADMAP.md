@@ -178,13 +178,14 @@ Plans:
 
 **Goal:** Extract and store memories, enable semantic search
 
+**Status:** Complete (2026-01-27)
 **Plans:** 4 plans
 
 Plans:
-- [ ] 06-01-PLAN.md — Embeddings library, memory extraction library, and API routes
-- [ ] 06-02-PLAN.md — Wire extraction into chat endpoint, conversation summaries
-- [ ] 06-03-PLAN.md — Semantic search API and project-scoped Ask AI panel
-- [ ] 06-04-PLAN.md — Global Ask AI (Cmd+K) modal
+- [x] 06-01-PLAN.md — Embeddings library, memory extraction library, and API routes
+- [x] 06-02-PLAN.md — Wire extraction into chat endpoint, conversation summaries
+- [x] 06-03-PLAN.md — Semantic search API and project-scoped Ask AI panel
+- [x] 06-04-PLAN.md — Global Ask AI (Cmd+K) modal
 
 ### Requirements Covered
 - REQ-MEMORY: Memory extraction and storage
@@ -227,11 +228,11 @@ Plans:
 - Filter options by project
 
 ### Success Criteria
-- [ ] Memories are extracted after conversations end
-- [ ] Embeddings are generated and stored
-- [ ] Semantic search returns relevant results
-- [ ] Ask AI works at project level
-- [ ] Global Ask AI (Cmd+K) works across all projects
+- [x] Memories are extracted after conversations end
+- [x] Embeddings are generated and stored
+- [x] Semantic search returns relevant results
+- [x] Ask AI works at project level
+- [x] Global Ask AI (Cmd+K) works across all projects
 
 ---
 
