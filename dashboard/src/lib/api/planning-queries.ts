@@ -7,6 +7,7 @@ import type {
   PlanningDocument,
   PlanningResearch,
   PlanningMemory,
+  PlanningMessage,
   UserGoal,
   PlanningDashboardData,
   ProjectStatus,
@@ -347,6 +348,52 @@ export async function searchMemories(
   }
 
   return (data || []) as PlanningMemory[];
+}
+
+/**
+ * Fetch all messages for a conversation ordered by created_at ascending
+ */
+export async function getConversationMessages(conversationId: string): Promise<PlanningMessage[]> {
+  const supabase = createServerClient();
+
+  const { data, error } = await supabase
+    .schema('planning_studio')
+    .from('messages')
+    .select('*')
+    .eq('conversation_id', conversationId)
+    .order('created_at', { ascending: true });
+
+  if (error) {
+    console.error('Error fetching conversation messages:', error);
+    return [];
+  }
+
+  return (data || []) as PlanningMessage[];
+}
+
+/**
+ * Get a phase by project ID and phase type
+ */
+export async function getPhaseByType(
+  projectId: string,
+  phaseType: string
+): Promise<PlanningPhase | null> {
+  const supabase = createServerClient();
+
+  const { data, error } = await supabase
+    .schema('planning_studio')
+    .from('phases')
+    .select('*')
+    .eq('project_id', projectId)
+    .eq('phase_type', phaseType)
+    .single();
+
+  if (error) {
+    console.error('Error fetching phase by type:', error);
+    return null;
+  }
+
+  return data as PlanningPhase;
 }
 
 /**
