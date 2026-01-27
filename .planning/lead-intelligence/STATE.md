@@ -10,11 +10,11 @@ See: .planning/lead-intelligence/PROJECT.md (updated 2026-01-27)
 ## Current Position
 
 Phase: 4 of 5 (Integrations & Bulk Actions)
-Plan: 1 of ? complete
+Plan: 2 of ? complete
 Status: In progress
-Last activity: 2026-01-27 - Completed 04-01-PLAN.md
+Last activity: 2026-01-27 - Completed 04-02-PLAN.md
 
-Progress: [██████░░░░] 65%
+Progress: [███████░░░] 70%
 
 ## Accumulated Decisions
 
@@ -40,7 +40,7 @@ Progress: [██████░░░░] 65%
 ## Session Continuity
 
 Last session: 2026-01-27
-Stopped at: Completed 04-01-PLAN.md (contact selection & bulk actions bar)
+Stopped at: Completed 04-02-PLAN.md (add to campaign flow)
 Resume file: None
 
 ## Session Log
@@ -67,6 +67,7 @@ Resume file: None
 ---
 | 2026-01-27 | Phase 3 verified | 9/9 must-haves passed |
 | 2026-01-27 | 04-01 complete | Checkbox selection + bulk actions bar, 2 tasks, build passes |
+| 2026-01-27 | 04-02 complete | SmartLead campaign API routes + modal + row/bulk action wiring |
 
 ---
-*Last updated: 2026-01-27 after 04-01 execution*
+*Last updated: 2026-01-27 after 04-02 execution*
