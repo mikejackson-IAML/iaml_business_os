@@ -9,7 +9,9 @@ import { MetricsBar } from './components/metrics-bar';
 import { DataHealthSection } from './components/data-health-section';
 import { ContactTable } from './components/contact-table';
 import { ContactFilters } from './components/contact-filters';
-import type { Contact, ContactListResponse } from '@/lib/api/lead-intelligence-contacts-types';
+import { AISearchBar } from './components/ai-search-bar';
+import { FilterPills } from './components/filter-pills';
+import type { Contact, ContactListParams, ContactListResponse } from '@/lib/api/lead-intelligence-contacts-types';
 
 interface LeadIntelligenceContentProps {
   initialContacts: ContactListResponse;
@@ -43,6 +45,7 @@ export function LeadIntelligenceContent({
   const [isLoading, setIsLoading] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [searchValue, setSearchValue] = useState(searchParams.get('search') ?? '');
+  const [aiFilters, setAiFilters] = useState<Partial<ContactListParams>>({});
 
   // Count active filters (excluding page, limit, sort, order, search)
   const activeFilterCount = useMemo(() => {
@@ -63,10 +66,32 @@ export function LeadIntelligenceContent({
     return filters;
   }, [searchParams]);
 
+  const handleAiFiltersApplied = useCallback((filters: Partial<ContactListParams>) => {
+    setAiFilters(filters);
+  }, []);
+
+  const handleAiFilterRemove = useCallback((key: string) => {
+    setAiFilters((prev) => {
+      const next = { ...prev };
+      delete next[key as keyof ContactListParams];
+      return next;
+    });
+  }, []);
+
+  const handleAiFilterClearAll = useCallback(() => {
+    setAiFilters({});
+  }, []);
+
   const fetchContacts = useCallback(async () => {
     setIsLoading(true);
     try {
       const params = new URLSearchParams(searchParams.toString());
+      // Merge AI filters into params
+      for (const [key, value] of Object.entries(aiFilters)) {
+        if (value !== undefined && value !== null && value !== '') {
+          params.set(key, String(value));
+        }
+      }
       if (!params.has('page')) params.set('page', '1');
       if (!params.has('limit')) params.set('limit', '25');
 
@@ -81,15 +106,14 @@ export function LeadIntelligenceContent({
     } finally {
       setIsLoading(false);
     }
-  }, [searchParams]);
+  }, [searchParams, aiFilters]);
 
-  // Refetch on URL param changes (skip initial render)
+  // Refetch on URL param changes or AI filter changes
   useEffect(() => {
-    // If we have search params, refetch
-    if (searchParams.toString()) {
+    if (searchParams.toString() || Object.keys(aiFilters).length > 0) {
       fetchContacts();
     }
-  }, [searchParams, fetchContacts]);
+  }, [searchParams, aiFilters, fetchContacts]);
 
   // Debounced search
   useEffect(() => {
@@ -138,6 +162,16 @@ export function LeadIntelligenceContent({
       {initialDataHealth && (
         <DataHealthSection dataHealth={initialDataHealth} />
       )}
+
+      {/* AI Search */}
+      <AISearchBar onFiltersApplied={handleAiFiltersApplied} />
+
+      {/* AI Filter Pills */}
+      <FilterPills
+        filters={aiFilters}
+        onRemove={handleAiFilterRemove}
+        onClearAll={handleAiFilterClearAll}
+      />
 
       {/* Search + Filter toggle */}
       <div className="flex items-center gap-3">
