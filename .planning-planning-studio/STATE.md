@@ -69,6 +69,7 @@ Overall:  [████████████████] 17/36 plans (~47%)
 | 05 | 01 | HTML comment markers stripped before DB save | Invisible to users, clean storage |
 | 05 | 01 | forceComplete delegates to completePhase | Readiness checks are conversation-level, not DB constraints |
 | 05 | 01 | ensureAllPhasesExist auto-starts capture | First phase should be in_progress on creation |
+| 05 | 02 | Used existing @/components/ui/alert-dialog and dropdown-menu | Already in project, consistent with action-center patterns |
 | 05 | 03 | Replaced placeholder buttons with idea capture textarea | Plan specified note capture over disabled buttons |
 
 ## MVP Checkpoint
@@ -84,14 +85,14 @@ Phases 1-7 constitute the MVP. After Phase 7:
 ## Session Continuity
 
 - **Last session:** 2026-01-27
-- **Stopped at:** Completed 05-03-PLAN.md
+- **Stopped at:** Completed 05-02-PLAN.md
 - **Resume file:** None
 
 ## Last Activity
 
 - **Date:** 2026-01-27
-- **Activity:** Completed Phase 5 Plan 3 (Incubation Overlay Wiring)
-- **Notes:** Rewrote incubation-overlay.tsx with live countdown, idea capture textarea, and working skip button using useTransition.
+- **Activity:** Completed Phase 5 Plan 2 (Phase Transition UI)
+- **Notes:** Created PhaseTransitionModal, ForceCompleteButton, ReadinessBadge components. Wired conversation shell to handle phase_complete and readiness_result SSE events with marker stripping.
 
 ## Phase 1 Deliverables
 
