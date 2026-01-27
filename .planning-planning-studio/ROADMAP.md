@@ -43,40 +43,17 @@ Plans:
 
 ## Phase 2: Pipeline View (Main Dashboard)
 
-**Goal:** Kanban-style view of all ideas
+**Goal:** Kanban-style view of all ideas with drag-and-drop, search/filter, and quick capture
+
+**Plans:** 3 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Pipeline board with drag-and-drop columns and project cards
+- [ ] 02-02-PLAN.md — Search and filter bar
+- [ ] 02-03-PLAN.md — Quick capture modal
 
 ### Requirements Covered
 - REQ-F1: Pipeline View feature
-
-### Tasks
-
-2.1 **Create Projects Query Functions**
-- `getProjects()` — Fetch all projects
-- Group by status for pipeline columns
-- Include phase progress data
-
-2.2 **Pipeline Columns Component**
-- Incubating column
-- Active column
-- Ready to Build column
-- Building column
-- Shipped column
-
-2.3 **Project Card Component**
-- Title and one-liner
-- Current phase indicator
-- Progress bar
-- Incubation countdown (if applicable)
-- Last activity timestamp
-
-2.4 **Quick Capture Button**
-- "+ Capture Idea" button in header
-- Opens capture modal (placeholder functionality)
-
-2.5 **Search & Filter**
-- Search across project titles
-- Filter by status
-- Filter by phase
 
 ### Success Criteria
 - [ ] Can see all projects organized by status columns
