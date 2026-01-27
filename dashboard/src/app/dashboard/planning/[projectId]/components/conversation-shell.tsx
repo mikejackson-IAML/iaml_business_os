@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { X } from 'lucide-react';
 import { Card, CardHeader, CardTitle } from '@/dashboard-kit/components/ui/card';
 import { MessageList } from './message-list';
@@ -8,6 +9,7 @@ import { ChatInput } from './chat-input';
 import { PhaseTransitionModal } from './phase-transition-modal';
 import { ForceCompleteButton } from './force-complete-button';
 import { ReadinessBadge } from './readiness-badge';
+import { DocSuggestionCard } from './doc-suggestion-card';
 import { stripMarkers, INCUBATION_DURATIONS } from '@/lib/planning/phase-transitions';
 import {
   getPhaseLabel,
@@ -44,6 +46,7 @@ export function ConversationShell({
   onConversationsChange,
   onActiveConversationChange,
 }: ConversationShellProps) {
+  const router = useRouter();
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [conversationId, setConversationId] = useState<string | null>(activeConversationId);
   const [isStreaming, setIsStreaming] = useState(false);
@@ -51,6 +54,7 @@ export function ConversationShell({
   const [error, setError] = useState<string | null>(null);
   const [showTransition, setShowTransition] = useState(false);
   const [readinessResult, setReadinessResult] = useState<{ passed: boolean; reason?: string } | null>(null);
+  const [docSuggestions, setDocSuggestions] = useState<Array<{ docType: string; id: string }>>([]);
   const pendingConversationId = useRef<string | null>(null);
   const selfInitiatedChange = useRef(false);
 
@@ -66,6 +70,7 @@ export function ConversationShell({
     setError(null);
     setShowTransition(false);
     setReadinessResult(null);
+    setDocSuggestions([]);
   }, [activeConversationId, initialMessages]);
 
   const refreshConversations = useCallback(async () => {
@@ -146,6 +151,11 @@ export function ConversationShell({
                 setShowTransition(true);
               } else if (data.type === 'readiness_result') {
                 setReadinessResult({ passed: data.passed, reason: data.reason });
+              } else if (data.type === 'doc_suggestion') {
+                setDocSuggestions((prev) => [
+                  ...prev,
+                  { docType: data.docType, id: `doc-${Date.now()}-${data.docType}` },
+                ]);
               } else if (data.type === 'done') {
                 // Add completed assistant message with markers stripped
                 setMessages((prev) => [
@@ -225,6 +235,21 @@ export function ConversationShell({
           </button>
         </div>
       )}
+
+      {docSuggestions.map((suggestion) => (
+        <DocSuggestionCard
+          key={suggestion.id}
+          docType={suggestion.docType}
+          projectId={projectId}
+          onGenerated={() => {
+            setDocSuggestions((prev) => prev.filter((s) => s.id !== suggestion.id));
+            router.refresh();
+          }}
+          onDismiss={() => {
+            setDocSuggestions((prev) => prev.filter((s) => s.id !== suggestion.id));
+          }}
+        />
+      ))}
 
       <ChatInput onSend={handleSend} disabled={isStreaming} />
 
