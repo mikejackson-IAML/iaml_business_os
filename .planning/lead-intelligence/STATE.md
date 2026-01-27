@@ -5,16 +5,16 @@
 See: .planning/lead-intelligence/PROJECT.md (updated 2026-01-27)
 
 **Core value:** Users can find any contact, understand their full relationship with IAML, and take immediate action.
-**Current focus:** Phase 2 complete — ready for Phase 3
+**Current focus:** Phase 3 in progress — AI Search & Intelligence
 
 ## Current Position
 
-Phase: 2 of 5 (Contact List, Profiles & Company Pages) — COMPLETE
-Plan: 7 of 7 complete
-Status: Phase verified ✓ (human approved)
-Last activity: 2026-01-27 - Phase 2 verified (6/6 must-haves)
+Phase: 3 of 5 (AI Search & Intelligence)
+Plan: 1 of N complete
+Status: In progress
+Last activity: 2026-01-27 - Completed 03-01-PLAN.md (AI Backend Endpoints)
 
-Progress: [████░░░░░░] 40%
+Progress: [█████░░░░░] 45%
 
 ## Accumulated Decisions
 
@@ -29,6 +29,8 @@ Progress: [████░░░░░░] 40%
 | supabase-type-assertion | Used `as never` for Supabase insert/update type mismatch | 01-03 | Record<string, unknown> vs Json type incompatibility; runtime compatible |
 | two-step-program-filter | Program filter uses two-step query (fetch IDs then .in()) | 02-01 | Supabase JS doesn't support subqueries |
 | company-size-bucket-mapping | Map bucket strings to employee_count ranges | 02-01 | UI presents human-readable buckets |
+| haiku-for-search | Use Haiku for NL search parsing, Sonnet for summaries | 03-01 | Search is simple classification; summaries need nuance |
+| silent-filter-strip | Invalid AI-parsed filters silently removed | 03-01 | Better UX than error — show what we can parse |
 
 ## Blockers / Concerns
 
@@ -37,7 +39,7 @@ Progress: [████░░░░░░] 40%
 ## Session Continuity
 
 Last session: 2026-01-27
-Stopped at: Completed 02-07-PLAN.md (Visual & Functional Verification)
+Stopped at: Completed 03-01-PLAN.md (AI Backend Endpoints)
 Resume file: None
 
 ## Session Log
@@ -57,6 +59,7 @@ Resume file: None
 | 2026-01-27 | 02-04 complete | Contact profile page: header + 3 tabs (Overview, Attendance, Email & Campaigns) + 3 stub tabs |
 | 2026-01-27 | 02-07 complete | Build verification passed, fixed unrelated build error, checkpoint for human verification |
 | 2026-01-27 | Phase 2 verified | 6/6 must-haves passed, human approved. Fixes: sort black screen (removed API key auth from GET), data health undefined values (column name mapping) |
+| 2026-01-27 | 03-01 complete | AI backend: 2 POST endpoints, Claude helpers, types, DB migration for summary caching |
 
 ---
-*Last updated: 2026-01-27 after Phase 2 verification*
+*Last updated: 2026-01-27 after 03-01 completion*
