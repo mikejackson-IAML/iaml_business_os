@@ -282,6 +282,57 @@ export type Database = {
         };
       };
       // Lead Intelligence Tables
+      companies: {
+        Row: {
+          id: string;
+          name: string;
+          website: string | null;
+          industry: string | null;
+          employee_count: number | null;
+          revenue_range: string | null;
+          city: string | null;
+          state: string | null;
+          country: string | null;
+          linkedin_url: string | null;
+          enrichment_source: string | null;
+          enrichment_data: Json | null;
+          enriched_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          website?: string | null;
+          industry?: string | null;
+          employee_count?: number | null;
+          revenue_range?: string | null;
+          city?: string | null;
+          state?: string | null;
+          country?: string | null;
+          linkedin_url?: string | null;
+          enrichment_source?: string | null;
+          enrichment_data?: Json | null;
+          enriched_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          name?: string;
+          website?: string | null;
+          industry?: string | null;
+          employee_count?: number | null;
+          revenue_range?: string | null;
+          city?: string | null;
+          state?: string | null;
+          country?: string | null;
+          linkedin_url?: string | null;
+          enrichment_source?: string | null;
+          enrichment_data?: Json | null;
+          enriched_at?: string | null;
+          updated_at?: string;
+        };
+      };
       domains: {
         Row: {
           id: string;
