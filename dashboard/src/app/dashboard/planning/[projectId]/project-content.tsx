@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-import { Card, CardContent, CardHeader } from '@/dashboard-kit/components/ui/card';
+import { Card, CardContent } from '@/dashboard-kit/components/ui/card';
 import { Badge } from '@/dashboard-kit/components/ui/badge';
 import {
   getPlanningProject,
@@ -9,8 +9,13 @@ import {
   getProjectDocuments,
   getProjectResearch,
 } from '@/lib/api/planning-queries';
-import { getStatusLabel } from '@/dashboard-kit/types/departments/planning';
+import { getStatusLabel, isIncubating } from '@/dashboard-kit/types/departments/planning';
 import { PhaseProgressBar } from './components/phase-progress-bar';
+import { SessionsPanel } from './components/sessions-panel';
+import { DocumentsPanel } from './components/documents-panel';
+import { ResearchPanel } from './components/research-panel';
+import { ConversationShell } from './components/conversation-shell';
+import { IncubationOverlay } from './components/incubation-overlay';
 
 interface ProjectContentProps {
   projectId: string;
@@ -103,52 +108,18 @@ export async function ProjectContent({ projectId }: ProjectContentProps) {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Left Sidebar */}
         <div className="space-y-4">
-          <Card>
-            <CardHeader className="pb-2">
-              <h3 className="text-sm font-medium">Sessions</h3>
-            </CardHeader>
-            <CardContent>
-              <p className="text-xs text-muted-foreground">
-                {conversations.length} session{conversations.length !== 1 ? 's' : ''}
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <h3 className="text-sm font-medium">Documents</h3>
-            </CardHeader>
-            <CardContent>
-              <p className="text-xs text-muted-foreground">
-                {documents.length} document{documents.length !== 1 ? 's' : ''}
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <h3 className="text-sm font-medium">Research</h3>
-            </CardHeader>
-            <CardContent>
-              <p className="text-xs text-muted-foreground">
-                {research.length} research run{research.length !== 1 ? 's' : ''}
-              </p>
-            </CardContent>
-          </Card>
+          <SessionsPanel conversations={conversations} />
+          <DocumentsPanel documents={documents} />
+          <ResearchPanel research={research} />
         </div>
 
         {/* Main Conversation Area */}
         <div className="lg:col-span-3">
-          <Card className="h-full min-h-[500px]">
-            <CardHeader className="pb-2 border-b">
-              <h3 className="text-sm font-medium">Conversation</h3>
-            </CardHeader>
-            <CardContent className="pt-4 flex items-center justify-center h-[450px]">
-              <p className="text-muted-foreground text-sm">
-                Conversation area coming in Plan 03
-              </p>
-            </CardContent>
-          </Card>
+          {isIncubating(project) ? (
+            <IncubationOverlay project={project} />
+          ) : (
+            <ConversationShell />
+          )}
         </div>
       </div>
     </div>
