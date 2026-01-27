@@ -4,8 +4,8 @@
 
 - **Milestone:** v1.0
 - **Current Phase:** 8 (Deep Research Integration) - In Progress
-- **Current Plan:** 2 of 4
-- **Status:** Plan 08-02 complete
+- **Current Plan:** 3 of 4
+- **Status:** Plan 08-03 complete
 
 ## Progress
 
@@ -17,7 +17,7 @@ Phase 4: [████████████████] 4/4 plans COMPLETE
 Phase 5: [████████████████] 4/4 plans COMPLETE
 Phase 6: [████████████████] 4/4 plans COMPLETE
 Phase 7: [████████████████] 5/5 plans COMPLETE  *** MVP ***
-Overall:  [█████████████████████████░] 29/36 plans (~81%)
+Overall:  [██████████████████████████░] 30/36 plans (~83%)
 ```
 
 ## Phase Progress
@@ -31,7 +31,7 @@ Overall:  [███████████████████████
 | 5 | Phase Transitions & Incubation | Complete (4/4 plans) |
 | 6 | Memory System | Complete (4/4 plans) |
 | 7 | Document Generation | Complete (5/5 plans) |
-| 8 | Deep Research Integration | In Progress (2/4 plans) |
+| 8 | Deep Research Integration | In Progress (3/4 plans) |
 | 9 | Ready-to-Build Queue & Prioritization | Not Started |
 | 10 | Build Tracker | Not Started |
 | 11 | Analytics & Polish | Not Started |
@@ -102,6 +102,9 @@ Overall:  [███████████████████████
 | 08 | 01 | Research markers in all 6 phase prompts | All phases can suggest research, not just discover |
 | 08 | 02 | Followed DocSuggestionCard pattern exactly | UI consistency across suggestion types |
 | 08 | 02 | Random ID suffix on research suggestions | Prevents key collisions with rapid SSE events |
+| 08 | 03 | Yellow pulse for pending, blue pulse for running | Visual differentiation of async states |
+| 08 | 03 | Manual research uses 'manual' placeholder IDs | Not tied to conversation/phase context |
+| 08 | 03 | 5-second polling for pending/running research | Balance responsiveness with API load |
 
 ## MVP Checkpoint
 
@@ -116,14 +119,14 @@ Phases 1-7 constitute the MVP. After Phase 7:
 ## Session Continuity
 
 - **Last session:** 2026-01-27
-- **Stopped at:** Completed 08-02-PLAN.md
+- **Stopped at:** Completed 08-03-PLAN.md
 - **Resume file:** None
 
 ## Last Activity
 
 - **Date:** 2026-01-27
-- **Activity:** Completed Phase 8 Plan 2 (Chat Flow Integration)
-- **Notes:** SSE research_suggestion events, ResearchSuggestionCard component, conversation shell wiring.
+- **Activity:** Completed Phase 8 Plan 3 (Research Panel UI)
+- **Notes:** ResearchPanel with real data, auto-refresh polling, results modal, manual research trigger.
 
 ## Phase 1 Deliverables
 
