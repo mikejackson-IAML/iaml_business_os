@@ -5,16 +5,16 @@
 See: .planning/lead-intelligence/PROJECT.md (updated 2026-01-27)
 
 **Core value:** Users can find any contact, understand their full relationship with IAML, and take immediate action.
-**Current focus:** Phase 4 complete — ready for Phase 5
+**Current focus:** Phase 5 in progress — opportunities UI taking shape
 
 ## Current Position
 
 Phase: 5 of 5 (Opportunities Pipeline)
-Plan: 1 of 4 complete
+Plan: 2 of 4 complete
 Status: In progress
-Last activity: 2026-01-27 - Completed 05-01-PLAN.md
+Last activity: 2026-01-27 - Completed 05-02-PLAN.md
 
-Progress: [████████░░] 82%
+Progress: [█████████░] 86%
 
 ## Phase 5 Polish Notes (from Phase 4 verification)
 
@@ -43,6 +43,8 @@ Progress: [████████░░] 82%
 | signed-url-attachments | Signed URLs (1hr) for attachments, not public | 05-01 | Proposals/contracts are sensitive documents |
 | storage-path-in-db | Store storage path in file_url, signed URL on read | 05-01 | Decouple storage from URL generation |
 | auto-create-bucket | Auto-create storage bucket on first upload | 05-01 | No manual setup needed |
+| components-ui-path | Use @/components/ui/ for dialog, label, select | 05-02 | Consistent with existing lead-intelligence modals |
+| detail-stub-components | Stub sub-section components to unblock build | 05-02 | Plan 01 detail page imports plan 03 components |
 
 ## Blockers / Concerns
 
@@ -51,9 +53,9 @@ Progress: [████████░░] 82%
 ## Session Continuity
 
 Last session: 2026-01-27
-Stopped at: Completed 05-01-PLAN.md
+Stopped at: Completed 05-02-PLAN.md
 Resume file: None
-**Next step:** Execute 05-02-PLAN.md
+**Next step:** Execute 05-03-PLAN.md
 
 ## Session Log
 
@@ -92,6 +94,7 @@ Resume file: None
 
 ---
 | 2026-01-27 | 05-01 complete | Opportunities API: 9 files, CRUD + stage advancement + contacts + attachments with Storage |
+| 2026-01-27 | 05-02 complete | Opportunities list page: kanban + table views, pipeline tabs, create modal, drag-and-drop |
 
 ---
-*Last updated: 2026-01-27 after 05-01 execution*
+*Last updated: 2026-01-27 after 05-02 execution*
