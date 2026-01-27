@@ -107,7 +107,12 @@ Flag the following for memory storage:
 - Any explicit preferences or constraints mentioned
 
 ## Phase Completion
-Once the user confirms the one-liner is accurate, mark CAPTURE as complete and begin the 24-hour incubation period.`;
+Once the user confirms the one-liner is accurate, mark CAPTURE as complete and begin the 24-hour incubation period.
+
+## Completion Markers (IMPORTANT)
+When you determine this phase is complete (based on the criteria above), include the marker <!--PHASE_COMPLETE--> at the very end of your message. This is invisible to the user but signals the system to show a transition confirmation.
+
+Do NOT include this marker unless you are confident the phase objectives are met. Only include it once per conversation.`;
 
 const DISCOVER_PROMPT = `You are helping deeply explore a product idea. The user has let this idea incubate and is returning with fresh perspective.
 
@@ -184,7 +189,19 @@ If you can answer these clearly, we're ready to define the problem more precisel
 Once readiness check passes:
 - Mark DISCOVER as complete
 - Begin 24-48 hour incubation
-- Summarize what was learned for context in DEFINE`;
+- Summarize what was learned for context in DEFINE
+
+## Readiness Check Markers
+When conducting a readiness check:
+- If the user passes: include <!--READINESS_PASS--> at the end of your assessment message
+- If the user does not pass: include <!--READINESS_FAIL:brief reason here--> at the end
+
+These markers are invisible to the user. Only include them after explicitly conducting the readiness check questions above.
+
+## Completion Markers (IMPORTANT)
+When you determine this phase is complete (based on the criteria above), include the marker <!--PHASE_COMPLETE--> at the very end of your message. This is invisible to the user but signals the system to show a transition confirmation.
+
+Do NOT include this marker unless you are confident the phase objectives are met. Only include it once per conversation.`;
 
 const DEFINE_PROMPT = `You are helping define the core problem and business model. This is convergent thinking -- we're narrowing down, not expanding.
 
@@ -238,7 +255,12 @@ Flag the following:
 Once Lean Canvas is complete and problem statement is crisp:
 - Mark DEFINE as complete
 - No incubation -- flow directly to DEVELOP
-- Summarize the definition for context in DEVELOP`;
+- Summarize the definition for context in DEVELOP
+
+## Completion Markers (IMPORTANT)
+When you determine this phase is complete (based on the criteria above), include the marker <!--PHASE_COMPLETE--> at the very end of your message. This is invisible to the user but signals the system to show a transition confirmation.
+
+Do NOT include this marker unless you are confident the phase objectives are met. Only include it once per conversation.`;
 
 const DEVELOP_PROMPT = `You are helping design the product solution. Using the problem definition and ICP, translate needs into features.
 
@@ -307,7 +329,19 @@ Before completing DEVELOP:
 Once feature spec and roadmap are solid:
 - Mark DEVELOP as complete
 - Begin 24-hour incubation
-- Encourage the user to return with fresh eyes`;
+- Encourage the user to return with fresh eyes
+
+## Readiness Check Markers
+When conducting a readiness check:
+- If the user passes: include <!--READINESS_PASS--> at the end of your assessment message
+- If the user does not pass: include <!--READINESS_FAIL:brief reason here--> at the end
+
+These markers are invisible to the user. Only include them after explicitly conducting the readiness check questions above.
+
+## Completion Markers (IMPORTANT)
+When you determine this phase is complete (based on the criteria above), include the marker <!--PHASE_COMPLETE--> at the very end of your message. This is invisible to the user but signals the system to show a transition confirmation.
+
+Do NOT include this marker unless you are confident the phase objectives are met. Only include it once per conversation.`;
 
 const VALIDATE_PROMPT = `You are conducting a final readiness check before this project moves to build status.
 
@@ -382,7 +416,12 @@ Only pass readiness if:
 When passed:
 "I'm confident this is ready for development. Let's package it up for Claude Code. Moving to PACKAGE phase now."
 
-Mark VALIDATE as complete and proceed immediately to PACKAGE.`;
+Mark VALIDATE as complete and proceed immediately to PACKAGE.
+
+## Completion Markers (IMPORTANT)
+When you determine this phase is complete (based on the criteria above), include the marker <!--PHASE_COMPLETE--> at the very end of your message. This is invisible to the user but signals the system to show a transition confirmation.
+
+Do NOT include this marker unless you are confident the phase objectives are met. Only include it once per conversation.`;
 
 const PACKAGE_PROMPT = `You are packaging this project for development. Generate all GSD-ready documents from the planning work.
 
@@ -444,4 +483,9 @@ Once user approves:
 - Set project status to 'ready_to_build'
 - Record ready_to_build_at timestamp
 - Calculate initial priority score
-- Add to Ready-to-Build queue`;
+- Add to Ready-to-Build queue
+
+## Completion Markers (IMPORTANT)
+When you determine this phase is complete (based on the criteria above), include the marker <!--PHASE_COMPLETE--> at the very end of your message. This is invisible to the user but signals the system to show a transition confirmation.
+
+Do NOT include this marker unless you are confident the phase objectives are met. Only include it once per conversation.`;

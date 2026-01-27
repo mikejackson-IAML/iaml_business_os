@@ -11,6 +11,7 @@ import {
   loadChatContext,
 } from '@/lib/api/planning-chat';
 import { getSystemPrompt, buildContextBlock } from '@/lib/planning/system-prompts';
+import { detectCompletionMarker, detectReadinessMarker, stripMarkers } from '@/lib/planning/phase-transitions';
 import type { PhaseType } from '@/dashboard-kit/types/departments/planning';
 
 export const runtime = 'nodejs';
@@ -133,8 +134,21 @@ export async function POST(request: NextRequest) {
           }
         }
 
-        // Save assistant message after stream completes
-        await saveMessage(conversationId, 'assistant', fullContent);
+        // Detect markers before stripping
+        const hasCompletion = detectCompletionMarker(fullContent);
+        const readinessResult = detectReadinessMarker(fullContent);
+
+        // Strip markers for storage
+        const cleanContent = stripMarkers(fullContent);
+        await saveMessage(conversationId, 'assistant', cleanContent);
+
+        // Emit marker events
+        if (hasCompletion) {
+          controller.enqueue(encoder.encode(formatSSE({ type: 'phase_complete', phaseType })));
+        }
+        if (readinessResult) {
+          controller.enqueue(encoder.encode(formatSSE({ type: 'readiness_result', passed: readinessResult.passed, reason: readinessResult.reason })));
+        }
 
         // Send done event
         controller.enqueue(encoder.encode(formatSSE({ type: 'done' })));
