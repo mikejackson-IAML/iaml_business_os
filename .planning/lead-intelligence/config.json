@@ -1,0 +1,13 @@
+{
+  "project": "Lead Intelligence System",
+  "planning_root": ".planning/lead-intelligence",
+  "current_milestone": "v1.0",
+  "workflow": {
+    "mode": "yolo",
+    "depth": "comprehensive",
+    "parallelization": true,
+    "commit_docs": true
+  },
+  "created": "2026-01-27",
+  "notes": "CRM module replacing existing leads dashboard. PRD at /Users/mikejackson/Downloads/lead-intelligence-prd.md"
+}
