@@ -98,6 +98,14 @@ Plans:
 **Goal:** Users can take action at scale — add contacts to SmartLead campaigns, trigger enrichment, find colleagues, set follow-ups
 **Depends on:** Phase 2 (requires contact list with selection)
 **Requirements:** LIST-05, INT-01, INT-02, INT-03, INT-05, INT-06, BULK-01, BULK-02, BULK-03, API-07, API-08, API-09, API-10
+**Plans:** 5 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — Checkbox selection + bulk actions bar foundation
+- [ ] 04-02-PLAN.md — SmartLead campaign integration (API + modal + wiring)
+- [ ] 04-03-PLAN.md — Contact enrichment (API + merge logic + UI wiring)
+- [ ] 04-04-PLAN.md — Find Colleagues + Follow-up tasks (API + modals + wiring)
+- [ ] 04-05-PLAN.md — Build verification and visual checkpoint
 
 **Success Criteria** (what must be TRUE):
 1. User can select multiple contacts and see bulk actions bar
@@ -131,9 +139,9 @@ Plans:
 | 1. Database Schema & Core API | 3/3 | Complete | 2026-01-27 |
 | 2. Contact List, Profiles & Company Pages | 7/7 | Complete | 2026-01-27 |
 | 3. AI Search & Intelligence | 3/3 | Complete | 2026-01-27 |
-| 4. Integrations & Bulk Actions | 0/? | Not started | - |
+| 4. Integrations & Bulk Actions | 0/5 | Planned | - |
 | 5. Opportunities Pipeline | 0/? | Not started | - |
 
 ---
 *Roadmap created: 2026-01-27*
-*Last updated: 2026-01-27 after Phase 3 execution*
+*Last updated: 2026-01-27 after Phase 4 planning*
