@@ -10,11 +10,11 @@ See: .planning/lead-intelligence/PROJECT.md (updated 2026-01-27)
 ## Current Position
 
 Phase: 4 of 5 (Integrations & Bulk Actions)
-Plan: 2 of ? complete
+Plan: 3 of ? complete
 Status: In progress
-Last activity: 2026-01-27 - Completed 04-02-PLAN.md
+Last activity: 2026-01-27 - Completed 04-03-PLAN.md
 
-Progress: [███████░░░] 70%
+Progress: [████████░░] 75%
 
 ## Accumulated Decisions
 
@@ -32,6 +32,9 @@ Progress: [███████░░░] 70%
 | haiku-for-search | Use Haiku for NL search parsing, Sonnet for summaries | 03-01 | Search is simple classification; summaries need nuance |
 | silent-filter-strip | Invalid AI-parsed filters silently removed | 03-01 | Better UX than error — show what we can parse |
 | ai-filter-separate-state | AI filters as React state, not URL params | 03-02 | Distinguish AI filters from manual; merge at fetch time |
+| fill-blanks-merge | Enrichment fills blanks only, flags conflicts | 04-03 | Preserve manually-entered data, surface discrepancies |
+| n8n-webhook-enrichment | n8n webhooks as enrichment source | 04-03 | Consistent with existing workflow architecture |
+| bulk-enrich-sequential | Bulk enrichment sequential with 1s delay, max 50 | 04-03 | Rate limit protection for n8n webhooks |
 
 ## Blockers / Concerns
 
@@ -40,7 +43,7 @@ Progress: [███████░░░] 70%
 ## Session Continuity
 
 Last session: 2026-01-27
-Stopped at: Completed 04-02-PLAN.md (add to campaign flow)
+Stopped at: Completed 04-03-PLAN.md (enrichment API + UI wiring)
 Resume file: None
 
 ## Session Log
@@ -68,6 +71,7 @@ Resume file: None
 | 2026-01-27 | Phase 3 verified | 9/9 must-haves passed |
 | 2026-01-27 | 04-01 complete | Checkbox selection + bulk actions bar, 2 tasks, build passes |
 | 2026-01-27 | 04-02 complete | SmartLead campaign API routes + modal + row/bulk action wiring |
+| 2026-01-27 | 04-03 complete | Enrichment merge utility + 3 API routes + UI wiring for single/bulk enrich |
 
 ---
-*Last updated: 2026-01-27 after 04-02 execution*
+*Last updated: 2026-01-27 after 04-03 execution*
