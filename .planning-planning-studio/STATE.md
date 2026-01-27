@@ -3,15 +3,16 @@
 ## Current Status
 
 - **Milestone:** v1.0
-- **Current Phase:** 1 (Database Foundation & Core UI Shell) - COMPLETE
-- **Current Plan:** 4 of 4 complete
-- **Status:** Phase Complete
+- **Current Phase:** 2 (Pipeline View - Main Dashboard) - In Progress
+- **Current Plan:** 1 of 3 complete
+- **Status:** In Progress
 
 ## Progress
 
 ```
 Phase 1: [████████████████] 4/4 plans COMPLETE
-Overall:  [███---------] 4/36 plans (~11%)
+Phase 2: [█████-----------] 1/3 plans
+Overall:  [████---------] 5/36 plans (~14%)
 ```
 
 ## Phase Progress
@@ -19,7 +20,7 @@ Overall:  [███---------] 4/36 plans (~11%)
 | Phase | Name | Status |
 |-------|------|--------|
 | 1 | Database Foundation & Core UI Shell | Complete (4/4 plans) |
-| 2 | Pipeline View (Main Dashboard) | Not Started |
+| 2 | Pipeline View (Main Dashboard) | In Progress (1/3 plans) |
 | 3 | Project Detail View — Layout | Not Started |
 | 4 | Conversation Engine | Not Started |
 | 5 | Phase Transitions & Incubation | Not Started |
@@ -46,6 +47,9 @@ Overall:  [███---------] 4/36 plans (~11%)
 | 01 | 04 | Schema-qualified queries via .schema() | Supabase client supports explicit schema switching |
 | 01 | 04 | Embedding field excluded from client queries | Avoids transferring large binary data |
 | 01 | 04 | 6 test projects covering all statuses | Comprehensive UI testing without additional setup |
+| 02 | 01 | rectIntersection collision detection | Better for column-based Kanban layouts |
+| 02 | 01 | Title-only Link, card body as drag handle | Avoids click-vs-drag conflict |
+| 02 | 01 | Inline formatRelativeTime in project-card | Simple utility, shared module not needed yet |
 
 ## MVP Checkpoint
 
@@ -60,14 +64,14 @@ Phases 1-7 constitute the MVP. After Phase 7:
 ## Session Continuity
 
 - **Last session:** 2026-01-27
-- **Stopped at:** Completed 01-04-PLAN.md (Phase 1 Complete)
+- **Stopped at:** Completed 02-01-PLAN.md
 - **Resume file:** None
 
 ## Last Activity
 
 - **Date:** 2026-01-27
-- **Activity:** Completed Plan 01-04 (Data Layer & Seed Data)
-- **Notes:** Created TypeScript types, query functions, and seed data migration. Phase 1 is now complete with database schema, UI shell pages, and data layer.
+- **Activity:** Completed Plan 02-01 (Pipeline Board with Drag-and-Drop)
+- **Notes:** Built Kanban board with dnd-kit drag-and-drop, 5 status columns, optimistic updates, incubation indicators. Server actions for status updates and project creation.
 
 ## Phase 1 Deliverables
 
@@ -77,4 +81,6 @@ All 4 plans complete:
 - **01-03:** Navigation integration (Planning link in sidebar and index)
 - **01-04:** Data layer (TypeScript types, queries, seed data)
 
-Ready to begin Phase 2: Pipeline View (Main Dashboard)
+## Phase 2 Deliverables (In Progress)
+
+- **02-01:** Pipeline board with drag-and-drop (COMPLETE)
