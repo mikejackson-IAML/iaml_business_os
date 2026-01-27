@@ -128,6 +128,61 @@ export async function getConversationMessages(
 }
 
 /**
+ * Fetch completed research for a conversation and format as context block
+ */
+export async function getCompletedResearchContext(
+  conversationId: string
+): Promise<string> {
+  const supabase = createServerClient();
+
+  const { data, error } = await supabase
+    .schema('planning_studio')
+    .from('research')
+    .select('query, summary, key_findings, completed_at')
+    .eq('conversation_id', conversationId)
+    .eq('status', 'complete')
+    .order('completed_at', { ascending: false });
+
+  if (error || !data || data.length === 0) {
+    return '';
+  }
+
+  const entries = data.map((r) => {
+    const citations = r.key_findings?.citations;
+    const sourceLine =
+      Array.isArray(citations) && citations.length > 0
+        ? `\nSources: ${citations.join(', ')}`
+        : '';
+    return `### Research: ${r.query}\n${r.summary || '(No summary)'}${sourceLine}`;
+  });
+
+  return `## Recent Research Findings\n\n${entries.join('\n\n')}`;
+}
+
+/**
+ * Fetch completed research for an entire project
+ */
+export async function getCompletedResearchForProject(
+  projectId: string
+): Promise<Array<{ query: string; summary: string; completed_at: string }>> {
+  const supabase = createServerClient();
+
+  const { data, error } = await supabase
+    .schema('planning_studio')
+    .from('research')
+    .select('query, summary, completed_at')
+    .eq('project_id', projectId)
+    .eq('status', 'complete')
+    .order('completed_at', { ascending: false });
+
+  if (error || !data) {
+    return [];
+  }
+
+  return data as Array<{ query: string; summary: string; completed_at: string }>;
+}
+
+/**
  * Load chat context for a project phase via the getPhaseContext RPC
  */
 export async function loadChatContext(

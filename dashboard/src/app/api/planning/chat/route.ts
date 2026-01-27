@@ -9,6 +9,7 @@ import {
   createConversation,
   getConversationMessages,
   loadChatContext,
+  getCompletedResearchContext,
 } from '@/lib/api/planning-chat';
 import { getSystemPrompt, buildContextBlock } from '@/lib/planning/system-prompts';
 import { detectCompletionMarker, detectReadinessMarker, stripMarkers } from '@/lib/planning/phase-transitions';
@@ -103,6 +104,11 @@ export async function POST(request: NextRequest) {
         // Load context
         const chatContext = await loadChatContext(projectId, phaseType);
 
+        // Load completed research findings for this conversation
+        const researchContext = conversationId
+          ? await getCompletedResearchContext(conversationId)
+          : '';
+
         // Build system message
         const contextBlock = buildContextBlock({
           project,
@@ -112,7 +118,8 @@ export async function POST(request: NextRequest) {
           recentMessages: chatContext.recentMessages,
         });
         const phasePrompt = getSystemPrompt(phaseType as PhaseType);
-        const systemMessage = `${contextBlock}\n\n---\n\n${phasePrompt}`;
+        const researchBlock = researchContext ? `\n\n${researchContext}` : '';
+        const systemMessage = `${contextBlock}${researchBlock}\n\n---\n\n${phasePrompt}`;
 
         // Fetch existing messages for conversation history
         const existingMessages = await getConversationMessages(conversationId);
