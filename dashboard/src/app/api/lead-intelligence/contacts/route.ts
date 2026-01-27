@@ -10,9 +10,8 @@ import { validateCreateContact, createValidationError } from '@/lib/api/lead-int
 import type { ContactListParams } from '@/lib/api/lead-intelligence-contacts-types';
 
 export async function GET(request: NextRequest) {
-  const authError = validateApiKey(request);
-  if (authError) return authError;
-
+  // No API key required for GET — this route is used by the dashboard client-side.
+  // POST remains protected below.
   try {
     const searchParams = request.nextUrl.searchParams;
 

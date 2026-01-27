@@ -10,6 +10,21 @@ function getContactsTable() {
 }
 
 // Map company_size bucket string to employee_count range
+// Allowed sort columns — prevents invalid column names from reaching Supabase
+const ALLOWED_SORT_COLUMNS = new Set([
+  'created_at',
+  'updated_at',
+  'last_name',
+  'first_name',
+  'title',
+  'status',
+  'last_activity_at',
+  'engagement_score',
+  'email',
+  'city',
+  'state',
+]);
+
 const COMPANY_SIZE_BUCKETS: Record<string, [number, number | null]> = {
   '1-10': [1, 10],
   '11-50': [11, 50],
@@ -21,7 +36,7 @@ const COMPANY_SIZE_BUCKETS: Record<string, [number, number | null]> = {
 export async function getContacts(params: ContactListParams): Promise<ContactListResponse> {
   const page = params.page ?? 1;
   const limit = params.limit ?? 25;
-  const sort = params.sort ?? 'created_at';
+  const sort = (params.sort && ALLOWED_SORT_COLUMNS.has(params.sort)) ? params.sort : 'created_at';
   const order = params.order ?? 'desc';
   const from = (page - 1) * limit;
   const to = from + limit - 1;

@@ -73,6 +73,7 @@ export function LeadIntelligenceContent({
       const res = await fetch(`/api/lead-intelligence/contacts?${params.toString()}`);
       if (!res.ok) throw new Error('Failed to fetch contacts');
       const data: ContactListResponse = await res.json();
+      if (!data.data || !data.meta) throw new Error('Invalid response shape');
       setContacts(data.data);
       setMeta(data.meta);
     } catch (err) {
