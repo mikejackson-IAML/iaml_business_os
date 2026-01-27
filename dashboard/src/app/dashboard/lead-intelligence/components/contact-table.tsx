@@ -8,6 +8,7 @@ import { Button } from '@/dashboard-kit/components/ui/button';
 import { ContactAvatar } from './contact-avatar';
 import { StatusBadge } from './status-badge';
 import { ContactRowActions } from './contact-row-actions';
+import { Checkbox } from '@/components/ui/checkbox';
 import type { Contact } from '@/lib/api/lead-intelligence-contacts-types';
 
 interface ContactTableProps {
@@ -16,6 +17,9 @@ interface ContactTableProps {
   onSort: (field: string, order: 'asc' | 'desc') => void;
   currentSort: string;
   currentOrder: 'asc' | 'desc';
+  selectedIds: Set<string>;
+  onSelectOne: (id: string, checked: boolean) => void;
+  onSelectAll: (checked: boolean) => void;
   pagination: {
     currentPage: number;
     totalPages: number;
@@ -60,8 +64,13 @@ export function ContactTable({
   onSort,
   currentSort,
   currentOrder,
+  selectedIds,
+  onSelectOne,
+  onSelectAll,
   pagination,
 }: ContactTableProps) {
+  const allSelected = contacts.length > 0 && contacts.every((c) => selectedIds.has(c.id));
+  const someSelected = contacts.some((c) => selectedIds.has(c.id)) && !allSelected;
   const handleSort = (columnId: string) => {
     const newOrder = currentSort === columnId && currentOrder === 'asc' ? 'desc' : 'asc';
     onSort(columnId, newOrder);
@@ -85,6 +94,13 @@ export function ContactTable({
           <table className="w-full">
             <thead>
               <tr className="border-b border-border">
+                <th className="px-4 py-3 w-10">
+                  <Checkbox
+                    checked={allSelected ? true : someSelected ? 'indeterminate' : false}
+                    onCheckedChange={(checked) => onSelectAll(checked === true)}
+                    aria-label="Select all contacts"
+                  />
+                </th>
                 {columns.map((col) => (
                   <th
                     key={col.id}
@@ -106,7 +122,7 @@ export function ContactTable({
               {isLoading ? (
                 Array.from({ length: 10 }).map((_, i) => (
                   <tr key={i} className="border-b border-border/50">
-                    <td colSpan={columns.length} className="px-4 py-3">
+                    <td colSpan={columns.length + 1} className="px-4 py-3">
                       <div className="h-10 bg-muted/50 rounded animate-pulse" />
                     </td>
                   </tr>
@@ -114,7 +130,7 @@ export function ContactTable({
               ) : contacts.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={columns.length}
+                    colSpan={columns.length + 1}
                     className="text-center py-12 text-muted-foreground"
                   >
                     No contacts found
@@ -126,6 +142,15 @@ export function ContactTable({
                     key={contact.id}
                     className="border-b border-border/50 hover:bg-muted/50 transition-colors"
                   >
+                    {/* Checkbox */}
+                    <td className="px-4 py-3 w-10">
+                      <Checkbox
+                        checked={selectedIds.has(contact.id)}
+                        onCheckedChange={(checked) => onSelectOne(contact.id, checked === true)}
+                        aria-label={`Select ${contact.first_name ?? ''} ${contact.last_name ?? ''}`}
+                      />
+                    </td>
+
                     {/* Name */}
                     <td className="px-4 py-3">
                       <Link
