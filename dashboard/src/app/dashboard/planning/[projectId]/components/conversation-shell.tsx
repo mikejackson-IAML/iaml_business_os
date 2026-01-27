@@ -1,45 +1,153 @@
 'use client';
 
-import { MessageSquare, Send } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/dashboard-kit/components/ui/card';
-import { Button } from '@/dashboard-kit/components/ui/button';
-import { Input } from '@/dashboard-kit/components/ui/input';
+import { useState, useCallback } from 'react';
+import { X } from 'lucide-react';
+import { Card, CardHeader, CardTitle } from '@/dashboard-kit/components/ui/card';
+import { MessageList } from './message-list';
+import { ChatInput } from './chat-input';
+import type {
+  PlanningProject,
+  PlanningPhase,
+  PlanningConversation,
+} from '@/dashboard-kit/types/departments/planning';
 
-export function ConversationShell() {
+interface ChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+interface ConversationShellProps {
+  projectId: string;
+  project: PlanningProject;
+  phases: PlanningPhase[];
+  initialConversations: PlanningConversation[];
+}
+
+export function ConversationShell({
+  projectId,
+  project,
+  // phases and initialConversations reserved for future use
+}: ConversationShellProps) {
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [conversationId, setConversationId] = useState<string | null>(null);
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [streamingContent, setStreamingContent] = useState('');
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSend = useCallback(
+    async (message: string) => {
+      // Add user message optimistically
+      const userMsg: ChatMessage = {
+        id: `user-${Date.now()}`,
+        role: 'user',
+        content: message,
+      };
+      setMessages((prev) => [...prev, userMsg]);
+      setIsStreaming(true);
+      setStreamingContent('');
+      setError(null);
+
+      try {
+        const res = await fetch('/api/planning/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            projectId,
+            phaseType: project.current_phase,
+            conversationId,
+            message,
+          }),
+        });
+
+        if (!res.ok) {
+          const errBody = await res.json().catch(() => ({ error: 'Request failed' }));
+          throw new Error(errBody.error || `HTTP ${res.status}`);
+        }
+
+        const reader = res.body?.getReader();
+        if (!reader) throw new Error('No response stream');
+
+        const decoder = new TextDecoder();
+        let accumulated = '';
+        let buffer = '';
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+
+          // Parse SSE lines
+          const lines = buffer.split('\n\n');
+          // Keep last potentially incomplete chunk
+          buffer = lines.pop() || '';
+
+          for (const line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed.startsWith('data: ')) continue;
+
+            try {
+              const data = JSON.parse(trimmed.slice(6));
+
+              if (data.type === 'conversation_created') {
+                setConversationId(data.conversationId);
+              } else if (data.type === 'text') {
+                accumulated += data.content;
+                setStreamingContent(accumulated);
+              } else if (data.type === 'done') {
+                // Add completed assistant message
+                setMessages((prev) => [
+                  ...prev,
+                  {
+                    id: `assistant-${Date.now()}`,
+                    role: 'assistant',
+                    content: accumulated,
+                  },
+                ]);
+                setStreamingContent('');
+                setIsStreaming(false);
+              } else if (data.type === 'error') {
+                throw new Error(data.message || 'Stream error');
+              }
+            } catch (parseErr) {
+              // Skip malformed SSE lines
+              if (parseErr instanceof SyntaxError) continue;
+              throw parseErr;
+            }
+          }
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Something went wrong');
+        setIsStreaming(false);
+        setStreamingContent('');
+      }
+    },
+    [projectId, project.current_phase, conversationId]
+  );
+
   return (
     <Card className="h-full min-h-[500px] flex flex-col">
       <CardHeader className="pb-2 border-b shrink-0">
         <CardTitle className="text-sm font-medium">Conversation</CardTitle>
       </CardHeader>
 
-      {/* Messages area - grows to fill */}
-      <CardContent className="flex-1 flex items-center justify-center">
-        <div className="text-center space-y-3">
-          <MessageSquare className="h-12 w-12 text-muted-foreground/30 mx-auto" />
-          <div>
-            <h3 className="text-sm font-medium text-muted-foreground">
-              Start a conversation
-            </h3>
-            <p className="text-xs text-muted-foreground/70 mt-1 max-w-[240px]">
-              Begin planning your idea with AI-guided conversations.
-            </p>
-          </div>
-        </div>
-      </CardContent>
+      <MessageList
+        messages={messages}
+        streamingContent={streamingContent}
+        isStreaming={isStreaming}
+      />
 
-      {/* Input area - stays at bottom */}
-      <div className="p-4 border-t shrink-0">
-        <div className="flex items-center gap-2">
-          <Input
-            placeholder="Type a message..."
-            disabled
-            className="flex-1"
-          />
-          <Button size="icon" variant="ghost" disabled>
-            <Send className="h-4 w-4" />
-          </Button>
+      {error && (
+        <div className="mx-4 mb-2 p-2 rounded bg-destructive/10 text-destructive text-xs flex items-center justify-between">
+          <span>{error}</span>
+          <button onClick={() => setError(null)} className="ml-2 shrink-0">
+            <X className="h-3 w-3" />
+          </button>
         </div>
-      </div>
+      )}
+
+      <ChatInput onSend={handleSend} disabled={isStreaming} />
     </Card>
   );
 }

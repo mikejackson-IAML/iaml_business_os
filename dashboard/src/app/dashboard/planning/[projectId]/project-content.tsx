@@ -118,7 +118,12 @@ export async function ProjectContent({ projectId }: ProjectContentProps) {
           {isIncubating(project) ? (
             <IncubationOverlay project={project} />
           ) : (
-            <ConversationShell />
+            <ConversationShell
+              projectId={projectId}
+              project={project}
+              phases={phases}
+              initialConversations={conversations}
+            />
           )}
         </div>
       </div>
