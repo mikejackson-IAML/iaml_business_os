@@ -5,6 +5,7 @@ import { Calendar, Star, TrendingUp, Users, CheckCircle, Clock, Mail, Phone, Fil
 import { Card, CardContent, CardHeader, CardTitle } from '@/dashboard-kit/components/ui/card';
 import { Button } from '@/dashboard-kit/components/ui/button';
 import type { Contact } from '@/lib/api/lead-intelligence-contacts-types';
+import { AISummaryCard } from '../../../components/ai-summary-card';
 
 interface OverviewTabProps {
   contactId: string;
@@ -89,6 +90,9 @@ export function OverviewTab({ contactId, contact }: OverviewTabProps) {
 
   return (
     <div className="space-y-6">
+      {/* AI Intelligence Summary */}
+      <AISummaryCard contactId={contactId} />
+
       {/* Key Stats Grid */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         <Card>
