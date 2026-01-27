@@ -4,8 +4,8 @@
 
 - **Milestone:** v1.0
 - **Current Phase:** 6 (Memory System) - In progress
-- **Current Plan:** 2 of 3
-- **Status:** In progress
+- **Current Plan:** 3 of 3
+- **Status:** Phase complete
 
 ## Progress
 
@@ -15,8 +15,8 @@ Phase 2: [████████████████] 3/3 plans COMPLETE
 Phase 3: [████████████████] 3/3 plans COMPLETE
 Phase 4: [████████████████] 4/4 plans COMPLETE
 Phase 5: [████████████████] 4/4 plans COMPLETE
-Phase 6: [████████            ] 2/3 plans IN PROGRESS
-Overall:  [█████████████████ ] 20/36 plans (~56%)
+Phase 6: [████████████████] 3/3 plans COMPLETE
+Overall:  [██████████████████] 21/36 plans (~58%)
 ```
 
 ## Phase Progress
@@ -28,7 +28,7 @@ Overall:  [█████████████████ ] 20/36 plans (~5
 | 3 | Project Detail View — Layout | Complete (3/3 plans) |
 | 4 | Conversation Engine | Complete (4/4 plans) |
 | 5 | Phase Transitions & Incubation | Complete (4/4 plans) |
-| 6 | Memory System | In Progress (1/3 plans) |
+| 6 | Memory System | Complete (3/3 plans) |
 | 7 | Document Generation | Not Started |
 | 8 | Deep Research Integration | Not Started |
 | 9 | Ready-to-Build Queue & Prioritization | Not Started |
@@ -79,6 +79,9 @@ Overall:  [█████████████████ ] 20/36 plans (~5
 | 06 | 01 | Empty array on extraction failure | Graceful degradation, don't block on AI errors |
 | 06 | 02 | Direct Supabase insert from chat route | Avoids circular API calls to memories endpoint |
 | 06 | 02 | void promise for fire-and-forget | Suppresses unhandled promise warnings cleanly |
+| 06 | 03 | Tabbed sidebar (Sessions / Ask AI) | Cleaner UX, Ask AI gets full sidebar height |
+| 06 | 03 | Inline search in ask route | Avoids unnecessary HTTP hop to search endpoint |
+| 06 | 03 | Deduplicated source badges by memory_type | Shows unique types not repeated entries |
 
 ## MVP Checkpoint
 
@@ -93,14 +96,14 @@ Phases 1-7 constitute the MVP. After Phase 7:
 ## Session Continuity
 
 - **Last session:** 2026-01-27
-- **Stopped at:** Completed 06-02-PLAN.md
+- **Stopped at:** Completed 06-03-PLAN.md (Phase 6 complete)
 - **Resume file:** None
 
 ## Last Activity
 
 - **Date:** 2026-01-27
-- **Activity:** Completed Phase 6 Plan 2 (Chat Wiring)
-- **Notes:** Wired memory extraction into chat route (fire-and-forget), added generateSummary to memory-extraction.ts, added PATCH endpoint for ending conversations with summary.
+- **Activity:** Completed Phase 6 Plan 3 (Semantic Search & Ask AI)
+- **Notes:** Built semantic search API, RAG-based Ask AI endpoint with Claude, and Ask AI sidebar panel with tabbed navigation.
 
 ## Phase 1 Deliverables
 
@@ -142,6 +145,7 @@ All 4 plans complete:
 
 ## Phase 6 Deliverables
 
-In progress (2/3 plans):
+All 3 plans complete:
 - **06-01:** Memory system foundation -- OpenAI embeddings, Claude memory extraction, API routes
 - **06-02:** Chat wiring -- fire-and-forget extraction in chat route, conversation summary generation, PATCH endpoint
+- **06-03:** Semantic search & Ask AI -- search API, RAG Ask AI endpoint, sidebar panel with tabbed navigation
