@@ -10,6 +10,7 @@ import { PhaseTransitionModal } from './phase-transition-modal';
 import { ForceCompleteButton } from './force-complete-button';
 import { ReadinessBadge } from './readiness-badge';
 import { DocSuggestionCard } from './doc-suggestion-card';
+import { ResearchSuggestionCard } from './research-suggestion-card';
 import { stripMarkers, INCUBATION_DURATIONS } from '@/lib/planning/phase-transitions';
 import {
   getPhaseLabel,
@@ -41,6 +42,7 @@ interface ConversationShellProps {
 export function ConversationShell({
   projectId,
   project,
+  phases,
   activeConversationId,
   initialMessages,
   onConversationsChange,
@@ -55,6 +57,7 @@ export function ConversationShell({
   const [showTransition, setShowTransition] = useState(false);
   const [readinessResult, setReadinessResult] = useState<{ passed: boolean; reason?: string } | null>(null);
   const [docSuggestions, setDocSuggestions] = useState<Array<{ docType: string; id: string }>>([]);
+  const [researchSuggestions, setResearchSuggestions] = useState<Array<{ query: string; id: string }>>([]);
   const pendingConversationId = useRef<string | null>(null);
   const selfInitiatedChange = useRef(false);
 
@@ -71,6 +74,7 @@ export function ConversationShell({
     setShowTransition(false);
     setReadinessResult(null);
     setDocSuggestions([]);
+    setResearchSuggestions([]);
   }, [activeConversationId, initialMessages]);
 
   const refreshConversations = useCallback(async () => {
@@ -151,6 +155,11 @@ export function ConversationShell({
                 setShowTransition(true);
               } else if (data.type === 'readiness_result') {
                 setReadinessResult({ passed: data.passed, reason: data.reason });
+              } else if (data.type === 'research_suggestion') {
+                setResearchSuggestions((prev) => [
+                  ...prev,
+                  { query: data.query, id: `research-${Date.now()}-${Math.random().toString(36).slice(2, 6)}` },
+                ]);
               } else if (data.type === 'doc_suggestion') {
                 setDocSuggestions((prev) => [
                   ...prev,
@@ -250,6 +259,25 @@ export function ConversationShell({
           }}
         />
       ))}
+
+      {researchSuggestions.map((suggestion) => {
+        const currentPhase = phases.find((p) => p.phase_type === project.current_phase);
+        return (
+          <ResearchSuggestionCard
+            key={suggestion.id}
+            query={suggestion.query}
+            projectId={projectId}
+            conversationId={conversationId || ''}
+            phaseId={currentPhase?.id || ''}
+            onCompleted={() => {
+              setResearchSuggestions((prev) => prev.filter((s) => s.id !== suggestion.id));
+            }}
+            onDismiss={() => {
+              setResearchSuggestions((prev) => prev.filter((s) => s.id !== suggestion.id));
+            }}
+          />
+        );
+      })}
 
       <ChatInput onSend={handleSend} disabled={isStreaming} />
 
