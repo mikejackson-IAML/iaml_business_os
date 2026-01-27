@@ -11,6 +11,7 @@ import { ContactTable } from './components/contact-table';
 import { ContactFilters } from './components/contact-filters';
 import { AISearchBar } from './components/ai-search-bar';
 import { FilterPills } from './components/filter-pills';
+import { BulkActionsBar } from './components/bulk-actions-bar';
 import type { Contact, ContactListParams, ContactListResponse } from '@/lib/api/lead-intelligence-contacts-types';
 
 interface LeadIntelligenceContentProps {
@@ -46,6 +47,7 @@ export function LeadIntelligenceContent({
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [searchValue, setSearchValue] = useState(searchParams.get('search') ?? '');
   const [aiFilters, setAiFilters] = useState<Partial<ContactListParams>>({});
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   // Count active filters (excluding page, limit, sort, order, search)
   const activeFilterCount = useMemo(() => {
@@ -81,6 +83,39 @@ export function LeadIntelligenceContent({
   const handleAiFilterClearAll = useCallback(() => {
     setAiFilters({});
   }, []);
+
+  // Selection handlers
+  const handleSelectOne = useCallback((id: string, checked: boolean) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (checked) {
+        next.add(id);
+      } else {
+        next.delete(id);
+      }
+      return next;
+    });
+  }, []);
+
+  const handleSelectAll = useCallback(
+    (checked: boolean) => {
+      if (checked) {
+        setSelectedIds(new Set(contacts.map((c) => c.id)));
+      } else {
+        setSelectedIds(new Set());
+      }
+    },
+    [contacts]
+  );
+
+  const handleClearSelection = useCallback(() => {
+    setSelectedIds(new Set());
+  }, []);
+
+  // Clear selection on filter/page/sort changes
+  useEffect(() => {
+    setSelectedIds(new Set());
+  }, [searchParams, aiFilters]);
 
   const fetchContacts = useCallback(async () => {
     setIsLoading(true);
@@ -210,6 +245,9 @@ export function LeadIntelligenceContent({
         onSort={handleSort}
         currentSort={searchParams.get('sort') ?? 'created_at'}
         currentOrder={(searchParams.get('order') as 'asc' | 'desc') ?? 'desc'}
+        selectedIds={selectedIds}
+        onSelectOne={handleSelectOne}
+        onSelectAll={handleSelectAll}
         pagination={{
           currentPage: meta.page,
           totalPages: meta.total_pages,
@@ -218,6 +256,17 @@ export function LeadIntelligenceContent({
           onPageChange: handlePageChange,
         }}
       />
+
+      {/* Bulk Actions Bar */}
+      {selectedIds.size > 0 && (
+        <BulkActionsBar
+          selectedCount={selectedIds.size}
+          onClear={handleClearSelection}
+          onAddToCampaign={() => {}}
+          onBulkEnrich={() => {}}
+          onBulkFollowUp={() => {}}
+        />
+      )}
     </div>
   );
 }
