@@ -3,9 +3,9 @@
 ## Current Status
 
 - **Milestone:** v1.0
-- **Current Phase:** 7 (Document Generation) - In progress
-- **Current Plan:** 4 of 5
-- **Status:** In progress — Plans 01/02/03/04 complete, Plan 05 remaining
+- **Current Phase:** 7 (Document Generation) - COMPLETE
+- **Current Plan:** 5 of 5
+- **Status:** Phase 7 complete — MVP milestone reached (Phases 1-7)
 
 ## Progress
 
@@ -16,7 +16,8 @@ Phase 3: [████████████████] 3/3 plans COMPLETE
 Phase 4: [████████████████] 4/4 plans COMPLETE
 Phase 5: [████████████████] 4/4 plans COMPLETE
 Phase 6: [████████████████] 4/4 plans COMPLETE
-Overall:  [████████████████████░] 26/36 plans (~72%)
+Phase 7: [████████████████] 5/5 plans COMPLETE  *** MVP ***
+Overall:  [███████████████████████░] 27/36 plans (~75%)
 ```
 
 ## Phase Progress
@@ -29,7 +30,7 @@ Overall:  [████████████████████░] 26/3
 | 4 | Conversation Engine | Complete (4/4 plans) |
 | 5 | Phase Transitions & Incubation | Complete (4/4 plans) |
 | 6 | Memory System | Complete (4/4 plans) |
-| 7 | Document Generation | In Progress (4/5 plans) |
+| 7 | Document Generation | Complete (5/5 plans) |
 | 8 | Deep Research Integration | Not Started |
 | 9 | Ready-to-Build Queue & Prioritization | Not Started |
 | 10 | Build Tracker | Not Started |
@@ -94,6 +95,8 @@ Overall:  [████████████████████░] 26/3
 | 07 | 04 | shadcn Dialog for document preview modal | Already in project, consistent with other modals |
 | 07 | 04 | Native select for version dropdown | Matches 02-02 convention |
 | 07 | 04 | Shared DOC_TYPE_LABELS import from doc-templates | Avoids duplicate label definitions |
+| 07 | 05 | Client-side ZIP generation via jszip | No server memory/temp files needed |
+| 07 | 05 | Dynamic imports for jszip/file-saver | Browser-only libraries loaded on demand |
 
 ## MVP Checkpoint
 
@@ -108,14 +111,14 @@ Phases 1-7 constitute the MVP. After Phase 7:
 ## Session Continuity
 
 - **Last session:** 2026-01-27
-- **Stopped at:** Completed 07-04-PLAN.md
+- **Stopped at:** Completed 07-05-PLAN.md (Phase 7 complete, MVP reached)
 - **Resume file:** None
 
 ## Last Activity
 
 - **Date:** 2026-01-27
-- **Activity:** Completed Phase 7 Plan 4 (Document UI Components)
-- **Notes:** Preview modal with markdown rendering, inline editor, version history dropdown, and updated DocumentsPanel with modal integration.
+- **Activity:** Completed Phase 7 Plan 5 (GSD Package Export)
+- **Notes:** ZIP export with .planning/ folder structure via jszip, Claude Code command copy. Phase 7 and MVP milestone complete.
 
 ## Phase 1 Deliverables
 
@@ -162,3 +165,12 @@ All 4 plans complete:
 - **06-02:** Chat wiring -- fire-and-forget extraction in chat route, conversation summary generation, PATCH endpoint
 - **06-03:** Semantic search & Ask AI -- search API, RAG Ask AI endpoint, sidebar panel with tabbed navigation
 - **06-04:** Global Cmd+K search -- cross-project search modal, layout integration
+
+## Phase 7 Deliverables
+
+All 5 plans complete:
+- **07-01:** Document templates and generation library (doc-templates.ts, doc-generation.ts)
+- **07-02:** Document API routes (generate, fetch, update with versioning)
+- **07-03:** Chat-to-document integration (markers, suggestion cards, auto-generation)
+- **07-04:** Document UI (preview modal, inline editor, version history)
+- **07-05:** GSD package export (ZIP download, Claude Code command copy)
