@@ -1,0 +1,147 @@
+{
+  "name": "Faculty Scheduler - Tier Advancement",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "cronExpression", "expression": "0 6 * * *"}]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Daily 6am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM faculty_scheduler.advance_tiers();",
+        "options": {}
+      },
+      "id": "advance-tiers",
+      "name": "Advance Tiers",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0],
+      "credentials": {"postgres": {"id": "EgmvZHbvINHsh6PR", "name": "Supabase Postgres"}}
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict"},
+          "conditions": [{"id": "condition-advanced", "leftValue": "={{ $json.programs_advanced }}", "rightValue": 0, "operator": {"type": "number", "operation": "gt"}}],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-advanced",
+      "name": "Programs Advanced?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM faculty_scheduler.get_recently_advanced_programs(10);",
+        "options": {}
+      },
+      "id": "get-advanced-programs",
+      "name": "Get Advanced Programs",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [660, -100],
+      "credentials": {"postgres": {"id": "EgmvZHbvINHsh6PR", "name": "Supabase Postgres"}}
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM faculty_scheduler.get_instructors_to_notify(\n  '{{ $json.program_id }}'::UUID,\n  {{ $json.current_tier }}\n);",
+        "options": {}
+      },
+      "id": "get-instructors",
+      "name": "Get Instructors to Notify",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [880, -100],
+      "credentials": {"postgres": {"id": "EgmvZHbvINHsh6PR", "name": "Supabase Postgres"}}
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.WEBHOOK_URL_NOTIFICATION_SENDER || 'https://n8n.realtyamp.ai/webhook/faculty-scheduler-notify' }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"program_id\": \"{{ $('Get Advanced Programs').item.json.program_id }}\",\n  \"program_name\": \"{{ $('Get Advanced Programs').item.json.program_name }}\",\n  \"city\": \"{{ $('Get Advanced Programs').item.json.city }}\",\n  \"state\": \"{{ $('Get Advanced Programs').item.json.state }}\",\n  \"venue\": \"{{ $('Get Advanced Programs').item.json.venue }}\",\n  \"start_date\": \"{{ $('Get Advanced Programs').item.json.start_date }}\",\n  \"tier\": {{ $('Get Advanced Programs').item.json.current_tier }},\n  \"tier_ends_at\": \"{{ $('Get Advanced Programs').item.json.tier_ends_at }}\",\n  \"instructors\": {{ JSON.stringify($json) }}\n}",
+        "options": {}
+      },
+      "id": "trigger-notifications",
+      "name": "Trigger Notification Sender",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1100, -100]
+    },
+    {
+      "parameters": {},
+      "id": "no-changes",
+      "name": "No Tier Changes",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [660, 100]
+    },
+    {
+      "parameters": {"errorTriggerType": "allErrors"},
+      "id": "error-trigger",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [0, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO n8n_brain.workflow_errors (workflow_id, workflow_name, error_message, error_node, error_details, created_at) VALUES ('23UINuBMopcU4LTm', 'Faculty Scheduler - Tier Advancement', '{{ $json.error.message }}', '{{ $json.error.node }}', '{{ JSON.stringify($json) }}'::JSONB, NOW());",
+        "options": {}
+      },
+      "id": "log-error-db",
+      "name": "Log Error to DB",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 300],
+      "credentials": {"postgres": {"id": "EgmvZHbvINHsh6PR", "name": "Supabase Postgres"}}
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"text\": \":rotating_light: *Faculty Scheduler - Tier Advancement Error*\\n\\n*Node:* {{ $json.error.node }}\\n*Error:* {{ $json.error.message }}\\n\\n<https://n8n.realtyamp.ai/workflow/23UINuBMopcU4LTm|View Workflow>\"}",
+        "options": {}
+      },
+      "id": "slack-alert",
+      "name": "Slack Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [440, 300]
+    }
+  ],
+  "connections": {
+    "Daily 6am CT": {"main": [[{"node": "Advance Tiers", "type": "main", "index": 0}]]},
+    "Advance Tiers": {"main": [[{"node": "Programs Advanced?", "type": "main", "index": 0}]]},
+    "Programs Advanced?": {"main": [[{"node": "Get Advanced Programs", "type": "main", "index": 0}], [{"node": "No Tier Changes", "type": "main", "index": 0}]]},
+    "Get Advanced Programs": {"main": [[{"node": "Get Instructors to Notify", "type": "main", "index": 0}]]},
+    "Get Instructors to Notify": {"main": [[{"node": "Trigger Notification Sender", "type": "main", "index": 0}]]},
+    "Error Trigger": {"main": [[{"node": "Log Error to DB", "type": "main", "index": 0}]]},
+    "Log Error to DB": {"main": [[{"node": "Slack Alert", "type": "main", "index": 0}]]}
+  },
+  "settings": {
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "executionTimeout": 3600,
+    "timezone": "America/Chicago"
+  }
+}

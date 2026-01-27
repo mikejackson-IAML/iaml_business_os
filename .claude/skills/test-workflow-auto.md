@@ -68,6 +68,23 @@ You have full access to:
 
 ---
 
+## PHASE 0: SET TERMINAL CONTEXT
+
+**Immediately upon starting a workflow test, set the terminal tab title:**
+
+```bash
+echo -ne "\033]0;Testing: ${WORKFLOW_NAME}\007"
+```
+
+This names the terminal tab so the user knows which workflow is being debugged.
+
+**Reset when done:**
+```bash
+echo -ne "\033]0;Claude Code\007"
+```
+
+---
+
 ## PHASE 1: LOAD AND ANALYZE WORKFLOW
 
 ### 1.1 Fetch Workflow
@@ -815,6 +832,84 @@ For everything else: **FIX IT.**
 
 ---
 
+## LIVE DEBUG NOTES
+
+When actively debugging a complex issue, capture learnings in `.planning/workflow-fixes/`:
+
+### Create Debug Session File
+
+```bash
+mkdir -p ".planning/workflow-fixes"
+cat > ".planning/workflow-fixes/${WORKFLOW_ID}-debug.md" << 'EOF'
+# Debug Session: ${WORKFLOW_NAME}
+
+**Workflow ID:** ${WORKFLOW_ID}
+**Started:** $(date)
+**Status:** In Progress
+
+## Problem
+
+[Initial error/issue description]
+
+## Investigation
+
+### Attempt 1
+- **Tried:**
+- **Result:**
+- **Learning:**
+
+### Attempt 2
+- **Tried:**
+- **Result:**
+- **Learning:**
+
+## Root Cause
+
+[Once identified]
+
+## Solution
+
+[What ultimately fixed it]
+
+## Learnings to Store
+
+- [ ] Store error→fix in n8n-brain
+- [ ] Update credential mapping if needed
+- [ ] Note any gotchas for similar workflows
+EOF
+```
+
+### Update During Debugging
+
+As you try different fixes, append to the file:
+
+```bash
+cat >> ".planning/workflow-fixes/${WORKFLOW_ID}-debug.md" << 'EOF'
+
+### Attempt N
+- **Tried:** [description]
+- **Result:** [success/failure and details]
+- **Learning:** [what we learned]
+EOF
+```
+
+### Commands for User Mid-Debug
+
+| Command | Action |
+|---------|--------|
+| `note: <text>` | Append a note to the debug file |
+| `root cause: <text>` | Record the root cause |
+| `solution: <text>` | Record the solution |
+| `abandon` | Mark as unfixable, move to next |
+
+### After Resolution
+
+1. Update the debug file with final solution
+2. Store learnings in n8n-brain
+3. Move file to `.planning/workflow-fixes/resolved/` or delete if trivial
+
+---
+
 ## STATE TRACKING
 
 Keep in conversation context:
@@ -824,6 +919,8 @@ Keep in conversation context:
 - `branches_tested[]`
 - `outputs_verified[]`
 - `error_handling_present: boolean`
+- `debug_session_file` - path to active debug notes (if complex issue)
+- `fix_attempt_count` - how many fixes attempted this session
 
 ---
 
