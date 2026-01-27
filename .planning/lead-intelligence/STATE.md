@@ -31,6 +31,7 @@ Progress: [██████░░░░] 50%
 | company-size-bucket-mapping | Map bucket strings to employee_count ranges | 02-01 | UI presents human-readable buckets |
 | haiku-for-search | Use Haiku for NL search parsing, Sonnet for summaries | 03-01 | Search is simple classification; summaries need nuance |
 | silent-filter-strip | Invalid AI-parsed filters silently removed | 03-01 | Better UX than error — show what we can parse |
+| ai-filter-separate-state | AI filters as React state, not URL params | 03-02 | Distinguish AI filters from manual; merge at fetch time |
 
 ## Blockers / Concerns
 
@@ -60,7 +61,8 @@ Resume file: None
 | 2026-01-27 | 02-07 complete | Build verification passed, fixed unrelated build error, checkpoint for human verification |
 | 2026-01-27 | Phase 2 verified | 6/6 must-haves passed, human approved. Fixes: sort black screen (removed API key auth from GET), data health undefined values (column name mapping) |
 | 2026-01-27 | 03-01 complete | AI backend: 2 POST endpoints, Claude helpers, types, DB migration for summary caching |
+| 2026-01-27 | 03-02 complete | AI search frontend: search bar with rotating placeholders, filter pills, integrated into contact list |
 | 2026-01-27 | 03-03 complete | AI summary card: shimmer loading, headline + expandable sections, age indicator, regenerate button, integrated into Overview tab |
 
 ---
-*Last updated: 2026-01-27 after 03-03 completion*
+*Last updated: 2026-01-27 after 03-02 completion (executed after 03-03)*
