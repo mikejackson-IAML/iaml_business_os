@@ -24,6 +24,8 @@ Progress: [==----] ~20%
 | no-programs-fk | No FK from attendance_records to programs | 01-01 | Avoid dependency on potentially missing table |
 | idempotent-alters | ALTER ADD COLUMN IF NOT EXISTS for existing tables | 01-01 | Pre-existing tables needed new columns |
 | migration-timestamp | Used 20260203 instead of 2026012700 | 01-01 | Timestamp conflict with planning_studio migration |
+| supabase-any-cast | Cast .from() as any for tables not in Database type | 01-02 | Generated types don't include new tables yet |
+| reuse-task-auth | Reuse validateApiKey from task-auth module | 01-02 | Consistent auth across all API routes |
 | supabase-type-assertion | Used `as never` for Supabase insert/update type mismatch | 01-03 | Record<string, unknown> vs Json type incompatibility; runtime compatible |
 
 ## Blockers / Concerns
@@ -42,6 +44,7 @@ Resume file: None
 |------|--------|-------|
 | 2026-01-27 | Project initialized | PRD reviewed, 60 requirements defined, 5-phase roadmap created |
 | 2026-01-27 | 01-01 complete | 11 tables + junction + view + triggers + indexes deployed to Supabase |
+| 2026-01-27 | 01-02 complete | Contacts CRUD API: 6 files, types + validation + queries + mutations + 2 routes |
 | 2026-01-27 | 01-03 complete | Companies CRUD API: 6 files, types + validation + queries + mutations + 2 routes |
 
 ---
