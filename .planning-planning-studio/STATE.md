@@ -3,9 +3,9 @@
 ## Current Status
 
 - **Milestone:** v1.0
-- **Current Phase:** 8 (Deep Research Integration) - In Progress
-- **Current Plan:** 3 of 4
-- **Status:** Plan 08-03 complete
+- **Current Phase:** 8 (Deep Research Integration) - Complete
+- **Current Plan:** 4 of 4
+- **Status:** Phase 8 complete
 
 ## Progress
 
@@ -17,7 +17,8 @@ Phase 4: [████████████████] 4/4 plans COMPLETE
 Phase 5: [████████████████] 4/4 plans COMPLETE
 Phase 6: [████████████████] 4/4 plans COMPLETE
 Phase 7: [████████████████] 5/5 plans COMPLETE  *** MVP ***
-Overall:  [██████████████████████████░] 30/36 plans (~83%)
+Phase 8: [████████████████] 4/4 plans COMPLETE
+Overall:  [████████████████████████████░] 31/36 plans (~86%)
 ```
 
 ## Phase Progress
@@ -31,7 +32,7 @@ Overall:  [███████████████████████
 | 5 | Phase Transitions & Incubation | Complete (4/4 plans) |
 | 6 | Memory System | Complete (4/4 plans) |
 | 7 | Document Generation | Complete (5/5 plans) |
-| 8 | Deep Research Integration | In Progress (3/4 plans) |
+| 8 | Deep Research Integration | Complete (4/4 plans) |
 | 9 | Ready-to-Build Queue & Prioritization | Not Started |
 | 10 | Build Tracker | Not Started |
 | 11 | Analytics & Polish | Not Started |
@@ -105,6 +106,9 @@ Overall:  [███████████████████████
 | 08 | 03 | Yellow pulse for pending, blue pulse for running | Visual differentiation of async states |
 | 08 | 03 | Manual research uses 'manual' placeholder IDs | Not tied to conversation/phase context |
 | 08 | 03 | 5-second polling for pending/running research | Balance responsiveness with API load |
+| 08 | 04 | Research context injected between context block and phase prompt | Scoped to conversation for relevance |
+| 08 | 04 | getCompletedResearchContext queries by conversation_id | Scoped results, not all project research |
+| 08 | 04 | router.refresh() reused from doc generation pattern | Consistency with existing sidebar update approach |
 
 ## MVP Checkpoint
 
@@ -119,14 +123,22 @@ Phases 1-7 constitute the MVP. After Phase 7:
 ## Session Continuity
 
 - **Last session:** 2026-01-27
-- **Stopped at:** Completed 08-03-PLAN.md
+- **Stopped at:** Completed 08-04-PLAN.md (Phase 8 complete)
 - **Resume file:** None
 
 ## Last Activity
 
 - **Date:** 2026-01-27
-- **Activity:** Completed Phase 8 Plan 3 (Research Panel UI)
-- **Notes:** ResearchPanel with real data, auto-refresh polling, results modal, manual research trigger.
+- **Activity:** Completed Phase 8 Plan 4 (Research Context Integration)
+- **Notes:** Research findings injected into Claude context, sidebar refresh on completion. Phase 8 complete.
+
+## Phase 8 Deliverables
+
+All 4 plans complete:
+- **08-01:** Research API with Perplexity integration, rate limiting, research markers in prompts
+- **08-02:** Research suggestion cards, SSE marker detection, approval flow
+- **08-03:** Research panel UI with polling, results modal, manual research trigger
+- **08-04:** Research context injection into chat, sidebar refresh on completion
 
 ## Phase 1 Deliverables
 
