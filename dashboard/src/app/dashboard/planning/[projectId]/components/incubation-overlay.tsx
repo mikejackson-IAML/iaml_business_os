@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import { Moon, FileText, MessageSquare } from 'lucide-react';
+import { useState, useEffect, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
+import { Moon, Save } from 'lucide-react';
 import { Card, CardContent } from '@/dashboard-kit/components/ui/card';
 import { Button } from '@/dashboard-kit/components/ui/button';
 import {
@@ -16,28 +17,64 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import type { PlanningProject } from '@/dashboard-kit/types/departments/planning';
-import { getApproximateIncubationTime } from '@/dashboard-kit/types/departments/planning';
+import { getIncubationTimeRemaining } from '@/dashboard-kit/types/departments/planning';
+import { skipIncubationAction, saveIncubationNoteAction } from '../../actions';
 
 interface IncubationOverlayProps {
   project: PlanningProject;
 }
 
 export function IncubationOverlay({ project }: IncubationOverlayProps) {
-  const [skipping, setSkipping] = useState(false);
-  const approximateTime = getApproximateIncubationTime(project);
+  const router = useRouter();
+  const [skipPending, startSkipTransition] = useTransition();
+  const [savePending, startSaveTransition] = useTransition();
+  const [timeRemaining, setTimeRemaining] = useState<string | null>(
+    getIncubationTimeRemaining(project)
+  );
+  const [noteText, setNoteText] = useState('');
+  const [savedNotes, setSavedNotes] = useState<string[]>([]);
+
+  // Live countdown timer -- updates every 60 seconds
+  useEffect(() => {
+    function tick() {
+      const remaining = getIncubationTimeRemaining(project);
+      setTimeRemaining(remaining);
+
+      // If incubation has expired, refresh to show conversation
+      if (!remaining) {
+        router.refresh();
+      }
+    }
+
+    const interval = setInterval(tick, 60_000);
+    return () => clearInterval(interval);
+  }, [project, router]);
 
   function handleSkipConfirm() {
-    setSkipping(true);
-    // Placeholder: actual skip action will be implemented in Phase 5
-    console.log('Skip incubation confirmed for project:', project.id);
-    // Reset after a moment to show we handled it
-    setTimeout(() => setSkipping(false), 1000);
+    startSkipTransition(async () => {
+      const result = await skipIncubationAction(project.id);
+      if (result.success) {
+        router.refresh();
+      }
+    });
+  }
+
+  function handleSaveNote() {
+    if (!noteText.trim()) return;
+    const text = noteText.trim();
+    startSaveTransition(async () => {
+      const result = await saveIncubationNoteAction(project.id, text);
+      if (result.success) {
+        setSavedNotes((prev) => [...prev, text]);
+        setNoteText('');
+      }
+    });
   }
 
   return (
     <Card className="h-full min-h-[500px] flex flex-col">
       <CardContent className="flex-1 flex items-center justify-center p-8">
-        <div className="text-center space-y-6 max-w-md">
+        <div className="text-center space-y-6 max-w-md w-full">
           {/* Icon */}
           <div className="flex justify-center">
             <div className="rounded-full bg-amber-500/10 p-4">
@@ -50,9 +87,9 @@ export function IncubationOverlay({ project }: IncubationOverlayProps) {
             <h2 className="text-xl font-semibold text-foreground">
               Let this idea marinate
             </h2>
-            {approximateTime && (
-              <p className="text-sm font-medium text-muted-foreground">
-                {approximateTime}
+            {timeRemaining && (
+              <p className="text-sm font-medium text-amber-600 dark:text-amber-400">
+                {timeRemaining}
               </p>
             )}
           </div>
@@ -63,16 +100,38 @@ export function IncubationOverlay({ project }: IncubationOverlayProps) {
             while you wait. Come back refreshed.
           </p>
 
-          {/* Action buttons */}
-          <div className="flex items-center justify-center gap-3">
-            <Button variant="outline" size="sm" disabled>
-              <FileText className="h-4 w-4 mr-2" />
-              View Documents
+          {/* Idea capture area */}
+          <div className="text-left space-y-3">
+            <textarea
+              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring resize-none"
+              rows={3}
+              placeholder="Jot down any ideas that come to mind..."
+              value={noteText}
+              onChange={(e) => setNoteText(e.target.value)}
+            />
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={handleSaveNote}
+              disabled={savePending || !noteText.trim()}
+            >
+              <Save className="h-4 w-4 mr-2" />
+              {savePending ? 'Saving...' : 'Save Note'}
             </Button>
-            <Button variant="outline" size="sm" disabled>
-              <MessageSquare className="h-4 w-4 mr-2" />
-              Review Conversations
-            </Button>
+
+            {/* Saved notes list */}
+            {savedNotes.length > 0 && (
+              <ul className="space-y-1 pt-2">
+                {savedNotes.map((note, i) => (
+                  <li
+                    key={i}
+                    className="text-sm text-muted-foreground bg-muted/50 rounded px-3 py-1.5"
+                  >
+                    {note}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
           {/* Skip incubation */}
@@ -83,9 +142,9 @@ export function IncubationOverlay({ project }: IncubationOverlayProps) {
                   variant="ghost"
                   size="sm"
                   className="text-muted-foreground text-xs"
-                  disabled={skipping}
+                  disabled={skipPending}
                 >
-                  {skipping ? 'Skipping...' : 'Skip Incubation'}
+                  {skipPending ? 'Skipping...' : 'Skip Incubation'}
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
