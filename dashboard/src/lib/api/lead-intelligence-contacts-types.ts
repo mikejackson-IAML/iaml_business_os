@@ -65,6 +65,22 @@ export interface ContactListParams {
   limit?: number;
   sort?: string;
   order?: 'asc' | 'desc';
+  // Filters
+  status?: string;
+  state?: string;
+  company_id?: string;
+  title?: string;
+  department?: string;
+  seniority_level?: string;
+  email_status?: string;
+  is_vip?: boolean;
+  engagement_score_min?: number;
+  engagement_score_max?: number;
+  created_after?: string;
+  created_before?: string;
+  search?: string;
+  company_size?: string;
+  program_id?: string;
 }
 
 export interface ContactListResponse {

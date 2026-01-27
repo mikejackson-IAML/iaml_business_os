@@ -36,6 +36,59 @@ export async function GET(request: NextRequest) {
     const order = searchParams.get('order');
     if (order === 'asc' || order === 'desc') params.order = order;
 
+    // Filter params
+    const status = searchParams.get('status');
+    if (status) params.status = status;
+
+    const state = searchParams.get('state');
+    if (state) params.state = state;
+
+    const companyId = searchParams.get('company_id');
+    if (companyId) params.company_id = companyId;
+
+    const title = searchParams.get('title');
+    if (title) params.title = title;
+
+    const department = searchParams.get('department');
+    if (department) params.department = department;
+
+    const seniorityLevel = searchParams.get('seniority_level');
+    if (seniorityLevel) params.seniority_level = seniorityLevel;
+
+    const emailStatus = searchParams.get('email_status');
+    if (emailStatus) params.email_status = emailStatus;
+
+    const isVip = searchParams.get('is_vip');
+    if (isVip === 'true') params.is_vip = true;
+    if (isVip === 'false') params.is_vip = false;
+
+    const engMin = searchParams.get('engagement_score_min');
+    if (engMin) {
+      const val = parseInt(engMin, 10);
+      if (!isNaN(val)) params.engagement_score_min = val;
+    }
+
+    const engMax = searchParams.get('engagement_score_max');
+    if (engMax) {
+      const val = parseInt(engMax, 10);
+      if (!isNaN(val)) params.engagement_score_max = val;
+    }
+
+    const createdAfter = searchParams.get('created_after');
+    if (createdAfter) params.created_after = createdAfter;
+
+    const createdBefore = searchParams.get('created_before');
+    if (createdBefore) params.created_before = createdBefore;
+
+    const search = searchParams.get('search');
+    if (search) params.search = search;
+
+    const companySize = searchParams.get('company_size');
+    if (companySize) params.company_size = companySize;
+
+    const programId = searchParams.get('program_id');
+    if (programId) params.program_id = programId;
+
     const result = await getContacts(params);
     return NextResponse.json(result);
   } catch (error) {
