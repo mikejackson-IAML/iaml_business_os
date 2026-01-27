@@ -36,9 +36,9 @@
 **Plans:** 3 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Complete database migration (all tables, views, triggers, indexes)
-- [ ] 01-02-PLAN.md — Contacts CRUD API (types, validation, queries, mutations, routes)
-- [ ] 01-03-PLAN.md — Companies CRUD API (types, validation, queries, mutations, routes)
+- [x] 01-01-PLAN.md — Complete database migration (all tables, views, triggers, indexes)
+- [x] 01-02-PLAN.md — Contacts CRUD API (types, validation, queries, mutations, routes)
+- [x] 01-03-PLAN.md — Companies CRUD API (types, validation, queries, mutations, routes)
 
 **Success Criteria** (what must be TRUE):
 1. All 11 tables + junction table created in Supabase with correct foreign keys and indexes
@@ -112,7 +112,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Database Schema & Core API | 0/3 | Planned | - |
+| 1. Database Schema & Core API | 3/3 | Complete | 2026-01-27 |
 | 2. Contact List, Profiles & Company Pages | 0/? | Not started | - |
 | 3. AI Search & Intelligence | 0/? | Not started | - |
 | 4. Integrations & Bulk Actions | 0/? | Not started | - |
@@ -120,4 +120,4 @@ Plans:
 
 ---
 *Roadmap created: 2026-01-27*
-*Last updated: 2026-01-27 after Phase 1 planning*
+*Last updated: 2026-01-27 after Phase 1 execution*
