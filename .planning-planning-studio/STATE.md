@@ -5,7 +5,7 @@
 - **Milestone:** v1.0
 - **Current Phase:** 7 (Document Generation) - In progress
 - **Current Plan:** 4 of 5
-- **Status:** In progress — Plans 01/02/04 complete, Plans 03/05 remaining
+- **Status:** In progress — Plans 01/02/03/04 complete, Plan 05 remaining
 
 ## Progress
 
@@ -16,7 +16,7 @@ Phase 3: [████████████████] 3/3 plans COMPLETE
 Phase 4: [████████████████] 4/4 plans COMPLETE
 Phase 5: [████████████████] 4/4 plans COMPLETE
 Phase 6: [████████████████] 4/4 plans COMPLETE
-Overall:  [████████████████████░] 25/36 plans (~69%)
+Overall:  [████████████████████░] 26/36 plans (~72%)
 ```
 
 ## Phase Progress
@@ -29,7 +29,7 @@ Overall:  [████████████████████░] 25/3
 | 4 | Conversation Engine | Complete (4/4 plans) |
 | 5 | Phase Transitions & Incubation | Complete (4/4 plans) |
 | 6 | Memory System | Complete (4/4 plans) |
-| 7 | Document Generation | In Progress (3/5 plans) |
+| 7 | Document Generation | In Progress (4/5 plans) |
 | 8 | Deep Research Integration | Not Started |
 | 9 | Ready-to-Build Queue & Prioritization | Not Started |
 | 10 | Build Tracker | Not Started |
@@ -88,6 +88,9 @@ Overall:  [████████████████████░] 25/3
 | 07 | 02 | Version list excludes content field | Lightweight responses for version history dropdown |
 | 07 | 01 | Re-exported DocumentType from planning types | Avoids type duplication across modules |
 | 07 | 01 | Lowercase phase names in PHASE_DOC_SUGGESTIONS | Matches PhaseType values directly |
+| 07 | 03 | detectAllDocGenerateMarkers returns array | Multi-marker support for responses with multiple doc suggestions |
+| 07 | 03 | Doc suggestions rendered between messages and input | Natural flow positioning for approval cards |
+| 07 | 03 | Router.refresh() for sidebar update | Triggers DocumentsPanel re-render after generation |
 | 07 | 04 | shadcn Dialog for document preview modal | Already in project, consistent with other modals |
 | 07 | 04 | Native select for version dropdown | Matches 02-02 convention |
 | 07 | 04 | Shared DOC_TYPE_LABELS import from doc-templates | Avoids duplicate label definitions |
