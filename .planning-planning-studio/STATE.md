@@ -4,7 +4,7 @@
 
 - **Milestone:** v1.0
 - **Current Phase:** 4 (Conversation Engine) - In Progress
-- **Current Plan:** 1 of TBD
+- **Current Plan:** 2 of TBD
 - **Status:** In progress
 
 ## Progress
@@ -13,8 +13,8 @@
 Phase 1: [████████████████] 4/4 plans COMPLETE
 Phase 2: [████████████████] 3/3 plans COMPLETE
 Phase 3: [████████████████] 3/3 plans COMPLETE
-Phase 4: [████-------------] 1/? plans IN PROGRESS
-Overall:  [██████████---] 11/36 plans (~31%)
+Phase 4: [████████---------] 2/? plans IN PROGRESS
+Overall:  [███████████--] 12/36 plans (~33%)
 ```
 
 ## Phase Progress
@@ -24,7 +24,7 @@ Overall:  [██████████---] 11/36 plans (~31%)
 | 1 | Database Foundation & Core UI Shell | Complete (4/4 plans) |
 | 2 | Pipeline View (Main Dashboard) | Complete (3/3 plans) |
 | 3 | Project Detail View — Layout | Complete (3/3 plans) |
-| 4 | Conversation Engine | In Progress (1/? plans) |
+| 4 | Conversation Engine | In Progress (2/? plans) |
 | 5 | Phase Transitions & Incubation | Not Started |
 | 6 | Memory System | Not Started |
 | 7 | Document Generation | Not Started |
@@ -60,6 +60,8 @@ Overall:  [██████████---] 11/36 plans (~31%)
 | 03 | 03 | Warm/amber tone for incubation overlay | CONTEXT.md specifies incubation as positive feature |
 | 04 | 01 | Template literals over handlebars for context block | Simpler, no extra dependency needed |
 | 04 | 01 | Modeled SSE pattern on mobile chat route | Consistency with existing streaming pattern |
+| 04 | 02 | Plain text during streaming, markdown after completion | Avoids partial markdown flickering |
+| 04 | 02 | Optimistic user message rendering | Snappy UX before API response |
 
 ## MVP Checkpoint
 
@@ -74,14 +76,14 @@ Phases 1-7 constitute the MVP. After Phase 7:
 ## Session Continuity
 
 - **Last session:** 2026-01-27
-- **Stopped at:** Completed 04-01-PLAN.md
+- **Stopped at:** Completed 04-02-PLAN.md
 - **Resume file:** None
 
 ## Last Activity
 
 - **Date:** 2026-01-27
-- **Activity:** Completed Plan 04-01 (Chat Backend)
-- **Notes:** Built streaming chat API endpoint, phase-specific system prompts for all 6 phases, chat helpers for message persistence and context loading. Phase 4 in progress.
+- **Activity:** Completed Plan 04-02 (Conversation UI Wiring)
+- **Notes:** Built functional chat interface with SSE streaming consumption, react-markdown rendering, auto-scroll, optimistic message display. Phase 4 in progress.
 
 ## Phase 1 Deliverables
 
@@ -109,3 +111,4 @@ All 3 plans complete:
 
 In progress:
 - **04-01:** Chat backend -- streaming API route, system prompts, chat helpers, message persistence
+- **04-02:** Conversation UI -- SSE streaming consumption, react-markdown rendering, chat input, auto-scroll
