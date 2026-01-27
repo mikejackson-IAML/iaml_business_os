@@ -11,6 +11,9 @@ import { StatusBadge } from '../../components/status-badge';
 import { OverviewTab } from './tabs/overview-tab';
 import { AttendanceTab } from './tabs/attendance-tab';
 import { EmailCampaignsTab } from './tabs/email-campaigns-tab';
+import { CompanyTab } from './tabs/company-tab';
+import { NotesTab } from './tabs/notes-tab';
+import { EnrichmentTab } from './tabs/enrichment-tab';
 import type { Contact } from '@/lib/api/lead-intelligence-contacts-types';
 
 interface ContactProfileContentProps {
