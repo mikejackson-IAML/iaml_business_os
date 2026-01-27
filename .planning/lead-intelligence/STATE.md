@@ -10,11 +10,11 @@ See: .planning/lead-intelligence/PROJECT.md (updated 2026-01-27)
 ## Current Position
 
 Phase: 2 of 5 (Contact List, Profiles & Company Pages)
-Plan: 2 of 6 complete (02-01 pending, 02-02 done)
+Plan: 2 of 6 complete (02-01 done, 02-02 done)
 Status: In progress
-Last activity: 2026-01-27 - Completed 02-02-PLAN.md (shared UI components)
+Last activity: 2026-01-27 - Completed 02-01-PLAN.md (Extended API Layer)
 
-Progress: [████░─────] 25%
+Progress: [████░░░░░░] 27%
 
 ## Accumulated Decisions
 
@@ -27,6 +27,8 @@ Progress: [████░─────] 25%
 | supabase-any-cast | Cast .from() as any for tables not in Database type | 01-02 | Generated types don't include new tables yet |
 | reuse-task-auth | Reuse validateApiKey from task-auth module | 01-02 | Consistent auth across all API routes |
 | supabase-type-assertion | Used `as never` for Supabase insert/update type mismatch | 01-03 | Record<string, unknown> vs Json type incompatibility; runtime compatible |
+| two-step-program-filter | Program filter uses two-step query (fetch IDs then .in()) | 02-01 | Supabase JS doesn't support subqueries |
+| company-size-bucket-mapping | Map bucket strings to employee_count ranges | 02-01 | UI presents human-readable buckets |
 
 ## Blockers / Concerns
 
@@ -35,7 +37,7 @@ Progress: [████░─────] 25%
 ## Session Continuity
 
 Last session: 2026-01-27
-Stopped at: Completed 02-02-PLAN.md (shared UI components)
+Stopped at: Completed 02-01-PLAN.md (Extended API Layer)
 Resume file: None
 
 ## Session Log
@@ -48,6 +50,7 @@ Resume file: None
 | 2026-01-27 | 01-03 complete | Companies CRUD API: 6 files, types + validation + queries + mutations + 2 routes |
 | 2026-01-27 | Phase 1 verified | 5/5 must-haves passed |
 | 2026-01-27 | 02-02 complete | 5 shared UI components: avatar, breadcrumbs, status badge, metrics bar, data health |
+| 2026-01-27 | 02-01 complete | Extended API: 15 contact filters, data health endpoint, 7 sub-resource routes |
 
 ---
-*Last updated: 2026-01-27 after 02-02 execution*
+*Last updated: 2026-01-27 after 02-01 execution*
