@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { MoreHorizontal, User, Rocket, Sparkles, Clock, Users, Star, Ban } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '@/dashboard-kit/components/ui/button';
 import {
   DropdownMenu,
@@ -20,6 +21,7 @@ import type { Contact } from '@/lib/api/lead-intelligence-contacts-types';
 
 interface ContactRowActionsProps {
   contact: Contact;
+  onAddToCampaign?: (contactId: string) => void;
 }
 
 function DisabledItem({
@@ -48,7 +50,7 @@ function DisabledItem({
   );
 }
 
-export function ContactRowActions({ contact }: ContactRowActionsProps) {
+export function ContactRowActions({ contact, onAddToCampaign }: ContactRowActionsProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -65,8 +67,34 @@ export function ContactRowActions({ contact }: ContactRowActionsProps) {
           </Link>
         </DropdownMenuItem>
 
-        <DisabledItem icon={Rocket} label="Add to Campaign" tooltip="Coming in Phase 4" />
-        <DisabledItem icon={Sparkles} label="Enrich Contact" tooltip="Coming in Phase 4" />
+        <DropdownMenuItem
+          onClick={() => onAddToCampaign?.(contact.id)}
+        >
+          <Rocket className="h-4 w-4 mr-2" />
+          Add to Campaign
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={async () => {
+            const promise = fetch(`/api/lead-intelligence/contacts/${contact.id}/enrich`, {
+              method: 'POST',
+            }).then(async (res) => {
+              const data = await res.json();
+              if (!res.ok || !data.success) throw new Error(data.error ?? 'No enrichment data found');
+              return data;
+            });
+            toast.promise(promise, {
+              loading: 'Enriching contact...',
+              success: (data) =>
+                data.updates_applied > 0
+                  ? `Updated ${data.updates_applied} field${data.updates_applied !== 1 ? 's' : ''}`
+                  : 'No new data to fill',
+              error: (err) => err.message ?? 'Enrichment failed',
+            });
+          }}
+        >
+          <Sparkles className="h-4 w-4 mr-2" />
+          Enrich Contact
+        </DropdownMenuItem>
         <DisabledItem icon={Clock} label="Set Follow-up" tooltip="Coming in Phase 4" />
         <DisabledItem icon={Users} label="Find Colleagues" tooltip="Coming in Phase 4" />
 

@@ -5,6 +5,17 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { Search, SlidersHorizontal } from 'lucide-react';
 import { Input } from '@/dashboard-kit/components/ui/input';
 import { Button } from '@/dashboard-kit/components/ui/button';
+import { toast } from 'sonner';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { MetricsBar } from './components/metrics-bar';
 import { DataHealthSection } from './components/data-health-section';
 import { ContactTable } from './components/contact-table';
@@ -12,6 +23,7 @@ import { ContactFilters } from './components/contact-filters';
 import { AISearchBar } from './components/ai-search-bar';
 import { FilterPills } from './components/filter-pills';
 import { BulkActionsBar } from './components/bulk-actions-bar';
+import { AddToCampaignModal } from './components/add-to-campaign-modal';
 import type { Contact, ContactListParams, ContactListResponse } from '@/lib/api/lead-intelligence-contacts-types';
 
 interface LeadIntelligenceContentProps {
@@ -48,6 +60,8 @@ export function LeadIntelligenceContent({
   const [searchValue, setSearchValue] = useState(searchParams.get('search') ?? '');
   const [aiFilters, setAiFilters] = useState<Partial<ContactListParams>>({});
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [campaignModalOpen, setCampaignModalOpen] = useState(false);
+  const [campaignContactIds, setCampaignContactIds] = useState<string[]>([]);
 
   // Count active filters (excluding page, limit, sort, order, search)
   const activeFilterCount = useMemo(() => {
@@ -142,6 +156,16 @@ export function LeadIntelligenceContent({
       setIsLoading(false);
     }
   }, [searchParams, aiFilters]);
+
+  const handleAddToCampaign = useCallback((ids: string[]) => {
+    setCampaignContactIds(ids);
+    setCampaignModalOpen(true);
+  }, []);
+
+  const handleCampaignSuccess = useCallback(() => {
+    setSelectedIds(new Set());
+    fetchContacts();
+  }, [fetchContacts]);
 
   // Refetch on URL param changes or AI filter changes
   useEffect(() => {
@@ -248,6 +272,7 @@ export function LeadIntelligenceContent({
         selectedIds={selectedIds}
         onSelectOne={handleSelectOne}
         onSelectAll={handleSelectAll}
+        onAddToCampaign={(contactId) => handleAddToCampaign([contactId])}
         pagination={{
           currentPage: meta.page,
           totalPages: meta.total_pages,
@@ -262,11 +287,19 @@ export function LeadIntelligenceContent({
         <BulkActionsBar
           selectedCount={selectedIds.size}
           onClear={handleClearSelection}
-          onAddToCampaign={() => {}}
+          onAddToCampaign={() => handleAddToCampaign(Array.from(selectedIds))}
           onBulkEnrich={() => {}}
           onBulkFollowUp={() => {}}
         />
       )}
+
+      {/* Add to Campaign Modal */}
+      <AddToCampaignModal
+        open={campaignModalOpen}
+        onOpenChange={setCampaignModalOpen}
+        contactIds={campaignContactIds}
+        onSuccess={handleCampaignSuccess}
+      />
     </div>
   );
 }

@@ -20,6 +20,7 @@ interface ContactTableProps {
   selectedIds: Set<string>;
   onSelectOne: (id: string, checked: boolean) => void;
   onSelectAll: (checked: boolean) => void;
+  onAddToCampaign?: (contactId: string) => void;
   pagination: {
     currentPage: number;
     totalPages: number;
@@ -67,6 +68,7 @@ export function ContactTable({
   selectedIds,
   onSelectOne,
   onSelectAll,
+  onAddToCampaign,
   pagination,
 }: ContactTableProps) {
   const allSelected = contacts.length > 0 && contacts.every((c) => selectedIds.has(c.id));
@@ -198,7 +200,7 @@ export function ContactTable({
 
                     {/* Actions */}
                     <td className="px-4 py-3">
-                      <ContactRowActions contact={contact} />
+                      <ContactRowActions contact={contact} onAddToCampaign={onAddToCampaign} />
                     </td>
                   </tr>
                 ))
