@@ -3,9 +3,9 @@
 ## Current Status
 
 - **Milestone:** v1.0
-- **Current Phase:** 5 (Phase Transitions & Incubation) - In Progress
-- **Current Plan:** 3 of 4
-- **Status:** In progress
+- **Current Phase:** 5 (Phase Transitions & Incubation) - Complete
+- **Current Plan:** 4 of 4
+- **Status:** Phase complete
 
 ## Progress
 
@@ -14,8 +14,8 @@ Phase 1: [████████████████] 4/4 plans COMPLETE
 Phase 2: [████████████████] 3/3 plans COMPLETE
 Phase 3: [████████████████] 3/3 plans COMPLETE
 Phase 4: [████████████████] 4/4 plans COMPLETE
-Phase 5: [████████████----] 3/4 plans
-Overall:  [████████████████] 17/36 plans (~47%)
+Phase 5: [████████████████] 4/4 plans COMPLETE
+Overall:  [████████████████] 18/36 plans (~50%)
 ```
 
 ## Phase Progress
@@ -26,7 +26,7 @@ Overall:  [████████████████] 17/36 plans (~47%)
 | 2 | Pipeline View (Main Dashboard) | Complete (3/3 plans) |
 | 3 | Project Detail View — Layout | Complete (3/3 plans) |
 | 4 | Conversation Engine | Complete (4/4 plans) |
-| 5 | Phase Transitions & Incubation | In Progress (3/4 plans) |
+| 5 | Phase Transitions & Incubation | Complete (4/4 plans) |
 | 6 | Memory System | Not Started |
 | 7 | Document Generation | Not Started |
 | 8 | Deep Research Integration | Not Started |
@@ -71,6 +71,9 @@ Overall:  [████████████████] 17/36 plans (~47%)
 | 05 | 01 | ensureAllPhasesExist auto-starts capture | First phase should be in_progress on creation |
 | 05 | 02 | Used existing @/components/ui/alert-dialog and dropdown-menu | Already in project, consistent with action-center patterns |
 | 05 | 03 | Replaced placeholder buttons with idea capture textarea | Plan specified note capture over disabled buttons |
+| 05 | 04 | All phases clickable except current | Current phase click is no-op; all others navigate |
+| 05 | 04 | AlertDialog for forward skips | Consistent with force-complete pattern from 05-02 |
+| 05 | 04 | project.current_phase as source of truth | Phase records can lag; current_phase field is authoritative |
 
 ## MVP Checkpoint
 
@@ -85,14 +88,14 @@ Phases 1-7 constitute the MVP. After Phase 7:
 ## Session Continuity
 
 - **Last session:** 2026-01-27
-- **Stopped at:** Completed 05-02-PLAN.md
+- **Stopped at:** Completed 05-04-PLAN.md (Phase 5 complete)
 - **Resume file:** None
 
 ## Last Activity
 
 - **Date:** 2026-01-27
-- **Activity:** Completed Phase 5 Plan 2 (Phase Transition UI)
-- **Notes:** Created PhaseTransitionModal, ForceCompleteButton, ReadinessBadge components. Wired conversation shell to handle phase_complete and readiness_result SSE events with marker stripping.
+- **Activity:** Completed Phase 5 Plan 4 (Phase Navigation via Progress Bar)
+- **Notes:** Made all phases clickable in progress bar, added forward-skip warning dialog, fixed navigation bugs found during verification.
 
 ## Phase 1 Deliverables
 
@@ -123,3 +126,11 @@ All 4 plans complete:
 - **04-02:** Conversation UI -- SSE streaming consumption, react-markdown rendering, chat input, auto-scroll
 - **04-03:** Session management -- interactive sidebar, API routes, shared state via ProjectDetailClient
 - **04-04:** End-to-end verification -- user-confirmed working, SSE remount bug fixed
+
+## Phase 5 Deliverables
+
+All 4 plans complete:
+- **05-01:** Phase transition logic -- completion detection, SSE markers, server actions, incubation timer
+- **05-02:** Phase transition UI -- modal, force-complete button, readiness badge, SSE event handling
+- **05-03:** Incubation overlay -- countdown timer, idea capture textarea, skip incubation flow
+- **05-04:** Phase navigation -- clickable progress bar, forward-skip warnings, navigation bug fixes
