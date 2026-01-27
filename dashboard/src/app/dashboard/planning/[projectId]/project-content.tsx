@@ -9,13 +9,9 @@ import {
   getProjectDocuments,
   getProjectResearch,
 } from '@/lib/api/planning-queries';
-import { getStatusLabel, isIncubating } from '@/dashboard-kit/types/departments/planning';
+import { getStatusLabel } from '@/dashboard-kit/types/departments/planning';
 import { PhaseProgressBar } from './components/phase-progress-bar';
-import { SessionsPanel } from './components/sessions-panel';
-import { DocumentsPanel } from './components/documents-panel';
-import { ResearchPanel } from './components/research-panel';
-import { ConversationShell } from './components/conversation-shell';
-import { IncubationOverlay } from './components/incubation-overlay';
+import { ProjectDetailClient } from './project-detail-client';
 
 interface ProjectContentProps {
   projectId: string;
@@ -104,29 +100,14 @@ export async function ProjectContent({ projectId }: ProjectContentProps) {
         </CardContent>
       </Card>
 
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        {/* Left Sidebar */}
-        <div className="space-y-4">
-          <SessionsPanel conversations={conversations} />
-          <DocumentsPanel documents={documents} />
-          <ResearchPanel research={research} />
-        </div>
-
-        {/* Main Conversation Area */}
-        <div className="lg:col-span-3">
-          {isIncubating(project) ? (
-            <IncubationOverlay project={project} />
-          ) : (
-            <ConversationShell
-              projectId={projectId}
-              project={project}
-              phases={phases}
-              initialConversations={conversations}
-            />
-          )}
-        </div>
-      </div>
+      {/* Main Content Grid - Client component for session management */}
+      <ProjectDetailClient
+        project={project}
+        phases={phases}
+        conversations={conversations}
+        documents={documents}
+        research={research}
+      />
     </div>
   );
 }

@@ -23,9 +23,17 @@ function formatRelativeTime(dateStr: string): string {
 
 interface SessionsPanelProps {
   conversations: PlanningConversation[];
+  activeConversationId: string | null;
+  onSelectSession: (conversationId: string) => void;
+  onNewSession: () => void;
 }
 
-export function SessionsPanel({ conversations }: SessionsPanelProps) {
+export function SessionsPanel({
+  conversations,
+  activeConversationId,
+  onSelectSession,
+  onNewSession,
+}: SessionsPanelProps) {
   return (
     <Card>
       <CardHeader className="pb-2">
@@ -34,7 +42,12 @@ export function SessionsPanel({ conversations }: SessionsPanelProps) {
             <MessageSquare className="h-4 w-4" />
             Sessions
           </CardTitle>
-          <Button variant="ghost" size="sm" disabled className="text-xs">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-xs"
+            onClick={onNewSession}
+          >
             New Session
           </Button>
         </div>
@@ -51,9 +64,15 @@ export function SessionsPanel({ conversations }: SessionsPanelProps) {
         ) : (
           <div className="space-y-1">
             {conversations.map((conversation) => (
-              <div
+              <button
                 key={conversation.id}
-                className="p-2 rounded-md hover:bg-muted/50 cursor-pointer transition-colors"
+                type="button"
+                onClick={() => onSelectSession(conversation.id)}
+                className={`w-full text-left p-2 rounded-md hover:bg-muted/50 cursor-pointer transition-colors ${
+                  activeConversationId === conversation.id
+                    ? 'bg-muted border-l-2 border-primary'
+                    : ''
+                }`}
               >
                 <div className="flex items-start justify-between gap-2">
                   <p className="text-sm font-medium truncate">
@@ -73,7 +92,7 @@ export function SessionsPanel({ conversations }: SessionsPanelProps) {
                       : conversation.summary}
                   </p>
                 )}
-              </div>
+              </button>
             ))}
           </div>
         )}

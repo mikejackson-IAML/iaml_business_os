@@ -22,18 +22,37 @@ interface ConversationShellProps {
   project: PlanningProject;
   phases: PlanningPhase[];
   initialConversations: PlanningConversation[];
+  activeConversationId: string | null;
+  initialMessages: ChatMessage[];
+  onConversationsChange: (conversations: PlanningConversation[]) => void;
+  onActiveConversationChange: (conversationId: string | null) => void;
 }
 
 export function ConversationShell({
   projectId,
   project,
-  // phases and initialConversations reserved for future use
+  activeConversationId,
+  initialMessages,
+  onConversationsChange,
+  onActiveConversationChange,
 }: ConversationShellProps) {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [conversationId, setConversationId] = useState<string | null>(null);
+  const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
+  const [conversationId, setConversationId] = useState<string | null>(activeConversationId);
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamingContent, setStreamingContent] = useState('');
   const [error, setError] = useState<string | null>(null);
+
+  const refreshConversations = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/planning/conversations?projectId=${projectId}`);
+      if (res.ok) {
+        const convs = await res.json();
+        onConversationsChange(convs);
+      }
+    } catch {
+      // Silently fail on refresh
+    }
+  }, [projectId, onConversationsChange]);
 
   const handleSend = useCallback(
     async (message: string) => {
@@ -92,6 +111,8 @@ export function ConversationShell({
 
               if (data.type === 'conversation_created') {
                 setConversationId(data.conversationId);
+                onActiveConversationChange(data.conversationId);
+                refreshConversations();
               } else if (data.type === 'text') {
                 accumulated += data.content;
                 setStreamingContent(accumulated);
@@ -107,6 +128,7 @@ export function ConversationShell({
                 ]);
                 setStreamingContent('');
                 setIsStreaming(false);
+                refreshConversations();
               } else if (data.type === 'error') {
                 throw new Error(data.message || 'Stream error');
               }
@@ -123,7 +145,7 @@ export function ConversationShell({
         setStreamingContent('');
       }
     },
-    [projectId, project.current_phase, conversationId]
+    [projectId, project.current_phase, conversationId, onActiveConversationChange, refreshConversations]
   );
 
   return (
