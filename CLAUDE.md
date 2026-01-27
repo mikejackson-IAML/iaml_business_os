@@ -14,9 +14,7 @@ n8n-brain is an MCP server that provides learning capabilities for n8n workflow 
 - **Scores confidence** - Determines when to ask vs. act autonomously
 - **Tracks workflow testing** - Registry of all workflows with test status
 
-### How Confidence Works
-
-When building n8n workflows, n8n-brain calculates a confidence score (0-100):
+### Confidence Scoring
 
 | Score | Behavior |
 |-------|----------|
@@ -24,42 +22,7 @@ When building n8n workflows, n8n-brain calculates a confidence score (0-100):
 | 40-79 | **Do & Verify** - Build and test, but verify before activating |
 | 80-100 | **Autonomous** - Can act without asking |
 
-The score is based on:
-- Pattern matches (have we built something similar?)
-- Credentials mapped (do we know the credential IDs?)
-- Error knowledge (do we know common errors for these nodes?)
-- Past success rate (how often have similar tasks succeeded?)
-- Risk level (high-risk services like payments reduce confidence)
-
-### Using n8n-brain Tools
-
-**Before building a workflow:**
-```
-calculate_confidence({
-  task_description: "Sync Airtable to GHL when records are created",
-  services: ["airtable", "ghl"],
-  node_types: ["airtableTrigger", "httpRequest"]
-})
-```
-
-**After a successful build:**
-```
-store_pattern({
-  name: "Airtable to GHL sync",
-  description: "...",
-  workflow_json: {...},
-  services: ["airtable", "ghl"],
-  node_types: ["airtableTrigger", "httpRequest"]
-})
-```
-
-**When encountering an error:**
-```
-lookup_error_fix({
-  error_message: "The resource could not be found",
-  node_type: "n8n-nodes-base.postgres"
-})
-```
+Score factors: pattern matches, credential mappings, error knowledge, past success rate, risk level.
 
 ### Available Tools
 
@@ -71,85 +34,15 @@ lookup_error_fix({
 | Confidence | `calculate_confidence`, `record_action` |
 | Preferences | `set_preference`, `get_preferences` |
 
-### Workflow Testing Registry
+### Workflow Testing
 
-Track which workflows have been tested and verified:
-
-```sql
--- See testing progress
-SELECT * FROM n8n_brain.workflow_test_summary;
-
--- See workflows needing attention (prioritized)
-SELECT * FROM n8n_brain.workflows_needing_attention;
-
--- Register a new workflow
-SELECT n8n_brain.register_workflow(
-  'WORKFLOW_ID'::TEXT,
-  'Workflow Name'::TEXT,
-  'category'::TEXT,
-  'Department'::TEXT,
-  'schedule'::TEXT,
-  'Daily 6am'::TEXT,
-  'Description'::TEXT,
-  ARRAY['service1', 'service2']::TEXT[],
-  TRUE,  -- has_error_handling
-  TRUE,  -- has_slack_alerts
-  TRUE   -- has_dashboard_logging
-);
-
--- Mark workflow as tested
-SELECT n8n_brain.mark_workflow_tested(
-  'WORKFLOW_ID'::TEXT,
-  'verified'::TEXT,
-  'tester_name'::TEXT,
-  'Test notes here'::TEXT
-);
-```
-
-**Test Status Values:**
-| Status | Meaning |
-|--------|---------|
-| `untested` | Never tested |
-| `in_progress` | Currently being tested |
-| `tested` | Tested but not verified in production |
-| `verified` | Verified working in production |
-| `needs_review` | Was working, needs re-testing |
-| `broken` | Known to be broken |
-
-### Automated Workflow Testing
-
-Use the `/test-workflow` skill to automatically test n8n workflows:
-
-```bash
-# Test a workflow by ID or name
-/test-workflow HnZQopXL7xjZnX3O
-/test-workflow "Airtable to GHL Sync"
-
-# Create a test specification
-/test-workflow --create-spec
-
-# Run specific test case
-/test-workflow HnZQopXL7xjZnX3O --test-case happy_path
-```
-
-The testing agent:
-1. Executes workflows with test data
-2. Diagnoses failures using n8n-brain error lookups
-3. Applies fixes automatically
-4. Learns from successful fixes
-5. Escalates to human when stuck
-
-**Test specifications** are stored in `.planning/workflow-tests/specs/`
-
-**Architecture:** `business-os/docs/architecture/N8N-WORKFLOW-TESTING-AGENT.md`
+Use `/test-workflow` to test n8n workflows automatically. The registry tracks test status (`untested`, `in_progress`, `tested`, `verified`, `needs_review`, `broken`). Use `n8n_brain.register_workflow()` and `n8n_brain.mark_workflow_tested()` for registry management. Test specs stored in `.planning/workflow-tests/specs/`. Architecture: `business-os/docs/architecture/N8N-WORKFLOW-TESTING-AGENT.md`.
 
 ## Understanding Confirmation (Auto-Trigger)
 
-Before starting any ambiguous coding task, **automatically invoke the `/understand` skill** to confirm interpretation. This prevents wasted effort from misunderstood requirements.
+Before starting any ambiguous coding task, **automatically invoke the `/understand` skill** to confirm interpretation.
 
 ### When to Auto-Trigger
-
-Proactively use `/understand` when the request has:
 
 | Signal | Example |
 |--------|---------|
@@ -161,19 +54,10 @@ Proactively use `/understand` when the request has:
 
 ### When to Skip
 
-Don't trigger when:
-- User gives explicit file + change: "Change color in Button.tsx to blue"
-- Detailed specs provided: "Use JWT, httpOnly cookie, add /api/auth/login"
-- Tiny scope: "Fix typo in README"
+- User gives explicit file + change
+- Detailed specs provided
+- Tiny scope (typo fixes)
 - User says "just do it" or "skip confirmation"
-
-### What It Does
-
-1. Reads back interpretation in plain English
-2. Maps user language to technical terms (teaches vocabulary)
-3. Shows planned approach and files to touch
-4. If confidence < 80%, asks clarifying questions
-5. Waits for user confirmation before building
 
 ### Confidence Thresholds
 
@@ -190,8 +74,6 @@ Reference: `.claude/skills/understand.md`
 ## Documentation Requirements (MANDATORY)
 
 All Business OS components MUST include documentation with CEO summaries. This is non-negotiable.
-
-### CEO Summary Format
 
 Every document must start with a CEO Summary immediately after the title:
 
@@ -217,14 +99,28 @@ Before considering any component "done":
 - [ ] Central README (`business-os/workflows/README.md` for workflows) updated if applicable
 - [ ] Related docs linked where appropriate
 
-Reference: `business-os/docs/DOCUMENTATION-STANDARDS.md`
+Full standards: `business-os/docs/DOCUMENTATION-STANDARDS.md`
 
 ## Reference Documents
 
-- Business OS architecture: @business-os/docs/architecture/
-- Documentation standards: @business-os/docs/DOCUMENTATION-STANDARDS.md
-- Campaign tracking: @business-os/docs/architecture/08-CAMPAIGN-TRACKING.md
-- n8n-brain schema: @supabase/migrations/20260111_create_n8n_brain_schema.sql
+Read these files when working on specific domains:
+
+| Domain | File Path |
+|--------|-----------|
+| Documentation standards | `business-os/docs/DOCUMENTATION-STANDARDS.md` |
+| Campaign tracking schema | `business-os/docs/architecture/08-CAMPAIGN-TRACKING.md` |
+| n8n-brain schema | `supabase/migrations/20260111_create_n8n_brain_schema.sql` |
+| Business OS architecture | `business-os/docs/architecture/` |
+
+## Supabase Migrations
+
+Run migrations automatically using the CLI. Do not ask the user to run these manually.
+
+```bash
+cd "/Users/mike/IAML Business OS" && supabase db push
+```
+
+Project: business-os-production (already linked). Credentials configured in `.env.local`.
 
 ## Key Integrations
 
@@ -247,54 +143,11 @@ Reference: `business-os/docs/DOCUMENTATION-STANDARDS.md`
 
 ### n8n-brain Setup
 
-1. **Run the Supabase migration:**
-   ```bash
-   # In Supabase SQL editor, run:
-   # supabase/migrations/20260111_create_n8n_brain_schema.sql
-   ```
+1. Run migration: `supabase/migrations/20260111_create_n8n_brain_schema.sql` in Supabase SQL editor
+2. Install: `cd mcp-servers/n8n-brain && npm install`
+3. Bootstrap: `SUPABASE_URL=your-url SUPABASE_SERVICE_KEY=your-key npm run bootstrap`
+4. Add to Claude Code MCP config with `SUPABASE_URL` and `SUPABASE_SERVICE_KEY` env vars
 
-2. **Install dependencies:**
-   ```bash
-   cd mcp-servers/n8n-brain
-   npm install
-   ```
+### n8n-mcp Setup (Optional)
 
-3. **Bootstrap data:**
-   ```bash
-   SUPABASE_URL=your-url SUPABASE_SERVICE_KEY=your-key npm run bootstrap
-   ```
-
-4. **Add to Claude Code MCP config:**
-   ```json
-   {
-     "mcpServers": {
-       "n8n-brain": {
-         "command": "node",
-         "args": ["/path/to/mcp-servers/n8n-brain/index.js"],
-         "env": {
-           "SUPABASE_URL": "your-supabase-url",
-           "SUPABASE_SERVICE_KEY": "your-service-key"
-         }
-       }
-     }
-   }
-   ```
-
-### n8n-mcp Setup (Optional - for full n8n integration)
-
-For node schemas, validation, and workflow management, install [n8n-mcp](https://github.com/czlonkowski/n8n-mcp):
-
-```json
-{
-  "mcpServers": {
-    "n8n-mcp": {
-      "command": "npx",
-      "args": ["-y", "@anthropic/n8n-mcp"],
-      "env": {
-        "N8N_API_URL": "https://n8n.realtyamp.ai",
-        "N8N_API_KEY": "your-n8n-api-key"
-      }
-    }
-  }
-}
-```
+For node schemas, validation, and workflow management: [n8n-mcp](https://github.com/czlonkowski/n8n-mcp). Configure with `N8N_API_URL` and `N8N_API_KEY` env vars.
