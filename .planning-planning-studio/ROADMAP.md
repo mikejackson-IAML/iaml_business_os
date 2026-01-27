@@ -240,14 +240,15 @@ Plans:
 
 **Goal:** Generate and manage planning documents
 
+**Status:** Complete (2026-01-27)
 **Plans:** 5 plans
 
 Plans:
-- [ ] 07-01-PLAN.md — Document templates and generation library
-- [ ] 07-02-PLAN.md — API routes for generation, fetch, and edit
-- [ ] 07-03-PLAN.md — Chat integration with marker detection and suggestion cards
-- [ ] 07-04-PLAN.md — Document preview modal, editor, and version history UI
-- [ ] 07-05-PLAN.md — GSD package export (ZIP download + Claude Code command)
+- [x] 07-01-PLAN.md — Document templates and generation library
+- [x] 07-02-PLAN.md — API routes for generation, fetch, and edit
+- [x] 07-03-PLAN.md — Chat integration with marker detection and suggestion cards
+- [x] 07-04-PLAN.md — Document preview modal, editor, and version history UI
+- [x] 07-05-PLAN.md — GSD package export (ZIP download + Claude Code command)
 
 ### Requirements Covered
 - REQ-DOCS: Document generation
@@ -287,11 +288,11 @@ Plans:
 - Copy Claude Code command to clipboard
 
 ### Success Criteria
-- [ ] Documents are generated during planning conversations
-- [ ] Can view and edit documents with versioning
-- [ ] GSD package is generated correctly in PACKAGE phase
-- [ ] Can download/export package
-- [ ] Claude Code command is generated
+- [x] Documents are generated during planning conversations
+- [x] Can view and edit documents with versioning
+- [x] GSD package is generated correctly in PACKAGE phase
+- [x] Can download/export package
+- [x] Claude Code command is generated
 
 ---
 
