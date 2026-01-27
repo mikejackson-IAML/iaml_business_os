@@ -157,7 +157,7 @@ export function ProjectDetailClient({
                 onNewSession={handleNewSession}
               />
               <DocumentsPanel documents={documents} projectId={project.id} projectName={project.title} />
-              <ResearchPanel research={research} />
+              <ResearchPanel research={research} projectId={project.id} />
             </>
           ) : (
             <AskAIPanel projectId={project.id} />
