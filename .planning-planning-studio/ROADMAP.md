@@ -94,43 +94,17 @@ Plans:
 
 **Goal:** Functional AI conversations with context management
 
+**Plans:** 4 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — API route, system prompts, context loading, message persistence
+- [ ] 04-02-PLAN.md — Conversation UI with streaming and markdown rendering
+- [ ] 04-03-PLAN.md — Session management (new/switch sessions, message loading)
+- [ ] 04-04-PLAN.md — End-to-end verification checkpoint
+
 ### Requirements Covered
 - REQ-API-CLAUDE: Claude API integration
 - REQ-CONV: Conversation system
-
-### Tasks
-
-4.1 **Claude API Integration**
-- Create `/api/planning/chat` route
-- Streaming response handling
-- Error handling and retry logic
-
-4.2 **Context Loading**
-- Implement get_phase_context function call from frontend
-- Load conversation summaries
-- Load relevant documents
-- Load recent messages (last 10)
-
-4.3 **System Prompts**
-- Create system prompt files/constants for each phase
-- CAPTURE, DISCOVER, DEFINE, DEVELOP, VALIDATE, PACKAGE prompts
-- Template variable injection
-
-4.4 **Message Storage**
-- Save messages to planning_studio.messages table
-- Update conversation message_count
-- Handle conversation creation on first message
-
-4.5 **Conversation UI**
-- Render messages with Markdown
-- Streaming response display
-- Auto-scroll behavior
-- Loading states
-
-4.6 **Session Management**
-- "New Session" creates new conversation
-- Previous sessions are read-only
-- Can switch between sessions
 
 ### Success Criteria
 - [ ] Can have full conversation with Claude
