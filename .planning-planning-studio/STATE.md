@@ -3,9 +3,9 @@
 ## Current Status
 
 - **Milestone:** v1.0
-- **Current Phase:** 4 (Conversation Engine) - In Progress
-- **Current Plan:** 3 of TBD
-- **Status:** In progress
+- **Current Phase:** 5 (Phase Transitions & Incubation) - Not Started
+- **Current Plan:** 0
+- **Status:** Ready to plan
 
 ## Progress
 
@@ -13,8 +13,8 @@
 Phase 1: [████████████████] 4/4 plans COMPLETE
 Phase 2: [████████████████] 3/3 plans COMPLETE
 Phase 3: [████████████████] 3/3 plans COMPLETE
-Phase 4: [████████████-----] 3/? plans IN PROGRESS
-Overall:  [████████████-] 13/36 plans (~36%)
+Phase 4: [████████████████] 4/4 plans COMPLETE
+Overall:  [██████████████-] 14/36 plans (~39%)
 ```
 
 ## Phase Progress
@@ -24,7 +24,7 @@ Overall:  [████████████-] 13/36 plans (~36%)
 | 1 | Database Foundation & Core UI Shell | Complete (4/4 plans) |
 | 2 | Pipeline View (Main Dashboard) | Complete (3/3 plans) |
 | 3 | Project Detail View — Layout | Complete (3/3 plans) |
-| 4 | Conversation Engine | In Progress (3/? plans) |
+| 4 | Conversation Engine | Complete (4/4 plans) |
 | 5 | Phase Transitions & Incubation | Not Started |
 | 6 | Memory System | Not Started |
 | 7 | Document Generation | Not Started |
@@ -79,14 +79,14 @@ Phases 1-7 constitute the MVP. After Phase 7:
 ## Session Continuity
 
 - **Last session:** 2026-01-27
-- **Stopped at:** Completed 04-03-PLAN.md
+- **Stopped at:** Completed Phase 4
 - **Resume file:** None
 
 ## Last Activity
 
 - **Date:** 2026-01-27
-- **Activity:** Completed Plan 04-03 (Session Management)
-- **Notes:** Built interactive session sidebar, API routes for conversations/messages, ProjectDetailClient for shared state. Users can create, switch, and highlight active sessions. Phase 4 in progress.
+- **Activity:** Completed Phase 4 (Conversation Engine)
+- **Notes:** All 4 plans executed. SSE streaming bug fixed during verification. User confirmed conversation works end-to-end. Phase verified 6/6 must-haves.
 
 ## Phase 1 Deliverables
 
@@ -112,7 +112,8 @@ All 3 plans complete:
 
 ## Phase 4 Deliverables
 
-In progress:
+All 4 plans complete:
 - **04-01:** Chat backend -- streaming API route, system prompts, chat helpers, message persistence
 - **04-02:** Conversation UI -- SSE streaming consumption, react-markdown rendering, chat input, auto-scroll
 - **04-03:** Session management -- interactive sidebar, API routes, shared state via ProjectDetailClient
+- **04-04:** End-to-end verification -- user-confirmed working, SSE remount bug fixed
