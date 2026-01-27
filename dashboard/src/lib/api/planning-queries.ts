@@ -5,6 +5,7 @@ import type {
   PlanningPhase,
   PlanningConversation,
   PlanningDocument,
+  PlanningResearch,
   PlanningMemory,
   UserGoal,
   PlanningDashboardData,
@@ -193,6 +194,27 @@ export async function getProjectDocuments(projectId: string): Promise<PlanningDo
   }
 
   return (data || []) as PlanningDocument[];
+}
+
+/**
+ * Fetch research runs for a project
+ */
+export async function getProjectResearch(projectId: string): Promise<PlanningResearch[]> {
+  const supabase = createServerClient();
+
+  const { data, error } = await supabase
+    .schema('planning_studio')
+    .from('research')
+    .select('*')
+    .eq('project_id', projectId)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching project research:', error);
+    return [];
+  }
+
+  return (data || []) as PlanningResearch[];
 }
 
 /**

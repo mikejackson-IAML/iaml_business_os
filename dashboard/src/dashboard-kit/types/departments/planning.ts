@@ -371,6 +371,25 @@ export function getIncubationTimeRemaining(project: PlanningProject): string | n
 }
 
 /**
+ * Get approximate incubation time remaining in human-friendly language
+ */
+export function getApproximateIncubationTime(project: PlanningProject): string | null {
+  if (!project.phase_locked_until) return null;
+  const lockEnd = new Date(project.phase_locked_until);
+  const now = new Date();
+  if (lockEnd <= now) return null;
+
+  const hoursLeft = (lockEnd.getTime() - now.getTime()) / (1000 * 60 * 60);
+
+  if (hoursLeft > 36) return 'Available in a few days';
+  if (hoursLeft > 20) return 'Available tomorrow morning';
+  if (hoursLeft > 12) return 'Available tomorrow';
+  if (hoursLeft > 4) return 'Available later today';
+  if (hoursLeft > 1) return 'Available in a couple hours';
+  return 'Available soon';
+}
+
+/**
  * Get the ordered list of phases for progress tracking
  */
 export const PHASE_ORDER: PhaseType[] = ['capture', 'discover', 'define', 'develop', 'validate', 'package'];
