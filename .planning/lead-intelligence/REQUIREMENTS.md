@@ -23,8 +23,8 @@
 ### Contact List View
 
 - [ ] **LIST-01**: User can view paginated contact list with name, company, title, status, last activity
-- [ ] **LIST-02**: User can search contacts using natural language queries via AI search bar
-- [ ] **LIST-03**: AI search returns structured filters displayed as removable filter pills
+- [x] **LIST-02**: User can search contacts using natural language queries via AI search bar
+- [x] **LIST-03**: AI search returns structured filters displayed as removable filter pills
 - [ ] **LIST-04**: User can apply advanced filters (status, state, company, title, department, seniority, company size, email status, dates, program, engagement score)
 - [ ] **LIST-05**: User can select multiple contacts via checkboxes for bulk actions
 - [ ] **LIST-06**: Top metrics bar shows total contacts, customers, companies, data quality score
@@ -35,7 +35,7 @@
 ### Contact Profile
 
 - [ ] **PROF-01**: Profile header displays contact info, status badges (lead/customer/VIP), and quick action buttons
-- [ ] **PROF-02**: Overview tab shows AI-generated intelligence summary with regenerate button
+- [x] **PROF-02**: Overview tab shows AI-generated intelligence summary with regenerate button
 - [ ] **PROF-03**: Overview tab shows key stats grid (programs attended, avg rating, last attended, engagement score)
 - [ ] **PROF-04**: Overview tab shows recent activity timeline (last 10 activities)
 - [ ] **PROF-05**: Overview tab shows upcoming follow-ups with quick complete action
@@ -65,10 +65,10 @@
 
 ### AI Features
 
-- [ ] **AI-01**: Natural language search parses queries into structured filter objects via Claude API
-- [ ] **AI-02**: Search shows loading state ("Understanding your search...") with animation
-- [ ] **AI-03**: Contact intelligence summary generated on first profile view, cached, regeneratable
-- [ ] **AI-04**: Summary covers attendance history, satisfaction trends, engagement status, company context, suggested next action
+- [x] **AI-01**: Natural language search parses queries into structured filter objects via Claude API
+- [x] **AI-02**: Search shows loading state ("Understanding your search...") with animation
+- [x] **AI-03**: Contact intelligence summary generated on first profile view, cached, regeneratable
+- [x] **AI-04**: Summary covers attendance history, satisfaction trends, engagement status, company context, suggested next action
 
 ### Integrations
 
@@ -90,8 +90,8 @@
 - [x] **API-01**: CRUD endpoints for contacts (/api/lead-intelligence/contacts)
 - [x] **API-02**: CRUD endpoints for companies (/api/lead-intelligence/companies)
 - [ ] **API-03**: CRUD endpoints for opportunities (/api/lead-intelligence/opportunities)
-- [ ] **API-04**: AI search endpoint (POST /api/lead-intelligence/ai/parse-search)
-- [ ] **API-05**: AI summary endpoint (POST /api/lead-intelligence/ai/generate-summary)
+- [x] **API-04**: AI search endpoint (POST /api/lead-intelligence/ai/parse-search)
+- [x] **API-05**: AI summary endpoint (POST /api/lead-intelligence/ai/generate-summary)
 - [ ] **API-06**: Data health endpoint (GET /api/lead-intelligence/data-health)
 - [ ] **API-07**: Enrichment endpoints (POST contacts/:id/enrich, companies/:id/enrich)
 - [ ] **API-08**: Campaign endpoints (POST contacts/:id/add-to-campaign, bulk/add-to-campaign)
@@ -148,8 +148,8 @@
 | DB-11 | Phase 1 | Complete |
 | DB-12 | Phase 1 | Complete |
 | LIST-01 | Phase 2 | Complete |
-| LIST-02 | Phase 3 | Pending |
-| LIST-03 | Phase 3 | Pending |
+| LIST-02 | Phase 3 | Complete |
+| LIST-03 | Phase 3 | Complete |
 | LIST-04 | Phase 2 | Complete |
 | LIST-05 | Phase 4 | Pending |
 | LIST-06 | Phase 2 | Complete |
@@ -157,7 +157,7 @@
 | LIST-08 | Phase 2 | Complete |
 | LIST-09 | Phase 2 | Complete |
 | PROF-01 | Phase 2 | Complete |
-| PROF-02 | Phase 3 | Pending |
+| PROF-02 | Phase 3 | Complete |
 | PROF-03 | Phase 2 | Complete |
 | PROF-04 | Phase 2 | Complete |
 | PROF-05 | Phase 2 | Complete |
@@ -178,10 +178,10 @@
 | OPP-04 | Phase 5 | Pending |
 | OPP-05 | Phase 5 | Pending |
 | OPP-06 | Phase 5 | Pending |
-| AI-01 | Phase 3 | Pending |
-| AI-02 | Phase 3 | Pending |
-| AI-03 | Phase 3 | Pending |
-| AI-04 | Phase 3 | Pending |
+| AI-01 | Phase 3 | Complete |
+| AI-02 | Phase 3 | Complete |
+| AI-03 | Phase 3 | Complete |
+| AI-04 | Phase 3 | Complete |
 | INT-01 | Phase 4 | Pending |
 | INT-02 | Phase 4 | Pending |
 | INT-03 | Phase 4 | Pending |
@@ -194,8 +194,8 @@
 | API-01 | Phase 1 | Complete |
 | API-02 | Phase 1 | Complete |
 | API-03 | Phase 5 | Pending |
-| API-04 | Phase 3 | Pending |
-| API-05 | Phase 3 | Pending |
+| API-04 | Phase 3 | Complete |
+| API-05 | Phase 3 | Complete |
 | API-06 | Phase 2 | Complete |
 | API-07 | Phase 4 | Pending |
 | API-08 | Phase 4 | Pending |
