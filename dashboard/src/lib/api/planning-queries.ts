@@ -322,6 +322,18 @@ export async function getReadyToBuildQueue(): Promise<PlanningProjectSummary[]> 
 }
 
 /**
+ * Client-side fetch: get all research for a project via API route
+ */
+export async function fetchProjectResearch(projectId: string): Promise<PlanningResearch[]> {
+  const res = await fetch(`/api/planning/research?projectId=${encodeURIComponent(projectId)}`);
+  if (!res.ok) {
+    console.error('Error fetching research:', res.statusText);
+    return [];
+  }
+  return res.json();
+}
+
+/**
  * Search memories using semantic similarity (via RPC)
  * Note: Requires embedding vector - call from server-side only with embedding API
  */
