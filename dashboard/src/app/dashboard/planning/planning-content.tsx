@@ -1,9 +1,13 @@
 'use client';
 
-import { Lightbulb } from 'lucide-react';
-import { Card, CardContent } from '@/dashboard-kit/components/ui/card';
+import type { PlanningDashboardData } from '@/dashboard-kit/types/departments/planning';
+import { PipelineBoard } from './components/pipeline-board';
 
-export function PlanningContent() {
+interface PlanningContentProps {
+  data: PlanningDashboardData;
+}
+
+export function PlanningContent({ data }: PlanningContentProps) {
   return (
     <div className="p-6 lg:p-8">
       {/* Header */}
@@ -17,17 +21,8 @@ export function PlanningContent() {
         </p>
       </header>
 
-      {/* Empty State */}
-      <Card>
-        <CardContent className="py-12 text-center">
-          <Lightbulb className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-          <h3 className="text-lg font-medium mb-2">Planning Studio coming soon</h3>
-          <p className="text-muted-foreground max-w-md mx-auto">
-            Connect the dots from idea to shipped product. Capture ideas, have AI-guided
-            planning conversations, and track progress through the pipeline.
-          </p>
-        </CardContent>
-      </Card>
+      {/* Pipeline Board */}
+      <PipelineBoard data={data} />
     </div>
   );
 }
