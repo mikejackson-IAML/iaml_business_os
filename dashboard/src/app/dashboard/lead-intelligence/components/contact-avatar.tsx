@@ -5,10 +5,10 @@ import { cn } from '@/dashboard-kit/lib/utils';
 
 interface ContactAvatarProps {
   contact: {
-    first_name?: string;
-    last_name?: string;
+    first_name?: string | null;
+    last_name?: string | null;
     profile_image_url?: string | null;
-    status?: string;
+    status?: string | null;
   };
   size?: 'sm' | 'md' | 'lg';
 }
@@ -28,7 +28,7 @@ function hashStringToColor(str: string): string {
   return `hsl(${hue}, 55%, 45%)`;
 }
 
-function getInitials(firstName?: string, lastName?: string): string {
+function getInitials(firstName?: string | null, lastName?: string | null): string {
   const first = firstName?.charAt(0) ?? '';
   const last = lastName?.charAt(0) ?? '';
   return (first + last).toUpperCase() || '?';
