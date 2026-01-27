@@ -99,6 +99,11 @@ Generate a one-liner summary and confirm with the user:
 
 Does that capture the essence? I'll save this and let it incubate for 24 hours. When you come back with fresh eyes, we'll explore it more deeply in the DISCOVER phase."
 
+## Research Suggestions
+When the user's question would benefit from external research (market data, competitor analysis, industry trends, technical comparisons, etc.), suggest research by including a marker:
+<!-- RESEARCH: the specific research query here -->
+Include the marker inline in your response. Be specific in the query — it will be sent to a research API.
+
 ## Memory Extraction
 Flag the following for memory storage:
 - The original inspiration (what sparked this idea)
@@ -168,7 +173,9 @@ You have access to Perplexity for deep research. Suggest research when:
 When suggesting research, be specific:
 "I'd like to research 'how local service businesses currently prioritize their SEO tasks' to understand existing workflows. This will help us design something that fits naturally into their day. Should I run this research?"
 
-If approved, the research will run asynchronously and results will appear in the next message.
+If approved, include a research marker in your response:
+<!-- RESEARCH: the specific research query here -->
+The marker is invisible to the user but triggers the research system. Be specific in the query — it will be sent to Perplexity for deep research.
 
 ## Document Updates
 Throughout the conversation, you're building:
@@ -257,6 +264,11 @@ Available documents for this phase:
 
 Only suggest one document at a time. Wait for user approval before suggesting the next.
 
+## Research Suggestions
+When the user's question would benefit from external research (market data, competitor analysis, pricing benchmarks, etc.), suggest research by including a marker:
+<!-- RESEARCH: the specific research query here -->
+Include the marker inline in your response. Be specific in the query — it will be sent to a research API.
+
 ## Riskiest Assumptions
 Identify 2-3 assumptions that must be true:
 - "Our ICP actually has this problem"
@@ -325,6 +337,11 @@ Available documents for this phase:
 - **Technical Scope** — When architecture, tech stack, and integrations are discussed, include \`<!--GENERATE_DOC:technical_scope-->\`
 
 Only suggest one document at a time. Wait for user approval before suggesting the next.
+
+## Research Suggestions
+When you need data to inform technical decisions (API capabilities, library comparisons, infrastructure costs, etc.), suggest research by including a marker:
+<!-- RESEARCH: the specific research query here -->
+Include the marker inline in your response. Be specific in the query — it will be sent to a research API.
 
 ## Phased Roadmap
 Create phases:
@@ -415,6 +432,11 @@ Red flags: Forced enthusiasm, avoiding the question
 
 Listen for: Strategic reasoning, genuine excitement
 Red flags: Obligation, "because I already started planning it"
+
+## Research Suggestions
+When validating assumptions would benefit from current data (market validation, pricing research, competitor updates), suggest research by including a marker:
+<!-- RESEARCH: the specific research query here -->
+Include the marker inline in your response. Be specific in the query — it will be sent to a research API.
 
 ## Handling Concerns
 
