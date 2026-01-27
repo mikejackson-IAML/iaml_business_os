@@ -4,15 +4,15 @@
 
 - **Milestone:** v1.0
 - **Current Phase:** 2 (Pipeline View - Main Dashboard) - In Progress
-- **Current Plan:** 2 of 3 complete
-- **Status:** In Progress
+- **Current Plan:** 3 of 3 complete
+- **Status:** Phase Complete
 
 ## Progress
 
 ```
 Phase 1: [████████████████] 4/4 plans COMPLETE
-Phase 2: [██████████------] 2/3 plans
-Overall:  [█████--------] 6/36 plans (~17%)
+Phase 2: [████████████████] 3/3 plans COMPLETE
+Overall:  [██████-------] 7/36 plans (~19%)
 ```
 
 ## Phase Progress
@@ -20,7 +20,7 @@ Overall:  [█████--------] 6/36 plans (~17%)
 | Phase | Name | Status |
 |-------|------|--------|
 | 1 | Database Foundation & Core UI Shell | Complete (4/4 plans) |
-| 2 | Pipeline View (Main Dashboard) | In Progress (2/3 plans) |
+| 2 | Pipeline View (Main Dashboard) | Complete (3/3 plans) |
 | 3 | Project Detail View — Layout | Not Started |
 | 4 | Conversation Engine | Not Started |
 | 5 | Phase Transitions & Incubation | Not Started |
@@ -51,6 +51,7 @@ Overall:  [█████--------] 6/36 plans (~17%)
 | 02 | 01 | Title-only Link, card body as drag handle | Avoids click-vs-drag conflict |
 | 02 | 01 | Inline formatRelativeTime in project-card | Simple utility, shared module not needed yet |
 | 02 | 02 | Native select over shadcn Select | Avoids adding radix-ui/select dependency for simple dropdowns |
+| 02 | 03 | Followed create-task-modal pattern | Consistency with existing action-center modal |
 
 ## MVP Checkpoint
 
@@ -65,14 +66,14 @@ Phases 1-7 constitute the MVP. After Phase 7:
 ## Session Continuity
 
 - **Last session:** 2026-01-27
-- **Stopped at:** Completed 02-02-PLAN.md
+- **Stopped at:** Completed 02-03-PLAN.md (Phase 02 complete)
 - **Resume file:** None
 
 ## Last Activity
 
 - **Date:** 2026-01-27
-- **Activity:** Completed Plan 02-02 (Search and Filter)
-- **Notes:** Added search bar and status/phase filter dropdowns to pipeline board. Real-time filtering with composable filters and clear button.
+- **Activity:** Completed Plan 02-03 (Quick Capture Modal) -- Phase 02 complete
+- **Notes:** Built capture modal with title + one-liner fields, toast feedback via sonner. Added "+ Capture Idea" button to pipeline header.
 
 ## Phase 1 Deliverables
 
@@ -82,7 +83,9 @@ All 4 plans complete:
 - **01-03:** Navigation integration (Planning link in sidebar and index)
 - **01-04:** Data layer (TypeScript types, queries, seed data)
 
-## Phase 2 Deliverables (In Progress)
+## Phase 2 Deliverables
 
+All 3 plans complete:
 - **02-01:** Pipeline board with drag-and-drop (COMPLETE)
 - **02-02:** Search and filter bar (COMPLETE)
+- **02-03:** Quick capture modal (COMPLETE)
