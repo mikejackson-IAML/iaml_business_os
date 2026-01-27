@@ -121,6 +121,14 @@ Plans:
 
 **Goal:** Proper phase flow with incubation enforcement
 
+**Plans:** 4 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — Phase transition backend: server actions, marker detection, incubation logic
+- [ ] 05-02-PLAN.md — Transition UI: confirmation modal, force-complete, readiness badges
+- [ ] 05-03-PLAN.md — Incubation overlay: countdown timer, idea capture, working skip
+- [ ] 05-04-PLAN.md — Phase navigation via progress bar + end-to-end verification
+
 ### Requirements Covered
 - REQ-PHASES: Phase transition logic
 - REQ-INCUBATE: Incubation enforcement
