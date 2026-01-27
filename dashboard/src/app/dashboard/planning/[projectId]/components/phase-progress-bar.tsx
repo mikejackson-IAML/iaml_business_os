@@ -119,7 +119,8 @@ export function PhaseProgressBar({
           const isCompleted = status === 'complete';
           const isCurrent = status === 'in_progress';
           const isIncubating = status === 'incubating';
-          const isClickable = isCompleted && onPhaseClick;
+          const isClickable = onPhaseClick && phaseType !== currentPhase;
+          const isNotStarted = !isCompleted && !isCurrent && !isIncubating;
 
           return (
             <div key={phaseType} className="flex items-center flex-1 last:flex-initial">
@@ -128,9 +129,11 @@ export function PhaseProgressBar({
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    className={`flex flex-col items-center gap-1.5 min-w-[64px] ${
-                      isClickable ? 'cursor-pointer' : 'cursor-default'
-                    }`}
+                    className={`flex flex-col items-center gap-1.5 min-w-[64px] transition-transform ${
+                      isClickable
+                        ? 'cursor-pointer hover:scale-105'
+                        : 'cursor-default'
+                    } ${isNotStarted && isClickable ? 'hover:opacity-80' : ''}`}
                     onClick={() => isClickable && onPhaseClick(phaseType)}
                     disabled={!isClickable}
                   >

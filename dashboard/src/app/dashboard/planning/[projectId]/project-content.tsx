@@ -10,7 +10,6 @@ import {
   getProjectResearch,
 } from '@/lib/api/planning-queries';
 import { getStatusLabel } from '@/dashboard-kit/types/departments/planning';
-import { PhaseProgressBar } from './components/phase-progress-bar';
 import { ProjectDetailClient } from './project-detail-client';
 
 interface ProjectContentProps {
@@ -88,17 +87,6 @@ export async function ProjectContent({ projectId }: ProjectContentProps) {
           <p className="text-muted-foreground text-sm">{project.one_liner}</p>
         )}
       </header>
-
-      {/* Phase Progress Bar */}
-      <Card>
-        <CardContent className="p-4">
-          <PhaseProgressBar
-            phases={phases}
-            currentPhase={project.current_phase}
-            project={project}
-          />
-        </CardContent>
-      </Card>
 
       {/* Main Content Grid - Client component for session management */}
       <ProjectDetailClient
