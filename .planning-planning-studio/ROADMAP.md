@@ -314,6 +314,15 @@ After Phase 7, the system is functional end-to-end:
 
 **Goal:** Perplexity integration for research during planning
 
+**Status:** Not Started
+**Plans:** 4 plans
+
+Plans:
+- [ ] 08-01-PLAN.md — Research backend: Perplexity API route, marker detection, system prompt updates
+- [ ] 08-02-PLAN.md — Chat integration: SSE research markers, suggestion cards, approve/edit flow
+- [ ] 08-03-PLAN.md — Research panel UI: list view, results modal, manual research trigger
+- [ ] 08-04-PLAN.md — Results integration: context injection, sidebar refresh, memory extraction
+
 ### Requirements Covered
 - REQ-API-PERPLEXITY: Perplexity API integration
 - REQ-RESEARCH: Research system
