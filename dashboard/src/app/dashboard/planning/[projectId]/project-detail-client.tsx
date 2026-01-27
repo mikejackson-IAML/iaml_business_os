@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { SessionsPanel } from './components/sessions-panel';
 import { DocumentsPanel } from './components/documents-panel';
 import { ResearchPanel } from './components/research-panel';
+import { AskAIPanel } from './components/ask-ai-panel';
 import { ConversationShell } from './components/conversation-shell';
 import { IncubationOverlay } from './components/incubation-overlay';
 import { PhaseProgressBar } from './components/phase-progress-bar';
@@ -53,6 +54,7 @@ export function ProjectDetailClient({
   >([]);
   const [pendingPhaseNav, setPendingPhaseNav] = useState<PhaseType | null>(null);
   const [showSkipWarning, setShowSkipWarning] = useState(false);
+  const [sidebarTab, setSidebarTab] = useState<'sessions' | 'ask-ai'>('sessions');
 
   const handlePhaseClick = useCallback((targetPhase: PhaseType) => {
     const targetIdx = PHASE_ORDER.indexOf(targetPhase);
@@ -120,14 +122,46 @@ export function ProjectDetailClient({
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Left Sidebar */}
         <div className="space-y-4">
-          <SessionsPanel
-            conversations={conversations}
-            activeConversationId={activeConversationId}
-            onSelectSession={handleSelectSession}
-            onNewSession={handleNewSession}
-          />
-          <DocumentsPanel documents={documents} />
-          <ResearchPanel research={research} />
+          {/* Sidebar tab switcher */}
+          <div className="flex rounded-lg bg-muted p-1 gap-1">
+            <button
+              type="button"
+              onClick={() => setSidebarTab('sessions')}
+              className={`flex-1 text-xs font-medium py-1.5 rounded-md transition-colors ${
+                sidebarTab === 'sessions'
+                  ? 'bg-background shadow-sm text-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              Sessions
+            </button>
+            <button
+              type="button"
+              onClick={() => setSidebarTab('ask-ai')}
+              className={`flex-1 text-xs font-medium py-1.5 rounded-md transition-colors ${
+                sidebarTab === 'ask-ai'
+                  ? 'bg-background shadow-sm text-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              Ask AI
+            </button>
+          </div>
+
+          {sidebarTab === 'sessions' ? (
+            <>
+              <SessionsPanel
+                conversations={conversations}
+                activeConversationId={activeConversationId}
+                onSelectSession={handleSelectSession}
+                onNewSession={handleNewSession}
+              />
+              <DocumentsPanel documents={documents} />
+              <ResearchPanel research={research} />
+            </>
+          ) : (
+            <AskAIPanel projectId={project.id} />
+          )}
         </div>
 
         {/* Main Conversation Area */}
