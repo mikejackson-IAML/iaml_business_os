@@ -3,8 +3,8 @@
 ## Current Status
 
 - **Milestone:** v1.0
-- **Current Phase:** 6 (Memory System) - In progress
-- **Current Plan:** 3 of 3
+- **Current Phase:** 6 (Memory System) - Complete
+- **Current Plan:** 4 of 4
 - **Status:** Phase complete
 
 ## Progress
@@ -15,8 +15,8 @@ Phase 2: [████████████████] 3/3 plans COMPLETE
 Phase 3: [████████████████] 3/3 plans COMPLETE
 Phase 4: [████████████████] 4/4 plans COMPLETE
 Phase 5: [████████████████] 4/4 plans COMPLETE
-Phase 6: [████████████████] 3/3 plans COMPLETE
-Overall:  [██████████████████] 21/36 plans (~58%)
+Phase 6: [████████████████] 4/4 plans COMPLETE
+Overall:  [██████████████████] 22/36 plans (~61%)
 ```
 
 ## Phase Progress
@@ -28,7 +28,7 @@ Overall:  [██████████████████] 21/36 plans (
 | 3 | Project Detail View — Layout | Complete (3/3 plans) |
 | 4 | Conversation Engine | Complete (4/4 plans) |
 | 5 | Phase Transitions & Incubation | Complete (4/4 plans) |
-| 6 | Memory System | Complete (3/3 plans) |
+| 6 | Memory System | Complete (4/4 plans) |
 | 7 | Document Generation | Not Started |
 | 8 | Deep Research Integration | Not Started |
 | 9 | Ready-to-Build Queue & Prioritization | Not Started |
@@ -82,6 +82,8 @@ Overall:  [██████████████████] 21/36 plans (
 | 06 | 03 | Tabbed sidebar (Sessions / Ask AI) | Cleaner UX, Ask AI gets full sidebar height |
 | 06 | 03 | Inline search in ask route | Avoids unnecessary HTTP hop to search endpoint |
 | 06 | 03 | Deduplicated source badges by memory_type | Shows unique types not repeated entries |
+| 06 | 04 | Custom modal over cmdk library | Chat UI needs differ from command palette; simpler without dependency |
+| 06 | 04 | Added project_title to ask route response | Cross-project source attribution requires project name |
 
 ## MVP Checkpoint
 
@@ -96,14 +98,14 @@ Phases 1-7 constitute the MVP. After Phase 7:
 ## Session Continuity
 
 - **Last session:** 2026-01-27
-- **Stopped at:** Completed 06-03-PLAN.md (Phase 6 complete)
+- **Stopped at:** Completed 06-04-PLAN.md (Phase 6 complete)
 - **Resume file:** None
 
 ## Last Activity
 
 - **Date:** 2026-01-27
-- **Activity:** Completed Phase 6 Plan 3 (Semantic Search & Ask AI)
-- **Notes:** Built semantic search API, RAG-based Ask AI endpoint with Claude, and Ask AI sidebar panel with tabbed navigation.
+- **Activity:** Completed Phase 6 Plan 4 (Global Cmd+K Search)
+- **Notes:** Built global Cmd+K search modal for cross-project memory search, mounted in Planning Studio layout.
 
 ## Phase 1 Deliverables
 
@@ -145,7 +147,8 @@ All 4 plans complete:
 
 ## Phase 6 Deliverables
 
-All 3 plans complete:
+All 4 plans complete:
 - **06-01:** Memory system foundation -- OpenAI embeddings, Claude memory extraction, API routes
 - **06-02:** Chat wiring -- fire-and-forget extraction in chat route, conversation summary generation, PATCH endpoint
 - **06-03:** Semantic search & Ask AI -- search API, RAG Ask AI endpoint, sidebar panel with tabbed navigation
+- **06-04:** Global Cmd+K search -- cross-project search modal, layout integration
