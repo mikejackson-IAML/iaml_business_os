@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   DndContext,
   DragOverlay,
@@ -15,12 +15,14 @@ import {
 import { toast } from 'sonner';
 import type {
   ProjectStatus,
+  PhaseType,
   PlanningProjectSummary,
   PlanningDashboardData,
 } from '@/dashboard-kit/types/departments/planning';
 import { updateProjectStatusAction } from '../actions';
 import { PipelineColumn } from './pipeline-column';
 import { ProjectCard } from './project-card';
+import { PipelineSearchFilter } from './pipeline-search-filter';
 
 const VISIBLE_STATUSES: ProjectStatus[] = [
   'idea',
@@ -37,11 +39,44 @@ interface PipelineBoardProps {
 export function PipelineBoard({ data }: PipelineBoardProps) {
   const [projectsByStatus, setProjectsByStatus] = useState(data.projectsByStatus);
   const [activeProject, setActiveProject] = useState<PlanningProjectSummary | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<ProjectStatus | 'all'>('all');
+  const [phaseFilter, setPhaseFilter] = useState<PhaseType | 'all'>('all');
 
   // Sync when data prop changes (e.g. after revalidation)
   useEffect(() => {
     setProjectsByStatus(data.projectsByStatus);
   }, [data.projectsByStatus]);
+
+  // Compute filtered projects
+  const filteredByStatus = useMemo(() => {
+    const query = searchQuery.toLowerCase();
+    const result: Record<string, PlanningProjectSummary[]> = {};
+
+    const statuses = statusFilter === 'all'
+      ? VISIBLE_STATUSES
+      : VISIBLE_STATUSES.filter((s) => s === statusFilter);
+
+    for (const status of statuses) {
+      let projects = projectsByStatus[status] || [];
+
+      if (query) {
+        projects = projects.filter(
+          (p) =>
+            p.title.toLowerCase().includes(query) ||
+            p.one_liner?.toLowerCase().includes(query)
+        );
+      }
+
+      if (phaseFilter !== 'all') {
+        projects = projects.filter((p) => p.current_phase === phaseFilter);
+      }
+
+      result[status] = projects;
+    }
+
+    return result;
+  }, [projectsByStatus, searchQuery, statusFilter, phaseFilter]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -100,6 +135,10 @@ export function PipelineBoard({ data }: PipelineBoardProps) {
     }
   }, []);
 
+  const visibleStatuses = statusFilter === 'all'
+    ? VISIBLE_STATUSES
+    : VISIBLE_STATUSES.filter((s) => s === statusFilter);
+
   return (
     <DndContext
       sensors={sensors}
@@ -107,12 +146,21 @@ export function PipelineBoard({ data }: PipelineBoardProps) {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
+      <PipelineSearchFilter
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        statusFilter={statusFilter}
+        onStatusFilterChange={setStatusFilter}
+        phaseFilter={phaseFilter}
+        onPhaseFilterChange={setPhaseFilter}
+      />
+
       <div className="flex gap-6 overflow-x-auto pb-4">
-        {VISIBLE_STATUSES.map((status) => (
+        {visibleStatuses.map((status) => (
           <PipelineColumn
             key={status}
             status={status}
-            projects={projectsByStatus[status] || []}
+            projects={filteredByStatus[status] || []}
           />
         ))}
       </div>
