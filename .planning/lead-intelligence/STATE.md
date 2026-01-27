@@ -9,12 +9,12 @@ See: .planning/lead-intelligence/PROJECT.md (updated 2026-01-27)
 
 ## Current Position
 
-Phase: 4 of 5 (Integrations & Bulk Actions) — COMPLETE
-Plan: 5 of 5 complete
-Status: Phase verified ✓ (6/6 must-haves)
-Last activity: 2026-01-27 - Phase 4 verified
+Phase: 5 of 5 (Opportunities Pipeline)
+Plan: 1 of 4 complete
+Status: In progress
+Last activity: 2026-01-27 - Completed 05-01-PLAN.md
 
-Progress: [████████░░] 80%
+Progress: [████████░░] 82%
 
 ## Phase 5 Polish Notes (from Phase 4 verification)
 
@@ -40,6 +40,9 @@ Progress: [████████░░] 80%
 | fill-blanks-merge | Enrichment fills blanks only, flags conflicts | 04-03 | Preserve manually-entered data, surface discrepancies |
 | n8n-webhook-enrichment | n8n webhooks as enrichment source | 04-03 | Consistent with existing workflow architecture |
 | bulk-enrich-sequential | Bulk enrichment sequential with 1s delay, max 50 | 04-03 | Rate limit protection for n8n webhooks |
+| signed-url-attachments | Signed URLs (1hr) for attachments, not public | 05-01 | Proposals/contracts are sensitive documents |
+| storage-path-in-db | Store storage path in file_url, signed URL on read | 05-01 | Decouple storage from URL generation |
+| auto-create-bucket | Auto-create storage bucket on first upload | 05-01 | No manual setup needed |
 
 ## Blockers / Concerns
 
@@ -48,9 +51,9 @@ Progress: [████████░░] 80%
 ## Session Continuity
 
 Last session: 2026-01-27
-Stopped at: Phase 4 complete, ready for Phase 5
+Stopped at: Completed 05-01-PLAN.md
 Resume file: None
-**Next step:** `/gsd:discuss-phase 5` to plan Opportunities Pipeline
+**Next step:** Execute 05-02-PLAN.md
 
 ## Session Log
 
@@ -88,4 +91,7 @@ Resume file: None
 | 2026-01-27 | Phase 4 verified | Human approved. Checkbox/page performance flagged as Phase 5 polish items. |
 
 ---
-*Last updated: 2026-01-27 after 04-05 execution*
+| 2026-01-27 | 05-01 complete | Opportunities API: 9 files, CRUD + stage advancement + contacts + attachments with Storage |
+
+---
+*Last updated: 2026-01-27 after 05-01 execution*
