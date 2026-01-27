@@ -69,41 +69,16 @@ Plans:
 
 **Goal:** Project detail page structure without AI conversation
 
+**Plans:** 3 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — Phase progress bar, data wiring, and page layout shell
+- [ ] 03-02-PLAN.md — Sidebar panels (sessions, documents, research)
+- [ ] 03-03-PLAN.md — Conversation shell, incubation overlay, and full layout wiring
+
 ### Requirements Covered
 - REQ-F2: Project Detail View (UI only)
 - REQ-F3: Incubation State UI
-
-### Tasks
-
-3.1 **Phase Progress Bar Component**
-- Visual indicator of all 6 phases
-- Current phase highlighted
-- Clickable to view past phases (read-only mode indicator)
-
-3.2 **Left Sidebar — Sessions Panel**
-- List conversations in current phase
-- Click to view past conversation
-- "New Session" button (placeholder)
-
-3.3 **Left Sidebar — Documents Panel**
-- List generated documents
-- Click to preview in modal
-- Version indicator
-
-3.4 **Left Sidebar — Research Panel**
-- List research runs
-- Status indicator (pending/running/complete/failed)
-- Click to view findings
-
-3.5 **Main Conversation Area — Shell**
-- Message list display area
-- Input area (non-functional yet)
-- Layout for streaming responses
-
-3.6 **Incubation State UI**
-- Special display when project is locked
-- Countdown timer
-- "Skip Incubation" button with confirmation modal
 
 ### Success Criteria
 - [ ] Project detail page renders correctly
