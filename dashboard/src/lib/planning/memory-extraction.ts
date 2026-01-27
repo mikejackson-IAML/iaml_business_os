@@ -109,3 +109,33 @@ export async function extractMemories(
     return [];
   }
 }
+
+/**
+ * Generate a concise summary of a planning conversation.
+ * Returns empty string on failure (logs error, does not throw).
+ */
+export async function generateSummary(conversationText: string): Promise<string> {
+  try {
+    const response = await anthropic.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 512,
+      system:
+        'Summarize this planning conversation in 2-3 sentences. Focus on what was discussed, decisions made, and outcomes. Be concise.',
+      messages: [
+        {
+          role: 'user',
+          content: conversationText,
+        },
+      ],
+    });
+
+    const textBlock = response.content.find(
+      (block): block is Anthropic.TextBlock => block.type === 'text'
+    );
+
+    return textBlock?.text || '';
+  } catch (error) {
+    console.error('Summary generation failed:', error);
+    return '';
+  }
+}
