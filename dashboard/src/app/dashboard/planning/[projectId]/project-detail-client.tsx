@@ -156,7 +156,7 @@ export function ProjectDetailClient({
                 onSelectSession={handleSelectSession}
                 onNewSession={handleNewSession}
               />
-              <DocumentsPanel documents={documents} />
+              <DocumentsPanel documents={documents} projectId={project.id} projectName={project.title} />
               <ResearchPanel research={research} />
             </>
           ) : (

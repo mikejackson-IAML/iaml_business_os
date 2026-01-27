@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/dashboard-kit/compon
 import { Badge } from '@/dashboard-kit/components/ui/badge';
 import { DocPreviewModal } from './doc-preview-modal';
 import { DOC_TYPE_LABELS } from '@/lib/planning/doc-templates';
+import { ExportPanel } from './export-panel';
 import type { PlanningDocument } from '@/dashboard-kit/types/departments/planning';
 
 function formatRelativeTime(dateStr: string): string {
@@ -25,10 +26,12 @@ function formatRelativeTime(dateStr: string): string {
 
 interface DocumentsPanelProps {
   documents: PlanningDocument[];
+  projectId: string;
+  projectName: string;
   onDocumentsChanged?: () => void;
 }
 
-export function DocumentsPanel({ documents, onDocumentsChanged }: DocumentsPanelProps) {
+export function DocumentsPanel({ documents, projectId, projectName, onDocumentsChanged }: DocumentsPanelProps) {
   const [selectedDoc, setSelectedDoc] = useState<PlanningDocument | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -82,6 +85,11 @@ export function DocumentsPanel({ documents, onDocumentsChanged }: DocumentsPanel
               ))}
             </div>
           )}
+          <ExportPanel
+            projectId={projectId}
+            projectName={projectName}
+            hasGsdDocs={documents.some((d) => d.doc_type.startsWith('gsd_'))}
+          />
         </CardContent>
       </Card>
 
