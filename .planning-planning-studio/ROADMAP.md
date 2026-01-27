@@ -45,22 +45,23 @@ Plans:
 
 **Goal:** Kanban-style view of all ideas with drag-and-drop, search/filter, and quick capture
 
+**Status:** Complete (2026-01-27)
 **Plans:** 3 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Pipeline board with drag-and-drop columns and project cards
-- [ ] 02-02-PLAN.md — Search and filter bar
-- [ ] 02-03-PLAN.md — Quick capture modal
+- [x] 02-01-PLAN.md — Pipeline board with drag-and-drop columns and project cards
+- [x] 02-02-PLAN.md — Search and filter bar
+- [x] 02-03-PLAN.md — Quick capture modal
 
 ### Requirements Covered
 - REQ-F1: Pipeline View feature
 
 ### Success Criteria
-- [ ] Can see all projects organized by status columns
-- [ ] Cards show accurate information
-- [ ] Search and filter work
-- [ ] Clicking card navigates to detail view
-- [ ] Quick capture button visible
+- [x] Can see all projects organized by status columns
+- [x] Cards show accurate information
+- [x] Search and filter work
+- [x] Clicking card navigates to detail view
+- [x] Quick capture button visible
 
 ---
 
