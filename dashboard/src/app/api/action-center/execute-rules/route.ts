@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { createServerClient } from '@/lib/supabase/server';
 import { executeRecurringRule, executeConditionRule } from '@/lib/action-center/task-rule-execution';
 import { TaskRule } from '@/lib/action-center/task-rule-types';
 
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const supabase = await createClient();
+    const supabase = createServerClient();
 
     // Get rules to execute
     let query = supabase
