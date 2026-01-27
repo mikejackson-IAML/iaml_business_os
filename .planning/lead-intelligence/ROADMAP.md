@@ -53,6 +53,16 @@ Plans:
 **Goal:** Users can browse contacts, view full contact profiles with all tabs, and view company profiles — the complete read experience
 **Depends on:** Phase 1 (requires database and API)
 **Requirements:** LIST-01, LIST-04, LIST-06, LIST-07, LIST-08, LIST-09, PROF-01, PROF-03, PROF-04, PROF-05, PROF-06, PROF-07, PROF-08, PROF-09, PROF-10, COMP-01, COMP-02, COMP-03, COMP-05, COMP-06, INT-04, API-06
+**Plans:** 7 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — API layer: filters, data health endpoint, all sub-resource routes
+- [ ] 02-02-PLAN.md — Shared UI components: avatar, breadcrumbs, badges, metrics bar, data health section
+- [ ] 02-03-PLAN.md — Contact list page: table, filters, row actions, metrics integration
+- [ ] 02-04-PLAN.md — Contact profile: header + Overview, Attendance, Email tabs
+- [ ] 02-05-PLAN.md — Contact profile: Company, Notes, Enrichment tabs
+- [ ] 02-06-PLAN.md — Company profile: header, metrics, Contacts/Notes/Enrichment tabs
+- [ ] 02-07-PLAN.md — Build verification and visual checkpoint
 
 **Success Criteria** (what must be TRUE):
 1. /dashboard/lead-intelligence shows paginated contact table with metrics bar and data health section
@@ -113,11 +123,11 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Database Schema & Core API | 3/3 | Complete | 2026-01-27 |
-| 2. Contact List, Profiles & Company Pages | 0/? | Not started | - |
+| 2. Contact List, Profiles & Company Pages | 0/7 | Planned | - |
 | 3. AI Search & Intelligence | 0/? | Not started | - |
 | 4. Integrations & Bulk Actions | 0/? | Not started | - |
 | 5. Opportunities Pipeline | 0/? | Not started | - |
 
 ---
 *Roadmap created: 2026-01-27*
-*Last updated: 2026-01-27 after Phase 1 execution*
+*Last updated: 2026-01-27 after Phase 2 planning*
