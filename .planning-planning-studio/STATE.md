@@ -4,7 +4,7 @@
 
 - **Milestone:** v1.0
 - **Current Phase:** 6 (Memory System) - In progress
-- **Current Plan:** 1 of 3
+- **Current Plan:** 2 of 3
 - **Status:** In progress
 
 ## Progress
@@ -15,8 +15,8 @@ Phase 2: [████████████████] 3/3 plans COMPLETE
 Phase 3: [████████████████] 3/3 plans COMPLETE
 Phase 4: [████████████████] 4/4 plans COMPLETE
 Phase 5: [████████████████] 4/4 plans COMPLETE
-Phase 6: [████                ] 1/3 plans IN PROGRESS
-Overall:  [█████████████████ ] 19/36 plans (~53%)
+Phase 6: [████████            ] 2/3 plans IN PROGRESS
+Overall:  [█████████████████ ] 20/36 plans (~56%)
 ```
 
 ## Phase Progress
@@ -77,6 +77,8 @@ Overall:  [█████████████████ ] 19/36 plans (~5
 | 05 | 04 | project.current_phase as source of truth | Phase records can lag; current_phase field is authoritative |
 | 06 | 01 | Forced tool_choice for extract_memories | Reliable structured output without ambiguity |
 | 06 | 01 | Empty array on extraction failure | Graceful degradation, don't block on AI errors |
+| 06 | 02 | Direct Supabase insert from chat route | Avoids circular API calls to memories endpoint |
+| 06 | 02 | void promise for fire-and-forget | Suppresses unhandled promise warnings cleanly |
 
 ## MVP Checkpoint
 
@@ -91,14 +93,14 @@ Phases 1-7 constitute the MVP. After Phase 7:
 ## Session Continuity
 
 - **Last session:** 2026-01-27
-- **Stopped at:** Completed 06-01-PLAN.md
+- **Stopped at:** Completed 06-02-PLAN.md
 - **Resume file:** None
 
 ## Last Activity
 
 - **Date:** 2026-01-27
-- **Activity:** Completed Phase 6 Plan 1 (Memory System Foundation)
-- **Notes:** Created embeddings library (OpenAI), memory extraction library (Claude tool_use), and API routes for both. Installed openai SDK.
+- **Activity:** Completed Phase 6 Plan 2 (Chat Wiring)
+- **Notes:** Wired memory extraction into chat route (fire-and-forget), added generateSummary to memory-extraction.ts, added PATCH endpoint for ending conversations with summary.
 
 ## Phase 1 Deliverables
 
@@ -140,5 +142,6 @@ All 4 plans complete:
 
 ## Phase 6 Deliverables
 
-In progress (1/3 plans):
+In progress (2/3 plans):
 - **06-01:** Memory system foundation -- OpenAI embeddings, Claude memory extraction, API routes
+- **06-02:** Chat wiring -- fire-and-forget extraction in chat route, conversation summary generation, PATCH endpoint
