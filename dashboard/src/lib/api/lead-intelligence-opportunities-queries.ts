@@ -37,7 +37,7 @@ export async function getOpportunities(params: OpportunityListParams): Promise<O
   const to = from + limit - 1;
 
   let query = getOpportunitiesTable()
-    .select('*, companies(id, name), contacts(id, first_name, last_name)', { count: 'exact' });
+    .select('*, companies(id, name), contacts!opportunities_contact_id_fkey(id, first_name, last_name)', { count: 'exact' });
 
   if (params.type) query = query.eq('type', params.type);
   if (params.stage) query = query.eq('stage', params.stage);
@@ -69,7 +69,7 @@ export async function getOpportunities(params: OpportunityListParams): Promise<O
 
 export async function getOpportunityById(id: string): Promise<Opportunity | null> {
   const { data, error } = await getOpportunitiesTable()
-    .select('*, companies(id, name), contacts(id, first_name, last_name)')
+    .select('*, companies(id, name), contacts!opportunities_contact_id_fkey(id, first_name, last_name)')
     .eq('id', id)
     .single();
 
