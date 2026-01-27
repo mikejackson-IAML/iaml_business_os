@@ -78,6 +78,12 @@ Plans:
 **Goal:** Users can search contacts with natural language and view AI-generated intelligence summaries on contact profiles
 **Depends on:** Phase 2 (requires contact list and profile UI)
 **Requirements:** LIST-02, LIST-03, PROF-02, AI-01, AI-02, AI-03, AI-04, API-04, API-05
+**Plans:** 3 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — AI API endpoints, types, Claude helpers, and DB migration for summary caching
+- [ ] 03-02-PLAN.md — AI search bar with rotating placeholder and removable filter pills
+- [ ] 03-03-PLAN.md — AI intelligence summary card on contact profile Overview tab
 
 **Success Criteria** (what must be TRUE):
 1. User types natural language query and sees "Understanding your search..." loading state
@@ -124,10 +130,10 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Database Schema & Core API | 3/3 | Complete | 2026-01-27 |
 | 2. Contact List, Profiles & Company Pages | 7/7 | Complete | 2026-01-27 |
-| 3. AI Search & Intelligence | 0/? | Not started | - |
+| 3. AI Search & Intelligence | 0/3 | Planned | - |
 | 4. Integrations & Bulk Actions | 0/? | Not started | - |
 | 5. Opportunities Pipeline | 0/? | Not started | - |
 
 ---
 *Roadmap created: 2026-01-27*
-*Last updated: 2026-01-27 after Phase 2 execution*
+*Last updated: 2026-01-27 after Phase 3 planning*
