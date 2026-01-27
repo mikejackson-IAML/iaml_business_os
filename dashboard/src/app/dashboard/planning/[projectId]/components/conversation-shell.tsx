@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
 import { Card, CardHeader, CardTitle } from '@/dashboard-kit/components/ui/card';
 import { MessageList } from './message-list';
@@ -41,6 +41,20 @@ export function ConversationShell({
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamingContent, setStreamingContent] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const pendingConversationId = useRef<string | null>(null);
+  const selfInitiatedChange = useRef(false);
+
+  // Sync state when parent changes active conversation (sidebar clicks only)
+  useEffect(() => {
+    if (selfInitiatedChange.current) {
+      selfInitiatedChange.current = false;
+      return;
+    }
+    setConversationId(activeConversationId);
+    setMessages(initialMessages);
+    setStreamingContent('');
+    setError(null);
+  }, [activeConversationId, initialMessages]);
 
   const refreshConversations = useCallback(async () => {
     try {
@@ -111,7 +125,7 @@ export function ConversationShell({
 
               if (data.type === 'conversation_created') {
                 setConversationId(data.conversationId);
-                onActiveConversationChange(data.conversationId);
+                pendingConversationId.current = data.conversationId;
                 refreshConversations();
               } else if (data.type === 'text') {
                 accumulated += data.content;
@@ -128,6 +142,12 @@ export function ConversationShell({
                 ]);
                 setStreamingContent('');
                 setIsStreaming(false);
+                // Now safe to notify parent of new conversation ID
+                if (pendingConversationId.current) {
+                  selfInitiatedChange.current = true;
+                  onActiveConversationChange(pendingConversationId.current);
+                  pendingConversationId.current = null;
+                }
                 refreshConversations();
               } else if (data.type === 'error') {
                 throw new Error(data.message || 'Stream error');
@@ -143,6 +163,11 @@ export function ConversationShell({
         setError(err instanceof Error ? err.message : 'Something went wrong');
         setIsStreaming(false);
         setStreamingContent('');
+        if (pendingConversationId.current) {
+          selfInitiatedChange.current = true;
+          onActiveConversationChange(pendingConversationId.current);
+          pendingConversationId.current = null;
+        }
       }
     },
     [projectId, project.current_phase, conversationId, onActiveConversationChange, refreshConversations]

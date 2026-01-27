@@ -90,7 +90,6 @@ export function ProjectDetailClient({
           <IncubationOverlay project={project} />
         ) : (
           <ConversationShell
-            key={activeConversationId || 'new'}
             projectId={project.id}
             project={project}
             phases={phases}
