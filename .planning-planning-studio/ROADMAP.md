@@ -178,6 +178,14 @@ Plans:
 
 **Goal:** Extract and store memories, enable semantic search
 
+**Plans:** 4 plans
+
+Plans:
+- [ ] 06-01-PLAN.md — Embeddings library, memory extraction library, and API routes
+- [ ] 06-02-PLAN.md — Wire extraction into chat endpoint, conversation summaries
+- [ ] 06-03-PLAN.md — Semantic search API and project-scoped Ask AI panel
+- [ ] 06-04-PLAN.md — Global Ask AI (Cmd+K) modal
+
 ### Requirements Covered
 - REQ-MEMORY: Memory extraction and storage
 - REQ-SEARCH: Semantic search
