@@ -271,6 +271,7 @@ export function ConversationShell({
             phaseId={currentPhase?.id || ''}
             onCompleted={() => {
               setResearchSuggestions((prev) => prev.filter((s) => s.id !== suggestion.id));
+              router.refresh();
             }}
             onDismiss={() => {
               setResearchSuggestions((prev) => prev.filter((s) => s.id !== suggestion.id));
