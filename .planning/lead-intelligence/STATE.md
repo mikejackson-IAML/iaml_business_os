@@ -10,11 +10,11 @@ See: .planning/lead-intelligence/PROJECT.md (updated 2026-01-27)
 ## Current Position
 
 Phase: 1 of 5 (Database Schema & Core API)
-Plan: 1 of 3 (estimated) in phase
+Plan: 3 of 3 (estimated) in phase
 Status: In progress
-Last activity: 2026-01-27 - Completed 01-01-PLAN.md
+Last activity: 2026-01-27 - Completed 01-03-PLAN.md
 
-Progress: [=-----] ~7%
+Progress: [==----] ~20%
 
 ## Accumulated Decisions
 
@@ -24,6 +24,7 @@ Progress: [=-----] ~7%
 | no-programs-fk | No FK from attendance_records to programs | 01-01 | Avoid dependency on potentially missing table |
 | idempotent-alters | ALTER ADD COLUMN IF NOT EXISTS for existing tables | 01-01 | Pre-existing tables needed new columns |
 | migration-timestamp | Used 20260203 instead of 2026012700 | 01-01 | Timestamp conflict with planning_studio migration |
+| supabase-type-assertion | Used `as never` for Supabase insert/update type mismatch | 01-03 | Record<string, unknown> vs Json type incompatibility; runtime compatible |
 
 ## Blockers / Concerns
 
@@ -32,7 +33,7 @@ Progress: [=-----] ~7%
 ## Session Continuity
 
 Last session: 2026-01-27
-Stopped at: Completed 01-01-PLAN.md
+Stopped at: Completed 01-03-PLAN.md
 Resume file: None
 
 ## Session Log
@@ -41,6 +42,7 @@ Resume file: None
 |------|--------|-------|
 | 2026-01-27 | Project initialized | PRD reviewed, 60 requirements defined, 5-phase roadmap created |
 | 2026-01-27 | 01-01 complete | 11 tables + junction + view + triggers + indexes deployed to Supabase |
+| 2026-01-27 | 01-03 complete | Companies CRUD API: 6 files, types + validation + queries + mutations + 2 routes |
 
 ---
-*Last updated: 2026-01-27 after completing 01-01-PLAN.md*
+*Last updated: 2026-01-27 after completing 01-03-PLAN.md*
