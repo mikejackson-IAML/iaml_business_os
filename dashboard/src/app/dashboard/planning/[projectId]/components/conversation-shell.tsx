@@ -5,6 +5,14 @@ import { X } from 'lucide-react';
 import { Card, CardHeader, CardTitle } from '@/dashboard-kit/components/ui/card';
 import { MessageList } from './message-list';
 import { ChatInput } from './chat-input';
+import { PhaseTransitionModal } from './phase-transition-modal';
+import { ForceCompleteButton } from './force-complete-button';
+import { ReadinessBadge } from './readiness-badge';
+import { stripMarkers, INCUBATION_DURATIONS } from '@/lib/planning/phase-transitions';
+import {
+  getPhaseLabel,
+  PHASE_ORDER,
+} from '@/dashboard-kit/types/departments/planning';
 import type {
   PlanningProject,
   PlanningPhase,
@@ -41,6 +49,8 @@ export function ConversationShell({
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamingContent, setStreamingContent] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [showTransition, setShowTransition] = useState(false);
+  const [readinessResult, setReadinessResult] = useState<{ passed: boolean; reason?: string } | null>(null);
   const pendingConversationId = useRef<string | null>(null);
   const selfInitiatedChange = useRef(false);
 
@@ -54,6 +64,8 @@ export function ConversationShell({
     setMessages(initialMessages);
     setStreamingContent('');
     setError(null);
+    setShowTransition(false);
+    setReadinessResult(null);
   }, [activeConversationId, initialMessages]);
 
   const refreshConversations = useCallback(async () => {
@@ -129,15 +141,19 @@ export function ConversationShell({
                 refreshConversations();
               } else if (data.type === 'text') {
                 accumulated += data.content;
-                setStreamingContent(accumulated);
+                setStreamingContent(stripMarkers(accumulated));
+              } else if (data.type === 'phase_complete') {
+                setShowTransition(true);
+              } else if (data.type === 'readiness_result') {
+                setReadinessResult({ passed: data.passed, reason: data.reason });
               } else if (data.type === 'done') {
-                // Add completed assistant message
+                // Add completed assistant message with markers stripped
                 setMessages((prev) => [
                   ...prev,
                   {
                     id: `assistant-${Date.now()}`,
                     role: 'assistant',
-                    content: accumulated,
+                    content: stripMarkers(accumulated),
                   },
                 ]);
                 setStreamingContent('');
@@ -173,11 +189,27 @@ export function ConversationShell({
     [projectId, project.current_phase, conversationId, onActiveConversationChange, refreshConversations]
   );
 
+  const currentPhaseIdx = PHASE_ORDER.indexOf(project.current_phase);
+  const nextPhase = currentPhaseIdx < PHASE_ORDER.length - 1
+    ? PHASE_ORDER[currentPhaseIdx + 1]
+    : project.current_phase;
+
   return (
     <Card className="h-full min-h-[500px] flex flex-col">
       <CardHeader className="pb-2 border-b shrink-0">
-        <CardTitle className="text-sm font-medium">Conversation</CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-sm font-medium">
+            Conversation — {getPhaseLabel(project.current_phase)}
+          </CardTitle>
+          <ForceCompleteButton projectId={projectId} currentPhase={project.current_phase} />
+        </div>
       </CardHeader>
+
+      {readinessResult && (
+        <div className="px-4 pt-2">
+          <ReadinessBadge result={readinessResult} />
+        </div>
+      )}
 
       <MessageList
         messages={messages}
@@ -195,6 +227,16 @@ export function ConversationShell({
       )}
 
       <ChatInput onSend={handleSend} disabled={isStreaming} />
+
+      <PhaseTransitionModal
+        open={showTransition}
+        onOpenChange={setShowTransition}
+        projectId={projectId}
+        currentPhase={project.current_phase}
+        nextPhase={nextPhase}
+        incubationHours={INCUBATION_DURATIONS[project.current_phase]}
+        readinessResult={readinessResult}
+      />
     </Card>
   );
 }
