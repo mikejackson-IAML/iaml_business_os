@@ -36,12 +36,10 @@ CREATE TABLE IF NOT EXISTS coupons (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Indexes
 CREATE INDEX idx_coupons_code ON coupons(LOWER(code));
 CREATE INDEX idx_coupons_status ON coupons(status);
 CREATE INDEX idx_coupons_stripe_id ON coupons(stripe_coupon_id);
-
 -- Updated at trigger
 CREATE OR REPLACE FUNCTION update_coupons_updated_at()
 RETURNS TRIGGER AS $$
@@ -50,11 +48,9 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 CREATE TRIGGER coupons_updated_at
   BEFORE UPDATE ON coupons
   FOR EACH ROW EXECUTE FUNCTION update_coupons_updated_at();
-
 -- ============================================
 -- SEED INITIAL COUPONS
 -- ============================================
@@ -64,7 +60,6 @@ INSERT INTO coupons (code, name, discount_amount, eligible_program_types, stripe
   ('IAML-100', '$100 Off Any Program', 100, ARRAY['certificate', 'advanced_certificate', 'block', 'standalone'], 'IAML-100', 'active'),
   ('IAML-ALUMNI', 'Free Quarterly Updates for Alumni', 397, ARRAY['standalone'], 'IAML-ALUMNI', 'active')
 ON CONFLICT (code) DO NOTHING;
-
 -- ============================================
 -- COMMENTS
 -- ============================================

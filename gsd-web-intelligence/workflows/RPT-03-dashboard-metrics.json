@@ -1,0 +1,85 @@
+{
+  "name": "Web Intel - Dashboard Metrics Computer",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "cronExpression", "expression": "0 1 * * *"}]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Daily 1am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT web_intel.compute_dashboard_metrics(CURRENT_DATE - 1)"
+      },
+      "id": "compute-metrics",
+      "name": "Compute Dashboard Metrics",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM web_intel.latest_dashboard"
+      },
+      "id": "fetch-latest",
+      "name": "Fetch Latest Metrics",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Check for significant changes to alert on\nconst metrics = $input.first().json;\nconst alerts = [];\n\n// Check for significant session drop\nif (metrics.sessions_7d_avg && metrics.sessions_30d_avg) {\n  const change = ((metrics.sessions_7d_avg - metrics.sessions_30d_avg) / metrics.sessions_30d_avg) * 100;\n  if (change < -20) {\n    alerts.push({\n      type: 'traffic_decline',\n      message: `7-day average sessions down ${Math.abs(change).toFixed(1)}% vs 30-day average`\n    });\n  }\n}\n\n// Check for critical alerts\nif (metrics.alerts_critical > 0) {\n  alerts.push({\n    type: 'critical_alerts',\n    message: `${metrics.alerts_critical} critical alerts pending`\n  });\n}\n\nreturn [{ json: { metrics, alerts, has_alerts: alerts.length > 0 } }];"
+      },
+      "id": "check-metrics",
+      "name": "Check for Alerts",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict"},
+          "conditions": [{"id": "has-alerts", "leftValue": "={{ $json.has_alerts }}", "rightValue": true, "operator": {"type": "boolean", "operation": "equals"}}]
+        }
+      },
+      "id": "check-alerts",
+      "name": "Has Alerts?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [880, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SLACK_WEB_INTEL_WEBHOOK}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"text\": \":warning: *Dashboard Alert*\\n{{ $json.alerts.map(a => '• ' + a.message).join('\\\\n') }}\"}"
+      },
+      "id": "send-alert",
+      "name": "Send Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1100, -100]
+    }
+  ],
+  "connections": {
+    "Daily 1am CT": {"main": [[{"node": "Compute Dashboard Metrics", "type": "main", "index": 0}]]},
+    "Compute Dashboard Metrics": {"main": [[{"node": "Fetch Latest Metrics", "type": "main", "index": 0}]]},
+    "Fetch Latest Metrics": {"main": [[{"node": "Check for Alerts", "type": "main", "index": 0}]]},
+    "Check for Alerts": {"main": [[{"node": "Has Alerts?", "type": "main", "index": 0}]]},
+    "Has Alerts?": {"main": [[{"node": "Send Alert", "type": "main", "index": 0}], []]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": [{"name": "web-intel"}, {"name": "dashboard"}, {"name": "daily"}]
+}

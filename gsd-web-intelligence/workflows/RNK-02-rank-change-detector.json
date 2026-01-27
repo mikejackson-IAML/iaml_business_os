@@ -1,0 +1,249 @@
+{
+  "name": "Web Intel - Rankings - Change Detector",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "30 5 * * *"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Daily 5:30am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM web_intel.ranking_changes WHERE change_type != 'stable' AND change_type != 'no_data'",
+        "options": {}
+      },
+      "id": "fetch-changes",
+      "name": "Fetch Ranking Changes",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Categorize changes by severity\nconst changes = $input.all().map(item => item.json);\n\nconst categorized = {\n  critical: [],\n  warning: [],\n  info: []\n};\n\nchanges.forEach(change => {\n  let severity;\n  \n  switch(change.change_type) {\n    case 'lost_ranking':\n    case 'major_drop':\n      severity = 'critical';\n      break;\n    case 'drop':\n      severity = 'warning';\n      break;\n    case 'new_ranking':\n    case 'major_gain':\n    case 'gain':\n      severity = 'info';\n      break;\n    default:\n      return;\n  }\n  \n  categorized[severity].push({\n    keyword: change.keyword,\n    change_type: change.change_type,\n    yesterday_position: change.yesterday_position,\n    today_position: change.today_position,\n    position_change: change.position_change,\n    priority: change.priority,\n    target_url: change.target_url,\n    today_url: change.today_url\n  });\n});\n\nconst hasAlerts = categorized.critical.length > 0 || categorized.warning.length > 0;\n\nreturn [{\n  json: {\n    has_alerts: hasAlerts,\n    categorized,\n    counts: {\n      critical: categorized.critical.length,\n      warning: categorized.warning.length,\n      info: categorized.info.length,\n      total: changes.length\n    }\n  }\n}];"
+      },
+      "id": "categorize-changes",
+      "name": "Categorize by Severity",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-alerts",
+              "leftValue": "={{ $json.has_alerts }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-alerts",
+      "name": "Has Critical/Warning?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Create alert records for significant changes\nconst data = $input.first().json;\nconst alerts = [];\nconst today = new Date().toISOString().split('T')[0];\n\n// Critical alerts\ndata.categorized.critical.forEach(change => {\n  alerts.push({\n    alert_type: change.change_type === 'lost_ranking' ? 'ranking_lost' : 'ranking_drop',\n    severity: 'critical',\n    title: change.change_type === 'lost_ranking' \n      ? `Lost Ranking: \"${change.keyword}\"`\n      : `Major Drop: \"${change.keyword}\" (#${change.yesterday_position} → #${change.today_position})`,\n    message: `Keyword \"${change.keyword}\" ${change.change_type === 'lost_ranking' ? 'is no longer ranking' : `dropped ${Math.abs(change.position_change)} positions`}`,\n    metadata: JSON.stringify(change)\n  });\n});\n\n// Warning alerts\ndata.categorized.warning.forEach(change => {\n  alerts.push({\n    alert_type: 'ranking_drop',\n    severity: 'warning',\n    title: `Ranking Drop: \"${change.keyword}\" (#${change.yesterday_position} → #${change.today_position})`,\n    message: `Keyword \"${change.keyword}\" dropped ${Math.abs(change.position_change)} positions`,\n    metadata: JSON.stringify(change)\n  });\n});\n\nreturn alerts.map(a => ({ json: a }));"
+      },
+      "id": "create-alerts",
+      "name": "Create Alert Records",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [880, -100]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "web_intel",
+        "table": "alerts",
+        "columns": "alert_type, severity, title, message, metadata",
+        "options": {}
+      },
+      "id": "insert-alerts",
+      "name": "Insert Alerts",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1100, -100],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.RNK_03_WEBHOOK_URL}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($('Categorize by Severity').first().json) }}",
+        "options": {}
+      },
+      "id": "trigger-notifier",
+      "name": "Trigger RNK-03 Notifier",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1320, -100]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "web_intel",
+        "table": "collection_log",
+        "columns": "workflow_id, workflow_name, status, records_processed, completed_at, details",
+        "options": {}
+      },
+      "id": "log-success",
+      "name": "Log Success",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [880, 100],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Daily 5:30am CT": {
+      "main": [
+        [
+          {
+            "node": "Fetch Ranking Changes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Ranking Changes": {
+      "main": [
+        [
+          {
+            "node": "Categorize by Severity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Categorize by Severity": {
+      "main": [
+        [
+          {
+            "node": "Has Critical/Warning?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Critical/Warning?": {
+      "main": [
+        [
+          {
+            "node": "Create Alert Records",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Alert Records": {
+      "main": [
+        [
+          {
+            "node": "Insert Alerts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Alerts": {
+      "main": [
+        [
+          {
+            "node": "Trigger RNK-03 Notifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trigger RNK-03 Notifier": {
+      "main": [
+        [
+          {
+            "node": "Log Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "meta": {
+    "templateId": "web-intel-rank-change-detector"
+  },
+  "tags": [
+    {
+      "name": "web-intel"
+    },
+    {
+      "name": "rankings"
+    },
+    {
+      "name": "detector"
+    }
+  ]
+}

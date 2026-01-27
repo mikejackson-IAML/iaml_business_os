@@ -1,0 +1,116 @@
+{
+  "name": "Web Intel - Internal Link Analyzer",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "cronExpression", "expression": "0 5 1 * *"}]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Monthly 1st 5am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT url, path FROM web_intel.content_inventory WHERE is_indexed = TRUE AND content_type IN ('blog', 'program', 'resource') ORDER BY url LIMIT 200"
+      },
+      "id": "fetch-pages",
+      "name": "Fetch Indexable Pages",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "batchSize": 5,
+        "options": {}
+      },
+      "id": "batch-pages",
+      "name": "Batch Pages",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.url }}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "fetch-page",
+      "name": "Fetch Page",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Analyze internal links on the page\nconst html = $input.first().json.data || '';\nconst url = $input.first().json.url;\nconst siteOrigin = process.env.SITE_ORIGIN || 'https://iaml.com';\n\n// Find all internal links\nconst linkMatches = html.match(/<a[^>]+href=[\"']([^\"']+)[\"'][^>]*>/gi) || [];\n\nlet internalLinks = 0;\nlet externalLinks = 0;\nlet brokenLinkCandidates = [];\n\nlinkMatches.forEach(link => {\n  const hrefMatch = link.match(/href=[\"']([^\"']+)[\"']/);\n  if (!hrefMatch) return;\n  \n  const href = hrefMatch[1];\n  \n  // Skip anchors, javascript, mailto\n  if (href.startsWith('#') || href.startsWith('javascript:') || href.startsWith('mailto:')) return;\n  \n  // Check if internal\n  if (href.startsWith('/') || href.startsWith(siteOrigin)) {\n    internalLinks++;\n  } else if (href.startsWith('http')) {\n    externalLinks++;\n  }\n});\n\nconst hasLowInternalLinks = internalLinks < 3;\n\nreturn [{ \n  json: { \n    url,\n    internal_link_count: internalLinks,\n    external_link_count: externalLinks,\n    total_links: internalLinks + externalLinks,\n    has_low_internal_links: hasLowInternalLinks,\n    analyzed_at: new Date().toISOString()\n  } \n}];"
+      },
+      "id": "analyze-links",
+      "name": "Analyze Links",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [880, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict"},
+          "conditions": [{"id": "low-links", "leftValue": "={{ $json.has_low_internal_links }}", "rightValue": true, "operator": {"type": "boolean", "operation": "equals"}}]
+        }
+      },
+      "id": "check-low-links",
+      "name": "Low Internal Links?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1100, 0]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "web_intel",
+        "table": "internal_link_issues",
+        "columns": "url, internal_link_count, external_link_count, issue_type, detected_at"
+      },
+      "id": "store-issue",
+      "name": "Store Link Issue",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1320, -100]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {"id": "issue_type", "name": "issue_type", "value": "low_internal_links", "type": "string"},
+            {"id": "detected_at", "name": "detected_at", "value": "={{ $now.toISO() }}", "type": "string"}
+          ]
+        }
+      },
+      "id": "set-issue-type",
+      "name": "Set Issue Type",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1320, -200]
+    }
+  ],
+  "connections": {
+    "Monthly 1st 5am CT": {"main": [[{"node": "Fetch Indexable Pages", "type": "main", "index": 0}]]},
+    "Fetch Indexable Pages": {"main": [[{"node": "Batch Pages", "type": "main", "index": 0}]]},
+    "Batch Pages": {"main": [[{"node": "Fetch Page", "type": "main", "index": 0}]]},
+    "Fetch Page": {"main": [[{"node": "Analyze Links", "type": "main", "index": 0}]]},
+    "Analyze Links": {"main": [[{"node": "Low Internal Links?", "type": "main", "index": 0}]]},
+    "Low Internal Links?": {"main": [[{"node": "Set Issue Type", "type": "main", "index": 0}], [{"node": "Batch Pages", "type": "main", "index": 0}]]},
+    "Set Issue Type": {"main": [[{"node": "Store Link Issue", "type": "main", "index": 0}]]},
+    "Store Link Issue": {"main": [[{"node": "Batch Pages", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": [{"name": "web-intel"}, {"name": "content"}, {"name": "internal-links"}, {"name": "monthly"}]
+}

@@ -1,0 +1,261 @@
+{
+  "name": "Web Intel - Rankings - Volume Updater",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 3 1 * *"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Monthly 1st 3am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, keyword, search_volume as old_volume FROM web_intel.tracked_keywords WHERE status = 'active' ORDER BY keyword",
+        "options": {}
+      },
+      "id": "fetch-keywords",
+      "name": "Fetch Keywords",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "batchSize": 100,
+        "options": {}
+      },
+      "id": "split-batches",
+      "name": "Split Into Batches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare DataForSEO keyword data request\nconst keywords = $input.all().map(item => item.json);\n\nconst tasks = keywords.map(kw => ({\n  keyword: kw.keyword,\n  location_code: 2840, // United States\n  language_code: 'en'\n}));\n\nreturn [{\n  json: {\n    tasks,\n    keywords\n  }\n}];"
+      },
+      "id": "prepare-request",
+      "name": "Prepare Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.dataforseo.com/v3/keywords_data/google_ads/search_volume/live",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.tasks) }}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "dataforseo-request",
+      "name": "DataForSEO - Get Volumes",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, 0],
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "{{DATAFORSEO_CREDENTIAL_ID}}",
+          "name": "DataForSEO API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse DataForSEO response and match with keywords\nconst input = $input.first().json;\nconst response = input; // The HTTP response\nconst tasks = response.tasks || [];\n\nconst updates = [];\nconst significantChanges = [];\n\ntasks.forEach(task => {\n  if (task.status_code !== 20000) return;\n  \n  const results = task.result || [];\n  results.forEach(result => {\n    const keyword = result.keyword;\n    const volume = result.search_volume || 0;\n    \n    updates.push({\n      keyword,\n      search_volume: volume\n    });\n  });\n});\n\nreturn updates.map(u => ({ json: u }));"
+      },
+      "id": "parse-response",
+      "name": "Parse Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1100, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=UPDATE web_intel.tracked_keywords \nSET \n  search_volume = {{ $json.search_volume }},\n  updated_at = NOW()\nWHERE keyword = '{{ $json.keyword }}'",
+        "options": {}
+      },
+      "id": "update-volumes",
+      "name": "Update Volumes",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1320, 0],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare log entry\nconst items = $input.all();\nreturn [{\n  json: {\n    workflow_id: 'RNK-07',\n    workflow_name: 'Web Intel - Rankings - Volume Updater',\n    status: 'success',\n    records_processed: items.length,\n    completed_at: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "prepare-log",
+      "name": "Prepare Log Entry",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1540, 0]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "web_intel",
+        "table": "collection_log",
+        "columns": "workflow_id, workflow_name, status, records_processed, completed_at",
+        "options": {}
+      },
+      "id": "log-success",
+      "name": "Log Success",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1760, 0],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Monthly 1st 3am CT": {
+      "main": [
+        [
+          {
+            "node": "Fetch Keywords",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Keywords": {
+      "main": [
+        [
+          {
+            "node": "Split Into Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Into Batches": {
+      "main": [
+        [
+          {
+            "node": "Prepare Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Request": {
+      "main": [
+        [
+          {
+            "node": "DataForSEO - Get Volumes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DataForSEO - Get Volumes": {
+      "main": [
+        [
+          {
+            "node": "Parse Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Response": {
+      "main": [
+        [
+          {
+            "node": "Update Volumes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Volumes": {
+      "main": [
+        [
+          {
+            "node": "Split Into Batches",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Prepare Log Entry",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Log Entry": {
+      "main": [
+        [
+          {
+            "node": "Log Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "meta": {
+    "templateId": "web-intel-volume-updater"
+  },
+  "tags": [
+    {
+      "name": "web-intel"
+    },
+    {
+      "name": "rankings"
+    },
+    {
+      "name": "dataforseo"
+    },
+    {
+      "name": "monthly"
+    }
+  ]
+}

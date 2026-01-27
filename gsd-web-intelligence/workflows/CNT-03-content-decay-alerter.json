@@ -1,0 +1,48 @@
+{
+  "name": "Web Intel - Content Decay Alerter",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "cnt-03-decay-alert",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "cnt-03-decay-alert"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Format decay alerts for Slack\nconst data = $input.first().json.body || $input.first().json;\nconst alerts = data.alerts || [];\n\nconst critical = alerts.filter(a => a.severity === 'critical');\nconst warning = alerts.filter(a => a.severity === 'warning');\nconst info = alerts.filter(a => a.severity === 'info');\n\nlet message = `:chart_with_downwards_trend: *Content Decay Alert*\\n`;\nmessage += `*Summary:* ${data.summary}\\n\\n`;\n\nif (critical.length > 0) {\n  message += `:rotating_light: *Critical (>50% decline):*\\n`;\n  critical.slice(0, 5).forEach(a => {\n    message += `• ${a.message}\\n`;\n  });\n  if (critical.length > 5) message += `_...and ${critical.length - 5} more_\\n`;\n  message += `\\n`;\n}\n\nif (warning.length > 0) {\n  message += `:warning: *Warning (30-50% decline):*\\n`;\n  warning.slice(0, 5).forEach(a => {\n    message += `• ${a.message}\\n`;\n  });\n  if (warning.length > 5) message += `_...and ${warning.length - 5} more_\\n`;\n  message += `\\n`;\n}\n\nif (info.length > 0) {\n  message += `:information_source: *Info (20-30% decline):*\\n`;\n  info.slice(0, 3).forEach(a => {\n    message += `• ${a.message}\\n`;\n  });\n  if (info.length > 3) message += `_...and ${info.length - 3} more_\\n`;\n}\n\nreturn [{ json: { slack_message: message, alert_count: alerts.length } }];"
+      },
+      "id": "format-message",
+      "name": "Format Slack Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SLACK_WEB_INTEL_WEBHOOK}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"text\": {{ JSON.stringify($json.slack_message) }}}"
+      },
+      "id": "send-slack",
+      "name": "Send to Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [440, 0]
+    }
+  ],
+  "connections": {
+    "Webhook": {"main": [[{"node": "Format Slack Message", "type": "main", "index": 0}]]},
+    "Format Slack Message": {"main": [[{"node": "Send to Slack", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": [{"name": "web-intel"}, {"name": "content"}, {"name": "decay"}, {"name": "alerter"}]
+}

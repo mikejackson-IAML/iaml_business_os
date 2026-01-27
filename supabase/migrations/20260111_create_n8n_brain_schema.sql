@@ -4,7 +4,6 @@
 
 -- Create dedicated schema
 CREATE SCHEMA IF NOT EXISTS n8n_brain;
-
 -- ============================================
 -- PATTERNS TABLE
 -- Stores successful workflow patterns for reuse
@@ -38,14 +37,12 @@ CREATE TABLE n8n_brain.patterns (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Indexes for fast pattern lookup
 CREATE INDEX idx_patterns_services ON n8n_brain.patterns USING GIN (services);
 CREATE INDEX idx_patterns_node_types ON n8n_brain.patterns USING GIN (node_types);
 CREATE INDEX idx_patterns_tags ON n8n_brain.patterns USING GIN (tags);
 CREATE INDEX idx_patterns_trigger ON n8n_brain.patterns (trigger_type);
 CREATE INDEX idx_patterns_success ON n8n_brain.patterns (success_count DESC);
-
 -- ============================================
 -- ERROR FIXES TABLE
 -- Maps error messages to proven fixes
@@ -71,13 +68,11 @@ CREATE TABLE n8n_brain.error_fixes (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Index for fast error lookup
 CREATE INDEX idx_error_fixes_message ON n8n_brain.error_fixes
   USING GIN (to_tsvector('english', error_message));
 CREATE INDEX idx_error_fixes_node ON n8n_brain.error_fixes (node_type);
 CREATE INDEX idx_error_fixes_operation ON n8n_brain.error_fixes (operation);
-
 -- ============================================
 -- CREDENTIALS TABLE
 -- Maps service names to credential IDs (NO SECRETS)
@@ -98,7 +93,6 @@ CREATE TABLE n8n_brain.credentials (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- ============================================
 -- CONFIDENCE LOG TABLE
 -- Tracks autonomous action outcomes for calibration
@@ -127,12 +121,10 @@ CREATE TABLE n8n_brain.confidence_log (
   -- Timestamps
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Index for confidence analysis
 CREATE INDEX idx_confidence_outcome ON n8n_brain.confidence_log (outcome);
 CREATE INDEX idx_confidence_services ON n8n_brain.confidence_log USING GIN (services_involved);
 CREATE INDEX idx_confidence_created ON n8n_brain.confidence_log (created_at DESC);
-
 -- ============================================
 -- PREFERENCES TABLE
 -- User preferences for workflow building
@@ -150,7 +142,6 @@ CREATE TABLE n8n_brain.preferences (
 
   UNIQUE(category, key)
 );
-
 -- ============================================
 -- HELPER FUNCTIONS
 -- ============================================
@@ -165,7 +156,6 @@ RETURNS NUMERIC AS $$
   FROM n8n_brain.error_fixes
   WHERE id = fix_id;
 $$ LANGUAGE SQL STABLE;
-
 -- Function to find similar patterns by services
 CREATE OR REPLACE FUNCTION n8n_brain.find_patterns_by_services(
   p_services TEXT[],
@@ -198,7 +188,6 @@ BEGIN
   LIMIT p_limit;
 END;
 $$ LANGUAGE plpgsql STABLE;
-
 -- Function to search error fixes by message
 CREATE OR REPLACE FUNCTION n8n_brain.search_error_fixes(
   p_error_message TEXT,
@@ -234,7 +223,6 @@ BEGIN
   LIMIT p_limit;
 END;
 $$ LANGUAGE plpgsql STABLE;
-
 -- Trigger to update updated_at timestamp
 CREATE OR REPLACE FUNCTION n8n_brain.update_updated_at()
 RETURNS TRIGGER AS $$
@@ -243,24 +231,19 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 -- Apply trigger to all tables with updated_at
 CREATE TRIGGER patterns_updated_at
   BEFORE UPDATE ON n8n_brain.patterns
   FOR EACH ROW EXECUTE FUNCTION n8n_brain.update_updated_at();
-
 CREATE TRIGGER error_fixes_updated_at
   BEFORE UPDATE ON n8n_brain.error_fixes
   FOR EACH ROW EXECUTE FUNCTION n8n_brain.update_updated_at();
-
 CREATE TRIGGER credentials_updated_at
   BEFORE UPDATE ON n8n_brain.credentials
   FOR EACH ROW EXECUTE FUNCTION n8n_brain.update_updated_at();
-
 CREATE TRIGGER preferences_updated_at
   BEFORE UPDATE ON n8n_brain.preferences
   FOR EACH ROW EXECUTE FUNCTION n8n_brain.update_updated_at();
-
 -- ============================================
 -- WORKFLOW REGISTRY TABLE
 -- Tracks all n8n workflows and their test status
@@ -317,12 +300,10 @@ CREATE TABLE IF NOT EXISTS n8n_brain.workflow_registry (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Indexes for workflow registry
 CREATE INDEX IF NOT EXISTS idx_workflow_registry_status ON n8n_brain.workflow_registry(test_status);
 CREATE INDEX IF NOT EXISTS idx_workflow_registry_category ON n8n_brain.workflow_registry(category);
 CREATE INDEX IF NOT EXISTS idx_workflow_registry_active ON n8n_brain.workflow_registry(is_active);
-
 -- ============================================
 -- VIEW: Workflow Test Summary
 -- Dashboard view of workflow testing progress
@@ -343,7 +324,6 @@ ORDER BY
     WHEN 'tested' THEN 5
     WHEN 'verified' THEN 6
   END;
-
 -- ============================================
 -- VIEW: Workflows Needing Attention
 -- Workflows that need testing or are broken
@@ -379,7 +359,6 @@ ORDER BY
     WHEN test_status = 'untested' THEN 4
     ELSE 5
   END;
-
 -- ============================================
 -- FUNCTION: Register or update workflow
 -- ============================================
@@ -445,7 +424,6 @@ BEGIN
   RETURN v_id;
 END;
 $$ LANGUAGE plpgsql;
-
 -- ============================================
 -- FUNCTION: Mark workflow as tested
 -- ============================================
@@ -467,12 +445,10 @@ BEGIN
   WHERE workflow_id = p_workflow_id;
 END;
 $$ LANGUAGE plpgsql;
-
 -- Trigger for workflow_registry updated_at
 CREATE TRIGGER workflow_registry_updated_at
   BEFORE UPDATE ON n8n_brain.workflow_registry
   FOR EACH ROW EXECUTE FUNCTION n8n_brain.update_updated_at();
-
 -- ============================================
 -- COMMENTS
 -- ============================================

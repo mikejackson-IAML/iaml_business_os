@@ -1,0 +1,108 @@
+{
+  "name": "Web Intel - Recommendation Generator",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "cronExpression", "expression": "0 10 * * 1"}]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Weekly Monday 10am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM web_intel.striking_distance ORDER BY opportunity_score DESC LIMIT 10"
+      },
+      "id": "fetch-opportunities",
+      "name": "Fetch Ranking Opportunities",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM web_intel.competitive_gaps LIMIT 10"
+      },
+      "id": "fetch-gaps",
+      "name": "Fetch Competitive Gaps",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 150]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM web_intel.link_opportunities WHERE status = 'new' ORDER BY domain_authority DESC LIMIT 10"
+      },
+      "id": "fetch-link-opps",
+      "name": "Fetch Link Opportunities",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 300]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "mergeByFields": {"values": []}
+      },
+      "id": "merge-data",
+      "name": "Merge All Data",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [440, 150]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Generate recommendations from opportunities\nconst items = $input.all();\nconst opportunities = items.filter(i => i.json.opportunity_score).map(i => i.json);\nconst gaps = items.filter(i => i.json.gap_type).map(i => i.json);\nconst linkOpps = items.filter(i => i.json.domain_authority && i.json.source).map(i => i.json);\n\nconst recommendations = [];\n\n// Ranking opportunity recommendations\nopportunities.slice(0, 3).forEach(opp => {\n  recommendations.push({\n    insight_type: 'keyword_opportunity',\n    category: 'rankings',\n    title: `Optimize \"${opp.keyword}\" for Page 1`,\n    summary: `Currently ranking #${opp.position}. With ${opp.search_volume || 'unknown'} monthly searches, improving to top 3 could drive significant traffic.`,\n    priority: opp.position <= 10 ? 'high' : 'medium',\n    recommended_actions: JSON.stringify([{\n      action: `Review and optimize ${opp.ranking_url || 'target page'} for \"${opp.keyword}\"`,\n      effort: 'medium',\n      impact: 'high'\n    }]),\n    data_sources: ['striking_distance', 'daily_rankings']\n  });\n});\n\n// Competitive gap recommendations\ngaps.slice(0, 2).forEach(gap => {\n  recommendations.push({\n    insight_type: 'competitive_insight',\n    category: 'competitors',\n    title: `Content Gap: \"${gap.keyword}\"`,\n    summary: `${gap.competitor_domain} ranks #${gap.competitor_position} for this keyword, but we don't have content targeting it.`,\n    priority: gap.competitor_position <= 5 ? 'high' : 'medium',\n    recommended_actions: JSON.stringify([{\n      action: `Create content targeting \"${gap.keyword}\" to compete with ${gap.competitor_domain}`,\n      effort: 'high',\n      impact: 'high'\n    }]),\n    data_sources: ['competitive_gaps', 'competitor_rankings']\n  });\n});\n\n// Link opportunity recommendations\nlinkOpps.slice(0, 2).forEach(link => {\n  recommendations.push({\n    insight_type: 'optimization_suggestion',\n    category: 'backlinks',\n    title: `Link Opportunity: ${link.domain}`,\n    summary: `DA ${link.domain_authority} site links to competitors. Potential outreach target.`,\n    priority: link.domain_authority >= 50 ? 'high' : 'medium',\n    recommended_actions: JSON.stringify([{\n      action: `Reach out to ${link.domain} for link building opportunity`,\n      effort: 'medium',\n      impact: 'medium'\n    }]),\n    data_sources: ['link_opportunities']\n  });\n});\n\nreturn recommendations.length > 0 ? recommendations.map(r => ({ json: r })) : [{ json: { skip: true } }];"
+      },
+      "id": "generate-recommendations",
+      "name": "Generate Recommendations",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 150]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict"},
+          "conditions": [{"id": "has-recs", "leftValue": "={{ $json.skip }}", "rightValue": true, "operator": {"type": "boolean", "operation": "notEquals"}}]
+        }
+      },
+      "id": "check-recs",
+      "name": "Has Recommendations?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [880, 150]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "web_intel",
+        "table": "ai_insights",
+        "columns": "insight_type, category, title, summary, priority, recommended_actions, data_sources"
+      },
+      "id": "store-recommendations",
+      "name": "Store Recommendations",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1100, 50]
+    }
+  ],
+  "connections": {
+    "Weekly Monday 10am CT": {"main": [[{"node": "Fetch Ranking Opportunities", "type": "main", "index": 0}, {"node": "Fetch Competitive Gaps", "type": "main", "index": 0}, {"node": "Fetch Link Opportunities", "type": "main", "index": 0}]]},
+    "Fetch Ranking Opportunities": {"main": [[{"node": "Merge All Data", "type": "main", "index": 0}]]},
+    "Fetch Competitive Gaps": {"main": [[{"node": "Merge All Data", "type": "main", "index": 1}]]},
+    "Fetch Link Opportunities": {"main": [[{"node": "Merge All Data", "type": "main", "index": 2}]]},
+    "Merge All Data": {"main": [[{"node": "Generate Recommendations", "type": "main", "index": 0}]]},
+    "Generate Recommendations": {"main": [[{"node": "Has Recommendations?", "type": "main", "index": 0}]]},
+    "Has Recommendations?": {"main": [[{"node": "Store Recommendations", "type": "main", "index": 0}], []]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": [{"name": "web-intel"}, {"name": "ai"}, {"name": "recommendations"}, {"name": "weekly"}]
+}

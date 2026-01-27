@@ -1,0 +1,108 @@
+{
+  "name": "Web Intel - New/Lost Backlink Detector",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "cronExpression", "expression": "0 4 * * 1"}]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Weekly Monday 4am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, source_url, source_domain, target_url, domain_authority, 'new' as change_type FROM web_intel.backlinks WHERE first_seen_at >= NOW() - INTERVAL '7 days' AND status = 'active'"
+      },
+      "id": "fetch-new",
+      "name": "Fetch New Backlinks",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, source_url, source_domain, target_url, domain_authority, 'lost' as change_type FROM web_intel.backlinks WHERE last_seen_at < NOW() - INTERVAL '14 days' AND status = 'active'"
+      },
+      "id": "fetch-lost",
+      "name": "Fetch Lost Backlinks",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 200]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "mergeByFields": {"values": []}
+      },
+      "id": "merge-changes",
+      "name": "Merge Changes",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [440, 100]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Process backlink changes\nconst items = $input.all().map(i => i.json);\nconst newLinks = items.filter(i => i.change_type === 'new');\nconst lostLinks = items.filter(i => i.change_type === 'lost');\n\nif (items.length === 0) {\n  return [{ json: { has_changes: false, summary: 'No backlink changes detected' } }];\n}\n\n// Calculate metrics\nconst newHighDA = newLinks.filter(l => l.domain_authority >= 50).length;\nconst lostHighDA = lostLinks.filter(l => l.domain_authority >= 50).length;\n\nconst changes = items.map(item => ({\n  backlink_id: item.id,\n  change_type: item.change_type,\n  source_url: item.source_url,\n  source_domain: item.source_domain,\n  target_url: item.target_url,\n  domain_authority: item.domain_authority,\n  detected_date: new Date().toISOString().split('T')[0]\n}));\n\nreturn [{\n  json: {\n    has_changes: true,\n    new_count: newLinks.length,\n    lost_count: lostLinks.length,\n    new_high_da: newHighDA,\n    lost_high_da: lostHighDA,\n    changes: changes,\n    top_new: newLinks.sort((a, b) => (b.domain_authority || 0) - (a.domain_authority || 0)).slice(0, 5),\n    top_lost: lostLinks.sort((a, b) => (b.domain_authority || 0) - (a.domain_authority || 0)).slice(0, 5)\n  }\n}];"
+      },
+      "id": "process-changes",
+      "name": "Process Changes",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 100]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict"},
+          "conditions": [{"id": "has-changes", "leftValue": "={{ $json.has_changes }}", "rightValue": true, "operator": {"type": "boolean", "operation": "equals"}}]
+        }
+      },
+      "id": "check-changes",
+      "name": "Has Changes?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [880, 100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SLACK_WEB_INTEL_WEBHOOK}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"text\": \":link: *Backlink Changes Detected*\\n\\n:arrow_up: *New:* {{ $json.new_count }} ({{ $json.new_high_da }} high DA)\\n:arrow_down: *Lost:* {{ $json.lost_count }} ({{ $json.lost_high_da }} high DA)\\n\\n*Top New:*\\n{{ $json.top_new.slice(0, 3).map(l => '• ' + l.source_domain + ' (DA ' + l.domain_authority + ')').join('\\\\n') }}\\n\\n*Top Lost:*\\n{{ $json.top_lost.slice(0, 3).map(l => '• ' + l.source_domain + ' (DA ' + l.domain_authority + ')').join('\\\\n') }}\"}"
+      },
+      "id": "send-slack",
+      "name": "Send to Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1100, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE web_intel.backlinks SET status = 'lost', lost_at = NOW() WHERE last_seen_at < NOW() - INTERVAL '14 days' AND status = 'active'"
+      },
+      "id": "mark-lost",
+      "name": "Mark Lost Backlinks",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1100, 200]
+    }
+  ],
+  "connections": {
+    "Weekly Monday 4am CT": {"main": [[{"node": "Fetch New Backlinks", "type": "main", "index": 0}, {"node": "Fetch Lost Backlinks", "type": "main", "index": 0}]]},
+    "Fetch New Backlinks": {"main": [[{"node": "Merge Changes", "type": "main", "index": 0}]]},
+    "Fetch Lost Backlinks": {"main": [[{"node": "Merge Changes", "type": "main", "index": 1}]]},
+    "Merge Changes": {"main": [[{"node": "Process Changes", "type": "main", "index": 0}]]},
+    "Process Changes": {"main": [[{"node": "Has Changes?", "type": "main", "index": 0}]]},
+    "Has Changes?": {"main": [[{"node": "Send to Slack", "type": "main", "index": 0}, {"node": "Mark Lost Backlinks", "type": "main", "index": 0}], []]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": [{"name": "web-intel"}, {"name": "backlinks"}, {"name": "detector"}, {"name": "weekly"}]
+}

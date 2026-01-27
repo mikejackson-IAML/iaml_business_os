@@ -41,11 +41,9 @@ CREATE TABLE IF NOT EXISTS dev_projects (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Indexes for dev_projects
 CREATE INDEX IF NOT EXISTS idx_dev_projects_status ON dev_projects(status);
 CREATE INDEX IF NOT EXISTS idx_dev_projects_key ON dev_projects(project_key);
-
 -- ============================================
 -- DEV PROJECT PHASES TABLE
 -- Tracks phases (roadmap) for each project
@@ -76,11 +74,9 @@ CREATE TABLE IF NOT EXISTS dev_project_phases (
 
   UNIQUE(project_id, phase_number)
 );
-
 -- Indexes for dev_project_phases
 CREATE INDEX IF NOT EXISTS idx_dev_project_phases_project ON dev_project_phases(project_id);
 CREATE INDEX IF NOT EXISTS idx_dev_project_phases_status ON dev_project_phases(status);
-
 -- ============================================
 -- DEV PROJECT IDEAS TABLE
 -- Ideas backlog for future work
@@ -102,12 +98,10 @@ CREATE TABLE IF NOT EXISTS dev_project_ideas (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Indexes for dev_project_ideas
 CREATE INDEX IF NOT EXISTS idx_dev_project_ideas_project ON dev_project_ideas(project_id);
 CREATE INDEX IF NOT EXISTS idx_dev_project_ideas_status ON dev_project_ideas(status);
 CREATE INDEX IF NOT EXISTS idx_dev_project_ideas_milestone ON dev_project_ideas(target_milestone);
-
 -- ============================================
 -- VIEWS
 -- ============================================
@@ -137,7 +131,6 @@ ORDER BY
     WHEN 'complete' THEN 5
   END,
   dp.last_activity_at DESC NULLS LAST;
-
 -- Projects needing attention view
 CREATE OR REPLACE VIEW dev_projects_needing_attention AS
 SELECT
@@ -172,7 +165,6 @@ ORDER BY
     WHEN dp.status = 'needs_input' THEN 2
     WHEN dp.status = 'idle' THEN 3
   END;
-
 -- ============================================
 -- HELPER FUNCTIONS
 -- ============================================
@@ -198,7 +190,6 @@ BEGIN
   RETURN v_project_id;
 END;
 $$ LANGUAGE plpgsql;
-
 -- Function to add a pending decision
 CREATE OR REPLACE FUNCTION add_pending_decision(
   p_project_key TEXT,
@@ -228,7 +219,6 @@ BEGIN
   RETURN v_decision_id;
 END;
 $$ LANGUAGE plpgsql;
-
 -- Function to resolve a pending decision
 CREATE OR REPLACE FUNCTION resolve_pending_decision(
   p_project_key TEXT,
@@ -253,7 +243,6 @@ BEGIN
     AND status = 'needs_input';
 END;
 $$ LANGUAGE plpgsql;
-
 -- Function to update phase progress
 CREATE OR REPLACE FUNCTION update_phase_progress(
   p_project_key TEXT,
@@ -282,7 +271,6 @@ BEGIN
   END IF;
 END;
 $$ LANGUAGE plpgsql;
-
 -- Function to register a new project from GSD
 CREATE OR REPLACE FUNCTION register_dev_project(
   p_project_key TEXT,
@@ -324,7 +312,6 @@ BEGIN
   RETURN v_id;
 END;
 $$ LANGUAGE plpgsql;
-
 -- Function to sync phases from roadmap
 CREATE OR REPLACE FUNCTION sync_project_phases(
   p_project_key TEXT,
@@ -376,7 +363,6 @@ BEGIN
   WHERE id = v_project_id;
 END;
 $$ LANGUAGE plpgsql;
-
 -- ============================================
 -- TRIGGERS
 -- ============================================
@@ -389,19 +375,15 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 CREATE TRIGGER dev_projects_updated_at
   BEFORE UPDATE ON dev_projects
   FOR EACH ROW EXECUTE FUNCTION update_dev_updated_at();
-
 CREATE TRIGGER dev_project_phases_updated_at
   BEFORE UPDATE ON dev_project_phases
   FOR EACH ROW EXECUTE FUNCTION update_dev_updated_at();
-
 CREATE TRIGGER dev_project_ideas_updated_at
   BEFORE UPDATE ON dev_project_ideas
   FOR EACH ROW EXECUTE FUNCTION update_dev_updated_at();
-
 -- ============================================
 -- RLS POLICIES (optional - enable if needed)
 -- ============================================

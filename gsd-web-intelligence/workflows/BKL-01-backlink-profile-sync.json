@@ -1,0 +1,75 @@
+{
+  "name": "Web Intel - Backlink Profile Sync",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "cronExpression", "expression": "0 2 * * 0"}]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Weekly Sunday 2am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.dataforseo.com/v3/backlinks/backlinks/live",
+        "authentication": "httpBasicAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "=[{\"target\": \"{{$env.SITE_DOMAIN}}\", \"mode\": \"as_is\", \"limit\": 1000, \"order_by\": [\"rank,desc\"]}]"
+      },
+      "id": "dataforseo-backlinks",
+      "name": "DataForSEO - Backlinks",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Transform backlink data\nconst input = $input.first().json;\nconst tasks = input.tasks || [];\nconst backlinks = tasks[0]?.result?.[0]?.items || [];\n\nconst now = new Date().toISOString();\n\nconst records = backlinks.map(bl => ({\n  source_url: bl.url_from,\n  source_domain: bl.domain_from,\n  target_url: bl.url_to,\n  target_path: new URL(bl.url_to).pathname,\n  anchor_text: bl.anchor,\n  is_dofollow: bl.dofollow,\n  is_image_link: bl.is_image,\n  domain_authority: bl.domain_from_rank,\n  page_authority: bl.page_from_rank,\n  spam_score: bl.domain_from_spam_score || 0,\n  first_seen_at: bl.first_seen || now,\n  last_seen_at: now,\n  status: 'active'\n}));\n\nreturn records.map(r => ({ json: r }));"
+      },
+      "id": "transform-backlinks",
+      "name": "Transform Backlinks",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": "web_intel",
+        "table": "backlinks",
+        "columns": "source_url, source_domain, target_url, target_path, anchor_text, is_dofollow, is_image_link, domain_authority, page_authority, spam_score, first_seen_at, last_seen_at, status",
+        "conflictColumns": "source_url, target_url"
+      },
+      "id": "upsert-backlinks",
+      "name": "Upsert Backlinks",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO web_intel.collection_log (workflow_id, workflow_name, status, records_processed, completed_at) VALUES ('BKL-01', 'Backlink Profile Sync', 'success', {{ $input.length }}, NOW())"
+      },
+      "id": "log-success",
+      "name": "Log Success",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [880, 0]
+    }
+  ],
+  "connections": {
+    "Weekly Sunday 2am CT": {"main": [[{"node": "DataForSEO - Backlinks", "type": "main", "index": 0}]]},
+    "DataForSEO - Backlinks": {"main": [[{"node": "Transform Backlinks", "type": "main", "index": 0}]]},
+    "Transform Backlinks": {"main": [[{"node": "Upsert Backlinks", "type": "main", "index": 0}]]},
+    "Upsert Backlinks": {"main": [[{"node": "Log Success", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": [{"name": "web-intel"}, {"name": "backlinks"}, {"name": "weekly"}]
+}

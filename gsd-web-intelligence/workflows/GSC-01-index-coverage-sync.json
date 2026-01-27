@@ -1,0 +1,80 @@
+{
+  "name": "Web Intel - GSC - Index Coverage Sync",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "cronExpression", "expression": "0 7 * * *"}]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Daily 7am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://searchconsole.googleapis.com/v1/sites/{{$env.GSC_SITE_URL}}/searchAnalytics/query",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "options": {}
+      },
+      "id": "gsc-request",
+      "name": "GSC - Fetch Index Coverage",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 0],
+      "notesInFlow": true,
+      "notes": "Note: Index Coverage API requires URL Inspection API for detailed data"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Transform GSC response to index_coverage schema\nconst response = $input.first().json;\nconst today = new Date().toISOString().split('T')[0];\n\n// Parse coverage data from response\nconst data = {\n  collected_date: today,\n  indexed_count: response.indexedCount || 0,\n  crawled_not_indexed_count: response.crawledNotIndexed || 0,\n  excluded_count: response.excludedCount || 0,\n  error_count: response.errorCount || 0,\n  status_breakdown: JSON.stringify(response.statusBreakdown || {})\n};\n\nreturn [{ json: data }];"
+      },
+      "id": "transform-data",
+      "name": "Transform Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": "web_intel",
+        "table": "index_coverage",
+        "columns": "collected_date, indexed_count, crawled_not_indexed_count, excluded_count, error_count, status_breakdown",
+        "conflictColumns": "collected_date",
+        "options": {}
+      },
+      "id": "supabase-upsert",
+      "name": "Supabase - Store Coverage",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "web_intel",
+        "table": "collection_log",
+        "columns": "workflow_id, workflow_name, status, completed_at",
+        "options": {}
+      },
+      "id": "log-success",
+      "name": "Log Success",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [880, 0]
+    }
+  ],
+  "connections": {
+    "Daily 7am CT": {"main": [[{"node": "GSC - Fetch Index Coverage", "type": "main", "index": 0}]]},
+    "GSC - Fetch Index Coverage": {"main": [[{"node": "Transform Data", "type": "main", "index": 0}]]},
+    "Transform Data": {"main": [[{"node": "Supabase - Store Coverage", "type": "main", "index": 0}]]},
+    "Supabase - Store Coverage": {"main": [[{"node": "Log Success", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": [{"name": "web-intel"}, {"name": "gsc"}]
+}

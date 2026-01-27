@@ -1,16 +1,42 @@
 # Setup MCP Credentials
 
-Walk the user through setting up MCP server credentials from LastPass for this cloud session.
+Walk the user through setting up MCP servers and credentials for Claude Code.
 
 ## Overview
 
-This command helps you configure environment variables for MCP servers at the start of each Claude Code cloud session. Credentials are stored in LastPass and need to be exported to the shell environment.
+This command helps you configure MCP servers at the start of each Claude Code session. It:
+1. Adds MCP servers to Claude Code (if not already added)
+2. Sets up environment variables for authentication
 
 ---
 
-## Step-by-Step Setup
+## Step 1: Add Core MCP Servers
 
-### Step 1: Retrieve MCP Credentials from LastPass
+Run these commands to add the essential MCP servers (only needed once per machine):
+
+### n8n-brain (REQUIRED - Learning Layer for n8n Workflows)
+```bash
+claude mcp add n8n-brain -e SUPABASE_URL=https://mnkuffgxemfyitcjnjdc.supabase.co -e SUPABASE_SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ua3VmZmd4ZW1meWl0Y2puamRjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MzgyNjc1NSwiZXhwIjoyMDc5NDAyNzU1fQ.9xE-Ee_A1UgVO12avVwtzLaT792EZ8JCJaupAAP0-88 -- node "/Users/mike/IAML Business OS/mcp-servers/n8n-brain/index.js"
+```
+
+### Context7 (Documentation lookup)
+```bash
+claude mcp add context7 -- npx -y @anthropic/mcp-context7
+```
+
+### Playwright (Web automation)
+```bash
+claude mcp add playwright -- npx -y @anthropic/mcp-playwright
+```
+
+**Verify servers are added:**
+```bash
+claude mcp list
+```
+
+---
+
+## Step 2: Retrieve MCP Credentials from LastPass
 
 Open LastPass and find the note called **"MCP Credentials"**. This contains bash export statements for all API keys.
 
@@ -24,7 +50,7 @@ export N8N_API_KEY="..."
 # ... etc
 ```
 
-### Step 2: Copy and Run the Exports
+## Step 3: Copy and Run the Exports
 
 Copy the entire contents of the "MCP Credentials" LastPass note and paste it into your terminal. This sets all environment variables for the current session.
 

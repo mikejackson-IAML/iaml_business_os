@@ -1,0 +1,86 @@
+{
+  "name": "Web Intel - GSC - Index Error Alerter",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "cronExpression", "expression": "30 7 * * *"}]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Daily 7:30am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM web_intel.index_coverage_trend WHERE collected_date >= CURRENT_DATE - INTERVAL '2 days' ORDER BY collected_date DESC LIMIT 2",
+        "options": {}
+      },
+      "id": "fetch-trend",
+      "name": "Fetch Coverage Trend",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Detect index errors\nconst rows = $input.all().map(i => i.json);\nconst today = rows[0];\nconst yesterday = rows[1];\n\nconst alerts = [];\n\n// Check for new errors\nif (today && today.error_change > 0) {\n  alerts.push({\n    type: 'index_error',\n    severity: today.error_change > 10 ? 'critical' : 'warning',\n    title: `${today.error_change} new index errors detected`,\n    message: `Total errors: ${today.error_count}. Previous: ${today.error_count - today.error_change}`,\n    metadata: JSON.stringify({ error_count: today.error_count, change: today.error_change })\n  });\n}\n\n// Check for significant indexed drop\nif (today && today.indexed_change < -50) {\n  alerts.push({\n    type: 'index_drop',\n    severity: 'critical',\n    title: `${Math.abs(today.indexed_change)} pages dropped from index`,\n    message: `Indexed pages: ${today.indexed_count}. Previous: ${today.prev_indexed}`,\n    metadata: JSON.stringify({ indexed_count: today.indexed_count, change: today.indexed_change })\n  });\n}\n\nreturn [{ json: { alerts, has_alerts: alerts.length > 0 } }];"
+      },
+      "id": "detect-errors",
+      "name": "Detect Errors",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict"},
+          "conditions": [{"id": "has-alerts", "leftValue": "={{ $json.has_alerts }}", "rightValue": true, "operator": {"type": "boolean", "operation": "equals"}}],
+          "combinator": "and"
+        }
+      },
+      "id": "check-alerts",
+      "name": "Has Alerts?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\nconst alerts = data.alerts;\n\nlet message = ':warning: *GSC Index Alert*\\n\\n';\nalerts.forEach(a => {\n  const icon = a.severity === 'critical' ? ':red_circle:' : ':large_yellow_circle:';\n  message += `${icon} *${a.title}*\\n${a.message}\\n\\n`;\n});\n\nreturn [{ json: { message } }];"
+      },
+      "id": "format-message",
+      "name": "Format Slack Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [880, -100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SLACK_WEB_INTEL_WEBHOOK}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"text\": {{ JSON.stringify($json.message) }}}"
+      },
+      "id": "send-slack",
+      "name": "Send to Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1100, -100]
+    }
+  ],
+  "connections": {
+    "Daily 7:30am CT": {"main": [[{"node": "Fetch Coverage Trend", "type": "main", "index": 0}]]},
+    "Fetch Coverage Trend": {"main": [[{"node": "Detect Errors", "type": "main", "index": 0}]]},
+    "Detect Errors": {"main": [[{"node": "Has Alerts?", "type": "main", "index": 0}]]},
+    "Has Alerts?": {"main": [[{"node": "Format Slack Message", "type": "main", "index": 0}], []]},
+    "Format Slack Message": {"main": [[{"node": "Send to Slack", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": [{"name": "web-intel"}, {"name": "gsc"}, {"name": "alerts"}]
+}

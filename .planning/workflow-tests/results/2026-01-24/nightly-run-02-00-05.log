@@ -1,0 +1,49 @@
+
+[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m
+[0;34mNIGHTLY RALPH LOOP TESTING[0m
+[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m
+Date: 2026-01-24
+Results: /Users/mike/IAML Business OS/.planning/workflow-tests/results/2026-01-24
+Mode: Testing 3 workflows (default)
+Timeout: 600s per workflow
+
+Fetching workflows from registry...
+Found 3 workflows to test
+
+
+[1;33mTesting: Branch C Scheduler[0m
+ID: R9AgG9ZK4m8vXqNT
+Started: Sat Jan 24 02:00:06 CST 2026
+Mode: Full RALPH Loop (test → diagnose → fix → verify)
+[0;31m✗ Timed out or failed[0m
+Finished: Sat Jan 24 02:00:07 CST 2026
+Pausing 10s before next workflow...
+
+[1;33mTesting: Campaign Analyst - Performance[0m
+ID: 7xEGFk7fgkp3egBj
+Started: Sat Jan 24 02:00:17 CST 2026
+Mode: Full RALPH Loop (test → diagnose → fix → verify)
+[0;31m✗ Timed out or failed[0m
+Finished: Sat Jan 24 02:00:18 CST 2026
+Pausing 10s before next workflow...
+
+[1;33mTesting: CLE Approval Monitor[0m
+ID: 8TBH2O0GuYghWTaZ
+Started: Sat Jan 24 02:00:28 CST 2026
+Mode: Full RALPH Loop (test → diagnose → fix → verify)
+[0;31m✗ Timed out or failed[0m
+Finished: Sat Jan 24 02:00:28 CST 2026
+Pausing 10s before next workflow...
+
+[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m
+[0;34mGENERATING SUMMARY[0m
+[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m
+[0;32mSummary: /Users/mike/IAML Business OS/.planning/workflow-tests/results/2026-01-24/SUMMARY.md[0m
+
+[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m
+[0;34mTESTING COMPLETE[0m
+[0;34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m
+
+Results saved to: /Users/mike/IAML Business OS/.planning/workflow-tests/results/2026-01-24/SUMMARY.md
+
+View with: /test-results

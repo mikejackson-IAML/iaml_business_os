@@ -1,0 +1,261 @@
+{
+  "name": "Web Intel - Rankings - Daily Tracker",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 5 * * *"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Daily 5am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, keyword, target_url FROM web_intel.tracked_keywords WHERE status = 'active' ORDER BY priority DESC, keyword",
+        "options": {}
+      },
+      "id": "fetch-keywords",
+      "name": "Fetch Active Keywords",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "batchSize": 50,
+        "options": {}
+      },
+      "id": "split-batches",
+      "name": "Split Into Batches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare DataForSEO request for batch of keywords\nconst keywords = $input.all().map(item => item.json);\n\n// Build tasks array for DataForSEO\nconst tasks = keywords.map((kw, index) => ({\n  keyword: kw.keyword,\n  location_code: 2840, // United States\n  language_code: 'en',\n  device: 'desktop',\n  os: 'windows',\n  tag: kw.id // Use keyword ID as tag for matching\n}));\n\nreturn [{\n  json: {\n    tasks,\n    keywords\n  }\n}];"
+      },
+      "id": "prepare-request",
+      "name": "Prepare DataForSEO Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.dataforseo.com/v3/serp/google/organic/live/regular",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.tasks) }}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "dataforseo-request",
+      "name": "DataForSEO - Check Rankings",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, 0],
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "{{DATAFORSEO_CREDENTIAL_ID}}",
+          "name": "DataForSEO API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse DataForSEO response and extract rankings\nconst response = $input.first().json;\nconst tasks = response.tasks || [];\nconst ourDomain = 'iaml.com'; // Update this\n\nconst today = new Date().toISOString().split('T')[0];\nconst rankings = [];\n\ntasks.forEach(task => {\n  if (task.status_code !== 20000) {\n    console.log(`Task failed: ${task.status_message}`);\n    return;\n  }\n  \n  const result = task.result?.[0];\n  if (!result) return;\n  \n  const keyword_id = task.data?.tag;\n  const items = result.items || [];\n  \n  // Find our position\n  let position = null;\n  let ranking_url = null;\n  let has_featured_snippet = false;\n  let featured_snippet_owner = null;\n  const competitor_positions = [];\n  \n  items.forEach((item, idx) => {\n    // Check featured snippet\n    if (item.type === 'featured_snippet') {\n      has_featured_snippet = true;\n      const domain = new URL(item.url || '').hostname.replace('www.', '');\n      featured_snippet_owner = domain === ourDomain ? 'us' : domain;\n    }\n    \n    // Check organic results\n    if (item.type === 'organic' && item.domain) {\n      const domain = item.domain.replace('www.', '');\n      \n      if (domain === ourDomain && position === null) {\n        position = item.rank_absolute;\n        ranking_url = item.url;\n      } else if (competitor_positions.length < 5) {\n        competitor_positions.push({\n          domain: domain,\n          position: item.rank_absolute\n        });\n      }\n    }\n  });\n  \n  rankings.push({\n    keyword_id,\n    collected_date: today,\n    position,\n    ranking_url,\n    has_featured_snippet,\n    featured_snippet_owner,\n    competitor_positions: JSON.stringify(competitor_positions)\n  });\n});\n\nreturn rankings.map(r => ({ json: r }));"
+      },
+      "id": "parse-rankings",
+      "name": "Parse Rankings",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1100, 0]
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": "web_intel",
+        "table": "daily_rankings",
+        "columns": "keyword_id, collected_date, position, ranking_url, has_featured_snippet, featured_snippet_owner, competitor_positions",
+        "conflictColumns": "keyword_id, collected_date",
+        "options": {}
+      },
+      "id": "supabase-upsert",
+      "name": "Supabase - Store Rankings",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1320, 0],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Continue to next batch or finish\nconst items = $input.all();\nreturn [{\n  json: {\n    workflow_id: 'RNK-01',\n    workflow_name: 'Web Intel - Rankings - Daily Tracker',\n    status: 'success',\n    records_processed: items.length,\n    completed_at: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "prepare-log",
+      "name": "Prepare Log Entry",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1540, 0]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "web_intel",
+        "table": "collection_log",
+        "columns": "workflow_id, workflow_name, status, records_processed, completed_at",
+        "options": {}
+      },
+      "id": "log-success",
+      "name": "Log Success",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1760, 0],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Daily 5am CT": {
+      "main": [
+        [
+          {
+            "node": "Fetch Active Keywords",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Active Keywords": {
+      "main": [
+        [
+          {
+            "node": "Split Into Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Into Batches": {
+      "main": [
+        [
+          {
+            "node": "Prepare DataForSEO Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare DataForSEO Request": {
+      "main": [
+        [
+          {
+            "node": "DataForSEO - Check Rankings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DataForSEO - Check Rankings": {
+      "main": [
+        [
+          {
+            "node": "Parse Rankings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Rankings": {
+      "main": [
+        [
+          {
+            "node": "Supabase - Store Rankings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase - Store Rankings": {
+      "main": [
+        [
+          {
+            "node": "Split Into Batches",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Prepare Log Entry",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Log Entry": {
+      "main": [
+        [
+          {
+            "node": "Log Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "meta": {
+    "templateId": "web-intel-rank-tracker"
+  },
+  "tags": [
+    {
+      "name": "web-intel"
+    },
+    {
+      "name": "rankings"
+    },
+    {
+      "name": "dataforseo"
+    }
+  ]
+}

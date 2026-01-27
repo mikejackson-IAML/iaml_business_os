@@ -1,0 +1,75 @@
+{
+  "name": "Web Intel - GSC - Sitemap Status Monitor",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "cronExpression", "expression": "0 4 * * *"}]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Daily 4am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://searchconsole.googleapis.com/webmasters/v3/sites/{{$env.GSC_SITE_URL}}/sitemaps",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi"
+      },
+      "id": "gsc-sitemaps",
+      "name": "GSC - List Sitemaps",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Check sitemap status\nconst data = $input.first().json;\nconst sitemaps = data.sitemap || [];\n\nconst alerts = [];\nsitemaps.forEach(sm => {\n  // Check for errors\n  if (sm.errors > 0) {\n    alerts.push({\n      type: 'sitemap_error',\n      severity: 'warning',\n      message: `Sitemap ${sm.path} has ${sm.errors} errors`\n    });\n  }\n  \n  // Check submitted vs indexed ratio\n  const submitted = sm.contents?.reduce((sum, c) => sum + (c.submitted || 0), 0) || 0;\n  const indexed = sm.contents?.reduce((sum, c) => sum + (c.indexed || 0), 0) || 0;\n  \n  if (submitted > 0 && indexed / submitted < 0.5) {\n    alerts.push({\n      type: 'sitemap_coverage',\n      severity: 'info',\n      message: `Sitemap ${sm.path}: only ${indexed}/${submitted} URLs indexed (${Math.round(indexed/submitted*100)}%)`\n    });\n  }\n});\n\nreturn [{ json: { sitemaps, alerts, has_alerts: alerts.length > 0 } }];"
+      },
+      "id": "analyze-sitemaps",
+      "name": "Analyze Sitemaps",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict"},
+          "conditions": [{"id": "has-alerts", "leftValue": "={{ $json.has_alerts }}", "rightValue": true, "operator": {"type": "boolean", "operation": "equals"}}]
+        }
+      },
+      "id": "check-alerts",
+      "name": "Has Alerts?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SLACK_WEB_INTEL_WEBHOOK}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"text\": \":world_map: *Sitemap Status Alert*\\n{{ $json.alerts.map(a => a.message).join('\\n') }}\"}"
+      },
+      "id": "send-slack",
+      "name": "Send to Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, -100]
+    }
+  ],
+  "connections": {
+    "Daily 4am CT": {"main": [[{"node": "GSC - List Sitemaps", "type": "main", "index": 0}]]},
+    "GSC - List Sitemaps": {"main": [[{"node": "Analyze Sitemaps", "type": "main", "index": 0}]]},
+    "Analyze Sitemaps": {"main": [[{"node": "Has Alerts?", "type": "main", "index": 0}]]},
+    "Has Alerts?": {"main": [[{"node": "Send to Slack", "type": "main", "index": 0}], []]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": [{"name": "web-intel"}, {"name": "gsc"}, {"name": "sitemap"}]
+}

@@ -1,0 +1,102 @@
+{
+  "name": "Web Intel - Link Opportunity Finder",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "cronExpression", "expression": "0 5 15 * *"}]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Monthly 15th 5am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT domain FROM web_intel.competitors WHERE is_active = TRUE ORDER BY priority DESC LIMIT 5"
+      },
+      "id": "fetch-competitors",
+      "name": "Fetch Top Competitors",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "batch-competitors",
+      "name": "Batch Competitors",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.dataforseo.com/v3/backlinks/backlinks/live",
+        "authentication": "httpBasicAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "=[{\"target\": \"{{ $json.domain }}\", \"mode\": \"as_is\", \"limit\": 100, \"order_by\": [\"rank,desc\"], \"filters\": [\"dofollow\", \"=\", true]}]"
+      },
+      "id": "dataforseo-comp-backlinks",
+      "name": "DataForSEO - Competitor Backlinks",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Find link opportunities from competitor backlinks\nconst input = $input.first().json;\nconst competitor = $('Batch Competitors').first().json.domain;\n\nconst tasks = input.tasks || [];\nconst backlinks = tasks[0]?.result?.[0]?.items || [];\n\n// Filter for high-quality opportunities\nconst opportunities = backlinks\n  .filter(bl => bl.domain_from_rank >= 30)  // DA 30+\n  .map(bl => ({\n    domain: bl.domain_from,\n    url: bl.url_from,\n    source: 'competitor_backlink',\n    source_details: `Links to ${competitor}`,\n    domain_authority: bl.domain_from_rank,\n    relevance_score: 7,  // Default medium-high relevance\n    status: 'new',\n    discovered_at: new Date().toISOString()\n  }));\n\nreturn opportunities.length > 0 ? opportunities.map(o => ({ json: o })) : [{ json: { skip: true } }];"
+      },
+      "id": "extract-opportunities",
+      "name": "Extract Opportunities",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [880, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict"},
+          "conditions": [{"id": "has-opps", "leftValue": "={{ $json.skip }}", "rightValue": true, "operator": {"type": "boolean", "operation": "notEquals"}}]
+        }
+      },
+      "id": "check-opps",
+      "name": "Has Opportunities?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1100, 0]
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": "web_intel",
+        "table": "link_opportunities",
+        "columns": "domain, url, source, source_details, domain_authority, relevance_score, status, discovered_at",
+        "conflictColumns": "domain, url"
+      },
+      "id": "store-opportunities",
+      "name": "Store Opportunities",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1320, -100]
+    }
+  ],
+  "connections": {
+    "Monthly 15th 5am CT": {"main": [[{"node": "Fetch Top Competitors", "type": "main", "index": 0}]]},
+    "Fetch Top Competitors": {"main": [[{"node": "Batch Competitors", "type": "main", "index": 0}]]},
+    "Batch Competitors": {"main": [[{"node": "DataForSEO - Competitor Backlinks", "type": "main", "index": 0}]]},
+    "DataForSEO - Competitor Backlinks": {"main": [[{"node": "Extract Opportunities", "type": "main", "index": 0}]]},
+    "Extract Opportunities": {"main": [[{"node": "Has Opportunities?", "type": "main", "index": 0}]]},
+    "Has Opportunities?": {"main": [[{"node": "Store Opportunities", "type": "main", "index": 0}], [{"node": "Batch Competitors", "type": "main", "index": 0}]]},
+    "Store Opportunities": {"main": [[{"node": "Batch Competitors", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": [{"name": "web-intel"}, {"name": "backlinks"}, {"name": "opportunities"}, {"name": "monthly"}]
+}

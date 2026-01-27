@@ -1,0 +1,37 @@
+{
+  "slack": {
+    "webhook_url": "YOUR_SLACK_WEBHOOK_URL",
+    "channel": "#automation"
+  },
+  "limits": {
+    "max_cost_usd": 25,
+    "max_iterations": 50,
+    "max_consecutive_failures": 3
+  },
+  "timing": {
+    "sleep_between_iterations_sec": 10
+  },
+  "behavior": {
+    "stop_on_blocker": true,
+    "stop_on_verification_fail": true
+  },
+  "modes": {
+    "run_gsd": true,
+    "run_n8n": true
+  },
+  "gsd": {
+    "target_phases": [],
+    "auto_detect_phase": true
+  },
+  "n8n": {
+    "max_workflows_per_night": 10,
+    "test_priority": ["broken", "needs_review", "untested"]
+  },
+  "model": "sonnet",
+  "notifications": {
+    "on_start": true,
+    "on_complete": true,
+    "on_blocker": true,
+    "on_phase_complete": false
+  }
+}

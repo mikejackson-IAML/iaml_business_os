@@ -54,7 +54,6 @@ BEGIN
   LIMIT p_limit;
 END;
 $$ LANGUAGE plpgsql STABLE SECURITY DEFINER;
-
 -- ============================================
 -- FUNCTION: Get workflow health summary
 -- ============================================
@@ -93,7 +92,6 @@ BEGIN
   ORDER BY unresolved_errors DESC, errors_last_7_days DESC;
 END;
 $$ LANGUAGE plpgsql STABLE SECURITY DEFINER;
-
 -- ============================================
 -- FUNCTION: Get workflow stats summary
 -- ============================================
@@ -122,7 +120,6 @@ BEGIN
     WHERE wr.started_at > NOW() - INTERVAL '7 days') as success_rate_7d;
 END;
 $$ LANGUAGE plpgsql STABLE SECURITY DEFINER;
-
 -- ============================================
 -- FUNCTION: Resolve error from dashboard
 -- ============================================
@@ -142,7 +139,6 @@ BEGIN
   WHERE id = p_run_id;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
 -- ============================================
 -- GRANT PERMISSIONS
 -- ============================================
@@ -150,7 +146,6 @@ GRANT EXECUTE ON FUNCTION public.get_recent_workflow_errors(INTEGER) TO authenti
 GRANT EXECUTE ON FUNCTION public.get_workflow_health_summary() TO authenticated, anon;
 GRANT EXECUTE ON FUNCTION public.get_workflow_stats_summary() TO authenticated, anon;
 GRANT EXECUTE ON FUNCTION public.resolve_workflow_error_dashboard(UUID, TEXT, TEXT) TO authenticated;
-
 -- ============================================
 -- COMMENTS
 -- ============================================

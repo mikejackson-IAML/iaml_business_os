@@ -1,0 +1,116 @@
+{
+  "name": "Web Intel - Data Cleanup",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "cronExpression", "expression": "0 3 * * 0"}]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Weekly Sunday 3am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DELETE FROM web_intel.collection_log WHERE started_at < NOW() - INTERVAL '90 days' RETURNING id"
+      },
+      "id": "cleanup-logs",
+      "name": "Cleanup Old Logs",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DELETE FROM web_intel.alerts WHERE created_at < NOW() - INTERVAL '90 days' AND acknowledged_at IS NOT NULL RETURNING id"
+      },
+      "id": "cleanup-alerts",
+      "name": "Cleanup Old Alerts",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 150]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DELETE FROM web_intel.ai_insights WHERE status = 'dismissed' AND generated_at < NOW() - INTERVAL '30 days' RETURNING id"
+      },
+      "id": "cleanup-insights",
+      "name": "Cleanup Dismissed Insights",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DELETE FROM web_intel.trends WHERE is_active = FALSE AND detected_at < NOW() - INTERVAL '60 days' RETURNING id"
+      },
+      "id": "cleanup-trends",
+      "name": "Cleanup Old Trends",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 450]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DELETE FROM web_intel.page_traffic WHERE collected_date < NOW() - INTERVAL '365 days' RETURNING id"
+      },
+      "id": "cleanup-old-traffic",
+      "name": "Cleanup Year-Old Traffic",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "mergeByFields": {"values": []}
+      },
+      "id": "merge-results",
+      "name": "Merge Results",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [660, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Summarize cleanup results\nconst items = $input.all();\n\nlet totalDeleted = 0;\nitems.forEach(item => {\n  if (Array.isArray(item.json)) {\n    totalDeleted += item.json.length;\n  } else if (item.json.id) {\n    totalDeleted += 1;\n  }\n});\n\nreturn [{\n  json: {\n    total_deleted: totalDeleted,\n    cleanup_date: new Date().toISOString(),\n    message: `Data cleanup complete: ${totalDeleted} records removed`\n  }\n}];"
+      },
+      "id": "summarize",
+      "name": "Summarize Cleanup",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [880, 200]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO web_intel.collection_log (workflow_id, workflow_name, status, records_processed, completed_at) VALUES ('SYS-03', 'Data Cleanup', 'success', {{ $json.total_deleted }}, NOW())"
+      },
+      "id": "log-cleanup",
+      "name": "Log Cleanup",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1100, 200]
+    }
+  ],
+  "connections": {
+    "Weekly Sunday 3am CT": {"main": [[{"node": "Cleanup Old Logs", "type": "main", "index": 0}, {"node": "Cleanup Old Alerts", "type": "main", "index": 0}, {"node": "Cleanup Dismissed Insights", "type": "main", "index": 0}, {"node": "Cleanup Old Trends", "type": "main", "index": 0}, {"node": "Cleanup Year-Old Traffic", "type": "main", "index": 0}]]},
+    "Cleanup Old Logs": {"main": [[{"node": "Merge Results", "type": "main", "index": 0}]]},
+    "Cleanup Old Alerts": {"main": [[{"node": "Merge Results", "type": "main", "index": 1}]]},
+    "Cleanup Dismissed Insights": {"main": [[{"node": "Merge Results", "type": "main", "index": 2}]]},
+    "Cleanup Old Trends": {"main": [[{"node": "Merge Results", "type": "main", "index": 3}]]},
+    "Cleanup Year-Old Traffic": {"main": [[{"node": "Merge Results", "type": "main", "index": 4}]]},
+    "Merge Results": {"main": [[{"node": "Summarize Cleanup", "type": "main", "index": 0}]]},
+    "Summarize Cleanup": {"main": [[{"node": "Log Cleanup", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": [{"name": "web-intel"}, {"name": "system"}, {"name": "maintenance"}, {"name": "weekly"}]
+}

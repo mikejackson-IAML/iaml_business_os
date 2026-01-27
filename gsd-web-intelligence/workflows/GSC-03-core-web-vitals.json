@@ -1,0 +1,93 @@
+{
+  "name": "Web Intel - GSC - Core Web Vitals Monitor",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "cronExpression", "expression": "0 8 * * *"}]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Daily 8am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://chromeuxreport.googleapis.com/v1/records:queryRecord",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"origin\": \"{{$env.SITE_ORIGIN}}\", \"formFactor\": \"PHONE\"}"
+      },
+      "id": "crux-mobile",
+      "name": "CrUX - Mobile",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://chromeuxreport.googleapis.com/v1/records:queryRecord",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"origin\": \"{{$env.SITE_ORIGIN}}\", \"formFactor\": \"DESKTOP\"}"
+      },
+      "id": "crux-desktop",
+      "name": "CrUX - Desktop",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 200]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "mergeByFields": {"values": []}
+      },
+      "id": "merge-data",
+      "name": "Merge Data",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [440, 100]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Transform CrUX responses to core_web_vitals schema\nconst items = $input.all();\nconst today = new Date().toISOString().split('T')[0];\nconst records = [];\n\nconst devices = ['mobile', 'desktop'];\nitems.forEach((item, idx) => {\n  const data = item.json.record || {};\n  const metrics = data.metrics || {};\n  \n  const lcp = metrics.largest_contentful_paint || {};\n  const inp = metrics.interaction_to_next_paint || metrics.first_input_delay || {};\n  const cls = metrics.cumulative_layout_shift || {};\n  \n  records.push({\n    collected_date: today,\n    device: devices[idx],\n    lcp_good_percent: lcp.histogram?.[0]?.density * 100 || null,\n    lcp_needs_improvement_percent: lcp.histogram?.[1]?.density * 100 || null,\n    lcp_poor_percent: lcp.histogram?.[2]?.density * 100 || null,\n    lcp_p75: lcp.percentiles?.p75 || null,\n    inp_good_percent: inp.histogram?.[0]?.density * 100 || null,\n    inp_needs_improvement_percent: inp.histogram?.[1]?.density * 100 || null,\n    inp_poor_percent: inp.histogram?.[2]?.density * 100 || null,\n    inp_p75: inp.percentiles?.p75 || null,\n    cls_good_percent: cls.histogram?.[0]?.density * 100 || null,\n    cls_needs_improvement_percent: cls.histogram?.[1]?.density * 100 || null,\n    cls_poor_percent: cls.histogram?.[2]?.density * 100 || null,\n    cls_p75: cls.percentiles?.p75 || null\n  });\n});\n\nreturn records.map(r => ({ json: r }));"
+      },
+      "id": "transform-data",
+      "name": "Transform Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 100]
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": "web_intel",
+        "table": "core_web_vitals",
+        "columns": "collected_date, device, lcp_good_percent, lcp_needs_improvement_percent, lcp_poor_percent, lcp_p75, inp_good_percent, inp_needs_improvement_percent, inp_poor_percent, inp_p75, cls_good_percent, cls_needs_improvement_percent, cls_poor_percent, cls_p75",
+        "conflictColumns": "collected_date, device"
+      },
+      "id": "supabase-upsert",
+      "name": "Supabase - Store CWV",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [880, 100]
+    }
+  ],
+  "connections": {
+    "Daily 8am CT": {"main": [[{"node": "CrUX - Mobile", "type": "main", "index": 0}, {"node": "CrUX - Desktop", "type": "main", "index": 0}]]},
+    "CrUX - Mobile": {"main": [[{"node": "Merge Data", "type": "main", "index": 0}]]},
+    "CrUX - Desktop": {"main": [[{"node": "Merge Data", "type": "main", "index": 1}]]},
+    "Merge Data": {"main": [[{"node": "Transform Data", "type": "main", "index": 0}]]},
+    "Transform Data": {"main": [[{"node": "Supabase - Store CWV", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": [{"name": "web-intel"}, {"name": "gsc"}, {"name": "cwv"}]
+}

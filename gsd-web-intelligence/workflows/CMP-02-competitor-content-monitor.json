@@ -1,0 +1,114 @@
+{
+  "name": "Web Intel - Competitor Content Monitor",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "cronExpression", "expression": "0 3 * * 1"}]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Weekly Monday 3am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, domain, name FROM web_intel.competitors WHERE is_active = TRUE ORDER BY priority DESC"
+      },
+      "id": "fetch-competitors",
+      "name": "Fetch Active Competitors",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "batch-competitors",
+      "name": "Batch Competitors",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://{{ $json.domain }}/sitemap.xml",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "fetch-sitemap",
+      "name": "Fetch Competitor Sitemap",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 0],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse competitor sitemap and find new content\nconst input = $input.first().json;\nconst competitor = $('Batch Competitors').first().json;\nconst xml = input.data || '';\n\n// If no sitemap, return empty\nif (!xml || xml.includes('error') || xml.includes('404')) {\n  return [{ json: { competitor_id: competitor.id, competitor_domain: competitor.domain, urls: [], new_count: 0 } }];\n}\n\nconst urlMatches = xml.match(/<loc>(.*?)<\\/loc>/g) || [];\nconst lastmodMatches = xml.match(/<lastmod>(.*?)<\\/lastmod>/g) || [];\n\nconst urls = urlMatches.map((match, idx) => {\n  const url = match.replace(/<\\/?loc>/g, '');\n  let lastmod = null;\n  if (lastmodMatches[idx]) {\n    lastmod = lastmodMatches[idx].replace(/<\\/?lastmod>/g, '');\n  }\n  \n  // Only include blog/article-like URLs\n  const isBlogContent = url.includes('/blog/') || url.includes('/news/') || url.includes('/article/') || url.includes('/post/');\n  \n  return {\n    competitor_id: competitor.id,\n    competitor_domain: competitor.domain,\n    url: url,\n    last_modified: lastmod,\n    is_blog_content: isBlogContent\n  };\n}).filter(u => u.is_blog_content);\n\nreturn urls.length > 0 ? urls.map(u => ({ json: u })) : [{ json: { competitor_id: competitor.id, competitor_domain: competitor.domain, urls: [], new_count: 0, skip: true } }];"
+      },
+      "id": "parse-sitemap",
+      "name": "Parse Sitemap",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [880, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict"},
+          "conditions": [{"id": "has-urls", "leftValue": "={{ $json.skip }}", "rightValue": true, "operator": {"type": "boolean", "operation": "notEquals"}}]
+        }
+      },
+      "id": "check-urls",
+      "name": "Has URLs?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1100, 0]
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": "web_intel",
+        "table": "competitor_content",
+        "columns": "competitor_id, competitor_domain, url, last_seen_at",
+        "conflictColumns": "competitor_domain, url"
+      },
+      "id": "upsert-content",
+      "name": "Upsert Competitor Content",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1320, -100]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE web_intel.competitor_content SET is_new = FALSE WHERE discovered_at < NOW() - INTERVAL '7 days'"
+      },
+      "id": "mark-old",
+      "name": "Mark Old Content",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1540, -100]
+    }
+  ],
+  "connections": {
+    "Weekly Monday 3am CT": {"main": [[{"node": "Fetch Active Competitors", "type": "main", "index": 0}]]},
+    "Fetch Active Competitors": {"main": [[{"node": "Batch Competitors", "type": "main", "index": 0}]]},
+    "Batch Competitors": {"main": [[{"node": "Fetch Competitor Sitemap", "type": "main", "index": 0}]]},
+    "Fetch Competitor Sitemap": {"main": [[{"node": "Parse Sitemap", "type": "main", "index": 0}]]},
+    "Parse Sitemap": {"main": [[{"node": "Has URLs?", "type": "main", "index": 0}]]},
+    "Has URLs?": {"main": [[{"node": "Upsert Competitor Content", "type": "main", "index": 0}], [{"node": "Batch Competitors", "type": "main", "index": 0}]]},
+    "Upsert Competitor Content": {"main": [[{"node": "Mark Old Content", "type": "main", "index": 0}]]},
+    "Mark Old Content": {"main": [[{"node": "Batch Competitors", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": [{"name": "web-intel"}, {"name": "competitor"}, {"name": "content"}, {"name": "weekly"}]
+}

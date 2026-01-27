@@ -7,7 +7,7 @@ import { ViewTabs, ViewPreset, viewPresetFilters } from './components/view-tabs'
 import { TaskFilterToolbar, TaskFilters, emptyFilters } from './components/task-filters';
 import { TaskTable } from './components/task-table';
 import { CreateTaskModal } from './components/create-task-modal';
-import { Button } from '@/dashboard-kit/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { RefreshCw, Plus, X, FileText } from 'lucide-react';
 

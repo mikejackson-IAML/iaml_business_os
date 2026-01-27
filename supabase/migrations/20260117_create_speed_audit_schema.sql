@@ -61,12 +61,10 @@ CREATE TABLE IF NOT EXISTS speed_audits (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Indexes for speed_audits
 CREATE INDEX idx_speed_audits_date ON speed_audits(audit_date DESC);
 CREATE INDEX idx_speed_audits_week ON speed_audits(audit_week);
 CREATE INDEX idx_speed_audits_status ON speed_audits(status);
-
 -- ============================================
 -- SPEED AUDIT ITEMS TABLE
 -- Individual issues/recommendations per audit
@@ -137,7 +135,6 @@ CREATE TABLE IF NOT EXISTS speed_audit_items (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Indexes for speed_audit_items
 CREATE INDEX idx_speed_audit_items_audit ON speed_audit_items(audit_id);
 CREATE INDEX idx_speed_audit_items_severity ON speed_audit_items(severity);
@@ -145,7 +142,6 @@ CREATE INDEX idx_speed_audit_items_type ON speed_audit_items(issue_type);
 CREATE INDEX idx_speed_audit_items_approved ON speed_audit_items(approved) WHERE approved = TRUE;
 CREATE INDEX idx_speed_audit_items_executed ON speed_audit_items(executed);
 CREATE INDEX idx_speed_audit_items_priority ON speed_audit_items(priority_score DESC);
-
 -- ============================================
 -- SPEED AUDIT PAGE RESULTS TABLE
 -- Per-page metrics for detailed tracking
@@ -201,12 +197,10 @@ CREATE TABLE IF NOT EXISTS speed_audit_page_results (
   -- Timestamps
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Indexes for page results
 CREATE INDEX idx_speed_audit_page_results_audit ON speed_audit_page_results(audit_id);
 CREATE INDEX idx_speed_audit_page_results_url ON speed_audit_page_results(page_url);
 CREATE INDEX idx_speed_audit_page_results_mobile ON speed_audit_page_results(pagespeed_mobile);
-
 -- ============================================
 -- SPEED OPTIMIZATION PATTERNS TABLE
 -- Track successful optimizations for learning
@@ -240,11 +234,9 @@ CREATE TABLE IF NOT EXISTS speed_optimization_patterns (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Index for patterns
 CREATE INDEX idx_speed_patterns_type ON speed_optimization_patterns(issue_type);
 CREATE INDEX idx_speed_patterns_success ON speed_optimization_patterns(success_rate DESC);
-
 -- ============================================
 -- VIEWS
 -- ============================================
@@ -291,7 +283,6 @@ LEFT JOIN (
   GROUP BY audit_id
 ) validated ON validated.audit_id = sa.id
 ORDER BY sa.audit_date DESC;
-
 -- Week-over-week trend view
 CREATE OR REPLACE VIEW speed_audit_trends AS
 SELECT
@@ -309,7 +300,8 @@ SELECT
 FROM speed_audits
 WHERE status != 'pending'
 ORDER BY audit_date DESC
-LIMIT 12;  -- Last 12 weeks
+LIMIT 12;
+-- Last 12 weeks
 
 -- Pending items for approval view
 CREATE OR REPLACE VIEW speed_audit_pending_items AS
@@ -334,7 +326,6 @@ WHERE sa.status = 'pending'
   AND sai.approved = FALSE
   AND sai.deferred = FALSE
 ORDER BY sai.priority_score DESC;
-
 -- ============================================
 -- HELPER FUNCTIONS
 -- ============================================
@@ -347,23 +338,19 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 -- Apply triggers
 DROP TRIGGER IF EXISTS speed_audits_updated_at ON speed_audits;
 CREATE TRIGGER speed_audits_updated_at
   BEFORE UPDATE ON speed_audits
   FOR EACH ROW EXECUTE FUNCTION update_speed_audit_updated_at();
-
 DROP TRIGGER IF EXISTS speed_audit_items_updated_at ON speed_audit_items;
 CREATE TRIGGER speed_audit_items_updated_at
   BEFORE UPDATE ON speed_audit_items
   FOR EACH ROW EXECUTE FUNCTION update_speed_audit_updated_at();
-
 DROP TRIGGER IF EXISTS speed_patterns_updated_at ON speed_optimization_patterns;
 CREATE TRIGGER speed_patterns_updated_at
   BEFORE UPDATE ON speed_optimization_patterns
   FOR EACH ROW EXECUTE FUNCTION update_speed_audit_updated_at();
-
 -- Function to calculate week-over-week deltas
 CREATE OR REPLACE FUNCTION calculate_speed_audit_deltas(p_audit_id UUID)
 RETURNS VOID AS $$
@@ -399,7 +386,6 @@ BEGIN
   WHERE id = p_audit_id;
 END;
 $$ LANGUAGE plpgsql;
-
 -- Function to approve all items by severity
 CREATE OR REPLACE FUNCTION approve_speed_audit_items(
   p_audit_id UUID,
@@ -444,7 +430,6 @@ BEGIN
   RETURN v_count;
 END;
 $$ LANGUAGE plpgsql;
-
 -- Function to generate next item code
 CREATE OR REPLACE FUNCTION get_next_speed_item_code(p_audit_id UUID)
 RETURNS TEXT AS $$
@@ -458,7 +443,6 @@ BEGIN
   RETURN 'SPEED-' || LPAD(v_count::TEXT, 3, '0');
 END;
 $$ LANGUAGE plpgsql;
-
 -- ============================================
 -- COMMENTS
 -- ============================================

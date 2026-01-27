@@ -1,0 +1,83 @@
+{
+  "name": "Web Intel - Backlink Quality Scorer",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "cronExpression", "expression": "0 3 1 * *"}]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Monthly 1st 3am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM web_intel.backlink_summary"
+      },
+      "id": "fetch-summary",
+      "name": "Fetch Backlink Summary",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT domain_authority, COUNT(*) as count FROM web_intel.backlinks WHERE status = 'active' GROUP BY domain_authority ORDER BY domain_authority DESC"
+      },
+      "id": "fetch-da-distribution",
+      "name": "Fetch DA Distribution",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 200]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "mergeByFields": {"values": []}
+      },
+      "id": "merge-data",
+      "name": "Merge Data",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [440, 100]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Calculate overall backlink quality score\nconst items = $input.all();\nconst summary = items.find(i => i.json.total_backlinks !== undefined)?.json || {};\nconst daDistribution = items.filter(i => i.json.domain_authority !== undefined).map(i => i.json);\n\n// Quality score components\nconst avgDA = summary.avg_domain_authority || 0;\nconst dofollowRatio = summary.total_backlinks > 0 ? (summary.dofollow_count / summary.total_backlinks) : 0;\nconst toxicRatio = summary.total_backlinks > 0 ? (summary.toxic_backlinks / summary.total_backlinks) : 0;\nconst diversityScore = Math.min(100, (summary.referring_domains / summary.total_backlinks) * 100);\n\n// Calculate DA tiers\nconst highDA = daDistribution.filter(d => d.domain_authority >= 50).reduce((sum, d) => sum + d.count, 0);\nconst medDA = daDistribution.filter(d => d.domain_authority >= 20 && d.domain_authority < 50).reduce((sum, d) => sum + d.count, 0);\nconst lowDA = daDistribution.filter(d => d.domain_authority < 20).reduce((sum, d) => sum + d.count, 0);\n\n// Overall quality score (0-100)\nconst qualityScore = Math.round(\n  (avgDA * 0.3) +\n  (dofollowRatio * 30) +\n  (diversityScore * 0.2) +\n  ((1 - toxicRatio) * 20)\n);\n\nreturn [{\n  json: {\n    quality_score: qualityScore,\n    total_backlinks: summary.total_backlinks,\n    referring_domains: summary.referring_domains,\n    avg_domain_authority: Math.round(avgDA),\n    dofollow_ratio: Math.round(dofollowRatio * 100),\n    toxic_ratio: Math.round(toxicRatio * 100),\n    diversity_score: Math.round(diversityScore),\n    da_tiers: {\n      high: highDA,\n      medium: medDA,\n      low: lowDA\n    },\n    new_last_30_days: summary.new_last_30_days\n  }\n}];"
+      },
+      "id": "calculate-score",
+      "name": "Calculate Quality Score",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SLACK_WEB_INTEL_WEBHOOK}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"text\": \":trophy: *Monthly Backlink Quality Report*\\n\\n*Overall Score:* {{ $json.quality_score }}/100\\n\\n*Profile Stats:*\\n• Total Backlinks: {{ $json.total_backlinks }}\\n• Referring Domains: {{ $json.referring_domains }}\\n• Avg Domain Authority: {{ $json.avg_domain_authority }}\\n• Dofollow Ratio: {{ $json.dofollow_ratio }}%\\n• Toxic Ratio: {{ $json.toxic_ratio }}%\\n\\n*DA Distribution:*\\n• High (50+): {{ $json.da_tiers.high }}\\n• Medium (20-49): {{ $json.da_tiers.medium }}\\n• Low (<20): {{ $json.da_tiers.low }}\\n\\n*Growth:* {{ $json.new_last_30_days }} new links last 30 days\"}"
+      },
+      "id": "send-slack",
+      "name": "Send to Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, 100]
+    }
+  ],
+  "connections": {
+    "Monthly 1st 3am CT": {"main": [[{"node": "Fetch Backlink Summary", "type": "main", "index": 0}, {"node": "Fetch DA Distribution", "type": "main", "index": 0}]]},
+    "Fetch Backlink Summary": {"main": [[{"node": "Merge Data", "type": "main", "index": 0}]]},
+    "Fetch DA Distribution": {"main": [[{"node": "Merge Data", "type": "main", "index": 1}]]},
+    "Merge Data": {"main": [[{"node": "Calculate Quality Score", "type": "main", "index": 0}]]},
+    "Calculate Quality Score": {"main": [[{"node": "Send to Slack", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": [{"name": "web-intel"}, {"name": "backlinks"}, {"name": "quality"}, {"name": "monthly"}]
+}

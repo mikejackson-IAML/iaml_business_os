@@ -24,22 +24,18 @@ CREATE TABLE IF NOT EXISTS public.profiles (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Index for faster lookups
 CREATE INDEX IF NOT EXISTS idx_profiles_email ON public.profiles(email);
 CREATE INDEX IF NOT EXISTS idx_profiles_role ON public.profiles(role);
-
 -- ============================================
 -- ROW LEVEL SECURITY (RLS)
 -- ============================================
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
-
 -- Users can read their own profile
 CREATE POLICY "Users can read own profile"
   ON public.profiles
   FOR SELECT
   USING (auth.uid() = id);
-
 -- Admins can read all profiles
 CREATE POLICY "Admins can read all profiles"
   ON public.profiles
@@ -50,14 +46,12 @@ CREATE POLICY "Admins can read all profiles"
       WHERE id = auth.uid() AND role = 'admin'
     )
   );
-
 -- Users can update their own profile (but not role)
 CREATE POLICY "Users can update own profile"
   ON public.profiles
   FOR UPDATE
   USING (auth.uid() = id)
   WITH CHECK (auth.uid() = id);
-
 -- Only admins can insert new profiles (for invites)
 CREATE POLICY "Admins can insert profiles"
   ON public.profiles
@@ -68,7 +62,6 @@ CREATE POLICY "Admins can insert profiles"
       WHERE id = auth.uid() AND role = 'admin'
     )
   );
-
 -- Only admins can delete profiles
 CREATE POLICY "Admins can delete profiles"
   ON public.profiles
@@ -79,7 +72,6 @@ CREATE POLICY "Admins can delete profiles"
       WHERE id = auth.uid() AND role = 'admin'
     )
   );
-
 -- ============================================
 -- AUTO-CREATE PROFILE ON SIGNUP
 -- ============================================
@@ -100,13 +92,11 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
 -- Trigger to create profile on signup
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
-
 -- ============================================
 -- UPDATE TIMESTAMP TRIGGER
 -- ============================================
@@ -117,12 +107,10 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 DROP TRIGGER IF EXISTS profiles_updated_at ON public.profiles;
 CREATE TRIGGER profiles_updated_at
   BEFORE UPDATE ON public.profiles
   FOR EACH ROW EXECUTE FUNCTION public.update_profiles_updated_at();
-
 -- ============================================
 -- HELPER FUNCTION: Check if user is admin
 -- ============================================
@@ -135,7 +123,6 @@ BEGIN
   );
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
 -- ============================================
 -- BACKFILL: Create profiles for existing users
 -- ============================================
@@ -150,7 +137,6 @@ SELECT
 FROM auth.users
 WHERE id NOT IN (SELECT id FROM public.profiles)
 ON CONFLICT (id) DO NOTHING;
-
 -- ============================================
 -- COMMENTS
 -- ============================================

@@ -1,0 +1,211 @@
+{
+  "name": "Web Intel - Traffic - Daily Collector",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 6 * * *"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Daily 6am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://analyticsdata.googleapis.com/v1beta/properties/{{$json.propertyId}}:runReport",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"dateRanges\": [\n    {\n      \"startDate\": \"yesterday\",\n      \"endDate\": \"yesterday\"\n    }\n  ],\n  \"metrics\": [\n    {\"name\": \"sessions\"},\n    {\"name\": \"totalUsers\"},\n    {\"name\": \"screenPageViews\"},\n    {\"name\": \"bounceRate\"},\n    {\"name\": \"averageSessionDuration\"}\n  ]\n}",
+        "options": {}
+      },
+      "id": "ga4-request",
+      "name": "GA4 - Fetch Daily Metrics",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 0],
+      "notesInFlow": true,
+      "notes": "Fetches aggregate metrics for yesterday from GA4 Data API"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Transform GA4 response to match daily_traffic schema\nconst response = $input.first().json;\nconst rows = response.rows || [];\n\nif (rows.length === 0) {\n  throw new Error('No data returned from GA4');\n}\n\nconst row = rows[0];\nconst metrics = row.metricValues;\n\n// Calculate yesterday's date\nconst yesterday = new Date();\nyesterday.setDate(yesterday.getDate() - 1);\nconst collected_date = yesterday.toISOString().split('T')[0];\n\nreturn [{\n  json: {\n    collected_date,\n    sessions: parseInt(metrics[0].value) || 0,\n    users: parseInt(metrics[1].value) || 0,\n    pageviews: parseInt(metrics[2].value) || 0,\n    bounce_rate: parseFloat(metrics[3].value) * 100 || 0,  // Convert to percentage\n    avg_session_duration: parseFloat(metrics[4].value) || 0\n  }\n}];"
+      },
+      "id": "transform-data",
+      "name": "Transform to Schema",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": "web_intel",
+        "table": "daily_traffic",
+        "columns": "collected_date, sessions, users, pageviews, bounce_rate, avg_session_duration",
+        "conflictColumns": "collected_date",
+        "options": {}
+      },
+      "id": "supabase-upsert",
+      "name": "Supabase - Store Daily Traffic",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [660, 0],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "web_intel",
+        "table": "collection_log",
+        "columns": "workflow_id, workflow_name, status, records_processed, completed_at",
+        "options": {}
+      },
+      "id": "log-success",
+      "name": "Log Success",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [880, 0],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "error-check",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "exists"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "error-check",
+      "name": "Has Error?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [660, 200]
+    },
+    {
+      "parameters": {
+        "webhookUri": "={{$env.SLACK_WEB_INTEL_WEBHOOK}}",
+        "text": "=:warning: *TRF-01 Daily Traffic Collector Failed*\n\nError: {{ $json.error.message || 'Unknown error' }}\nTime: {{ $now.format('yyyy-MM-dd HH:mm:ss') }}\n\nCheck n8n for details.",
+        "options": {}
+      },
+      "id": "slack-error",
+      "name": "Slack - Alert Error",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [880, 200]
+    }
+  ],
+  "connections": {
+    "Daily 6am CT": {
+      "main": [
+        [
+          {
+            "node": "GA4 - Fetch Daily Metrics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GA4 - Fetch Daily Metrics": {
+      "main": [
+        [
+          {
+            "node": "Transform to Schema",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transform to Schema": {
+      "main": [
+        [
+          {
+            "node": "Supabase - Store Daily Traffic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase - Store Daily Traffic": {
+      "main": [
+        [
+          {
+            "node": "Log Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Error?": {
+      "main": [
+        [
+          {
+            "node": "Slack - Alert Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "staticData": null,
+  "meta": {
+    "templateId": "web-intel-traffic-collector"
+  },
+  "tags": [
+    {
+      "name": "web-intel"
+    },
+    {
+      "name": "traffic"
+    },
+    {
+      "name": "ga4"
+    }
+  ]
+}

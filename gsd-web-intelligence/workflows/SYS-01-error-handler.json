@@ -1,0 +1,90 @@
+{
+  "name": "Web Intel - Error Handler",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "web-intel-error",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Error Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "web-intel-error"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Process incoming error from any Web Intel workflow\nconst error = $input.first().json.body || $input.first().json;\n\nconst errorRecord = {\n  workflow_id: error.workflow_id || 'unknown',\n  workflow_name: error.workflow_name || 'Unknown Workflow',\n  error_message: error.error_message || error.message || 'Unknown error',\n  error_type: error.error_type || 'runtime_error',\n  node_name: error.node_name || null,\n  execution_id: error.execution_id || null,\n  timestamp: new Date().toISOString(),\n  metadata: JSON.stringify(error.metadata || {})\n};\n\n// Determine severity\nlet severity = 'warning';\nif (error.error_message?.includes('authentication') || error.error_message?.includes('credential')) {\n  severity = 'critical';\n} else if (error.error_message?.includes('timeout') || error.error_message?.includes('rate limit')) {\n  severity = 'warning';\n} else if (error.error_message?.includes('not found')) {\n  severity = 'info';\n}\n\nerrorRecord.severity = severity;\n\nreturn [{ json: errorRecord }];"
+      },
+      "id": "process-error",
+      "name": "Process Error",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "web_intel",
+        "table": "collection_log",
+        "columns": "workflow_id, workflow_name, status, error_message, details"
+      },
+      "id": "log-error",
+      "name": "Log Error to DB",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict"},
+          "conditions": [{"id": "is-critical", "leftValue": "={{ $json.severity }}", "rightValue": "critical", "operator": {"type": "string", "operation": "equals"}}]
+        }
+      },
+      "id": "check-severity",
+      "name": "Is Critical?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SLACK_WEB_INTEL_WEBHOOK}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"text\": \":rotating_light: *CRITICAL Web Intel Error*\\n*Workflow:* {{ $json.workflow_name }}\\n*Error:* {{ $json.error_message }}\\n*Node:* {{ $json.node_name || 'N/A' }}\\n*Time:* {{ $json.timestamp }}\"}"
+      },
+      "id": "alert-critical",
+      "name": "Alert Critical Error",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, -100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SLACK_WEB_INTEL_WEBHOOK}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"text\": \":warning: *Web Intel Error*\\n*Workflow:* {{ $json.workflow_name }}\\n*Error:* {{ $json.error_message }}\"}"
+      },
+      "id": "alert-warning",
+      "name": "Alert Warning",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, 100]
+    }
+  ],
+  "connections": {
+    "Error Webhook": {"main": [[{"node": "Process Error", "type": "main", "index": 0}]]},
+    "Process Error": {"main": [[{"node": "Log Error to DB", "type": "main", "index": 0}]]},
+    "Log Error to DB": {"main": [[{"node": "Is Critical?", "type": "main", "index": 0}]]},
+    "Is Critical?": {"main": [[{"node": "Alert Critical Error", "type": "main", "index": 0}], [{"node": "Alert Warning", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": [{"name": "web-intel"}, {"name": "system"}, {"name": "error-handling"}]
+}

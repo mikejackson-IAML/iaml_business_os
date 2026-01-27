@@ -1,0 +1,100 @@
+{
+  "name": "Web Intel - Competitor Rank Tracker",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "cronExpression", "expression": "30 5 * * *"}]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Daily 5:30am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT c.id as competitor_id, c.domain as competitor_domain, k.id as keyword_id, k.keyword FROM web_intel.competitors c CROSS JOIN web_intel.tracked_keywords k WHERE c.is_active = TRUE AND k.status = 'active' ORDER BY c.priority DESC, k.priority DESC LIMIT 200"
+      },
+      "id": "fetch-combinations",
+      "name": "Fetch Competitor-Keyword Combinations",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "batchSize": 10,
+        "options": {}
+      },
+      "id": "batch-keywords",
+      "name": "Batch Keywords",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.dataforseo.com/v3/serp/google/organic/live/advanced",
+        "authentication": "httpBasicAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "=[{\"keyword\": \"{{ $json.keyword }}\", \"location_code\": 2840, \"language_code\": \"en\", \"device\": \"desktop\", \"depth\": 100}]"
+      },
+      "id": "dataforseo-serp",
+      "name": "DataForSEO - SERP",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract competitor position from SERP results\nconst input = $input.first().json;\nconst competitorDomain = $('Batch Keywords').first().json.competitor_domain;\nconst keyword = $('Batch Keywords').first().json.keyword;\nconst keywordId = $('Batch Keywords').first().json.keyword_id;\nconst competitorId = $('Batch Keywords').first().json.competitor_id;\n\nconst tasks = input.tasks || [];\nconst items = tasks[0]?.result?.[0]?.items || [];\n\n// Find competitor in results\nlet position = null;\nlet url = null;\nlet hasFeatureSnippet = false;\nlet hasLocalPack = false;\n\nfor (const item of items) {\n  if (item.type === 'featured_snippet' && item.domain?.includes(competitorDomain)) {\n    hasFeatureSnippet = true;\n  }\n  if (item.type === 'local_pack') {\n    hasLocalPack = true;\n  }\n  if (item.type === 'organic' && item.domain?.includes(competitorDomain)) {\n    position = item.rank_absolute;\n    url = item.url;\n    break;\n  }\n}\n\nreturn [{\n  json: {\n    collected_date: new Date().toISOString().split('T')[0],\n    competitor_id: competitorId,\n    competitor_domain: competitorDomain,\n    keyword_id: keywordId,\n    keyword: keyword,\n    position: position,\n    url: url,\n    has_featured_snippet: hasFeatureSnippet,\n    has_local_pack: hasLocalPack\n  }\n}];"
+      },
+      "id": "extract-position",
+      "name": "Extract Competitor Position",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [880, 0]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "web_intel",
+        "table": "competitor_rankings",
+        "columns": "collected_date, competitor_id, competitor_domain, keyword_id, keyword, position, url, has_featured_snippet, has_local_pack"
+      },
+      "id": "store-ranking",
+      "name": "Store Competitor Ranking",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1100, 0]
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "id": "loop-back",
+      "name": "Loop Back",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [1320, 0]
+    }
+  ],
+  "connections": {
+    "Daily 5:30am CT": {"main": [[{"node": "Fetch Competitor-Keyword Combinations", "type": "main", "index": 0}]]},
+    "Fetch Competitor-Keyword Combinations": {"main": [[{"node": "Batch Keywords", "type": "main", "index": 0}]]},
+    "Batch Keywords": {"main": [[{"node": "DataForSEO - SERP", "type": "main", "index": 0}]]},
+    "DataForSEO - SERP": {"main": [[{"node": "Extract Competitor Position", "type": "main", "index": 0}]]},
+    "Extract Competitor Position": {"main": [[{"node": "Store Competitor Ranking", "type": "main", "index": 0}]]},
+    "Store Competitor Ranking": {"main": [[{"node": "Loop Back", "type": "main", "index": 0}]]},
+    "Loop Back": {"main": [[{"node": "Batch Keywords", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": [{"name": "web-intel"}, {"name": "competitor"}, {"name": "rankings"}]
+}

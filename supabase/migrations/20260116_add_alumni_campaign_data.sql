@@ -55,7 +55,6 @@ ON CONFLICT (domain_name) DO UPDATE SET
   health_score = EXCLUDED.health_score,
   notes = EXCLUDED.notes,
   updated_at = NOW();
-
 -- ============================================
 -- PART 2: ADD SMARTLEAD MESSAGES
 -- ============================================
@@ -130,7 +129,6 @@ VALUES
     E'Hi {{first_name}},\n\nI don''t want to fill your inbox, so this will be my last email on this.\n\nOur Quarterly Updates are free for alumni and designed for people who don''t have time to track every employment law change themselves.\n\nIf the timing ever feels right: just reply and I''ll add you to the invite list.\n\nEither way, thanks for being part of the IAML community.\n\n{{sender_name}}'
   )
 ON CONFLICT DO NOTHING;
-
 -- ============================================
 -- PART 3: ADD PHONE SCRIPTS
 -- ============================================
@@ -179,7 +177,6 @@ VALUES
     E'Hi {{first_name}}, this is [Your Name] from IAML again.\n\nI left you a voicemail earlier this week about our free Quarterly Updates for alumni.\n\nDo you have a quick minute to chat?\n\n[SAME RESPONSE HANDLING AS P1]'
   )
 ON CONFLICT DO NOTHING;
-
 -- ============================================
 -- PART 4: UPDATE SMARTLEAD CHANNEL WITH CAMPAIGN ID
 -- ============================================
@@ -217,4 +214,4 @@ ON CONFLICT DO NOTHING;
 -- FROM campaign_messages cm
 -- JOIN campaign_channels cc ON cc.id = cm.channel_id
 -- WHERE cm.campaign_id = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
--- GROUP BY cm.channel_id, cc.channel;
+-- GROUP BY cm.channel_id, cc.channel;;

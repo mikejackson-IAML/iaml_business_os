@@ -11,12 +11,10 @@
 -- Only workflows with a webhook trigger can be triggered from the app
 ALTER TABLE n8n_brain.workflow_registry
 ADD COLUMN IF NOT EXISTS webhook_url TEXT;
-
 -- quick_action_icon: SF Symbol name for display in the iOS quick actions grid
 -- Defaults to 'bolt.fill' which represents a quick action/trigger
 ALTER TABLE n8n_brain.workflow_registry
 ADD COLUMN IF NOT EXISTS quick_action_icon TEXT DEFAULT 'bolt.fill';
-
 -- risk_level: Determines if confirmation dialog is required before triggering
 -- 'safe' = execute immediately on tap
 -- 'risky' = show confirmation dialog first
@@ -24,12 +22,10 @@ ADD COLUMN IF NOT EXISTS quick_action_icon TEXT DEFAULT 'bolt.fill';
 ALTER TABLE n8n_brain.workflow_registry
 ADD COLUMN IF NOT EXISTS risk_level TEXT DEFAULT 'safe'
 CHECK (risk_level IN ('safe', 'risky', 'destructive'));
-
 -- quick_action_enabled: Whether this workflow appears in the quick actions grid
 -- User can enable/disable from Settings screen
 ALTER TABLE n8n_brain.workflow_registry
 ADD COLUMN IF NOT EXISTS quick_action_enabled BOOLEAN DEFAULT false;
-
 -- ============================================
 -- COMMENTS
 -- ============================================

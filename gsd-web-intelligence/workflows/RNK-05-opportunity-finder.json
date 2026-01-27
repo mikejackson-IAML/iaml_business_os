@@ -1,0 +1,252 @@
+{
+  "name": "Web Intel - Rankings - Opportunity Finder",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 4 * * 1"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Weekly Monday 4am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM web_intel.striking_distance ORDER BY opportunity_score DESC LIMIT 20",
+        "options": {}
+      },
+      "id": "fetch-opportunities",
+      "name": "Fetch Striking Distance",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-opportunities",
+              "leftValue": "={{ $input.all().length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-opportunities",
+      "name": "Has Opportunities?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Format opportunity digest\nconst opportunities = $input.all().map(i => i.json);\n\nconst page1 = opportunities.filter(o => o.opportunity_type === 'page_1_opportunity');\nconst page2 = opportunities.filter(o => o.opportunity_type === 'page_2_opportunity');\n\nlet message = `:dart: *Weekly Ranking Opportunities*\\n`;\nmessage += `_Keywords in striking distance for optimization_\\n`;\n\nif (page1.length > 0) {\n  message += `\\n:first_place_medal: *Page 1 Opportunities* (positions 4-10)\\n`;\n  page1.slice(0, 10).forEach(o => {\n    const volume = o.search_volume ? `${o.search_volume.toLocaleString()} vol` : 'vol unknown';\n    message += `• \"${o.keyword}\" - #${o.position} (${volume})\\n`;\n  });\n}\n\nif (page2.length > 0) {\n  message += `\\n:second_place_medal: *Page 2 Opportunities* (positions 11-20)\\n`;\n  page2.slice(0, 10).forEach(o => {\n    const volume = o.search_volume ? `${o.search_volume.toLocaleString()} vol` : 'vol unknown';\n    message += `• \"${o.keyword}\" - #${o.position} (${volume})\\n`;\n  });\n}\n\nmessage += `\\n_Focus on these keywords for quick wins_`;\n\nreturn [{\n  json: {\n    message,\n    opportunity_count: opportunities.length,\n    page1_count: page1.length,\n    page2_count: page2.length\n  }\n}];"
+      },
+      "id": "format-digest",
+      "name": "Format Opportunity Digest",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, -100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SLACK_WEB_INTEL_WEBHOOK}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": {{ JSON.stringify($json.message) }},\n  \"unfurl_links\": false\n}",
+        "options": {}
+      },
+      "id": "send-slack",
+      "name": "Send to Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, -100]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Create alert record\nconst data = $input.first().json;\n\nreturn [{\n  json: {\n    alert_type: 'opportunity',\n    severity: 'info',\n    title: `Weekly Opportunities: ${data.opportunity_count} keywords in striking distance`,\n    message: `${data.page1_count} page 1 opportunities, ${data.page2_count} page 2 opportunities`,\n    metadata: JSON.stringify(data)\n  }\n}];"
+      },
+      "id": "create-alert",
+      "name": "Create Alert Record",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1100, -100]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "web_intel",
+        "table": "alerts",
+        "columns": "alert_type, severity, title, message, metadata",
+        "options": {}
+      },
+      "id": "insert-alert",
+      "name": "Insert Alert",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1320, -100],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "web_intel",
+        "table": "collection_log",
+        "columns": "workflow_id, workflow_name, status, records_processed, completed_at",
+        "options": {}
+      },
+      "id": "log-success",
+      "name": "Log Success",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [660, 100],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Weekly Monday 4am CT": {
+      "main": [
+        [
+          {
+            "node": "Fetch Striking Distance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Striking Distance": {
+      "main": [
+        [
+          {
+            "node": "Has Opportunities?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Opportunities?": {
+      "main": [
+        [
+          {
+            "node": "Format Opportunity Digest",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Opportunity Digest": {
+      "main": [
+        [
+          {
+            "node": "Send to Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send to Slack": {
+      "main": [
+        [
+          {
+            "node": "Create Alert Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Alert Record": {
+      "main": [
+        [
+          {
+            "node": "Insert Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Alert": {
+      "main": [
+        [
+          {
+            "node": "Log Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "meta": {
+    "templateId": "web-intel-opportunity-finder"
+  },
+  "tags": [
+    {
+      "name": "web-intel"
+    },
+    {
+      "name": "rankings"
+    },
+    {
+      "name": "opportunities"
+    },
+    {
+      "name": "weekly"
+    }
+  ]
+}

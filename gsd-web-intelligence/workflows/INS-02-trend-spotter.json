@@ -1,0 +1,110 @@
+{
+  "name": "Web Intel - Trend Spotter",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "cronExpression", "expression": "0 9 * * 1"}]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Weekly Monday 9am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM web_intel.weekly_performance ORDER BY week_start DESC LIMIT 8"
+      },
+      "id": "fetch-weekly-traffic",
+      "name": "Fetch Weekly Traffic",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT tk.keyword, tk.priority, dr.collected_date, dr.position FROM web_intel.tracked_keywords tk JOIN web_intel.daily_rankings dr ON tk.id = dr.keyword_id WHERE dr.collected_date >= CURRENT_DATE - INTERVAL '28 days' AND tk.status = 'active' ORDER BY tk.keyword, dr.collected_date"
+      },
+      "id": "fetch-ranking-history",
+      "name": "Fetch Ranking History",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 200]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "mergeByFields": {"values": []}
+      },
+      "id": "merge-data",
+      "name": "Merge Data",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [440, 100]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Analyze trends from historical data\nconst items = $input.all();\nconst weeklyTraffic = items.filter(i => i.json.week_start).map(i => i.json);\nconst rankingHistory = items.filter(i => i.json.keyword).map(i => i.json);\n\nconst trends = [];\n\n// Traffic trend analysis\nif (weeklyTraffic.length >= 4) {\n  const recent = weeklyTraffic.slice(0, 4);\n  const older = weeklyTraffic.slice(4, 8);\n  \n  const recentAvg = recent.reduce((sum, w) => sum + (w.total_sessions || 0), 0) / recent.length;\n  const olderAvg = older.length > 0 ? older.reduce((sum, w) => sum + (w.total_sessions || 0), 0) / older.length : recentAvg;\n  \n  const change = olderAvg > 0 ? ((recentAvg - olderAvg) / olderAvg) * 100 : 0;\n  \n  if (Math.abs(change) >= 10) {\n    trends.push({\n      trend_type: 'traffic_trend',\n      name: change > 0 ? 'Traffic Growth Trend' : 'Traffic Decline Trend',\n      description: `Traffic has ${change > 0 ? 'increased' : 'decreased'} by ${Math.abs(change).toFixed(1)}% over the last 4 weeks`,\n      direction: change > 0 ? 'up' : 'down',\n      magnitude: Math.abs(change),\n      data_points: JSON.stringify(recent.map(w => ({ date: w.week_start, value: w.total_sessions }))),\n      is_active: true\n    });\n  }\n}\n\n// Keyword ranking trends\nconst keywordGroups = {};\nrankingHistory.forEach(r => {\n  if (!keywordGroups[r.keyword]) keywordGroups[r.keyword] = [];\n  keywordGroups[r.keyword].push(r);\n});\n\nObject.entries(keywordGroups).forEach(([keyword, history]) => {\n  if (history.length < 7) return;\n  \n  const recent = history.slice(-7);\n  const older = history.slice(-14, -7);\n  \n  if (older.length === 0) return;\n  \n  const recentAvg = recent.reduce((sum, r) => sum + (r.position || 100), 0) / recent.length;\n  const olderAvg = older.reduce((sum, r) => sum + (r.position || 100), 0) / older.length;\n  \n  const improvement = olderAvg - recentAvg;  // Positive = improved\n  \n  if (Math.abs(improvement) >= 5) {\n    trends.push({\n      trend_type: 'ranking_trend',\n      name: `${keyword} Ranking ${improvement > 0 ? 'Improvement' : 'Decline'}`,\n      description: `\"${keyword}\" has ${improvement > 0 ? 'improved' : 'declined'} by ${Math.abs(improvement).toFixed(1)} positions`,\n      direction: improvement > 0 ? 'up' : 'down',\n      magnitude: Math.abs(improvement),\n      data_points: JSON.stringify(recent.map(r => ({ date: r.collected_date, value: r.position }))),\n      is_active: true\n    });\n  }\n});\n\nreturn trends.length > 0 ? trends.map(t => ({ json: t })) : [{ json: { no_trends: true } }];"
+      },
+      "id": "analyze-trends",
+      "name": "Analyze Trends",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 100]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict"},
+          "conditions": [{"id": "has-trends", "leftValue": "={{ $json.no_trends }}", "rightValue": true, "operator": {"type": "boolean", "operation": "notEquals"}}]
+        }
+      },
+      "id": "check-trends",
+      "name": "Has Trends?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [880, 100]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "web_intel",
+        "table": "trends",
+        "columns": "trend_type, name, description, direction, magnitude, data_points, is_active"
+      },
+      "id": "store-trends",
+      "name": "Store Trends",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1100, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SLACK_WEB_INTEL_WEBHOOK}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"text\": \":chart_with_upwards_trend: *Trend Spotted*\\n*{{ $json.name }}*\\n{{ $json.description }}\\nDirection: {{ $json.direction }} | Magnitude: {{ $json.magnitude.toFixed(1) }}%\"}"
+      },
+      "id": "notify-trend",
+      "name": "Notify Trend",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1100, 200]
+    }
+  ],
+  "connections": {
+    "Weekly Monday 9am CT": {"main": [[{"node": "Fetch Weekly Traffic", "type": "main", "index": 0}, {"node": "Fetch Ranking History", "type": "main", "index": 0}]]},
+    "Fetch Weekly Traffic": {"main": [[{"node": "Merge Data", "type": "main", "index": 0}]]},
+    "Fetch Ranking History": {"main": [[{"node": "Merge Data", "type": "main", "index": 1}]]},
+    "Merge Data": {"main": [[{"node": "Analyze Trends", "type": "main", "index": 0}]]},
+    "Analyze Trends": {"main": [[{"node": "Has Trends?", "type": "main", "index": 0}]]},
+    "Has Trends?": {"main": [[{"node": "Store Trends", "type": "main", "index": 0}, {"node": "Notify Trend", "type": "main", "index": 0}], []]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": [{"name": "web-intel"}, {"name": "ai"}, {"name": "trends"}, {"name": "weekly"}]
+}

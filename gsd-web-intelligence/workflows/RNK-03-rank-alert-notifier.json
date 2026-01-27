@@ -1,0 +1,190 @@
+{
+  "name": "Web Intel - Rankings - Alert Notifier",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "web-intel/rank-alert",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "rank-alert-notifier"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Format Slack message for ranking alerts\nconst data = $input.first().json;\nconst { categorized, counts } = data;\n\nif (counts.total === 0) {\n  return [{ json: { skip: true } }];\n}\n\nconst today = new Date().toISOString().split('T')[0];\nlet message = `:chart_with_upwards_trend: *Ranking Changes for ${today}*\\n`;\n\n// Critical changes\nif (categorized.critical.length > 0) {\n  message += `\\n:red_circle: *Critical* (${categorized.critical.length})\\n`;\n  categorized.critical.slice(0, 5).forEach(c => {\n    if (c.change_type === 'lost_ranking') {\n      message += `• \"${c.keyword}\" - *Lost ranking* (was #${c.yesterday_position})\\n`;\n    } else {\n      message += `• \"${c.keyword}\" - #${c.yesterday_position} → #${c.today_position} (${c.position_change > 0 ? '+' : ''}${c.position_change})\\n`;\n    }\n  });\n  if (categorized.critical.length > 5) {\n    message += `  _...and ${categorized.critical.length - 5} more_\\n`;\n  }\n}\n\n// Warning changes\nif (categorized.warning.length > 0) {\n  message += `\\n:large_yellow_circle: *Warning* (${categorized.warning.length})\\n`;\n  categorized.warning.slice(0, 5).forEach(c => {\n    message += `• \"${c.keyword}\" - #${c.yesterday_position} → #${c.today_position} (${c.position_change > 0 ? '+' : ''}${c.position_change})\\n`;\n  });\n  if (categorized.warning.length > 5) {\n    message += `  _...and ${categorized.warning.length - 5} more_\\n`;\n  }\n}\n\n// Info (gains) - brief summary\nif (categorized.info.length > 0) {\n  message += `\\n:large_green_circle: *Gains* (${categorized.info.length})\\n`;\n  categorized.info.slice(0, 3).forEach(c => {\n    if (c.change_type === 'new_ranking') {\n      message += `• \"${c.keyword}\" - *New ranking* at #${c.today_position}\\n`;\n    } else {\n      message += `• \"${c.keyword}\" - #${c.yesterday_position} → #${c.today_position}\\n`;\n    }\n  });\n  if (categorized.info.length > 3) {\n    message += `  _...and ${categorized.info.length - 3} more gains_\\n`;\n  }\n}\n\nreturn [{\n  json: {\n    message,\n    counts,\n    skip: false\n  }\n}];"
+      },
+      "id": "format-message",
+      "name": "Format Slack Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "not-skip",
+              "leftValue": "={{ $json.skip }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-skip",
+      "name": "Should Send?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SLACK_WEB_INTEL_WEBHOOK}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": {{ JSON.stringify($json.message) }},\n  \"unfurl_links\": false\n}",
+        "options": {}
+      },
+      "id": "send-slack",
+      "name": "Send to Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=UPDATE web_intel.alerts \nSET notified_at = NOW(), notification_channel = 'slack'\nWHERE alert_type IN ('ranking_drop', 'ranking_lost', 'ranking_gain', 'ranking_new')\n  AND notified_at IS NULL\n  AND created_at > NOW() - INTERVAL '5 minutes'",
+        "options": {}
+      },
+      "id": "mark-notified",
+      "name": "Mark Alerts Notified",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [880, 0],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "web_intel",
+        "table": "collection_log",
+        "columns": "workflow_id, workflow_name, status, records_processed, completed_at",
+        "options": {}
+      },
+      "id": "log-success",
+      "name": "Log Success",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1100, 0],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Format Slack Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Slack Message": {
+      "main": [
+        [
+          {
+            "node": "Should Send?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Should Send?": {
+      "main": [
+        [
+          {
+            "node": "Send to Slack",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Send to Slack": {
+      "main": [
+        [
+          {
+            "node": "Mark Alerts Notified",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Alerts Notified": {
+      "main": [
+        [
+          {
+            "node": "Log Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "meta": {
+    "templateId": "web-intel-rank-alert-notifier"
+  },
+  "tags": [
+    {
+      "name": "web-intel"
+    },
+    {
+      "name": "rankings"
+    },
+    {
+      "name": "alerts"
+    },
+    {
+      "name": "slack"
+    }
+  ]
+}

@@ -12,17 +12,14 @@ ALTER TABLE contacts
 ADD COLUMN IF NOT EXISTS quarterly_updates_registered_at TIMESTAMPTZ,
 ADD COLUMN IF NOT EXISTS quarterly_updates_access_expires TIMESTAMPTZ,
 ADD COLUMN IF NOT EXISTS quarterly_updates_access_type TEXT;
-
 -- Add check constraint for access_type
 ALTER TABLE contacts
 ADD CONSTRAINT contacts_quarterly_updates_access_type_check
 CHECK (quarterly_updates_access_type IS NULL OR quarterly_updates_access_type IN ('legacy_alumni', 'program_benefit'));
-
 -- Create index for efficient queries on access status
 CREATE INDEX IF NOT EXISTS idx_contacts_quarterly_updates_access
 ON contacts (quarterly_updates_access_expires)
 WHERE quarterly_updates_registered_at IS NOT NULL;
-
 -- Add comments
 COMMENT ON COLUMN contacts.quarterly_updates_registered_at IS 'When the contact registered for Quarterly Updates access';
 COMMENT ON COLUMN contacts.quarterly_updates_access_expires IS 'When their Quarterly Updates access expires';

@@ -1,0 +1,131 @@
+{
+  "name": "Web Intel - AI Content Analyzer",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "cronExpression", "expression": "0 8 * * 1"}]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Weekly Monday 8am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT ci.url, ci.title, ci.word_count, ci.content_type, pt.sessions as last_week_sessions, pt.pageviews, pt.bounce_rate FROM web_intel.content_inventory ci LEFT JOIN LATERAL (SELECT SUM(sessions) as sessions, SUM(pageviews) as pageviews, AVG(bounce_rate) as bounce_rate FROM web_intel.page_traffic WHERE page_path = ci.path AND collected_date >= CURRENT_DATE - INTERVAL '7 days') pt ON true WHERE ci.status = 'active' ORDER BY pt.sessions DESC NULLS LAST LIMIT 20"
+      },
+      "id": "fetch-top-content",
+      "name": "Fetch Top Content",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM web_intel.content_decay_candidates ORDER BY decline_percent DESC LIMIT 10"
+      },
+      "id": "fetch-decaying",
+      "name": "Fetch Decaying Content",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 200]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "mergeByFields": {"values": []}
+      },
+      "id": "merge-data",
+      "name": "Merge Data",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [440, 100]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare context for AI analysis\nconst items = $input.all();\nconst topContent = items.filter(i => i.json.last_week_sessions !== undefined).map(i => i.json);\nconst decayingContent = items.filter(i => i.json.decline_percent !== undefined).map(i => i.json);\n\nconst context = {\n  top_performing: topContent.slice(0, 10).map(c => ({\n    url: c.url,\n    title: c.title,\n    sessions: c.last_week_sessions,\n    bounce_rate: c.bounce_rate,\n    word_count: c.word_count\n  })),\n  decaying: decayingContent.slice(0, 5).map(c => ({\n    page: c.page,\n    decline: c.decline_percent,\n    current: c.current_sessions,\n    historical: c.historical_sessions\n  })),\n  analysis_date: new Date().toISOString().split('T')[0]\n};\n\nreturn [{ json: context }];"
+      },
+      "id": "prepare-context",
+      "name": "Prepare AI Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "anthropicApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "x-api-key", "value": "={{$env.ANTHROPIC_API_KEY}}"},
+            {"name": "anthropic-version", "value": "2023-06-01"}
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"claude-3-haiku-20240307\",\n  \"max_tokens\": 1024,\n  \"messages\": [{\n    \"role\": \"user\",\n    \"content\": \"Analyze this website content performance data and provide 3-5 actionable insights. Focus on: 1) What's working well, 2) Content that needs attention, 3) Specific recommendations.\\n\\nTop Performing Content:\\n{{ JSON.stringify($json.top_performing) }}\\n\\nDecaying Content:\\n{{ JSON.stringify($json.decaying) }}\\n\\nProvide insights in JSON format: {\\\"insights\\\": [{\\\"type\\\": \\\"...\\\", \\\"priority\\\": \\\"high|medium|low\\\", \\\"title\\\": \\\"...\\\", \\\"summary\\\": \\\"...\\\", \\\"action\\\": \\\"...\\\"}]}\"\n  }]\n}"
+      },
+      "id": "ai-analyze",
+      "name": "Claude - Analyze Content",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, 100]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse AI response and store insights\nconst response = $input.first().json;\nconst content = response.content?.[0]?.text || '{\"insights\": []}';\n\nlet parsed;\ntry {\n  // Extract JSON from response\n  const jsonMatch = content.match(/\\{[\\s\\S]*\\}/);\n  parsed = JSON.parse(jsonMatch ? jsonMatch[0] : content);\n} catch (e) {\n  parsed = { insights: [] };\n}\n\nconst insights = (parsed.insights || []).map(i => ({\n  insight_type: 'content_recommendation',\n  category: 'content',\n  title: i.title,\n  summary: i.summary,\n  priority: i.priority || 'medium',\n  recommended_actions: JSON.stringify([{ action: i.action, effort: 'medium', impact: 'medium' }]),\n  data_sources: ['content_inventory', 'page_traffic', 'content_decay_candidates'],\n  confidence_score: 0.8,\n  model_used: 'claude-3-haiku'\n}));\n\nreturn insights.length > 0 ? insights.map(i => ({ json: i })) : [{ json: { skip: true } }];"
+      },
+      "id": "parse-insights",
+      "name": "Parse AI Insights",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1100, 100]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict"},
+          "conditions": [{"id": "has-insights", "leftValue": "={{ $json.skip }}", "rightValue": true, "operator": {"type": "boolean", "operation": "notEquals"}}]
+        }
+      },
+      "id": "check-insights",
+      "name": "Has Insights?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1320, 100]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "web_intel",
+        "table": "ai_insights",
+        "columns": "insight_type, category, title, summary, priority, recommended_actions, data_sources, confidence_score, model_used"
+      },
+      "id": "store-insights",
+      "name": "Store Insights",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1540, 0]
+    }
+  ],
+  "connections": {
+    "Weekly Monday 8am CT": {"main": [[{"node": "Fetch Top Content", "type": "main", "index": 0}, {"node": "Fetch Decaying Content", "type": "main", "index": 0}]]},
+    "Fetch Top Content": {"main": [[{"node": "Merge Data", "type": "main", "index": 0}]]},
+    "Fetch Decaying Content": {"main": [[{"node": "Merge Data", "type": "main", "index": 1}]]},
+    "Merge Data": {"main": [[{"node": "Prepare AI Context", "type": "main", "index": 0}]]},
+    "Prepare AI Context": {"main": [[{"node": "Claude - Analyze Content", "type": "main", "index": 0}]]},
+    "Claude - Analyze Content": {"main": [[{"node": "Parse AI Insights", "type": "main", "index": 0}]]},
+    "Parse AI Insights": {"main": [[{"node": "Has Insights?", "type": "main", "index": 0}]]},
+    "Has Insights?": {"main": [[{"node": "Store Insights", "type": "main", "index": 0}], []]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": [{"name": "web-intel"}, {"name": "ai"}, {"name": "content"}, {"name": "weekly"}]
+}

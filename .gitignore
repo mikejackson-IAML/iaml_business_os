@@ -2,3 +2,13 @@ iaml_business_os/
 .vercel
 .env*.local
 business-os/docs/API-CREDENTIALS.md
+.mcp.json
+
+# Overnight GSD runtime outputs
+.overnight/
+scripts/overnight-gsd/config.json
+
+# n8n testing outputs and config (contains API keys)
+.n8n-testing/
+scripts/n8n-testing/config.json
+.env

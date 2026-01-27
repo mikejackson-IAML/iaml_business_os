@@ -41,12 +41,10 @@ CREATE TABLE IF NOT EXISTS domains (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Indexes
 CREATE INDEX IF NOT EXISTS idx_domains_status ON domains(status);
 CREATE INDEX IF NOT EXISTS idx_domains_health ON domains(health_score);
 CREATE INDEX IF NOT EXISTS idx_domains_platform ON domains(platform);
-
 -- ============================================
 -- DOMAIN_HEALTH_LOG TABLE
 -- Daily snapshots of domain health
@@ -70,11 +68,9 @@ CREATE TABLE IF NOT EXISTS domain_health_log (
 
   UNIQUE(domain_id, log_date)
 );
-
 -- Index for time-series queries
 CREATE INDEX IF NOT EXISTS idx_domain_health_log_date ON domain_health_log(log_date DESC);
 CREATE INDEX IF NOT EXISTS idx_domain_health_log_domain ON domain_health_log(domain_id);
-
 -- ============================================
 -- LEAD_SOURCES TABLE
 -- Platform configurations for lead sourcing
@@ -104,7 +100,6 @@ CREATE TABLE IF NOT EXISTS lead_sources (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- ============================================
 -- LEAD_IMPORTS TABLE
 -- Import batches with validation statistics
@@ -136,12 +131,10 @@ CREATE TABLE IF NOT EXISTS lead_imports (
   imported_at TIMESTAMPTZ DEFAULT NOW(),
   completed_at TIMESTAMPTZ
 );
-
 -- Index
 CREATE INDEX IF NOT EXISTS idx_lead_imports_source ON lead_imports(source_name);
 CREATE INDEX IF NOT EXISTS idx_lead_imports_date ON lead_imports(imported_at DESC);
 CREATE INDEX IF NOT EXISTS idx_lead_imports_status ON lead_imports(status);
-
 -- ============================================
 -- SENDING_CAPACITY TABLE
 -- Daily capacity calculations
@@ -167,10 +160,8 @@ CREATE TABLE IF NOT EXISTS sending_capacity (
   -- Metadata
   calculated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Index
 CREATE INDEX IF NOT EXISTS idx_sending_capacity_date ON sending_capacity(calculation_date DESC);
-
 -- ============================================
 -- LEAD_INTELLIGENCE_ACTIVITY TABLE
 -- Activity log for lead operations
@@ -190,7 +181,6 @@ CREATE TABLE IF NOT EXISTS lead_intelligence_activity (
   metadata JSONB DEFAULT '{}',
   activity_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Constraint on activity_type
 ALTER TABLE lead_intelligence_activity DROP CONSTRAINT IF EXISTS lead_intel_activity_type_check;
 ALTER TABLE lead_intelligence_activity ADD CONSTRAINT lead_intel_activity_type_check
@@ -210,11 +200,9 @@ CHECK (activity_type IN (
   -- System events
   'sync_completed', 'sync_failed', 'alert_generated', 'alert_resolved'
 ));
-
 -- Index
 CREATE INDEX IF NOT EXISTS idx_lead_intel_activity_type ON lead_intelligence_activity(activity_type);
 CREATE INDEX IF NOT EXISTS idx_lead_intel_activity_at ON lead_intelligence_activity(activity_at DESC);
-
 -- ============================================
 -- VIEW: Domain Summary
 -- Aggregate domain statistics
@@ -231,7 +219,6 @@ SELECT
   COALESCE(SUM(daily_limit) FILTER (WHERE status = 'active'), 0) as total_active_capacity,
   COALESCE(SUM(sent_today), 0) as total_sent_today
 FROM domains;
-
 -- ============================================
 -- VIEW: Lead Pipeline Summary (Last 7 Days)
 -- ============================================
@@ -249,7 +236,6 @@ SELECT
   COUNT(*) as import_count
 FROM lead_imports
 WHERE imported_at >= CURRENT_DATE - INTERVAL '7 days';
-
 -- ============================================
 -- VIEW: Capacity Dashboard
 -- Current capacity status
@@ -266,7 +252,6 @@ FROM sending_capacity sc
 WHERE sc.calculation_date = CURRENT_DATE
 ORDER BY sc.calculation_date DESC
 LIMIT 1;
-
 -- ============================================
 -- FUNCTION: Calculate Daily Capacity
 -- Recalculates sending capacity based on domain status
@@ -343,7 +328,6 @@ BEGIN
     calculated_at = NOW();
 END;
 $$ LANGUAGE plpgsql;
-
 -- ============================================
 -- TRIGGERS: Auto-update timestamps
 -- ============================================
@@ -351,12 +335,10 @@ DROP TRIGGER IF EXISTS domains_updated_at ON domains;
 CREATE TRIGGER domains_updated_at
   BEFORE UPDATE ON domains
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
 DROP TRIGGER IF EXISTS lead_sources_updated_at ON lead_sources;
 CREATE TRIGGER lead_sources_updated_at
   BEFORE UPDATE ON lead_sources
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
 -- ============================================
 -- COMMENTS
 -- ============================================

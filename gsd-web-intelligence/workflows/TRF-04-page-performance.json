@@ -1,0 +1,178 @@
+{
+  "name": "Web Intel - Traffic - Page Performance",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "15 6 * * *"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Daily 6:15am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://analyticsdata.googleapis.com/v1beta/properties/{{$json.propertyId}}:runReport",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"dateRanges\": [\n    {\n      \"startDate\": \"yesterday\",\n      \"endDate\": \"yesterday\"\n    }\n  ],\n  \"dimensions\": [\n    {\"name\": \"pagePath\"}\n  ],\n  \"metrics\": [\n    {\"name\": \"sessions\"},\n    {\"name\": \"screenPageViews\"},\n    {\"name\": \"averageSessionDuration\"},\n    {\"name\": \"bounceRate\"},\n    {\"name\": \"entrances\"}\n  ],\n  \"limit\": 100,\n  \"orderBys\": [\n    {\n      \"metric\": {\n        \"metricName\": \"screenPageViews\"\n      },\n      \"desc\": true\n    }\n  ]\n}",
+        "options": {}
+      },
+      "id": "ga4-request",
+      "name": "GA4 - Fetch Page Metrics",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 0],
+      "notesInFlow": true,
+      "notes": "Fetches per-page metrics for top 100 pages by pageviews"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Transform GA4 response to match page_traffic schema\nconst response = $input.first().json;\nconst rows = response.rows || [];\n\nif (rows.length === 0) {\n  return [{ json: { pages: [], count: 0 } }];\n}\n\n// Calculate yesterday's date\nconst yesterday = new Date();\nyesterday.setDate(yesterday.getDate() - 1);\nconst collected_date = yesterday.toISOString().split('T')[0];\n\nconst pages = rows.map(row => {\n  const dimensions = row.dimensionValues;\n  const metrics = row.metricValues;\n  \n  return {\n    collected_date,\n    page_path: dimensions[0].value,\n    sessions: parseInt(metrics[0].value) || 0,\n    pageviews: parseInt(metrics[1].value) || 0,\n    avg_time_on_page: parseFloat(metrics[2].value) || 0,\n    bounce_rate: parseFloat(metrics[3].value) * 100 || 0,\n    entrances: parseInt(metrics[4].value) || 0\n  };\n});\n\nreturn pages.map(page => ({ json: page }));"
+      },
+      "id": "transform-data",
+      "name": "Transform to Schema",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": "web_intel",
+        "table": "page_traffic",
+        "columns": "collected_date, page_path, sessions, pageviews, avg_time_on_page, bounce_rate, entrances",
+        "conflictColumns": "collected_date, page_path",
+        "options": {}
+      },
+      "id": "supabase-upsert",
+      "name": "Supabase - Store Page Traffic",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [660, 0],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Log success\nconst items = $input.all();\nreturn [{\n  json: {\n    workflow_id: 'TRF-04',\n    workflow_name: 'Web Intel - Traffic - Page Performance',\n    status: 'success',\n    records_processed: items.length,\n    completed_at: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "prepare-log",
+      "name": "Prepare Log Entry",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [880, 0]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "web_intel",
+        "table": "collection_log",
+        "columns": "workflow_id, workflow_name, status, records_processed, completed_at",
+        "options": {}
+      },
+      "id": "log-success",
+      "name": "Log Success",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1100, 0],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Daily 6:15am CT": {
+      "main": [
+        [
+          {
+            "node": "GA4 - Fetch Page Metrics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GA4 - Fetch Page Metrics": {
+      "main": [
+        [
+          {
+            "node": "Transform to Schema",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transform to Schema": {
+      "main": [
+        [
+          {
+            "node": "Supabase - Store Page Traffic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase - Store Page Traffic": {
+      "main": [
+        [
+          {
+            "node": "Prepare Log Entry",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Log Entry": {
+      "main": [
+        [
+          {
+            "node": "Log Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "meta": {
+    "templateId": "web-intel-page-performance"
+  },
+  "tags": [
+    {
+      "name": "web-intel"
+    },
+    {
+      "name": "traffic"
+    },
+    {
+      "name": "ga4"
+    }
+  ]
+}

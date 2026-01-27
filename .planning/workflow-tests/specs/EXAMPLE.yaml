@@ -1,0 +1,120 @@
+# Example Test Specification
+# Copy this file and modify for your workflow
+# Save as: {workflow_id}.yaml or {workflow-name-kebab-case}.yaml
+
+# ============================================
+# REQUIRED FIELDS
+# ============================================
+
+workflow_id: "HnZQopXL7xjZnX3O"  # Your n8n workflow ID
+workflow_name: "Airtable to GHL Contact Sync"  # Human-readable name
+
+# How to execute the workflow for testing:
+# - "webhook": Workflow has a Webhook trigger - can be called directly
+# - "poll_history": Workflow is scheduled/manual - monitor execution history
+# - "manual": Requires manual trigger, agent will prompt you
+execution_method: "webhook"
+
+# ============================================
+# TEST CASES
+# ============================================
+# Define at least one test case. Each test case has:
+# - name: Unique identifier (no spaces, use underscores)
+# - description: What this test verifies
+# - input: Data to send to the workflow
+# - expected: What should happen
+
+test_cases:
+  # Happy path - standard successful case
+  - name: "happy_path"
+    description: "Standard contact with all required fields"
+    input:
+      firstName: "John"
+      lastName: "Doe"
+      email: "john.doe@example.com"
+      phone: "+1-555-123-4567"
+      company: "Acme Corp"
+    expected:
+      status: "success"
+      output_contains:
+        contactId: "string"  # Expect a contactId field of type string
+
+  # Edge case - missing optional field
+  - name: "missing_phone"
+    description: "Contact without phone number should still work"
+    input:
+      firstName: "Jane"
+      lastName: "Smith"
+      email: "jane.smith@example.com"
+    expected:
+      status: "success"
+
+  # Edge case - testing error handling
+  - name: "invalid_email"
+    description: "Invalid email should be rejected gracefully"
+    input:
+      firstName: "Bad"
+      lastName: "Email"
+      email: "not-an-email"
+    expected:
+      status: "error"
+      error_contains: "invalid"  # Error message should contain "invalid"
+
+  # Edge case - empty input
+  - name: "empty_input"
+    description: "Empty payload should return helpful error"
+    input: {}
+    expected:
+      status: "error"
+      error_contains: "required"
+
+# ============================================
+# SETTINGS
+# ============================================
+
+# Maximum number of fix attempts before escalating to human
+max_fix_iterations: 5
+
+# How long to wait for workflow execution (seconds)
+timeout_seconds: 60
+
+# ============================================
+# OPTIONAL FIELDS
+# ============================================
+
+# Critical nodes that MUST succeed for the test to pass
+# Use exact node names from your workflow
+critical_nodes:
+  - "Airtable Trigger"
+  - "GHL Create Contact"
+  - "Error Handler"
+
+# Set to true to skip storing learned fixes (useful for testing the testing agent)
+skip_learning: false
+
+# Tags for organizing test specs
+tags:
+  - "integration"
+  - "ghl"
+  - "airtable"
+
+# Notes for humans
+notes: |
+  This workflow syncs new Airtable records to GHL.
+  Triggered by Airtable webhook when new record is created.
+
+  Known issues:
+  - Rate limiting can cause failures during bulk imports
+  - Phone number formatting must be E.164
+
+# ============================================
+# ADVANCED: Custom Validation
+# ============================================
+
+# Optional: Custom validation rules using JSONPath expressions
+# custom_validations:
+#   - path: "$.data.contactId"
+#     condition: "exists"
+#   - path: "$.data.tags"
+#     condition: "contains"
+#     value: "airtable-sync"

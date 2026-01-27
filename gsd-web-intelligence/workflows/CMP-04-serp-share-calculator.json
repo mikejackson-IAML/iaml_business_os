@@ -1,0 +1,83 @@
+{
+  "name": "Web Intel - SERP Share Calculator",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "cronExpression", "expression": "0 6 * * 1"}]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Weekly Monday 6am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT k.id as keyword_id, k.keyword, dr.position as our_position, dr.ranking_url as our_url FROM web_intel.tracked_keywords k LEFT JOIN web_intel.daily_rankings dr ON k.id = dr.keyword_id AND dr.collected_date = (SELECT MAX(collected_date) FROM web_intel.daily_rankings) WHERE k.status = 'active' ORDER BY k.priority DESC"
+      },
+      "id": "fetch-our-rankings",
+      "name": "Fetch Our Rankings",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT keyword, competitor_domain, position FROM web_intel.competitor_rankings WHERE collected_date = (SELECT MAX(collected_date) FROM web_intel.competitor_rankings)"
+      },
+      "id": "fetch-competitor-rankings",
+      "name": "Fetch Competitor Rankings",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 200]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "mergeByFields": {"values": []}
+      },
+      "id": "merge-data",
+      "name": "Merge Data",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [440, 100]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Calculate SERP share per keyword\nconst items = $input.all();\nconst ourRankings = items.filter(i => i.json.keyword_id).map(i => i.json);\nconst competitorRankings = items.filter(i => i.json.competitor_domain).map(i => i.json);\n\n// Group competitor rankings by keyword\nconst compByKeyword = {};\ncompetitorRankings.forEach(cr => {\n  if (!compByKeyword[cr.keyword]) compByKeyword[cr.keyword] = {};\n  compByKeyword[cr.keyword][cr.competitor_domain] = cr.position;\n});\n\nconst today = new Date().toISOString().split('T')[0];\n\nconst results = ourRankings.map(our => {\n  const competitorPositions = compByKeyword[our.keyword] || {};\n  const competitorsInTop10 = Object.values(competitorPositions).filter(p => p && p <= 10).length;\n  \n  // Visibility score: 100 for position 1, decreasing logarithmically\n  let visibilityScore = 0;\n  if (our.our_position && our.our_position <= 100) {\n    visibilityScore = Math.max(0, 100 - (Math.log10(our.our_position) * 50));\n  }\n  \n  return {\n    collected_date: today,\n    keyword_id: our.keyword_id,\n    keyword: our.keyword,\n    our_position: our.our_position,\n    our_url: our.our_url,\n    total_competitors_in_top10: competitorsInTop10,\n    our_visibility_score: Math.round(visibilityScore * 100) / 100,\n    competitor_positions: competitorPositions\n  };\n});\n\nreturn results.map(r => ({ json: r }));"
+      },
+      "id": "calculate-share",
+      "name": "Calculate SERP Share",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 100]
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": "web_intel",
+        "table": "serp_share",
+        "columns": "collected_date, keyword_id, keyword, our_position, our_url, total_competitors_in_top10, our_visibility_score, competitor_positions",
+        "conflictColumns": "collected_date, keyword_id"
+      },
+      "id": "store-share",
+      "name": "Store SERP Share",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [880, 100]
+    }
+  ],
+  "connections": {
+    "Weekly Monday 6am CT": {"main": [[{"node": "Fetch Our Rankings", "type": "main", "index": 0}, {"node": "Fetch Competitor Rankings", "type": "main", "index": 0}]]},
+    "Fetch Our Rankings": {"main": [[{"node": "Merge Data", "type": "main", "index": 0}]]},
+    "Fetch Competitor Rankings": {"main": [[{"node": "Merge Data", "type": "main", "index": 1}]]},
+    "Merge Data": {"main": [[{"node": "Calculate SERP Share", "type": "main", "index": 0}]]},
+    "Calculate SERP Share": {"main": [[{"node": "Store SERP Share", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": [{"name": "web-intel"}, {"name": "competitor"}, {"name": "serp-share"}, {"name": "weekly"}]
+}

@@ -4,7 +4,6 @@
 
 -- Create dedicated schema
 CREATE SCHEMA IF NOT EXISTS accomplishments;
-
 -- ============================================
 -- GOALS TABLE
 -- Multi-horizon goal tracking
@@ -52,14 +51,12 @@ CREATE TABLE accomplishments.goals (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Indexes
 CREATE INDEX idx_goals_horizon ON accomplishments.goals(horizon, period_start, period_end);
 CREATE INDEX idx_goals_status ON accomplishments.goals(status);
 CREATE INDEX idx_goals_impact ON accomplishments.goals(impact_category);
 CREATE INDEX idx_goals_user ON accomplishments.goals(user_id);
 CREATE INDEX idx_goals_parent ON accomplishments.goals(parent_goal_id);
-
 -- ============================================
 -- ENTRIES TABLE
 -- Individual accomplishment entries
@@ -119,14 +116,12 @@ CREATE TABLE accomplishments.entries (
   -- Timestamps
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 -- Indexes
 CREATE INDEX idx_entries_date ON accomplishments.entries(work_date);
 CREATE INDEX idx_entries_logged ON accomplishments.entries(logged_at DESC);
 CREATE INDEX idx_entries_category ON accomplishments.entries(impact_category);
 CREATE INDEX idx_entries_user ON accomplishments.entries(user_id);
 CREATE INDEX idx_entries_source ON accomplishments.entries(detection_source);
-
 -- ============================================
 -- GOAL_ENTRIES TABLE
 -- Links entries to goals (many-to-many)
@@ -144,10 +139,8 @@ CREATE TABLE accomplishments.goal_entries (
 
   UNIQUE(goal_id, entry_id)
 );
-
 CREATE INDEX idx_goal_entries_goal ON accomplishments.goal_entries(goal_id);
 CREATE INDEX idx_goal_entries_entry ON accomplishments.goal_entries(entry_id);
-
 -- ============================================
 -- EMAIL_SUMMARIES TABLE
 -- Track sent email summaries
@@ -178,10 +171,8 @@ CREATE TABLE accomplishments.email_summaries (
 
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
 CREATE INDEX idx_email_summaries_date ON accomplishments.email_summaries(summary_date);
 CREATE INDEX idx_email_summaries_type ON accomplishments.email_summaries(summary_type);
-
 -- ============================================
 -- HELPER FUNCTIONS
 -- ============================================
@@ -208,7 +199,6 @@ BEGIN
     END AS period_end;
 END;
 $$ LANGUAGE plpgsql STABLE;
-
 -- Get accomplishments for a date range
 CREATE OR REPLACE FUNCTION accomplishments.get_entries_for_period(
   p_start_date DATE,
@@ -224,7 +214,6 @@ BEGIN
   ORDER BY logged_at DESC;
 END;
 $$ LANGUAGE plpgsql STABLE;
-
 -- Get active goals for a horizon
 CREATE OR REPLACE FUNCTION accomplishments.get_active_goals(
   p_horizon TEXT DEFAULT NULL,
@@ -275,7 +264,6 @@ BEGIN
     g.period_end;
 END;
 $$ LANGUAGE plpgsql STABLE;
-
 -- Update goal progress from linked entries
 CREATE OR REPLACE FUNCTION accomplishments.update_goal_progress(p_goal_id UUID)
 RETURNS VOID AS $$
@@ -306,7 +294,6 @@ BEGIN
   WHERE id = p_goal_id;
 END;
 $$ LANGUAGE plpgsql;
-
 -- ============================================
 -- VIEWS
 -- ============================================
@@ -323,7 +310,6 @@ FROM accomplishments.entries
 WHERE work_date >= CURRENT_DATE - INTERVAL '7 days'
 GROUP BY work_date
 ORDER BY work_date DESC;
-
 -- Goal progress view
 CREATE OR REPLACE VIEW accomplishments.goal_progress AS
 SELECT
@@ -338,7 +324,6 @@ FROM accomplishments.goals g
 LEFT JOIN accomplishments.goal_entries ge ON ge.goal_id = g.id
 WHERE g.status = 'active'
 GROUP BY g.id;
-
 -- ============================================
 -- TRIGGERS
 -- ============================================
@@ -351,11 +336,9 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 CREATE TRIGGER goals_updated_at
   BEFORE UPDATE ON accomplishments.goals
   FOR EACH ROW EXECUTE FUNCTION accomplishments.update_updated_at();
-
 -- Auto-update goal progress when entries are linked/unlinked
 CREATE OR REPLACE FUNCTION accomplishments.trigger_update_goal_progress()
 RETURNS TRIGGER AS $$
@@ -369,11 +352,9 @@ BEGIN
   END IF;
 END;
 $$ LANGUAGE plpgsql;
-
 CREATE TRIGGER goal_entries_progress_update
   AFTER INSERT OR UPDATE OR DELETE ON accomplishments.goal_entries
   FOR EACH ROW EXECUTE FUNCTION accomplishments.trigger_update_goal_progress();
-
 -- ============================================
 -- COMMENTS
 -- ============================================

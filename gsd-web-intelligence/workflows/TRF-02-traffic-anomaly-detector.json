@@ -1,0 +1,299 @@
+{
+  "name": "Web Intel - Traffic - Anomaly Detector",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 7 * * *"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Daily 7am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n  collected_date,\n  sessions,\n  users,\n  pageviews\nFROM web_intel.daily_traffic\nWHERE collected_date = CURRENT_DATE - INTERVAL '1 day'\nLIMIT 1",
+        "options": {}
+      },
+      "id": "fetch-yesterday",
+      "name": "Fetch Yesterday Traffic",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM web_intel.daily_traffic_averages",
+        "options": {}
+      },
+      "id": "fetch-averages",
+      "name": "Fetch Averages",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 200],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "mergeByFields": {
+          "values": []
+        },
+        "options": {}
+      },
+      "id": "merge-data",
+      "name": "Merge Data",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [440, 100]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Detect traffic anomalies\nconst items = $input.all();\nconst yesterday = items[0]?.json || {};\nconst averages = items[1]?.json || {};\n\nconst THRESHOLD_DROP = 0.20;  // 20% drop\nconst THRESHOLD_SPIKE = 0.50; // 50% spike\n\nconst anomalies = [];\n\n// Check sessions\nconst sessions = yesterday.sessions || 0;\nconst avg7d = averages.avg_sessions_7d || 0;\n\nif (avg7d > 0) {\n  const change = (sessions - avg7d) / avg7d;\n  \n  if (change < -THRESHOLD_DROP) {\n    anomalies.push({\n      type: 'traffic_drop',\n      metric: 'sessions',\n      current: sessions,\n      expected: Math.round(avg7d),\n      change_percent: Math.round(change * 100),\n      severity: change < -0.40 ? 'critical' : 'warning'\n    });\n  } else if (change > THRESHOLD_SPIKE) {\n    anomalies.push({\n      type: 'traffic_spike',\n      metric: 'sessions',\n      current: sessions,\n      expected: Math.round(avg7d),\n      change_percent: Math.round(change * 100),\n      severity: 'info'\n    });\n  }\n}\n\n// Check pageviews\nconst pageviews = yesterday.pageviews || 0;\nconst avgPv7d = averages.avg_pageviews_7d || 0;\n\nif (avgPv7d > 0) {\n  const pvChange = (pageviews - avgPv7d) / avgPv7d;\n  \n  if (pvChange < -THRESHOLD_DROP) {\n    anomalies.push({\n      type: 'traffic_drop',\n      metric: 'pageviews',\n      current: pageviews,\n      expected: Math.round(avgPv7d),\n      change_percent: Math.round(pvChange * 100),\n      severity: pvChange < -0.40 ? 'critical' : 'warning'\n    });\n  }\n}\n\nreturn [{\n  json: {\n    collected_date: yesterday.collected_date,\n    has_anomalies: anomalies.length > 0,\n    anomalies,\n    yesterday,\n    averages\n  }\n}];"
+      },
+      "id": "detect-anomalies",
+      "name": "Detect Anomalies",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 100]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-anomalies",
+              "leftValue": "={{ $json.has_anomalies }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-anomalies",
+      "name": "Has Anomalies?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [880, 100]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Create alert records for each anomaly\nconst data = $input.first().json;\nconst alerts = data.anomalies.map(anomaly => ({\n  json: {\n    alert_type: anomaly.type,\n    severity: anomaly.severity,\n    title: `${anomaly.type === 'traffic_drop' ? 'Traffic Drop' : 'Traffic Spike'}: ${anomaly.metric}`,\n    message: `${anomaly.metric} ${anomaly.type === 'traffic_drop' ? 'dropped' : 'spiked'} ${Math.abs(anomaly.change_percent)}% (${anomaly.current} vs expected ${anomaly.expected})`,\n    metadata: JSON.stringify({\n      metric: anomaly.metric,\n      current: anomaly.current,\n      expected: anomaly.expected,\n      change_percent: anomaly.change_percent,\n      collected_date: data.collected_date\n    })\n  }\n}));\n\nreturn alerts;"
+      },
+      "id": "prepare-alerts",
+      "name": "Prepare Alert Records",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1100, 0]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "web_intel",
+        "table": "alerts",
+        "columns": "alert_type, severity, title, message, metadata",
+        "options": {}
+      },
+      "id": "insert-alerts",
+      "name": "Insert Alerts",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1320, 0],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.TRF_03_WEBHOOK_URL}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "id": "trigger-notifier",
+      "name": "Trigger TRF-03 Notifier",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1540, 0],
+      "notesInFlow": true,
+      "notes": "Triggers the alert notifier workflow"
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "web_intel",
+        "table": "collection_log",
+        "columns": "workflow_id, workflow_name, status, records_processed, completed_at, details",
+        "options": {}
+      },
+      "id": "log-success",
+      "name": "Log Success",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1100, 200],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Daily 7am CT": {
+      "main": [
+        [
+          {
+            "node": "Fetch Yesterday Traffic",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fetch Averages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Yesterday Traffic": {
+      "main": [
+        [
+          {
+            "node": "Merge Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Averages": {
+      "main": [
+        [
+          {
+            "node": "Merge Data",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge Data": {
+      "main": [
+        [
+          {
+            "node": "Detect Anomalies",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Detect Anomalies": {
+      "main": [
+        [
+          {
+            "node": "Has Anomalies?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Anomalies?": {
+      "main": [
+        [
+          {
+            "node": "Prepare Alert Records",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Alert Records": {
+      "main": [
+        [
+          {
+            "node": "Insert Alerts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Alerts": {
+      "main": [
+        [
+          {
+            "node": "Trigger TRF-03 Notifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "meta": {
+    "templateId": "web-intel-anomaly-detector"
+  },
+  "tags": [
+    {
+      "name": "web-intel"
+    },
+    {
+      "name": "traffic"
+    },
+    {
+      "name": "anomaly"
+    }
+  ]
+}

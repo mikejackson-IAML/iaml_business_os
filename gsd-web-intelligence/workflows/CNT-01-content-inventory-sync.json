@@ -1,0 +1,72 @@
+{
+  "name": "Web Intel - Content Inventory Sync",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "cronExpression", "expression": "0 2 * * 0"}]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Weekly Sunday 2am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{$env.SITE_ORIGIN}}/sitemap.xml",
+        "options": {}
+      },
+      "id": "fetch-sitemap",
+      "name": "Fetch Sitemap",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse sitemap XML and extract URLs\nconst xml = $input.first().json.data;\nconst urlMatches = xml.match(/<loc>(.*?)<\\/loc>/g) || [];\n\nconst urls = urlMatches.map(match => {\n  const url = match.replace(/<\\/?loc>/g, '');\n  const path = new URL(url).pathname;\n  \n  // Extract content type from URL pattern\n  let content_type = 'page';\n  if (path.includes('/blog/')) content_type = 'blog';\n  else if (path.includes('/programs/')) content_type = 'program';\n  else if (path.includes('/resources/')) content_type = 'resource';\n  else if (path.includes('/news/')) content_type = 'news';\n  \n  return {\n    url,\n    path,\n    content_type,\n    discovered_at: new Date().toISOString()\n  };\n});\n\nreturn urls.map(u => ({ json: u }));"
+      },
+      "id": "parse-sitemap",
+      "name": "Parse Sitemap URLs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": "web_intel",
+        "table": "content_inventory",
+        "columns": "url, path, content_type, discovered_at",
+        "conflictColumns": "url"
+      },
+      "id": "supabase-upsert",
+      "name": "Supabase - Upsert Inventory",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO web_intel.collection_log (workflow_id, workflow_name, status, records_processed, completed_at) VALUES ('CNT-01', 'Content Inventory Sync', 'success', {{ $json.affectedRows || 0 }}, NOW())"
+      },
+      "id": "log-success",
+      "name": "Log Success",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [880, 0]
+    }
+  ],
+  "connections": {
+    "Weekly Sunday 2am CT": {"main": [[{"node": "Fetch Sitemap", "type": "main", "index": 0}]]},
+    "Fetch Sitemap": {"main": [[{"node": "Parse Sitemap URLs", "type": "main", "index": 0}]]},
+    "Parse Sitemap URLs": {"main": [[{"node": "Supabase - Upsert Inventory", "type": "main", "index": 0}]]},
+    "Supabase - Upsert Inventory": {"main": [[{"node": "Log Success", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": [{"name": "web-intel"}, {"name": "content"}, {"name": "weekly"}]
+}

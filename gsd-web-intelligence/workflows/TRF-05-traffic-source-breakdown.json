@@ -1,0 +1,156 @@
+{
+  "name": "Web Intel - Traffic - Source Breakdown",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "30 6 * * *"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Daily 6:30am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://analyticsdata.googleapis.com/v1beta/properties/{{$json.propertyId}}:runReport",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"dateRanges\": [\n    {\n      \"startDate\": \"yesterday\",\n      \"endDate\": \"yesterday\"\n    }\n  ],\n  \"dimensions\": [\n    {\"name\": \"sessionDefaultChannelGroup\"}\n  ],\n  \"metrics\": [\n    {\"name\": \"sessions\"},\n    {\"name\": \"totalUsers\"},\n    {\"name\": \"conversions\"}\n  ]\n}",
+        "options": {}
+      },
+      "id": "ga4-request",
+      "name": "GA4 - Fetch Source Metrics",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 0],
+      "notesInFlow": true,
+      "notes": "Fetches traffic by default channel grouping"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Transform GA4 response to source_breakdown JSONB format\nconst response = $input.first().json;\nconst rows = response.rows || [];\n\n// Calculate yesterday's date\nconst yesterday = new Date();\nyesterday.setDate(yesterday.getDate() - 1);\nconst collected_date = yesterday.toISOString().split('T')[0];\n\n// Build source breakdown object\nconst source_breakdown = {};\nlet total_sessions = 0;\n\nrows.forEach(row => {\n  const channel = row.dimensionValues[0].value.toLowerCase().replace(/\\s+/g, '_');\n  const sessions = parseInt(row.metricValues[0].value) || 0;\n  source_breakdown[channel] = sessions;\n  total_sessions += sessions;\n});\n\n// Ensure common channels exist even if 0\nconst channels = ['organic_search', 'direct', 'referral', 'organic_social', 'email', 'paid_search', 'paid_social', 'display', 'affiliates', 'unassigned'];\nchannels.forEach(ch => {\n  if (!source_breakdown[ch]) {\n    source_breakdown[ch] = 0;\n  }\n});\n\nreturn [{\n  json: {\n    collected_date,\n    source_breakdown: JSON.stringify(source_breakdown)\n  }\n}];"
+      },
+      "id": "transform-data",
+      "name": "Transform to JSONB",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=UPDATE web_intel.daily_traffic \nSET source_breakdown = '{{ $json.source_breakdown }}'::jsonb,\n    updated_at = NOW()\nWHERE collected_date = '{{ $json.collected_date }}'",
+        "options": {}
+      },
+      "id": "supabase-update",
+      "name": "Supabase - Update Source Breakdown",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [660, 0],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      },
+      "notesInFlow": true,
+      "notes": "Updates the source_breakdown column in daily_traffic"
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "web_intel",
+        "table": "collection_log",
+        "columns": "workflow_id, workflow_name, status, records_processed, completed_at",
+        "options": {}
+      },
+      "id": "log-success",
+      "name": "Log Success",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [880, 0],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Daily 6:30am CT": {
+      "main": [
+        [
+          {
+            "node": "GA4 - Fetch Source Metrics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GA4 - Fetch Source Metrics": {
+      "main": [
+        [
+          {
+            "node": "Transform to JSONB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transform to JSONB": {
+      "main": [
+        [
+          {
+            "node": "Supabase - Update Source Breakdown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase - Update Source Breakdown": {
+      "main": [
+        [
+          {
+            "node": "Log Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "meta": {
+    "templateId": "web-intel-source-breakdown"
+  },
+  "tags": [
+    {
+      "name": "web-intel"
+    },
+    {
+      "name": "traffic"
+    },
+    {
+      "name": "ga4"
+    }
+  ]
+}

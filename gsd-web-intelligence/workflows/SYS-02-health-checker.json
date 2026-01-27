@@ -1,0 +1,97 @@
+{
+  "name": "Web Intel - Health Checker",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "cronExpression", "expression": "0 6 * * *"}]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Daily 6am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT workflow_id, workflow_name, MAX(completed_at) as last_run, COUNT(*) FILTER (WHERE status = 'failure' AND started_at >= NOW() - INTERVAL '24 hours') as failures_24h FROM web_intel.collection_log WHERE started_at >= NOW() - INTERVAL '7 days' GROUP BY workflow_id, workflow_name"
+      },
+      "id": "fetch-workflow-health",
+      "name": "Fetch Workflow Health",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT (SELECT COUNT(*) FROM web_intel.daily_traffic WHERE collected_date >= CURRENT_DATE - 1) as traffic_data, (SELECT COUNT(*) FROM web_intel.daily_rankings WHERE collected_date >= CURRENT_DATE - 1) as ranking_data, (SELECT MAX(collected_date) FROM web_intel.daily_traffic) as last_traffic_date, (SELECT MAX(collected_date) FROM web_intel.daily_rankings) as last_ranking_date"
+      },
+      "id": "fetch-data-health",
+      "name": "Fetch Data Health",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 200]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "mergeByFields": {"values": []}
+      },
+      "id": "merge-health",
+      "name": "Merge Health Data",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [440, 100]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Analyze system health\nconst items = $input.all();\nconst workflowHealth = items.filter(i => i.json.workflow_id).map(i => i.json);\nconst dataHealth = items.find(i => i.json.traffic_data !== undefined)?.json || {};\n\nconst issues = [];\nlet overallStatus = 'healthy';\n\n// Check for workflow failures\nconst failingWorkflows = workflowHealth.filter(w => w.failures_24h > 0);\nif (failingWorkflows.length > 0) {\n  overallStatus = 'degraded';\n  failingWorkflows.forEach(w => {\n    issues.push({\n      type: 'workflow_failure',\n      severity: w.failures_24h >= 3 ? 'critical' : 'warning',\n      message: `${w.workflow_name}: ${w.failures_24h} failures in last 24h`\n    });\n  });\n}\n\n// Check for stale workflows (no run in 48h)\nconst now = new Date();\nconst staleWorkflows = workflowHealth.filter(w => {\n  if (!w.last_run) return true;\n  const lastRun = new Date(w.last_run);\n  return (now - lastRun) > 48 * 60 * 60 * 1000;\n});\n\nif (staleWorkflows.length > 0) {\n  if (overallStatus === 'healthy') overallStatus = 'warning';\n  staleWorkflows.forEach(w => {\n    issues.push({\n      type: 'stale_workflow',\n      severity: 'warning',\n      message: `${w.workflow_name}: No run in 48+ hours`\n    });\n  });\n}\n\n// Check data freshness\nif (dataHealth.traffic_data === 0) {\n  overallStatus = 'degraded';\n  issues.push({\n    type: 'missing_data',\n    severity: 'critical',\n    message: 'No traffic data collected yesterday'\n  });\n}\n\nif (dataHealth.ranking_data === 0) {\n  if (overallStatus === 'healthy') overallStatus = 'warning';\n  issues.push({\n    type: 'missing_data',\n    severity: 'warning',\n    message: 'No ranking data collected yesterday'\n  });\n}\n\nreturn [{\n  json: {\n    overall_status: overallStatus,\n    issues,\n    issue_count: issues.length,\n    critical_count: issues.filter(i => i.severity === 'critical').length,\n    workflow_count: workflowHealth.length,\n    data_health: dataHealth,\n    checked_at: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "analyze-health",
+      "name": "Analyze Health",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 100]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict"},
+          "conditions": [{"id": "has-issues", "leftValue": "={{ $json.issue_count }}", "rightValue": 0, "operator": {"type": "number", "operation": "gt"}}]
+        }
+      },
+      "id": "check-issues",
+      "name": "Has Issues?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [880, 100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SLACK_WEB_INTEL_WEBHOOK}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"text\": \":{{ $json.overall_status === 'healthy' ? 'white_check_mark' : $json.overall_status === 'degraded' ? 'rotating_light' : 'warning' }}: *Web Intel Health Check*\\n*Status:* {{ $json.overall_status.toUpperCase() }}\\n*Issues:* {{ $json.issue_count }} ({{ $json.critical_count }} critical)\\n\\n{{ $json.issues.map(i => (i.severity === 'critical' ? ':rotating_light:' : ':warning:') + ' ' + i.message).join('\\\\n') }}\"}"
+      },
+      "id": "send-alert",
+      "name": "Send Health Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1100, 0]
+    }
+  ],
+  "connections": {
+    "Daily 6am CT": {"main": [[{"node": "Fetch Workflow Health", "type": "main", "index": 0}, {"node": "Fetch Data Health", "type": "main", "index": 0}]]},
+    "Fetch Workflow Health": {"main": [[{"node": "Merge Health Data", "type": "main", "index": 0}]]},
+    "Fetch Data Health": {"main": [[{"node": "Merge Health Data", "type": "main", "index": 1}]]},
+    "Merge Health Data": {"main": [[{"node": "Analyze Health", "type": "main", "index": 0}]]},
+    "Analyze Health": {"main": [[{"node": "Has Issues?", "type": "main", "index": 0}]]},
+    "Has Issues?": {"main": [[{"node": "Send Health Alert", "type": "main", "index": 0}], []]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": [{"name": "web-intel"}, {"name": "system"}, {"name": "health"}]
+}

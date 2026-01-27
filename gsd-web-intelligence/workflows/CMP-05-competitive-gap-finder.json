@@ -1,0 +1,73 @@
+{
+  "name": "Web Intel - Competitive Gap Finder",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "cronExpression", "expression": "0 7 * * 1"}]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Weekly Monday 7am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM web_intel.competitive_gaps LIMIT 50"
+      },
+      "id": "fetch-gaps",
+      "name": "Fetch Competitive Gaps",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Analyze competitive gaps\nconst gaps = $input.all().map(i => i.json);\n\nif (gaps.length === 0) {\n  return [{ json: { has_gaps: false, summary: 'No competitive gaps found' } }];\n}\n\n// Group by competitor\nconst byCompetitor = {};\ngaps.forEach(g => {\n  if (!byCompetitor[g.competitor_domain]) {\n    byCompetitor[g.competitor_domain] = [];\n  }\n  byCompetitor[g.competitor_domain].push(g);\n});\n\nconst summary = Object.entries(byCompetitor).map(([domain, keywords]) => ({\n  competitor: domain,\n  keyword_count: keywords.length,\n  top_keywords: keywords.slice(0, 3).map(k => k.keyword)\n}));\n\nreturn [{\n  json: {\n    has_gaps: true,\n    total_gaps: gaps.length,\n    by_competitor: summary,\n    top_opportunities: gaps.slice(0, 10).map(g => ({\n      keyword: g.keyword,\n      competitor: g.competitor_domain,\n      position: g.competitor_position\n    }))\n  }\n}];"
+      },
+      "id": "analyze-gaps",
+      "name": "Analyze Gaps",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict"},
+          "conditions": [{"id": "has-gaps", "leftValue": "={{ $json.has_gaps }}", "rightValue": true, "operator": {"type": "boolean", "operation": "equals"}}]
+        }
+      },
+      "id": "check-gaps",
+      "name": "Has Gaps?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SLACK_WEB_INTEL_WEBHOOK}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"text\": \":dart: *Competitive Gap Report*\\n*Total gaps found:* {{ $json.total_gaps }}\\n\\n*By Competitor:*\\n{{ $json.by_competitor.map(c => '• ' + c.competitor + ': ' + c.keyword_count + ' keywords').join('\\\\n') }}\\n\\n*Top Opportunities:*\\n{{ $json.top_opportunities.slice(0, 5).map(o => '• ' + o.keyword + ' (' + o.competitor + ' @ #' + o.position + ')').join('\\\\n') }}\"}"
+      },
+      "id": "send-slack",
+      "name": "Send to Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, -100]
+    }
+  ],
+  "connections": {
+    "Weekly Monday 7am CT": {"main": [[{"node": "Fetch Competitive Gaps", "type": "main", "index": 0}]]},
+    "Fetch Competitive Gaps": {"main": [[{"node": "Analyze Gaps", "type": "main", "index": 0}]]},
+    "Analyze Gaps": {"main": [[{"node": "Has Gaps?", "type": "main", "index": 0}]]},
+    "Has Gaps?": {"main": [[{"node": "Send to Slack", "type": "main", "index": 0}], []]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": [{"name": "web-intel"}, {"name": "competitor"}, {"name": "gap-analysis"}, {"name": "weekly"}]
+}

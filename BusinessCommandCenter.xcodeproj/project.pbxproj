@@ -21,11 +21,9 @@
 		A1000000C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001D /* Constants.swift */; };
 		A1000000D /* LockScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001E /* LockScreenView.swift */; };
 		A1000000E /* APIKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001F /* APIKeyView.swift */; };
-		/* Phase 7 - Core */
 		A20000001 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000011 /* NetworkManager.swift */; };
 		A20000002 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000012 /* NetworkError.swift */; };
 		A20000003 /* HealthModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000013 /* HealthModels.swift */; };
-		/* Phase 7 - Home Feature */
 		A20000004 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000014 /* HomeViewModel.swift */; };
 		A20000005 /* AlertsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000015 /* AlertsView.swift */; };
 		A20000006 /* HealthScoreCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000016 /* HealthScoreCard.swift */; };
@@ -33,7 +31,6 @@
 		A20000008 /* AlertBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000018 /* AlertBadge.swift */; };
 		A20000009 /* AlertRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000019 /* AlertRow.swift */; };
 		A2000000A /* StatusIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000001A /* StatusIndicator.swift */; };
-		/* Phase 9 - Chat Feature */
 		A30000001 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30000011 /* ChatViewModel.swift */; };
 		A30000002 /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30000012 /* ChatMessage.swift */; };
 		A30000003 /* ChatEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30000013 /* ChatEvent.swift */; };
@@ -47,7 +44,6 @@
 		A3000000B /* RecordingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3000001B /* RecordingIndicator.swift */; };
 		A3000000C /* ConfirmationBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3000001C /* ConfirmationBubble.swift */; };
 		A3000000D /* AnyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3000001D /* AnyCodable.swift */; };
-		/* Phase 12 - Push Notifications */
 		A40000001 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40000012 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
@@ -68,11 +64,9 @@
 		A1000001D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		A1000001E /* LockScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenView.swift; sourceTree = "<group>"; };
 		A1000001F /* APIKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeyView.swift; sourceTree = "<group>"; };
-		/* Phase 7 - Core */
 		A20000011 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		A20000012 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		A20000013 /* HealthModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthModels.swift; sourceTree = "<group>"; };
-		/* Phase 7 - Home Feature */
 		A20000014 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		A20000015 /* AlertsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsView.swift; sourceTree = "<group>"; };
 		A20000016 /* HealthScoreCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthScoreCard.swift; sourceTree = "<group>"; };
@@ -80,7 +74,6 @@
 		A20000018 /* AlertBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertBadge.swift; sourceTree = "<group>"; };
 		A20000019 /* AlertRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertRow.swift; sourceTree = "<group>"; };
 		A2000001A /* StatusIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusIndicator.swift; sourceTree = "<group>"; };
-		/* Phase 9 - Chat Feature */
 		A30000011 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
 		A30000012 /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
 		A30000013 /* ChatEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatEvent.swift; sourceTree = "<group>"; };
@@ -94,7 +87,6 @@
 		A3000001B /* RecordingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingIndicator.swift; sourceTree = "<group>"; };
 		A3000001C /* ConfirmationBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationBubble.swift; sourceTree = "<group>"; };
 		A3000001D /* AnyCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCodable.swift; sourceTree = "<group>"; };
-		/* Phase 12 - Push Notifications */
 		A40000011 /* BusinessCommandCenter.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BusinessCommandCenter.entitlements; sourceTree = "<group>"; };
 		A40000012 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -208,6 +200,46 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
+		A1000003A /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				A10000013 /* HomeView.swift */,
+				A20000014 /* HomeViewModel.swift */,
+				A20000015 /* AlertsView.swift */,
+				A2000003C /* Components */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		A1000003B /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				A10000014 /* ChatView.swift */,
+				A30000011 /* ChatViewModel.swift */,
+				A3000003D /* Models */,
+				A3000003E /* Services */,
+				A3000003F /* Components */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		A1000003C /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				A10000015 /* SettingsView.swift */,
+				A1000001F /* APIKeyView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		A1000003D /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				A1000001E /* LockScreenView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		A2000003A /* Network */ = {
 			isa = PBXGroup;
 			children = (
@@ -225,17 +257,6 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		A1000003A /* Home */ = {
-			isa = PBXGroup;
-			children = (
-				A10000013 /* HomeView.swift */,
-				A20000014 /* HomeViewModel.swift */,
-				A20000015 /* AlertsView.swift */,
-				A2000003C /* Components */,
-			);
-			path = Home;
-			sourceTree = "<group>";
-		};
 		A2000003C /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -246,18 +267,6 @@
 				A2000001A /* StatusIndicator.swift */,
 			);
 			path = Components;
-			sourceTree = "<group>";
-		};
-		A1000003B /* Chat */ = {
-			isa = PBXGroup;
-			children = (
-				A10000014 /* ChatView.swift */,
-				A30000011 /* ChatViewModel.swift */,
-				A3000003D /* Models */,
-				A3000003E /* Services */,
-				A3000003F /* Components */,
-			);
-			path = Chat;
 			sourceTree = "<group>";
 		};
 		A3000003D /* Models */ = {
@@ -288,23 +297,6 @@
 				A3000001A /* StreamingBubble.swift */,
 				A3000001B /* RecordingIndicator.swift */,
 				A3000001C /* ConfirmationBubble.swift */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
-		A1000003C /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				A10000015 /* SettingsView.swift */,
-				A1000001F /* APIKeyView.swift */,
-			);
-			path = Settings;
-			sourceTree = "<group>";
-		};
-		A1000003D /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				A1000001E /* LockScreenView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -391,11 +383,9 @@
 				A1000000B /* HapticManager.swift in Sources */,
 				A1000000C /* Constants.swift in Sources */,
 				A1000000D /* LockScreenView.swift in Sources */,
-				/* Phase 7 - Core */
 				A20000001 /* NetworkManager.swift in Sources */,
 				A20000002 /* NetworkError.swift in Sources */,
 				A20000003 /* HealthModels.swift in Sources */,
-				/* Phase 7 - Home Feature */
 				A20000004 /* HomeViewModel.swift in Sources */,
 				A20000005 /* AlertsView.swift in Sources */,
 				A20000006 /* HealthScoreCard.swift in Sources */,
@@ -403,7 +393,6 @@
 				A20000008 /* AlertBadge.swift in Sources */,
 				A20000009 /* AlertRow.swift in Sources */,
 				A2000000A /* StatusIndicator.swift in Sources */,
-				/* Phase 9 - Chat Feature */
 				A30000001 /* ChatViewModel.swift in Sources */,
 				A30000002 /* ChatMessage.swift in Sources */,
 				A30000003 /* ChatEvent.swift in Sources */,
@@ -417,7 +406,6 @@
 				A3000000B /* RecordingIndicator.swift in Sources */,
 				A3000000C /* ConfirmationBubble.swift in Sources */,
 				A3000000D /* AnyCodable.swift in Sources */,
-				/* Phase 12 - Push Notifications */
 				A40000001 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -552,7 +540,7 @@
 				CODE_SIGN_ENTITLEMENTS = BusinessCommandCenter/BusinessCommandCenter.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 63973J9C8T;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = BusinessCommandCenter/Info.plist;
@@ -581,7 +569,7 @@
 				CODE_SIGN_ENTITLEMENTS = BusinessCommandCenter/BusinessCommandCenter.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 63973J9C8T;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = BusinessCommandCenter/Info.plist;

@@ -1,0 +1,88 @@
+{
+  "name": "Web Intel - Competitor Traffic Estimator",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "cronExpression", "expression": "0 4 1 * *"}]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Monthly 1st 4am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, domain, name FROM web_intel.competitors WHERE is_active = TRUE ORDER BY priority DESC LIMIT 10"
+      },
+      "id": "fetch-competitors",
+      "name": "Fetch Competitors",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "batch-competitors",
+      "name": "Batch Competitors",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.dataforseo.com/v3/dataforseo_labs/google/domain_metrics_by_categories/live",
+        "authentication": "httpBasicAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "=[{\"target\": \"{{ $json.domain }}\", \"location_code\": 2840, \"language_code\": \"en\"}]"
+      },
+      "id": "dataforseo-metrics",
+      "name": "DataForSEO - Domain Metrics",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract traffic estimates from DataForSEO\nconst input = $input.first().json;\nconst competitor = $('Batch Competitors').first().json;\n\nconst tasks = input.tasks || [];\nconst metrics = tasks[0]?.result?.[0]?.metrics || {};\n\nreturn [{\n  json: {\n    competitor_id: competitor.id,\n    competitor_domain: competitor.domain,\n    estimated_traffic: metrics.organic?.etv || 0,\n    organic_keywords: metrics.organic?.count || 0,\n    paid_traffic: metrics.paid?.etv || 0,\n    collected_date: new Date().toISOString().split('T')[0]\n  }\n}];"
+      },
+      "id": "extract-metrics",
+      "name": "Extract Metrics",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [880, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SLACK_WEB_INTEL_WEBHOOK}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"text\": \":bar_chart: *Competitor Traffic Update*\\n*{{ $json.competitor_domain }}*\\n• Est. Organic Traffic: {{ $json.estimated_traffic.toLocaleString() }}\\n• Organic Keywords: {{ $json.organic_keywords.toLocaleString() }}\"}"
+      },
+      "id": "send-slack",
+      "name": "Send to Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1100, 0]
+    }
+  ],
+  "connections": {
+    "Monthly 1st 4am CT": {"main": [[{"node": "Fetch Competitors", "type": "main", "index": 0}]]},
+    "Fetch Competitors": {"main": [[{"node": "Batch Competitors", "type": "main", "index": 0}]]},
+    "Batch Competitors": {"main": [[{"node": "DataForSEO - Domain Metrics", "type": "main", "index": 0}]]},
+    "DataForSEO - Domain Metrics": {"main": [[{"node": "Extract Metrics", "type": "main", "index": 0}]]},
+    "Extract Metrics": {"main": [[{"node": "Send to Slack", "type": "main", "index": 0}]]},
+    "Send to Slack": {"main": [[{"node": "Batch Competitors", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": [{"name": "web-intel"}, {"name": "competitor"}, {"name": "traffic"}, {"name": "monthly"}]
+}

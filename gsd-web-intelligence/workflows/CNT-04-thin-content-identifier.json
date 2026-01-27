@@ -1,0 +1,112 @@
+{
+  "name": "Web Intel - Thin Content Identifier",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "cronExpression", "expression": "0 4 1 * *"}]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Monthly 1st 4am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT url, path, content_type, word_count, last_crawled_at FROM web_intel.content_inventory WHERE is_indexed = TRUE ORDER BY url"
+      },
+      "id": "fetch-inventory",
+      "name": "Fetch Content Inventory",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "batchSize": 10,
+        "options": {}
+      },
+      "id": "batch-urls",
+      "name": "Batch URLs",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.url }}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "fetch-page",
+      "name": "Fetch Page",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Analyze page content for thin content indicators\nconst items = $input.all();\nconst results = [];\n\nfor (const item of items) {\n  const html = item.json.data || '';\n  const url = item.json.url;\n  \n  // Extract text content (rough approximation)\n  const textContent = html\n    .replace(/<script[^>]*>[\\s\\S]*?<\\/script>/gi, '')\n    .replace(/<style[^>]*>[\\s\\S]*?<\\/style>/gi, '')\n    .replace(/<[^>]+>/g, ' ')\n    .replace(/\\s+/g, ' ')\n    .trim();\n  \n  const wordCount = textContent.split(/\\s+/).filter(w => w.length > 0).length;\n  \n  // Check for thin content indicators\n  const isThin = wordCount < 300;\n  const hasDuplicateTitle = /<title>.*?(copy|duplicate|untitled)/i.test(html);\n  const hasNoH1 = !/<h1[^>]*>/i.test(html);\n  \n  results.push({\n    url,\n    word_count: wordCount,\n    is_thin: isThin,\n    has_no_h1: hasNoH1,\n    issues: [\n      isThin ? 'thin_content' : null,\n      hasNoH1 ? 'missing_h1' : null\n    ].filter(Boolean),\n    last_analyzed_at: new Date().toISOString()\n  });\n}\n\nreturn results.map(r => ({ json: r }));"
+      },
+      "id": "analyze-content",
+      "name": "Analyze Content",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [880, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE web_intel.content_inventory SET word_count = {{ $json.word_count }}, last_crawled_at = NOW() WHERE url = '{{ $json.url }}'"
+      },
+      "id": "update-inventory",
+      "name": "Update Inventory",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1100, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict"},
+          "conditions": [{"id": "is-thin", "leftValue": "={{ $json.is_thin }}", "rightValue": true, "operator": {"type": "boolean", "operation": "equals"}}]
+        }
+      },
+      "id": "check-thin",
+      "name": "Is Thin?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1320, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SLACK_WEB_INTEL_WEBHOOK}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"text\": \":page_facing_up: *Thin Content Found*\\n{{ $json.url }} has only {{ $json.word_count }} words\"}"
+      },
+      "id": "alert-thin",
+      "name": "Alert Thin Content",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1540, -100]
+    }
+  ],
+  "connections": {
+    "Monthly 1st 4am CT": {"main": [[{"node": "Fetch Content Inventory", "type": "main", "index": 0}]]},
+    "Fetch Content Inventory": {"main": [[{"node": "Batch URLs", "type": "main", "index": 0}]]},
+    "Batch URLs": {"main": [[{"node": "Fetch Page", "type": "main", "index": 0}]]},
+    "Fetch Page": {"main": [[{"node": "Analyze Content", "type": "main", "index": 0}]]},
+    "Analyze Content": {"main": [[{"node": "Update Inventory", "type": "main", "index": 0}]]},
+    "Update Inventory": {"main": [[{"node": "Is Thin?", "type": "main", "index": 0}]]},
+    "Is Thin?": {"main": [[{"node": "Alert Thin Content", "type": "main", "index": 0}], [{"node": "Batch URLs", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": [{"name": "web-intel"}, {"name": "content"}, {"name": "monthly"}]
+}

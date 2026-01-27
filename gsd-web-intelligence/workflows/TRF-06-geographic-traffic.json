@@ -1,0 +1,179 @@
+{
+  "name": "Web Intel - Traffic - Geographic Analyzer",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 6 * * 1"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Weekly Monday 6am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://analyticsdata.googleapis.com/v1beta/properties/{{$json.propertyId}}:runReport",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"dateRanges\": [\n    {\n      \"startDate\": \"7daysAgo\",\n      \"endDate\": \"yesterday\"\n    }\n  ],\n  \"dimensions\": [\n    {\"name\": \"country\"},\n    {\"name\": \"region\"}\n  ],\n  \"metrics\": [\n    {\"name\": \"sessions\"},\n    {\"name\": \"totalUsers\"},\n    {\"name\": \"screenPageViews\"}\n  ],\n  \"orderBys\": [\n    {\n      \"metric\": {\n        \"metricName\": \"sessions\"\n      },\n      \"desc\": true\n    }\n  ],\n  \"limit\": 50\n}",
+        "options": {}
+      },
+      "id": "ga4-request",
+      "name": "GA4 - Fetch Geo Traffic",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Transform GA4 response to geo_traffic schema\nconst response = $input.first().json;\nconst rows = response.rows || [];\n\n// Calculate week start (Monday)\nconst now = new Date();\nconst dayOfWeek = now.getDay();\nconst diff = now.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1) - 7; // Previous Monday\nconst weekStart = new Date(now.setDate(diff));\nconst week_start = weekStart.toISOString().split('T')[0];\n\nconst geoData = rows.map(row => {\n  const dims = row.dimensionValues;\n  const metrics = row.metricValues;\n  \n  return {\n    week_start,\n    country_code: dims[0].value === '(not set)' ? 'XX' : dims[0].value,\n    country_name: dims[0].value,\n    region: dims[1].value === '(not set)' ? null : dims[1].value,\n    sessions: parseInt(metrics[0].value) || 0,\n    users: parseInt(metrics[1].value) || 0,\n    pageviews: parseInt(metrics[2].value) || 0\n  };\n});\n\nreturn geoData.map(g => ({ json: g }));"
+      },
+      "id": "transform-data",
+      "name": "Transform to Schema",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": "web_intel",
+        "table": "geo_traffic",
+        "columns": "week_start, country_code, country_name, region, sessions, users, pageviews",
+        "conflictColumns": "week_start, country_code, region",
+        "options": {}
+      },
+      "id": "supabase-upsert",
+      "name": "Supabase - Store Geo Traffic",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [660, 0],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Log success\nconst items = $input.all();\nreturn [{\n  json: {\n    workflow_id: 'TRF-06',\n    workflow_name: 'Web Intel - Traffic - Geographic Analyzer',\n    status: 'success',\n    records_processed: items.length,\n    completed_at: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "prepare-log",
+      "name": "Prepare Log Entry",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [880, 0]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "web_intel",
+        "table": "collection_log",
+        "columns": "workflow_id, workflow_name, status, records_processed, completed_at",
+        "options": {}
+      },
+      "id": "log-success",
+      "name": "Log Success",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1100, 0],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Weekly Monday 6am CT": {
+      "main": [
+        [
+          {
+            "node": "GA4 - Fetch Geo Traffic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GA4 - Fetch Geo Traffic": {
+      "main": [
+        [
+          {
+            "node": "Transform to Schema",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transform to Schema": {
+      "main": [
+        [
+          {
+            "node": "Supabase - Store Geo Traffic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase - Store Geo Traffic": {
+      "main": [
+        [
+          {
+            "node": "Prepare Log Entry",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Log Entry": {
+      "main": [
+        [
+          {
+            "node": "Log Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "meta": {
+    "templateId": "web-intel-geo-traffic"
+  },
+  "tags": [
+    {
+      "name": "web-intel"
+    },
+    {
+      "name": "traffic"
+    },
+    {
+      "name": "ga4"
+    },
+    {
+      "name": "weekly"
+    }
+  ]
+}

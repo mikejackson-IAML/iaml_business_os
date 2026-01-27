@@ -1,0 +1,49 @@
+{
+  "_schema_version": "1.0",
+  "_description": "Workflow testing state - tracks current test execution and history",
+
+  "current_test": null,
+
+  "recent_tests": [],
+
+  "learning_queue": [],
+
+  "_templates": {
+    "current_test": {
+      "workflow_id": "string",
+      "workflow_name": "string",
+      "test_case": "string",
+      "iteration": 0,
+      "max_iterations": 5,
+      "status": "pending|running|fixing|passed|failed|escalated",
+      "started_at": "ISO8601",
+      "fix_history": []
+    },
+    "fix_history_entry": {
+      "iteration": 0,
+      "error_message": "string",
+      "failed_node": "string",
+      "diagnosis": "string",
+      "fix_applied": "string",
+      "fix_source": "n8n-brain|pattern-match|manual",
+      "result": "success|still_failing"
+    },
+    "recent_test_entry": {
+      "workflow_id": "string",
+      "workflow_name": "string",
+      "tested_at": "ISO8601",
+      "test_cases_run": 0,
+      "test_cases_passed": 0,
+      "fixes_applied": 0,
+      "status": "passed|failed|escalated"
+    },
+    "learning_queue_entry": {
+      "error_message": "string",
+      "node_type": "string",
+      "fix_description": "string",
+      "fix_example": {},
+      "discovered_at": "ISO8601",
+      "workflow_id": "string"
+    }
+  }
+}

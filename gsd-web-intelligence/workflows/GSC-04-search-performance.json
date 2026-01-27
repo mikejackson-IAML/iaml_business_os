@@ -1,0 +1,80 @@
+{
+  "name": "Web Intel - GSC - Search Performance",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "cronExpression", "expression": "0 6 * * *"}]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Daily 6am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://searchconsole.googleapis.com/webmasters/v3/sites/{{$env.GSC_SITE_URL}}/searchAnalytics/query",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"startDate\": \"{{ $now.minus(3, 'days').format('yyyy-MM-dd') }}\",\n  \"endDate\": \"{{ $now.minus(3, 'days').format('yyyy-MM-dd') }}\",\n  \"dimensions\": [\"query\", \"page\"],\n  \"rowLimit\": 1000,\n  \"startRow\": 0\n}"
+      },
+      "id": "gsc-request",
+      "name": "GSC - Search Analytics",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 0],
+      "notesInFlow": true,
+      "notes": "GSC data has 3-day lag"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Transform GSC response to search_performance schema\nconst response = $input.first().json;\nconst rows = response.rows || [];\n\nconst date = new Date();\ndate.setDate(date.getDate() - 3);\nconst collected_date = date.toISOString().split('T')[0];\n\nconst records = rows.map(row => ({\n  collected_date,\n  query: row.keys[0],\n  page: row.keys[1],\n  clicks: row.clicks || 0,\n  impressions: row.impressions || 0,\n  ctr: row.ctr || 0,\n  position: row.position || 0\n}));\n\nreturn records.map(r => ({ json: r }));"
+      },
+      "id": "transform-data",
+      "name": "Transform Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "web_intel",
+        "table": "search_performance",
+        "columns": "collected_date, query, page, clicks, impressions, ctr, position",
+        "options": {}
+      },
+      "id": "supabase-insert",
+      "name": "Supabase - Store Search Data",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "web_intel",
+        "table": "collection_log",
+        "columns": "workflow_id, workflow_name, status, records_processed, completed_at"
+      },
+      "id": "log-success",
+      "name": "Log Success",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [880, 0]
+    }
+  ],
+  "connections": {
+    "Daily 6am CT": {"main": [[{"node": "GSC - Search Analytics", "type": "main", "index": 0}]]},
+    "GSC - Search Analytics": {"main": [[{"node": "Transform Data", "type": "main", "index": 0}]]},
+    "Transform Data": {"main": [[{"node": "Supabase - Store Search Data", "type": "main", "index": 0}]]},
+    "Supabase - Store Search Data": {"main": [[{"node": "Log Success", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": [{"name": "web-intel"}, {"name": "gsc"}]
+}

@@ -1,0 +1,97 @@
+{
+  "name": "Web Intel - Content Gap Analyzer",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "cronExpression", "expression": "0 4 15 * *"}]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Monthly 15th 4am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT DISTINCT query FROM web_intel.search_performance WHERE impressions > 100 AND ctr < 0.02 AND position > 10 AND collected_date >= NOW() - INTERVAL '30 days' ORDER BY impressions DESC LIMIT 100"
+      },
+      "id": "fetch-opportunity-queries",
+      "name": "Fetch High-Impression Low-CTR Queries",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT kw.keyword, kw.search_volume, kw.keyword_difficulty FROM web_intel.tracked_keywords kw LEFT JOIN web_intel.content_inventory ci ON ci.path LIKE '%' || REPLACE(LOWER(kw.keyword), ' ', '-') || '%' WHERE ci.id IS NULL ORDER BY kw.search_volume DESC LIMIT 50"
+      },
+      "id": "fetch-unmatched-keywords",
+      "name": "Fetch Keywords Without Content",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 200]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "mergeByFields": {"values": []}
+      },
+      "id": "merge-gaps",
+      "name": "Merge Gaps",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [440, 100]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Combine and analyze content gaps\nconst items = $input.all();\nconst opportunityQueries = items.filter(i => i.json.query).map(i => i.json);\nconst unmatchedKeywords = items.filter(i => i.json.keyword).map(i => i.json);\n\nconst gaps = [];\n\n// Add opportunity queries as gaps\nopportunityQueries.forEach(q => {\n  gaps.push({\n    gap_type: 'ranking_opportunity',\n    topic: q.query,\n    source: 'gsc_search_performance',\n    priority: 'high',\n    reason: 'High impressions but low CTR and poor ranking'\n  });\n});\n\n// Add unmatched keywords as gaps\nunmatchedKeywords.forEach(kw => {\n  gaps.push({\n    gap_type: 'missing_content',\n    topic: kw.keyword,\n    source: 'tracked_keywords',\n    search_volume: kw.search_volume,\n    difficulty: kw.keyword_difficulty,\n    priority: kw.search_volume > 1000 ? 'high' : kw.search_volume > 500 ? 'medium' : 'low',\n    reason: 'Tracked keyword with no matching content'\n  });\n});\n\nreturn [{ \n  json: { \n    gaps,\n    total_gaps: gaps.length,\n    ranking_opportunities: opportunityQueries.length,\n    missing_content: unmatchedKeywords.length,\n    analyzed_at: new Date().toISOString()\n  } \n}];"
+      },
+      "id": "analyze-gaps",
+      "name": "Analyze Gaps",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 100]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict"},
+          "conditions": [{"id": "has-gaps", "leftValue": "={{ $json.total_gaps }}", "rightValue": 0, "operator": {"type": "number", "operation": "gt"}}]
+        }
+      },
+      "id": "check-gaps",
+      "name": "Has Gaps?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [880, 100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SLACK_WEB_INTEL_WEBHOOK}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"text\": \":mag: *Content Gap Analysis*\\n*Total gaps found:* {{ $json.total_gaps }}\\n• Ranking opportunities: {{ $json.ranking_opportunities }}\\n• Missing content: {{ $json.missing_content }}\\n\\n*Top opportunities:*\\n{{ $json.gaps.slice(0, 5).map(g => '• ' + g.topic + ' (' + g.gap_type + ')').join('\\\\n') }}\"}"
+      },
+      "id": "send-slack",
+      "name": "Send to Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1100, 0]
+    }
+  ],
+  "connections": {
+    "Monthly 15th 4am CT": {"main": [[{"node": "Fetch High-Impression Low-CTR Queries", "type": "main", "index": 0}, {"node": "Fetch Keywords Without Content", "type": "main", "index": 0}]]},
+    "Fetch High-Impression Low-CTR Queries": {"main": [[{"node": "Merge Gaps", "type": "main", "index": 0}]]},
+    "Fetch Keywords Without Content": {"main": [[{"node": "Merge Gaps", "type": "main", "index": 1}]]},
+    "Merge Gaps": {"main": [[{"node": "Analyze Gaps", "type": "main", "index": 0}]]},
+    "Analyze Gaps": {"main": [[{"node": "Has Gaps?", "type": "main", "index": 0}]]},
+    "Has Gaps?": {"main": [[{"node": "Send to Slack", "type": "main", "index": 0}], []]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": [{"name": "web-intel"}, {"name": "content"}, {"name": "gap-analysis"}, {"name": "monthly"}]
+}

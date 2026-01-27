@@ -1,0 +1,120 @@
+{
+  "name": "Web Intel - Weekly Digest",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "cronExpression", "expression": "0 7 * * 1"}]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Weekly Monday 7am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT SUM(sessions) as total_sessions, SUM(users) as total_users, SUM(pageviews) as total_pageviews, AVG(bounce_rate) as avg_bounce_rate FROM web_intel.daily_traffic WHERE collected_date >= CURRENT_DATE - INTERVAL '7 days'"
+      },
+      "id": "fetch-traffic",
+      "name": "Fetch Weekly Traffic",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT COUNT(*) FILTER (WHERE change_type IN ('gain', 'major_gain')) as improved, COUNT(*) FILTER (WHERE change_type IN ('drop', 'major_drop')) as declined, COUNT(*) FILTER (WHERE change_type = 'new_ranking') as new_rankings, COUNT(*) FILTER (WHERE change_type = 'lost_ranking') as lost_rankings FROM web_intel.ranking_changes"
+      },
+      "id": "fetch-rankings",
+      "name": "Fetch Ranking Changes",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 150]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT COUNT(*) as new_backlinks FROM web_intel.backlinks WHERE first_seen_at >= CURRENT_DATE - INTERVAL '7 days'"
+      },
+      "id": "fetch-backlinks",
+      "name": "Fetch New Backlinks",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT COUNT(*) as total, COUNT(*) FILTER (WHERE severity = 'critical') as critical, COUNT(*) FILTER (WHERE severity = 'warning') as warning FROM web_intel.alerts WHERE created_at >= CURRENT_DATE - INTERVAL '7 days'"
+      },
+      "id": "fetch-alerts",
+      "name": "Fetch Week Alerts",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 450]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "mergeByFields": {"values": []}
+      },
+      "id": "merge-data",
+      "name": "Merge All Data",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [440, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Compile weekly digest\nconst items = $input.all();\nconst traffic = items.find(i => i.json.total_sessions !== undefined)?.json || {};\nconst rankings = items.find(i => i.json.improved !== undefined)?.json || {};\nconst backlinks = items.find(i => i.json.new_backlinks !== undefined)?.json || {};\nconst alerts = items.find(i => i.json.critical !== undefined)?.json || {};\n\nconst weekEnd = new Date();\nconst weekStart = new Date(weekEnd);\nweekStart.setDate(weekStart.getDate() - 7);\n\nconst digest = {\n  period_start: weekStart.toISOString().split('T')[0],\n  period_end: weekEnd.toISOString().split('T')[0],\n  traffic: {\n    sessions: traffic.total_sessions || 0,\n    users: traffic.total_users || 0,\n    pageviews: traffic.total_pageviews || 0,\n    bounce_rate: Math.round((traffic.avg_bounce_rate || 0) * 100) / 100\n  },\n  rankings: {\n    improved: rankings.improved || 0,\n    declined: rankings.declined || 0,\n    new: rankings.new_rankings || 0,\n    lost: rankings.lost_rankings || 0\n  },\n  backlinks: {\n    new: backlinks.new_backlinks || 0\n  },\n  alerts: {\n    total: alerts.total || 0,\n    critical: alerts.critical || 0,\n    warning: alerts.warning || 0\n  }\n};\n\n// Generate highlights\nconst highlights = [];\nif (digest.rankings.improved > digest.rankings.declined) {\n  highlights.push({ type: 'win', message: `Rankings improved: ${digest.rankings.improved} keywords up vs ${digest.rankings.declined} down` });\n}\nif (digest.backlinks.new > 0) {\n  highlights.push({ type: 'win', message: `${digest.backlinks.new} new backlinks acquired` });\n}\nif (digest.alerts.critical > 0) {\n  highlights.push({ type: 'alert', message: `${digest.alerts.critical} critical alerts require attention` });\n}\n\ndigest.highlights = highlights;\n\nreturn [{ json: digest }];"
+      },
+      "id": "compile-digest",
+      "name": "Compile Digest",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SLACK_WEB_INTEL_WEBHOOK}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"text\": \":newspaper: *Weekly Web Intelligence Digest*\\n_{{ $json.period_start }} to {{ $json.period_end }}_\\n\\n:chart_with_upwards_trend: *Traffic*\\n• Sessions: {{ $json.traffic.sessions.toLocaleString() }}\\n• Users: {{ $json.traffic.users.toLocaleString() }}\\n• Pageviews: {{ $json.traffic.pageviews.toLocaleString() }}\\n\\n:dart: *Rankings*\\n• Improved: {{ $json.rankings.improved }}\\n• Declined: {{ $json.rankings.declined }}\\n• New: {{ $json.rankings.new }}\\n• Lost: {{ $json.rankings.lost }}\\n\\n:link: *Backlinks*\\n• New: {{ $json.backlinks.new }}\\n\\n:bell: *Alerts*\\n• Critical: {{ $json.alerts.critical }}\\n• Warning: {{ $json.alerts.warning }}\\n\\n{{ $json.highlights.map(h => (h.type === 'win' ? ':white_check_mark: ' : ':warning: ') + h.message).join('\\\\n') }}\"}"
+      },
+      "id": "send-slack",
+      "name": "Send to Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, 200]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "web_intel",
+        "table": "reports",
+        "columns": "report_type, period_start, period_end, title, metrics_snapshot, highlights, status"
+      },
+      "id": "store-report",
+      "name": "Store Report",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [880, 400]
+    }
+  ],
+  "connections": {
+    "Weekly Monday 7am CT": {"main": [[{"node": "Fetch Weekly Traffic", "type": "main", "index": 0}, {"node": "Fetch Ranking Changes", "type": "main", "index": 0}, {"node": "Fetch New Backlinks", "type": "main", "index": 0}, {"node": "Fetch Week Alerts", "type": "main", "index": 0}]]},
+    "Fetch Weekly Traffic": {"main": [[{"node": "Merge All Data", "type": "main", "index": 0}]]},
+    "Fetch Ranking Changes": {"main": [[{"node": "Merge All Data", "type": "main", "index": 1}]]},
+    "Fetch New Backlinks": {"main": [[{"node": "Merge All Data", "type": "main", "index": 2}]]},
+    "Fetch Week Alerts": {"main": [[{"node": "Merge All Data", "type": "main", "index": 3}]]},
+    "Merge All Data": {"main": [[{"node": "Compile Digest", "type": "main", "index": 0}]]},
+    "Compile Digest": {"main": [[{"node": "Send to Slack", "type": "main", "index": 0}, {"node": "Store Report", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": [{"name": "web-intel"}, {"name": "reports"}, {"name": "weekly"}]
+}

@@ -1,0 +1,396 @@
+{
+  "name": "Web Intel - Rankings - Keyword Discovery",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 4 * * 3"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Weekly Wednesday 4am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT keyword FROM web_intel.tracked_keywords WHERE status = 'active' AND priority = 'high' ORDER BY search_volume DESC NULLS LAST LIMIT 10",
+        "options": {}
+      },
+      "id": "fetch-seed-keywords",
+      "name": "Fetch Seed Keywords",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [220, 0],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare DataForSEO related keywords request\nconst seeds = $input.all().map(i => i.json.keyword);\n\nconst tasks = seeds.map(keyword => ({\n  keyword,\n  location_code: 2840,\n  language_code: 'en',\n  depth: 1,\n  limit: 20\n}));\n\nreturn [{\n  json: { tasks }\n}];"
+      },
+      "id": "prepare-request",
+      "name": "Prepare Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.dataforseo.com/v3/keywords_data/google_ads/keywords_for_keywords/live",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.tasks) }}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "dataforseo-request",
+      "name": "DataForSEO - Related Keywords",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 0],
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "{{DATAFORSEO_CREDENTIAL_ID}}",
+          "name": "DataForSEO API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT keyword FROM web_intel.tracked_keywords",
+        "options": {}
+      },
+      "id": "fetch-existing",
+      "name": "Fetch Existing Keywords",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [660, 200],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "mergeByFields": {
+          "values": []
+        },
+        "options": {}
+      },
+      "id": "merge-data",
+      "name": "Merge Data",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [880, 100]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Filter and score new keyword suggestions\nconst items = $input.all();\nconst response = items[0]?.json;\nconst existingKeywords = items.slice(1).map(i => i.json.keyword.toLowerCase());\n\nconst tasks = response?.tasks || [];\nconst suggestions = [];\n\ntasks.forEach(task => {\n  if (task.status_code !== 20000) return;\n  \n  const results = task.result || [];\n  results.forEach(result => {\n    const keyword = result.keyword?.toLowerCase();\n    const volume = result.search_volume || 0;\n    const competition = result.competition || 0;\n    \n    // Filter criteria\n    if (!keyword) return;\n    if (existingKeywords.includes(keyword)) return;  // Already tracking\n    if (volume < 50) return;  // Too low volume\n    if (keyword.length < 5) return;  // Too short\n    \n    // Score: volume / (competition + 1)\n    const score = volume / (competition * 100 + 1);\n    \n    suggestions.push({\n      keyword,\n      search_volume: volume,\n      difficulty: Math.round(competition * 100),\n      score,\n      source_keyword: task.data?.keyword\n    });\n  });\n});\n\n// Sort by score and take top 20\nconst topSuggestions = suggestions\n  .sort((a, b) => b.score - a.score)\n  .slice(0, 20);\n\nreturn [{\n  json: {\n    suggestions: topSuggestions,\n    count: topSuggestions.length\n  }\n}];"
+      },
+      "id": "filter-suggestions",
+      "name": "Filter & Score Suggestions",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1100, 100]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-suggestions",
+              "leftValue": "={{ $json.count }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-suggestions",
+      "name": "Has Suggestions?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1320, 100]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare insert records for suggested keywords\nconst data = $input.first().json;\n\nreturn data.suggestions.map(s => ({\n  json: {\n    keyword: s.keyword,\n    search_volume: s.search_volume,\n    difficulty: s.difficulty,\n    priority: 'low',\n    category: 'suggested',\n    status: 'suggested'\n  }\n}));"
+      },
+      "id": "prepare-inserts",
+      "name": "Prepare Insert Records",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1540, 0]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "web_intel",
+        "table": "tracked_keywords",
+        "columns": "keyword, search_volume, difficulty, priority, category, status",
+        "options": {
+          "onConflict": "doNothing"
+        }
+      },
+      "id": "insert-suggestions",
+      "name": "Insert Suggestions",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1760, 0],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Format discovery report\nconst data = $('Filter & Score Suggestions').first().json;\nconst suggestions = data.suggestions;\n\nlet message = `:bulb: *Weekly Keyword Discovery*\\n`;\nmessage += `_${data.count} new keyword opportunities found_\\n\\n`;\n\nsuggestions.slice(0, 10).forEach(s => {\n  message += `• \"${s.keyword}\" - ${s.search_volume.toLocaleString()} vol, ${s.difficulty}% diff\\n`;\n});\n\nif (suggestions.length > 10) {\n  message += `\\n_...and ${suggestions.length - 10} more added to suggested keywords_`;\n}\n\nreturn [{\n  json: { message }\n}];"
+      },
+      "id": "format-report",
+      "name": "Format Report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1540, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SLACK_WEB_INTEL_WEBHOOK}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": {{ JSON.stringify($json.message) }},\n  \"unfurl_links\": false\n}",
+        "options": {}
+      },
+      "id": "send-slack",
+      "name": "Send to Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1760, 200]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "schema": "web_intel",
+        "table": "collection_log",
+        "columns": "workflow_id, workflow_name, status, records_processed, completed_at",
+        "options": {}
+      },
+      "id": "log-success",
+      "name": "Log Success",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [1540, 300],
+      "credentials": {
+        "postgres": {
+          "id": "{{SUPABASE_CREDENTIAL_ID}}",
+          "name": "Supabase Postgres"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Weekly Wednesday 4am CT": {
+      "main": [
+        [
+          {
+            "node": "Fetch Seed Keywords",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Seed Keywords": {
+      "main": [
+        [
+          {
+            "node": "Prepare Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Request": {
+      "main": [
+        [
+          {
+            "node": "DataForSEO - Related Keywords",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fetch Existing Keywords",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DataForSEO - Related Keywords": {
+      "main": [
+        [
+          {
+            "node": "Merge Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Existing Keywords": {
+      "main": [
+        [
+          {
+            "node": "Merge Data",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge Data": {
+      "main": [
+        [
+          {
+            "node": "Filter & Score Suggestions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter & Score Suggestions": {
+      "main": [
+        [
+          {
+            "node": "Has Suggestions?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Suggestions?": {
+      "main": [
+        [
+          {
+            "node": "Prepare Insert Records",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Format Report",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Insert Records": {
+      "main": [
+        [
+          {
+            "node": "Insert Suggestions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Suggestions": {
+      "main": [
+        [
+          {
+            "node": "Log Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Report": {
+      "main": [
+        [
+          {
+            "node": "Send to Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send to Slack": {
+      "main": [
+        [
+          {
+            "node": "Log Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "meta": {
+    "templateId": "web-intel-keyword-discovery"
+  },
+  "tags": [
+    {
+      "name": "web-intel"
+    },
+    {
+      "name": "rankings"
+    },
+    {
+      "name": "discovery"
+    },
+    {
+      "name": "weekly"
+    }
+  ]
+}
