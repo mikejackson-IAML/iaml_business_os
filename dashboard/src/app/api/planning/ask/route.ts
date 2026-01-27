@@ -22,6 +22,7 @@ interface MemoryResult {
   memory_type: string;
   similarity: number;
   project_id: string;
+  project_title: string;
   source_phase: string | null;
   conversation_id: string;
 }
@@ -117,6 +118,8 @@ export async function POST(request: NextRequest) {
         content: m.content,
         memory_type: m.memory_type,
         similarity: m.similarity,
+        project_id: m.project_id,
+        project_title: m.project_title || 'Unknown Project',
       })),
     });
   } catch (error) {
