@@ -16,6 +16,7 @@ const anthropic = new Anthropic();
 // =============================================================================
 
 const DOC_GENERATE_REGEX = /<!--GENERATE_DOC:(\w+)-->/;
+const DOC_GENERATE_REGEX_GLOBAL = /<!--GENERATE_DOC:(\w+)-->/g;
 
 /**
  * Detect a document generation marker in content.
@@ -24,6 +25,19 @@ const DOC_GENERATE_REGEX = /<!--GENERATE_DOC:(\w+)-->/;
 export function detectDocGenerateMarker(content: string): string | null {
   const match = content.match(DOC_GENERATE_REGEX);
   return match ? match[1] : null;
+}
+
+/**
+ * Detect all document generation markers in content.
+ * Returns an array of doc type strings (may be empty).
+ */
+export function detectAllDocGenerateMarkers(content: string): string[] {
+  const matches: string[] = [];
+  let match: RegExpExecArray | null;
+  while ((match = DOC_GENERATE_REGEX_GLOBAL.exec(content)) !== null) {
+    matches.push(match[1]);
+  }
+  return matches;
 }
 
 /**

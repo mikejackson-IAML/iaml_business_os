@@ -148,6 +148,16 @@ Understand the landscape:
 - What do they do poorly?
 - What's the gap or opportunity?
 
+## Document Generation
+When you have gathered enough information to generate a document, include the appropriate marker in your response. These markers are invisible to the user but signal the system to offer document generation.
+
+Available documents for this phase:
+- **Ideal Customer Profile** — When you have a clear picture of the target user, include \`<!--GENERATE_DOC:icp-->\`
+- **Competitive Intelligence** — When competitive landscape is understood, include \`<!--GENERATE_DOC:competitive_intel-->\`
+- **Problem Statement** — When the core problem is articulated, include \`<!--GENERATE_DOC:problem_statement-->\`
+
+Only suggest one document at a time. Wait for user approval before suggesting the next.
+
 ## Research Suggestions
 You have access to Perplexity for deep research. Suggest research when:
 - You need current market data
@@ -238,6 +248,15 @@ Walk through each section:
 8. **Key Metrics** (what numbers tell you it's working)
 9. **Channels** (how will you reach customers)
 
+## Document Generation
+When you have gathered enough information to generate a document, include the appropriate marker in your response. These markers are invisible to the user but signal the system to offer document generation.
+
+Available documents for this phase:
+- **Lean Canvas** — When all canvas sections are discussed, include \`<!--GENERATE_DOC:lean_canvas-->\`
+- **Feature Specification** — When features and user stories are defined, include \`<!--GENERATE_DOC:feature_spec-->\`
+
+Only suggest one document at a time. Wait for user approval before suggesting the next.
+
 ## Riskiest Assumptions
 Identify 2-3 assumptions that must be true:
 - "Our ICP actually has this problem"
@@ -298,6 +317,14 @@ Given the existing stack (Next.js, Supabase, n8n):
 - What APIs or integrations are required?
 - Are there technical risks or unknowns?
 - What could be built quickly vs what needs more time?
+
+## Document Generation
+When you have gathered enough information to generate a document, include the appropriate marker in your response. These markers are invisible to the user but signal the system to offer document generation.
+
+Available documents for this phase:
+- **Technical Scope** — When architecture, tech stack, and integrations are discussed, include \`<!--GENERATE_DOC:technical_scope-->\`
+
+Only suggest one document at a time. Wait for user approval before suggesting the next.
 
 ## Phased Roadmap
 Create phases:
@@ -432,7 +459,17 @@ const PACKAGE_PROMPT = `You are packaging this project for development. Generate
 4. Generate the Claude Code launch command
 5. Present everything for final review
 
-## Document Generation
+## Document Generation Markers
+When you are ready to generate each GSD document, include the appropriate marker in your response. These markers are invisible to the user but signal the system to offer document generation.
+
+Available documents for this phase:
+- **PROJECT.md** — include \`<!--GENERATE_DOC:gsd_project-->\`
+- **REQUIREMENTS.md** — include \`<!--GENERATE_DOC:gsd_requirements-->\`
+- **ROADMAP.md** — include \`<!--GENERATE_DOC:gsd_roadmap-->\`
+
+Only suggest one document at a time. Wait for user approval before suggesting the next.
+
+## Document Content
 
 Generate each document from the planning conversations and existing documents:
 

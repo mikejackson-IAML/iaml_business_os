@@ -12,6 +12,7 @@ import {
 } from '@/lib/api/planning-chat';
 import { getSystemPrompt, buildContextBlock } from '@/lib/planning/system-prompts';
 import { detectCompletionMarker, detectReadinessMarker, stripMarkers } from '@/lib/planning/phase-transitions';
+import { detectAllDocGenerateMarkers, stripDocMarkers } from '@/lib/planning/doc-generation';
 import { extractMemories } from '@/lib/planning/memory-extraction';
 import { generateEmbedding } from '@/lib/planning/embeddings';
 import { createServerClient } from '@/lib/supabase/server';
@@ -140,9 +141,10 @@ export async function POST(request: NextRequest) {
         // Detect markers before stripping
         const hasCompletion = detectCompletionMarker(fullContent);
         const readinessResult = detectReadinessMarker(fullContent);
+        const docSuggestions = detectAllDocGenerateMarkers(fullContent);
 
-        // Strip markers for storage
-        const cleanContent = stripMarkers(fullContent);
+        // Strip all markers for storage
+        const cleanContent = stripDocMarkers(stripMarkers(fullContent));
         await saveMessage(conversationId, 'assistant', cleanContent);
 
         // Emit marker events
@@ -151,6 +153,9 @@ export async function POST(request: NextRequest) {
         }
         if (readinessResult) {
           controller.enqueue(encoder.encode(formatSSE({ type: 'readiness_result', passed: readinessResult.passed, reason: readinessResult.reason })));
+        }
+        for (const docType of docSuggestions) {
+          controller.enqueue(encoder.encode(formatSSE({ type: 'doc_suggestion', docType })));
         }
 
         // Send done event
