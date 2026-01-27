@@ -162,13 +162,12 @@ export function ProjectDetailClient({
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              onClick={() => {
+              onClick={async () => {
                 if (pendingPhaseNav) {
-                  navigateToPhaseAction(project.id, pendingPhaseNav).then(() =>
-                    router.refresh()
-                  );
+                  await navigateToPhaseAction(project.id, pendingPhaseNav);
+                  router.refresh();
                 }
-                setShowSkipWarning(false);
+                setPendingPhaseNav(null);
               }}
             >
               Skip ahead

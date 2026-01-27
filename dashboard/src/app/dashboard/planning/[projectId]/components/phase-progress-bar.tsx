@@ -56,12 +56,18 @@ function getPhaseStatus(
   currentPhase: PhaseType
 ): PhaseStatus {
   const record = getPhaseRecord(phases, phaseType);
-  if (record) return record.status;
-  // If no record exists, infer from position relative to current phase
+  // project.current_phase is the source of truth for what's active
+  if (phaseType === currentPhase) {
+    // Check if incubating (record overrides)
+    if (record?.status === 'incubating') return 'incubating';
+    return 'in_progress';
+  }
+  if (record?.status === 'complete') return 'complete';
+  if (record?.status === 'incubating') return 'incubating';
+  // Infer from position relative to current phase
   const phaseIdx = PHASE_ORDER.indexOf(phaseType);
   const currentIdx = PHASE_ORDER.indexOf(currentPhase);
   if (phaseIdx < currentIdx) return 'complete';
-  if (phaseIdx === currentIdx) return 'in_progress';
   return 'not_started';
 }
 

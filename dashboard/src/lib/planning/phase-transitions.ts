@@ -268,6 +268,15 @@ export async function navigateToPhase(
           status: 'in_progress',
           started_at: now,
         });
+    } else {
+      // Update existing phase to in_progress if not already complete
+      await supabase
+        .schema('planning_studio')
+        .from('phases')
+        .update({ status: 'in_progress', started_at: now })
+        .eq('project_id', projectId)
+        .eq('phase_type', targetPhase)
+        .in('status', ['not_started']);
     }
 
     // Update project current_phase
