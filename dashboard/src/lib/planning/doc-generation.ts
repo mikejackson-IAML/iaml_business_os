@@ -84,7 +84,7 @@ export async function saveDocumentVersion(
   projectId: string,
   docType: DocumentType,
   content: string
-): Promise<{ id: string; version: number }> {
+): Promise<{ id: string; version: number; doc_type: string; content: string }> {
   const latestVersion = await getLatestVersion(supabase, projectId, docType);
   const newVersion = latestVersion + 1;
   const filePath = DOC_FILE_PATHS[docType];
@@ -99,14 +99,14 @@ export async function saveDocumentVersion(
       version: newVersion,
       file_path: filePath,
     })
-    .select('id, version')
+    .select('id, version, doc_type, content')
     .single();
 
   if (error || !data) {
     throw new Error(`Failed to save document version: ${error?.message ?? 'No data returned'}`);
   }
 
-  return { id: data.id, version: data.version };
+  return { id: data.id, version: data.version, doc_type: data.doc_type, content: data.content };
 }
 
 // =============================================================================
