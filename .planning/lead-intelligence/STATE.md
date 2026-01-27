@@ -5,16 +5,16 @@
 See: .planning/lead-intelligence/PROJECT.md (updated 2026-01-27)
 
 **Core value:** Users can find any contact, understand their full relationship with IAML, and take immediate action.
-**Current focus:** Phase 5 in progress — opportunities UI taking shape
+**Current focus:** Phase 5 in progress — detail page complete, verification next
 
 ## Current Position
 
 Phase: 5 of 5 (Opportunities Pipeline)
-Plan: 2 of 4 complete
+Plan: 3 of 4 complete
 Status: In progress
-Last activity: 2026-01-27 - Completed 05-02-PLAN.md
+Last activity: 2026-01-27 - Completed 05-03-PLAN.md
 
-Progress: [█████████░] 86%
+Progress: [█████████░] 91%
 
 ## Phase 5 Polish Notes (from Phase 4 verification)
 
@@ -45,6 +45,9 @@ Progress: [█████████░] 86%
 | auto-create-bucket | Auto-create storage bucket on first upload | 05-01 | No manual setup needed |
 | components-ui-path | Use @/components/ui/ for dialog, label, select | 05-02 | Consistent with existing lead-intelligence modals |
 | detail-stub-components | Stub sub-section components to unblock build | 05-02 | Plan 01 detail page imports plan 03 components |
+| scrollable-detail-page | Single scrollable page for detail (not tabbed) | 05-03 | Low volume monitoring view per CONTEXT.md |
+| lost-requires-reason | Lost stage requires reason via inline prompt | 05-03 | Better tracking of why opportunities are lost |
+| simple-notes-textarea | Notes as textarea on opportunity record, not full notes table | 05-03 | Monitoring view, not high-volume note-taking |
 
 ## Blockers / Concerns
 
@@ -53,9 +56,9 @@ Progress: [█████████░] 86%
 ## Session Continuity
 
 Last session: 2026-01-27
-Stopped at: Completed 05-02-PLAN.md
+Stopped at: Completed 05-03-PLAN.md
 Resume file: None
-**Next step:** Execute 05-03-PLAN.md
+**Next step:** Execute 05-04-PLAN.md
 
 ## Session Log
 
@@ -95,6 +98,7 @@ Resume file: None
 ---
 | 2026-01-27 | 05-01 complete | Opportunities API: 9 files, CRUD + stage advancement + contacts + attachments with Storage |
 | 2026-01-27 | 05-02 complete | Opportunities list page: kanban + table views, pipeline tabs, create modal, drag-and-drop |
+| 2026-01-27 | 05-03 complete | Opportunity detail page: stage visualization, contacts with roles, notes, file attachments |
 
 ---
-*Last updated: 2026-01-27 after 05-02 execution*
+*Last updated: 2026-01-27 after 05-03 execution*
