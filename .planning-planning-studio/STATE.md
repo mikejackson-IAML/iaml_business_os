@@ -3,9 +3,9 @@
 ## Current Status
 
 - **Milestone:** v1.0
-- **Current Phase:** 3 (Project Detail View — Layout) - Complete
-- **Current Plan:** 3 of 3 complete
-- **Status:** Phase Complete
+- **Current Phase:** 4 (Conversation Engine) - Not Started
+- **Current Plan:** 0 of TBD
+- **Status:** Ready for planning
 
 ## Progress
 

@@ -69,23 +69,24 @@ Plans:
 
 **Goal:** Project detail page structure without AI conversation
 
+**Status:** Complete (2026-01-27)
 **Plans:** 3 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Phase progress bar, data wiring, and page layout shell
-- [ ] 03-02-PLAN.md — Sidebar panels (sessions, documents, research)
-- [ ] 03-03-PLAN.md — Conversation shell, incubation overlay, and full layout wiring
+- [x] 03-01-PLAN.md — Phase progress bar, data wiring, and page layout shell
+- [x] 03-02-PLAN.md — Sidebar panels (sessions, documents, research)
+- [x] 03-03-PLAN.md — Conversation shell, incubation overlay, and full layout wiring
 
 ### Requirements Covered
 - REQ-F2: Project Detail View (UI only)
 - REQ-F3: Incubation State UI
 
 ### Success Criteria
-- [ ] Project detail page renders correctly
-- [ ] All sidebar panels show data from database
-- [ ] Phase navigation shows correct state
-- [ ] Incubation UI displays correctly when locked
-- [ ] Skip incubation modal works
+- [x] Project detail page renders correctly
+- [x] All sidebar panels show data from database
+- [x] Phase navigation shows correct state
+- [x] Incubation UI displays correctly when locked
+- [x] Skip incubation modal works
 
 ---
 
