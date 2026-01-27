@@ -4,8 +4,8 @@
 
 - **Milestone:** v1.0
 - **Current Phase:** 7 (Document Generation) - In progress
-- **Current Plan:** 2 of 5
-- **Status:** In progress — Plans 01/02 complete, Plans 03/04/05 remaining
+- **Current Plan:** 4 of 5
+- **Status:** In progress — Plans 01/02/04 complete, Plans 03/05 remaining
 
 ## Progress
 
@@ -16,7 +16,7 @@ Phase 3: [████████████████] 3/3 plans COMPLETE
 Phase 4: [████████████████] 4/4 plans COMPLETE
 Phase 5: [████████████████] 4/4 plans COMPLETE
 Phase 6: [████████████████] 4/4 plans COMPLETE
-Overall:  [███████████████████░] 24/36 plans (~67%)
+Overall:  [████████████████████░] 25/36 plans (~69%)
 ```
 
 ## Phase Progress
@@ -29,7 +29,7 @@ Overall:  [███████████████████░] 24/36 p
 | 4 | Conversation Engine | Complete (4/4 plans) |
 | 5 | Phase Transitions & Incubation | Complete (4/4 plans) |
 | 6 | Memory System | Complete (4/4 plans) |
-| 7 | Document Generation | In Progress (2/5 plans) |
+| 7 | Document Generation | In Progress (3/5 plans) |
 | 8 | Deep Research Integration | Not Started |
 | 9 | Ready-to-Build Queue & Prioritization | Not Started |
 | 10 | Build Tracker | Not Started |
@@ -88,6 +88,9 @@ Overall:  [███████████████████░] 24/36 p
 | 07 | 02 | Version list excludes content field | Lightweight responses for version history dropdown |
 | 07 | 01 | Re-exported DocumentType from planning types | Avoids type duplication across modules |
 | 07 | 01 | Lowercase phase names in PHASE_DOC_SUGGESTIONS | Matches PhaseType values directly |
+| 07 | 04 | shadcn Dialog for document preview modal | Already in project, consistent with other modals |
+| 07 | 04 | Native select for version dropdown | Matches 02-02 convention |
+| 07 | 04 | Shared DOC_TYPE_LABELS import from doc-templates | Avoids duplicate label definitions |
 
 ## MVP Checkpoint
 
@@ -102,14 +105,14 @@ Phases 1-7 constitute the MVP. After Phase 7:
 ## Session Continuity
 
 - **Last session:** 2026-01-27
-- **Stopped at:** Completed 07-01-PLAN.md
+- **Stopped at:** Completed 07-04-PLAN.md
 - **Resume file:** None
 
 ## Last Activity
 
 - **Date:** 2026-01-27
-- **Activity:** Completed Phase 7 Plan 1 (Document Templates & Generation Library)
-- **Notes:** Created doc-templates.ts with 9 template constants and doc-generation.ts with Claude tool_choice generation, version management, and context loading.
+- **Activity:** Completed Phase 7 Plan 4 (Document UI Components)
+- **Notes:** Preview modal with markdown rendering, inline editor, version history dropdown, and updated DocumentsPanel with modal integration.
 
 ## Phase 1 Deliverables
 
