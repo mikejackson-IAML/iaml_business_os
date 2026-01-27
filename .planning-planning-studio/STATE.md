@@ -3,9 +3,9 @@
 ## Current Status
 
 - **Milestone:** v1.0
-- **Current Phase:** 7 (Document Generation) - COMPLETE
-- **Current Plan:** 5 of 5
-- **Status:** Phase 7 complete — MVP milestone reached (Phases 1-7)
+- **Current Phase:** 8 (Deep Research Integration) - In Progress
+- **Current Plan:** 1 of 4
+- **Status:** Plan 08-01 complete
 
 ## Progress
 
@@ -17,7 +17,7 @@ Phase 4: [████████████████] 4/4 plans COMPLETE
 Phase 5: [████████████████] 4/4 plans COMPLETE
 Phase 6: [████████████████] 4/4 plans COMPLETE
 Phase 7: [████████████████] 5/5 plans COMPLETE  *** MVP ***
-Overall:  [███████████████████████░] 27/36 plans (~75%)
+Overall:  [████████████████████████░] 28/36 plans (~78%)
 ```
 
 ## Phase Progress
@@ -31,7 +31,7 @@ Overall:  [███████████████████████
 | 5 | Phase Transitions & Incubation | Complete (4/4 plans) |
 | 6 | Memory System | Complete (4/4 plans) |
 | 7 | Document Generation | Complete (5/5 plans) |
-| 8 | Deep Research Integration | Not Started |
+| 8 | Deep Research Integration | In Progress (1/4 plans) |
 | 9 | Ready-to-Build Queue & Prioritization | Not Started |
 | 10 | Build Tracker | Not Started |
 | 11 | Analytics & Polish | Not Started |
@@ -97,6 +97,9 @@ Overall:  [███████████████████████
 | 07 | 04 | Shared DOC_TYPE_LABELS import from doc-templates | Avoids duplicate label definitions |
 | 07 | 05 | Client-side ZIP generation via jszip | No server memory/temp files needed |
 | 07 | 05 | Dynamic imports for jszip/file-saver | Browser-only libraries loaded on demand |
+| 08 | 01 | Synchronous Perplexity call (not fire-and-forget) | Avoids serverless timeout issues per RESEARCH.md |
+| 08 | 01 | Soft limits 10/session 50/project | Server-side rate control with 429 responses |
+| 08 | 01 | Research markers in all 6 phase prompts | All phases can suggest research, not just discover |
 
 ## MVP Checkpoint
 
@@ -111,14 +114,14 @@ Phases 1-7 constitute the MVP. After Phase 7:
 ## Session Continuity
 
 - **Last session:** 2026-01-27
-- **Stopped at:** Completed 07-05-PLAN.md (Phase 7 complete, MVP reached)
+- **Stopped at:** Completed 08-01-PLAN.md
 - **Resume file:** None
 
 ## Last Activity
 
 - **Date:** 2026-01-27
-- **Activity:** Completed Phase 7 Plan 5 (GSD Package Export)
-- **Notes:** ZIP export with .planning/ folder structure via jszip, Claude Code command copy. Phase 7 and MVP milestone complete.
+- **Activity:** Completed Phase 8 Plan 1 (Research Backend)
+- **Notes:** Perplexity API route, research markers library, system prompt updates for all phases.
 
 ## Phase 1 Deliverables
 
