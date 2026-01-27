@@ -12,6 +12,9 @@ import {
 } from '@/lib/api/planning-chat';
 import { getSystemPrompt, buildContextBlock } from '@/lib/planning/system-prompts';
 import { detectCompletionMarker, detectReadinessMarker, stripMarkers } from '@/lib/planning/phase-transitions';
+import { extractMemories } from '@/lib/planning/memory-extraction';
+import { generateEmbedding } from '@/lib/planning/embeddings';
+import { createServerClient } from '@/lib/supabase/server';
 import type { PhaseType } from '@/dashboard-kit/types/departments/planning';
 
 export const runtime = 'nodejs';
@@ -153,6 +156,54 @@ export async function POST(request: NextRequest) {
         // Send done event
         controller.enqueue(encoder.encode(formatSSE({ type: 'done' })));
         controller.close();
+
+        // Fire-and-forget memory extraction after stream closes
+        const extractionPromise = (async () => {
+          try {
+            const allMessages = await getConversationMessages(conversationId!);
+            const conversationText = allMessages
+              .map((m) => `${m.role}: ${m.content}`)
+              .join('\n');
+            const memories = await extractMemories(conversationText, project.title, phaseType);
+            if (memories.length > 0) {
+              const supabase = createServerClient();
+              const rows = memories.map((m) => ({
+                project_id: projectId,
+                conversation_id: conversationId!,
+                content: m.content,
+                memory_type: m.memory_type,
+                source_phase: m.source_phase || null,
+              }));
+
+              const { data: inserted, error: insertError } = await supabase
+                .schema('planning_studio')
+                .from('memories')
+                .insert(rows)
+                .select('id, content');
+
+              if (insertError) {
+                console.error('Memory insert error:', insertError);
+                return;
+              }
+
+              // Generate embeddings for stored memories
+              await Promise.allSettled(
+                (inserted || []).map(async (row) => {
+                  const embedding = await generateEmbedding(row.content);
+                  await supabase
+                    .schema('planning_studio')
+                    .from('memories')
+                    .update({ embedding: JSON.stringify(embedding) })
+                    .eq('id', row.id);
+                })
+              );
+            }
+          } catch (e) {
+            console.error('Memory extraction failed:', e);
+          }
+        })();
+        // Do NOT await extractionPromise — fire and forget
+        void extractionPromise;
       } catch (error) {
         console.error('Planning chat error:', error);
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
