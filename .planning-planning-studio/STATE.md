@@ -3,9 +3,9 @@
 ## Current Status
 
 - **Milestone:** v1.0
-- **Current Phase:** 5 (Phase Transitions & Incubation) - Not Started
-- **Current Plan:** 0
-- **Status:** Ready to plan
+- **Current Phase:** 5 (Phase Transitions & Incubation) - In Progress
+- **Current Plan:** 1 of 4
+- **Status:** In progress
 
 ## Progress
 
@@ -14,7 +14,8 @@ Phase 1: [████████████████] 4/4 plans COMPLETE
 Phase 2: [████████████████] 3/3 plans COMPLETE
 Phase 3: [████████████████] 3/3 plans COMPLETE
 Phase 4: [████████████████] 4/4 plans COMPLETE
-Overall:  [██████████████-] 14/36 plans (~39%)
+Phase 5: [████------------] 1/4 plans
+Overall:  [███████████████-] 15/36 plans (~42%)
 ```
 
 ## Phase Progress
@@ -25,7 +26,7 @@ Overall:  [██████████████-] 14/36 plans (~39%)
 | 2 | Pipeline View (Main Dashboard) | Complete (3/3 plans) |
 | 3 | Project Detail View — Layout | Complete (3/3 plans) |
 | 4 | Conversation Engine | Complete (4/4 plans) |
-| 5 | Phase Transitions & Incubation | Not Started |
+| 5 | Phase Transitions & Incubation | In Progress (1/4 plans) |
 | 6 | Memory System | Not Started |
 | 7 | Document Generation | Not Started |
 | 8 | Deep Research Integration | Not Started |
@@ -65,6 +66,9 @@ Overall:  [██████████████-] 14/36 plans (~39%)
 | 04 | 03 | ProjectDetailClient wrapper for shared session state | Avoids URL-based state; keeps sidebar and chat coordinated |
 | 04 | 03 | Key-based React reset for session switching | Clean state without useEffect sync |
 | 04 | 03 | Fetch-based conversation refresh after SSE events | Data consistency over optimistic mutation |
+| 05 | 01 | HTML comment markers stripped before DB save | Invisible to users, clean storage |
+| 05 | 01 | forceComplete delegates to completePhase | Readiness checks are conversation-level, not DB constraints |
+| 05 | 01 | ensureAllPhasesExist auto-starts capture | First phase should be in_progress on creation |
 
 ## MVP Checkpoint
 
@@ -79,14 +83,14 @@ Phases 1-7 constitute the MVP. After Phase 7:
 ## Session Continuity
 
 - **Last session:** 2026-01-27
-- **Stopped at:** Completed Phase 4
+- **Stopped at:** Completed 05-01-PLAN.md
 - **Resume file:** None
 
 ## Last Activity
 
 - **Date:** 2026-01-27
-- **Activity:** Completed Phase 4 (Conversation Engine)
-- **Notes:** All 4 plans executed. SSE streaming bug fixed during verification. User confirmed conversation works end-to-end. Phase verified 6/6 must-haves.
+- **Activity:** Completed Phase 5 Plan 1 (Phase Transition Backend Logic)
+- **Notes:** Created phase-transitions.ts utility module, 5 new server actions, marker instructions in all prompts, SSE marker detection in chat route.
 
 ## Phase 1 Deliverables
 
