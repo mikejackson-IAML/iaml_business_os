@@ -4,7 +4,7 @@
 
 - **Milestone:** v1.0
 - **Current Phase:** 5 (Phase Transitions & Incubation) - In Progress
-- **Current Plan:** 1 of 4
+- **Current Plan:** 3 of 4
 - **Status:** In progress
 
 ## Progress
@@ -14,8 +14,8 @@ Phase 1: [████████████████] 4/4 plans COMPLETE
 Phase 2: [████████████████] 3/3 plans COMPLETE
 Phase 3: [████████████████] 3/3 plans COMPLETE
 Phase 4: [████████████████] 4/4 plans COMPLETE
-Phase 5: [████------------] 1/4 plans
-Overall:  [███████████████-] 15/36 plans (~42%)
+Phase 5: [████████████----] 3/4 plans
+Overall:  [████████████████] 17/36 plans (~47%)
 ```
 
 ## Phase Progress
@@ -26,7 +26,7 @@ Overall:  [███████████████-] 15/36 plans (~42%)
 | 2 | Pipeline View (Main Dashboard) | Complete (3/3 plans) |
 | 3 | Project Detail View — Layout | Complete (3/3 plans) |
 | 4 | Conversation Engine | Complete (4/4 plans) |
-| 5 | Phase Transitions & Incubation | In Progress (1/4 plans) |
+| 5 | Phase Transitions & Incubation | In Progress (3/4 plans) |
 | 6 | Memory System | Not Started |
 | 7 | Document Generation | Not Started |
 | 8 | Deep Research Integration | Not Started |
@@ -69,6 +69,7 @@ Overall:  [███████████████-] 15/36 plans (~42%)
 | 05 | 01 | HTML comment markers stripped before DB save | Invisible to users, clean storage |
 | 05 | 01 | forceComplete delegates to completePhase | Readiness checks are conversation-level, not DB constraints |
 | 05 | 01 | ensureAllPhasesExist auto-starts capture | First phase should be in_progress on creation |
+| 05 | 03 | Replaced placeholder buttons with idea capture textarea | Plan specified note capture over disabled buttons |
 
 ## MVP Checkpoint
 
@@ -83,14 +84,14 @@ Phases 1-7 constitute the MVP. After Phase 7:
 ## Session Continuity
 
 - **Last session:** 2026-01-27
-- **Stopped at:** Completed 05-01-PLAN.md
+- **Stopped at:** Completed 05-03-PLAN.md
 - **Resume file:** None
 
 ## Last Activity
 
 - **Date:** 2026-01-27
-- **Activity:** Completed Phase 5 Plan 1 (Phase Transition Backend Logic)
-- **Notes:** Created phase-transitions.ts utility module, 5 new server actions, marker instructions in all prompts, SSE marker detection in chat route.
+- **Activity:** Completed Phase 5 Plan 3 (Incubation Overlay Wiring)
+- **Notes:** Rewrote incubation-overlay.tsx with live countdown, idea capture textarea, and working skip button using useTransition.
 
 ## Phase 1 Deliverables
 
