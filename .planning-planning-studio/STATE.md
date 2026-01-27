@@ -4,8 +4,8 @@
 
 - **Milestone:** v1.0
 - **Current Phase:** 7 (Document Generation) - In progress
-- **Current Plan:** 2 of 4
-- **Status:** In progress — Plan 02 complete, Plans 01/03/04 remaining
+- **Current Plan:** 2 of 5
+- **Status:** In progress — Plans 01/02 complete, Plans 03/04/05 remaining
 
 ## Progress
 
@@ -16,7 +16,7 @@ Phase 3: [████████████████] 3/3 plans COMPLETE
 Phase 4: [████████████████] 4/4 plans COMPLETE
 Phase 5: [████████████████] 4/4 plans COMPLETE
 Phase 6: [████████████████] 4/4 plans COMPLETE
-Overall:  [██████████████████░] 23/36 plans (~64%)
+Overall:  [███████████████████░] 24/36 plans (~67%)
 ```
 
 ## Phase Progress
@@ -29,7 +29,7 @@ Overall:  [██████████████████░] 23/36 plan
 | 4 | Conversation Engine | Complete (4/4 plans) |
 | 5 | Phase Transitions & Incubation | Complete (4/4 plans) |
 | 6 | Memory System | Complete (4/4 plans) |
-| 7 | Document Generation | In Progress (2/4 plans) |
+| 7 | Document Generation | In Progress (2/5 plans) |
 | 8 | Deep Research Integration | Not Started |
 | 9 | Ready-to-Build Queue & Prioritization | Not Started |
 | 10 | Build Tracker | Not Started |
@@ -86,6 +86,8 @@ Overall:  [██████████████████░] 23/36 plan
 | 06 | 04 | Added project_title to ask route response | Cross-project source attribution requires project name |
 | 07 | 02 | Next.js 15 Promise<params> for dynamic routes | Consistency with existing route patterns |
 | 07 | 02 | Version list excludes content field | Lightweight responses for version history dropdown |
+| 07 | 01 | Re-exported DocumentType from planning types | Avoids type duplication across modules |
+| 07 | 01 | Lowercase phase names in PHASE_DOC_SUGGESTIONS | Matches PhaseType values directly |
 
 ## MVP Checkpoint
 
@@ -100,14 +102,14 @@ Phases 1-7 constitute the MVP. After Phase 7:
 ## Session Continuity
 
 - **Last session:** 2026-01-27
-- **Stopped at:** Completed 07-02-PLAN.md
+- **Stopped at:** Completed 07-01-PLAN.md
 - **Resume file:** None
 
 ## Last Activity
 
 - **Date:** 2026-01-27
-- **Activity:** Completed Phase 7 Plan 2 (Document API Routes)
-- **Notes:** Created POST/GET/PUT API routes for document generation, retrieval, and versioned editing.
+- **Activity:** Completed Phase 7 Plan 1 (Document Templates & Generation Library)
+- **Notes:** Created doc-templates.ts with 9 template constants and doc-generation.ts with Claude tool_choice generation, version management, and context loading.
 
 ## Phase 1 Deliverables
 
