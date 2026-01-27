@@ -33,6 +33,12 @@
 **Goal:** All database tables, views, functions, and indexes deployed; basic CRUD API endpoints for contacts and companies operational
 **Depends on:** Nothing (first phase)
 **Requirements:** DB-01, DB-02, DB-03, DB-04, DB-05, DB-06, DB-07, DB-08, DB-09, DB-10, DB-11, DB-12, API-01, API-02
+**Plans:** 3 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Complete database migration (all tables, views, triggers, indexes)
+- [ ] 01-02-PLAN.md — Contacts CRUD API (types, validation, queries, mutations, routes)
+- [ ] 01-03-PLAN.md — Companies CRUD API (types, validation, queries, mutations, routes)
 
 **Success Criteria** (what must be TRUE):
 1. All 11 tables + junction table created in Supabase with correct foreign keys and indexes
@@ -106,7 +112,7 @@
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Database Schema & Core API | 0/? | Not started | - |
+| 1. Database Schema & Core API | 0/3 | Planned | - |
 | 2. Contact List, Profiles & Company Pages | 0/? | Not started | - |
 | 3. AI Search & Intelligence | 0/? | Not started | - |
 | 4. Integrations & Bulk Actions | 0/? | Not started | - |
@@ -114,4 +120,4 @@
 
 ---
 *Roadmap created: 2026-01-27*
-*Last updated: 2026-01-27 after initial creation*
+*Last updated: 2026-01-27 after Phase 1 planning*
