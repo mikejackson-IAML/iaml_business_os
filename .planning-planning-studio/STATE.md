@@ -3,9 +3,9 @@
 ## Current Status
 
 - **Milestone:** v1.0
-- **Current Phase:** 4 (Conversation Engine) - Not Started
-- **Current Plan:** 0 of TBD
-- **Status:** Ready for planning
+- **Current Phase:** 4 (Conversation Engine) - In Progress
+- **Current Plan:** 1 of TBD
+- **Status:** In progress
 
 ## Progress
 
@@ -13,7 +13,8 @@
 Phase 1: [████████████████] 4/4 plans COMPLETE
 Phase 2: [████████████████] 3/3 plans COMPLETE
 Phase 3: [████████████████] 3/3 plans COMPLETE
-Overall:  [█████████----] 10/36 plans (~28%)
+Phase 4: [████-------------] 1/? plans IN PROGRESS
+Overall:  [██████████---] 11/36 plans (~31%)
 ```
 
 ## Phase Progress
@@ -23,7 +24,7 @@ Overall:  [█████████----] 10/36 plans (~28%)
 | 1 | Database Foundation & Core UI Shell | Complete (4/4 plans) |
 | 2 | Pipeline View (Main Dashboard) | Complete (3/3 plans) |
 | 3 | Project Detail View — Layout | Complete (3/3 plans) |
-| 4 | Conversation Engine | Not Started |
+| 4 | Conversation Engine | In Progress (1/? plans) |
 | 5 | Phase Transitions & Incubation | Not Started |
 | 6 | Memory System | Not Started |
 | 7 | Document Generation | Not Started |
@@ -57,6 +58,8 @@ Overall:  [█████████----] 10/36 plans (~28%)
 | 03 | 02 | Custom CSS classes for status badges | Specific colors with dark mode + pulse animation for running |
 | 03 | 03 | Disabled conversation input as placeholder | Phase 4 will wire real functionality |
 | 03 | 03 | Warm/amber tone for incubation overlay | CONTEXT.md specifies incubation as positive feature |
+| 04 | 01 | Template literals over handlebars for context block | Simpler, no extra dependency needed |
+| 04 | 01 | Modeled SSE pattern on mobile chat route | Consistency with existing streaming pattern |
 
 ## MVP Checkpoint
 
@@ -71,14 +74,14 @@ Phases 1-7 constitute the MVP. After Phase 7:
 ## Session Continuity
 
 - **Last session:** 2026-01-27
-- **Stopped at:** Completed 03-03-PLAN.md (Phase 3 complete)
+- **Stopped at:** Completed 04-01-PLAN.md
 - **Resume file:** None
 
 ## Last Activity
 
 - **Date:** 2026-01-27
-- **Activity:** Completed Plan 03-03 (Conversation Shell & Layout Wiring)
-- **Notes:** Built conversation shell with disabled input, incubation overlay with skip confirmation dialog, and wired all components into project-content layout. Phase 3 fully complete.
+- **Activity:** Completed Plan 04-01 (Chat Backend)
+- **Notes:** Built streaming chat API endpoint, phase-specific system prompts for all 6 phases, chat helpers for message persistence and context loading. Phase 4 in progress.
 
 ## Phase 1 Deliverables
 
@@ -101,3 +104,8 @@ All 3 plans complete:
 - **03-01:** Project detail shell with header, phase progress bar, grid layout
 - **03-02:** Sidebar panels (sessions, documents, research) with typed props and empty states
 - **03-03:** Conversation shell, incubation overlay, and full layout wiring
+
+## Phase 4 Deliverables
+
+In progress:
+- **04-01:** Chat backend -- streaming API route, system prompts, chat helpers, message persistence
