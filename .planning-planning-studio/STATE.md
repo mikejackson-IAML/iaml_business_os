@@ -5,7 +5,7 @@
 - **Milestone:** v1.0
 - **Current Phase:** 9 (Ready-to-Build Queue & Prioritization) - In Progress
 - **Current Plan:** 2 of 4
-- **Status:** Plan 09-02 complete
+- **Status:** Plans 09-01 and 09-02 complete
 
 ## Progress
 
@@ -20,6 +20,7 @@ Phase 7: [████████████████] 5/5 plans COMPLETE  
 Phase 8: [████████████████] 4/4 plans COMPLETE
 Phase 9: [████████░░░░░░░░] 2/4 plans IN PROGRESS
 Overall:  [█████████████████████████████░] 33/36 plans (~92%)
+Note: 09-01 executed after 09-02 (wave independence)
 ```
 
 ## Phase Progress
@@ -113,6 +114,9 @@ Overall:  [███████████████████████
 | 09 | 02 | Added pinned column via migration | Schema didn't have pinned field; needed for queue sorting |
 | 09 | 02 | Score badge thresholds: green >70, amber 40-70, red <40 | Visual priority hierarchy |
 | 09 | 02 | Placeholder buttons for Build/Export/Refresh | Wired in plans 03-04 per plan sequence |
+| 09 | 01 | Native select for goal type | Matches 02-02 convention |
+| 09 | 01 | Radio card buttons for tier selection | Visual, intuitive tier picking |
+| 09 | 01 | IF NOT EXISTS for pinned column migration | Idempotent migration |
 
 ## MVP Checkpoint
 
@@ -126,15 +130,15 @@ Phases 1-7 constitute the MVP. After Phase 7:
 
 ## Session Continuity
 
-- **Last session:** 2026-01-28
-- **Stopped at:** Completed 09-02-PLAN.md
+- **Last session:** 2026-01-27
+- **Stopped at:** Completed 09-01-PLAN.md
 - **Resume file:** None
 
 ## Last Activity
 
-- **Date:** 2026-01-28
-- **Activity:** Completed Phase 9 Plan 2 (Queue Page UI)
-- **Notes:** Queue page with ranked project cards, pin toggle, score badges, empty state. Added pinned column migration.
+- **Date:** 2026-01-27
+- **Activity:** Completed Phase 9 Plan 1 (Goals Management & Pinned Projects)
+- **Notes:** Goals CRUD page with tier-based priority cards, pinned column migration, 5 new server actions.
 
 ## Phase 8 Deliverables
 
