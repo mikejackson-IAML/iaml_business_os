@@ -116,6 +116,8 @@ Overall:  [███████████████████████
 | 09 | 01 | Native select for goal type | Matches 02-02 convention |
 | 09 | 01 | Radio card buttons for tier selection | Visual, intuitive tier picking |
 | 09 | 01 | IF NOT EXISTS for pinned column migration | Idempotent migration |
+| 09 | 03 | Regex JSON extraction from Claude response | Handles both raw JSON and markdown-wrapped responses |
+| 09 | 03 | Stale banner over auto-recalc | User controls when to spend API credits; simpler implementation |
 | 09 | 04 | DropdownMenu for export actions | Groups ZIP download and copy command cleanly |
 | 09 | 04 | Reuse existing export POST route | No duplication of ZIP generation logic |
 
