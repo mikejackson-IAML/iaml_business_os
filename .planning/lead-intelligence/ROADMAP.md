@@ -6,13 +6,14 @@
 
 ## Post-v1.0
 
-### Phase 6: Tech Debt Cleanup
+### Phase 6: Tech Debt Cleanup ✓
 
 **Goal:** Resolve all 5 low-severity tech debt items from the v1.0 milestone audit
+**Status:** Complete (2026-01-28)
 **Plans:** 1 plan
 
 Plans:
-- [ ] 06-01-PLAN.md — Wire VIP/DNC toggles, remove stubs, fix breadcrumbs, add Suspense pattern, remove redundant headers
+- [x] 06-01-PLAN.md — Wire VIP/DNC toggles, remove stubs, fix breadcrumbs, add Suspense pattern, remove redundant headers
 
 ---
-*Last updated: 2026-01-27 after Phase 6 planning*
+*Last updated: 2026-01-28 after Phase 6 execution*
