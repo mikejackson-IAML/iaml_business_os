@@ -136,6 +136,9 @@ Overall:  [███████████████████████
 | 11 | 01 | Velocity = shipped_at - created_at | Simple journey time measurement |
 | 11 | 01 | Native select for PeriodSelector | Matches pipeline-search-filter.tsx convention |
 | 11 | 01 | BarList for funnel visualization | Follows conversion-funnel-chart.tsx pattern |
+| 11 | 02 | Server/client component split for analytics | Initial SSR with client-side period changes |
+| 11 | 02 | useTransition for period change loading | Subtle opacity reduction during fetch, not blocking UI |
+| 11 | 02 | Empty state when shipped=0 AND captured=0 | Show metrics even with 0 shipped if projects were captured |
 | 11 | 03 | Followed lead-intelligence error.tsx pattern exactly | Consistency with existing error boundaries |
 | 11 | 03 | Route-specific console.error prefixes | Easier debugging when errors occur |
 
