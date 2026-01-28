@@ -145,6 +145,9 @@ Overall:  [███████████████████████
 | 11 | 04 | Used button elements for clickable list items | Better accessibility for clickable elements |
 | 11 | 04 | hover:bg-accent over hover:bg-muted/50 | Stronger visual feedback on hover |
 | 11 | 04 | Minimal empty state for pipeline columns | Many columns visible; avoid visual noise |
+| 12 | 02 | Permanent (308) redirect for deprecated routes | Browser caches 308 redirects, reducing server load |
+| 12 | 02 | Sub-path redirect to planning root | /dashboard/development/:path* -> /dashboard/planning (different route structures) |
+| 12 | 02 | Removed FolderCode import | Only used for deleted Development link |
 | 12 | 03 | Page objects use data-testid selectors | More resilient than class/role selectors |
 | 12 | 03 | Auth uses storage state | Supabase session persisted between tests |
 | 12 | 03 | Test data prefix [E2E] | Easy identification for cleanup and filtering |
