@@ -120,20 +120,58 @@ export function ContactRowActions({ contact, onAddToCampaign, onContactsChanged 
           <DropdownMenuSeparator />
 
           <DropdownMenuItem
-            onClick={() => {
-              // TODO: Implement VIP toggle
-              console.log('Mark as VIP:', contact.id);
+            onClick={async () => {
+              const newVip = !contact.is_vip;
+              const promise = fetch(`/api/lead-intelligence/contacts/${contact.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ is_vip: newVip }),
+              }).then(async (res) => {
+                if (!res.ok) {
+                  const data = await res.json();
+                  throw new Error(data.error ?? 'Failed to update VIP status');
+                }
+                return res.json();
+              });
+              toast.promise(promise, {
+                loading: newVip ? 'Marking as VIP...' : 'Removing VIP status...',
+                success: () => {
+                  onContactsChanged?.();
+                  return newVip ? 'Marked as VIP' : 'VIP status removed';
+                },
+                error: (err) => err.message ?? 'Failed to update VIP status',
+              });
             }}
           >
             <Star className="h-4 w-4 mr-2" />
-            Mark as VIP
+            {contact.is_vip ? 'Remove VIP' : 'Mark as VIP'}
           </DropdownMenuItem>
 
           <DropdownMenuItem
             className="text-destructive"
-            onClick={() => {
-              // TODO: Implement DNC toggle
-              console.log('Mark Do Not Contact:', contact.id);
+            onClick={async () => {
+              if (!window.confirm('Mark as Do Not Contact? This will change their status.')) {
+                return;
+              }
+              const promise = fetch(`/api/lead-intelligence/contacts/${contact.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: 'do_not_contact' }),
+              }).then(async (res) => {
+                if (!res.ok) {
+                  const data = await res.json();
+                  throw new Error(data.error ?? 'Failed to update status');
+                }
+                return res.json();
+              });
+              toast.promise(promise, {
+                loading: 'Marking as Do Not Contact...',
+                success: () => {
+                  onContactsChanged?.();
+                  return 'Marked as Do Not Contact';
+                },
+                error: (err) => err.message ?? 'Failed to update status',
+              });
             }}
           >
             <Ban className="h-4 w-4 mr-2" />

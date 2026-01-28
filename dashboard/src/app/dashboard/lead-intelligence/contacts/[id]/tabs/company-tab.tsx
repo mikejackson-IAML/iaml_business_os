@@ -79,12 +79,6 @@ export function CompanyTab({ contactId, contact }: CompanyTabProps) {
         <CardContent className="py-12 text-center">
           <Building2 className="mx-auto h-12 w-12 text-muted-foreground/40" />
           <p className="mt-3 text-sm text-muted-foreground">No company associated</p>
-          <button
-            disabled
-            className="mt-3 text-sm text-muted-foreground/60 cursor-not-allowed"
-          >
-            Link Company (coming soon)
-          </button>
         </CardContent>
       </Card>
     );
@@ -188,14 +182,6 @@ export function CompanyTab({ contactId, contact }: CompanyTabProps) {
         </CardContent>
       </Card>
 
-      {/* Opportunities placeholder */}
-      <Card>
-        <CardContent className="py-8 text-center">
-          <p className="text-sm text-muted-foreground">
-            Opportunities coming in Phase 5
-          </p>
-        </CardContent>
-      </Card>
     </div>
   );
 }

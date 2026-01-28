@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ContactAvatar } from '../../../components/contact-avatar';
 import { StatusBadge } from '../../../components/status-badge';
-import { Button } from '@/dashboard-kit/components/ui/button';
 
 interface Contact {
   id: string;
@@ -50,9 +49,6 @@ export function ContactsTab({ companyId }: { companyId: string }) {
     return (
       <div className="py-12 text-center">
         <p className="text-muted-foreground">No contacts at this company</p>
-        <Button className="mt-4" disabled>
-          Add Contact (Coming soon)
-        </Button>
       </div>
     );
   }
@@ -61,14 +57,6 @@ export function ContactsTab({ companyId }: { companyId: string }) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">{total} contact{total !== 1 ? 's' : ''}</p>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" disabled>
-            Bulk actions coming in Phase 4
-          </Button>
-          <Button size="sm" disabled>
-            Add Contact (Coming soon)
-          </Button>
-        </div>
       </div>
 
       <div className="rounded-md border">

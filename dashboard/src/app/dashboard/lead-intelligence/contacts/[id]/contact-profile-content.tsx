@@ -42,7 +42,7 @@ export function ContactProfileContent({ contact }: ContactProfileContentProps) {
       <Breadcrumbs
         items={[
           { label: 'Lead Intelligence', href: '/dashboard/lead-intelligence' },
-          { label: 'Contacts', href: '/dashboard/lead-intelligence/contacts' },
+          { label: 'Contacts', href: '/dashboard/lead-intelligence' },
           { label: fullName },
         ]}
       />
