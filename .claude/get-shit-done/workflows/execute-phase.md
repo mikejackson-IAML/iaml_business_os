@@ -333,6 +333,22 @@ Plans with `autonomous: false` require user interaction.
    ./scripts/gsd-supabase.sh notify "$PROJECT_KEY" "Decision needed: $CHECKPOINT_TITLE" "Ping" 2>/dev/null || true
    ```
 
+   **Slack notification (for Claude Cloud sessions):**
+   ```bash
+   # Send Slack notification via webhook for remote visibility
+   curl -s -X POST "https://n8n.realtyamp.ai/webhook/gsd-input" \
+     -H "Content-Type: application/json" \
+     -d "{
+       \"type\": \"checkpoint\",
+       \"project\": \"$PROJECT_KEY\",
+       \"phase\": \"$PHASE_NUM\",
+       \"plan\": \"$PLAN_ID\",
+       \"summary\": \"$CHECKPOINT_TITLE\",
+       \"details\": \"$CHECKPOINT_DETAILS\",
+       \"action_needed\": \"$AWAITING\"
+     }" 2>/dev/null || true
+   ```
+
 5. **User responds:**
    - "approved" / "done" → spawn continuation agent
    - Description of issues → spawn continuation agent with feedback
@@ -460,6 +476,20 @@ All automated checks passed. {N} items need human testing:
 - Report issues → will route to gap closure planning
 ```
 
+**Slack notification (for Claude Cloud sessions):**
+```bash
+curl -s -X POST "https://n8n.realtyamp.ai/webhook/gsd-input" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"type\": \"verification\",
+    \"project\": \"$PROJECT_KEY\",
+    \"phase\": \"$PHASE_NUM\",
+    \"summary\": \"Phase $PHASE_NUM complete - human verification required\",
+    \"details\": \"All automated checks passed. Manual testing needed for $HUMAN_ITEMS_COUNT items.\",
+    \"action_needed\": \"Complete verification checklist, then respond 'approved' or describe issues\"
+  }" 2>/dev/null || true
+```
+
 If user approves → continue to update_roadmap.
 If user reports issues → treat as gaps_found.
 
@@ -491,6 +521,20 @@ Present gaps and offer next command:
 
 **Also available:**
 - `cat {phase_dir}/{phase}-VERIFICATION.md` — see full report
+```
+
+**Slack notification (for Claude Cloud sessions):**
+```bash
+curl -s -X POST "https://n8n.realtyamp.ai/webhook/gsd-input" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"type\": \"decision\",
+    \"project\": \"$PROJECT_KEY\",
+    \"phase\": \"$PHASE_NUM\",
+    \"summary\": \"Phase $PHASE_NUM gaps found - $GAPS_COUNT must-haves missing\",
+    \"details\": \"$GAP_SUMMARY\",
+    \"action_needed\": \"Run /gsd:plan-phase $PHASE_NUM --gaps to create closure plans\"
+  }" 2>/dev/null || true
 - `/gsd:verify-work {X}` — manual testing before planning
 ```
 
@@ -607,6 +651,19 @@ Each subagent: Fresh 200k context
 ```bash
 ./scripts/gsd-supabase.sh status "$PROJECT_KEY" "blocked" "Plan failed: $PLAN_NAME" 2>/dev/null || true
 ./scripts/gsd-supabase.sh notify "$PROJECT_KEY" "Blocked: Plan failed in Phase $PHASE_NUM" "Basso" 2>/dev/null || true
+
+# Slack notification for remote visibility
+curl -s -X POST "https://n8n.realtyamp.ai/webhook/gsd-input" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"type\": \"blocked\",
+    \"project\": \"$PROJECT_KEY\",
+    \"phase\": \"$PHASE_NUM\",
+    \"plan\": \"$PLAN_ID\",
+    \"summary\": \"Plan failed: $PLAN_NAME\",
+    \"details\": \"$ERROR_DETAILS\",
+    \"action_needed\": \"Review error and decide: retry, skip, or abort\"
+  }" 2>/dev/null || true
 ```
 
 **Dependency chain breaks:**
@@ -624,6 +681,18 @@ Each subagent: Fresh 200k context
 ```bash
 ./scripts/gsd-supabase.sh status "$PROJECT_KEY" "blocked" "Systemic failure in Phase $PHASE_NUM" 2>/dev/null || true
 ./scripts/gsd-supabase.sh notify "$PROJECT_KEY" "Blocked: Systemic failure - manual investigation needed" "Basso" 2>/dev/null || true
+
+# Slack notification for remote visibility
+curl -s -X POST "https://n8n.realtyamp.ai/webhook/gsd-input" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"type\": \"blocked\",
+    \"project\": \"$PROJECT_KEY\",
+    \"phase\": \"$PHASE_NUM\",
+    \"summary\": \"Systemic failure - all agents in wave failed\",
+    \"details\": \"Something systemic (git issues, permissions, etc.) - manual investigation needed\",
+    \"action_needed\": \"Investigate and restart execution\"
+  }" 2>/dev/null || true
 ```
 
 **Checkpoint fails to resolve:**

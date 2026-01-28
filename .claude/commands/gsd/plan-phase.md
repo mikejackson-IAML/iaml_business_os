@@ -442,11 +442,29 @@ Verification: {Passed | Passed with override | Skipped}
 
 ───────────────────────────────────────────────────────────────
 
+Then use AskUserQuestion to offer auto-continue:
+- header: "Continue"
+- question: "Continue to execute-phase now?"
+- options:
+  - "Yes, execute now" — Proceed directly to execute-phase
+  - "No, I'll run it later" — Show manual command and exit
+
+**If "Yes, execute now":**
+1. Output: "Continuing to execute-phase..."
+2. Invoke the Skill tool with skill: "gsd:execute-phase" and args: "${PHASE} --project ${PROJECT}"
+   - Note: ${PROJECT} comes from the --project argument passed to plan-phase
+   - If no --project was specified, omit the --project flag
+
+**If "No, I'll run it later":**
+Output the manual instructions:
+```
+───────────────────────────────────────────────────────────────
+
 ## ▶ Next Up
 
 **Execute Phase {X}** — run all {N} plans
 
-/gsd:execute-phase {X}
+/gsd:execute-phase {X} [--project ${PROJECT}]
 
 <sub>/clear first → fresh context window</sub>
 
@@ -457,6 +475,7 @@ Verification: {Passed | Passed with override | Skipped}
 - /gsd:plan-phase {X} --research — re-research first
 
 ───────────────────────────────────────────────────────────────
+```
 </offer_next>
 
 <success_criteria>

@@ -22,28 +22,32 @@ The GSD workflow follows this sequence per phase:
 
 ## Output Rules
 
-- Output ONLY the command, starting with: Continue
+- Output ONLY the command, starting with: `& Continue`
+- The `&` prefix pushes this to a background Claude Code session
 - No markdown, no code blocks, no explanation
 - Keep it concise but include essential context
 - Always specify the next `/gsd:` command to run
+- When handing off after discuss or plan, instruct the session to flow through plan→execute without stopping
 - Always specify a stop point
+- Include "Proceed through all approval prompts without stopping" when the session should auto-continue
+- Always include: "When you hit a gate requiring human input, run /checkpoint and stop."
 
 ## Output Format
 
-Continue [project name] in [.planning path]. Context: [key decisions/outcomes from session]. Files touched: [if any]. Next: [/gsd:command]. Stop at: Completion of [command] or when human input needed.
+& Continue [project name] in [.planning path]. Context: [key decisions/outcomes from session]. Files touched: [if any]. Next: [/gsd:command]. Proceed through all approval prompts without stopping. When you hit a gate requiring human input, run /checkpoint and stop. Stop at: [stop point] or when human input needed.
 
 ## Stop Points by GSD Step
 
-- After `/gsd:plan-phase` → Stop before execute, let me review plans
+- After `/gsd:discuss-phase` → Continue through plan AND execute. Stop at: Execution complete or when human input needed.
+- After `/gsd:plan-phase` → Continue through execute. Stop at: Execution complete or when human input needed.
 - After `/gsd:execute-phase` → Stop at verify, let me check work
 - After `/gsd:verify-work` → Stop before next phase discuss
-- After `/gsd:discuss-phase` → Stop after plan created
 
 ## Example Outputs
 
-Continue lead-intelligence in .planning. Context: Decided Apollo for enrichment, skip ZoomInfo due to cost. Schema approved. Next: /gsd:plan-phase 2. Stop at: Plan complete, before execute.
+& Continue lead-intelligence in .planning. Context: Decided Apollo for enrichment, skip ZoomInfo due to cost. Schema approved. Next: /gsd:plan-phase 2. Proceed through all approval prompts — continue into /gsd:execute-phase 2 after planning. Stop at: Execution complete or when human input needed.
 
-Continue web-intelligence in .planning. Context: Phase 1 verified, all workflows passing. Next: /gsd:discuss-phase 2. Stop at: When implementation decisions needed.
+& Continue web-intelligence in .planning. Context: Phase 1 verified, all workflows passing. Next: /gsd:discuss-phase 2. Stop at: When implementation decisions needed.
 
 ## Usage
 
@@ -54,10 +58,10 @@ After working locally:
 
 Claude outputs:
 ```
-Continue lead-intelligence in .planning. Context: Reviewed enrichment logic, approved 3-task plan for Apollo integration. Next: /gsd:execute-phase 1. Stop at: Execution complete, before verify.
+& Continue lead-intelligence in .planning. Context: Reviewed enrichment logic, approved 3-task plan for Apollo integration. Next: /gsd:plan-phase 1. Proceed through all approval prompts — continue into /gsd:execute-phase 1 after planning. Stop at: Execution complete or when human input needed.
 ```
 
-You add `&` and press enter:
+The output already includes `&` — just copy and press enter:
 ```
-& Continue lead-intelligence in .planning. Context: Reviewed enrichment logic, approved 3-task plan for Apollo integration. Next: /gsd:execute-phase 1. Stop at: Execution complete, before verify.
+& Continue lead-intelligence in .planning. Context: Reviewed enrichment logic, approved 3-task plan for Apollo integration. Next: /gsd:plan-phase 1. Proceed through all approval prompts — continue into /gsd:execute-phase 1 after planning. Stop at: Execution complete or when human input needed.
 ```

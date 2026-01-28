@@ -46,7 +46,42 @@ allowed-tools: [Read, Write, Bash, Grep, Glob, mcp__n8n-mcp__*, mcp__n8n-brain__
 
 <orchestration>
 
-### Step 0: Supabase Connection
+### PHASE 0: SET TERMINAL TAB NAME (MANDATORY — DO THIS FIRST)
+
+**Before doing ANYTHING else**, set the terminal tab title to the workflow name. This is the FIRST command you run, period.
+
+Once you know the workflow name (from arguments or Supabase query), immediately run:
+
+```bash
+echo -ne "\033]0;Testing: WORKFLOW_NAME_HERE\007"
+```
+
+Replace `WORKFLOW_NAME_HERE` with the actual workflow name.
+
+**When testing is complete** (success, failure, or any exit), reset the tab:
+
+```bash
+echo -ne "\033]0;Claude Code\007"
+```
+
+This is non-optional. The user relies on tab names to track which workflow is being tested.
+
+---
+
+### CORE PRINCIPLE: Autonomous Fix-Test-Verify
+
+**ALWAYS apply fixes autonomously.** Never stop to ask the user for permission to fix issues. The testing agent must:
+
+1. **Fix all issues found** — logic bugs, missing error handling, missing tags — without asking
+2. **Add standard error handling** if missing (Error Trigger → Parse Error Details → Log Error to DB → Send Error Slack → Mark Error Notified)
+3. **Add `business-os` tag** if missing
+4. **Validate after every change** using `n8n_validate_workflow` with strict profile
+5. **Test ALL branches** — verify both TRUE and FALSE paths of IF nodes, all Switch cases, and the error handling chain
+6. **Only return to the user** when all branches are tested and verified, with a complete report showing each branch's test result
+
+If a fix cannot be applied autonomously (e.g., credential issues, external service down), mark as `needs_review` and explain why in the report.
+
+### Step 1: Supabase Connection
 
 **CRITICAL:** All workflow selection MUST come from Supabase, not n8n directly.
 
@@ -94,7 +129,7 @@ SELECT n8n_brain.register_workflow(
 );
 ```
 
-### Step 1: Parse Arguments
+### Step 2: Parse Arguments
 
 Extract from the user's command:
 - `workflow_id_or_name`: Target workflow (optional if using --bulk)
@@ -104,7 +139,7 @@ Extract from the user's command:
 - `dry_run`: Whether to skip execution
 - `verbose`: Detailed logging flag
 
-### Step 2: Get Workflows to Test
+### Step 3: Get Workflows to Test
 
 **If `--bulk N` specified:**
 
@@ -152,7 +187,7 @@ Extract from the user's command:
    Use --force to re-test, or choose an unverified workflow.
    ```
 
-### Step 3: Mark Test In Progress
+### Step 4: Mark Test In Progress
 
 Before testing each workflow, update Supabase:
 
@@ -165,7 +200,7 @@ SELECT n8n_brain.mark_workflow_tested(
 );
 ```
 
-### Step 4: Load or Create Test Specification
+### Step 5: Load or Create Test Specification
 
 Check for existing spec in `.planning/workflow-tests/specs/`:
 
@@ -181,7 +216,7 @@ ls -la ".planning/workflow-tests/specs/${workflow_id}.yaml" 2>/dev/null
 - Auto-generate basic spec from workflow structure
 - Or run interactive creation with `--create-spec`
 
-### Step 5: Execute Test
+### Step 6: Execute Test
 
 1. Get workflow from n8n:
    ```
@@ -212,18 +247,48 @@ ls -la ".planning/workflow-tests/specs/${workflow_id}.yaml" 2>/dev/null
    })
    ```
 
-### Step 6: Evaluate Results
+### Step 6b: Structural Analysis (Always Run)
+
+Even if the workflow executes successfully, perform structural analysis:
+
+1. **Verify IF/Switch branch wiring** — Check that TRUE/FALSE branches connect to the correct nodes by analyzing node names, purposes, and the condition logic. Fix swapped branches autonomously.
+2. **Check for error handling** — If missing, add the standard error handling pattern from n8n-brain (pattern ID `235e56be-d444-4c62-a2c4-9ae3e8db279b`). Replace `{{WORKFLOW_NAME}}` and `{{WORKFLOW_ID}}` with actual values.
+3. **Check for `business-os` tag** — Add if missing.
+4. **Validate** — Run `n8n_validate_workflow` with strict profile. Fix any errors found.
+5. **Record all fixes** to n8n-brain via `store_error_fix` for future learning.
+
+### Step 6c: MANDATORY Brain Lookup Before Debugging
+
+**If any errors were found in Step 6 or 6b, you MUST consult the brain BEFORE attempting any fix:**
+
+```
+mcp__n8n-brain__lookup_error_fix({
+  error_message: "<the error message>",
+  node_type: "<the node type>"
+})
+```
+
+**Decision tree:**
+- Brain returns fix with `times_succeeded > 0` → **Apply it immediately**, log: `[BRAIN] Applied known fix: {fix_description} (id: {id}, success: {times_succeeded}/{times_applied})`
+- Brain returns fix with `times_succeeded == 0` → Note it, diagnose fresh
+- No results → Reason from scratch
+
+This is non-optional. Every error must be checked against the brain first.
+
+### Step 7: Evaluate Results
 
 Parse execution result and determine status:
 
 | Execution Status | Test Result | Next Action |
 |------------------|-------------|-------------|
-| Success | PASS | Mark verified |
-| Error (known fix) | RETRY | Apply fix, re-test |
-| Error (unknown) | FAIL | Mark broken, escalate |
+| Success + structure OK | PASS | Mark verified |
+| Success + structure fixed | PASS | Apply fixes, validate, mark verified |
+| Error (brain fix available) | RETRY | Apply brain fix, re-test |
+| Error (fixable) | RETRY | Generate fix, apply, re-test (up to 5 iterations) |
+| Error (unfixable) | FAIL | Mark broken, include diagnosis in report |
 | Timeout | FAIL | Mark needs_review |
 
-### Step 7: Update Supabase with Results
+### Step 8: Update Supabase with Results
 
 **On SUCCESS:**
 
@@ -258,7 +323,7 @@ SELECT n8n_brain.mark_workflow_tested(
 );
 ```
 
-### Step 8: Record to n8n-brain
+### Step 9: Record to n8n-brain
 
 Store the action for confidence calibration:
 
@@ -283,9 +348,9 @@ mcp__n8n-brain__store_error_fix({
 })
 ```
 
-### Step 9: Generate Report
+### Step 10: Generate Report
 
-After testing all workflows, output summary:
+After testing all workflows, output summary with **branch-level detail**:
 
 ```markdown
 ## Workflow Testing Complete
@@ -302,10 +367,32 @@ After testing all workflows, output summary:
 | {name} | PASS | Verified |
 | {name} | FAIL | {error} |
 
+### Branch Coverage
+
+For each workflow with IF/Switch nodes, show branch test results:
+
+| Workflow | Branch | Tested | Result |
+|----------|--------|--------|--------|
+| {name} | IF "Has Issues?" → TRUE | Yes | Slack Alert fires correctly |
+| {name} | IF "Has Issues?" → FALSE | Yes | All OK reached |
+| {name} | Error Handling Chain | Yes | Error Trigger → Parse → Log → Slack → Mark all connected |
+
+### Fixes Applied
+
+| Workflow | Fix | Source |
+|----------|-----|--------|
+| {name} | Swapped IF branches | Structural analysis |
+| {name} | Added error handling pattern | n8n-brain pattern 235e... |
+| {name} | Added business-os tag | Compliance check |
+
 ### Supabase Updated
 - {N} workflows marked as verified
 - {N} workflows marked as broken
 - {N} workflows marked as needs_review
+
+### n8n-brain Updated
+- {N} error fixes stored
+- {N} actions recorded
 
 ### Next Steps
 {If failures, list recommended actions}

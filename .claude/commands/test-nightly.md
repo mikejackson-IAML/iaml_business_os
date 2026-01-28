@@ -5,22 +5,21 @@ description: Start nightly workflow testing. Run this before bed and check resul
 
 # Start Nightly Workflow Tests
 
-Run automated tests on priority n8n workflows overnight.
+Run autonomous tests on ALL unverified n8n workflows overnight, then send an email summary with clickable links for morning verification.
 
 ## What This Does
 
-1. Tests 3 priority workflows (configurable)
-2. Verifies each has error handling pattern
-3. Adds `business-os` tag if missing
-4. Saves results for morning review
+1. Queries Supabase for ALL workflows where `test_status != 'verified'`
+2. For each workflow, spawns a **fresh Claude session** running `/test-workflow <id>` (full protocol with clean context)
+3. Parses structured result from each session, collects into results JSON
+4. Sends HTML email via SendGrid with results table and clickable links
 
-## Default Workflows Tested
+## Email Summary
 
-| Workflow | Purpose |
-|----------|---------|
-| Airtable Registrations Sync + GHL | Sales pipeline |
-| Smartlead Activity Receiver | Email campaign tracking |
-| HeyReach Activity Receiver | LinkedIn tracking |
+Sent to `mike.jackson@iaml.com` with:
+- Summary stats (X tested, Y passed, Z need manual fix)
+- "Ready for Verification" section: workflow name + clickable n8n link
+- "Needs Attention" section: workflow name + what went wrong
 
 ---
 
@@ -32,24 +31,25 @@ When the user runs `/test-nightly`:
    ```
    Starting nightly workflow tests...
 
-   Workflows to test:
-   1. Airtable Registrations Sync + GHL
-   2. Smartlead Activity Receiver
-   3. HeyReach Activity Receiver
+   Mode: Up to 50 unverified workflows per night
+   Protocol: Full autonomous testing (phases 1-8)
+   Email: Results sent to mike.jackson@iaml.com
 
    Results will be saved to: .planning/workflow-tests/results/{today's date}/
    ```
 
 2. **Run the bash script in background:**
    ```bash
-   nohup /Users/mike/IAML\ Business\ OS/scripts/test-workflows-nightly.sh > /Users/mike/IAML\ Business\ OS/.planning/workflow-tests/nightly.log 2>&1 &
+   nohup /Users/mikejackson/Documents/IAML/iaml_business_os/scripts/test-workflows-nightly.sh --all > /Users/mikejackson/Documents/IAML/iaml_business_os/.planning/workflow-tests/nightly.log 2>&1 &
    ```
 
 3. **Confirm started:**
    ```
-   ✓ Nightly tests started in background
+   Nightly tests started in background (all unverified workflows).
 
-   The tests will run for approximately 15-20 minutes.
+   The script will:
+   - Test each workflow with full RALPH loop
+   - Send email summary when complete
 
    Tomorrow morning, run:
      /test-results
@@ -57,7 +57,5 @@ When the user runs `/test-nightly`:
    Or check the log now:
      tail -f .planning/workflow-tests/nightly.log
    ```
-
-If the user says "all" or "--all", modify step 2 to add the --all flag.
 
 </instructions>

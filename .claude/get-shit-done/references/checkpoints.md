@@ -312,6 +312,32 @@ Plans execute autonomously. Checkpoints formalize the interaction points where h
 </type>
 </checkpoint_types>
 
+<preflight_checks>
+
+**Before presenting ANY checkpoint that references localhost URLs:**
+
+1. **Verify dev server is running:**
+   ```bash
+   curl -s -o /dev/null -w "%{http_code}" http://localhost:3000 2>/dev/null
+   ```
+2. **If not responding (exit code non-zero or 000):**
+   - Check for stale lock files: `rm -f .next/dev/lock`
+   - Kill zombie processes: `lsof -ti :3000 | xargs kill 2>/dev/null`
+   - Start the server: `cd dashboard && npm run dev` (background)
+   - Wait for ready: poll until `curl` returns non-000 status (max 30s)
+3. **Only then present the checkpoint to the user**
+
+This prevents asking users to verify URLs that won't load.
+
+**Pre-flight applies to:**
+- `checkpoint:human-verify` with localhost URLs
+- Any checkpoint with `<how-to-verify>` referencing a local service
+
+**Does NOT apply to:**
+- `checkpoint:decision` (no server needed)
+- Checkpoints referencing external URLs
+</preflight_checks>
+
 <execution_protocol>
 
 When Claude encounters `type="checkpoint:*"`:

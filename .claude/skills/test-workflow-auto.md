@@ -179,7 +179,9 @@ Extract:
 
 **This is where we actually FIX things, not just report them.**
 
-### 3.1 Check n8n-brain for Known Fix
+### 3.0 MANDATORY: Check n8n-brain FIRST (Non-Optional)
+
+**Before ANY debugging or reasoning, always consult the brain.**
 
 ```tool
 mcp__n8n-brain__lookup_error_fix({
@@ -188,7 +190,24 @@ mcp__n8n-brain__lookup_error_fix({
 })
 ```
 
-If a known fix exists with high success rate → Apply it immediately (skip to 3.3)
+**Decision tree based on brain response:**
+
+| Brain Result | Action |
+|-------------|--------|
+| Fix found with `times_succeeded > 0` | **Apply immediately** — skip to 3.3. Log: "Applied brain fix (id: X, success rate: Y%)" |
+| Fix found with `times_succeeded == 0` | Note it but diagnose fresh — previous fix didn't work |
+| No results | Proceed to 3.1 for manual diagnosis |
+
+**Logging:** When a brain fix is applied, always output:
+```
+[BRAIN] Applied known fix: {fix_description} (id: {error_fix_id}, success: {times_succeeded}/{times_applied})
+```
+
+This lets us track ROI of the brain learning system.
+
+### 3.1 Pattern-Match and Diagnose (Only if Brain Had No Fix)
+
+If the brain had no relevant fix, diagnose the error manually using the patterns below.
 
 ### 3.1.5 Get Failing Node Details (Only When Needed)
 

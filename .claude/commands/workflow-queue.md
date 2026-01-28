@@ -197,52 +197,12 @@ If output contains `CLAIMED`:
 **Previous Status:** {PREVIOUS_STATUS}
 **URL:** {URL}
 
-Starting autonomous testing...
+Run this to start testing:
+
+/test-workflow {WORKFLOW_ID}
 ```
 
-### Step 4: Launch Autonomous Testing
-
-**CRITICAL: Invoke the test-workflow-auto skill with the claimed workflow ID**
-
-```
-/test-workflow-auto {WORKFLOW_ID}
-```
-
-The test-workflow-auto skill will:
-1. Analyze the workflow
-2. Run tests
-3. Diagnose and fix errors
-4. Only return when workflow is working or truly unfixable
-
-### Step 5: After Testing Completes
-
-When test-workflow-auto finishes, it will either:
-
-**A) Workflow is working:**
-- The skill marks it as `tested` (pending human verification)
-- Present verification summary to user
-- Ask: "Reply `confirm` to mark verified, `broken` if issues found, or `next` to claim another"
-
-**B) Workflow is unfixable:**
-- The skill marks it as `broken` or `needs_review` with notes
-- Present the issues to user
-- Ask: "Reply `next` to claim another workflow, or investigate manually"
-
-### Step 6: Handle User Response
-
-On `confirm`:
-- Mark workflow as `verified`
-- Release claim
-- Display: "Verified! Run `/workflow-queue claim` for next workflow."
-
-On `broken`:
-- Mark workflow as `broken`
-- Release claim
-- Display: "Marked as broken. Run `/workflow-queue claim` for next workflow."
-
-On `next`:
-- Release current claim
-- Automatically claim and test next workflow (repeat from Step 2)
+**Do NOT auto-launch testing.** Output the `/test-workflow {WORKFLOW_ID}` command so the user can copy-paste and run it themselves.
 
 ---
 
