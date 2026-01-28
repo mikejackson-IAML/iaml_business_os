@@ -1,7 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
-import { Lock } from 'lucide-react';
+import { Lock, Hammer } from 'lucide-react';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
 import { Card, CardContent } from '@/dashboard-kit/components/ui/card';
@@ -10,6 +11,7 @@ import { Progress } from '@/dashboard-kit/components/ui/progress';
 import { cn } from '@/dashboard-kit/lib/utils';
 import type { PlanningProjectSummary } from '@/dashboard-kit/types/departments/planning';
 import { getPhaseLabel } from '@/dashboard-kit/types/departments/planning';
+import { BuildModal } from './build-modal';
 
 function formatRelativeTime(dateStr: string): string {
   const now = Date.now();
@@ -49,6 +51,8 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, isOverlay }: ProjectCardProps) {
+  const [buildModalOpen, setBuildModalOpen] = useState(false);
+
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: project.id,
     data: { status: project.status },
@@ -69,58 +73,95 @@ export function ProjectCard({ project, isOverlay }: ProjectCardProps) {
   const progressValue =
     (project.phases_completed / Math.max(project.total_phases, 1)) * 100;
 
+  const isBuilding = project.status === 'building';
+
+  // Handle card body click - open modal for building projects
+  function handleCardClick(e: React.MouseEvent) {
+    if (isBuilding) {
+      e.stopPropagation();
+      setBuildModalOpen(true);
+    }
+  }
+
   return (
-    <Card
-      ref={isOverlay ? undefined : setNodeRef}
-      style={isOverlay ? undefined : style}
-      className={cn(
-        'cursor-grab active:cursor-grabbing',
-        isDragging && 'opacity-50',
-        incubating && 'opacity-60',
-        isOverlay && 'shadow-lg rotate-2'
-      )}
-      {...(isOverlay ? {} : { ...attributes, ...listeners })}
-    >
-      <CardContent className="p-4">
-        {/* Title row */}
-        <div className="flex items-center gap-1.5">
-          {incubating && <Lock className="h-3.5 w-3.5 text-amber-500 shrink-0" />}
-          <Link
-            href={`/dashboard/planning/${project.id}`}
-            className="font-medium text-sm truncate hover:underline"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {project.title}
-          </Link>
-        </div>
-
-        {/* One-liner */}
-        {project.one_liner && (
-          <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
-            {project.one_liner}
-          </p>
+    <>
+      <Card
+        ref={isOverlay ? undefined : setNodeRef}
+        style={isOverlay ? undefined : style}
+        className={cn(
+          'cursor-grab active:cursor-grabbing',
+          isDragging && 'opacity-50',
+          incubating && 'opacity-60',
+          isOverlay && 'shadow-lg rotate-2',
+          isBuilding && 'ring-1 ring-blue-500/30'
         )}
+        {...(isOverlay ? {} : { ...attributes, ...listeners })}
+        onClick={handleCardClick}
+      >
+        <CardContent className="p-4">
+          {/* Title row */}
+          <div className="flex items-center gap-1.5">
+            {incubating && <Lock className="h-3.5 w-3.5 text-amber-500 shrink-0" />}
+            {isBuilding && <Hammer className="h-3.5 w-3.5 text-blue-500 shrink-0" />}
+            <Link
+              href={`/dashboard/planning/${project.id}`}
+              className="font-medium text-sm truncate hover:underline"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {project.title}
+            </Link>
+          </div>
 
-        {/* Phase badge + progress bar */}
-        <div className="flex items-center gap-2 mt-3">
-          <Badge variant="outline" className="text-xs shrink-0">
-            {getPhaseLabel(project.current_phase)}
-          </Badge>
-          <Progress value={progressValue} className="flex-1 h-1.5" />
-        </div>
-
-        {/* Incubation countdown + last activity */}
-        <div className="flex items-center justify-between mt-2">
-          <p className="text-xs text-muted-foreground">
-            {formatRelativeTime(project.updated_at)}
-          </p>
-          {incubationRemaining && (
-            <Badge variant="secondary" className="text-xs">
-              {incubationRemaining}
-            </Badge>
+          {/* One-liner */}
+          {project.one_liner && (
+            <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+              {project.one_liner}
+            </p>
           )}
-        </div>
-      </CardContent>
-    </Card>
+
+          {/* Phase badge + progress bar */}
+          <div className="flex items-center gap-2 mt-3">
+            <Badge variant="outline" className="text-xs shrink-0">
+              {isBuilding ? 'Building' : getPhaseLabel(project.current_phase)}
+            </Badge>
+            <Progress value={progressValue} className="flex-1 h-1.5" />
+          </div>
+
+          {/* Incubation countdown + last activity */}
+          <div className="flex items-center justify-between mt-2">
+            <p className="text-xs text-muted-foreground">
+              {formatRelativeTime(project.updated_at)}
+            </p>
+            {incubationRemaining && (
+              <Badge variant="secondary" className="text-xs">
+                {incubationRemaining}
+              </Badge>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Build Modal for building projects */}
+      {isBuilding && (
+        <BuildModal
+          project={{
+            id: project.id,
+            title: project.title,
+            one_liner: project.one_liner,
+            status: project.status,
+            build_phase: project.build_phase,
+            build_total_phases: project.build_total_phases,
+            build_progress_percent: project.build_progress_percent ?? 0,
+            build_started_at: project.build_started_at,
+            updated_at: project.updated_at,
+          }}
+          open={buildModalOpen}
+          onOpenChange={setBuildModalOpen}
+          onProjectUpdated={() => {
+            // Will be wired in plan 02
+          }}
+        />
+      )}
+    </>
   );
 }
