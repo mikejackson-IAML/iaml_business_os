@@ -110,6 +110,7 @@ export function ProjectSelector({
             <button
               key={project.id}
               type="button"
+              data-testid="old-project-item"
               onClick={() => handleToggle(project.id)}
               className={`w-full flex items-start gap-3 p-4 rounded-lg border transition-colors text-left ${
                 isSelected

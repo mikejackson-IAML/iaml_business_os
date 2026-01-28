@@ -135,6 +135,7 @@ export function PhaseProgressBar({
                 <TooltipTrigger asChild>
                   <button
                     type="button"
+                    data-testid={`phase-${phaseType}`}
                     className={`flex flex-col items-center gap-1.5 min-w-[64px] transition-transform ${
                       isClickable
                         ? 'cursor-pointer hover:scale-105'

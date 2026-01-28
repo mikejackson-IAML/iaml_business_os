@@ -47,6 +47,7 @@ export function MessageList({ messages, streamingContent, isStreaming }: Message
       {messages.map((msg) => (
         <div
           key={msg.id}
+          data-testid={`message-${msg.role}`}
           className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
         >
           <div

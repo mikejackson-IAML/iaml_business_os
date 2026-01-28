@@ -68,6 +68,7 @@ export function ChatInput({ onSend, disabled, placeholder = 'Type a message...' 
           placeholder={placeholder}
           disabled={disabled}
           rows={1}
+          data-testid="chat-input"
           className="flex-1 resize-none rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         />
         <Button
@@ -75,6 +76,7 @@ export function ChatInput({ onSend, disabled, placeholder = 'Type a message...' 
           size="icon"
           variant="ghost"
           disabled={disabled || !value.trim()}
+          data-testid="send-button"
         >
           <Send className="h-4 w-4" />
         </Button>

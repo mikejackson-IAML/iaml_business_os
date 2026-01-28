@@ -69,7 +69,7 @@ export async function ProjectContent({ projectId }: ProjectContentProps) {
   return (
     <div className="p-6 lg:p-8 space-y-6">
       {/* Header */}
-      <header>
+      <header data-testid="project-header">
         <Link
           href="/dashboard/planning"
           className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-4"
@@ -78,8 +78,8 @@ export async function ProjectContent({ projectId }: ProjectContentProps) {
           <span className="text-sm">Back to Pipeline</span>
         </Link>
         <div className="flex items-center gap-3 mb-1">
-          <h1 className="text-2xl font-semibold text-foreground">{project.title}</h1>
-          <Badge variant={getStatusBadgeVariant(project.status)}>
+          <h1 className="text-2xl font-semibold text-foreground" data-testid="project-title">{project.title}</h1>
+          <Badge variant={getStatusBadgeVariant(project.status)} data-testid="current-phase">
             {getStatusLabel(project.status)}
           </Badge>
         </div>

@@ -28,7 +28,7 @@ export function PlanningContent({ data }: PlanningContentProps) {
               AI-guided idea-to-production pipeline
             </p>
           </div>
-          <Button size="sm" onClick={() => setCaptureOpen(true)}>
+          <Button size="sm" onClick={() => setCaptureOpen(true)} data-testid="capture-button">
             <Plus className="h-4 w-4 mr-1" />
             Capture Idea
           </Button>

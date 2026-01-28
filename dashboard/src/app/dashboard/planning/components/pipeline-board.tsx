@@ -155,7 +155,7 @@ export function PipelineBoard({ data }: PipelineBoardProps) {
         onPhaseFilterChange={setPhaseFilter}
       />
 
-      <div className="flex gap-6 overflow-x-auto pb-4">
+      <div className="flex gap-6 overflow-x-auto pb-4" data-testid="pipeline-board">
         {visibleStatuses.map((status) => (
           <PipelineColumn
             key={status}

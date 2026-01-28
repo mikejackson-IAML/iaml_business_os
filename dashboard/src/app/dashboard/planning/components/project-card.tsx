@@ -93,6 +93,7 @@ export function ProjectCard({ project, isOverlay }: ProjectCardProps) {
       <Card
         ref={isOverlay ? undefined : setNodeRef}
         style={isOverlay ? undefined : style}
+        data-testid="project-card"
         className={cn(
           'cursor-grab active:cursor-grabbing hover:border-primary/50 transition-colors',
           isDragging && 'opacity-50',
@@ -113,6 +114,7 @@ export function ProjectCard({ project, isOverlay }: ProjectCardProps) {
               href={`/dashboard/planning/${project.id}`}
               className="font-medium text-sm truncate hover:underline"
               onClick={(e) => e.stopPropagation()}
+              data-testid="project-title"
             >
               {project.title}
             </Link>

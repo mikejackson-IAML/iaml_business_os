@@ -46,7 +46,7 @@ export function DocumentsPanel({ documents, projectId, projectName, onDocumentsC
 
   return (
     <>
-      <Card>
+      <Card data-testid="documents-panel">
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium flex items-center gap-2">
             <FileText className="h-4 w-4" />
@@ -66,6 +66,7 @@ export function DocumentsPanel({ documents, projectId, projectName, onDocumentsC
                 <button
                   key={doc.id}
                   type="button"
+                  data-testid="document-item"
                   onClick={() => handleDocClick(doc)}
                   className="w-full text-left p-2 rounded-md hover:bg-accent cursor-pointer transition-colors"
                 >

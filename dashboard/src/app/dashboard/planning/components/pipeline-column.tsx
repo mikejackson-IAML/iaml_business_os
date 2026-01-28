@@ -50,6 +50,7 @@ export function PipelineColumn({ status, projects }: PipelineColumnProps) {
   return (
     <div
       ref={setNodeRef}
+      data-testid={`column-${status}`}
       className={cn(
         'min-w-[280px] w-[280px] flex-shrink-0 flex flex-col rounded-lg p-2 transition-colors',
         isOver && 'ring-2 ring-primary/30 bg-primary/5'

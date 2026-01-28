@@ -15,7 +15,7 @@ interface QueueItemProps {
 function ScoreBadge({ score }: { score: number | undefined | null }) {
   if (score == null) {
     return (
-      <span className="inline-flex items-center justify-center h-9 min-w-[3rem] px-2 rounded-full text-sm font-medium bg-muted text-muted-foreground">
+      <span data-testid="priority-score" className="inline-flex items-center justify-center h-9 min-w-[3rem] px-2 rounded-full text-sm font-medium bg-muted text-muted-foreground">
         N/A
       </span>
     );
@@ -29,7 +29,7 @@ function ScoreBadge({ score }: { score: number | undefined | null }) {
         : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400';
 
   return (
-    <span className={`inline-flex items-center justify-center h-9 min-w-[3rem] px-2 rounded-full text-sm font-bold ${colorClass}`}>
+    <span data-testid="priority-score" className={`inline-flex items-center justify-center h-9 min-w-[3rem] px-2 rounded-full text-sm font-bold ${colorClass}`}>
       {Math.round(score)}
     </span>
   );
@@ -45,7 +45,7 @@ export function QueueItem({ project, rank }: QueueItemProps) {
   }
 
   return (
-    <div className="flex items-center gap-4 p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors">
+    <div data-testid="queue-item" className="flex items-center gap-4 p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors">
       {/* Pin toggle */}
       <button
         onClick={handleTogglePin}

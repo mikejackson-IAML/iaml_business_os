@@ -122,7 +122,7 @@ export function QueueContent({ projects, statusCounts, goalsLastUpdated }: Queue
       )}
 
       {/* Queue List */}
-      <div className="space-y-3">
+      <div className="space-y-3" data-testid="queue-list">
         {projects.map((project, index) => (
           <QueueItem
             key={project.id}
