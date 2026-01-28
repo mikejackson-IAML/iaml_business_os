@@ -3,9 +3,9 @@
 ## Current Status
 
 - **Milestone:** v1.0
-- **Current Phase:** 9 (Ready-to-Build Queue & Prioritization) - In Progress
-- **Current Plan:** 2 of 4
-- **Status:** Plans 09-01 and 09-02 complete
+- **Current Phase:** 9 (Ready-to-Build Queue & Prioritization) - Complete
+- **Current Plan:** 4 of 4
+- **Status:** All plans complete
 
 ## Progress
 
@@ -18,9 +18,8 @@ Phase 5: [████████████████] 4/4 plans COMPLETE
 Phase 6: [████████████████] 4/4 plans COMPLETE
 Phase 7: [████████████████] 5/5 plans COMPLETE  *** MVP ***
 Phase 8: [████████████████] 4/4 plans COMPLETE
-Phase 9: [████████░░░░░░░░] 2/4 plans IN PROGRESS
-Overall:  [█████████████████████████████░] 33/36 plans (~92%)
-Note: 09-01 executed after 09-02 (wave independence)
+Phase 9: [████████████████] 4/4 plans COMPLETE
+Overall:  [███████████████████████████████] 35/36 plans (~97%)
 ```
 
 ## Phase Progress
@@ -35,7 +34,7 @@ Note: 09-01 executed after 09-02 (wave independence)
 | 6 | Memory System | Complete (4/4 plans) |
 | 7 | Document Generation | Complete (5/5 plans) |
 | 8 | Deep Research Integration | Complete (4/4 plans) |
-| 9 | Ready-to-Build Queue & Prioritization | In Progress (2/4 plans) |
+| 9 | Ready-to-Build Queue & Prioritization | Complete (4/4 plans) |
 | 10 | Build Tracker | Not Started |
 | 11 | Analytics & Polish | Not Started |
 | 12 | Migration & Cleanup | Not Started |
@@ -117,6 +116,8 @@ Note: 09-01 executed after 09-02 (wave independence)
 | 09 | 01 | Native select for goal type | Matches 02-02 convention |
 | 09 | 01 | Radio card buttons for tier selection | Visual, intuitive tier picking |
 | 09 | 01 | IF NOT EXISTS for pinned column migration | Idempotent migration |
+| 09 | 04 | DropdownMenu for export actions | Groups ZIP download and copy command cleanly |
+| 09 | 04 | Reuse existing export POST route | No duplication of ZIP generation logic |
 
 ## MVP Checkpoint
 
@@ -131,14 +132,14 @@ Phases 1-7 constitute the MVP. After Phase 7:
 ## Session Continuity
 
 - **Last session:** 2026-01-27
-- **Stopped at:** Completed 09-01-PLAN.md
+- **Stopped at:** Completed 09-04-PLAN.md (Phase 9 complete)
 - **Resume file:** None
 
 ## Last Activity
 
 - **Date:** 2026-01-27
-- **Activity:** Completed Phase 9 Plan 1 (Goals Management & Pinned Projects)
-- **Notes:** Goals CRUD page with tier-based priority cards, pinned column migration, 5 new server actions.
+- **Activity:** Completed Phase 9 Plan 4 (Queue Item Actions)
+- **Notes:** QueueActions component with Start Build confirmation, Export ZIP/copy command. Phase 9 complete.
 
 ## Phase 8 Deliverables
 
