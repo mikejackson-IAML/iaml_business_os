@@ -1,6 +1,14 @@
 'use client';
 
 import { useDroppable } from '@dnd-kit/core';
+import {
+  Lightbulb,
+  MessageSquare,
+  Package,
+  Hammer,
+  CheckCircle,
+  Archive,
+} from 'lucide-react';
 import { Badge } from '@/dashboard-kit/components/ui/badge';
 import { cn } from '@/dashboard-kit/lib/utils';
 import type {
@@ -10,14 +18,26 @@ import type {
 import { getStatusLabel } from '@/dashboard-kit/types/departments/planning';
 import { ProjectCard } from './project-card';
 
-const statusDotColor: Record<ProjectStatus, string> = {
-  idea: 'bg-purple-500',
-  planning: 'bg-amber-500',
-  ready_to_build: 'bg-green-500',
-  building: 'bg-blue-500',
-  shipped: 'bg-emerald-500',
-  archived: 'bg-gray-500',
-};
+function getColumnIcon(status: ProjectStatus) {
+  const iconClass = 'h-4 w-4';
+  switch (status) {
+    case 'idea':
+      return <Lightbulb className={cn(iconClass, 'text-purple-500')} />;
+    case 'planning':
+      return <MessageSquare className={cn(iconClass, 'text-amber-500')} />;
+    case 'ready_to_build':
+      return <Package className={cn(iconClass, 'text-green-500')} />;
+    case 'building':
+      return <Hammer className={cn(iconClass, 'text-blue-500')} />;
+    case 'shipped':
+      return <CheckCircle className={cn(iconClass, 'text-emerald-500')} />;
+    case 'archived':
+      return <Archive className={cn(iconClass, 'text-gray-500')} />;
+    default:
+      return null;
+  }
+}
+
 
 interface PipelineColumnProps {
   status: ProjectStatus;
@@ -37,7 +57,7 @@ export function PipelineColumn({ status, projects }: PipelineColumnProps) {
     >
       {/* Column header */}
       <div className="flex items-center gap-2 mb-3 px-1">
-        <span className={cn('h-2.5 w-2.5 rounded-full', statusDotColor[status])} />
+        {getColumnIcon(status)}
         <h3 className="text-sm font-medium text-foreground">
           {getStatusLabel(status)}
         </h3>
