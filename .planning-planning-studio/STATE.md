@@ -132,6 +132,10 @@ Overall:  [███████████████████████
 | 10 | 03 | Icons replace colored dots in column headers | More recognizable visual cues |
 | 10 | 03 | Progress bar hidden for shipped | Shipped projects are 100% complete |
 | 10 | 03 | formatRelativeTime for shipped date | Consistency with other timestamps |
+| 11 | 01 | Date bucketing by period type | Daily for week, weekly for month/quarter, monthly for all time |
+| 11 | 01 | Velocity = shipped_at - created_at | Simple journey time measurement |
+| 11 | 01 | Native select for PeriodSelector | Matches pipeline-search-filter.tsx convention |
+| 11 | 01 | BarList for funnel visualization | Follows conversion-funnel-chart.tsx pattern |
 | 11 | 03 | Followed lead-intelligence error.tsx pattern exactly | Consistency with existing error boundaries |
 | 11 | 03 | Route-specific console.error prefixes | Easier debugging when errors occur |
 
@@ -238,6 +242,6 @@ All 4 plans complete:
 ## Phase 11 Deliverables
 
 All 3 plans complete:
-- **11-01:** Analytics page with metrics dashboard (projects by status, phase distribution, recent activity)
-- **11-02:** Polish pass on pipeline, queue, and project detail pages
+- **11-01:** Analytics foundation (query functions, MetricCard, PeriodSelector, FunnelVisualization)
+- **11-02:** Analytics page layout with metrics and funnel wiring
 - **11-03:** Error boundaries for all 5 Planning Studio routes
