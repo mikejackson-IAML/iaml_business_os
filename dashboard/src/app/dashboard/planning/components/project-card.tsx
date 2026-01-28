@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Lock, Hammer, Check } from 'lucide-react';
 import { useDraggable } from '@dnd-kit/core';
@@ -51,6 +52,7 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, isOverlay }: ProjectCardProps) {
+  const router = useRouter();
   const [buildModalOpen, setBuildModalOpen] = useState(false);
 
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
@@ -187,7 +189,7 @@ export function ProjectCard({ project, isOverlay }: ProjectCardProps) {
           open={buildModalOpen}
           onOpenChange={setBuildModalOpen}
           onProjectUpdated={() => {
-            // Will be wired in plan 02
+            router.refresh();
           }}
         />
       )}

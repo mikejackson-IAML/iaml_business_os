@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import Link from 'next/link';
 import {
   Eye,
@@ -19,6 +19,17 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog';
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -28,6 +39,7 @@ import { Badge } from '@/dashboard-kit/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import type { BuildProject } from '@/dashboard-kit/types/departments/planning';
 import { formatBuildDuration } from '@/dashboard-kit/types/departments/planning';
+import { updateBuildProgressAction, markShippedAction } from '../actions';
 
 interface BuildModalProps {
   project: BuildProject;
@@ -66,9 +78,33 @@ export function BuildModal({
 }: BuildModalProps) {
   const [downloading, setDownloading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [isEditingProgress, setIsEditingProgress] = useState(false);
+  const [currentPhase, setCurrentPhase] = useState(project.build_phase || 1);
+  const [totalPhases, setTotalPhases] = useState(project.build_total_phases || 8);
+  const [isPending, startTransition] = useTransition();
 
   const hasPhaseInfo =
     project.build_phase != null && project.build_total_phases != null;
+
+  function handleSaveProgress() {
+    startTransition(async () => {
+      const result = await updateBuildProgressAction(project.id, currentPhase, totalPhases);
+      if (result.success) {
+        setIsEditingProgress(false);
+        onProjectUpdated();
+      }
+    });
+  }
+
+  function handleMarkShipped() {
+    startTransition(async () => {
+      const result = await markShippedAction(project.id);
+      if (result.success) {
+        onOpenChange(false);
+        onProjectUpdated();
+      }
+    });
+  }
 
   const claudeCommand = `claude "Continue building ${project.title} -- see .planning/ for project docs"`;
 
@@ -141,7 +177,38 @@ export function BuildModal({
         {/* Progress Stepper */}
         <div className="space-y-2">
           <h4 className="text-sm font-medium">Build Progress</h4>
-          {hasPhaseInfo ? (
+          {isEditingProgress ? (
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-sm">Phase</span>
+              <input
+                type="number"
+                min={1}
+                max={totalPhases}
+                value={currentPhase}
+                onChange={(e) => setCurrentPhase(Math.max(1, Math.min(totalPhases, parseInt(e.target.value) || 1)))}
+                className="w-16 px-2 py-1 text-sm border rounded bg-background"
+              />
+              <span className="text-sm">of</span>
+              <input
+                type="number"
+                min={1}
+                max={20}
+                value={totalPhases}
+                onChange={(e) => {
+                  const newTotal = Math.max(1, Math.min(20, parseInt(e.target.value) || 8));
+                  setTotalPhases(newTotal);
+                  if (currentPhase > newTotal) setCurrentPhase(newTotal);
+                }}
+                className="w-16 px-2 py-1 text-sm border rounded bg-background"
+              />
+              <Button size="sm" onClick={handleSaveProgress} disabled={isPending}>
+                {isPending ? 'Saving...' : 'Save'}
+              </Button>
+              <Button size="sm" variant="ghost" onClick={() => setIsEditingProgress(false)}>
+                Cancel
+              </Button>
+            </div>
+          ) : hasPhaseInfo ? (
             <div className="space-y-3">
               <p className="text-sm text-muted-foreground">
                 Phase {project.build_phase} of {project.build_total_phases}
@@ -268,29 +335,44 @@ export function BuildModal({
           {/* Spacer */}
           <div className="flex-1" />
 
-          {/* Update Progress - placeholder */}
+          {/* Update Progress */}
           <Button
             variant="outline"
             size="sm"
             onClick={() => {
-              /* wired in plan 02 */
+              setCurrentPhase(project.build_phase || 1);
+              setTotalPhases(project.build_total_phases || 8);
+              setIsEditingProgress(true);
             }}
+            disabled={isEditingProgress}
           >
             <ArrowRight className="h-4 w-4 mr-1.5" />
             Update
           </Button>
 
-          {/* Mark Shipped - placeholder */}
-          <Button
-            variant="default"
-            size="sm"
-            onClick={() => {
-              /* wired in plan 02 */
-            }}
-          >
-            <Rocket className="h-4 w-4 mr-1.5" />
-            Shipped
-          </Button>
+          {/* Mark Shipped */}
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="default" size="sm" disabled={isPending}>
+                <Rocket className="h-4 w-4 mr-1.5" />
+                Shipped
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Mark as Shipped?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Mark &quot;{project.title}&quot; as shipped? This will move it to the Shipped column.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleMarkShipped} disabled={isPending}>
+                  {isPending ? 'Shipping...' : 'Ship It!'}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </DialogContent>
     </Dialog>
