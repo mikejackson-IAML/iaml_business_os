@@ -68,9 +68,13 @@ export function PipelineColumn({ status, projects }: PipelineColumnProps) {
 
       {/* Cards */}
       <div className="space-y-3 flex-1 min-h-[200px]">
-        {projects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
-        ))}
+        {projects.length === 0 ? (
+          <p className="text-sm text-muted-foreground/50 text-center py-8">No projects</p>
+        ) : (
+          projects.map((project) => (
+            <ProjectCard key={project.id} project={project} />
+          ))
+        )}
       </div>
     </div>
   );

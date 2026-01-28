@@ -99,10 +99,14 @@ export function GoalsContent({ goals }: GoalsContentProps) {
         <Card>
           <CardContent className="py-12 text-center">
             <Target className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-            <h3 className="text-lg font-medium mb-2">No goals yet</h3>
-            <p className="text-muted-foreground max-w-md mx-auto">
-              Add business goals to prioritize your build queue.
+            <h3 className="text-lg font-medium mb-2">No goals set yet</h3>
+            <p className="text-muted-foreground max-w-md mx-auto mb-6">
+              Add goals to help AI prioritize your projects in the build queue.
             </p>
+            <Button onClick={() => setAddOpen(true)} className="gap-2">
+              <Plus className="h-4 w-4" />
+              Add Goal
+            </Button>
           </CardContent>
         </Card>
       ) : (
