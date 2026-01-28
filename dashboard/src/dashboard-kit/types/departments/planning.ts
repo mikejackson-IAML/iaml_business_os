@@ -157,6 +157,7 @@ export interface PlanningProjectSummary {
 export interface QueueProject extends PlanningProjectSummary {
   pinned: boolean;
   priority_reasoning?: string;
+  priority_updated_at?: string;
 }
 
 export interface PlanningDashboardData {

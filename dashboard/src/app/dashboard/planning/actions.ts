@@ -221,6 +221,7 @@ export async function createGoalAction(
     if (error) throw error;
 
     revalidatePath('/dashboard/planning/goals');
+    revalidatePath('/dashboard/planning/queue');
     revalidatePath('/dashboard/planning');
     return { success: true };
   } catch (error) {
@@ -249,6 +250,7 @@ export async function updateGoalAction(
     if (error) throw error;
 
     revalidatePath('/dashboard/planning/goals');
+    revalidatePath('/dashboard/planning/queue');
     revalidatePath('/dashboard/planning');
     return { success: true };
   } catch (error) {
@@ -274,6 +276,7 @@ export async function deleteGoalAction(goalId: string): Promise<ActionResult> {
     if (error) throw error;
 
     revalidatePath('/dashboard/planning/goals');
+    revalidatePath('/dashboard/planning/queue');
     revalidatePath('/dashboard/planning');
     return { success: true };
   } catch (error) {
