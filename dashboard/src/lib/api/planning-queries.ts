@@ -14,6 +14,21 @@ import type {
   QueueProject,
 } from '@/dashboard-kit/types/departments/planning';
 
+// Analytics types
+export type AnalyticsPeriod = 'week' | 'month' | 'quarter' | 'all';
+
+export interface AnalyticsMetrics {
+  shippedCount: number;
+  avgVelocityDays: number | null;
+  capturedCount: number;
+  trendData: Array<{ date: string; shipped: number; captured: number }>;
+}
+
+export interface FunnelDataItem {
+  name: string;
+  value: number;
+}
+
 // Note: planning_studio is a separate schema. Supabase client may require
 // schema-qualified names or RPC functions for access. If direct table access
 // doesn't work, use the RPC pattern with get_project_summary, search_memories, etc.
@@ -565,4 +580,225 @@ export async function getPhaseContext(
   }
 
   return data?.[0] || null;
+}
+
+/**
+ * Get period start date for analytics queries
+ */
+function getPeriodStartDate(period: AnalyticsPeriod): Date | null {
+  const now = new Date();
+  switch (period) {
+    case 'week':
+      return new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    case 'month':
+      return new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    case 'quarter':
+      return new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+    case 'all':
+      return null;
+  }
+}
+
+/**
+ * Generate date buckets for trend data
+ */
+function generateDateBuckets(
+  period: AnalyticsPeriod,
+  startDate: Date | null
+): string[] {
+  const now = new Date();
+  const buckets: string[] = [];
+
+  if (period === 'week') {
+    // Daily buckets for week
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+      buckets.push(d.toISOString().split('T')[0]);
+    }
+  } else if (period === 'month' || period === 'quarter') {
+    // Weekly buckets for month/quarter
+    const weeks = period === 'month' ? 4 : 12;
+    for (let i = weeks - 1; i >= 0; i--) {
+      const d = new Date(now.getTime() - i * 7 * 24 * 60 * 60 * 1000);
+      buckets.push(d.toISOString().split('T')[0]);
+    }
+  } else {
+    // Monthly buckets for all time (last 12 months)
+    for (let i = 11; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      buckets.push(d.toISOString().split('T')[0].slice(0, 7));
+    }
+  }
+
+  return buckets;
+}
+
+/**
+ * Get a date key for bucketing
+ */
+function getDateKey(dateStr: string, period: AnalyticsPeriod): string {
+  const date = new Date(dateStr);
+  if (period === 'week') {
+    return date.toISOString().split('T')[0];
+  } else if (period === 'month' || period === 'quarter') {
+    // Round to start of week (Sunday)
+    const dayOfWeek = date.getDay();
+    const startOfWeek = new Date(date.getTime() - dayOfWeek * 24 * 60 * 60 * 1000);
+    return startOfWeek.toISOString().split('T')[0];
+  } else {
+    // Monthly bucket
+    return date.toISOString().split('T')[0].slice(0, 7);
+  }
+}
+
+/**
+ * Fetch analytics metrics for a given period
+ */
+export async function getAnalyticsMetrics(
+  period: AnalyticsPeriod
+): Promise<AnalyticsMetrics> {
+  const supabase = createServerClient();
+  const startDate = getPeriodStartDate(period);
+  const startDateStr = startDate ? startDate.toISOString() : null;
+
+  // Fetch all projects (we'll filter in JS for flexibility)
+  const { data: projects, error } = await supabase
+    .schema('planning_studio')
+    .from('projects')
+    .select('id, status, created_at, shipped_at');
+
+  if (error) {
+    console.error('Error fetching analytics metrics:', error);
+    return {
+      shippedCount: 0,
+      avgVelocityDays: null,
+      capturedCount: 0,
+      trendData: [],
+    };
+  }
+
+  const allProjects = projects || [];
+
+  // Filter projects by period
+  const projectsInPeriod = startDateStr
+    ? allProjects.filter((p) => {
+        const created = new Date(p.created_at);
+        const shipped = p.shipped_at ? new Date(p.shipped_at) : null;
+        return (
+          created >= new Date(startDateStr) ||
+          (shipped && shipped >= new Date(startDateStr))
+        );
+      })
+    : allProjects;
+
+  // Calculate shipped count in period
+  const shippedInPeriod = startDateStr
+    ? allProjects.filter(
+        (p) =>
+          p.shipped_at &&
+          new Date(p.shipped_at) >= new Date(startDateStr)
+      )
+    : allProjects.filter((p) => p.shipped_at);
+
+  const shippedCount = shippedInPeriod.length;
+
+  // Calculate captured count in period
+  const capturedInPeriod = startDateStr
+    ? allProjects.filter(
+        (p) => new Date(p.created_at) >= new Date(startDateStr)
+      )
+    : allProjects;
+
+  const capturedCount = capturedInPeriod.length;
+
+  // Calculate average velocity (shipped_at - created_at) for shipped projects
+  let avgVelocityDays: number | null = null;
+  if (shippedInPeriod.length > 0) {
+    const velocities = shippedInPeriod.map((p) => {
+      const created = new Date(p.created_at).getTime();
+      const shipped = new Date(p.shipped_at!).getTime();
+      return (shipped - created) / (1000 * 60 * 60 * 24);
+    });
+    const totalDays = velocities.reduce((sum, v) => sum + v, 0);
+    avgVelocityDays = Math.round((totalDays / velocities.length) * 10) / 10;
+  }
+
+  // Generate trend data
+  const buckets = generateDateBuckets(period, startDate);
+  const shippedByBucket: Record<string, number> = {};
+  const capturedByBucket: Record<string, number> = {};
+
+  for (const bucket of buckets) {
+    shippedByBucket[bucket] = 0;
+    capturedByBucket[bucket] = 0;
+  }
+
+  for (const p of allProjects) {
+    const createdKey = getDateKey(p.created_at, period);
+    if (createdKey in capturedByBucket) {
+      capturedByBucket[createdKey]++;
+    }
+
+    if (p.shipped_at) {
+      const shippedKey = getDateKey(p.shipped_at, period);
+      if (shippedKey in shippedByBucket) {
+        shippedByBucket[shippedKey]++;
+      }
+    }
+  }
+
+  const trendData = buckets.map((bucket) => ({
+    date: bucket,
+    shipped: shippedByBucket[bucket] || 0,
+    captured: capturedByBucket[bucket] || 0,
+  }));
+
+  return {
+    shippedCount,
+    avgVelocityDays,
+    capturedCount,
+    trendData,
+  };
+}
+
+/**
+ * Fetch funnel data showing project counts by status
+ */
+export async function getFunnelData(): Promise<FunnelDataItem[]> {
+  const supabase = createServerClient();
+
+  const { data: projects, error } = await supabase
+    .schema('planning_studio')
+    .from('projects')
+    .select('status')
+    .neq('status', 'archived');
+
+  if (error) {
+    console.error('Error fetching funnel data:', error);
+    return [];
+  }
+
+  // Count by status
+  const counts: Record<string, number> = {
+    idea: 0,
+    planning: 0,
+    ready_to_build: 0,
+    building: 0,
+    shipped: 0,
+  };
+
+  for (const p of projects || []) {
+    if (p.status in counts) {
+      counts[p.status]++;
+    }
+  }
+
+  // Return in funnel order with display names
+  return [
+    { name: 'Idea', value: counts.idea },
+    { name: 'Planning', value: counts.planning },
+    { name: 'Ready to Build', value: counts.ready_to_build },
+    { name: 'Building', value: counts.building },
+    { name: 'Shipped', value: counts.shipped },
+  ];
 }
