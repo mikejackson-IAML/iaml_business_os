@@ -314,14 +314,14 @@ After Phase 7, the system is functional end-to-end:
 
 **Goal:** Perplexity integration for research during planning
 
-**Status:** Not Started
+**Status:** Complete (2026-01-27)
 **Plans:** 4 plans
 
 Plans:
-- [ ] 08-01-PLAN.md — Research backend: Perplexity API route, marker detection, system prompt updates
-- [ ] 08-02-PLAN.md — Chat integration: SSE research markers, suggestion cards, approve/edit flow
-- [ ] 08-03-PLAN.md — Research panel UI: list view, results modal, manual research trigger
-- [ ] 08-04-PLAN.md — Results integration: context injection, sidebar refresh, memory extraction
+- [x] 08-01-PLAN.md — Research backend: Perplexity API route, marker detection, system prompt updates
+- [x] 08-02-PLAN.md — Chat integration: SSE research markers, suggestion cards, approve/edit flow
+- [x] 08-03-PLAN.md — Research panel UI: list view, results modal, manual research trigger
+- [x] 08-04-PLAN.md — Results integration: context injection, sidebar refresh, memory extraction
 
 ### Requirements Covered
 - REQ-API-PERPLEXITY: Perplexity API integration
@@ -355,10 +355,10 @@ Plans:
 - Filter by type
 
 ### Success Criteria
-- [ ] Can trigger research from conversation
-- [ ] Research runs asynchronously
-- [ ] Results are stored and integrated into conversation
-- [ ] Can view research history
+- [x] Can trigger research from conversation
+- [x] Research runs asynchronously
+- [x] Results are stored and integrated into conversation
+- [x] Can view research history
 
 ---
 
@@ -424,6 +424,14 @@ Plans:
 ## Phase 10: Build Tracker
 
 **Goal:** Track active development progress
+
+**Status:** Not Started
+**Plans:** 3 plans
+
+Plans:
+- [ ] 10-01-PLAN.md — Build modal with progress stepper, actions, and Claude Code command
+- [ ] 10-02-PLAN.md — Progress management server actions and Mark Shipped flow
+- [ ] 10-03-PLAN.md — Enhanced card displays for building and shipped statuses
 
 ### Requirements Covered
 - REQ-F5: Build Tracker
