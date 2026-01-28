@@ -134,6 +134,41 @@ export interface PlanningConfig {
 }
 
 // =============================================================================
+// BUILD MODAL TYPES
+// =============================================================================
+
+/**
+ * Project data needed for the build modal
+ */
+export interface BuildProject {
+  id: string;
+  title: string;
+  one_liner?: string;
+  status: ProjectStatus;
+  build_phase?: number;
+  build_total_phases?: number;
+  build_progress_percent: number;
+  build_started_at?: string;
+  updated_at: string;
+}
+
+/**
+ * Format build duration from start date
+ */
+export function formatBuildDuration(buildStartedAt?: string): string {
+  if (!buildStartedAt) return 'Not started';
+
+  const start = new Date(buildStartedAt);
+  const now = new Date();
+  const diffMs = now.getTime() - start.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffDays === 0) return 'Started today';
+  if (diffDays === 1) return 'Building for 1 day';
+  return `Building for ${diffDays} days`;
+}
+
+// =============================================================================
 // SUMMARY / DASHBOARD TYPES
 // =============================================================================
 
@@ -152,6 +187,11 @@ export interface PlanningProjectSummary {
   document_count: number;
   created_at: string;
   updated_at: string;
+  // Optional build fields for Building status
+  build_phase?: number;
+  build_total_phases?: number;
+  build_progress_percent?: number;
+  build_started_at?: string;
 }
 
 export interface QueueProject extends PlanningProjectSummary {
