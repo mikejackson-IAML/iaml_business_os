@@ -87,7 +87,7 @@ export function OpportunityDetail({ opportunityId }: OpportunityDetailProps) {
     try {
       const res = await fetch(`/api/lead-intelligence/opportunities/${opportunityId}/advance-stage`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-api-key': 'internal' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ stage: newStage }),
       });
       if (!res.ok) {
@@ -101,7 +101,7 @@ export function OpportunityDetail({ opportunityId }: OpportunityDetailProps) {
       if (notes && notes.trim()) {
         await fetch(`/api/lead-intelligence/opportunities/${opportunityId}`, {
           method: 'PATCH',
-          headers: { 'Content-Type': 'application/json', 'x-api-key': 'internal' },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ notes: (opportunity.notes ? opportunity.notes + '\n\n' : '') + `Lost reason: ${notes}` }),
         });
         setOpportunity((prev) => prev ? {
@@ -131,7 +131,6 @@ export function OpportunityDetail({ opportunityId }: OpportunityDetailProps) {
     try {
       const res = await fetch(`/api/lead-intelligence/opportunities/${opportunityId}`, {
         method: 'DELETE',
-        headers: { 'x-api-key': 'internal' },
       });
       if (!res.ok) throw new Error('Failed to delete');
       toast.success('Opportunity deleted');
@@ -162,7 +161,7 @@ export function OpportunityDetail({ opportunityId }: OpportunityDetailProps) {
 
       const res = await fetch(`/api/lead-intelligence/opportunities/${opportunityId}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json', 'x-api-key': 'internal' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
       if (!res.ok) throw new Error('Failed to update');

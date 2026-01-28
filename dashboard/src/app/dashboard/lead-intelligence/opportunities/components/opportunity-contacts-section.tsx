@@ -66,7 +66,7 @@ export function OpportunityContactsSection({ opportunityId, contacts, onUpdate }
     try {
       const res = await fetch('/api/lead-intelligence/opportunities/' + opportunityId + '/contacts', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-api-key': 'internal' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ contact_id: selectedContact.id, role: selectedRole }),
       });
       if (!res.ok) {
@@ -91,7 +91,7 @@ export function OpportunityContactsSection({ opportunityId, contacts, onUpdate }
     try {
       const res = await fetch('/api/lead-intelligence/opportunities/' + opportunityId + '/contacts', {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json', 'x-api-key': 'internal' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ contact_id: contactId }),
       });
       if (!res.ok) throw new Error('Failed to remove contact');

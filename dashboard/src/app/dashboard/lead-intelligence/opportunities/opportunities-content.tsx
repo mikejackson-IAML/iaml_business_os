@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { Plus, LayoutGrid, Table } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger } from '@/dashboard-kit/components/ui/tabs';
 import { Button } from '@/dashboard-kit/components/ui/button';
+import { Skeleton } from '@/dashboard-kit/components/ui/skeleton';
+import { Card, CardContent } from '@/dashboard-kit/components/ui/card';
 import { cn } from '@/dashboard-kit/lib/utils';
 import type { Opportunity } from '@/lib/api/lead-intelligence-opportunities-types';
 import {
@@ -102,8 +104,29 @@ export function OpportunitiesContent() {
 
       {/* Content */}
       {loading ? (
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+        <div className="flex gap-4 overflow-x-auto pb-4">
+          {[1, 2, 3, 4, 5].map((col) => (
+            <div key={col} className="flex-shrink-0 w-72">
+              <Card>
+                <CardContent className="p-4 space-y-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <Skeleton className="h-4 w-24" />
+                    <Skeleton className="h-5 w-6 rounded-full" />
+                  </div>
+                  {[1, 2, 3].map((card) => (
+                    <div key={card} className="border rounded-md p-3 space-y-2">
+                      <Skeleton className="h-4 w-full" />
+                      <Skeleton className="h-3 w-3/4" />
+                      <div className="flex items-center gap-2">
+                        <Skeleton className="h-5 w-16 rounded-full" />
+                        <Skeleton className="h-3 w-12" />
+                      </div>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            </div>
+          ))}
         </div>
       ) : view === 'kanban' ? (
         <OpportunityKanban

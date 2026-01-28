@@ -32,9 +32,7 @@ export function CompanyProfileContent({ company }: CompanyProfileContentProps) {
   useEffect(() => {
     async function fetchMetrics() {
       try {
-        const res = await fetch(`/api/lead-intelligence/companies/${company.id}/contacts?limit=100`, {
-          headers: { 'x-api-key': 'internal' },
-        });
+        const res = await fetch(`/api/lead-intelligence/companies/${company.id}/contacts?limit=100`);
         if (res.ok) {
           const json = await res.json();
           const contacts = json.data ?? [];

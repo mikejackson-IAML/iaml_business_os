@@ -24,9 +24,7 @@ export function ContactsTab({ companyId }: { companyId: string }) {
   useEffect(() => {
     async function fetchContacts() {
       try {
-        const res = await fetch(`/api/lead-intelligence/companies/${companyId}/contacts?limit=50`, {
-          headers: { 'x-api-key': 'internal' },
-        });
+        const res = await fetch(`/api/lead-intelligence/companies/${companyId}/contacts?limit=50`);
         if (res.ok) {
           const json = await res.json();
           setContacts(json.data ?? []);

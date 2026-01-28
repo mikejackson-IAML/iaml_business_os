@@ -23,9 +23,7 @@ export function NotesTab({ companyId }: { companyId: string }) {
 
   async function fetchNotes() {
     try {
-      const res = await fetch(`/api/lead-intelligence/companies/${companyId}/notes`, {
-        headers: { 'x-api-key': 'internal' },
-      });
+      const res = await fetch(`/api/lead-intelligence/companies/${companyId}/notes`);
       if (res.ok) {
         const data = await res.json();
         setNotes(Array.isArray(data) ? data : []);
@@ -49,7 +47,7 @@ export function NotesTab({ companyId }: { companyId: string }) {
     try {
       const res = await fetch(`/api/lead-intelligence/companies/${companyId}/notes`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-api-key': 'internal' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ note_type: noteType, content: content.trim() }),
       });
       if (res.ok) {

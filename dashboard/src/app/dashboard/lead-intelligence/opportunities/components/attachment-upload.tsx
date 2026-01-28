@@ -57,7 +57,6 @@ export function AttachmentUpload({ opportunityId, attachments, onUpdate }: Attac
       formData.append('file', file);
       const res = await fetch('/api/lead-intelligence/opportunities/' + opportunityId + '/attachments', {
         method: 'POST',
-        headers: { 'x-api-key': 'internal' },
         body: formData,
       });
       if (!res.ok) {
@@ -91,7 +90,7 @@ export function AttachmentUpload({ opportunityId, attachments, onUpdate }: Attac
     try {
       const res = await fetch('/api/lead-intelligence/opportunities/' + opportunityId + '/attachments', {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json', 'x-api-key': 'internal' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ attachment_id: attachmentId }),
       });
       if (!res.ok) throw new Error('Failed to delete');

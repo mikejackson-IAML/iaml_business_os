@@ -23,7 +23,7 @@ export function OpportunityNotesSection({ opportunityId, notes, onUpdate }: Oppo
     try {
       const res = await fetch(`/api/lead-intelligence/opportunities/${opportunityId}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json', 'x-api-key': 'internal' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ notes: value || null }),
       });
       if (!res.ok) throw new Error('Failed to save notes');
