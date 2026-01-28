@@ -42,6 +42,7 @@ export interface PlanningProject {
   shipped_at?: string;
   archived_at?: string;
   archive_reason?: string;
+  pinned?: boolean;
 }
 
 export interface PlanningPhase {
@@ -151,6 +152,11 @@ export interface PlanningProjectSummary {
   document_count: number;
   created_at: string;
   updated_at: string;
+}
+
+export interface QueueProject extends PlanningProjectSummary {
+  pinned: boolean;
+  priority_reasoning?: string;
 }
 
 export interface PlanningDashboardData {

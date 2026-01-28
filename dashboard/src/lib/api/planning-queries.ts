@@ -11,6 +11,7 @@ import type {
   UserGoal,
   PlanningDashboardData,
   ProjectStatus,
+  QueueProject,
 } from '@/dashboard-kit/types/departments/planning';
 
 // Note: planning_studio is a separate schema. Supabase client may require
@@ -314,11 +315,91 @@ export async function getProjectsByStatus(status: ProjectStatus): Promise<Planni
 }
 
 /**
- * Fetch the ready-to-build queue sorted by priority
+ * Fetch the ready-to-build queue sorted by pinned first, then priority score
  */
-export async function getReadyToBuildQueue(): Promise<PlanningProjectSummary[]> {
-  const projects = await getProjectsByStatus('ready_to_build');
-  return projects.sort((a, b) => (b.priority_score || 0) - (a.priority_score || 0));
+export async function getReadyToBuildQueue(): Promise<QueueProject[]> {
+  const supabase = createServerClient();
+
+  // Fetch ready_to_build projects with pinned and priority_reasoning
+  const { data: projects, error } = await supabase
+    .schema('planning_studio')
+    .from('projects')
+    .select('*')
+    .eq('status', 'ready_to_build')
+    .order('pinned', { ascending: false, nullsFirst: false })
+    .order('priority_score', { ascending: false, nullsFirst: false });
+
+  if (error) {
+    console.error('Error fetching ready-to-build queue:', error);
+    return [];
+  }
+
+  // Fetch document counts for these projects
+  const projectIds = (projects || []).map(p => p.id);
+  const { data: documents } = await supabase
+    .schema('planning_studio')
+    .from('documents')
+    .select('project_id')
+    .in('project_id', projectIds.length > 0 ? projectIds : ['__none__']);
+
+  const documentCounts: Record<string, number> = {};
+  for (const doc of documents || []) {
+    documentCounts[doc.project_id] = (documentCounts[doc.project_id] || 0) + 1;
+  }
+
+  return (projects || []).map((p): QueueProject => ({
+    id: p.id,
+    title: p.title,
+    one_liner: p.one_liner,
+    status: p.status as ProjectStatus,
+    current_phase: p.current_phase,
+    phase_locked_until: p.phase_locked_until,
+    priority_score: p.priority_score,
+    phases_completed: 6, // ready_to_build means all phases done
+    total_phases: 6,
+    conversation_count: 0,
+    memory_count: 0,
+    document_count: documentCounts[p.id] || 0,
+    created_at: p.created_at,
+    updated_at: p.updated_at,
+    pinned: p.pinned || false,
+    priority_reasoning: p.priority_reasoning,
+  }));
+}
+
+/**
+ * Get project counts by status for empty state display
+ */
+export async function getProjectCountsByStatus(): Promise<Record<ProjectStatus, number>> {
+  const supabase = createServerClient();
+
+  const { data, error } = await supabase
+    .schema('planning_studio')
+    .from('projects')
+    .select('status');
+
+  const counts: Record<ProjectStatus, number> = {
+    idea: 0,
+    planning: 0,
+    ready_to_build: 0,
+    building: 0,
+    shipped: 0,
+    archived: 0,
+  };
+
+  if (error) {
+    console.error('Error fetching project counts:', error);
+    return counts;
+  }
+
+  for (const p of data || []) {
+    const status = p.status as ProjectStatus;
+    if (status in counts) {
+      counts[status]++;
+    }
+  }
+
+  return counts;
 }
 
 /**
