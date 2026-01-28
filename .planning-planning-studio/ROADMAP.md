@@ -366,14 +366,14 @@ Plans:
 
 **Goal:** AI-prioritized queue of packaged projects
 
-**Status:** Not Started
+**Status:** Complete (2026-01-27)
 **Plans:** 4 plans
 
 Plans:
-- [ ] 09-01-PLAN.md — Goals management page with CRUD, migration for pinned column, server actions
-- [ ] 09-02-PLAN.md — Queue page UI with ranked list, queue items, and empty state
-- [ ] 09-03-PLAN.md — Priority calculation API route with Claude batch scoring and refresh button
-- [ ] 09-04-PLAN.md — Queue actions: View, Start Build, Export with confirmation flow
+- [x] 09-01-PLAN.md — Goals management page with CRUD, migration for pinned column, server actions
+- [x] 09-02-PLAN.md — Queue page UI with ranked list, queue items, and empty state
+- [x] 09-03-PLAN.md — Priority calculation API route with Claude batch scoring and refresh button
+- [x] 09-04-PLAN.md — Queue actions: View, Start Build, Export with confirmation flow
 
 ### Requirements Covered
 - REQ-F4: Ready-to-Build Queue
@@ -414,10 +414,10 @@ Plans:
 - Navigate away from queue
 
 ### Success Criteria
-- [ ] Can manage goals with priorities
-- [ ] Projects are prioritized by AI with reasoning
-- [ ] Queue displays correctly sorted
-- [ ] Can start build from queue
+- [x] Can manage goals with priorities
+- [x] Projects are prioritized by AI with reasoning
+- [x] Queue displays correctly sorted
+- [x] Can start build from queue
 
 ---
 
