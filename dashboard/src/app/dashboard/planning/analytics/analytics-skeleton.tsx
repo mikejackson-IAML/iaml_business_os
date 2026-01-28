@@ -7,59 +7,48 @@ export function AnalyticsSkeleton() {
   return (
     <div className="p-6 lg:p-8 space-y-6">
       {/* Header */}
-      <div className="space-y-2">
-        <Skeleton className="h-8 w-36" />
-        <Skeleton className="h-4 w-80" />
+      <header className="mb-8">
+        <Skeleton className="h-4 w-28 mb-4" />
+        <div className="flex items-center gap-3 mb-2">
+          <Skeleton className="h-6 w-20" />
+          <Skeleton className="h-8 w-32" />
+        </div>
+        <Skeleton className="h-4 w-64" />
+      </header>
+
+      {/* Period Selector */}
+      <div className="flex justify-end">
+        <Skeleton className="h-10 w-32" />
       </div>
 
-      {/* Stats Row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {/* Metric Cards Grid */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[...Array(4)].map((_, i) => (
-          <Card key={i}>
-            <CardContent className="p-4">
-              <Skeleton className="h-4 w-20 mb-2" />
-              <Skeleton className="h-8 w-12" />
+          <Card key={i} className="p-6">
+            <CardContent className="p-0 flex items-center justify-between">
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-9 w-16" />
+              </div>
+              <Skeleton className="h-10 w-28" />
             </CardContent>
           </Card>
         ))}
       </div>
 
-      {/* Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Chart 1 */}
-        <Card>
-          <CardHeader className="pb-2">
-            <Skeleton className="h-5 w-32" />
-          </CardHeader>
-          <CardContent>
-            <Skeleton className="h-64 w-full" />
-          </CardContent>
-        </Card>
-
-        {/* Chart 2 */}
-        <Card>
-          <CardHeader className="pb-2">
-            <Skeleton className="h-5 w-40" />
-          </CardHeader>
-          <CardContent>
-            <Skeleton className="h-64 w-full" />
-          </CardContent>
-        </Card>
-      </div>
-
       {/* Funnel */}
       <Card>
         <CardHeader className="pb-2">
-          <Skeleton className="h-5 w-36" />
+          <Skeleton className="h-5 w-32" />
+          <Skeleton className="h-4 w-40 mt-1" />
         </CardHeader>
         <CardContent>
-          <div className="flex items-center justify-center gap-2">
+          <div className="space-y-3 mt-2">
             {[100, 85, 70, 55, 40].map((width, i) => (
-              <Skeleton
-                key={i}
-                className="h-16"
-                style={{ width: `${width}px` }}
-              />
+              <div key={i} className="flex items-center gap-3">
+                <Skeleton className="h-6 flex-1" style={{ maxWidth: `${width}%` }} />
+                <Skeleton className="h-4 w-20" />
+              </div>
             ))}
           </div>
         </CardContent>
