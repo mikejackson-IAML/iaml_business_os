@@ -515,7 +515,17 @@ Plans:
 
 ## Phase 12: Migration & Cleanup
 
-**Goal:** Migrate existing data, remove old dashboard
+**Goal:** Migrate existing data from Development Dashboard, remove old code, establish E2E tests and documentation
+
+**Status:** Not Started
+**Plans:** 5 plans
+
+Plans:
+- [ ] 12-01-PLAN.md — Interactive migration UI for dev_projects to planning_studio
+- [ ] 12-02-PLAN.md — Remove old Development Dashboard code, add redirect
+- [ ] 12-03-PLAN.md — Playwright E2E test foundation (config, page objects, auth)
+- [ ] 12-04-PLAN.md — E2E test suite for critical flows and migration verification
+- [ ] 12-05-PLAN.md — Documentation (CLAUDE.md update, API docs) and performance benchmarks
 
 ### Requirements Covered
 - REQ-MIGRATE: Data migration
@@ -524,29 +534,35 @@ Plans:
 ### Tasks
 
 12.1 **Data Migration**
-- Migrate any existing Development Dashboard projects if desired
-- Map to new schema
-- Preserve history where possible
+- Interactive migration page at /dashboard/planning/migrate
+- Select which old projects to migrate
+- Map dev_projects status to planning_studio status/phase
+- Preview and execute batch migration
 
-12.2 **Remove Old Dashboard (Optional)**
-- Delete old components if replacing
-- Remove old API routes
-- Clean up old database tables (after confirming migration)
+12.2 **Remove Old Dashboard**
+- Delete development/ route and components
+- Delete development types and queries
+- Add redirect from /dashboard/development to /dashboard/planning
+- Update navigation links
 
-12.3 **Documentation**
-- Update CLAUDE.md with Planning Studio instructions
-- Document new workflow
+12.3 **E2E Testing**
+- Install and configure Playwright
+- Create page objects for Planning Studio pages
+- Write tests for capture, phases, documents, queue
+- Verify migration works correctly
 
-12.4 **Final Testing**
-- End-to-end flow testing
-- Edge case testing
-- Performance testing
+12.4 **Documentation**
+- Update CLAUDE.md with Planning Studio section
+- Create API documentation
+- Performance benchmarks with <1s page load target
 
 ### Success Criteria
-- [ ] Old data migrated (if applicable)
-- [ ] System fully functional
+- [ ] Migration UI allows selective import of old projects
+- [ ] Old Development Dashboard code deleted
+- [ ] /dashboard/development redirects to /dashboard/planning
+- [ ] E2E tests pass for all critical flows
+- [ ] All pages load under 1 second
 - [ ] Documentation complete
-- [ ] All tests pass
 
 ---
 
