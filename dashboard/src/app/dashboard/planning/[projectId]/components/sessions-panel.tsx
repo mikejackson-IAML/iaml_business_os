@@ -66,7 +66,7 @@ export function SessionsPanel({
                 key={conversation.id}
                 type="button"
                 onClick={() => onSelectSession(conversation.id)}
-                className={`w-full text-left p-2 rounded-md hover:bg-muted/50 cursor-pointer transition-colors ${
+                className={`w-full text-left p-2 rounded-md hover:bg-accent cursor-pointer transition-colors ${
                   activeConversationId === conversation.id
                     ? 'bg-muted border-l-2 border-primary'
                     : ''

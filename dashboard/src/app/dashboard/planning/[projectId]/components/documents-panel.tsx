@@ -63,10 +63,11 @@ export function DocumentsPanel({ documents, projectId, projectName, onDocumentsC
           ) : (
             <div className="space-y-1">
               {documents.map((doc) => (
-                <div
+                <button
                   key={doc.id}
+                  type="button"
                   onClick={() => handleDocClick(doc)}
-                  className="p-2 rounded-md hover:bg-muted/50 cursor-pointer transition-colors"
+                  className="w-full text-left p-2 rounded-md hover:bg-accent cursor-pointer transition-colors"
                 >
                   <div className="flex items-center justify-between gap-2">
                     <p className="text-sm font-medium truncate">
@@ -79,7 +80,7 @@ export function DocumentsPanel({ documents, projectId, projectName, onDocumentsC
                   <p className="text-xs text-muted-foreground mt-0.5">
                     {formatRelativeTime(doc.updated_at)}
                   </p>
-                </div>
+                </button>
               ))}
             </div>
           )}

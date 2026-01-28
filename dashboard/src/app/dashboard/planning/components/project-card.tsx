@@ -94,7 +94,7 @@ export function ProjectCard({ project, isOverlay }: ProjectCardProps) {
         ref={isOverlay ? undefined : setNodeRef}
         style={isOverlay ? undefined : style}
         className={cn(
-          'cursor-grab active:cursor-grabbing',
+          'cursor-grab active:cursor-grabbing hover:border-primary/50 transition-colors',
           isDragging && 'opacity-50',
           incubating && 'opacity-60',
           isOverlay && 'shadow-lg rotate-2',
