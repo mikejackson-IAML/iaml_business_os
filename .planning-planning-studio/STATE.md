@@ -3,9 +3,9 @@
 ## Current Status
 
 - **Milestone:** v1.0
-- **Current Phase:** 9 (Ready-to-Build Queue & Prioritization) - Complete
-- **Current Plan:** 4 of 4
-- **Status:** All plans complete
+- **Current Phase:** 10 (Build Tracker) - In Progress
+- **Current Plan:** 1 of 3
+- **Status:** Plan 01 complete
 
 ## Progress
 
@@ -19,7 +19,8 @@ Phase 6: [████████████████] 4/4 plans COMPLETE
 Phase 7: [████████████████] 5/5 plans COMPLETE  *** MVP ***
 Phase 8: [████████████████] 4/4 plans COMPLETE
 Phase 9: [████████████████] 4/4 plans COMPLETE
-Overall:  [███████████████████████████████] 35/36 plans (~97%)
+Phase 10: [█████░░░░░░░░░░░] 1/3 plans IN PROGRESS
+Overall:  [████████████████████████████████░] 36/39 plans (~92%)
 ```
 
 ## Phase Progress
@@ -35,7 +36,7 @@ Overall:  [███████████████████████
 | 7 | Document Generation | Complete (5/5 plans) |
 | 8 | Deep Research Integration | Complete (4/4 plans) |
 | 9 | Ready-to-Build Queue & Prioritization | Complete (4/4 plans) |
-| 10 | Build Tracker | Not Started |
+| 10 | Build Tracker | In Progress (1/3 plans) |
 | 11 | Analytics & Polish | Not Started |
 | 12 | Migration & Cleanup | Not Started |
 
@@ -120,6 +121,10 @@ Overall:  [███████████████████████
 | 09 | 03 | Stale banner over auto-recalc | User controls when to spend API credits; simpler implementation |
 | 09 | 04 | DropdownMenu for export actions | Groups ZIP download and copy command cleanly |
 | 09 | 04 | Reuse existing export POST route | No duplication of ZIP generation logic |
+| 10 | 01 | BuildModal uses shadcn Dialog pattern | Consistent with doc-preview-modal |
+| 10 | 01 | Stepper with check marks for complete, blue pulse for current | Common progress stepper UX pattern |
+| 10 | 01 | Card body click opens modal; title link navigates | Intuitive UX separation |
+| 10 | 01 | Hammer icon for building status | Clear visual indicator |
 
 ## MVP Checkpoint
 
@@ -133,15 +138,20 @@ Phases 1-7 constitute the MVP. After Phase 7:
 
 ## Session Continuity
 
-- **Last session:** 2026-01-27
-- **Stopped at:** Completed 09-04-PLAN.md (Phase 9 complete)
+- **Last session:** 2026-01-28
+- **Stopped at:** Completed 10-01-PLAN.md
 - **Resume file:** None
 
 ## Last Activity
 
-- **Date:** 2026-01-27
-- **Activity:** Completed Phase 9 Plan 4 (Queue Item Actions)
-- **Notes:** QueueActions component with Start Build confirmation, Export ZIP/copy command. Phase 9 complete.
+- **Date:** 2026-01-28
+- **Activity:** Completed Phase 10 Plan 1 (Build Modal)
+- **Notes:** BuildModal component with progress stepper, Claude Code command, export actions. ProjectCard enhanced to open modal for building projects.
+
+## Phase 10 Deliverables
+
+Plan 1 complete:
+- **10-01:** BuildModal component, BuildProject type, ProjectCard enhancement
 
 ## Phase 8 Deliverables
 
@@ -205,3 +215,11 @@ All 5 plans complete:
 - **07-03:** Chat-to-document integration (markers, suggestion cards, auto-generation)
 - **07-04:** Document UI (preview modal, inline editor, version history)
 - **07-05:** GSD package export (ZIP download, Claude Code command copy)
+
+## Phase 9 Deliverables
+
+All 4 plans complete:
+- **09-01:** Goals management page with goal types and tiers
+- **09-02:** Queue page with sorted projects, pinning, score badges
+- **09-03:** Priority scoring API with Claude-based evaluation
+- **09-04:** Queue actions (Start Build, Export ZIP/copy command)
