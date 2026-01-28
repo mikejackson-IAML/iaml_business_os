@@ -4,8 +4,8 @@
 
 - **Milestone:** v1.0
 - **Current Phase:** 10 (Build Tracker) - In Progress
-- **Current Plan:** 1 of 3
-- **Status:** Plan 01 complete
+- **Current Plan:** 2 of 3
+- **Status:** Plan 02 complete
 
 ## Progress
 
@@ -19,8 +19,8 @@ Phase 6: [████████████████] 4/4 plans COMPLETE
 Phase 7: [████████████████] 5/5 plans COMPLETE  *** MVP ***
 Phase 8: [████████████████] 4/4 plans COMPLETE
 Phase 9: [████████████████] 4/4 plans COMPLETE
-Phase 10: [█████░░░░░░░░░░░] 1/3 plans IN PROGRESS
-Overall:  [████████████████████████████████░] 36/39 plans (~92%)
+Phase 10: [██████████░░░░░░] 2/3 plans IN PROGRESS
+Overall:  [█████████████████████████████████░] 37/39 plans (~95%)
 ```
 
 ## Phase Progress
@@ -36,7 +36,7 @@ Overall:  [███████████████████████
 | 7 | Document Generation | Complete (5/5 plans) |
 | 8 | Deep Research Integration | Complete (4/4 plans) |
 | 9 | Ready-to-Build Queue & Prioritization | Complete (4/4 plans) |
-| 10 | Build Tracker | In Progress (1/3 plans) |
+| 10 | Build Tracker | In Progress (2/3 plans) |
 | 11 | Analytics & Polish | Not Started |
 | 12 | Migration & Cleanup | Not Started |
 
@@ -125,6 +125,9 @@ Overall:  [███████████████████████
 | 10 | 01 | Stepper with check marks for complete, blue pulse for current | Common progress stepper UX pattern |
 | 10 | 01 | Card body click opens modal; title link navigates | Intuitive UX separation |
 | 10 | 01 | Hammer icon for building status | Clear visual indicator |
+| 10 | 02 | Inline number inputs for phase edit | Simple UX for Phase X of Y without modal-in-modal |
+| 10 | 02 | AlertDialog for ship confirmation | Consistent with force-complete pattern from 05-02 |
+| 10 | 02 | router.refresh() for data sync | Consistent with doc generation pattern from 07-03 |
 
 ## MVP Checkpoint
 
@@ -139,19 +142,20 @@ Phases 1-7 constitute the MVP. After Phase 7:
 ## Session Continuity
 
 - **Last session:** 2026-01-28
-- **Stopped at:** Completed 10-01-PLAN.md
+- **Stopped at:** Completed 10-02-PLAN.md
 - **Resume file:** None
 
 ## Last Activity
 
 - **Date:** 2026-01-28
-- **Activity:** Completed Phase 10 Plan 1 (Build Modal)
-- **Notes:** BuildModal component with progress stepper, Claude Code command, export actions. ProjectCard enhanced to open modal for building projects.
+- **Activity:** Completed Phase 10 Plan 2 (Build Progress Actions)
+- **Notes:** Server actions for build progress management. Progress edit form and Mark Shipped confirmation dialog wired into BuildModal.
 
 ## Phase 10 Deliverables
 
-Plan 1 complete:
+Plans 1-2 complete:
 - **10-01:** BuildModal component, BuildProject type, ProjectCard enhancement
+- **10-02:** updateBuildProgressAction, markShippedAction, progress edit form, ship confirmation dialog
 
 ## Phase 8 Deliverables
 
