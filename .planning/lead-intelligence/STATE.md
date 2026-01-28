@@ -5,16 +5,16 @@
 See: .planning/lead-intelligence/PROJECT.md (updated 2026-01-27)
 
 **Core value:** Users can find any contact, understand their full relationship with IAML, and take immediate action.
-**Current focus:** Phase 5 in progress — detail page complete, verification next
+**Current focus:** All phases complete — milestone v1.0 done
 
 ## Current Position
 
 Phase: 5 of 5 (Opportunities Pipeline)
-Plan: 3 of 4 complete
-Status: In progress
-Last activity: 2026-01-27 - Completed 05-03-PLAN.md
+Plan: 4 of 4 complete
+Status: Complete
+Last activity: 2026-01-27 - Phase 5 verified (9/9 must-haves)
 
-Progress: [█████████░] 91%
+Progress: [██████████] 100%
 
 ## Phase 5 Polish Notes (from Phase 4 verification)
 
@@ -56,9 +56,9 @@ Progress: [█████████░] 91%
 ## Session Continuity
 
 Last session: 2026-01-27
-Stopped at: Completed 05-03-PLAN.md
+Stopped at: All phases complete
 Resume file: None
-**Next step:** Execute 05-04-PLAN.md
+**Next step:** /gsd:audit-milestone
 
 ## Session Log
 
@@ -100,5 +100,11 @@ Resume file: None
 | 2026-01-27 | 05-02 complete | Opportunities list page: kanban + table views, pipeline tabs, create modal, drag-and-drop |
 | 2026-01-27 | 05-03 complete | Opportunity detail page: stage visualization, contacts with roles, notes, file attachments |
 
+| 2026-01-27 | 05-04 complete | Company profile opportunities tab + build verification checkpoint |
+| 2026-01-27 | Phase 5 verified | 9/9 must-haves passed. Fixes: removed validateApiKey from opportunity routes, matched Planning Studio spacing |
+
 ---
-*Last updated: 2026-01-27 after 05-03 execution*
+| 2026-01-27 | Milestone v1.0 complete | All 5 phases complete, 60 requirements delivered |
+
+---
+*Last updated: 2026-01-27 after Phase 5 complete*

@@ -50,18 +50,18 @@
 - [ ] **COMP-01**: Company header displays logo, firmographics, quick action buttons
 - [ ] **COMP-02**: Key metrics bar shows contacts in database, customers, total attendance, active opportunities
 - [ ] **COMP-03**: Contacts tab shows table of contacts at company with bulk actions and add contact button
-- [ ] **COMP-04**: Opportunities tab shows table of opportunities with create button and detail view
+- [x] **COMP-04**: Opportunities tab shows table of opportunities with create button and detail view
 - [ ] **COMP-05**: Notes tab with company-level notes (separate from contact notes)
 - [ ] **COMP-06**: Enrichment Data tab shows company enrichment fields
 
 ### Opportunities
 
-- [ ] **OPP-01**: Opportunities list view at /dashboard/lead-intelligence/opportunities with filters
-- [ ] **OPP-02**: In-house pipeline visualization showing stage counts (lead through won/lost)
-- [ ] **OPP-03**: User can create opportunities with type (in-house or individual program)
-- [ ] **OPP-04**: User can advance opportunities through stage-specific pipelines
-- [ ] **OPP-05**: Opportunity detail view with stage visualization, attached contacts with roles, notes, attachments
-- [ ] **OPP-06**: User can upload attachments (proposals, contracts) to opportunities
+- [x] **OPP-01**: Opportunities list view at /dashboard/lead-intelligence/opportunities with filters
+- [x] **OPP-02**: In-house pipeline visualization showing stage counts (lead through won/lost)
+- [x] **OPP-03**: User can create opportunities with type (in-house or individual program)
+- [x] **OPP-04**: User can advance opportunities through stage-specific pipelines
+- [x] **OPP-05**: Opportunity detail view with stage visualization, attached contacts with roles, notes, attachments
+- [x] **OPP-06**: User can upload attachments (proposals, contracts) to opportunities
 
 ### AI Features
 
@@ -89,7 +89,7 @@
 
 - [x] **API-01**: CRUD endpoints for contacts (/api/lead-intelligence/contacts)
 - [x] **API-02**: CRUD endpoints for companies (/api/lead-intelligence/companies)
-- [ ] **API-03**: CRUD endpoints for opportunities (/api/lead-intelligence/opportunities)
+- [x] **API-03**: CRUD endpoints for opportunities (/api/lead-intelligence/opportunities)
 - [x] **API-04**: AI search endpoint (POST /api/lead-intelligence/ai/parse-search)
 - [x] **API-05**: AI summary endpoint (POST /api/lead-intelligence/ai/generate-summary)
 - [ ] **API-06**: Data health endpoint (GET /api/lead-intelligence/data-health)
@@ -97,8 +97,8 @@
 - [x] **API-08**: Campaign endpoints (POST contacts/:id/add-to-campaign, bulk/add-to-campaign)
 - [x] **API-09**: Follow-up endpoint (POST contacts/:id/follow-up)
 - [x] **API-10**: Find Colleagues endpoint (POST companies/:id/find-colleagues)
-- [ ] **API-11**: Opportunity stage advancement (POST opportunities/:id/advance-stage)
-- [ ] **API-12**: Opportunity attachments (POST opportunities/:id/attachments)
+- [x] **API-11**: Opportunity stage advancement (POST opportunities/:id/advance-stage)
+- [x] **API-12**: Opportunity attachments (POST opportunities/:id/attachments)
 
 ## v2 Requirements
 
@@ -169,15 +169,15 @@
 | COMP-01 | Phase 2 | Complete |
 | COMP-02 | Phase 2 | Complete |
 | COMP-03 | Phase 2 | Complete |
-| COMP-04 | Phase 5 | Pending |
+| COMP-04 | Phase 5 | Complete |
 | COMP-05 | Phase 2 | Complete |
 | COMP-06 | Phase 2 | Complete |
-| OPP-01 | Phase 5 | Pending |
-| OPP-02 | Phase 5 | Pending |
-| OPP-03 | Phase 5 | Pending |
-| OPP-04 | Phase 5 | Pending |
-| OPP-05 | Phase 5 | Pending |
-| OPP-06 | Phase 5 | Pending |
+| OPP-01 | Phase 5 | Complete |
+| OPP-02 | Phase 5 | Complete |
+| OPP-03 | Phase 5 | Complete |
+| OPP-04 | Phase 5 | Complete |
+| OPP-05 | Phase 5 | Complete |
+| OPP-06 | Phase 5 | Complete |
 | AI-01 | Phase 3 | Complete |
 | AI-02 | Phase 3 | Complete |
 | AI-03 | Phase 3 | Complete |
@@ -193,7 +193,7 @@
 | BULK-03 | Phase 4 | Complete |
 | API-01 | Phase 1 | Complete |
 | API-02 | Phase 1 | Complete |
-| API-03 | Phase 5 | Pending |
+| API-03 | Phase 5 | Complete |
 | API-04 | Phase 3 | Complete |
 | API-05 | Phase 3 | Complete |
 | API-06 | Phase 2 | Complete |
@@ -201,8 +201,8 @@
 | API-08 | Phase 4 | Complete |
 | API-09 | Phase 4 | Complete |
 | API-10 | Phase 4 | Complete |
-| API-11 | Phase 5 | Pending |
-| API-12 | Phase 5 | Pending |
+| API-11 | Phase 5 | Complete |
+| API-12 | Phase 5 | Complete |
 
 **Coverage:**
 - v1 requirements: 60 total
@@ -211,4 +211,4 @@
 
 ---
 *Requirements defined: 2026-01-27*
-*Last updated: 2026-01-27 after Phase 4 execution*
+*Last updated: 2026-01-27 after Phase 5 complete*

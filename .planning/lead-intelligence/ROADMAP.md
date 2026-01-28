@@ -124,10 +124,10 @@ Plans:
 **Plans:** 4 plans
 
 Plans:
-- [ ] 05-01-PLAN.md — Opportunities CRUD API (types, validation, queries, mutations, routes + attachments)
-- [ ] 05-02-PLAN.md — Kanban board + table view + pipeline tabs + create modal
-- [ ] 05-03-PLAN.md — Opportunity detail page (stage viz, contacts, notes, attachments)
-- [ ] 05-04-PLAN.md — Company profile integration + build verification checkpoint
+- [x] 05-01-PLAN.md — Opportunities CRUD API (types, validation, queries, mutations, routes + attachments)
+- [x] 05-02-PLAN.md — Kanban board + table view + pipeline tabs + create modal
+- [x] 05-03-PLAN.md — Opportunity detail page (stage viz, contacts, notes, attachments)
+- [x] 05-04-PLAN.md — Company profile integration + build verification checkpoint
 
 **Success Criteria** (what must be TRUE):
 1. /dashboard/lead-intelligence/opportunities shows filterable list of all opportunities
@@ -147,8 +147,8 @@ Plans:
 | 2. Contact List, Profiles & Company Pages | 7/7 | Complete | 2026-01-27 |
 | 3. AI Search & Intelligence | 3/3 | Complete | 2026-01-27 |
 | 4. Integrations & Bulk Actions | 5/5 | Complete | 2026-01-27 |
-| 5. Opportunities Pipeline | 0/4 | Planning complete | - |
+| 5. Opportunities Pipeline | 4/4 | Complete | 2026-01-27 |
 
 ---
 *Roadmap created: 2026-01-27*
-*Last updated: 2026-01-27 after Phase 5 planning*
+*Last updated: 2026-01-27 after Phase 5 complete*
