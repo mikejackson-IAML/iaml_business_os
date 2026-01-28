@@ -474,14 +474,14 @@ Plans:
 
 **Goal:** Metrics dashboard and final refinements
 
-**Status:** Not Started
+**Status:** Complete (2026-01-28)
 **Plans:** 4 plans
 
 Plans:
-- [ ] 11-01-PLAN.md — Analytics data layer and reusable components (queries, MetricCard, PeriodSelector, FunnelVisualization)
-- [ ] 11-02-PLAN.md — Analytics dashboard page implementation with period selection and empty state
-- [ ] 11-03-PLAN.md — Error boundaries for all Planning Studio routes
-- [ ] 11-04-PLAN.md — Standardize empty states and add hover transitions
+- [x] 11-01-PLAN.md — Analytics data layer and reusable components (queries, MetricCard, PeriodSelector, FunnelVisualization)
+- [x] 11-02-PLAN.md — Analytics dashboard page implementation with period selection and empty state
+- [x] 11-03-PLAN.md — Error boundaries for all Planning Studio routes
+- [x] 11-04-PLAN.md — Standardize empty states and add hover transitions
 
 ### Requirements Covered
 - REQ-F8: Analytics Dashboard
@@ -506,10 +506,10 @@ Plans:
 - Subtle hover transitions
 
 ### Success Criteria
-- [ ] Analytics page shows meaningful data
-- [ ] All UI states handled gracefully
-- [ ] Mobile works reasonably well
-- [ ] Performance is acceptable
+- [x] Analytics page shows meaningful data
+- [x] All UI states handled gracefully
+- [x] Mobile works reasonably well
+- [x] Performance is acceptable
 
 ---
 
