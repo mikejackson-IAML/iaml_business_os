@@ -42,7 +42,7 @@ export interface PlanningProject {
   shipped_at?: string;
   archived_at?: string;
   archive_reason?: string;
-  pinned?: boolean;
+  pinned: boolean;
 }
 
 export interface PlanningPhase {
@@ -405,4 +405,24 @@ export const PHASE_ORDER: PhaseType[] = ['capture', 'discover', 'define', 'devel
  */
 export function getPhaseIndex(phase: PhaseType): number {
   return PHASE_ORDER.indexOf(phase);
+}
+
+// =============================================================================
+// GOAL TIER CONSTANTS
+// =============================================================================
+
+export const GOAL_TIERS = {
+  'must-have': { value: 3, label: 'Must-have', color: 'red' },
+  'should-have': { value: 2, label: 'Should-have', color: 'amber' },
+  'nice-to-have': { value: 1, label: 'Nice-to-have', color: 'gray' },
+} as const;
+
+export type GoalTier = keyof typeof GOAL_TIERS;
+
+export const BUSINESS_GOAL_TYPES: GoalType[] = ['revenue', 'strategic', 'quick_win'];
+
+export function getTierFromPriority(priority: number): GoalTier {
+  if (priority >= 3) return 'must-have';
+  if (priority >= 2) return 'should-have';
+  return 'nice-to-have';
 }

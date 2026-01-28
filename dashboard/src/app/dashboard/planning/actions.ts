@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { createServerClient } from '@/lib/supabase/server';
-import type { ProjectStatus, PhaseType } from '@/dashboard-kit/types/departments/planning';
+import type { ProjectStatus, PhaseType, GoalType } from '@/dashboard-kit/types/departments/planning';
 import {
   completePhase,
   skipIncubation,
@@ -199,6 +199,144 @@ export async function saveIncubationNoteAction(
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to save incubation note',
+    };
+  }
+}
+
+/**
+ * Create a new user goal.
+ */
+export async function createGoalAction(
+  goalType: GoalType,
+  description: string,
+  priority: number
+): Promise<ActionResult> {
+  try {
+    const supabase = createServerClient();
+    const { error } = await supabase
+      .schema('planning_studio')
+      .from('user_goals')
+      .insert({ goal_type: goalType, description, priority });
+
+    if (error) throw error;
+
+    revalidatePath('/dashboard/planning/goals');
+    revalidatePath('/dashboard/planning');
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to create goal',
+    };
+  }
+}
+
+/**
+ * Update an existing user goal.
+ */
+export async function updateGoalAction(
+  goalId: string,
+  updates: { description?: string; priority?: number; active?: boolean }
+): Promise<ActionResult> {
+  try {
+    const supabase = createServerClient();
+    const { error } = await supabase
+      .schema('planning_studio')
+      .from('user_goals')
+      .update({ ...updates, updated_at: new Date().toISOString() })
+      .eq('id', goalId);
+
+    if (error) throw error;
+
+    revalidatePath('/dashboard/planning/goals');
+    revalidatePath('/dashboard/planning');
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to update goal',
+    };
+  }
+}
+
+/**
+ * Delete a user goal.
+ */
+export async function deleteGoalAction(goalId: string): Promise<ActionResult> {
+  try {
+    const supabase = createServerClient();
+    const { error } = await supabase
+      .schema('planning_studio')
+      .from('user_goals')
+      .delete()
+      .eq('id', goalId);
+
+    if (error) throw error;
+
+    revalidatePath('/dashboard/planning/goals');
+    revalidatePath('/dashboard/planning');
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to delete goal',
+    };
+  }
+}
+
+/**
+ * Toggle pin status on a project.
+ */
+export async function togglePinAction(
+  projectId: string,
+  pinned: boolean
+): Promise<ActionResult> {
+  try {
+    const supabase = createServerClient();
+    const { error } = await supabase
+      .schema('planning_studio')
+      .from('projects')
+      .update({ pinned, updated_at: new Date().toISOString() })
+      .eq('id', projectId);
+
+    if (error) throw error;
+
+    revalidatePath('/dashboard/planning');
+    revalidatePath('/dashboard/planning/queue');
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to toggle pin',
+    };
+  }
+}
+
+/**
+ * Start building a project — updates status to 'building' and sets build_started_at.
+ */
+export async function startBuildAction(projectId: string): Promise<ActionResult> {
+  try {
+    const supabase = createServerClient();
+    const { error } = await supabase
+      .schema('planning_studio')
+      .from('projects')
+      .update({
+        status: 'building',
+        build_started_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', projectId);
+
+    if (error) throw error;
+
+    revalidatePath('/dashboard/planning');
+    revalidatePath('/dashboard/planning/queue');
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to start build',
     };
   }
 }

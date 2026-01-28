@@ -265,6 +265,49 @@ export async function getUserGoals(): Promise<UserGoal[]> {
 }
 
 /**
+ * Fetch all goals ordered by priority DESC, created_at ASC
+ */
+export async function getGoals(): Promise<UserGoal[]> {
+  const supabase = createServerClient();
+
+  const { data, error } = await supabase
+    .schema('planning_studio')
+    .from('user_goals')
+    .select('*')
+    .order('priority', { ascending: false })
+    .order('created_at', { ascending: true });
+
+  if (error) {
+    console.error('Error fetching goals:', error);
+    return [];
+  }
+
+  return (data || []) as UserGoal[];
+}
+
+/**
+ * Fetch only active goals
+ */
+export async function getActiveGoals(): Promise<UserGoal[]> {
+  const supabase = createServerClient();
+
+  const { data, error } = await supabase
+    .schema('planning_studio')
+    .from('user_goals')
+    .select('*')
+    .eq('active', true)
+    .order('priority', { ascending: false })
+    .order('created_at', { ascending: true });
+
+  if (error) {
+    console.error('Error fetching active goals:', error);
+    return [];
+  }
+
+  return (data || []) as UserGoal[];
+}
+
+/**
  * Fetch complete dashboard data for the Planning Studio main view
  */
 export async function getPlanningDashboardData(): Promise<PlanningDashboardData> {
