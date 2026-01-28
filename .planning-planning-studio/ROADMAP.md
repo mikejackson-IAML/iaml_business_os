@@ -366,6 +366,15 @@ Plans:
 
 **Goal:** AI-prioritized queue of packaged projects
 
+**Status:** Not Started
+**Plans:** 4 plans
+
+Plans:
+- [ ] 09-01-PLAN.md — Goals management page with CRUD, migration for pinned column, server actions
+- [ ] 09-02-PLAN.md — Queue page UI with ranked list, queue items, and empty state
+- [ ] 09-03-PLAN.md — Priority calculation API route with Claude batch scoring and refresh button
+- [ ] 09-04-PLAN.md — Queue actions: View, Start Build, Export with confirmation flow
+
 ### Requirements Covered
 - REQ-F4: Ready-to-Build Queue
 - REQ-F7: Goals Management
@@ -375,33 +384,34 @@ Plans:
 
 9.1 **Goals Management Page**
 - CRUD for user goals
-- Priority slider (1-10)
-- Goal type selection
+- Tier selection (Must-have / Should-have / Nice-to-have)
+- Business goal types only (revenue, strategic, quick_win)
 
 9.2 **Priority Calculation**
 - Create `/api/planning/prioritize` route
-- Claude function to calculate priority based on goals
+- Claude batch scoring with multi-factor analysis
 - Generate reasoning text
 - Store score and reasoning
 
 9.3 **Ready-to-Build Queue UI**
-- Sorted list by priority score
-- Priority score display with reasoning tooltip
-- Project summary cards
+- Sorted list by priority score (pinned first)
+- Priority score display with reasoning
+- Project summary cards with doc counts
 
 9.4 **Queue Actions**
-- View PRD button
-- Copy Claude Code command button
-- Start Build button
+- View project details link
+- Export GSD package (reuse ExportPanel)
+- Start Build with confirmation
 
 9.5 **Refresh Priority**
 - Manual recalculation button
+- Stale indicator when goals changed
 - Recalculates all ready-to-build projects
 
 9.6 **Start Build Flow**
 - Transition project to 'building' status
 - Record build_started_at
-- Navigate to build tracker
+- Navigate away from queue
 
 ### Success Criteria
 - [ ] Can manage goals with priorities
