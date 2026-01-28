@@ -3,9 +3,9 @@
 ## Current Status
 
 - **Milestone:** v1.0
-- **Current Phase:** 8 (Deep Research Integration) - Complete
-- **Current Plan:** 4 of 4
-- **Status:** Phase 8 complete
+- **Current Phase:** 9 (Ready-to-Build Queue & Prioritization) - In Progress
+- **Current Plan:** 2 of 4
+- **Status:** Plan 09-02 complete
 
 ## Progress
 
@@ -18,7 +18,8 @@ Phase 5: [████████████████] 4/4 plans COMPLETE
 Phase 6: [████████████████] 4/4 plans COMPLETE
 Phase 7: [████████████████] 5/5 plans COMPLETE  *** MVP ***
 Phase 8: [████████████████] 4/4 plans COMPLETE
-Overall:  [████████████████████████████░] 31/36 plans (~86%)
+Phase 9: [████████░░░░░░░░] 2/4 plans IN PROGRESS
+Overall:  [█████████████████████████████░] 33/36 plans (~92%)
 ```
 
 ## Phase Progress
@@ -33,7 +34,7 @@ Overall:  [███████████████████████
 | 6 | Memory System | Complete (4/4 plans) |
 | 7 | Document Generation | Complete (5/5 plans) |
 | 8 | Deep Research Integration | Complete (4/4 plans) |
-| 9 | Ready-to-Build Queue & Prioritization | Not Started |
+| 9 | Ready-to-Build Queue & Prioritization | In Progress (2/4 plans) |
 | 10 | Build Tracker | Not Started |
 | 11 | Analytics & Polish | Not Started |
 | 12 | Migration & Cleanup | Not Started |
@@ -109,6 +110,9 @@ Overall:  [███████████████████████
 | 08 | 04 | Research context injected between context block and phase prompt | Scoped to conversation for relevance |
 | 08 | 04 | getCompletedResearchContext queries by conversation_id | Scoped results, not all project research |
 | 08 | 04 | router.refresh() reused from doc generation pattern | Consistency with existing sidebar update approach |
+| 09 | 02 | Added pinned column via migration | Schema didn't have pinned field; needed for queue sorting |
+| 09 | 02 | Score badge thresholds: green >70, amber 40-70, red <40 | Visual priority hierarchy |
+| 09 | 02 | Placeholder buttons for Build/Export/Refresh | Wired in plans 03-04 per plan sequence |
 
 ## MVP Checkpoint
 
@@ -122,15 +126,15 @@ Phases 1-7 constitute the MVP. After Phase 7:
 
 ## Session Continuity
 
-- **Last session:** 2026-01-27
-- **Stopped at:** Completed 08-04-PLAN.md (Phase 8 complete)
+- **Last session:** 2026-01-28
+- **Stopped at:** Completed 09-02-PLAN.md
 - **Resume file:** None
 
 ## Last Activity
 
-- **Date:** 2026-01-27
-- **Activity:** Completed Phase 8 Plan 4 (Research Context Integration)
-- **Notes:** Research findings injected into Claude context, sidebar refresh on completion. Phase 8 complete.
+- **Date:** 2026-01-28
+- **Activity:** Completed Phase 9 Plan 2 (Queue Page UI)
+- **Notes:** Queue page with ranked project cards, pin toggle, score badges, empty state. Added pinned column migration.
 
 ## Phase 8 Deliverables
 
