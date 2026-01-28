@@ -3,9 +3,9 @@
 ## Current Status
 
 - **Milestone:** v1.0
-- **Current Phase:** 11 (Analytics & Polish) - Complete
-- **Current Plan:** 4 of 4 (complete)
-- **Status:** Phase 11 complete
+- **Current Phase:** 12 (Migration & Cleanup) - In Progress
+- **Current Plan:** 3 of 4 (complete)
+- **Status:** Phase 12 in progress
 
 ## Progress
 
@@ -21,7 +21,8 @@ Phase 8: [████████████████] 4/4 plans COMPLETE
 Phase 9: [████████████████] 4/4 plans COMPLETE
 Phase 10: [████████████████] 3/3 plans COMPLETE
 Phase 11: [████████████████] 4/4 plans COMPLETE
-Overall:  [████████████████████████████████████████] 41/42 plans (~98%)
+Phase 12: [████████████░░░░] 3/4 plans IN PROGRESS
+Overall:  [█████████████████████████████████████████░░] 44/46 plans (~96%)
 ```
 
 ## Phase Progress
@@ -39,7 +40,7 @@ Overall:  [███████████████████████
 | 9 | Ready-to-Build Queue & Prioritization | Complete (4/4 plans) |
 | 10 | Build Tracker | Complete (3/3 plans) |
 | 11 | Analytics & Polish | Complete (4/4 plans) |
-| 12 | Migration & Cleanup | Not Started |
+| 12 | Migration & Cleanup | In Progress (3/4 plans) |
 
 ## Accumulated Decisions
 
@@ -144,6 +145,10 @@ Overall:  [███████████████████████
 | 11 | 04 | Used button elements for clickable list items | Better accessibility for clickable elements |
 | 11 | 04 | hover:bg-accent over hover:bg-muted/50 | Stronger visual feedback on hover |
 | 11 | 04 | Minimal empty state for pipeline columns | Many columns visible; avoid visual noise |
+| 12 | 03 | Page objects use data-testid selectors | More resilient than class/role selectors |
+| 12 | 03 | Auth uses storage state | Supabase session persisted between tests |
+| 12 | 03 | Test data prefix [E2E] | Easy identification for cleanup and filtering |
+| 12 | 03 | webServer builds then starts | Production build for accurate testing |
 
 ## MVP Checkpoint
 
@@ -158,14 +163,14 @@ Phases 1-7 constitute the MVP. After Phase 7:
 ## Session Continuity
 
 - **Last session:** 2026-01-28
-- **Stopped at:** Completed 11-04-PLAN.md (Phase 11 complete)
+- **Stopped at:** Completed 12-03-PLAN.md
 - **Resume file:** None
 
 ## Last Activity
 
 - **Date:** 2026-01-28
-- **Activity:** Completed Phase 11 Plan 4 (Empty States & Polish)
-- **Notes:** Standardized empty states across all panels/pages. Added hover transitions. Phase 11 fully complete.
+- **Activity:** Completed Phase 12 Plan 3 (E2E Test Infrastructure)
+- **Notes:** Playwright installed and configured. Page objects created for Pipeline, Project Detail, Queue. Auth fixture and test data helpers ready.
 
 ## Phase 10 Deliverables
 
@@ -252,3 +257,11 @@ All 4 plans complete:
 - **11-02:** Analytics page layout with metrics and funnel wiring
 - **11-03:** Error boundaries for all 5 Planning Studio routes
 - **11-04:** Empty states standardization, hover transitions for interactive elements
+
+## Phase 12 Deliverables (In Progress)
+
+3 of 4 plans complete:
+- **12-01:** Data migration UI with selective project import
+- **12-02:** Old dashboard removal and redirects
+- **12-03:** Playwright E2E infrastructure with page objects and auth fixtures
+- **12-04:** E2E test specs and data-testid attributes (pending)
