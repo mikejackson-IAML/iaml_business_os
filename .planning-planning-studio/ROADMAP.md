@@ -425,13 +425,13 @@ Plans:
 
 **Goal:** Track active development progress
 
-**Status:** Not Started
+**Status:** Complete (2026-01-28)
 **Plans:** 3 plans
 
 Plans:
-- [ ] 10-01-PLAN.md — Build modal with progress stepper, actions, and Claude Code command
-- [ ] 10-02-PLAN.md — Progress management server actions and Mark Shipped flow
-- [ ] 10-03-PLAN.md — Enhanced card displays for building and shipped statuses
+- [x] 10-01-PLAN.md — Build modal with progress stepper, actions, and Claude Code command
+- [x] 10-02-PLAN.md — Progress management server actions and Mark Shipped flow
+- [x] 10-03-PLAN.md — Enhanced card displays for building and shipped statuses
 
 ### Requirements Covered
 - REQ-F5: Build Tracker
@@ -463,10 +463,10 @@ Plans:
 - Move to Shipped column
 
 ### Success Criteria
-- [ ] Active builds show progress
-- [ ] Can track multiple builds
-- [ ] Can mark as shipped
-- [ ] Shipped projects appear in Shipped column
+- [x] Active builds show progress
+- [x] Can track multiple builds
+- [x] Can mark as shipped
+- [x] Shipped projects appear in Shipped column
 
 ---
 
