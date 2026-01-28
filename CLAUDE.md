@@ -38,6 +38,79 @@ Score factors: pattern matches, credential mappings, error knowledge, past succe
 
 Use `/test-workflow` to test n8n workflows automatically. The registry tracks test status (`untested`, `in_progress`, `tested`, `verified`, `needs_review`, `broken`). Use `n8n_brain.register_workflow()` and `n8n_brain.mark_workflow_tested()` for registry management. Test specs stored in `.planning/workflow-tests/specs/`. Architecture: `business-os/docs/architecture/N8N-WORKFLOW-TESTING-AGENT.md`.
 
+## Planning Studio
+
+Planning Studio is an AI-guided idea-to-production pipeline. Ideas go through 6 phases with enforced incubation periods and semantic memory.
+
+### Phases
+
+| Phase | Purpose | Incubation After |
+|-------|---------|------------------|
+| CAPTURE | Quick capture before idea escapes | 24 hours |
+| DISCOVER | Deep research - problem, user, market | 24-48 hours |
+| DEFINE | Narrow the problem, create Lean Canvas | None |
+| DEVELOP | Design solution - features, UX, technical | 24 hours |
+| VALIDATE | Final gut check and readiness assessment | None |
+| PACKAGE | Generate GSD documents for Claude Code | None |
+
+### Key Features
+
+- **Pipeline View:** Kanban board at `/dashboard/planning`
+- **AI Conversations:** Claude-guided planning per phase
+- **Memory System:** Semantic search across all project history (Cmd+K)
+- **Document Generation:** ICP, Lean Canvas, Feature Specs, GSD packages
+- **Deep Research:** Perplexity integration for market research
+- **Priority Queue:** AI-ranked ready-to-build projects at `/dashboard/planning/queue`
+- **Build Tracker:** Track active development progress
+
+### Database Schema
+
+Schema: `planning_studio` in Supabase
+
+| Table | Purpose |
+|-------|---------|
+| projects | Main project records |
+| phases | Phase tracking per project |
+| conversations | Chat sessions |
+| messages | Individual chat messages |
+| memories | Extracted insights with embeddings |
+| documents | Generated planning documents |
+| research | Perplexity research results |
+| user_goals | Goals for AI prioritization |
+
+### API Routes
+
+All routes under `/api/planning/`:
+
+| Route | Method | Purpose |
+|-------|--------|---------|
+| /analytics | GET | Get analytics metrics by period |
+| /ask | POST | RAG-based question answering |
+| /chat | POST | Send message (SSE streaming) |
+| /conversations | GET | List conversations for project |
+| /conversations | POST | Create new conversation |
+| /conversations | PATCH | End conversation with summary |
+| /documents/generate | POST | Generate document via Claude |
+| /documents/export | POST | Export all latest documents |
+| /documents/[docId] | GET | Get document by ID |
+| /memories | POST | Store memories with embeddings |
+| /memories/search | POST | Semantic memory search |
+| /prioritize | POST | Calculate priority scores |
+| /research | GET | Fetch research records |
+| /research | POST | Trigger Perplexity research |
+
+### Workflow
+
+1. **Capture:** Quick capture via modal or API
+2. **Plan:** Navigate through phases with AI guidance
+3. **Package:** Generate GSD documents when ready
+4. **Build:** Export to Claude Code and track progress
+5. **Ship:** Mark complete when deployed
+
+### Migration
+
+To migrate from the old Development Dashboard, visit `/dashboard/planning/migrate` and select projects to bring over.
+
 ## Understanding Confirmation (Auto-Trigger)
 
 Before starting any ambiguous coding task, **automatically invoke the `/understand` skill** to confirm interpretation.
