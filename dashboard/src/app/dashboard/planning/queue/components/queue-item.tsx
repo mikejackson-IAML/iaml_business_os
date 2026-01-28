@@ -1,9 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { Pin, PinOff, FileText, Eye, Rocket, Download } from 'lucide-react';
+import { Pin, PinOff, FileText } from 'lucide-react';
 import { useTransition } from 'react';
 import { togglePinAction } from '@/app/dashboard/planning/queue/actions';
+import { QueueActions } from './queue-actions';
 import type { QueueProject } from '@/dashboard-kit/types/departments/planning';
 
 interface QueueItemProps {
@@ -87,30 +88,7 @@ export function QueueItem({ project, rank }: QueueItemProps) {
       </span>
 
       {/* Actions */}
-      <div className="shrink-0 flex items-center gap-1">
-        <Link
-          href={`/dashboard/planning/${project.id}`}
-          className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded border hover:bg-accent transition-colors"
-        >
-          <Eye className="h-3.5 w-3.5" />
-          View
-        </Link>
-        <button
-          disabled
-          className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded border hover:bg-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          title="Start Build — coming soon"
-        >
-          <Rocket className="h-3.5 w-3.5" />
-          Build
-        </button>
-        <button
-          disabled
-          className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded border hover:bg-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          title="Export — coming soon"
-        >
-          <Download className="h-3.5 w-3.5" />
-        </button>
-      </div>
+      <QueueActions projectId={project.id} projectTitle={project.title} />
     </div>
   );
 }
