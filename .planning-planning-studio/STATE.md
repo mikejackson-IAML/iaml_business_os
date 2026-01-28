@@ -3,9 +3,9 @@
 ## Current Status
 
 - **Milestone:** v1.0
-- **Current Phase:** 10 (Build Tracker) - In Progress
-- **Current Plan:** 2 of 3
-- **Status:** Plan 02 complete
+- **Current Phase:** 10 (Build Tracker) - Complete
+- **Current Plan:** 3 of 3
+- **Status:** Phase 10 complete
 
 ## Progress
 
@@ -19,8 +19,8 @@ Phase 6: [████████████████] 4/4 plans COMPLETE
 Phase 7: [████████████████] 5/5 plans COMPLETE  *** MVP ***
 Phase 8: [████████████████] 4/4 plans COMPLETE
 Phase 9: [████████████████] 4/4 plans COMPLETE
-Phase 10: [██████████░░░░░░] 2/3 plans IN PROGRESS
-Overall:  [█████████████████████████████████░] 37/39 plans (~95%)
+Phase 10: [████████████████] 3/3 plans COMPLETE
+Overall:  [██████████████████████████████████] 38/39 plans (~97%)
 ```
 
 ## Phase Progress
@@ -36,7 +36,7 @@ Overall:  [███████████████████████
 | 7 | Document Generation | Complete (5/5 plans) |
 | 8 | Deep Research Integration | Complete (4/4 plans) |
 | 9 | Ready-to-Build Queue & Prioritization | Complete (4/4 plans) |
-| 10 | Build Tracker | In Progress (2/3 plans) |
+| 10 | Build Tracker | Complete (3/3 plans) |
 | 11 | Analytics & Polish | Not Started |
 | 12 | Migration & Cleanup | Not Started |
 
@@ -128,6 +128,9 @@ Overall:  [███████████████████████
 | 10 | 02 | Inline number inputs for phase edit | Simple UX for Phase X of Y without modal-in-modal |
 | 10 | 02 | AlertDialog for ship confirmation | Consistent with force-complete pattern from 05-02 |
 | 10 | 02 | router.refresh() for data sync | Consistent with doc generation pattern from 07-03 |
+| 10 | 03 | Icons replace colored dots in column headers | More recognizable visual cues |
+| 10 | 03 | Progress bar hidden for shipped | Shipped projects are 100% complete |
+| 10 | 03 | formatRelativeTime for shipped date | Consistency with other timestamps |
 
 ## MVP Checkpoint
 
@@ -142,20 +145,21 @@ Phases 1-7 constitute the MVP. After Phase 7:
 ## Session Continuity
 
 - **Last session:** 2026-01-28
-- **Stopped at:** Completed 10-02-PLAN.md
+- **Stopped at:** Completed 10-03-PLAN.md (Phase 10 complete)
 - **Resume file:** None
 
 ## Last Activity
 
 - **Date:** 2026-01-28
-- **Activity:** Completed Phase 10 Plan 2 (Build Progress Actions)
-- **Notes:** Server actions for build progress management. Progress edit form and Mark Shipped confirmation dialog wired into BuildModal.
+- **Activity:** Completed Phase 10 Plan 3 (Building & Shipped Column Enhancements)
+- **Notes:** Enhanced ProjectCard with building/shipped status displays. Added status-specific icons to pipeline column headers. Phase 10 complete.
 
 ## Phase 10 Deliverables
 
-Plans 1-2 complete:
+All 3 plans complete:
 - **10-01:** BuildModal component, BuildProject type, ProjectCard enhancement
 - **10-02:** updateBuildProgressAction, markShippedAction, progress edit form, ship confirmation dialog
+- **10-03:** Building/shipped card displays, column header icons, shipped_at in queries
 
 ## Phase 8 Deliverables
 
