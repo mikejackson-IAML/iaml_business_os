@@ -152,6 +152,9 @@ Overall:  [███████████████████████
 | 12 | 03 | Auth uses storage state | Supabase session persisted between tests |
 | 12 | 03 | Test data prefix [E2E] | Easy identification for cleanup and filtering |
 | 12 | 03 | webServer builds then starts | Production build for accurate testing |
+| 12 | 04 | data-testid on container elements | More stable than class/role selectors |
+| 12 | 04 | Minimal attributes added | Only where page objects need them |
+| 12 | 04 | Graceful handling of missing elements | Tests pass if optional UI doesn't exist |
 | 12 | 05 | 14 API routes documented with request/response schemas | Full API coverage for developer onboarding |
 | 12 | 05 | 1000ms page load threshold from CONTEXT.md | Enforced via Playwright performance tests |
 | 12 | 05 | Navigation Timing API for detailed performance metrics | DNS, TCP, TTFB, DOM timing captured |
