@@ -192,6 +192,8 @@ export interface PlanningProjectSummary {
   build_total_phases?: number;
   build_progress_percent?: number;
   build_started_at?: string;
+  // Optional shipped field for Shipped status
+  shipped_at?: string;
 }
 
 export interface QueueProject extends PlanningProjectSummary {

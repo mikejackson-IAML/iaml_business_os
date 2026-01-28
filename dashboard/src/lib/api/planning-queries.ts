@@ -102,6 +102,13 @@ export async function getPlanningProjects(): Promise<PlanningProjectSummary[]> {
     document_count: documentCounts[p.id] || 0,
     created_at: p.created_at,
     updated_at: p.updated_at,
+    // Build fields
+    build_phase: p.build_phase,
+    build_total_phases: p.build_total_phases,
+    build_progress_percent: p.build_progress_percent,
+    build_started_at: p.build_started_at,
+    // Shipped field
+    shipped_at: p.shipped_at,
   }));
 }
 

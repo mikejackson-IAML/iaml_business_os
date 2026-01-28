@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Lock, Hammer } from 'lucide-react';
+import { Lock, Hammer, Check } from 'lucide-react';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
 import { Card, CardContent } from '@/dashboard-kit/components/ui/card';
@@ -76,6 +76,7 @@ export function ProjectCard({ project, isOverlay }: ProjectCardProps) {
     : (project.phases_completed / Math.max(project.total_phases, 1)) * 100;
 
   const isBuilding = project.status === 'building';
+  const isShipped = project.status === 'shipped';
 
   // Handle card body click - open modal for building projects
   function handleCardClick(e: React.MouseEvent) {
@@ -95,7 +96,8 @@ export function ProjectCard({ project, isOverlay }: ProjectCardProps) {
           isDragging && 'opacity-50',
           incubating && 'opacity-60',
           isOverlay && 'shadow-lg rotate-2',
-          isBuilding && 'ring-1 ring-blue-500/30'
+          isBuilding && 'ring-1 ring-blue-500/30',
+          isShipped && 'border-emerald-200 bg-emerald-50/50'
         )}
         {...(isOverlay ? {} : { ...attributes, ...listeners })}
         onClick={handleCardClick}
@@ -123,7 +125,12 @@ export function ProjectCard({ project, isOverlay }: ProjectCardProps) {
 
           {/* Phase badge + progress bar */}
           <div className="flex items-center gap-2 mt-3">
-            {isBuilding ? (
+            {isShipped ? (
+              <Badge className="text-xs bg-emerald-100 text-emerald-700 border-emerald-200">
+                <Check className="h-3 w-3 mr-1" />
+                Shipped
+              </Badge>
+            ) : isBuilding ? (
               <Badge variant="outline" className="text-xs shrink-0 bg-blue-50 text-blue-700 border-blue-200">
                 {project.build_phase && project.build_total_phases
                   ? `Phase ${project.build_phase}/${project.build_total_phases}`
@@ -134,12 +141,19 @@ export function ProjectCard({ project, isOverlay }: ProjectCardProps) {
                 {getPhaseLabel(project.current_phase)}
               </Badge>
             )}
-            <Progress value={progressValue} className="flex-1 h-1.5" />
+            {!isShipped && <Progress value={progressValue} className="flex-1 h-1.5" />}
           </div>
 
           {/* Click hint for building cards */}
           {isBuilding && (
             <p className="text-[10px] text-muted-foreground mt-1">Click to manage build</p>
+          )}
+
+          {/* Shipped date */}
+          {isShipped && project.shipped_at && (
+            <p className="text-xs text-emerald-600 mt-1">
+              Shipped {formatRelativeTime(project.shipped_at)}
+            </p>
           )}
 
           {/* Incubation countdown + last activity */}
