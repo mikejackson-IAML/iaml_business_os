@@ -70,8 +70,10 @@ export function ProjectCard({ project, isOverlay }: ProjectCardProps) {
     ? getIncubationRemaining(project.phase_locked_until!)
     : null;
 
-  const progressValue =
-    (project.phases_completed / Math.max(project.total_phases, 1)) * 100;
+  // Use build progress for building projects, phase progress otherwise
+  const progressValue = project.status === 'building'
+    ? (project.build_progress_percent || 0)
+    : (project.phases_completed / Math.max(project.total_phases, 1)) * 100;
 
   const isBuilding = project.status === 'building';
 
@@ -121,11 +123,24 @@ export function ProjectCard({ project, isOverlay }: ProjectCardProps) {
 
           {/* Phase badge + progress bar */}
           <div className="flex items-center gap-2 mt-3">
-            <Badge variant="outline" className="text-xs shrink-0">
-              {isBuilding ? 'Building' : getPhaseLabel(project.current_phase)}
-            </Badge>
+            {isBuilding ? (
+              <Badge variant="outline" className="text-xs shrink-0 bg-blue-50 text-blue-700 border-blue-200">
+                {project.build_phase && project.build_total_phases
+                  ? `Phase ${project.build_phase}/${project.build_total_phases}`
+                  : 'Building'}
+              </Badge>
+            ) : (
+              <Badge variant="outline" className="text-xs shrink-0">
+                {getPhaseLabel(project.current_phase)}
+              </Badge>
+            )}
             <Progress value={progressValue} className="flex-1 h-1.5" />
           </div>
+
+          {/* Click hint for building cards */}
+          {isBuilding && (
+            <p className="text-[10px] text-muted-foreground mt-1">Click to manage build</p>
+          )}
 
           {/* Incubation countdown + last activity */}
           <div className="flex items-center justify-between mt-2">
