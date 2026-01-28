@@ -47,23 +47,28 @@ export function OpportunitiesContent() {
   const stageLabels = tab === 'in_house' ? IN_HOUSE_STAGE_LABELS : INDIVIDUAL_STAGE_LABELS;
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 lg:p-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Opportunities</h1>
-          <p className="text-muted-foreground">
-            Manage your pipeline and track deal progress
-          </p>
+      <header className="mb-8">
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <span className="badge-live">PIPELINE</span>
+              <h1 className="text-display-sm text-foreground">Opportunities</h1>
+            </div>
+            <p className="text-muted-foreground">
+              Manage your pipeline and track deal progress
+            </p>
+          </div>
+          <Button size="sm" onClick={() => setCreateOpen(true)}>
+            <Plus className="h-4 w-4 mr-1" />
+            Create Opportunity
+          </Button>
         </div>
-        <Button onClick={() => setCreateOpen(true)}>
-          <Plus className="h-4 w-4 mr-2" />
-          Create Opportunity
-        </Button>
-      </div>
+      </header>
 
       {/* Tabs + View Toggle */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-6">
         <Tabs value={tab} onValueChange={(v) => setTab(v as PipelineTab)}>
           <TabsList>
             <TabsTrigger value="in_house">In-House</TabsTrigger>
