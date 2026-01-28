@@ -54,12 +54,10 @@ export function SessionsPanel({
       </CardHeader>
       <CardContent>
         {conversations.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-6 text-center">
-            <MessageSquare className="h-8 w-8 text-muted-foreground/50 mb-2" />
-            <p className="text-sm font-medium text-muted-foreground">No sessions yet</p>
-            <p className="text-xs text-muted-foreground/70 mt-1">
-              Start a conversation to begin planning
-            </p>
+          <div className="py-8 text-center">
+            <MessageSquare className="h-8 w-8 mx-auto mb-3 text-muted-foreground" />
+            <p className="text-sm font-medium mb-1">No conversations yet</p>
+            <p className="text-xs text-muted-foreground">Start chatting to begin planning this project.</p>
           </div>
         ) : (
           <div className="space-y-1">

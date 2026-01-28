@@ -55,12 +55,10 @@ export function DocumentsPanel({ documents, projectId, projectName, onDocumentsC
         </CardHeader>
         <CardContent>
           {documents.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-6 text-center">
-              <FileText className="h-8 w-8 text-muted-foreground/50 mb-2" />
-              <p className="text-sm font-medium text-muted-foreground">No documents yet</p>
-              <p className="text-xs text-muted-foreground/70 mt-1">
-                Documents will appear here as you discuss your project with Claude.
-              </p>
+            <div className="py-8 text-center">
+              <FileText className="h-8 w-8 mx-auto mb-3 text-muted-foreground" />
+              <p className="text-sm font-medium mb-1">No documents yet</p>
+              <p className="text-xs text-muted-foreground">Documents will appear as you progress through planning.</p>
             </div>
           ) : (
             <div className="space-y-1">

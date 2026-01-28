@@ -171,12 +171,10 @@ export function ResearchPanel({ research: initialResearch, projectId, onResearch
           )}
 
           {research.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-6 text-center">
-              <Search className="h-8 w-8 text-muted-foreground/50 mb-2" />
-              <p className="text-sm font-medium text-muted-foreground">No research yet</p>
-              <p className="text-xs text-muted-foreground/70 mt-1">
-                Claude will suggest research during conversations.
-              </p>
+            <div className="py-8 text-center">
+              <Search className="h-8 w-8 mx-auto mb-3 text-muted-foreground" />
+              <p className="text-sm font-medium mb-1">No research yet</p>
+              <p className="text-xs text-muted-foreground">Trigger research from chat or use the button above.</p>
             </div>
           ) : (
             <div className="space-y-1">
