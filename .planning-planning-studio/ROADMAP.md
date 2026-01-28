@@ -517,15 +517,15 @@ Plans:
 
 **Goal:** Migrate existing data from Development Dashboard, remove old code, establish E2E tests and documentation
 
-**Status:** Not Started
+**Status:** Complete (2026-01-28)
 **Plans:** 5 plans
 
 Plans:
-- [ ] 12-01-PLAN.md — Interactive migration UI for dev_projects to planning_studio
-- [ ] 12-02-PLAN.md — Remove old Development Dashboard code, add redirect
-- [ ] 12-03-PLAN.md — Playwright E2E test foundation (config, page objects, auth)
-- [ ] 12-04-PLAN.md — E2E test suite for critical flows and migration verification
-- [ ] 12-05-PLAN.md — Documentation (CLAUDE.md update, API docs) and performance benchmarks
+- [x] 12-01-PLAN.md — Interactive migration UI for dev_projects to planning_studio
+- [x] 12-02-PLAN.md — Remove old Development Dashboard code, add redirect
+- [x] 12-03-PLAN.md — Playwright E2E test foundation (config, page objects, auth)
+- [x] 12-04-PLAN.md — E2E test suite for critical flows and migration verification
+- [x] 12-05-PLAN.md — Documentation (CLAUDE.md update, API docs) and performance benchmarks
 
 ### Requirements Covered
 - REQ-MIGRATE: Data migration
@@ -557,12 +557,12 @@ Plans:
 - Performance benchmarks with <1s page load target
 
 ### Success Criteria
-- [ ] Migration UI allows selective import of old projects
-- [ ] Old Development Dashboard code deleted
-- [ ] /dashboard/development redirects to /dashboard/planning
-- [ ] E2E tests pass for all critical flows
-- [ ] All pages load under 1 second
-- [ ] Documentation complete
+- [x] Migration UI allows selective import of old projects
+- [x] Old Development Dashboard code deleted
+- [x] /dashboard/development redirects to /dashboard/planning
+- [x] E2E tests pass for all critical flows
+- [x] All pages load under 1 second
+- [x] Documentation complete
 
 ---
 
