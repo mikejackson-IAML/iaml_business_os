@@ -343,3 +343,70 @@ export async function startBuildAction(projectId: string): Promise<ActionResult>
     };
   }
 }
+
+/**
+ * Update build progress for a project
+ */
+export async function updateBuildProgressAction(
+  projectId: string,
+  buildPhase: number,
+  buildTotalPhases: number
+): Promise<ActionResult> {
+  try {
+    const supabase = createServerClient();
+
+    // Calculate progress percentage
+    const progressPercent = Math.round((buildPhase / buildTotalPhases) * 100);
+
+    const { error } = await supabase
+      .schema('planning_studio')
+      .from('projects')
+      .update({
+        build_phase: buildPhase,
+        build_total_phases: buildTotalPhases,
+        build_progress_percent: progressPercent,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', projectId);
+
+    if (error) throw error;
+
+    revalidatePath('/dashboard/planning');
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to update progress',
+    };
+  }
+}
+
+/**
+ * Mark a project as shipped
+ */
+export async function markShippedAction(projectId: string): Promise<ActionResult> {
+  try {
+    const supabase = createServerClient();
+    const { error } = await supabase
+      .schema('planning_studio')
+      .from('projects')
+      .update({
+        status: 'shipped',
+        shipped_at: new Date().toISOString(),
+        build_progress_percent: 100,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', projectId);
+
+    if (error) throw error;
+
+    revalidatePath('/dashboard/planning');
+    revalidatePath('/dashboard/planning/queue');
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to mark as shipped',
+    };
+  }
+}
