@@ -2,10 +2,10 @@
 
 ## Current Status
 
-- **Milestone:** v1.0
-- **Current Phase:** 12 (Migration & Cleanup) - In Progress
-- **Current Plan:** 3 of 4 (complete)
-- **Status:** Phase 12 in progress
+- **Milestone:** v1.0 COMPLETE
+- **Current Phase:** 12 (Migration & Cleanup) - Complete
+- **Current Plan:** 5 of 5 (complete)
+- **Status:** v1.0 Milestone Complete
 
 ## Progress
 
@@ -21,8 +21,8 @@ Phase 8: [████████████████] 4/4 plans COMPLETE
 Phase 9: [████████████████] 4/4 plans COMPLETE
 Phase 10: [████████████████] 3/3 plans COMPLETE
 Phase 11: [████████████████] 4/4 plans COMPLETE
-Phase 12: [████████████░░░░] 3/4 plans IN PROGRESS
-Overall:  [█████████████████████████████████████████░░] 44/46 plans (~96%)
+Phase 12: [████████████████] 5/5 plans COMPLETE  *** v1.0 ***
+Overall:  [████████████████████████████████████████████] 46/46 plans (100%)
 ```
 
 ## Phase Progress
@@ -40,7 +40,7 @@ Overall:  [███████████████████████
 | 9 | Ready-to-Build Queue & Prioritization | Complete (4/4 plans) |
 | 10 | Build Tracker | Complete (3/3 plans) |
 | 11 | Analytics & Polish | Complete (4/4 plans) |
-| 12 | Migration & Cleanup | In Progress (3/4 plans) |
+| 12 | Migration & Cleanup | Complete (5/5 plans) |
 
 ## Accumulated Decisions
 
@@ -152,6 +152,9 @@ Overall:  [███████████████████████
 | 12 | 03 | Auth uses storage state | Supabase session persisted between tests |
 | 12 | 03 | Test data prefix [E2E] | Easy identification for cleanup and filtering |
 | 12 | 03 | webServer builds then starts | Production build for accurate testing |
+| 12 | 05 | 14 API routes documented with request/response schemas | Full API coverage for developer onboarding |
+| 12 | 05 | 1000ms page load threshold from CONTEXT.md | Enforced via Playwright performance tests |
+| 12 | 05 | Navigation Timing API for detailed performance metrics | DNS, TCP, TTFB, DOM timing captured |
 
 ## MVP Checkpoint
 
@@ -163,17 +166,32 @@ Phases 1-7 constitute the MVP. After Phase 7:
 - Documents are generated
 - GSD packages are created
 
+## v1.0 Milestone Complete
+
+All 12 phases complete (46 plans total). Planning Studio v1.0 is ready for production use:
+
+- **Core Planning:** 6-phase idea-to-production pipeline with AI guidance
+- **Memory System:** Semantic search across all project history (Cmd+K)
+- **Document Generation:** ICP, Lean Canvas, Feature Specs, GSD packages
+- **Deep Research:** Perplexity integration for market research
+- **Priority Queue:** AI-ranked ready-to-build projects
+- **Build Tracker:** Active development progress tracking
+- **Analytics:** Funnel metrics, velocity, and trend visualization
+- **Migration:** Selective import from old Development Dashboard
+- **Testing:** E2E infrastructure with Playwright, performance benchmarks
+- **Documentation:** CLAUDE.md section, comprehensive API reference
+
 ## Session Continuity
 
 - **Last session:** 2026-01-28
-- **Stopped at:** Completed 12-03-PLAN.md
+- **Stopped at:** Completed 12-05-PLAN.md (v1.0 milestone complete)
 - **Resume file:** None
 
 ## Last Activity
 
 - **Date:** 2026-01-28
-- **Activity:** Completed Phase 12 Plan 3 (E2E Test Infrastructure)
-- **Notes:** Playwright installed and configured. Page objects created for Pipeline, Project Detail, Queue. Auth fixture and test data helpers ready.
+- **Activity:** Completed Phase 12 Plan 5 (Documentation & Performance Benchmarks)
+- **Notes:** CLAUDE.md updated with Planning Studio section. Full API documentation created. Performance benchmark tests added.
 
 ## Phase 10 Deliverables
 
@@ -261,10 +279,11 @@ All 4 plans complete:
 - **11-03:** Error boundaries for all 5 Planning Studio routes
 - **11-04:** Empty states standardization, hover transitions for interactive elements
 
-## Phase 12 Deliverables (In Progress)
+## Phase 12 Deliverables
 
-3 of 4 plans complete:
+All 5 plans complete:
 - **12-01:** Data migration UI with selective project import
 - **12-02:** Old dashboard removal and redirects
 - **12-03:** Playwright E2E infrastructure with page objects and auth fixtures
-- **12-04:** E2E test specs and data-testid attributes (pending)
+- **12-04:** E2E test specs and data-testid attributes
+- **12-05:** Documentation (CLAUDE.md, API reference) and performance benchmarks
