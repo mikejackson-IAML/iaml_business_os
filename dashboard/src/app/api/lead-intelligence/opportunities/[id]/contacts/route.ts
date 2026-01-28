@@ -4,7 +4,6 @@
 // DELETE /api/lead-intelligence/opportunities/:id/contacts - Remove contact
 
 import { NextRequest, NextResponse } from 'next/server';
-import { validateApiKey } from '@/lib/api/task-auth';
 import { getOpportunityContacts } from '@/lib/api/lead-intelligence-opportunities-queries';
 import { addOpportunityContact, removeOpportunityContact } from '@/lib/api/lead-intelligence-opportunities-mutations';
 import { CONTACT_ROLES } from '@/lib/api/lead-intelligence-opportunities-types';
@@ -38,9 +37,6 @@ export async function GET(request: NextRequest, context: RouteContext) {
 }
 
 export async function POST(request: NextRequest, context: RouteContext) {
-  const authError = validateApiKey(request);
-  if (authError) return authError;
-
   try {
     const { id } = await context.params;
 
@@ -93,9 +89,6 @@ export async function POST(request: NextRequest, context: RouteContext) {
 }
 
 export async function DELETE(request: NextRequest, context: RouteContext) {
-  const authError = validateApiKey(request);
-  if (authError) return authError;
-
   try {
     const { id } = await context.params;
 

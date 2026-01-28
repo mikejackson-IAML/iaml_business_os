@@ -3,7 +3,6 @@
 // POST /api/lead-intelligence/opportunities - Create a new opportunity
 
 import { NextRequest, NextResponse } from 'next/server';
-import { validateApiKey } from '@/lib/api/task-auth';
 import { getOpportunities } from '@/lib/api/lead-intelligence-opportunities-queries';
 import { createOpportunity } from '@/lib/api/lead-intelligence-opportunities-mutations';
 import { validateOpportunity, createValidationError } from '@/lib/api/lead-intelligence-opportunities-validation';
@@ -57,9 +56,6 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const authError = validateApiKey(request);
-  if (authError) return authError;
-
   try {
     let body: unknown;
     try {

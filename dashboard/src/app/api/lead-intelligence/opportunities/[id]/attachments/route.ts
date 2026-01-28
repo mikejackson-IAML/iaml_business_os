@@ -6,7 +6,6 @@
 export const runtime = 'nodejs';
 
 import { NextRequest, NextResponse } from 'next/server';
-import { validateApiKey } from '@/lib/api/task-auth';
 import { getServerClient } from '@/lib/supabase/server';
 import { getOpportunityAttachments } from '@/lib/api/lead-intelligence-opportunities-queries';
 import { createAttachment, deleteAttachment } from '@/lib/api/lead-intelligence-opportunities-mutations';
@@ -69,9 +68,6 @@ export async function GET(request: NextRequest, context: RouteContext) {
 }
 
 export async function POST(request: NextRequest, context: RouteContext) {
-  const authError = validateApiKey(request);
-  if (authError) return authError;
-
   try {
     const { id } = await context.params;
 
@@ -145,9 +141,6 @@ export async function POST(request: NextRequest, context: RouteContext) {
 }
 
 export async function DELETE(request: NextRequest, context: RouteContext) {
-  const authError = validateApiKey(request);
-  if (authError) return authError;
-
   try {
     const { id } = await context.params;
 

@@ -4,7 +4,6 @@
 // DELETE /api/lead-intelligence/opportunities/:id - Delete opportunity
 
 import { NextRequest, NextResponse } from 'next/server';
-import { validateApiKey } from '@/lib/api/task-auth';
 import { getOpportunityById, getOpportunityContacts, getOpportunityAttachments } from '@/lib/api/lead-intelligence-opportunities-queries';
 import { updateOpportunity, deleteOpportunity } from '@/lib/api/lead-intelligence-opportunities-mutations';
 import { validateUpdateOpportunity, createValidationError } from '@/lib/api/lead-intelligence-opportunities-validation';
@@ -50,9 +49,6 @@ export async function GET(request: NextRequest, context: RouteContext) {
 }
 
 export async function PATCH(request: NextRequest, context: RouteContext) {
-  const authError = validateApiKey(request);
-  if (authError) return authError;
-
   try {
     const { id } = await context.params;
 
@@ -100,9 +96,6 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
 }
 
 export async function DELETE(request: NextRequest, context: RouteContext) {
-  const authError = validateApiKey(request);
-  if (authError) return authError;
-
   try {
     const { id } = await context.params;
 

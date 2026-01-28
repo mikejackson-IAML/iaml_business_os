@@ -2,7 +2,6 @@
 // POST /api/lead-intelligence/opportunities/:id/advance-stage
 
 import { NextRequest, NextResponse } from 'next/server';
-import { validateApiKey } from '@/lib/api/task-auth';
 import { getOpportunityById } from '@/lib/api/lead-intelligence-opportunities-queries';
 import { advanceStage } from '@/lib/api/lead-intelligence-opportunities-mutations';
 import { validateStageAdvancement } from '@/lib/api/lead-intelligence-opportunities-validation';
@@ -14,9 +13,6 @@ interface RouteContext {
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 export async function POST(request: NextRequest, context: RouteContext) {
-  const authError = validateApiKey(request);
-  if (authError) return authError;
-
   try {
     const { id } = await context.params;
 
