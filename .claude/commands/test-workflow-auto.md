@@ -21,73 +21,145 @@ This agent FIXES workflows, not just reports on them. It diagnoses errors, appli
 
 <instructions>
 
-## PHILOSOPHY
+## CRITICAL: RELIABILITY REQUIREMENTS
 
-**This agent FIXES things. It does not just report problems.**
+**This command MUST execute reliably every single time.** Follow these mandatory patterns:
 
-- If there's a database connection error → diagnose and fix the credential
-- If there's a missing property → update the expression
-- If there's missing error handling → add the canary pattern
-- If a branch hasn't been tested → generate test data that exercises it
+### MCP Tool Call Protocol
 
-Only escalate to the human AFTER you've tried everything AND the workflow is either:
-1. Working (ready for human verification)
-2. Truly unfixable (credential secrets needed, external service down, etc.)
+**EVERY MCP tool call MUST follow this pattern:**
+
+1. **Pre-call delay**: Wait 2 seconds before each n8n-mcp tool call
+2. **Retry on failure**: If a tool call fails, wait 5 seconds and retry up to 3 times
+3. **Post-call delay**: Wait 1 second after each successful call before the next
+
+**Implementation:** Before calling any `mcp__n8n-mcp__*` tool:
+```bash
+sleep 2
+```
+
+**If a tool call returns an error or times out:**
+1. Output: `[RETRY 1/3] Tool call failed, waiting 5s...`
+2. Wait 5 seconds: `sleep 5`
+3. Retry the same call
+4. If still failing after 3 retries, output error and continue to next phase
+
+### Rate Limiting Protection
+
+n8n has API rate limits. These delays are MANDATORY:
+
+| Operation | Delay Before | Delay After |
+|-----------|--------------|-------------|
+| Get workflow | 2s | 1s |
+| List executions | 2s | 1s |
+| Get execution | 2s | 1s |
+| Test workflow | 3s | 5s |
+| Update workflow | 3s | 2s |
 
 ---
 
-## CONFIGURATION
+## MID-PHASE HEALTH CHECKS (CRITICAL)
 
+**After EVERY major phase, run a health check to detect connection loss early.**
+
+### Health Check Pattern
+
+Use this lightweight check between phases:
+
+```bash
+echo "[HEALTH] Verifying n8n connection..."
+sleep 2
 ```
-MAX_FIX_ATTEMPTS = 5
-BRANCH_TEST_REQUIRED = true
-ERROR_HANDLING_REQUIRED = true
-OUTPUT_VERIFICATION_REQUIRED = true
+
+```tool
+mcp__n8n-mcp__n8n_list_workflows({
+  limit: 1
+})
 ```
 
-## CONTEXT EFFICIENCY
+**If health check fails:**
+1. Output: `[CONNECTION LOST] n8n-mcp stopped responding after Phase X`
+2. Wait 10 seconds: `sleep 10`
+3. Retry the health check once
+4. If still failing:
+   - Output current progress summary
+   - Mark workflow as `needs_review` with note: "Testing interrupted - connection lost after Phase X"
+   - **STOP** and inform user: `[FATAL] Lost connection to n8n. Progress saved. Run /test-workflow-auto <id> to resume.`
 
-To prevent context exhaustion during multi-iteration fixes:
+### When to Run Health Checks
 
-**Iteration 1-2:** Use standard modes (structure, error)
-**Iteration 3+:** If still failing, use minimal modes:
-- Skip re-fetching workflow structure (already known)
-- Use `errorItemsLimit: 2` instead of 5
-- Focus only on the specific failing node
-
-**If approaching iteration 5:**
-Before attempting final fix, summarize what's been tried and escalate with clear diagnosis rather than continuing to consume context.
-
-## TOOLS AVAILABLE
-
-You have full access to:
-- `mcp__n8n-mcp__*` - All n8n operations (get/update workflows, test, executions)
-- `mcp__n8n-brain__*` - Learning layer (patterns, error fixes, credentials)
-- `Bash` with Supabase CLI - Database operations, credential verification
-- `Read/Write/Edit` - File operations for specs and reports
+| After Phase | Health Check Required |
+|-------------|----------------------|
+| Phase 1 (Load) | YES |
+| Phase 2 (History) | YES |
+| Phase 3 (Diagnose/Fix) | YES - especially important |
+| Phase 4 (Test Branches) | YES - after EACH branch test |
+| Phase 5 (Verify Output) | YES |
+| Phase 6 (Error Handling) | YES |
+| Phase 7+ | NO - these are just registry updates |
 
 ---
 
-## PHASE 0: SET TERMINAL CONTEXT
+## PHASE 0: HEALTH CHECK (MANDATORY - DO NOT SKIP)
 
-**Immediately upon starting a workflow test, set the terminal tab title:**
+**Before ANY workflow testing, verify all systems are operational.**
+
+### 0.1 Verify n8n-mcp Server
+
+Test the connection with a simple call:
+
+```bash
+echo "[HEALTH CHECK] Testing n8n-mcp connection..."
+sleep 2
+```
+
+Then call:
+```tool
+mcp__n8n-mcp__n8n_list_workflows({
+  limit: 1
+})
+```
+
+**If this fails:**
+1. Output: `[ERROR] n8n-mcp server not responding`
+2. Wait 10 seconds and retry once
+3. If still failing: `[FATAL] Cannot connect to n8n. Please check MCP server status.`
+4. **STOP - do not proceed**
+
+**If successful:** Output `[OK] n8n-mcp connected`
+
+### 0.2 Verify n8n-brain Server
+
+```bash
+sleep 2
+```
+
+```tool
+mcp__n8n-brain__get_preferences()
+```
+
+**If this fails:**
+1. Output: `[WARN] n8n-brain not responding - will continue without learning features`
+2. Set flag: `brain_available = false`
+
+**If successful:** Output `[OK] n8n-brain connected`
+
+### 0.3 Set Terminal Context
 
 ```bash
 echo -ne "\033]0;Testing: ${WORKFLOW_NAME}\007"
-```
-
-This names the terminal tab so the user knows which workflow is being debugged.
-
-**Reset when done:**
-```bash
-echo -ne "\033]0;Claude Code\007"
 ```
 
 ---
 
 ## PHASE 1: LOAD AND ANALYZE WORKFLOW
 
-### 1.1 Fetch Workflow
+### 1.1 Fetch Workflow (WITH RETRY)
+
+```bash
+echo "[PHASE 1] Loading workflow..."
+sleep 2
+```
 
 ```tool
 mcp__n8n-mcp__n8n_get_workflow({
@@ -96,7 +168,15 @@ mcp__n8n-mcp__n8n_get_workflow({
 })
 ```
 
-**Note:** Using `mode: "structure"` saves ~35KB vs `mode: "details"`. We only need nodes, connections, and trigger type for initial analysis. Full parameter details are fetched only when actively fixing a specific node.
+**If this fails after 3 retries:**
+- Output: `[ERROR] Cannot fetch workflow <id>. Verify the ID is correct.`
+- **STOP**
+
+**On success:**
+```bash
+sleep 1
+echo "[OK] Loaded: <workflow_name>"
+```
 
 Extract and store:
 - `workflow_id`, `workflow_name`
@@ -132,11 +212,31 @@ Look for these nodes:
 
 **If ANY of these are missing, flag for PHASE 6 (Add Error Handling).**
 
+### 1.4 Mid-Phase Health Check
+
+```bash
+echo "[HEALTH] Verifying connection after Phase 1..."
+sleep 2
+```
+
+```tool
+mcp__n8n-mcp__n8n_list_workflows({ limit: 1 })
+```
+
+**If fails:** Follow the "Health Check Pattern" recovery steps above.
+
+**If succeeds:** `[OK] Connection stable - proceeding to Phase 2`
+
 ---
 
 ## PHASE 2: CHECK EXECUTION HISTORY
 
-### 2.1 Get Recent Executions
+### 2.1 Get Recent Executions (WITH RETRY)
+
+```bash
+echo "[PHASE 2] Checking execution history..."
+sleep 2
+```
 
 ```tool
 mcp__n8n-mcp__n8n_executions({
@@ -147,7 +247,9 @@ mcp__n8n-mcp__n8n_executions({
 })
 ```
 
-**Note:** Limiting to 3 failed executions saves ~7KB. We only need recent failures for diagnosis.
+```bash
+sleep 1
+```
 
 Categorize:
 - How many succeeded?
@@ -155,6 +257,10 @@ Categorize:
 - What's the most recent status?
 
 ### 2.2 If Failures Exist, Get Error Details
+
+```bash
+sleep 2
+```
 
 ```tool
 mcp__n8n-mcp__n8n_executions({
@@ -166,12 +272,31 @@ mcp__n8n-mcp__n8n_executions({
 })
 ```
 
+```bash
+sleep 1
+```
+
 Extract:
 - `primaryError.message` - The actual error
 - `primaryError.nodeName` - Which node failed
 - `primaryError.nodeType` - What type of node
 - `upstreamContext` - Data that was flowing into the failed node
 - `executionPath` - Which nodes ran before failure
+
+### 2.3 Mid-Phase Health Check
+
+```bash
+echo "[HEALTH] Verifying connection after Phase 2..."
+sleep 2
+```
+
+```tool
+mcp__n8n-mcp__n8n_list_workflows({ limit: 1 })
+```
+
+**If fails:** Follow the "Health Check Pattern" recovery steps above.
+
+**If succeeds:** `[OK] Connection stable - proceeding to Phase 3`
 
 ---
 
@@ -181,7 +306,11 @@ Extract:
 
 ### 3.0 MANDATORY: Check n8n-brain FIRST (Non-Optional)
 
-**Before ANY debugging or reasoning, always consult the brain.**
+**Before ANY debugging or reasoning, always consult the brain (if available).**
+
+```bash
+sleep 2
+```
 
 ```tool
 mcp__n8n-brain__lookup_error_fix({
@@ -203,8 +332,6 @@ mcp__n8n-brain__lookup_error_fix({
 [BRAIN] Applied known fix: {fix_description} (id: {error_fix_id}, success: {times_succeeded}/{times_applied})
 ```
 
-This lets us track ROI of the brain learning system.
-
 ### 3.1 Pattern-Match and Diagnose (Only if Brain Had No Fix)
 
 If the brain had no relevant fix, diagnose the error manually using the patterns below.
@@ -212,6 +339,10 @@ If the brain had no relevant fix, diagnose the error manually using the patterns
 ### 3.1.5 Get Failing Node Details (Only When Needed)
 
 If you need the full configuration of the failing node:
+
+```bash
+sleep 2
+```
 
 ```tool
 mcp__n8n-mcp__n8n_get_workflow({
@@ -221,8 +352,6 @@ mcp__n8n-mcp__n8n_get_workflow({
 ```
 
 Then extract ONLY the failing node's parameters. Do NOT store the full workflow JSON - immediately discard after extracting the needed node config.
-
-For simpler property access fixes, you often don't need this - the error context from `mode: "error"` includes enough upstream data.
 
 ### 3.2 Pattern-Match and Diagnose
 
@@ -242,6 +371,9 @@ For simpler property access fixes, you often don't need this - the error context
    ```
 
 3. **Check what credential n8n should be using:**
+   ```bash
+   sleep 2
+   ```
    ```tool
    mcp__n8n-brain__get_credential({
      service_name: "supabase"
@@ -260,6 +392,9 @@ For simpler property access fixes, you often don't need this - the error context
    - Provide specific fix instructions for the credential
 
 6. **Store the diagnosis:**
+   ```bash
+   sleep 2
+   ```
    ```tool
    mcp__n8n-brain__store_error_fix({
      error_message: "connect ECONNREFUSED",
@@ -281,6 +416,10 @@ For simpler property access fixes, you often don't need this - the error context
 3. Find the correct path
 4. Update the node:
 
+```bash
+sleep 3
+```
+
 ```tool
 mcp__n8n-mcp__n8n_update_partial_workflow({
   id: "<workflow_id>",
@@ -294,11 +433,19 @@ mcp__n8n-mcp__n8n_update_partial_workflow({
 })
 ```
 
+```bash
+sleep 2
+echo "[OK] Node updated"
+```
+
 #### EMPTY INPUT ERRORS (No items, empty array)
 
 **FIX IT:**
 
 Option A - Enable "Always Output Data":
+```bash
+sleep 3
+```
 ```tool
 mcp__n8n-mcp__n8n_update_partial_workflow({
   id: "<workflow_id>",
@@ -309,36 +456,6 @@ mcp__n8n-mcp__n8n_update_partial_workflow({
       "alwaysOutputData": true
     }
   }]
-})
-```
-
-Option B - Add IF node to check for empty:
-```tool
-mcp__n8n-mcp__n8n_update_partial_workflow({
-  id: "<workflow_id>",
-  operations: [
-    {
-      type: "addNode",
-      node: {
-        name: "Check Has Data",
-        type: "n8n-nodes-base.if",
-        typeVersion: 2,
-        position: [<calculated_position>],
-        parameters: {
-          conditions: {
-            options: { caseSensitive: true, leftValue: "", typeValidation: "strict" },
-            conditions: [{
-              id: "has-data",
-              leftValue: "={{ $input.all().length > 0 }}",
-              rightValue: true,
-              operator: { type: "boolean", operation: "equals" }
-            }]
-          }
-        }
-      }
-    },
-    // Rewire connections
-  ]
 })
 ```
 
@@ -363,7 +480,16 @@ mcp__n8n-mcp__n8n_update_partial_workflow({
 
 Use `mcp__n8n-mcp__n8n_update_partial_workflow` to apply fixes.
 
+**ALWAYS include delays:**
+```bash
+sleep 3
+echo "[APPLYING FIX] <description>"
+```
+
 After applying:
+```bash
+sleep 2
+```
 ```tool
 mcp__n8n-brain__store_error_fix({
   error_message: "<original_error>",
@@ -381,6 +507,23 @@ If same error occurs again:
 - Increment attempt counter
 - If attempts >= MAX_FIX_ATTEMPTS → Flag for human review
 - If different error → diagnose the new error
+
+### 3.5 Mid-Phase Health Check (CRITICAL - After Fixes)
+
+**This is the most important health check - fixes involve write operations that can stress the connection.**
+
+```bash
+echo "[HEALTH] Verifying connection after Phase 3 (fix operations)..."
+sleep 3
+```
+
+```tool
+mcp__n8n-mcp__n8n_list_workflows({ limit: 1 })
+```
+
+**If fails:** Follow the "Health Check Pattern" recovery steps above. Note which fixes were applied before connection loss.
+
+**If succeeds:** `[OK] Connection stable - proceeding to Phase 4`
 
 ---
 
@@ -415,9 +558,15 @@ const warningTest = {
 };
 ```
 
-### 4.3 Execute Tests for Each Branch
+### 4.3 Execute Tests for Each Branch (WITH MANDATORY DELAYS)
 
 For webhook-triggered workflows:
+
+```bash
+echo "[PHASE 4] Testing workflow execution..."
+sleep 3
+```
+
 ```tool
 mcp__n8n-mcp__n8n_test_workflow({
   workflowId: "<workflow_id>",
@@ -427,9 +576,19 @@ mcp__n8n-mcp__n8n_test_workflow({
 })
 ```
 
+**CRITICAL: Wait for n8n to process the execution:**
+```bash
+echo "[WAIT] Allowing n8n to complete execution..."
+sleep 5
+```
+
 ### 4.4 Track Branch Coverage
 
 After each test, get execution details. Use `mode: "error"` for failed executions (80% smaller):
+
+```bash
+sleep 2
+```
 
 ```tool
 // For FAILED executions - optimized for debugging
@@ -439,7 +598,13 @@ mcp__n8n-mcp__n8n_executions({
   mode: "error",
   errorItemsLimit: 3
 })
+```
 
+```bash
+sleep 1
+```
+
+```tool
 // For SUCCESSFUL executions - minimal check
 mcp__n8n-mcp__n8n_executions({
   action: "get",
@@ -467,6 +632,28 @@ If any branch hasn't been tested:
 2. Generate appropriate test payload
 3. Execute and verify
 
+### 4.6 Health Check After EACH Branch Test
+
+**Run a health check after each individual branch test, not just at end of Phase 4.**
+
+After each `n8n_test_workflow` call and result fetch:
+
+```bash
+echo "[HEALTH] Verifying connection after branch test..."
+sleep 2
+```
+
+```tool
+mcp__n8n-mcp__n8n_list_workflows({ limit: 1 })
+```
+
+**If fails:**
+- Note which branches were successfully tested
+- Save progress: "Tested X/Y branches before connection loss"
+- Follow recovery steps
+
+**If succeeds:** Continue to next branch or Phase 5
+
 ---
 
 ## PHASE 5: VERIFY OUTPUT
@@ -478,6 +665,10 @@ If any branch hasn't been tested:
 Terminal nodes = nodes with no outgoing connections. These produce the workflow's "output."
 
 ### 5.2 Get Output from Each Terminal Node
+
+```bash
+sleep 2
+```
 
 ```tool
 mcp__n8n-mcp__n8n_executions({
@@ -514,6 +705,21 @@ If output doesn't match expectations:
 - Attempt to fix if it's a data transformation issue
 - Flag for human review if unclear
 
+### 5.5 Mid-Phase Health Check
+
+```bash
+echo "[HEALTH] Verifying connection after Phase 5..."
+sleep 2
+```
+
+```tool
+mcp__n8n-mcp__n8n_list_workflows({ limit: 1 })
+```
+
+**If fails:** Follow recovery steps. Note output verification results before loss.
+
+**If succeeds:** `[OK] Connection stable - proceeding to Phase 6`
+
 ---
 
 ## PHASE 6: ENSURE ERROR HANDLING
@@ -531,6 +737,9 @@ Required pattern:
 ### 6.2 If Missing, Add Error Handling
 
 Get the standard error handling pattern:
+```bash
+sleep 2
+```
 ```tool
 mcp__n8n-brain__find_similar_patterns({
   description: "error handling canary pattern",
@@ -538,106 +747,11 @@ mcp__n8n-brain__find_similar_patterns({
 })
 ```
 
-Or construct it manually:
-
-```tool
-mcp__n8n-mcp__n8n_update_partial_workflow({
-  id: "<workflow_id>",
-  operations: [
-    {
-      type: "addNode",
-      node: {
-        id: "error-trigger",
-        name: "Error Trigger",
-        type: "n8n-nodes-base.errorTrigger",
-        typeVersion: 1,
-        position: [0, 400],
-        parameters: {}
-      }
-    },
-    {
-      type: "addNode",
-      node: {
-        id: "parse-error",
-        name: "Parse Error",
-        type: "n8n-nodes-base.code",
-        typeVersion: 2,
-        position: [220, 400],
-        parameters: {
-          jsCode: "const error = $input.first().json;\nconst execution = $execution;\n\nreturn [{\n  json: {\n    workflow_id: $workflow.id,\n    workflow_name: $workflow.name,\n    execution_id: execution.id,\n    error_message: error.message || 'Unknown error',\n    error_node: error.node?.name || 'Unknown',\n    timestamp: new Date().toISOString()\n  }\n}];"
-        }
-      }
-    },
-    {
-      type: "addNode",
-      node: {
-        id: "log-error-db",
-        name: "Log Error to DB",
-        type: "n8n-nodes-base.postgres",
-        typeVersion: 2.5,
-        position: [440, 400],
-        parameters: {
-          operation: "insert",
-          schema: "n8n_brain",
-          table: "workflow_runs",
-          columns: {
-            mappingMode: "defineBelow",
-            value: {
-              "workflow_id": "={{ $json.workflow_id }}",
-              "workflow_name": "={{ $json.workflow_name }}",
-              "execution_id": "={{ $json.execution_id }}",
-              "status": "error",
-              "error_message": "={{ $json.error_message }}",
-              "completed_at": "={{ $json.timestamp }}"
-            }
-          }
-        },
-        credentials: {
-          postgres: {
-            id: "<supabase_credential_id>",
-            name: "Supabase Postgres"
-          }
-        }
-      }
-    },
-    {
-      type: "addNode",
-      node: {
-        id: "alert-slack",
-        name: "Alert Slack",
-        type: "n8n-nodes-base.httpRequest",
-        typeVersion: 4.2,
-        position: [660, 400],
-        parameters: {
-          method: "POST",
-          url: "https://hooks.slack.com/services/YOUR_WEBHOOK",
-          sendBody: true,
-          specifyBody: "json",
-          jsonBody: "={\"text\": \":rotating_light: *Workflow Error*\\n*Workflow:* {{ $json.workflow_name }}\\n*Error:* {{ $json.error_message }}\\n*Node:* {{ $json.error_node }}\"}"
-        }
-      }
-    },
-    {
-      type: "addConnection",
-      from: "Error Trigger",
-      to: "Parse Error"
-    },
-    {
-      type: "addConnection",
-      from: "Parse Error",
-      to: "Log Error to DB"
-    },
-    {
-      type: "addConnection",
-      from: "Log Error to DB",
-      to: "Alert Slack"
-    }
-  ]
-})
-```
-
 ### 6.3 Get Credential ID for Error Handling
 
+```bash
+sleep 2
+```
 ```tool
 mcp__n8n-brain__get_credential({
   service_name: "supabase"
@@ -645,6 +759,25 @@ mcp__n8n-brain__get_credential({
 ```
 
 Use the returned credential ID in the Postgres node.
+
+### 6.4 Mid-Phase Health Check (Final Check Before Learning/Registry)
+
+```bash
+echo "[HEALTH] Final connection check before completing test..."
+sleep 2
+```
+
+```tool
+mcp__n8n-mcp__n8n_list_workflows({ limit: 1 })
+```
+
+**If fails:**
+- All major testing is complete at this point
+- Save current results
+- Mark as `tested` (not `verified`) since learning/registry update couldn't complete
+- Follow recovery steps
+
+**If succeeds:** `[OK] Connection stable - proceeding to learning and registry update`
 
 ---
 
@@ -655,6 +788,9 @@ Use the returned credential ID in the Postgres node.
 ### 7.1 Store New Error Fixes
 
 For each error that was fixed:
+```bash
+sleep 2
+```
 ```tool
 mcp__n8n-brain__store_error_fix({
   error_message: "<original_error>",
@@ -672,6 +808,9 @@ mcp__n8n-brain__store_error_fix({
 ### 7.2 Report Fix Success
 
 If we used an existing fix from n8n-brain:
+```bash
+sleep 2
+```
 ```tool
 mcp__n8n-brain__report_fix_result({
   error_fix_id: "<fix_id>",
@@ -681,6 +820,9 @@ mcp__n8n-brain__report_fix_result({
 
 ### 7.3 Record the Action
 
+```bash
+sleep 2
+```
 ```tool
 mcp__n8n-brain__record_action({
   task_description: "Test and fix workflow: <workflow_name>",
@@ -701,26 +843,31 @@ mcp__n8n-brain__record_action({
 ### 8.1 Mark as Tested (Pending Human Verification)
 
 ```bash
-cd "/Users/mike/IAML Business OS" && npx supabase db execute --db-url "$DATABASE_URL" \
-  "SELECT n8n_brain.mark_workflow_tested(
-    '${WORKFLOW_ID}',
-    'tested',
-    'test-workflow-auto',
-    'Automated testing complete: ${SUMMARY}'
-  );"
+cd "/Users/mike/IAML Business OS" && source .env.local && \
+curl -s -X PATCH "${SUPABASE_URL}/rest/v1/workflow_registry?workflow_id=eq.${WORKFLOW_ID}" \
+  -H "apikey: ${SUPABASE_SERVICE_KEY}" \
+  -H "Authorization: Bearer ${SUPABASE_SERVICE_KEY}" \
+  -H "Content-Type: application/json" \
+  -H "Content-Profile: n8n_brain" \
+  -d "{
+    \"test_status\": \"tested\",
+    \"tested_at\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",
+    \"tested_by\": \"test-workflow-auto\",
+    \"test_notes\": \"Automated testing complete\"
+  }"
 ```
 
 Note: Use `tested` not `verified` - human still needs to confirm.
-
-### 8.2 Add Verified Tag in n8n (if all checks pass)
-
-This requires manual action or a separate workflow. Note for human.
 
 ---
 
 ## PHASE 9: PRESENT TO HUMAN
 
 **Only after ALL of the above is complete:**
+
+```bash
+echo -ne "\033]0;Claude Code\007"
+```
 
 ```markdown
 ## Workflow Ready for Verification: <workflow_name>
@@ -745,29 +892,6 @@ This requires manual action or a separate workflow. Note for human.
 4. **Verified:** Database insert succeeded
 5. **Verified:** Slack webhook returned 200 OK
 
-### Branch Coverage
-
-| Branch | Test Payload | Result |
-|--------|--------------|--------|
-| Critical Error | `{error_message: "authentication failed"}` | Alert sent |
-| Warning Error | `{error_message: "timeout"}` | Alert sent |
-
-### Output Verification
-
-**Terminal Node: Alert Critical Error**
-- Input: `{text: ":rotating_light: *CRITICAL Web Intel Error*..."}`
-- Response: `200 OK`
-- Expected: Slack notification sent
-
-**Terminal Node: Alert Warning**
-- Input: `{text: ":warning: *Web Intel Error*..."}`
-- Response: `200 OK`
-- Expected: Slack notification sent
-
-### Fixes Stored in n8n-brain
-
-- Error: `ECONNREFUSED` → Fix: "Update Postgres credential host"
-
 ---
 
 ## YOUR TURN: Manual Verification
@@ -775,8 +899,6 @@ This requires manual action or a separate workflow. Note for human.
 Please verify:
 1. Open: https://n8n.realtyamp.ai/workflow/<workflow_id>
 2. Check the Executions tab - confirm recent runs look correct
-3. Verify the Slack channel received test alerts
-4. Test manually if desired
 
 **When done, reply:**
 - `confirm` → Mark as **verified**
@@ -791,16 +913,24 @@ Please verify:
 ### On "confirm":
 
 ```bash
-cd "/Users/mike/IAML Business OS" && npx supabase db execute --db-url "$DATABASE_URL" \
-  "SELECT n8n_brain.mark_workflow_tested(
-    '${WORKFLOW_ID}',
-    'verified',
-    'mike',
-    'Human verified after automated testing'
-  );"
+cd "/Users/mike/IAML Business OS" && source .env.local && \
+curl -s -X PATCH "${SUPABASE_URL}/rest/v1/workflow_registry?workflow_id=eq.${WORKFLOW_ID}" \
+  -H "apikey: ${SUPABASE_SERVICE_KEY}" \
+  -H "Authorization: Bearer ${SUPABASE_SERVICE_KEY}" \
+  -H "Content-Type: application/json" \
+  -H "Content-Profile: n8n_brain" \
+  -d "{
+    \"test_status\": \"verified\",
+    \"tested_at\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",
+    \"tested_by\": \"mike\",
+    \"test_notes\": \"Human verified after automated testing\"
+  }"
 ```
 
 Add verified tag in n8n:
+```bash
+sleep 3
+```
 ```tool
 mcp__n8n-mcp__n8n_update_partial_workflow({
   id: "<workflow_id>",
@@ -811,30 +941,66 @@ mcp__n8n-mcp__n8n_update_partial_workflow({
 })
 ```
 
-Respond: "✓ **<workflow_name>** marked as verified. Ready for next?"
+Respond: "**<workflow_name>** marked as verified. Ready for next?"
 
 ### On "broken":
 
 ```bash
-cd "/Users/mike/IAML Business OS" && npx supabase db execute --db-url "$DATABASE_URL" \
-  "SELECT n8n_brain.mark_workflow_tested(
-    '${WORKFLOW_ID}',
-    'broken',
-    'mike',
-    'Human marked as broken: ${USER_NOTES}'
-  );"
+cd "/Users/mike/IAML Business OS" && source .env.local && \
+curl -s -X PATCH "${SUPABASE_URL}/rest/v1/workflow_registry?workflow_id=eq.${WORKFLOW_ID}" \
+  -H "apikey: ${SUPABASE_SERVICE_KEY}" \
+  -H "Authorization: Bearer ${SUPABASE_SERVICE_KEY}" \
+  -H "Content-Type: application/json" \
+  -H "Content-Profile: n8n_brain" \
+  -d "{
+    \"test_status\": \"broken\",
+    \"tested_at\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",
+    \"tested_by\": \"mike\",
+    \"test_notes\": \"Human marked as broken\"
+  }"
 ```
 
-Respond: "✗ **<workflow_name>** marked as broken. Notes saved. What's the issue?"
+Respond: "**<workflow_name>** marked as broken. Notes saved. What's the issue?"
 
 ### On "skip" or "next":
 
-Move to next untested workflow:
-```bash
-cd "/Users/mike/IAML Business OS" && npx supabase db execute --db-url "$DATABASE_URL" \
-  "SELECT workflow_id, workflow_name FROM n8n_brain.workflows_needing_attention
-   WHERE test_status != 'verified' LIMIT 1;"
+Move to next untested workflow by fetching from registry.
+
+---
+
+## CONFIGURATION
+
 ```
+MAX_FIX_ATTEMPTS = 5
+BRANCH_TEST_REQUIRED = true
+ERROR_HANDLING_REQUIRED = true
+OUTPUT_VERIFICATION_REQUIRED = true
+
+# RELIABILITY SETTINGS
+MCP_CALL_DELAY_BEFORE = 2s
+MCP_CALL_DELAY_AFTER = 1s
+N8N_TEST_DELAY_BEFORE = 3s
+N8N_TEST_DELAY_AFTER = 5s
+N8N_UPDATE_DELAY_BEFORE = 3s
+N8N_UPDATE_DELAY_AFTER = 2s
+MAX_RETRIES = 3
+RETRY_DELAY = 5s
+```
+
+---
+
+## CONTEXT EFFICIENCY
+
+To prevent context exhaustion during multi-iteration fixes:
+
+**Iteration 1-2:** Use standard modes (structure, error)
+**Iteration 3+:** If still failing, use minimal modes:
+- Skip re-fetching workflow structure (already known)
+- Use `errorItemsLimit: 2` instead of 5
+- Focus only on the specific failing node
+
+**If approaching iteration 5:**
+Before attempting final fix, summarize what's been tried and escalate with clear diagnosis rather than continuing to consume context.
 
 ---
 
@@ -851,84 +1017,6 @@ For everything else: **FIX IT.**
 
 ---
 
-## LIVE DEBUG NOTES
-
-When actively debugging a complex issue, capture learnings in `.planning/workflow-fixes/`:
-
-### Create Debug Session File
-
-```bash
-mkdir -p ".planning/workflow-fixes"
-cat > ".planning/workflow-fixes/${WORKFLOW_ID}-debug.md" << 'EOF'
-# Debug Session: ${WORKFLOW_NAME}
-
-**Workflow ID:** ${WORKFLOW_ID}
-**Started:** $(date)
-**Status:** In Progress
-
-## Problem
-
-[Initial error/issue description]
-
-## Investigation
-
-### Attempt 1
-- **Tried:**
-- **Result:**
-- **Learning:**
-
-### Attempt 2
-- **Tried:**
-- **Result:**
-- **Learning:**
-
-## Root Cause
-
-[Once identified]
-
-## Solution
-
-[What ultimately fixed it]
-
-## Learnings to Store
-
-- [ ] Store error→fix in n8n-brain
-- [ ] Update credential mapping if needed
-- [ ] Note any gotchas for similar workflows
-EOF
-```
-
-### Update During Debugging
-
-As you try different fixes, append to the file:
-
-```bash
-cat >> ".planning/workflow-fixes/${WORKFLOW_ID}-debug.md" << 'EOF'
-
-### Attempt N
-- **Tried:** [description]
-- **Result:** [success/failure and details]
-- **Learning:** [what we learned]
-EOF
-```
-
-### Commands for User Mid-Debug
-
-| Command | Action |
-|---------|--------|
-| `note: <text>` | Append a note to the debug file |
-| `root cause: <text>` | Record the root cause |
-| `solution: <text>` | Record the solution |
-| `abandon` | Mark as unfixable, move to next |
-
-### After Resolution
-
-1. Update the debug file with final solution
-2. Store learnings in n8n-brain
-3. Move file to `.planning/workflow-fixes/resolved/` or delete if trivial
-
----
-
 ## STATE TRACKING
 
 Keep in conversation context:
@@ -938,45 +1026,76 @@ Keep in conversation context:
 - `branches_tested[]`
 - `outputs_verified[]`
 - `error_handling_present: boolean`
-- `debug_session_file` - path to active debug notes (if complex issue)
 - `fix_attempt_count` - how many fixes attempted this session
+- `brain_available` - whether n8n-brain is responding
+- `last_successful_phase` - track progress for recovery
+- `last_health_check_passed` - timestamp of last successful health check
+- `connection_failures` - count of health check failures this session
 
 ---
 
-## EXAMPLE FULL RUN
+## ERROR RECOVERY
 
-```
-User: /test-workflow-auto 3aUQ6BQkiS5HphxA
+### Connection Loss Recovery
 
-Claude:
-[PHASE 1] Loading Web Intel - Error Handler...
-[PHASE 2] Found 5 failed executions. Most recent error: ECONNREFUSED
-[PHASE 3] Diagnosing... Postgres credential using wrong host (3.141.138.47)
-         Checking Supabase connection... ✓ Database reachable at db.xxx.supabase.co
-         FIX NEEDED: Credential must be updated to use correct host
-         (Cannot update credential secrets via API - will note for human)
-         Stored error→fix mapping in n8n-brain
-[PHASE 4] Testing branches...
-         Branch 1 (critical): Sent test payload → Execution failed (same DB error)
-         NOTE: Cannot proceed with branch testing until credential is fixed
-[PHASE 5] Cannot verify output - workflow failing
-[PHASE 6] Error handling pattern: PRESENT ✓
-[PHASE 7] Stored 1 error fix in n8n-brain
-[PHASE 8] Marked as 'needs_review' - credential fix required
+If a health check fails mid-testing:
 
-## Workflow Needs Credential Fix: Web Intel - Error Handler
+1. **Output progress immediately:**
+   ```
+   [CONNECTION LOST] n8n-mcp stopped responding
 
-The Postgres credential "Supabase Postgres" (EgmvZHbvINHsh6PR) is configured
-with an incorrect host (3.141.138.47).
+   Progress before connection loss:
+   - Phase completed: X
+   - Fixes applied: [list]
+   - Branches tested: X/Y
+   - Output verified: yes/no
+   ```
 
-**To fix:**
-1. Open n8n credentials: https://n8n.realtyamp.ai/credentials
-2. Edit "Supabase Postgres"
-3. Update host to: db.xxxx.supabase.co (check your Supabase dashboard)
-4. Test connection
-5. Save
+2. **Save state to registry:**
+   ```bash
+   cd "/Users/mike/IAML Business OS" && source .env.local && \
+   curl -s -X PATCH "${SUPABASE_URL}/rest/v1/workflow_registry?workflow_id=eq.${WORKFLOW_ID}" \
+     -H "apikey: ${SUPABASE_SERVICE_KEY}" \
+     -H "Authorization: Bearer ${SUPABASE_SERVICE_KEY}" \
+     -H "Content-Type: application/json" \
+     -H "Content-Profile: n8n_brain" \
+     -d "{
+       \"test_status\": \"needs_review\",
+       \"tested_at\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",
+       \"tested_by\": \"test-workflow-auto\",
+       \"test_notes\": \"Testing interrupted at Phase X - connection lost. Partial results: [summary]\"
+     }"
+   ```
 
-Once fixed, reply "fixed" and I'll re-run full testing.
-```
+3. **Inform user:**
+   ```
+   [FATAL] Lost connection to n8n after Phase X.
+
+   Progress has been saved. To resume testing:
+   /test-workflow-auto <workflow_id>
+
+   Or check MCP server status and try again.
+   ```
+
+### Phase Failure Recovery
+
+If any phase fails completely (not connection loss):
+
+1. Log the error clearly: `[ERROR] Phase X failed: <reason>`
+2. Try to continue to the next phase if possible
+3. At the end, summarize what worked and what didn't
+4. Mark workflow as `needs_review` instead of `broken` if some tests passed
+
+### Recovery Checklist
+
+Before giving up on a workflow:
+
+- [ ] Tried 3 retries on failed MCP calls?
+- [ ] Waited 10s between retry attempts?
+- [ ] Checked if it's a connection issue vs. workflow issue?
+- [ ] Saved progress to registry?
+- [ ] Informed user with clear next steps?
+
+**Never silently fail.** Always output what happened.
 
 </instructions>
