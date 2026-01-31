@@ -13,7 +13,7 @@ See: `.planning-programs/AUTONOMOUS-BUILD-GUIDE.md` (pre-answered decisions)
 **Milestone:** v1.0
 **Status:** In Progress
 **Phase:** 02-registrations-tab IN PROGRESS (2 of 7)
-**Plan:** 02 of 4 complete
+**Plan:** 02 of 4 complete (01 and 02 done)
 
 Progress: [##########..................] 28%
 
@@ -38,6 +38,8 @@ Progress: [##########..................] 28%
 | 2026-01-31 | LATERAL JOIN for child aggregation in view | Better performance than correlated subquery |
 | 2026-01-31 | mountedTabs Set for lazy tab loading | Prevents unnecessary renders of unmounted tabs |
 | 2026-01-31 | Registration count in tab label | Quick reference without switching tabs |
+| 2026-01-31 | BLOCK_CONFIG constant for program blocks | Program-to-blocks mapping in code, supports partial name match |
+| 2026-01-31 | Migration requires manual run | CLI history out of sync with remote, SQL ready in file |
 
 ## Session Log
 
@@ -50,10 +52,14 @@ Progress: [##########..................] 28%
 | 2026-01-31 | Completed 01-04-PLAN.md | Date Range Filter UI (gap closure) - 2min |
 | 2026-01-31 | Completed 01-05-PLAN.md | Virtual Block Data Wiring (gap closure) - 3min |
 | 2026-01-31 | Completed 02-02-PLAN.md | Program Detail Page with Tabs - 4min |
+| 2026-01-31 | Completed 02-01-PLAN.md | Schema Extensions & Types - 10min |
 
 ## Blockers
 
-None
+**Migration needs manual application:**
+- Supabase CLI migration history out of sync
+- SQL ready in `supabase/migrations/20260131_registrations_tab_schema.sql`
+- Run in Supabase Dashboard SQL Editor before using cancellation/Apollo features
 
 ## Session Continuity
 
@@ -85,7 +91,8 @@ Per AUTONOMOUS-BUILD-GUIDE.md:
 | 01 | 03 | Filtering & Date Range | 2min | 21265fee, 65936102 |
 | 01 | 04 | Date Range Filter UI (gap closure) | 2min | 690622e3, bffb1e1f |
 | 01 | 05 | Virtual Block Data Wiring (gap closure) | 3min | e928f91d, 7fc8f1ab |
+| 02 | 01 | Schema Extensions & Types | 10min | 8abdd5b5, 57bc09b8 |
 | 02 | 02 | Program Detail Page with Tabs | 4min | 3f394bef, 462dafc7, 7c622e50 |
 
 ---
-*Last updated: 2026-01-31T18:36Z*
+*Last updated: 2026-01-31T20:25Z*
