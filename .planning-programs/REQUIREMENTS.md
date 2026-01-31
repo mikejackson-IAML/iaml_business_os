@@ -19,16 +19,16 @@
 
 ### Program Detail: Registrations Tab
 
-- [ ] **PROG-10**: Display registrations tab as the default/first tab
-- [ ] **PROG-11**: Show roster table with: Name, Company, Email, Blocks attending (checkmarks), Paid status
-- [ ] **PROG-12**: For block-based programs, show block columns with check/x for each registrant
-- [ ] **PROG-13**: Indicate registration type: full program vs. individual blocks
-- [ ] **PROG-14**: For virtual certificates, flag "Certificate registrant" vs. "Block-only registrant"
-- [ ] **PROG-15**: Show registration source (Website, Phone, Email, Colleague outreach, Repeat customer, Referral)
-- [ ] **PROG-16**: Filter roster by: paid/unpaid, block attending, company, registration source
-- [ ] **PROG-17**: Click on registrant row opens Contact Panel (slide-out)
-- [ ] **PROG-18**: Handle cancellations with visual indicator and refund status
-- [ ] **PROG-19**: For virtual blocks, show "Certificate Progress" section (who needs which blocks)
+- [x] **PROG-10**: Display registrations tab as the default/first tab
+- [x] **PROG-11**: Show roster table with: Name, Company, Email, Blocks attending (checkmarks), Paid status
+- [x] **PROG-12**: For block-based programs, show block columns with check/x for each registrant
+- [x] **PROG-13**: Indicate registration type: full program vs. individual blocks
+- [x] **PROG-14**: For virtual certificates, flag "Certificate registrant" vs. "Block-only registrant"
+- [x] **PROG-15**: Show registration source (Website, Phone, Email, Colleague outreach, Repeat customer, Referral)
+- [x] **PROG-16**: Filter roster by: paid/unpaid, block attending, company, registration source
+- [x] **PROG-17**: Click on registrant row opens Contact Panel (slide-out)
+- [x] **PROG-18**: Handle cancellations with visual indicator and refund status
+- [x] **PROG-19**: For virtual blocks, show "Certificate Progress" section (who needs which blocks)
 
 ### Contact Panel (Slide-Out)
 
@@ -108,7 +108,7 @@
 
 ### Data & Integration
 
-- [ ] **PROG-65**: Apollo API integration for person and company enrichment (auto on registration)
+- [x] **PROG-65**: Apollo API integration for person and company enrichment (auto on registration)
 - [ ] **PROG-66**: GA4 integration for website behavior data
 - [ ] **PROG-67**: SmartLead API integration for cold email engagement data
 - [ ] **PROG-68**: GoHighLevel API integration for warm email engagement data
@@ -130,7 +130,7 @@
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | PROG-01 to PROG-09 | Phase 1: Foundation & Programs List | Complete |
-| PROG-10 to PROG-19 | Phase 2: Registrations Tab | Pending |
+| PROG-10 to PROG-19 | Phase 2: Registrations Tab | Complete |
 | PROG-20 to PROG-32 | Phase 3: Contact Panel | Pending |
 | PROG-33 to PROG-44 | Phase 4: Logistics Tab | Pending |
 | PROG-45 to PROG-52 | Phase 5: Attendance/Evaluations Tab | Pending |

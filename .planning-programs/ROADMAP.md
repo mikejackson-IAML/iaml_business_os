@@ -84,10 +84,10 @@ Plans:
 **Plans:** 4 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Schema extensions for cancellation/enrichment and query functions
-- [ ] 02-02-PLAN.md — Program detail route with tabbed interface
-- [ ] 02-03-PLAN.md — Registrations roster table with filters and certificate progress
-- [ ] 02-04-PLAN.md — Apollo enrichment API integration
+- [x] 02-01-PLAN.md — Schema extensions for cancellation/enrichment and query functions
+- [x] 02-02-PLAN.md — Program detail route with tabbed interface
+- [x] 02-03-PLAN.md — Registrations roster table with filters and certificate progress
+- [x] 02-04-PLAN.md — Apollo enrichment API integration
 
 ---
 
@@ -214,7 +214,7 @@ Plans:
 | Phase | Plans Complete | Status |
 |-------|----------------|--------|
 | 1. Foundation & Programs List | 5/5 | Complete |
-| 2. Registrations Tab | 0/4 | Planned |
+| 2. Registrations Tab | 4/4 | Complete |
 | 3. Contact Panel | 0/TBD | Not Started |
 | 4. Logistics Tab | 0/TBD | Not Started |
 | 5. Attendance/Evaluations Tab | 0/TBD | Not Started |
@@ -224,4 +224,4 @@ Plans:
 ---
 *Roadmap created: 2026-01-30*
 *Phase 1 complete: 2026-01-31*
-*Phase 2 planned: 2026-01-31*
+*Phase 2 complete: 2026-01-31*
