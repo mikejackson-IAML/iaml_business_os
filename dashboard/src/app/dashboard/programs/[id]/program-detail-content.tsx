@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Calendar, MapPin, Users } from 'lucide-react';
+import { toast } from 'sonner';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/dashboard-kit/components/ui/tabs';
 import { Badge } from '@/dashboard-kit/components/ui/badge';
 import { formatDateShort } from '@/dashboard-kit/lib/utils';
@@ -52,8 +53,47 @@ export function ProgramDetailContent({
 
   function handleRowClick(registration: RegistrationRosterItem) {
     setSelectedRegistration(registration);
-    // Contact Panel will be implemented in Phase 3
-    console.log('Selected registration:', registration.id);
+    // Show toast until Contact Panel is implemented in Phase 3
+    toast.info(`Selected: ${registration.full_name}`, {
+      description: 'Contact Panel will be implemented in Phase 3',
+      action: {
+        label: 'Enrich',
+        onClick: () => triggerEnrichment(registration.email),
+      },
+    });
+  }
+
+  async function triggerEnrichment(email: string) {
+    toast.loading('Enriching contact...', { id: 'enrich' });
+
+    try {
+      const response = await fetch('/api/apollo/enrich', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (data.success && data.matched) {
+        toast.success('Contact enriched!', {
+          id: 'enrich',
+          description: `${data.person?.name || email} - ${data.person?.title || 'Unknown title'}`,
+        });
+      } else if (data.skipped) {
+        toast.info('Already enriched', {
+          id: 'enrich',
+          description: 'Contact was enriched recently',
+        });
+      } else {
+        toast.error('Enrichment failed', {
+          id: 'enrich',
+          description: data.error || 'No match found',
+        });
+      }
+    } catch (error) {
+      toast.error('Enrichment error', { id: 'enrich' });
+    }
   }
 
   function handleTabChange(value: string) {
