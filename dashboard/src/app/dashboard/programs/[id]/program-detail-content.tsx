@@ -7,10 +7,12 @@ import { toast } from 'sonner';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/dashboard-kit/components/ui/tabs';
 import { Badge } from '@/dashboard-kit/components/ui/badge';
 import { formatDateShort } from '@/dashboard-kit/lib/utils';
+import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { ProgramStatusBadge } from '../components/program-status-badge';
 import { RegistrationsRoster } from '../components/registrations-roster';
 import { RosterFilters } from '../components/roster-filters';
 import { CertificateProgress } from '../components/certificate-progress';
+import { ContactPanel } from '../components/contact-panel/contact-panel';
 import type { ProgramDetail, RegistrationRosterItem } from '@/lib/api/programs-queries';
 import { getBlocksForProgram } from '@/lib/api/programs-queries';
 
@@ -53,14 +55,6 @@ export function ProgramDetailContent({
 
   function handleRowClick(registration: RegistrationRosterItem) {
     setSelectedRegistration(registration);
-    // Show toast until Contact Panel is implemented in Phase 3
-    toast.info(`Selected: ${registration.full_name}`, {
-      description: 'Contact Panel will be implemented in Phase 3',
-      action: {
-        label: 'Enrich',
-        onClick: () => triggerEnrichment(registration.email),
-      },
-    });
   }
 
   async function triggerEnrichment(email: string) {
@@ -237,6 +231,21 @@ export function ProgramDetailContent({
           )}
         </TabsContent>
       </Tabs>
+
+      {/* Contact Panel Slide-out (PROG-17) */}
+      <Sheet
+        open={selectedRegistration !== null}
+        onOpenChange={(open) => !open && setSelectedRegistration(null)}
+      >
+        <SheetContent side="right" className="w-full sm:w-[600px] overflow-y-auto">
+          {selectedRegistration && (
+            <ContactPanel
+              registration={selectedRegistration}
+              onClose={() => setSelectedRegistration(null)}
+            />
+          )}
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }
