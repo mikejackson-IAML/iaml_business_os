@@ -20,10 +20,9 @@ export function PersonHero({ registration }: PersonHeroProps) {
     .join('')
     .toUpperCase();
 
-  // Get LinkedIn URL from registration if enriched (will be added by Apollo)
-  // For now, check if there's a linkedin_url field
-  const linkedinUrl = (registration as Record<string, unknown>).linkedin_url as string | null;
-  const photoUrl = (registration as Record<string, unknown>).linkedin_photo_url as string | null;
+  // Get LinkedIn URL and photo from Apollo enrichment
+  const linkedinUrl = registration.linkedin_url;
+  const photoUrl = registration.linkedin_photo_url;
 
   return (
     <div className="space-y-4">

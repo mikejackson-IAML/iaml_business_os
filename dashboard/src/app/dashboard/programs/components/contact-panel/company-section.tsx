@@ -30,12 +30,11 @@ export function CompanySection({
   const companyName = registration.company_name;
 
   // Get Apollo enrichment data if available
-  const enrichedData = registration as Record<string, unknown>;
-  const industry = enrichedData.company_industry as string | null;
-  const employeeCount = enrichedData.company_employee_count as number | null;
-  const growth30d = enrichedData.company_growth_30d as number | null;
-  const growth60d = enrichedData.company_growth_60d as number | null;
-  const growth90d = enrichedData.company_growth_90d as number | null;
+  const industry = registration.company_industry;
+  const employeeCount = registration.company_employee_count;
+  const growth30d = registration.company_growth_30d;
+  const growth60d = registration.company_growth_60d;
+  const growth90d = registration.company_growth_90d;
 
   const hasEnrichedData = industry || employeeCount || growth30d || growth60d || growth90d;
 

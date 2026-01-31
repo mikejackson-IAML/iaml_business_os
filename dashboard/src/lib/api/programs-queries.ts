@@ -833,14 +833,24 @@ export interface RegistrationRosterItem {
   registration_status: string;
   payment_status: string;
   payment_method: string | null;
+  payment_due_date: string | null;
   final_price: number;
   attendance_type: string;
   selected_blocks: string[] | null;
   registration_source: string | null;
+  program_name: string | null;
   // Cancellation fields (available after migration applied)
   cancelled_at: string | null;
   refund_status: 'not_applicable' | 'pending' | 'processed' | 'denied' | null;
   refund_amount: number | null;
+  // Apollo enrichment fields (available after enrichment)
+  linkedin_url: string | null;
+  linkedin_photo_url: string | null;
+  company_industry: string | null;
+  company_employee_count: number | null;
+  company_growth_30d: number | null;
+  company_growth_60d: number | null;
+  company_growth_90d: number | null;
 }
 
 /** Roster filter options */
@@ -938,14 +948,24 @@ export async function getRegistrationsForProgram(
     registration_status: r.registration_status as string,
     payment_status: r.payment_status as string,
     payment_method: r.payment_method as string | null,
+    payment_due_date: (r.payment_due_date as string) || null,
     final_price: (r.final_price as number) || 0,
     attendance_type: r.attendance_type as string,
     selected_blocks: r.selected_blocks as string[] | null,
     registration_source: r.registration_source as string | null,
+    program_name: (r.program_name as string) || null,
     // Cancellation fields (null until migration applied)
     cancelled_at: (r.cancelled_at as string) || null,
     refund_status: (r.refund_status as RegistrationRosterItem['refund_status']) || null,
     refund_amount: (r.refund_amount as number) || null,
+    // Apollo enrichment fields (null until enriched)
+    linkedin_url: (r.linkedin_url as string) || null,
+    linkedin_photo_url: (r.linkedin_photo_url as string) || null,
+    company_industry: (r.company_industry as string) || null,
+    company_employee_count: (r.company_employee_count as number) || null,
+    company_growth_30d: (r.company_growth_30d as number) || null,
+    company_growth_60d: (r.company_growth_60d as number) || null,
+    company_growth_90d: (r.company_growth_90d as number) || null,
   }));
 }
 

@@ -35,7 +35,7 @@ export function RegistrationSection({ registration }: RegistrationSectionProps) 
               Program
             </dt>
             <dd className="text-sm font-medium mt-0.5">
-              {(registration as Record<string, unknown>).program_name as string || 'Unknown Program'}
+              {registration.program_name || 'Unknown Program'}
             </dd>
           </div>
 

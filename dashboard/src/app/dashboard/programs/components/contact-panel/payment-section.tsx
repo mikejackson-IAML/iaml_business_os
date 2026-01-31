@@ -17,9 +17,7 @@ interface PaymentSectionProps {
 export function PaymentSection({ registration }: PaymentSectionProps) {
   // Payment status
   const isPaid = registration.payment_status?.toLowerCase() === 'paid';
-  const paymentDueDate = (registration as Record<string, unknown>).payment_due_date as
-    | string
-    | null;
+  const paymentDueDate = registration.payment_due_date;
 
   // Calculate days until/past due
   const daysInfo = calculateDaysInfo(paymentDueDate, isPaid);
