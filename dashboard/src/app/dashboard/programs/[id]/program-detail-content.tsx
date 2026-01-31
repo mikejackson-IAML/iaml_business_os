@@ -7,7 +7,11 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/dashboard-kit/compon
 import { Badge } from '@/dashboard-kit/components/ui/badge';
 import { formatDateShort } from '@/dashboard-kit/lib/utils';
 import { ProgramStatusBadge } from '../components/program-status-badge';
+import { RegistrationsRoster } from '../components/registrations-roster';
+import { RosterFilters } from '../components/roster-filters';
+import { CertificateProgress } from '../components/certificate-progress';
 import type { ProgramDetail, RegistrationRosterItem } from '@/lib/api/programs-queries';
+import { getBlocksForProgram } from '@/lib/api/programs-queries';
 
 interface ProgramDetailContentProps {
   program: ProgramDetail;
@@ -25,6 +29,32 @@ export function ProgramDetailContent({
 }: ProgramDetailContentProps) {
   const [activeTab, setActiveTab] = useState<TabId>('registrations'); // Default to first tab per PROG-10
   const [mountedTabs, setMountedTabs] = useState<Set<TabId>>(new Set(['registrations']));
+  const [selectedRegistration, setSelectedRegistration] = useState<RegistrationRosterItem | null>(null);
+
+  // Get blocks for this program
+  const blocks = getBlocksForProgram(program.program_name);
+
+  // Get unique companies and sources for filters
+  const companies = Array.from(new Set(
+    registrations.map(r => r.company_name).filter(Boolean)
+  )) as string[];
+
+  const sources = Array.from(new Set(
+    registrations.map(r => r.registration_source).filter(Boolean)
+  )) as string[];
+
+  // Check if this is a virtual block (has parent)
+  const isVirtualBlock = program.parent_program_id !== null;
+
+  // Compute completed blocks for certificate progress (if virtual block)
+  // For now, show all blocks from parent as incomplete - will be enhanced later
+  const completedBlockIds: string[] = [];
+
+  function handleRowClick(registration: RegistrationRosterItem) {
+    setSelectedRegistration(registration);
+    // Contact Panel will be implemented in Phase 3
+    console.log('Selected registration:', registration.id);
+  }
 
   function handleTabChange(value: string) {
     const tab = value as TabId;
@@ -108,16 +138,42 @@ export function ProgramDetailContent({
           <TabsTrigger value="attendance">Attendance/Evaluations</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="registrations" className="mt-4">
+        <TabsContent value="registrations" className="mt-4 space-y-4">
           {mountedTabs.has('registrations') && (
-            <div className="rounded-lg border bg-card p-6">
-              <p className="text-muted-foreground">
-                Registrations roster will be implemented in Plan 02-03.
+            <>
+              {/* Certificate Progress for virtual blocks (PROG-19) */}
+              {isVirtualBlock && (
+                <CertificateProgress
+                  certificateName={program.parent_program_name || 'Certificate Program'}
+                  blocks={blocks}
+                  completedBlockIds={completedBlockIds}
+                />
+              )}
+
+              {/* Filters (PROG-16) */}
+              <RosterFilters
+                programId={program.id}
+                blocks={blocks}
+                companies={companies}
+                sources={sources}
+                currentFilters={currentFilters}
+              />
+
+              {/* Roster Table */}
+              <div className="rounded-lg border bg-card">
+                <RegistrationsRoster
+                  registrations={registrations}
+                  blocks={blocks}
+                  onRowClick={handleRowClick}
+                  isVirtualCertificate={program.child_block_count > 0}
+                />
+              </div>
+
+              {/* Registration count */}
+              <p className="text-sm text-muted-foreground text-center">
+                Showing {registrations.length} registration{registrations.length !== 1 ? 's' : ''}
               </p>
-              <p className="text-sm text-muted-foreground mt-2">
-                {registrations.length} registrations loaded for program {program.id}
-              </p>
-            </div>
+            </>
           )}
         </TabsContent>
 
