@@ -13,9 +13,9 @@ See: `.planning-programs/AUTONOMOUS-BUILD-GUIDE.md` (pre-answered decisions)
 **Milestone:** v1.0
 **Status:** In Progress
 **Phase:** 02-registrations-tab IN PROGRESS (2 of 7)
-**Plan:** 02 of 4 complete (01 and 02 done)
+**Plan:** 03 of 4 complete (01, 02, 03 done)
 
-Progress: [##########..................] 28%
+Progress: [###########.................] 34%
 
 ## Quick Context
 
@@ -40,6 +40,9 @@ Progress: [##########..................] 28%
 | 2026-01-31 | Registration count in tab label | Quick reference without switching tabs |
 | 2026-01-31 | BLOCK_CONFIG constant for program blocks | Program-to-blocks mapping in code, supports partial name match |
 | 2026-01-31 | Migration requires manual run | CLI history out of sync with remote, SQL ready in file |
+| 2026-01-31 | Certificate vs Block-only by attendance_type | 'Full' = certificate registrant, else block-only |
+| 2026-01-31 | Block selection via case-insensitive name match | Flexible matching for various block name formats |
+| 2026-01-31 | Roster filter state in URL params | Shareable/bookmarkable filter combinations |
 
 ## Session Log
 
@@ -53,6 +56,7 @@ Progress: [##########..................] 28%
 | 2026-01-31 | Completed 01-05-PLAN.md | Virtual Block Data Wiring (gap closure) - 3min |
 | 2026-01-31 | Completed 02-02-PLAN.md | Program Detail Page with Tabs - 4min |
 | 2026-01-31 | Completed 02-01-PLAN.md | Schema Extensions & Types - 10min |
+| 2026-01-31 | Completed 02-03-PLAN.md | Registrations Roster - 6min |
 
 ## Blockers
 
@@ -64,9 +68,9 @@ Progress: [##########..................] 28%
 ## Session Continuity
 
 - **Last session:** 2026-01-31
-- **Stopped at:** Completed 02-02-PLAN.md (Program Detail Page with Tabs)
-- **Next step:** Continue Phase 02 with Plan 02-03 (Registrations Roster)
-- **Resume file:** `.planning-programs/phases/02-registrations-tab/02-03-PLAN.md`
+- **Stopped at:** Completed 02-03-PLAN.md (Registrations Roster)
+- **Next step:** Continue Phase 02 with Plan 02-04 (Contact Panel Slideout)
+- **Resume file:** `.planning-programs/phases/02-registrations-tab/02-04-PLAN.md`
 
 ## Key Reference Documents
 
@@ -93,6 +97,7 @@ Per AUTONOMOUS-BUILD-GUIDE.md:
 | 01 | 05 | Virtual Block Data Wiring (gap closure) | 3min | e928f91d, 7fc8f1ab |
 | 02 | 01 | Schema Extensions & Types | 10min | 8abdd5b5, 57bc09b8 |
 | 02 | 02 | Program Detail Page with Tabs | 4min | 3f394bef, 462dafc7, 7c622e50 |
+| 02 | 03 | Registrations Roster | 6min | 18fc661b, f4d550a5, 6cafc17b |
 
 ---
-*Last updated: 2026-01-31T20:25Z*
+*Last updated: 2026-01-31T20:42Z*
