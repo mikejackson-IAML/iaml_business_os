@@ -151,6 +151,67 @@ export interface ProgramFiltersUI {
   showArchived: boolean;
 }
 
+// Program Detail types (Phase 2)
+export interface ProgramDetailUI {
+  id: string;
+  programName: string;
+  instanceName: string;
+  format: 'in-person' | 'virtual' | 'on-demand';
+  location: string;
+  startDate: Date | null;
+  endDate: Date | null;
+  daysUntil: number | null;
+  enrolledCount: number;
+  minCapacity: number;
+  maxCapacity: number;
+  registrationStatus: 'go' | 'close' | 'needs';
+  readinessScore: number;
+  // Virtual block info
+  parentProgramId: string | null;
+  parentProgramName: string | null;
+  isVirtualBlock: boolean;
+  childBlockCount: number;
+  childTotalEnrolled: number;
+  // Block configuration
+  blocks: ProgramBlockUI[];
+}
+
+export interface ProgramBlockUI {
+  id: string;
+  name: string;
+  shortName: string;
+  startDate?: Date;
+}
+
+export interface RegistrationRosterItemUI {
+  id: string;
+  fullName: string;
+  email: string;
+  phone: string | null;
+  companyName: string | null;
+  jobTitle: string | null;
+  registrationDate: Date;
+  registrationStatus: string;
+  paymentStatus: 'paid' | 'pending' | 'past_due' | 'refunded';
+  finalPrice: number;
+  selectedBlocks: string[];
+  registrationSource: string | null;
+  // Cancellation info
+  cancelledAt: Date | null;
+  refundStatus: 'not_applicable' | 'pending' | 'processed' | 'denied' | null;
+  refundAmount: number | null;
+  // Computed
+  isCertificateRegistrant: boolean;
+  isCancelled: boolean;
+}
+
+export interface RosterFiltersUI {
+  paymentStatus: 'all' | 'paid' | 'unpaid' | 'past_due';
+  block: string | null;
+  company: string | null;
+  source: string | null;
+}
+
 // Programs department configuration - matches the JSON spec provided
 export const programsDepartmentConfig: DepartmentConfig = {
   department: 'programs',

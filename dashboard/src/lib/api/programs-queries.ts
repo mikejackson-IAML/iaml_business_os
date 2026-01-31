@@ -749,6 +749,54 @@ export async function getDistinctCities(): Promise<string[]> {
 // Program Detail Types & Queries (Phase 2)
 // ============================================
 
+export interface ProgramBlock {
+  id: string;
+  name: string;
+  shortName: string; // "Block 1", "Block 2", etc.
+  startDate?: string;
+}
+
+// Block configuration mapping program names to their blocks
+const BLOCK_CONFIG: Record<string, ProgramBlock[]> = {
+  'Certificate in Employee Relations Law': [
+    { id: 'block_1', name: 'Comprehensive Labor Relations', shortName: 'Block 1' },
+    { id: 'block_2', name: 'Discrimination Prevention', shortName: 'Block 2' },
+    { id: 'block_3', name: 'Special Issues', shortName: 'Block 3' },
+  ],
+  'Certificate in Strategic HR Leadership': [
+    { id: 'block_1', name: 'HR Strategy Foundations', shortName: 'Block 1' },
+    { id: 'block_2', name: 'Advanced Leadership', shortName: 'Block 2' },
+  ],
+  'Certificate in Legal HR Foundations': [
+    { id: 'block_1', name: 'Employment Law Essentials', shortName: 'Block 1' },
+    { id: 'block_2', name: 'HR Compliance', shortName: 'Block 2' },
+  ],
+  'Certificate in HR Analytics': [
+    { id: 'block_1', name: 'Data-Driven HR', shortName: 'Block 1' },
+    { id: 'block_2', name: 'Advanced Analytics', shortName: 'Block 2' },
+  ],
+};
+
+/**
+ * Get blocks configuration for a program by name
+ * Returns empty array for non-certificate programs
+ */
+export function getBlocksForProgram(programName: string): ProgramBlock[] {
+  // Check for exact match first
+  if (BLOCK_CONFIG[programName]) {
+    return BLOCK_CONFIG[programName];
+  }
+
+  // Check for partial match (e.g., "Certificate in Employee Relations Law - Virtual - Oct 2026")
+  for (const [key, blocks] of Object.entries(BLOCK_CONFIG)) {
+    if (programName.includes(key)) {
+      return blocks;
+    }
+  }
+
+  return [];
+}
+
 export interface ProgramDetail {
   id: string;
   instance_name: string;
@@ -789,6 +837,18 @@ export interface RegistrationRosterItem {
   attendance_type: string;
   selected_blocks: string[] | null;
   registration_source: string | null;
+  // Cancellation fields (available after migration applied)
+  cancelled_at: string | null;
+  refund_status: 'not_applicable' | 'pending' | 'processed' | 'denied' | null;
+  refund_amount: number | null;
+}
+
+/** Roster filter options */
+export interface RosterFilters {
+  paymentStatus?: 'all' | 'paid' | 'unpaid' | 'past_due';
+  block?: string;
+  company?: string;
+  source?: string;
 }
 
 export async function getProgram(programId: string): Promise<ProgramDetail | null> {
@@ -882,5 +942,33 @@ export async function getRegistrationsForProgram(
     attendance_type: r.attendance_type as string,
     selected_blocks: r.selected_blocks as string[] | null,
     registration_source: r.registration_source as string | null,
+    // Cancellation fields (null until migration applied)
+    cancelled_at: (r.cancelled_at as string) || null,
+    refund_status: (r.refund_status as RegistrationRosterItem['refund_status']) || null,
+    refund_amount: (r.refund_amount as number) || null,
   }));
+}
+
+/**
+ * Check if a block is selected in the selected_blocks array
+ * Handles various formats: "Full", "Block 1", "block_1", etc.
+ */
+export function isBlockSelected(selectedBlocks: string[] | null, blockId: string): boolean {
+  if (!selectedBlocks || selectedBlocks.length === 0) return false;
+
+  // "Full" or "full" means all blocks selected
+  if (selectedBlocks.some((b) => b.toLowerCase() === 'full')) return true;
+
+  // Check for various block identifier formats
+  const blockNum = blockId.replace('block_', '');
+  return selectedBlocks.some((b) => {
+    const lower = b.toLowerCase();
+    return (
+      lower === blockId ||
+      lower === `block ${blockNum}` ||
+      lower === `block_${blockNum}` ||
+      lower.includes(`block ${blockNum}`) ||
+      lower.includes(blockId)
+    );
+  });
 }
