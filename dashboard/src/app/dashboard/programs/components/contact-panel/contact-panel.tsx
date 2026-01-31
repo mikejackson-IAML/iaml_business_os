@@ -15,6 +15,7 @@ import { PersonHero } from './person-hero';
 import { RegistrationSection } from './registration-section';
 import { PaymentSection } from './payment-section';
 import { CompanySection } from './company-section';
+import { EngagementSection } from './engagement-section';
 
 interface ContactPanelProps {
   registration: RegistrationRosterItem;
@@ -100,17 +101,8 @@ export function ContactPanel({ registration, onClose }: ContactPanelProps) {
           />
         )}
 
-        {/* Engagement Section - Placeholder for Plan 03 */}
-        <section className="space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">
-            Engagement
-          </h3>
-          <div className="rounded-lg border bg-muted/50 p-4">
-            <p className="text-sm text-muted-foreground">
-              Engagement section coming in Plan 03
-            </p>
-          </div>
-        </section>
+        {/* Engagement Section (PROG-27 through PROG-31) */}
+        <EngagementSection email={registration.email} />
       </div>
     </div>
   );
