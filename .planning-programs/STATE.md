@@ -12,10 +12,10 @@ See: `.planning-programs/AUTONOMOUS-BUILD-GUIDE.md` (pre-answered decisions)
 
 **Milestone:** v1.0
 **Status:** In Progress
-**Phase:** 02-registrations-tab IN PROGRESS (2 of 7)
-**Plan:** 03 of 4 complete (01, 02, 03 done)
+**Phase:** 02-registrations-tab COMPLETE (2 of 7)
+**Plan:** 04 of 4 complete (all done)
 
-Progress: [###########.................] 34%
+Progress: [#############...............] 41%
 
 ## Quick Context
 
@@ -43,6 +43,9 @@ Progress: [###########.................] 34%
 | 2026-01-31 | Certificate vs Block-only by attendance_type | 'Full' = certificate registrant, else block-only |
 | 2026-01-31 | Block selection via case-insensitive name match | Flexible matching for various block name formats |
 | 2026-01-31 | Roster filter state in URL params | Shareable/bookmarkable filter combinations |
+| 2026-01-31 | pg_net for async HTTP from DB triggers | Non-blocking enrichment calls |
+| 2026-01-31 | 24-hour enrichment cache | Prevents redundant Apollo API calls |
+| 2026-01-31 | app_config table for API URL | Configurable base URL for triggers |
 
 ## Session Log
 
@@ -57,20 +60,23 @@ Progress: [###########.................] 34%
 | 2026-01-31 | Completed 02-02-PLAN.md | Program Detail Page with Tabs - 4min |
 | 2026-01-31 | Completed 02-01-PLAN.md | Schema Extensions & Types - 10min |
 | 2026-01-31 | Completed 02-03-PLAN.md | Registrations Roster - 6min |
+| 2026-01-31 | Completed 02-04-PLAN.md | Apollo Enrichment Integration - 2min |
 
 ## Blockers
 
-**Migration needs manual application:**
+**Migrations need manual application:**
 - Supabase CLI migration history out of sync
-- SQL ready in `supabase/migrations/20260131_registrations_tab_schema.sql`
+- SQL ready in:
+  - `supabase/migrations/20260131_registrations_tab_schema.sql` (cancellation columns, Apollo tracking)
+  - `supabase/migrations/20260131_apollo_auto_enrich_trigger.sql` (auto-enrichment trigger)
 - Run in Supabase Dashboard SQL Editor before using cancellation/Apollo features
 
 ## Session Continuity
 
 - **Last session:** 2026-01-31
-- **Stopped at:** Completed 02-03-PLAN.md (Registrations Roster)
-- **Next step:** Continue Phase 02 with Plan 02-04 (Contact Panel Slideout)
-- **Resume file:** `.planning-programs/phases/02-registrations-tab/02-04-PLAN.md`
+- **Stopped at:** Completed 02-04-PLAN.md (Apollo Enrichment Integration)
+- **Next step:** Begin Phase 03 (Contact Panel)
+- **Resume file:** `.planning-programs/phases/03-contact-panel/03-01-PLAN.md`
 
 ## Key Reference Documents
 
@@ -98,6 +104,7 @@ Per AUTONOMOUS-BUILD-GUIDE.md:
 | 02 | 01 | Schema Extensions & Types | 10min | 8abdd5b5, 57bc09b8 |
 | 02 | 02 | Program Detail Page with Tabs | 4min | 3f394bef, 462dafc7, 7c622e50 |
 | 02 | 03 | Registrations Roster | 6min | 18fc661b, f4d550a5, 6cafc17b |
+| 02 | 04 | Apollo Enrichment Integration | 2min | 88f9257e, 1ea0e458, b034444a, 76b08952 |
 
 ---
-*Last updated: 2026-01-31T20:42Z*
+*Last updated: 2026-01-31T20:33Z*
