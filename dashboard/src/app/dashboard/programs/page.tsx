@@ -22,6 +22,8 @@ interface PageProps {
     sort?: string;
     order?: string;
     archived?: string;
+    dateFrom?: string;
+    dateTo?: string;
   }>;
 }
 
@@ -36,6 +38,8 @@ async function ProgramsDataLoader({ searchParams }: { searchParams: PageProps['s
     sort: (params.sort as 'start_date' | 'instance_name' | 'current_enrolled') || 'start_date',
     order: (params.order as 'asc' | 'desc') || 'asc',
     includeArchived: params.archived === 'true',
+    dateFrom: params.dateFrom,
+    dateTo: params.dateTo,
   };
 
   // Fetch data in parallel
@@ -53,6 +57,8 @@ async function ProgramsDataLoader({ searchParams }: { searchParams: PageProps['s
         format: filters.format || null,
         status: filters.status,
         showArchived: filters.includeArchived,
+        dateFrom: filters.dateFrom || null,
+        dateTo: filters.dateTo || null,
       }}
       currentSort={{
         column: filters.sort,
