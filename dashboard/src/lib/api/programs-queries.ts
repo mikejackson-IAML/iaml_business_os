@@ -744,3 +744,143 @@ export async function getDistinctCities(): Promise<string[]> {
   const cities = Array.from(citySet) as string[];
   return cities;
 }
+
+// ============================================
+// Program Detail Types & Queries (Phase 2)
+// ============================================
+
+export interface ProgramDetail {
+  id: string;
+  instance_name: string;
+  program_name: string;
+  format: 'in-person' | 'virtual' | 'on-demand' | null;
+  start_date: string | null;
+  end_date: string | null;
+  city: string | null;
+  state: string | null;
+  venue_name: string | null;
+  current_enrolled: number;
+  min_capacity: number;
+  max_capacity: number;
+  days_until_start: number | null;
+  status: string;
+  readiness_score: number;
+  // Virtual block linking
+  parent_program_id: string | null;
+  parent_program_name: string | null;
+  child_block_count: number;
+  child_total_enrolled: number;
+}
+
+export interface RegistrationRosterItem {
+  id: string;
+  first_name: string;
+  last_name: string;
+  full_name: string;
+  email: string;
+  phone: string | null;
+  company_name: string | null;
+  job_title: string | null;
+  registration_date: string;
+  registration_status: string;
+  payment_status: string;
+  payment_method: string | null;
+  final_price: number;
+  attendance_type: string;
+  selected_blocks: string[] | null;
+  registration_source: string | null;
+}
+
+export async function getProgram(programId: string): Promise<ProgramDetail | null> {
+  const supabase = getServerClient();
+
+  const { data, error } = await supabase
+    .from('program_dashboard_summary')
+    .select('*')
+    .eq('id', programId)
+    .single();
+
+  if (error) {
+    console.error('Error fetching program:', error);
+    return null;
+  }
+
+  if (!data) {
+    return null;
+  }
+
+  // Map to ProgramDetail type with proper defaults
+  const p = data as Record<string, unknown>;
+  return {
+    id: p.id as string,
+    instance_name: p.instance_name as string,
+    program_name: p.program_name as string,
+    format: p.format as ProgramDetail['format'],
+    start_date: p.start_date as string | null,
+    end_date: p.end_date as string | null,
+    city: p.city as string | null,
+    state: p.state as string | null,
+    venue_name: p.venue_name as string | null,
+    current_enrolled: (p.current_enrolled as number) || 0,
+    min_capacity: (p.min_capacity as number) || 0,
+    max_capacity: (p.max_capacity as number) || 0,
+    days_until_start: p.days_until_start as number | null,
+    status: p.status as string,
+    readiness_score: (p.readiness_score as number) || 0,
+    parent_program_id: (p.parent_program_id as string) || null,
+    parent_program_name: (p.parent_program_name as string) || null,
+    child_block_count: (p.child_block_count as number) || 0,
+    child_total_enrolled: (p.child_total_enrolled as number) || 0,
+  };
+}
+
+export async function getRegistrationsForProgram(
+  programId: string,
+  filters?: Record<string, string | undefined>
+): Promise<RegistrationRosterItem[]> {
+  const supabase = getServerClient();
+
+  let query = supabase
+    .from('registration_dashboard_summary')
+    .select('*')
+    .eq('program_instance_id', programId);
+
+  // Apply filters if provided
+  if (filters?.paymentStatus && filters.paymentStatus !== '_all') {
+    query = query.eq('payment_status', filters.paymentStatus);
+  }
+
+  if (filters?.source && filters.source !== '_all') {
+    query = query.eq('registration_source', filters.source);
+  }
+
+  // Sort by registration date descending (most recent first)
+  query = query.order('registration_date', { ascending: false });
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.error('Error fetching registrations for program:', error);
+    return [];
+  }
+
+  // Map to RegistrationRosterItem type
+  return (data || []).map((r: Record<string, unknown>) => ({
+    id: r.id as string,
+    first_name: r.first_name as string,
+    last_name: r.last_name as string,
+    full_name: r.full_name as string,
+    email: r.email as string,
+    phone: r.phone as string | null,
+    company_name: r.company_name as string | null,
+    job_title: r.job_title as string | null,
+    registration_date: r.registration_date as string,
+    registration_status: r.registration_status as string,
+    payment_status: r.payment_status as string,
+    payment_method: r.payment_method as string | null,
+    final_price: (r.final_price as number) || 0,
+    attendance_type: r.attendance_type as string,
+    selected_blocks: r.selected_blocks as string[] | null,
+    registration_source: r.registration_source as string | null,
+  }));
+}
