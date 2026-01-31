@@ -22,6 +22,8 @@ interface ProgramsContentProps {
     format: string | null;
     status: 'upcoming' | 'completed' | 'all';
     showArchived: boolean;
+    dateFrom: string | null;
+    dateTo: string | null;
   };
   currentSort: {
     column: string;

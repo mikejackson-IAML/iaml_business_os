@@ -18,6 +18,8 @@ interface ProgramFiltersProps {
     format: string | null;
     status: 'upcoming' | 'completed' | 'all';
     showArchived: boolean;
+    dateFrom: string | null;
+    dateTo: string | null;
   };
   isOpen: boolean;
   onToggle: () => void;
@@ -65,7 +67,7 @@ export function ProgramFilters({
     router.push(`/dashboard/programs?${params.toString()}`);
   };
 
-  const hasActiveFilters = currentFilters.city || currentFilters.format || currentFilters.status !== 'upcoming';
+  const hasActiveFilters = currentFilters.city || currentFilters.format || currentFilters.status !== 'upcoming' || currentFilters.dateFrom || currentFilters.dateTo;
 
   return (
     <div className="space-y-4">
@@ -81,7 +83,7 @@ export function ProgramFilters({
           Filters
           {hasActiveFilters && (
             <span className="ml-1 rounded-full bg-primary-foreground/20 px-1.5 py-0.5 text-xs">
-              {[currentFilters.city, currentFilters.format, currentFilters.status !== 'upcoming' ? currentFilters.status : null].filter(Boolean).length}
+              {[currentFilters.city, currentFilters.format, currentFilters.status !== 'upcoming' ? currentFilters.status : null, currentFilters.dateFrom, currentFilters.dateTo].filter(Boolean).length}
             </span>
           )}
         </Button>
@@ -102,7 +104,7 @@ export function ProgramFilters({
       {/* Filter panel */}
       {isOpen && (
         <div className="rounded-lg border bg-card p-4 space-y-4 animate-in fade-in-0 slide-in-from-top-2">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {/* City filter */}
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-muted-foreground">City</label>
@@ -162,6 +164,28 @@ export function ProgramFilters({
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+
+            {/* Date From filter */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-muted-foreground">From</label>
+              <input
+                type="date"
+                value={currentFilters.dateFrom || ''}
+                onChange={(e) => updateFilter('dateFrom', e.target.value)}
+                className="h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
+              />
+            </div>
+
+            {/* Date To filter */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-muted-foreground">To</label>
+              <input
+                type="date"
+                value={currentFilters.dateTo || ''}
+                onChange={(e) => updateFilter('dateTo', e.target.value)}
+                className="h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
+              />
             </div>
           </div>
         </div>
