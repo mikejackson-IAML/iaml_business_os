@@ -103,7 +103,7 @@ Plans:
 4. Payment details: invoice sent, due date, status, days until/past due
 5. Company data: name, industry, size, growth rates
 6. Same-company registrant count shown
-7. Colleague outreach button (disabled until webhook ready)
+7. Colleague outreach button triggers n8n workflow
 8. Workflow status displayed
 9. Engagement history section expandable
 10. Email engagement: received, opened, clicked, campaigns
@@ -115,7 +115,13 @@ Plans:
 16. SmartLead integration working
 17. GoHighLevel integration working
 
-**Plans:** TBD during planning phase
+**Plans:** 4 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — Sheet component and panel wrapper with row click wiring
+- [ ] 03-02-PLAN.md — Person hero, registration, payment, and company sections
+- [ ] 03-03-PLAN.md — Engagement section with GA4, SmartLead, GHL integrations
+- [ ] 03-04-PLAN.md — Colleague outreach and manual enrich action buttons
 
 ---
 
@@ -215,7 +221,7 @@ Plans:
 |-------|----------------|--------|
 | 1. Foundation & Programs List | 5/5 | Complete |
 | 2. Registrations Tab | 4/4 | Complete |
-| 3. Contact Panel | 0/TBD | Not Started |
+| 3. Contact Panel | 0/4 | Not Started |
 | 4. Logistics Tab | 0/TBD | Not Started |
 | 5. Attendance/Evaluations Tab | 0/TBD | Not Started |
 | 6. Program Status & Alerts | 0/TBD | Not Started |
@@ -225,3 +231,4 @@ Plans:
 *Roadmap created: 2026-01-30*
 *Phase 1 complete: 2026-01-31*
 *Phase 2 complete: 2026-01-31*
+*Phase 3 planned: 2026-01-31*
