@@ -1,558 +1,291 @@
 'use client';
 
-import {
-  Calendar,
-  Users,
-  GraduationCap,
-  CheckCircle2,
-  AlertTriangle,
-  Clock,
-  Building2,
-  UserCheck,
-  Package,
-  Award,
-  Tv,
-  UtensilsCrossed,
-  Hotel,
-  Globe,
-  ArrowLeft,
-} from 'lucide-react';
-import Link from 'next/link';
-import { HealthScore } from '@/dashboard-kit/components/dashboard/health-score';
-import { MetricCard } from '@/dashboard-kit/components/dashboard/metric-card';
-import { AlertList } from '@/dashboard-kit/components/dashboard/alert-list';
-import { ActivityFeed } from '@/dashboard-kit/components/dashboard/activity-feed';
-import { Card, CardContent, CardHeader, CardTitle } from '@/dashboard-kit/components/ui/card';
-import { Progress } from '@/dashboard-kit/components/ui/progress';
-import { FallingPattern } from '@/components/ui/falling-pattern';
-import { UserMenu } from '@/components/UserMenu';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { GraduationCap, Calendar, Users, ArrowUpDown } from 'lucide-react';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
-import type { HealthStatus, AlertItem, ActivityItem } from '@/dashboard-kit/types';
-import type {
-  ProgramsDashboardData,
-  ProgramSummary,
-  AtRiskProgram,
-  RoomBlockAlert,
-  FacultyGap,
-  ProgramActivity,
-  ProgramsAlert,
-  ReadinessBreakdown,
-  RegistrationSummary,
-} from '@/lib/api/programs-queries';
-import { RegistrationsTable } from './components/registrations-table';
+import { UserMenu } from '@/components/UserMenu';
+import { Card, CardContent } from '@/dashboard-kit/components/ui/card';
+import { Badge } from '@/dashboard-kit/components/ui/badge';
+import { cn, formatDateShort } from '@/dashboard-kit/lib/utils';
+import type { ProgramListItem } from '@/lib/api/programs-queries';
+import { ProgramStatusBadge } from './components/program-status-badge';
+import { LogisticsProgress } from './components/logistics-progress';
 
 interface ProgramsContentProps {
-  data: ProgramsDashboardData;
-  recentRegistrations: RegistrationSummary[];
+  programs: ProgramListItem[];
+  cities: string[];
+  currentFilters: {
+    city: string | null;
+    format: string | null;
+    status: 'upcoming' | 'completed' | 'all';
+    showArchived: boolean;
+  };
+  currentSort: {
+    column: string;
+    order: 'asc' | 'desc';
+  };
 }
 
-// Map alerts to AlertItem format
-function mapAlertsToAlertItems(alerts: ProgramsAlert[]): AlertItem[] {
-  return alerts.map((alert) => ({
-    id: alert.id,
-    title: alert.title,
-    description: alert.description,
-    severity: alert.severity,
-    category: alert.category,
-    timestamp: alert.timestamp,
-    dismissable: false,
-  }));
-}
+export function ProgramsContent({
+  programs,
+  cities,
+  currentFilters,
+  currentSort,
+}: ProgramsContentProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-// Map activity to ActivityItem format
-function mapActivityToFeed(activities: ProgramActivity[]): ActivityItem[] {
-  const typeLabels: Record<string, string> = {
-    registration: 'New registration',
-    cancellation: 'Cancellation',
-    faculty_confirmed: 'Faculty confirmed',
-    faculty_brief_sent: 'Faculty brief sent',
-    materials_ordered: 'Materials ordered',
-    materials_shipped: 'Materials shipped',
-    materials_received: 'Materials received',
-    shrm_approved: 'SHRM approved',
-    venue_confirmed: 'Venue confirmed',
-    room_block_created: 'Room block created',
-    registration_page_live: 'Registration live',
-    status_changed: 'Status changed',
+  // Calculate logistics readiness for each program
+  const getLogisticsStats = (program: ProgramListItem) => {
+    const isVirtual = program.format === 'virtual';
+    const total = isVirtual ? 6 : 10; // Virtual tracks 6 items, in-person tracks 10
+
+    // Count completed items based on available fields
+    let completed = 0;
+    if (program.faculty_confirmed) completed++;
+    if (program.venue_confirmed) completed++;
+    if (program.materials_ordered) completed++;
+    if (program.materials_received) completed++;
+    // Additional items would be tracked in the readiness table
+    // For now, use readiness_score as a proxy
+    const scoreBasedCompleted = Math.round((program.readiness_score / 100) * total);
+    completed = Math.max(completed, scoreBasedCompleted);
+
+    // Calculate warnings (items past threshold but not complete)
+    // For simplicity, 0 warnings for now - will be enhanced in Phase 6
+    const warnings = 0;
+
+    return { completed, total, warnings };
   };
 
-  return activities.map((activity) => ({
-    id: activity.id,
-    type: activity.activity_type,
-    title: typeLabels[activity.activity_type] || activity.activity_type.replace(/_/g, ' '),
-    description: activity.description || undefined,
-    timestamp: new Date(activity.activity_at),
-  }));
-}
+  // Format location display
+  const formatLocation = (program: ProgramListItem) => {
+    if (program.format === 'virtual') return 'Virtual';
+    if (program.format === 'on-demand') return 'On-Demand';
+    return program.city || 'TBD';
+  };
 
-// Format date for display
-function formatDate(dateStr: string | null): string {
-  if (!dateStr) return '-';
-  const date = new Date(dateStr);
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-}
+  // Format days until display
+  const formatDaysUntil = (daysUntil: number | null) => {
+    if (daysUntil === null) return null;
+    if (daysUntil < 0) return <Badge variant="secondary">Completed</Badge>;
+    if (daysUntil === 0) return <Badge variant="warning">Today</Badge>;
+    if (daysUntil <= 7) return <span className="text-amber-600 dark:text-amber-400 font-medium">{daysUntil}d</span>;
+    if (daysUntil <= 30) return <span className="text-muted-foreground">{daysUntil}d</span>;
+    return <span className="text-muted-foreground">{daysUntil}d</span>;
+  };
 
-// Format date range
-function formatDateRange(start: string | null, end: string | null): string {
-  if (!start) return '-';
-  const startDate = new Date(start);
-  const endDate = end ? new Date(end) : null;
+  // Handle row click - navigate to program detail
+  const handleRowClick = (program: ProgramListItem) => {
+    router.push(`/dashboard/programs/${program.id}`);
+  };
 
-  const startStr = startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-  if (!endDate || startDate.toDateString() === endDate.toDateString()) {
-    return startStr;
-  }
+  // Handle sort change
+  const handleSort = (column: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    const currentColumn = params.get('sort') || 'start_date';
+    const currentOrder = params.get('order') || 'asc';
 
-  const endStr = endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-  return `${startStr} - ${endStr}`;
-}
+    if (currentColumn === column) {
+      // Toggle order
+      params.set('order', currentOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      params.set('sort', column);
+      params.set('order', 'asc');
+    }
+    router.push(`/dashboard/programs?${params.toString()}`);
+  };
 
-// Readiness item config
-const readinessItems = [
-  { key: 'faculty_confirmed_count', label: 'Faculty Confirmed', icon: UserCheck },
-  { key: 'faculty_brief_count', label: 'Faculty Brief Sent', icon: Users },
-  { key: 'venue_confirmed_count', label: 'Venue Confirmed', icon: Building2 },
-  { key: 'materials_ordered_count', label: 'Materials Ordered', icon: Package },
-  { key: 'materials_received_count', label: 'Materials Received', icon: Package },
-  { key: 'shrm_approved_count', label: 'SHRM Approved', icon: Award },
-  { key: 'av_ordered_count', label: 'AV Ordered', icon: Tv },
-  { key: 'catering_confirmed_count', label: 'Catering Confirmed', icon: UtensilsCrossed },
-  { key: 'room_block_count', label: 'Room Block Active', icon: Hotel },
-  { key: 'registration_live_count', label: 'Registration Live', icon: Globe },
-] as const;
-
-export function ProgramsContent({ data, recentRegistrations }: ProgramsContentProps) {
-  const {
-    programs,
-    metrics,
-    readiness,
-    atRiskPrograms,
-    roomBlockAlerts,
-    facultyGaps,
-    recentActivity,
-    alerts,
-    healthScore,
-  } = data;
-
-  const alertItems = mapAlertsToAlertItems(alerts);
-  const activityItems = mapActivityToFeed(recentActivity);
+  // Render sort indicator
+  const SortIndicator = ({ column }: { column: string }) => {
+    const isActive = currentSort.column === column;
+    return (
+      <ArrowUpDown className={cn(
+        'h-3.5 w-3.5 ml-1',
+        isActive ? 'text-foreground' : 'text-muted-foreground/50'
+      )} />
+    );
+  };
 
   return (
-    <div className="relative min-h-screen">
-      {/* Background pattern */}
-      <FallingPattern
-        color="hsl(var(--accent-primary))"
-        backgroundColor="hsl(var(--background))"
-        duration={150}
-        blurIntensity="1em"
-        density={0.5}
-        className="fixed inset-0 -z-10 opacity-50"
-      />
-
-      <div className="relative z-10 p-6 lg:p-8">
+    <div className="relative min-h-screen w-full">
+      <div className="relative z-10 p-6 lg:p-8 space-y-6">
         {/* Header */}
         <header className="mb-8">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-3">
-              <Link
-                href="/dashboard"
-                className="p-2 rounded-lg hover:bg-background-card-light transition-colors"
-              >
-                <ArrowLeft className="h-5 w-5 text-muted-foreground" />
-              </Link>
-              <span className="badge-live">LIVE</span>
-              <h1 className="text-display-sm text-foreground">Programs & Operations</h1>
+              <GraduationCap className="h-8 w-8 text-indigo-500" />
+              <h1 className="text-display-sm text-foreground">Programs</h1>
             </div>
-            <div className="flex items-center gap-2">
-              <ThemeToggle />
-              <UserMenu />
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <ThemeToggle />
+                <UserMenu />
+              </div>
             </div>
           </div>
-          <p className="text-muted-foreground ml-12">
-            Program readiness • Enrollment tracking • Faculty & logistics • Next 90 days
+          <p className="text-muted-foreground">
+            {currentFilters.status === 'upcoming'
+              ? 'Upcoming programs and their logistics readiness'
+              : currentFilters.status === 'completed'
+              ? 'Completed program archive'
+              : 'All programs'}
           </p>
         </header>
 
-        {/* Main Grid */}
-        <div className="grid grid-cols-12 gap-6">
-          {/* Row 1: Health Score (4 cols) + Key Metrics (8 cols) */}
-          <div className="col-span-12 lg:col-span-4">
-            <HealthScore
-              score={healthScore.score}
-              status={healthScore.status}
-              label="Programs Health"
-              description="Based on readiness, enrollment, and operational status"
-              breakdown={healthScore.breakdown.map((item) => ({
-                label: item.label,
-                score: item.score,
-                status: item.status,
-              }))}
-              showBreakdown
-            />
-          </div>
+        {/* Stats bar - placeholder for now */}
+        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+          <span className="flex items-center gap-1.5">
+            <Calendar className="h-4 w-4" />
+            {programs.length} program{programs.length !== 1 ? 's' : ''}
+          </span>
+          <span className="flex items-center gap-1.5">
+            <Users className="h-4 w-4" />
+            {programs.reduce((sum, p) => sum + p.current_enrolled, 0)} total registered
+          </span>
+        </div>
 
-          <div className="col-span-12 lg:col-span-8">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <MetricCard
-                label="Total Programs"
-                value={metrics.totalPrograms}
-                icon={Calendar}
-                description="Next 90 days"
-                format="number"
-              />
-              <MetricCard
-                label="Total Enrolled"
-                value={metrics.totalEnrolled}
-                icon={Users}
-                description={`${metrics.enrollmentPercent}% of capacity`}
-                format="number"
-              />
-              <MetricCard
-                label="Faculty Confirmed"
-                value={`${metrics.facultyConfirmedPercent}%`}
-                icon={UserCheck}
-                status={metrics.facultyConfirmedPercent >= 90 ? 'healthy' : metrics.facultyConfirmedPercent >= 70 ? 'warning' : 'critical'}
-                format="text"
-              />
-              <MetricCard
-                label="Programs Ready"
-                value={`${metrics.programsReadyPercent}%`}
-                icon={CheckCircle2}
-                description={`${metrics.programsReady}/${metrics.totalPrograms} at ≥80%`}
-                status={metrics.programsReadyPercent >= 80 ? 'healthy' : metrics.programsReadyPercent >= 60 ? 'warning' : 'critical'}
-                format="text"
-              />
-            </div>
-          </div>
-
-          {/* Row 2: Upcoming Programs Table (8 cols) + At-Risk Programs (4 cols) */}
-          <div className="col-span-12 lg:col-span-8">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-heading-md">Upcoming Programs</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {programs.length === 0 ? (
-                  <p className="text-muted-foreground text-center py-8">
-                    No upcoming programs in the next 90 days.
-                  </p>
-                ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead>
-                        <tr className="border-b border-border text-left">
-                          <th className="pb-3 font-medium text-muted-foreground">Program</th>
-                          <th className="pb-3 font-medium text-muted-foreground">Date</th>
-                          <th className="pb-3 font-medium text-muted-foreground">Location</th>
-                          <th className="pb-3 font-medium text-muted-foreground text-right">Enrolled</th>
-                          <th className="pb-3 font-medium text-muted-foreground text-right">Ready</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {programs.slice(0, 8).map((program) => (
-                          <ProgramRow key={program.id} program={program} />
-                        ))}
-                      </tbody>
-                    </table>
-                    {programs.length > 8 && (
-                      <p className="text-sm text-muted-foreground text-center pt-4 border-t border-border mt-4">
-                        + {programs.length - 8} more programs
-                      </p>
-                    )}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="col-span-12 lg:col-span-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-heading-md flex items-center gap-2">
-                  <AlertTriangle className="h-5 w-5 text-warning" />
-                  At-Risk Programs
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {atRiskPrograms.length === 0 ? (
-                  <p className="text-muted-foreground text-center py-4">
-                    No at-risk programs
-                  </p>
-                ) : (
-                  <div className="space-y-3">
-                    {atRiskPrograms.slice(0, 4).map((program) => (
-                      <AtRiskProgramCard key={program.id} program={program} />
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Row 3: Readiness Breakdown (6 cols) + Alerts/Deadlines (6 cols) */}
-          <div className="col-span-12 lg:col-span-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-heading-md">Readiness Breakdown</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {readinessItems.map((item) => {
-                    const count = readiness[item.key] || 0;
-                    const total = readiness.total_programs || 1;
-                    const percent = Math.round((count / total) * 100);
-                    const Icon = item.icon;
-
-                    return (
-                      <div key={item.key} className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <Icon className="h-4 w-4 text-muted-foreground" />
-                            <span className="text-sm font-medium">{item.label}</span>
-                          </div>
-                          <span className="text-sm text-muted-foreground">
-                            {count}/{total} ({percent}%)
+        {/* Programs Table */}
+        <Card>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-border bg-muted/30">
+                    <th
+                      className="text-left px-4 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider cursor-pointer hover:text-foreground"
+                      onClick={() => handleSort('instance_name')}
+                      style={{ width: '35%' }}
+                    >
+                      <span className="flex items-center">
+                        Program
+                        <SortIndicator column="instance_name" />
+                      </span>
+                    </th>
+                    <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider" style={{ width: '12%' }}>
+                      Location
+                    </th>
+                    <th
+                      className="text-left px-4 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider cursor-pointer hover:text-foreground"
+                      onClick={() => handleSort('start_date')}
+                      style={{ width: '15%' }}
+                    >
+                      <span className="flex items-center">
+                        Dates
+                        <SortIndicator column="start_date" />
+                      </span>
+                    </th>
+                    <th
+                      className="text-left px-4 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider cursor-pointer hover:text-foreground"
+                      onClick={() => handleSort('current_enrolled')}
+                      style={{ width: '12%' }}
+                    >
+                      <span className="flex items-center">
+                        Status
+                        <SortIndicator column="current_enrolled" />
+                      </span>
+                    </th>
+                    <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider" style={{ width: '20%' }}>
+                      Logistics
+                    </th>
+                    <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider" style={{ width: '6%' }}>
+                      Days
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {programs.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="text-center py-12 text-muted-foreground">
+                        No programs found for the selected filters.
+                        {currentFilters.status === 'upcoming' && (
+                          <span className="block mt-2 text-sm">
+                            Try showing completed programs or adjusting your filters.
                           </span>
-                        </div>
-                        <Progress
-                          value={percent}
-                          className="h-2"
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+                        )}
+                      </td>
+                    </tr>
+                  ) : (
+                    programs.map((program) => {
+                      const logistics = getLogisticsStats(program);
 
-          <div className="col-span-12 lg:col-span-6">
-            <AlertList
-              alerts={alertItems}
-              title="Alerts & Deadlines"
-              maxItems={6}
-            />
-          </div>
+                      return (
+                        <tr
+                          key={program.id}
+                          className="border-b border-border/50 transition-colors cursor-pointer hover:bg-muted/50"
+                          onClick={() => handleRowClick(program)}
+                        >
+                          {/* Program name & info */}
+                          <td className="px-4 py-4">
+                            <div className="font-medium text-foreground">
+                              {program.instance_name}
+                            </div>
+                            {program.parent_program_id && (
+                              <div className="text-xs text-muted-foreground mt-0.5">
+                                Part of: {program.parent_program_name || 'Certificate Program'}
+                              </div>
+                            )}
+                            {program.format === 'virtual' && (
+                              <Badge variant="info" className="mt-1 text-xs">Virtual</Badge>
+                            )}
+                            {program.format === 'on-demand' && (
+                              <Badge variant="secondary" className="mt-1 text-xs">On-Demand</Badge>
+                            )}
+                          </td>
 
-          {/* Row 4: Room Blocks (4 cols) + Faculty Gaps (4 cols) + Activity (4 cols) */}
-          <div className="col-span-12 lg:col-span-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-heading-md flex items-center gap-2">
-                  <Hotel className="h-5 w-5" />
-                  Room Blocks
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {roomBlockAlerts.length === 0 ? (
-                  <p className="text-muted-foreground text-center py-4">
-                    No room block alerts
-                  </p>
-                ) : (
-                  <div className="space-y-3">
-                    {roomBlockAlerts.slice(0, 3).map((block) => (
-                      <RoomBlockCard key={block.id} block={block} />
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
+                          {/* Location */}
+                          <td className="px-4 py-4 text-sm text-muted-foreground">
+                            {formatLocation(program)}
+                          </td>
 
-          <div className="col-span-12 lg:col-span-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-heading-md flex items-center gap-2">
-                  <Users className="h-5 w-5" />
-                  Faculty Gaps
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {facultyGaps.length === 0 ? (
-                  <p className="text-muted-foreground text-center py-4">
-                    All faculty confirmed
-                  </p>
-                ) : (
-                  <div className="space-y-3">
-                    {facultyGaps.slice(0, 3).map((gap) => (
-                      <FacultyGapCard key={`${gap.program_instance_id}-${gap.faculty_name}`} gap={gap} />
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
+                          {/* Dates */}
+                          <td className="px-4 py-4 text-sm">
+                            {program.start_date ? (
+                              <div>
+                                <span className="text-foreground">
+                                  {formatDateShort(program.start_date)}
+                                </span>
+                                {program.end_date && program.end_date !== program.start_date && (
+                                  <span className="text-muted-foreground">
+                                    {' - '}{formatDateShort(program.end_date)}
+                                  </span>
+                                )}
+                              </div>
+                            ) : (
+                              <span className="text-muted-foreground">TBD</span>
+                            )}
+                          </td>
 
-          <div className="col-span-12 lg:col-span-4">
-            <ActivityFeed
-              activities={activityItems}
-              title="Recent Activity"
-              maxItems={6}
-            />
-          </div>
+                          {/* Status badge */}
+                          <td className="px-4 py-4">
+                            <ProgramStatusBadge
+                              enrolledCount={program.current_enrolled}
+                              showCount={true}
+                            />
+                          </td>
 
-          {/* Row 5: Recent Registrations (full width) */}
-          <div className="col-span-12">
-            <RegistrationsTable
-              registrations={recentRegistrations}
-              title="Recent Registrations"
-              maxItems={10}
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+                          {/* Logistics */}
+                          <td className="px-4 py-4">
+                            <LogisticsProgress
+                              completed={logistics.completed}
+                              total={logistics.total}
+                              warnings={logistics.warnings}
+                            />
+                          </td>
 
-// Sub-components
-
-function ProgramRow({ program }: { program: ProgramSummary }) {
-  const enrollmentPercent = program.enrollment_percent || 0;
-  const readinessScore = program.readiness_score || 0;
-
-  const enrollmentStatus: HealthStatus =
-    enrollmentPercent >= 80 ? 'healthy' : enrollmentPercent >= 50 ? 'warning' : 'critical';
-  const readinessStatus: HealthStatus =
-    readinessScore >= 80 ? 'healthy' : readinessScore >= 60 ? 'warning' : 'critical';
-
-  return (
-    <tr className="border-b border-border/50 hover:bg-background-card-light/50">
-      <td className="py-3">
-        <div>
-          <p className="font-medium text-foreground">{program.program_name}</p>
-          <p className="text-sm text-muted-foreground">{program.format}</p>
-        </div>
-      </td>
-      <td className="py-3">
-        <span className="text-sm">{formatDateRange(program.start_date, program.end_date)}</span>
-        {program.days_until_start !== null && program.days_until_start <= 14 && (
-          <span className="ml-2 text-xs text-warning">({program.days_until_start}d)</span>
-        )}
-      </td>
-      <td className="py-3">
-        <span className="text-sm">
-          {program.city && program.state
-            ? `${program.city}, ${program.state}`
-            : program.format === 'virtual'
-            ? 'Virtual'
-            : '-'}
-        </span>
-      </td>
-      <td className="py-3 text-right">
-        <span
-          className={`text-sm font-medium ${
-            enrollmentStatus === 'healthy'
-              ? 'text-success'
-              : enrollmentStatus === 'warning'
-              ? 'text-warning'
-              : 'text-error'
-          }`}
-        >
-          {program.current_enrolled}/{program.min_capacity}
-        </span>
-      </td>
-      <td className="py-3 text-right">
-        <span
-          className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-            readinessStatus === 'healthy'
-              ? 'bg-success/20 text-success'
-              : readinessStatus === 'warning'
-              ? 'bg-warning/20 text-warning'
-              : 'bg-error/20 text-error'
-          }`}
-        >
-          {readinessScore}%
-        </span>
-      </td>
-    </tr>
-  );
-}
-
-function AtRiskProgramCard({ program }: { program: AtRiskProgram }) {
-  const severityColors = {
-    critical: 'border-error/50 bg-error/5',
-    warning: 'border-warning/50 bg-warning/5',
-    info: 'border-info/50 bg-info/5',
-  };
-
-  return (
-    <div className={`p-3 rounded-lg border ${severityColors[program.risk_level]}`}>
-      <p className="font-medium text-sm">{program.program_name}</p>
-      <p className="text-xs text-muted-foreground mt-1">
-        {formatDate(program.start_date)} • {program.days_until_start} days out
-      </p>
-      <div className="flex items-center justify-between mt-2">
-        <span className="text-xs text-muted-foreground">{program.risk_reason}</span>
-        <span
-          className={`text-xs font-medium ${
-            program.risk_level === 'critical'
-              ? 'text-error'
-              : program.risk_level === 'warning'
-              ? 'text-warning'
-              : 'text-info'
-          }`}
-        >
-          {program.enrollment_percent || 0}% enrolled
-        </span>
-      </div>
-    </div>
-  );
-}
-
-function RoomBlockCard({ block }: { block: RoomBlockAlert }) {
-  const urgencyColors = {
-    critical: 'border-error/50',
-    warning: 'border-warning/50',
-    info: 'border-border',
-  };
-
-  return (
-    <div className={`p-3 rounded-lg border ${urgencyColors[block.urgency]}`}>
-      <p className="font-medium text-sm">{block.hotel_name}</p>
-      <p className="text-xs text-muted-foreground">{block.program_name}</p>
-      <div className="flex items-center justify-between mt-2">
-        <span className="text-xs text-muted-foreground">
-          {block.rooms_booked}/{block.block_size} booked
-        </span>
-        <span
-          className={`text-xs font-medium ${
-            block.urgency === 'critical'
-              ? 'text-error'
-              : block.urgency === 'warning'
-              ? 'text-warning'
-              : 'text-muted-foreground'
-          }`}
-        >
-          {block.days_to_cutoff}d to cutoff
-        </span>
-      </div>
-      <Progress value={block.pickup_percent || 0} className="h-1.5 mt-2" />
-    </div>
-  );
-}
-
-function FacultyGapCard({ gap }: { gap: FacultyGap }) {
-  const urgencyColors = {
-    critical: 'text-error',
-    warning: 'text-warning',
-    info: 'text-muted-foreground',
-  };
-
-  return (
-    <div className="p-3 rounded-lg border border-border">
-      <p className="font-medium text-sm">{gap.program_name}</p>
-      <p className="text-xs text-muted-foreground mt-1">
-        {gap.faculty_name}
-        {gap.block_number && ` (Block ${gap.block_number})`}
-      </p>
-      <div className="flex items-center justify-between mt-2">
-        <span className="text-xs text-muted-foreground">
-          {formatDate(gap.start_date)}
-        </span>
-        <span className={`text-xs font-medium ${urgencyColors[gap.urgency]}`}>
-          {gap.days_until_start}d out
-        </span>
+                          {/* Days until */}
+                          <td className="px-4 py-4 text-sm">
+                            {formatDaysUntil(program.days_until_start)}
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
