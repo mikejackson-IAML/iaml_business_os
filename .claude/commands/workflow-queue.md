@@ -177,7 +177,7 @@ claim();
 "
 ```
 
-### Step 3: Parse Result
+### Step 3: Parse Result and Output Copy-Paste Command
 
 If output contains `NO_WORKFLOWS_AVAILABLE`:
 ```
@@ -187,22 +187,36 @@ Run `/workflow-queue` to see current status.
 ```
 
 If output contains `CLAIMED`:
-- Extract WORKFLOW_ID, WORKFLOW_NAME from output
-- Store these in your context for the session
-- Display:
-```
+- Extract WORKFLOW_ID, WORKFLOW_NAME, URL from output
+- **Output this exact format for the user to copy-paste into a fresh chat:**
+
+```markdown
 ## Claimed: {WORKFLOW_NAME}
 
 **ID:** {WORKFLOW_ID}
-**Previous Status:** {PREVIOUS_STATUS}
+**Status:** {PREVIOUS_STATUS}
 **URL:** {URL}
 
-Run this to start testing:
+---
 
-/test-workflow {WORKFLOW_ID}
+**Copy this into a fresh chat to start autonomous testing:**
+
+\`\`\`
+/test-workflow-auto {WORKFLOW_ID}
+\`\`\`
+
+**n8n URL:** {URL}
 ```
 
-**Do NOT auto-launch testing.** Output the `/test-workflow {WORKFLOW_ID}` command so the user can copy-paste and run it themselves.
+**IMPORTANT:** Do NOT automatically invoke `/test-workflow-auto`. Just output the command for the user to copy-paste into a cleared chat. This prevents context bloat from the claim process affecting the test run.
+
+### Step 4: Done
+
+That's it for `/workflow-queue claim`. The user will:
+1. Copy the `/test-workflow-auto {ID}` command
+2. Clear/start a fresh chat
+3. Paste and run the command
+4. The autonomous tester handles everything from there
 
 ---
 
