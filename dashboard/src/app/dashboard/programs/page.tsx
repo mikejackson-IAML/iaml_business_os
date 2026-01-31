@@ -1,29 +1,71 @@
 import { Suspense } from 'react';
 import { ProgramsSkeleton } from './programs-skeleton';
 import { ProgramsContent } from './programs-content';
-import { getProgramsDashboardData, getRecentRegistrations } from '@/lib/api/programs-queries';
+import { getProgramsList, getDistinctCities } from '@/lib/api/programs-queries';
 
 export const metadata = {
-  title: 'Programs & Operations | IAML Business OS',
-  description: 'Program readiness, enrollment tracking, faculty management, and logistics',
+  title: 'Programs | IAML Business OS',
+  description: 'Program management, registrations, logistics, and attendance tracking',
 };
 
 // Revalidate every 5 minutes
 export const revalidate = 300;
 
-async function ProgramsDataLoader() {
-  const [data, recentRegistrations] = await Promise.all([
-    getProgramsDashboardData(),
-    getRecentRegistrations(15),
-  ]);
+// Force dynamic rendering because we use searchParams
+export const dynamic = 'force-dynamic';
 
-  return <ProgramsContent data={data} recentRegistrations={recentRegistrations} />;
+interface PageProps {
+  searchParams: Promise<{
+    city?: string;
+    format?: string;
+    status?: string;
+    sort?: string;
+    order?: string;
+    archived?: string;
+  }>;
 }
 
-export default function ProgramsDashboardPage() {
+async function ProgramsDataLoader({ searchParams }: { searchParams: PageProps['searchParams'] }) {
+  const params = await searchParams;
+
+  // Parse filters from URL params
+  const filters = {
+    city: params.city,
+    format: params.format,
+    status: (params.status as 'upcoming' | 'completed' | 'all') || 'upcoming',
+    sort: (params.sort as 'start_date' | 'instance_name' | 'current_enrolled') || 'start_date',
+    order: (params.order as 'asc' | 'desc') || 'asc',
+    includeArchived: params.archived === 'true',
+  };
+
+  // Fetch data in parallel
+  const [programs, cities] = await Promise.all([
+    getProgramsList(filters),
+    getDistinctCities(),
+  ]);
+
+  return (
+    <ProgramsContent
+      programs={programs}
+      cities={cities}
+      currentFilters={{
+        city: filters.city || null,
+        format: filters.format || null,
+        status: filters.status,
+        showArchived: filters.includeArchived,
+      }}
+      currentSort={{
+        column: filters.sort,
+        order: filters.order,
+      }}
+    />
+  );
+}
+
+export default async function ProgramsPage({ searchParams }: PageProps) {
   return (
     <Suspense fallback={<ProgramsSkeleton />}>
-      <ProgramsDataLoader />
+      <ProgramsDataLoader searchParams={searchParams} />
     </Suspense>
   );
 }
