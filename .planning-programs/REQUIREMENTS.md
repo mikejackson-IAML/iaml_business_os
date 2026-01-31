@@ -32,19 +32,19 @@
 
 ### Contact Panel (Slide-Out)
 
-- [ ] **PROG-20**: Display enriched person data: name, title, company, email, phone, LinkedIn URL (clickable), profile photo (from LinkedIn)
-- [ ] **PROG-21**: Show registration details: program, blocks selected, registration date, source
-- [ ] **PROG-22**: Show payment details: invoice sent date, due date, paid/unpaid status, days until/past due
-- [ ] **PROG-23**: Display enriched company data: name, industry, employee count, growth rate (30/60/90 day)
-- [ ] **PROG-24**: Show count of other registrants from same company
-- [ ] **PROG-25**: "Trigger Colleague Outreach" button that fires n8n workflow
-- [ ] **PROG-26**: Display workflow status: Not started, Triggered (date), emails sent count
-- [ ] **PROG-27**: Show engagement history section (expandable)
-- [ ] **PROG-28**: Email engagement: count received, opened, clicked; which campaigns/sequences
-- [ ] **PROG-29**: Website behavior: page visits, time on site, last visit date (from GA4)
-- [ ] **PROG-30**: Conversion attribution: which email/touchpoint preceded registration
-- [ ] **PROG-31**: Email source: where email was found, which service, verification status
-- [ ] **PROG-32**: "Enrich" button to trigger Apollo enrichment (if not auto-enriched)
+- [x] **PROG-20**: Display enriched person data: name, title, company, email, phone, LinkedIn URL (clickable), profile photo (from LinkedIn)
+- [x] **PROG-21**: Show registration details: program, blocks selected, registration date, source
+- [x] **PROG-22**: Show payment details: invoice sent date, due date, paid/unpaid status, days until/past due
+- [x] **PROG-23**: Display enriched company data: name, industry, employee count, growth rate (30/60/90 day)
+- [x] **PROG-24**: Show count of other registrants from same company
+- [x] **PROG-25**: "Trigger Colleague Outreach" button that fires n8n workflow
+- [x] **PROG-26**: Display workflow status: Not started, Triggered (date), emails sent count
+- [x] **PROG-27**: Show engagement history section (expandable)
+- [x] **PROG-28**: Email engagement: count received, opened, clicked; which campaigns/sequences
+- [x] **PROG-29**: Website behavior: page visits, time on site, last visit date (from GA4)
+- [x] **PROG-30**: Conversion attribution: which email/touchpoint preceded registration
+- [x] **PROG-31**: Email source: where email was found, which service, verification status
+- [x] **PROG-32**: "Enrich" button to trigger Apollo enrichment (if not auto-enriched)
 
 ### Program Detail: Logistics Tab
 
@@ -109,10 +109,10 @@
 ### Data & Integration
 
 - [x] **PROG-65**: Apollo API integration for person and company enrichment (auto on registration)
-- [ ] **PROG-66**: GA4 integration for website behavior data
-- [ ] **PROG-67**: SmartLead API integration for cold email engagement data
-- [ ] **PROG-68**: GoHighLevel API integration for warm email engagement data
-- [ ] **PROG-69**: n8n webhook trigger for colleague outreach workflow (deferred until webhook created)
+- [x] **PROG-66**: GA4 integration for website behavior data
+- [x] **PROG-67**: SmartLead API integration for cold email engagement data
+- [x] **PROG-68**: GoHighLevel API integration for warm email engagement data
+- [x] **PROG-69**: n8n webhook trigger for colleague outreach workflow
 - [ ] **PROG-70**: All program data stored in Supabase with proper relational structure
 
 ## Out of Scope (This Version)
@@ -131,12 +131,13 @@
 |-------------|-------|--------|
 | PROG-01 to PROG-09 | Phase 1: Foundation & Programs List | Complete |
 | PROG-10 to PROG-19 | Phase 2: Registrations Tab | Complete |
-| PROG-20 to PROG-32 | Phase 3: Contact Panel | Pending |
+| PROG-20 to PROG-32 | Phase 3: Contact Panel | Complete |
 | PROG-33 to PROG-44 | Phase 4: Logistics Tab | Pending |
 | PROG-45 to PROG-52 | Phase 5: Attendance/Evaluations Tab | Pending |
 | PROG-53 to PROG-60 | Phase 6: Program Status & Alerts | Pending |
 | PROG-61 to PROG-64 | Phase 7: AI Reporting Chat | Pending |
-| PROG-65 to PROG-70 | Phases 1-5 (parallel integration work) | Pending |
+| PROG-65 to PROG-69 | Phase 3: Contact Panel (integrations) | Complete |
+| PROG-70 | Phase 1: Foundation | Complete |
 
 **Coverage:**
 - Total requirements: 70
