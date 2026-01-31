@@ -1,7 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { GraduationCap, Calendar, Users, ArrowUpDown } from 'lucide-react';
+import { GraduationCap, Calendar, Users, ArrowUpDown, ExternalLink } from 'lucide-react';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { UserMenu } from '@/components/UserMenu';
 import { Card, CardContent } from '@/dashboard-kit/components/ui/card';
@@ -10,6 +11,8 @@ import { cn, formatDateShort } from '@/dashboard-kit/lib/utils';
 import type { ProgramListItem } from '@/lib/api/programs-queries';
 import { ProgramStatusBadge } from './components/program-status-badge';
 import { LogisticsProgress } from './components/logistics-progress';
+import { ProgramFilters } from './components/program-filters';
+import { ArchiveToggle } from './components/archive-toggle';
 
 interface ProgramsContentProps {
   programs: ProgramListItem[];
@@ -34,6 +37,7 @@ export function ProgramsContent({
 }: ProgramsContentProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   // Calculate logistics readiness for each program
   const getLogisticsStats = (program: ProgramListItem) => {
@@ -71,8 +75,17 @@ export function ProgramsContent({
     if (daysUntil < 0) return <Badge variant="secondary">Completed</Badge>;
     if (daysUntil === 0) return <Badge variant="warning">Today</Badge>;
     if (daysUntil <= 7) return <span className="text-amber-600 dark:text-amber-400 font-medium">{daysUntil}d</span>;
-    if (daysUntil <= 30) return <span className="text-muted-foreground">{daysUntil}d</span>;
     return <span className="text-muted-foreground">{daysUntil}d</span>;
+  };
+
+  // Check if program is a virtual certificate (has child blocks)
+  const isVirtualCertificate = (program: ProgramListItem) => {
+    return program.child_block_count > 0;
+  };
+
+  // Check if program is a virtual block (has parent)
+  const isVirtualBlock = (program: ProgramListItem) => {
+    return program.parent_program_id !== null;
   };
 
   // Handle row click - navigate to program detail
@@ -107,17 +120,22 @@ export function ProgramsContent({
     );
   };
 
+  // Calculate totals
+  const totalEnrolled = programs.reduce((sum, p) => sum + p.current_enrolled, 0);
+  const upcomingCount = programs.filter(p => (p.days_until_start ?? 0) >= 0).length;
+
   return (
     <div className="relative min-h-screen w-full">
       <div className="relative z-10 p-6 lg:p-8 space-y-6">
         {/* Header */}
-        <header className="mb-8">
+        <header className="mb-6">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-3">
               <GraduationCap className="h-8 w-8 text-indigo-500" />
               <h1 className="text-display-sm text-foreground">Programs</h1>
             </div>
             <div className="flex items-center gap-4">
+              <ArchiveToggle showArchived={currentFilters.showArchived} />
               <div className="flex items-center gap-2">
                 <ThemeToggle />
                 <UserMenu />
@@ -133,15 +151,24 @@ export function ProgramsContent({
           </p>
         </header>
 
-        {/* Stats bar - placeholder for now */}
-        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+        {/* Filters */}
+        <ProgramFilters
+          cities={cities}
+          currentFilters={currentFilters}
+          isOpen={filtersOpen}
+          onToggle={() => setFiltersOpen(!filtersOpen)}
+        />
+
+        {/* Stats bar */}
+        <div className="flex items-center gap-6 text-sm text-muted-foreground">
           <span className="flex items-center gap-1.5">
             <Calendar className="h-4 w-4" />
             {programs.length} program{programs.length !== 1 ? 's' : ''}
+            {currentFilters.status === 'all' && ` (${upcomingCount} upcoming)`}
           </span>
           <span className="flex items-center gap-1.5">
             <Users className="h-4 w-4" />
-            {programs.reduce((sum, p) => sum + p.current_enrolled, 0)} total registered
+            {totalEnrolled} total registered
           </span>
         </div>
 
@@ -198,7 +225,7 @@ export function ProgramsContent({
                     <tr>
                       <td colSpan={6} className="text-center py-12 text-muted-foreground">
                         No programs found for the selected filters.
-                        {currentFilters.status === 'upcoming' && (
+                        {currentFilters.status === 'upcoming' && !currentFilters.showArchived && (
                           <span className="block mt-2 text-sm">
                             Try showing completed programs or adjusting your filters.
                           </span>
@@ -208,6 +235,8 @@ export function ProgramsContent({
                   ) : (
                     programs.map((program) => {
                       const logistics = getLogisticsStats(program);
+                      const isCertificate = isVirtualCertificate(program);
+                      const isBlock = isVirtualBlock(program);
 
                       return (
                         <tr
@@ -220,17 +249,34 @@ export function ProgramsContent({
                             <div className="font-medium text-foreground">
                               {program.instance_name}
                             </div>
-                            {program.parent_program_id && (
-                              <div className="text-xs text-muted-foreground mt-0.5">
+
+                            {/* Virtual block: show parent link */}
+                            {isBlock && (
+                              <div className="flex items-center gap-1 text-xs text-muted-foreground mt-0.5">
+                                <ExternalLink className="h-3 w-3" />
                                 Part of: {program.parent_program_name || 'Certificate Program'}
                               </div>
                             )}
-                            {program.format === 'virtual' && (
-                              <Badge variant="info" className="mt-1 text-xs">Virtual</Badge>
+
+                            {/* Virtual certificate: show rollup count */}
+                            {isCertificate && program.child_total_enrolled > 0 && (
+                              <div className="text-xs text-muted-foreground mt-0.5">
+                                {program.child_block_count} blocks, {program.child_total_enrolled} total registrations
+                              </div>
                             )}
-                            {program.format === 'on-demand' && (
-                              <Badge variant="secondary" className="mt-1 text-xs">On-Demand</Badge>
-                            )}
+
+                            {/* Format badges */}
+                            <div className="flex gap-1 mt-1">
+                              {program.format === 'virtual' && (
+                                <Badge variant="info" className="text-xs">Virtual</Badge>
+                              )}
+                              {program.format === 'on-demand' && (
+                                <Badge variant="secondary" className="text-xs">On-Demand</Badge>
+                              )}
+                              {isCertificate && (
+                                <Badge variant="outline" className="text-xs">Certificate</Badge>
+                              )}
+                            </div>
                           </td>
 
                           {/* Location */}
@@ -256,21 +302,27 @@ export function ProgramsContent({
                             )}
                           </td>
 
-                          {/* Status badge */}
+                          {/* Status badge - for certificates, show combined count */}
                           <td className="px-4 py-4">
                             <ProgramStatusBadge
-                              enrolledCount={program.current_enrolled}
+                              enrolledCount={isCertificate
+                                ? program.current_enrolled + program.child_total_enrolled
+                                : program.current_enrolled}
                               showCount={true}
                             />
                           </td>
 
                           {/* Logistics */}
                           <td className="px-4 py-4">
-                            <LogisticsProgress
-                              completed={logistics.completed}
-                              total={logistics.total}
-                              warnings={logistics.warnings}
-                            />
+                            {program.format === 'on-demand' ? (
+                              <span className="text-xs text-muted-foreground">N/A</span>
+                            ) : (
+                              <LogisticsProgress
+                                completed={logistics.completed}
+                                total={logistics.total}
+                                warnings={logistics.warnings}
+                              />
+                            )}
                           </td>
 
                           {/* Days until */}
