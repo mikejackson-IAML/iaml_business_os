@@ -52,12 +52,14 @@ This roadmap builds the Programs section in 7 phases, ordered by technical depen
 10. Virtual certificate shows rollup registration count
 11. Archive toggle shows/hides completed programs
 
-**Plans:** 3 plans
+**Plans:** 5 plans (including gap closure)
 
 Plans:
-- [ ] 01-01-PLAN.md — Schema extension (parent_program_id) and query functions
-- [ ] 01-02-PLAN.md — Route structure, page component, and core UI components
-- [ ] 01-03-PLAN.md — Filters, archive toggle, and virtual block display
+- [x] 01-01-PLAN.md — Schema extension (parent_program_id) and query functions
+- [x] 01-02-PLAN.md — Route structure, page component, and core UI components
+- [x] 01-03-PLAN.md — Filters, archive toggle, and virtual block display
+- [x] 01-04-PLAN.md — Date range filter UI (gap closure)
+- [x] 01-05-PLAN.md — Virtual block data wiring (gap closure)
 
 ---
 
@@ -205,7 +207,7 @@ Plans:
 
 | Phase | Plans Complete | Status |
 |-------|----------------|--------|
-| 1. Foundation & Programs List | 0/3 | Planned |
+| 1. Foundation & Programs List | 5/5 | Complete |
 | 2. Registrations Tab | 0/TBD | Not Started |
 | 3. Contact Panel | 0/TBD | Not Started |
 | 4. Logistics Tab | 0/TBD | Not Started |
@@ -215,4 +217,4 @@ Plans:
 
 ---
 *Roadmap created: 2026-01-30*
-*Phase 1 planned: 2026-01-30*
+*Phase 1 complete: 2026-01-31*
