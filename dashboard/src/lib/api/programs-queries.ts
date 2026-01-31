@@ -972,3 +972,39 @@ export function isBlockSelected(selectedBlocks: string[] | null, blockId: string
     );
   });
 }
+
+// ============================================
+// Company History Types & Queries (Phase 3)
+// ============================================
+
+export interface CompanyRegistrationHistoryItem {
+  id: string;
+  full_name: string;
+  program_name: string;
+  registration_date: string;
+  payment_status: 'paid' | 'unpaid';
+}
+
+/**
+ * Get all registrations from a specific company across all programs
+ * Used by Contact Panel to show colleague history
+ */
+export async function getCompanyRegistrationHistory(
+  companyName: string
+): Promise<CompanyRegistrationHistoryItem[]> {
+  const supabase = getServerClient();
+
+  const { data, error } = await supabase
+    .from('registration_dashboard_summary')
+    .select('id, full_name, program_name, registration_date, payment_status')
+    .eq('company_name', companyName)
+    .order('registration_date', { ascending: false })
+    .limit(50);
+
+  if (error) {
+    console.error('Error fetching company history:', error);
+    return [];
+  }
+
+  return (data || []) as CompanyRegistrationHistoryItem[];
+}
