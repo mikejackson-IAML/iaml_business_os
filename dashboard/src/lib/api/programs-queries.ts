@@ -719,9 +719,9 @@ export async function getProgramsList(params: ProgramListParams = {}): Promise<P
     materials_ordered: Boolean(p.materials_ordered),
     materials_received: Boolean(p.materials_received),
     parent_program_id: (p.parent_program_id as string) || null,
-    parent_program_name: null, // Will be populated by view update later if needed
-    child_block_count: 0,
-    child_total_enrolled: 0,
+    parent_program_name: (p.parent_program_name as string) || null,
+    child_block_count: (p.child_block_count as number) || 0,
+    child_total_enrolled: (p.child_total_enrolled as number) || 0,
   })) as ProgramListItem[];
 }
 
