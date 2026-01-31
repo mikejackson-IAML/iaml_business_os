@@ -118,6 +118,39 @@ export interface ProgramsDashboardData {
   overallHealth: HealthStatus;
 }
 
+// Programs List types (Phase 1)
+export interface ProgramListItemUI {
+  id: string;
+  programName: string;
+  instanceName: string;
+  format: 'in-person' | 'virtual' | 'on-demand';
+  location: string; // City or "Virtual"
+  startDate: Date | null;
+  endDate: Date | null;
+  daysUntil: number | null;
+  isCompleted: boolean;
+  enrolledCount: number;
+  // Status (GO/CLOSE/NEEDS)
+  registrationStatus: 'go' | 'close' | 'needs';
+  // Logistics readiness
+  logisticsCompleted: number;
+  logisticsTotal: number;
+  logisticsWarnings: number;
+  // Virtual block info
+  parentProgramId: string | null;
+  parentProgramName: string | null;
+  isVirtualBlock: boolean;
+  childBlockCount: number;
+  childTotalEnrolled: number;
+}
+
+export interface ProgramFiltersUI {
+  city: string | null;
+  format: string | null;
+  status: 'upcoming' | 'completed' | 'all';
+  showArchived: boolean;
+}
+
 // Programs department configuration - matches the JSON spec provided
 export const programsDepartmentConfig: DepartmentConfig = {
   department: 'programs',

@@ -609,3 +609,138 @@ export async function getRegistrationStats(): Promise<{
 
   return { total, paid, pending, last7Days };
 }
+
+// ============================================
+// Programs List Types & Queries (Phase 1)
+// ============================================
+
+export interface ProgramListItem {
+  id: string;
+  instance_name: string;
+  program_name: string;
+  format: 'in-person' | 'virtual' | 'on-demand' | null;
+  start_date: string | null;
+  end_date: string | null;
+  city: string | null;
+  state: string | null;
+  current_enrolled: number;
+  days_until_start: number | null;
+  status: string;
+  // Readiness fields
+  readiness_score: number;
+  faculty_confirmed: boolean;
+  venue_confirmed: boolean;
+  materials_ordered: boolean;
+  materials_received: boolean;
+  // Virtual block linking
+  parent_program_id: string | null;
+  parent_program_name: string | null;
+  child_block_count: number;
+  child_total_enrolled: number;
+}
+
+export interface ProgramListParams {
+  city?: string;
+  format?: string;
+  status?: 'upcoming' | 'completed' | 'all';
+  dateFrom?: string;
+  dateTo?: string;
+  sort?: 'start_date' | 'instance_name' | 'current_enrolled';
+  order?: 'asc' | 'desc';
+  includeArchived?: boolean;
+}
+
+export async function getProgramsList(params: ProgramListParams = {}): Promise<ProgramListItem[]> {
+  const supabase = getServerClient();
+
+  let query = supabase
+    .from('program_dashboard_summary')
+    .select('*');
+
+  // Filter by city
+  if (params.city && params.city !== '_all') {
+    query = query.eq('city', params.city);
+  }
+
+  // Filter by format
+  if (params.format && params.format !== '_all') {
+    query = query.eq('format', params.format);
+  }
+
+  // Filter by status (upcoming vs completed)
+  if (params.status === 'upcoming') {
+    query = query.or('days_until_start.gte.0,days_until_start.is.null');
+  } else if (params.status === 'completed') {
+    query = query.lt('days_until_start', 0);
+  }
+  // 'all' or undefined = no status filter
+
+  // Default: hide archived (completed) unless explicitly requested
+  if (!params.includeArchived && params.status !== 'completed' && params.status !== 'all') {
+    query = query.or('days_until_start.gte.0,days_until_start.is.null');
+  }
+
+  // Date range filters
+  if (params.dateFrom) {
+    query = query.gte('start_date', params.dateFrom);
+  }
+  if (params.dateTo) {
+    query = query.lte('start_date', params.dateTo);
+  }
+
+  // Sorting
+  const sortColumn = params.sort || 'start_date';
+  const sortOrder = params.order !== 'desc';
+  query = query.order(sortColumn, { ascending: sortOrder, nullsFirst: false });
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.error('Error fetching programs list:', error);
+    return [];
+  }
+
+  // Map to ProgramListItem type with defaults
+  return (data || []).map((p: Record<string, unknown>) => ({
+    id: p.id as string,
+    instance_name: p.instance_name as string,
+    program_name: p.program_name as string,
+    format: p.format as ProgramListItem['format'],
+    start_date: p.start_date as string | null,
+    end_date: p.end_date as string | null,
+    city: p.city as string | null,
+    state: p.state as string | null,
+    current_enrolled: (p.current_enrolled as number) || 0,
+    days_until_start: p.days_until_start as number | null,
+    status: p.status as string,
+    readiness_score: (p.readiness_score as number) || 0,
+    faculty_confirmed: Boolean(p.faculty_confirmed),
+    venue_confirmed: Boolean(p.venue_confirmed),
+    materials_ordered: Boolean(p.materials_ordered),
+    materials_received: Boolean(p.materials_received),
+    parent_program_id: (p.parent_program_id as string) || null,
+    parent_program_name: null, // Will be populated by view update later if needed
+    child_block_count: 0,
+    child_total_enrolled: 0,
+  })) as ProgramListItem[];
+}
+
+export async function getDistinctCities(): Promise<string[]> {
+  const supabase = getServerClient();
+
+  const { data, error } = await supabase
+    .from('program_instances')
+    .select('city')
+    .not('city', 'is', null)
+    .order('city') as { data: { city: string }[] | null; error: Error | null };
+
+  if (error) {
+    console.error('Error fetching distinct cities:', error);
+    return [];
+  }
+
+  // Get unique cities
+  const citySet = new Set((data || []).map(d => d.city).filter(Boolean));
+  const cities = Array.from(citySet) as string[];
+  return cities;
+}
