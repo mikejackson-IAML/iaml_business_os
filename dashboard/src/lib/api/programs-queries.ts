@@ -1264,3 +1264,198 @@ export async function getProgramExpenses(programId: string): Promise<ProgramExpe
 
   return (data || []) as ProgramExpense[];
 }
+
+// ============================================
+// Evaluation Types (Phase 5)
+// ============================================
+
+export interface EvaluationTemplate {
+  id: string;
+  name: string;
+  description: string | null;
+  rating_categories: {
+    key: string;
+    label: string;
+    description: string;
+    virtual_skip?: boolean;
+  }[];
+  free_text_questions: {
+    key: string;
+    question: string;
+  }[];
+  rating_scale_min: number;
+  rating_scale_max: number;
+  is_default: boolean;
+}
+
+export interface EvaluationResponse {
+  id: string;
+  registration_id: string;
+  program_instance_id: string;
+  template_id: string | null;
+  ratings: Record<string, number>;
+  free_text_responses: Record<string, string>;
+  submitted_at: string;
+  // Joined fields
+  attendee_name?: string;
+  attendee_email?: string;
+}
+
+export interface EvaluationAggregate {
+  program_instance_id: string;
+  response_count: number;
+  avg_instructor: number | null;
+  avg_content: number | null;
+  avg_venue: number | null;
+  avg_overall: number | null;
+  avg_total: number | null;
+}
+
+// ============================================
+// Evaluation Queries (Phase 5)
+// ============================================
+
+/**
+ * Get the default evaluation template
+ */
+export async function getEvaluationTemplate(): Promise<EvaluationTemplate | null> {
+  const supabase = getServerClient();
+
+  const { data, error } = await supabase
+    .from('evaluation_templates')
+    .select('*')
+    .eq('is_default', true)
+    .single();
+
+  if (error || !data) {
+    console.error('Error fetching evaluation template:', error);
+    return null;
+  }
+
+  return data as EvaluationTemplate;
+}
+
+/**
+ * Get all evaluation responses for a program with attendee info
+ */
+export async function getEvaluationsForProgram(
+  programId: string
+): Promise<EvaluationResponse[]> {
+  const supabase = getServerClient();
+
+  const { data, error } = await supabase
+    .from('evaluation_responses')
+    .select(`
+      *,
+      registrations!inner (
+        full_name,
+        email
+      )
+    `)
+    .eq('program_instance_id', programId)
+    .order('submitted_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching evaluations:', error);
+    return [];
+  }
+
+  // Map to include attendee info
+  return (data || []).map((r: Record<string, unknown>) => ({
+    id: r.id as string,
+    registration_id: r.registration_id as string,
+    program_instance_id: r.program_instance_id as string,
+    template_id: (r.template_id as string) || null,
+    ratings: (r.ratings as Record<string, number>) || {},
+    free_text_responses: (r.free_text_responses as Record<string, string>) || {},
+    submitted_at: r.submitted_at as string,
+    attendee_name: ((r.registrations as Record<string, unknown>)?.full_name as string) || undefined,
+    attendee_email: ((r.registrations as Record<string, unknown>)?.email as string) || undefined,
+  }));
+}
+
+/**
+ * Get aggregate evaluation scores for a program
+ */
+export async function getEvaluationAggregates(
+  programId: string
+): Promise<EvaluationAggregate | null> {
+  const supabase = getServerClient();
+
+  const { data, error } = await supabase
+    .from('evaluation_aggregate_scores')
+    .select('*')
+    .eq('program_instance_id', programId)
+    .single();
+
+  if (error) {
+    // No evaluations yet is not an error
+    if (error.code === 'PGRST116') {
+      return null;
+    }
+    console.error('Error fetching evaluation aggregates:', error);
+    return null;
+  }
+
+  return data as EvaluationAggregate;
+}
+
+/**
+ * Get registrations with attendance data for a program
+ * Extends RegistrationRosterItem with attendance fields
+ */
+export interface RegistrationWithAttendance extends RegistrationRosterItem {
+  attendance_by_block: Record<string, boolean>;
+  marked_attended_at: string | null;
+}
+
+export async function getRegistrationsWithAttendance(
+  programId: string
+): Promise<RegistrationWithAttendance[]> {
+  const supabase = getServerClient();
+
+  const { data, error } = await supabase
+    .from('registration_dashboard_summary')
+    .select('*')
+    .eq('program_instance_id', programId)
+    .order('full_name', { ascending: true });
+
+  if (error) {
+    console.error('Error fetching registrations with attendance:', error);
+    return [];
+  }
+
+  return (data || []).map((r: Record<string, unknown>) => ({
+    id: r.id as string,
+    first_name: r.first_name as string,
+    last_name: r.last_name as string,
+    full_name: r.full_name as string,
+    email: r.email as string,
+    phone: r.phone as string | null,
+    company_name: r.company_name as string | null,
+    job_title: r.job_title as string | null,
+    registration_date: r.registration_date as string,
+    registration_status: r.registration_status as string,
+    payment_status: r.payment_status as string,
+    payment_method: r.payment_method as string | null,
+    payment_due_date: (r.payment_due_date as string) || null,
+    final_price: (r.final_price as number) || 0,
+    attendance_type: r.attendance_type as string,
+    selected_blocks: r.selected_blocks as string[] | null,
+    registration_source: r.registration_source as string | null,
+    program_name: (r.program_name as string) || null,
+    cancelled_at: (r.cancelled_at as string) || null,
+    refund_status: (r.refund_status as RegistrationRosterItem['refund_status']) || null,
+    refund_amount: (r.refund_amount as number) || null,
+    linkedin_url: (r.linkedin_url as string) || null,
+    linkedin_photo_url: (r.linkedin_photo_url as string) || null,
+    company_industry: (r.company_industry as string) || null,
+    company_employee_count: (r.company_employee_count as number) || null,
+    company_growth_30d: (r.company_growth_30d as number) || null,
+    company_growth_60d: (r.company_growth_60d as number) || null,
+    company_growth_90d: (r.company_growth_90d as number) || null,
+    // Attendance fields
+    attendance_by_block: (r.attendance_by_block as Record<string, boolean>) || {},
+    marked_attended_at: (r.marked_attended_at as string) || null,
+  }));
+}
