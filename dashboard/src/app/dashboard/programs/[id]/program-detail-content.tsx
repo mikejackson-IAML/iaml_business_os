@@ -13,6 +13,7 @@ import { RegistrationsRoster } from '../components/registrations-roster';
 import { RosterFilters } from '../components/roster-filters';
 import { CertificateProgress } from '../components/certificate-progress';
 import { ContactPanel } from '../components/contact-panel/contact-panel';
+import { LogisticsTab } from '../components/logistics/logistics-tab';
 import type { ProgramDetail, RegistrationRosterItem } from '@/lib/api/programs-queries';
 import { getBlocksForProgram } from '@/lib/api/programs-queries';
 
@@ -213,11 +214,7 @@ export function ProgramDetailContent({
 
         <TabsContent value="logistics" className="mt-4">
           {mountedTabs.has('logistics') && (
-            <div className="rounded-lg border bg-card p-6">
-              <p className="text-muted-foreground">
-                Logistics checklist will be implemented in Phase 4.
-              </p>
-            </div>
+            <LogisticsTab program={program} />
           )}
         </TabsContent>
 
