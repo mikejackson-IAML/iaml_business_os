@@ -1028,3 +1028,229 @@ export async function getCompanyRegistrationHistory(
 
   return (data || []) as CompanyRegistrationHistoryItem[];
 }
+
+// ============================================
+// Logistics Types & Queries (Phase 4)
+// ============================================
+
+export interface ProgramLogistics {
+  program_instance_id: string;
+  // People
+  instructor_name: string | null;
+  instructor_contact: string | null;
+  instructor_confirmed_at: string | null;
+  // My Hotel
+  my_hotel_name: string | null;
+  my_hotel_dates: string | null;
+  my_hotel_confirmation: string | null;
+  my_hotel_booked_at: string | null;
+  // Instructor Hotel
+  instructor_hotel_name: string | null;
+  instructor_hotel_dates: string | null;
+  instructor_hotel_confirmation: string | null;
+  instructor_hotel_booked_at: string | null;
+  // Room Block
+  room_block_secured_at: string | null;
+  // Venue
+  venue_location: string | null;
+  venue_daily_rate: number | null;
+  venue_fb_minimum: number | null;
+  venue_confirmed_at: string | null;
+  // BEO
+  beo_url: string | null;
+  beo_file_name: string | null;
+  beo_status: 'draft' | 'final' | null;
+  beo_uploaded_at: string | null;
+  // Materials (7 items)
+  materials_sent_to_instructor: boolean;
+  materials_sent_at: string | null;
+  materials_feedback_received: boolean;
+  materials_feedback_at: string | null;
+  materials_updated: boolean;
+  materials_updated_at: string | null;
+  materials_printed: boolean;
+  materials_printed_at: string | null;
+  materials_shipped: boolean;
+  materials_shipped_at: string | null;
+  materials_tracking: string | null;
+  // AV
+  av_purchased: boolean;
+  av_purchased_at: string | null;
+  av_shipped: boolean;
+  av_shipped_at: string | null;
+  av_tracking: string | null;
+  // Virtual-specific
+  platform_ready: boolean;
+  platform_link: string | null;
+  platform_ready_at: string | null;
+  calendar_invites_sent: boolean;
+  calendar_invites_at: string | null;
+  reminder_emails_sent: boolean;
+  reminder_emails_at: string | null;
+  // Meta
+  updated_at: string | null;
+}
+
+export interface ProgramExpense {
+  id: string;
+  program_instance_id: string;
+  category: 'Accommodations' | 'Venue' | 'Materials' | 'Equipment' | 'Other';
+  description: string;
+  amount: number;
+  expense_date: string | null;
+  receipt_url: string | null;
+  receipt_file_name: string | null;
+  receipt_file_type: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export const EXPENSE_CATEGORIES = [
+  'Accommodations',
+  'Venue',
+  'Materials',
+  'Equipment',
+  'Other',
+] as const;
+
+/**
+ * Default logistics values for programs without a logistics record
+ */
+function getDefaultLogistics(programId: string): ProgramLogistics {
+  return {
+    program_instance_id: programId,
+    instructor_name: null,
+    instructor_contact: null,
+    instructor_confirmed_at: null,
+    my_hotel_name: null,
+    my_hotel_dates: null,
+    my_hotel_confirmation: null,
+    my_hotel_booked_at: null,
+    instructor_hotel_name: null,
+    instructor_hotel_dates: null,
+    instructor_hotel_confirmation: null,
+    instructor_hotel_booked_at: null,
+    room_block_secured_at: null,
+    venue_location: null,
+    venue_daily_rate: null,
+    venue_fb_minimum: null,
+    venue_confirmed_at: null,
+    beo_url: null,
+    beo_file_name: null,
+    beo_status: null,
+    beo_uploaded_at: null,
+    materials_sent_to_instructor: false,
+    materials_sent_at: null,
+    materials_feedback_received: false,
+    materials_feedback_at: null,
+    materials_updated: false,
+    materials_updated_at: null,
+    materials_printed: false,
+    materials_printed_at: null,
+    materials_shipped: false,
+    materials_shipped_at: null,
+    materials_tracking: null,
+    av_purchased: false,
+    av_purchased_at: null,
+    av_shipped: false,
+    av_shipped_at: null,
+    av_tracking: null,
+    platform_ready: false,
+    platform_link: null,
+    platform_ready_at: null,
+    calendar_invites_sent: false,
+    calendar_invites_at: null,
+    reminder_emails_sent: false,
+    reminder_emails_at: null,
+    updated_at: null,
+  };
+}
+
+/**
+ * Get logistics data for a program
+ * Returns default values if no record exists yet
+ */
+export async function getProgramLogistics(programId: string): Promise<ProgramLogistics> {
+  const supabase = getServerClient();
+
+  const { data, error } = await supabase
+    .from('program_logistics')
+    .select('*')
+    .eq('program_instance_id', programId)
+    .single();
+
+  if (error || !data) {
+    // Return default values - record will be created on first update
+    return getDefaultLogistics(programId);
+  }
+
+  // Map database record to typed interface with proper defaults
+  const d = data as Record<string, unknown>;
+  return {
+    program_instance_id: d.program_instance_id as string,
+    instructor_name: (d.instructor_name as string) || null,
+    instructor_contact: (d.instructor_contact as string) || null,
+    instructor_confirmed_at: (d.instructor_confirmed_at as string) || null,
+    my_hotel_name: (d.my_hotel_name as string) || null,
+    my_hotel_dates: (d.my_hotel_dates as string) || null,
+    my_hotel_confirmation: (d.my_hotel_confirmation as string) || null,
+    my_hotel_booked_at: (d.my_hotel_booked_at as string) || null,
+    instructor_hotel_name: (d.instructor_hotel_name as string) || null,
+    instructor_hotel_dates: (d.instructor_hotel_dates as string) || null,
+    instructor_hotel_confirmation: (d.instructor_hotel_confirmation as string) || null,
+    instructor_hotel_booked_at: (d.instructor_hotel_booked_at as string) || null,
+    room_block_secured_at: (d.room_block_secured_at as string) || null,
+    venue_location: (d.venue_location as string) || null,
+    venue_daily_rate: (d.venue_daily_rate as number) || null,
+    venue_fb_minimum: (d.venue_fb_minimum as number) || null,
+    venue_confirmed_at: (d.venue_confirmed_at as string) || null,
+    beo_url: (d.beo_url as string) || null,
+    beo_file_name: (d.beo_file_name as string) || null,
+    beo_status: (d.beo_status as 'draft' | 'final') || null,
+    beo_uploaded_at: (d.beo_uploaded_at as string) || null,
+    materials_sent_to_instructor: Boolean(d.materials_sent_to_instructor),
+    materials_sent_at: (d.materials_sent_at as string) || null,
+    materials_feedback_received: Boolean(d.materials_feedback_received),
+    materials_feedback_at: (d.materials_feedback_at as string) || null,
+    materials_updated: Boolean(d.materials_updated),
+    materials_updated_at: (d.materials_updated_at as string) || null,
+    materials_printed: Boolean(d.materials_printed),
+    materials_printed_at: (d.materials_printed_at as string) || null,
+    materials_shipped: Boolean(d.materials_shipped),
+    materials_shipped_at: (d.materials_shipped_at as string) || null,
+    materials_tracking: (d.materials_tracking as string) || null,
+    av_purchased: Boolean(d.av_purchased),
+    av_purchased_at: (d.av_purchased_at as string) || null,
+    av_shipped: Boolean(d.av_shipped),
+    av_shipped_at: (d.av_shipped_at as string) || null,
+    av_tracking: (d.av_tracking as string) || null,
+    platform_ready: Boolean(d.platform_ready),
+    platform_link: (d.platform_link as string) || null,
+    platform_ready_at: (d.platform_ready_at as string) || null,
+    calendar_invites_sent: Boolean(d.calendar_invites_sent),
+    calendar_invites_at: (d.calendar_invites_at as string) || null,
+    reminder_emails_sent: Boolean(d.reminder_emails_sent),
+    reminder_emails_at: (d.reminder_emails_at as string) || null,
+    updated_at: (d.updated_at as string) || null,
+  };
+}
+
+/**
+ * Get all expenses for a program
+ */
+export async function getProgramExpenses(programId: string): Promise<ProgramExpense[]> {
+  const supabase = getServerClient();
+
+  const { data, error } = await supabase
+    .from('program_expenses')
+    .select('*')
+    .eq('program_instance_id', programId)
+    .order('expense_date', { ascending: false, nullsFirst: false });
+
+  if (error) {
+    console.error('Error fetching expenses:', error);
+    return [];
+  }
+
+  return (data || []) as ProgramExpense[];
+}
