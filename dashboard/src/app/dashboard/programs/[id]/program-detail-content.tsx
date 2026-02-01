@@ -14,6 +14,7 @@ import { RosterFilters } from '../components/roster-filters';
 import { CertificateProgress } from '../components/certificate-progress';
 import { ContactPanel } from '../components/contact-panel/contact-panel';
 import { LogisticsTab } from '../components/logistics/logistics-tab';
+import { AttendanceTab } from '../components/attendance-tab';
 import type { ProgramDetail, RegistrationRosterItem } from '@/lib/api/programs-queries';
 import { getBlocksForProgram } from '@/lib/api/programs-queries';
 
@@ -220,11 +221,7 @@ export function ProgramDetailContent({
 
         <TabsContent value="attendance" className="mt-4">
           {mountedTabs.has('attendance') && (
-            <div className="rounded-lg border bg-card p-6">
-              <p className="text-muted-foreground">
-                Attendance and evaluations will be implemented in Phase 5.
-              </p>
-            </div>
+            <AttendanceTab program={program} />
           )}
         </TabsContent>
       </Tabs>
