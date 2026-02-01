@@ -12,10 +12,10 @@ See: `.planning-programs/AUTONOMOUS-BUILD-GUIDE.md` (pre-answered decisions)
 
 **Milestone:** v1.0
 **Status:** In Progress
-**Phase:** 04-logistics-tab (4 of 7) - COMPLETE
-**Plan:** 4 of 4 complete (Phase Complete)
+**Phase:** 05-attendance-evaluations (5 of 7)
+**Plan:** 1 of 3 complete
 
-Progress: [##########################..] 76%
+Progress: [############################.] 79%
 
 ## Quick Context
 
@@ -68,6 +68,9 @@ Progress: [##########################..] 76%
 | 2026-02-01 | Expenses grouped by 5 categories | Accommodations, Venue, Materials, Equipment, Other |
 | 2026-02-01 | Grand total at top of expenses section | Quick reference without scrolling through categories |
 | 2026-02-01 | Receipt uploads via attachments API | Reuses existing upload infrastructure |
+| 2026-02-01 | JSONB for attendance_by_block | Flexible per-block tracking without schema changes |
+| 2026-02-01 | UNIQUE(registration_id) on evaluation_responses | One evaluation per registration ensures integrity |
+| 2026-02-01 | Database view for aggregate scores | Efficient calculation server-side |
 
 ## Session Log
 
@@ -91,6 +94,7 @@ Progress: [##########################..] 76%
 | 2026-02-01 | Completed 04-02-PLAN.md | Logistics Tab UI - 3min |
 | 2026-02-01 | Completed 04-03-PLAN.md | Remaining Cards (Venue, BEO, Materials, AV, Virtual) - 4min |
 | 2026-02-01 | Completed 04-04-PLAN.md | Expenses & Tab Integration - 3min |
+| 2026-02-01 | Completed 05-01-PLAN.md | Schema & Query Foundation - 3min |
 
 ## Blockers
 
@@ -100,13 +104,14 @@ Progress: [##########################..] 76%
   - `supabase/migrations/20260131_registrations_tab_schema.sql` (cancellation columns, Apollo tracking)
   - `supabase/migrations/20260131_apollo_auto_enrich_trigger.sql` (auto-enrichment trigger)
   - `supabase/migrations/20260201_logistics_tab_schema.sql` (logistics columns, expenses table)
+  - `supabase/migrations/20260201_attendance_evaluations_schema.sql` (attendance columns, evaluation tables)
 - Run in Supabase Dashboard SQL Editor before using these features
 
 ## Session Continuity
 
 - **Last session:** 2026-02-01
-- **Stopped at:** Completed 04-04-PLAN.md (Phase 04 Complete)
-- **Next step:** Execute Phase 05 (Attendance & Evaluations)
+- **Stopped at:** Completed 05-01-PLAN.md (Schema & Query Foundation)
+- **Next step:** Execute 05-02-PLAN.md (Attendance Tab UI)
 - **Resume file:** None
 
 ## Key Reference Documents
@@ -144,6 +149,7 @@ Per AUTONOMOUS-BUILD-GUIDE.md:
 | 04 | 02 | Logistics Tab UI | 3min | 3c982149, 645c6736, d3c0959e |
 | 04 | 03 | Remaining Cards (Venue, BEO, Materials, AV, Virtual) | 4min | 878a1dba, 3026dea7, e88be07f |
 | 04 | 04 | Expenses & Tab Integration | 3min | f82387c1, 239eb172, 8444faeb |
+| 05 | 01 | Schema & Query Foundation | 3min | 6fbd129a, 7aeb00ca, ee885b08 |
 
 ---
-*Last updated: 2026-02-01T20:02Z*
+*Last updated: 2026-02-01T20:20Z*
