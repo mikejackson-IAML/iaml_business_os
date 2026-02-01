@@ -170,7 +170,13 @@ Plans:
 8. Aggregate scores (averages) calculated and displayed
 9. Virtual certificates track attendance across linked blocks
 
-**Plans:** TBD during planning phase
+**Plans:** 4 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — Schema (attendance column, evaluation tables) and query/mutation functions
+- [ ] 05-02-PLAN.md — Attendance roster UI with per-block checkboxes and bulk actions
+- [ ] 05-03-PLAN.md — Evaluations UI (aggregate scores, individual response cards)
+- [ ] 05-04-PLAN.md — Tab integration into program detail
 
 ---
 
@@ -229,7 +235,7 @@ Plans:
 | 2. Registrations Tab | 4/4 | Complete |
 | 3. Contact Panel | 4/4 | Complete |
 | 4. Logistics Tab | 4/4 | Complete |
-| 5. Attendance/Evaluations Tab | 0/TBD | Not Started |
+| 5. Attendance/Evaluations Tab | 0/4 | Ready |
 | 6. Program Status & Alerts | 0/TBD | Not Started |
 | 7. AI Reporting Chat | 0/TBD | Not Started |
 
@@ -239,3 +245,4 @@ Plans:
 *Phase 2 complete: 2026-01-31*
 *Phase 3 complete: 2026-01-31*
 *Phase 4 complete: 2026-02-01*
+*Phase 5 planned: 2026-02-01*
