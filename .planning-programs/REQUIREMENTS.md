@@ -48,25 +48,25 @@
 
 ### Program Detail: Logistics Tab
 
-- [ ] **PROG-33**: Display logistics as checklist cards with status indicators
-- [ ] **PROG-34**: Instructor assignment card: assigned instructor(s) per block, contact info, confirmation status
-- [ ] **PROG-35**: My hotel card: hotel name, dates, confirmation number
-- [ ] **PROG-36**: Instructor hotel card: hotel name, dates, confirmation number (per instructor if multiple)
-- [ ] **PROG-37**: Room block card: hotel, number of rooms, cut-off date, rooms booked vs. block size
-- [ ] **PROG-38**: Venue card: location (same as hotel), daily rental rate, F&B minimum
-- [ ] **PROG-39**: BEO card: upload document, status (draft/final), view/download link
-- [ ] **PROG-40**: Materials workflow checklist:
-  - [ ] Instructor assigned
-  - [ ] Materials sent to instructor for review
-  - [ ] Instructor feedback received
-  - [ ] Updates made (if needed)
-  - [ ] Sent to print
-  - [ ] Printed
-  - [ ] Shipped (with tracking number field)
-- [ ] **PROG-41**: AV equipment card: purchased status, shipped status, tracking number
-- [ ] **PROG-42**: Expenses section (post-program): itemized expenses with totals
-- [ ] **PROG-43**: Each logistics card is expandable to show/edit details
-- [ ] **PROG-44**: Virtual programs: hide hotel/venue cards, show only applicable logistics
+- [x] **PROG-33**: Display logistics as checklist cards with status indicators
+- [x] **PROG-34**: Instructor assignment card: assigned instructor(s) per block, contact info, confirmation status
+- [x] **PROG-35**: My hotel card: hotel name, dates, confirmation number
+- [x] **PROG-36**: Instructor hotel card: hotel name, dates, confirmation number (per instructor if multiple)
+- [x] **PROG-37**: Room block card: hotel, number of rooms, cut-off date, rooms booked vs. block size
+- [x] **PROG-38**: Venue card: location (same as hotel), daily rental rate, F&B minimum
+- [x] **PROG-39**: BEO card: upload document, status (draft/final), view/download link
+- [x] **PROG-40**: Materials workflow checklist:
+  - [x] Instructor assigned
+  - [x] Materials sent to instructor for review
+  - [x] Instructor feedback received
+  - [x] Updates made (if needed)
+  - [x] Sent to print
+  - [x] Printed
+  - [x] Shipped (with tracking number field)
+- [x] **PROG-41**: AV equipment card: purchased status, shipped status, tracking number
+- [x] **PROG-42**: Expenses section (post-program): itemized expenses with totals
+- [x] **PROG-43**: Each logistics card is expandable to show/edit details
+- [x] **PROG-44**: Virtual programs: hide hotel/venue cards, show only applicable logistics
 
 ### Program Detail: Attendance/Evaluations Tab
 
@@ -132,7 +132,7 @@
 | PROG-01 to PROG-09 | Phase 1: Foundation & Programs List | Complete |
 | PROG-10 to PROG-19 | Phase 2: Registrations Tab | Complete |
 | PROG-20 to PROG-32 | Phase 3: Contact Panel | Complete |
-| PROG-33 to PROG-44 | Phase 4: Logistics Tab | Pending |
+| PROG-33 to PROG-44 | Phase 4: Logistics Tab | Complete |
 | PROG-45 to PROG-52 | Phase 5: Attendance/Evaluations Tab | Pending |
 | PROG-53 to PROG-60 | Phase 6: Program Status & Alerts | Pending |
 | PROG-61 to PROG-64 | Phase 7: AI Reporting Chat | Pending |
