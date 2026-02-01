@@ -12,10 +12,10 @@ See: `.planning-programs/AUTONOMOUS-BUILD-GUIDE.md` (pre-answered decisions)
 
 **Milestone:** v1.0
 **Status:** In Progress
-**Phase:** 03-contact-panel COMPLETE (3 of 7)
-**Plan:** 4 of 4 complete
+**Phase:** 04-logistics-tab (4 of 7)
+**Plan:** 1 of 3 complete
 
-Progress: [####################........] 58%
+Progress: [######################......] 62%
 
 ## Quick Context
 
@@ -56,6 +56,10 @@ Progress: [####################........] 58%
 | 2026-01-31 | GA4 implementation deferred | Requires user ID tracking setup in GA4 property |
 | 2026-01-31 | Workflow URL from workflow_registry | Lookup webhook URL at request time for flexibility |
 | 2026-01-31 | Button state machine pattern | Tracks not_started/triggering/triggered/error for UX |
+| 2026-02-01 | ADD COLUMN IF NOT EXISTS for idempotent migration | Safe to re-run migration without errors |
+| 2026-02-01 | ON DELETE CASCADE for program_expenses | Auto-cleanup when program instance deleted |
+| 2026-02-01 | Helper function pattern for Supabase mutations | Type workaround using any cast, follows lead-intelligence pattern |
+| 2026-02-01 | Upsert for logistics updates | Creates record on first update, no explicit creation needed |
 
 ## Session Log
 
@@ -75,6 +79,7 @@ Progress: [####################........] 58%
 | 2026-01-31 | Completed 03-02-PLAN.md | Panel Content Sections - 5min |
 | 2026-01-31 | Completed 03-03-PLAN.md | Engagement Section - 3min |
 | 2026-01-31 | Completed 03-04-PLAN.md | Action Buttons - 2min |
+| 2026-02-01 | Completed 04-01-PLAN.md | Schema & Types for Logistics - 3min |
 
 ## Blockers
 
@@ -83,13 +88,14 @@ Progress: [####################........] 58%
 - SQL ready in:
   - `supabase/migrations/20260131_registrations_tab_schema.sql` (cancellation columns, Apollo tracking)
   - `supabase/migrations/20260131_apollo_auto_enrich_trigger.sql` (auto-enrichment trigger)
-- Run in Supabase Dashboard SQL Editor before using cancellation/Apollo features
+  - `supabase/migrations/20260201_logistics_tab_schema.sql` (logistics columns, expenses table)
+- Run in Supabase Dashboard SQL Editor before using these features
 
 ## Session Continuity
 
-- **Last session:** 2026-01-31
-- **Stopped at:** Completed 03-04-PLAN.md (Action Buttons) - Phase 03 complete
-- **Next step:** Begin Phase 04 (Logistics Tab)
+- **Last session:** 2026-02-01
+- **Stopped at:** Completed 04-01-PLAN.md (Schema & Types for Logistics)
+- **Next step:** Execute 04-02-PLAN.md (Logistics Tab UI)
 - **Resume file:** None
 
 ## Key Reference Documents
@@ -123,6 +129,7 @@ Per AUTONOMOUS-BUILD-GUIDE.md:
 | 03 | 02 | Panel Content Sections | 5min | d767ba3d, ccfb3bea, f0cc7e4a, 9381df52, b3d885b9 |
 | 03 | 03 | Engagement Section | 3min | e8f73571, d9820af2, cd2f2173, 0ebdbaa1 |
 | 03 | 04 | Action Buttons | 2min | 7ce3d5c8, 775884ca, 5676dd51 |
+| 04 | 01 | Schema & Types for Logistics | 3min | 708e03a4, ea0dad81, 44eef8d6 |
 
 ---
-*Last updated: 2026-01-31T22:09Z*
+*Last updated: 2026-02-01T19:52Z*
