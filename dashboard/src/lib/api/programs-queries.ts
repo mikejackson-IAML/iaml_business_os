@@ -818,6 +818,11 @@ export interface ProgramDetail {
   parent_program_name: string | null;
   child_block_count: number;
   child_total_enrolled: number;
+  // Room block fields (for Logistics tab)
+  room_block_hotel: string | null;
+  rooms_booked: number | null;
+  block_size: number | null;
+  room_block_cutoff: string | null;
 }
 
 export interface RegistrationRosterItem {
@@ -901,6 +906,11 @@ export async function getProgram(programId: string): Promise<ProgramDetail | nul
     parent_program_name: (p.parent_program_name as string) || null,
     child_block_count: (p.child_block_count as number) || 0,
     child_total_enrolled: (p.child_total_enrolled as number) || 0,
+    // Room block fields
+    room_block_hotel: (p.room_block_hotel as string) || null,
+    rooms_booked: (p.rooms_booked as number) || null,
+    block_size: (p.block_size as number) || null,
+    room_block_cutoff: (p.room_block_cutoff as string) || null,
   };
 }
 
