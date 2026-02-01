@@ -70,14 +70,14 @@
 
 ### Program Detail: Attendance/Evaluations Tab
 
-- [ ] **PROG-45**: Show same roster as Registrations tab with "Actually Attended" checkmarks per block
-- [ ] **PROG-46**: Visual distinction between "registered for" vs. "attended"
-- [ ] **PROG-47**: Evaluation responses section: display submitted evaluations
-- [ ] **PROG-48**: Evaluation survey: standard questions stored in Supabase (template TBD)
-- [ ] **PROG-49**: Evaluation customization: instructor name and venue name inserted per program
-- [ ] **PROG-50**: Show individual evaluation responses (expandable per attendee)
-- [ ] **PROG-51**: Show aggregate evaluation scores (average ratings)
-- [ ] **PROG-52**: For virtual certificates, track attendance across linked block events
+- [x] **PROG-45**: Show same roster as Registrations tab with "Actually Attended" checkmarks per block
+- [x] **PROG-46**: Visual distinction between "registered for" vs. "attended"
+- [x] **PROG-47**: Evaluation responses section: display submitted evaluations
+- [x] **PROG-48**: Evaluation survey: standard questions stored in Supabase (template TBD)
+- [x] **PROG-49**: Evaluation customization: instructor name and venue name inserted per program
+- [x] **PROG-50**: Show individual evaluation responses (expandable per attendee)
+- [x] **PROG-51**: Show aggregate evaluation scores (average ratings)
+- [x] **PROG-52**: For virtual certificates, track attendance across linked block events
 
 ### Program Status & Logistics Readiness
 
@@ -133,7 +133,7 @@
 | PROG-10 to PROG-19 | Phase 2: Registrations Tab | Complete |
 | PROG-20 to PROG-32 | Phase 3: Contact Panel | Complete |
 | PROG-33 to PROG-44 | Phase 4: Logistics Tab | Complete |
-| PROG-45 to PROG-52 | Phase 5: Attendance/Evaluations Tab | Pending |
+| PROG-45 to PROG-52 | Phase 5: Attendance/Evaluations Tab | Complete |
 | PROG-53 to PROG-60 | Phase 6: Program Status & Alerts | Pending |
 | PROG-61 to PROG-64 | Phase 7: AI Reporting Chat | Pending |
 | PROG-65 to PROG-69 | Phase 3: Contact Panel (integrations) | Complete |
