@@ -13,9 +13,9 @@ See: `.planning-programs/AUTONOMOUS-BUILD-GUIDE.md` (pre-answered decisions)
 **Milestone:** v1.0
 **Status:** In Progress
 **Phase:** 04-logistics-tab (4 of 7)
-**Plan:** 2 of 3 complete
+**Plan:** 3 of 3 complete (Phase Complete)
 
-Progress: [########################....] 67%
+Progress: [#########################...] 71%
 
 ## Quick Context
 
@@ -62,6 +62,9 @@ Progress: [########################....] 67%
 | 2026-02-01 | Upsert for logistics updates | Creates record on first update, no explicit creation needed |
 | 2026-02-01 | LogisticsCard adapted from EngagementCard pattern | Consistent expandable card UI across app |
 | 2026-02-01 | Extended ProgramDetail with room_block fields | RoomBlockCard needs hotel, rooms_booked, block_size, cutoff |
+| 2026-02-01 | Auto-create storage bucket on first upload | ensureBucket() pattern from Lead Intelligence |
+| 2026-02-01 | Adaptive materials checklist (7 vs 4 items) | Virtual programs skip print/ship steps |
+| 2026-02-01 | Virtual setup cards in single file | Cleaner imports for PlatformReady, Calendar, Reminders |
 
 ## Session Log
 
@@ -83,6 +86,7 @@ Progress: [########################....] 67%
 | 2026-01-31 | Completed 03-04-PLAN.md | Action Buttons - 2min |
 | 2026-02-01 | Completed 04-01-PLAN.md | Schema & Types for Logistics - 3min |
 | 2026-02-01 | Completed 04-02-PLAN.md | Logistics Tab UI - 3min |
+| 2026-02-01 | Completed 04-03-PLAN.md | Remaining Cards (Venue, BEO, Materials, AV, Virtual) - 4min |
 
 ## Blockers
 
@@ -97,8 +101,8 @@ Progress: [########################....] 67%
 ## Session Continuity
 
 - **Last session:** 2026-02-01
-- **Stopped at:** Completed 04-02-PLAN.md (Logistics Tab UI)
-- **Next step:** Execute 04-03-PLAN.md (Remaining Logistics Cards and Integration)
+- **Stopped at:** Completed 04-03-PLAN.md (Remaining Cards - Phase 04 Complete)
+- **Next step:** Execute Phase 05 (Attendance & Evaluations)
 - **Resume file:** None
 
 ## Key Reference Documents
@@ -134,6 +138,7 @@ Per AUTONOMOUS-BUILD-GUIDE.md:
 | 03 | 04 | Action Buttons | 2min | 7ce3d5c8, 775884ca, 5676dd51 |
 | 04 | 01 | Schema & Types for Logistics | 3min | 708e03a4, ea0dad81, 44eef8d6 |
 | 04 | 02 | Logistics Tab UI | 3min | 3c982149, 645c6736, d3c0959e |
+| 04 | 03 | Remaining Cards (Venue, BEO, Materials, AV, Virtual) | 4min | 878a1dba, 3026dea7, e88be07f |
 
 ---
-*Last updated: 2026-02-01T19:57Z*
+*Last updated: 2026-02-01T20:15Z*
