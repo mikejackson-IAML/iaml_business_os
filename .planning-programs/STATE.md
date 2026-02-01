@@ -12,10 +12,10 @@ See: `.planning-programs/AUTONOMOUS-BUILD-GUIDE.md` (pre-answered decisions)
 
 **Milestone:** v1.0
 **Status:** In Progress
-**Phase:** 04-logistics-tab (4 of 7)
-**Plan:** 3 of 3 complete (Phase Complete)
+**Phase:** 04-logistics-tab (4 of 7) - COMPLETE
+**Plan:** 4 of 4 complete (Phase Complete)
 
-Progress: [#########################...] 71%
+Progress: [##########################..] 76%
 
 ## Quick Context
 
@@ -65,6 +65,9 @@ Progress: [#########################...] 71%
 | 2026-02-01 | Auto-create storage bucket on first upload | ensureBucket() pattern from Lead Intelligence |
 | 2026-02-01 | Adaptive materials checklist (7 vs 4 items) | Virtual programs skip print/ship steps |
 | 2026-02-01 | Virtual setup cards in single file | Cleaner imports for PlatformReady, Calendar, Reminders |
+| 2026-02-01 | Expenses grouped by 5 categories | Accommodations, Venue, Materials, Equipment, Other |
+| 2026-02-01 | Grand total at top of expenses section | Quick reference without scrolling through categories |
+| 2026-02-01 | Receipt uploads via attachments API | Reuses existing upload infrastructure |
 
 ## Session Log
 
@@ -87,6 +90,7 @@ Progress: [#########################...] 71%
 | 2026-02-01 | Completed 04-01-PLAN.md | Schema & Types for Logistics - 3min |
 | 2026-02-01 | Completed 04-02-PLAN.md | Logistics Tab UI - 3min |
 | 2026-02-01 | Completed 04-03-PLAN.md | Remaining Cards (Venue, BEO, Materials, AV, Virtual) - 4min |
+| 2026-02-01 | Completed 04-04-PLAN.md | Expenses & Tab Integration - 3min |
 
 ## Blockers
 
@@ -101,7 +105,7 @@ Progress: [#########################...] 71%
 ## Session Continuity
 
 - **Last session:** 2026-02-01
-- **Stopped at:** Completed 04-03-PLAN.md (Remaining Cards - Phase 04 Complete)
+- **Stopped at:** Completed 04-04-PLAN.md (Phase 04 Complete)
 - **Next step:** Execute Phase 05 (Attendance & Evaluations)
 - **Resume file:** None
 
@@ -139,6 +143,7 @@ Per AUTONOMOUS-BUILD-GUIDE.md:
 | 04 | 01 | Schema & Types for Logistics | 3min | 708e03a4, ea0dad81, 44eef8d6 |
 | 04 | 02 | Logistics Tab UI | 3min | 3c982149, 645c6736, d3c0959e |
 | 04 | 03 | Remaining Cards (Venue, BEO, Materials, AV, Virtual) | 4min | 878a1dba, 3026dea7, e88be07f |
+| 04 | 04 | Expenses & Tab Integration | 3min | f82387c1, 239eb172, 8444faeb |
 
 ---
-*Last updated: 2026-02-01T20:15Z*
+*Last updated: 2026-02-01T20:02Z*
