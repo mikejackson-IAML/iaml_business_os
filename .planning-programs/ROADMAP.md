@@ -144,7 +144,13 @@ Plans:
 11. All cards expandable for editing
 12. Virtual programs hide hotel/venue/AV cards
 
-**Plans:** TBD during planning phase
+**Plans:** 4 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — Schema extension and query/mutation functions
+- [ ] 04-02-PLAN.md — Base LogisticsCard and People/Accommodations cards
+- [ ] 04-03-PLAN.md — Venue, BEO, Materials, AV, and virtual-specific cards
+- [ ] 04-04-PLAN.md — Expenses section and tab integration
 
 ---
 
@@ -222,7 +228,7 @@ Plans:
 | 1. Foundation & Programs List | 5/5 | Complete |
 | 2. Registrations Tab | 4/4 | Complete |
 | 3. Contact Panel | 4/4 | Complete |
-| 4. Logistics Tab | 0/TBD | Not Started |
+| 4. Logistics Tab | 0/4 | Planned |
 | 5. Attendance/Evaluations Tab | 0/TBD | Not Started |
 | 6. Program Status & Alerts | 0/TBD | Not Started |
 | 7. AI Reporting Chat | 0/TBD | Not Started |
@@ -232,3 +238,4 @@ Plans:
 *Phase 1 complete: 2026-01-31*
 *Phase 2 complete: 2026-01-31*
 *Phase 3 complete: 2026-01-31*
+*Phase 4 planned: 2026-02-01*
