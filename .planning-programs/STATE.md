@@ -13,11 +13,11 @@ See: `.planning-programs/AUTONOMOUS-BUILD-GUIDE.md` (pre-answered decisions)
 **Milestone:** v1.0
 **Status:** In Progress
 **Phase:** 06-program-status-alerts (6 of 7)
-**Plan:** 2 of 3 complete
+**Plan:** 3 of 3 complete
 
-Progress: [####################################----] 92%
+Progress: [#####################################---] 95%
 
-Phase 06 in progress - Status badges and alert display on programs list complete
+Phase 06 COMPLETE - Full alert pipeline: calculation, list badges, detail breakdown
 
 ## Quick Context
 
@@ -87,6 +87,8 @@ Phase 06 in progress - Status badges and alert display on programs list complete
 | 2026-02-02 | Badge format uses parentheses not pipe | "GO (8)" per CONTEXT.md decision |
 | 2026-02-02 | Alert thresholds checked: instructor 30/45d, venue 60/90d | Simplified threshold checks for list view |
 | 2026-02-02 | AlertCountBadge returns null when no alerts | Clean display per CONTEXT.md "no visual noise" |
+| 2026-02-02 | Alerts hidden for on-demand and completed programs | No alerts needed for these program types |
+| 2026-02-02 | Expand/collapse for alert details | Toggle button shows "Show details" / "Hide details" |
 
 ## Session Log
 
@@ -116,6 +118,7 @@ Phase 06 in progress - Status badges and alert display on programs list complete
 | 2026-02-01 | Completed 05-04-PLAN.md | Tab Integration - 2min |
 | 2026-02-02 | Completed 06-01-PLAN.md | Alert Calculation Utility - 1min |
 | 2026-02-02 | Completed 06-02-PLAN.md | Status Badge UI - 2min |
+| 2026-02-02 | Completed 06-03-PLAN.md | Alert Breakdown in Detail View - 2min |
 
 ## Blockers
 
@@ -131,8 +134,8 @@ Phase 06 in progress - Status badges and alert display on programs list complete
 ## Session Continuity
 
 - **Last session:** 2026-02-02
-- **Stopped at:** Completed 06-02-PLAN.md (Status Badge UI)
-- **Next step:** Continue with 06-03-PLAN.md (Program Detail Alerts)
+- **Stopped at:** Completed 06-03-PLAN.md (Alert Breakdown in Detail View)
+- **Next step:** Begin Phase 07 (Final Integration & Polish)
 - **Resume file:** None
 
 ## Key Reference Documents
@@ -176,6 +179,7 @@ Per AUTONOMOUS-BUILD-GUIDE.md:
 | 05 | 04 | Tab Integration | 2min | 9c9d6279, f5c87eaa, 94310cb3 |
 | 06 | 01 | Alert Calculation Utility | 1min | d18a946c |
 | 06 | 02 | Status Badge UI | 2min | f75f8621, 88b8e3ee, 3fe680a0 |
+| 06 | 03 | Alert Breakdown in Detail View | 2min | c75bdbcb, 4e798ba6 |
 
 ---
-*Last updated: 2026-02-02T16:22Z*
+*Last updated: 2026-02-02T16:20Z*
