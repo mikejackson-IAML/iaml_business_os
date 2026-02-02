@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Calendar, MapPin, Users } from 'lucide-react';
 import { toast } from 'sonner';
@@ -15,8 +15,16 @@ import { CertificateProgress } from '../components/certificate-progress';
 import { ContactPanel } from '../components/contact-panel/contact-panel';
 import { LogisticsTab } from '../components/logistics/logistics-tab';
 import { AttendanceTab } from '../components/attendance-tab';
-import type { ProgramDetail, RegistrationRosterItem } from '@/lib/api/programs-queries';
+import { AlertBreakdown } from '../components/alert-breakdown';
+import { AlertCountBadge } from '../components/alert-count-badge';
+import { LogisticsProgress } from '../components/logistics-progress';
+import type { ProgramDetail, ProgramLogistics, RegistrationRosterItem } from '@/lib/api/programs-queries';
 import { getBlocksForProgram } from '@/lib/api/programs-queries';
+import {
+  calculateProgramAlerts,
+  calculateLogisticsReadiness,
+  type AlertSummary,
+} from '@/lib/api/program-alerts';
 
 interface ProgramDetailContentProps {
   program: ProgramDetail;
@@ -35,6 +43,9 @@ export function ProgramDetailContent({
   const [activeTab, setActiveTab] = useState<TabId>('registrations'); // Default to first tab per PROG-10
   const [mountedTabs, setMountedTabs] = useState<Set<TabId>>(new Set(['registrations']));
   const [selectedRegistration, setSelectedRegistration] = useState<RegistrationRosterItem | null>(null);
+  const [logistics, setLogistics] = useState<ProgramLogistics | null>(null);
+  const [alerts, setAlerts] = useState<AlertSummary | null>(null);
+  const [alertsExpanded, setAlertsExpanded] = useState(false);
 
   // Get blocks for this program
   const blocks = getBlocksForProgram(program.program_name);
@@ -54,6 +65,41 @@ export function ProgramDetailContent({
   // Compute completed blocks for certificate progress (if virtual block)
   // For now, show all blocks from parent as incomplete - will be enhanced later
   const completedBlockIds: string[] = [];
+
+  // Load logistics and calculate alerts
+  useEffect(() => {
+    async function loadAlerts() {
+      // Skip for on-demand or completed programs
+      if (program.format === 'on-demand') return;
+      if (program.days_until_start !== null && program.days_until_start < 0) return;
+
+      try {
+        const res = await fetch(`/api/programs/${program.id}/logistics`);
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && json.data) {
+            setLogistics(json.data);
+
+            // Calculate alerts with logistics data
+            const unpaidRegs = registrations.filter(
+              (r) => r.payment_status !== 'Paid' && r.payment_due_date
+            );
+            const alertSummary = calculateProgramAlerts(program, json.data, unpaidRegs);
+            setAlerts(alertSummary);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load logistics for alerts:', error);
+      }
+    }
+
+    loadAlerts();
+  }, [program, registrations]);
+
+  // Calculate logistics readiness
+  const logisticsReadiness = logistics && alerts
+    ? calculateLogisticsReadiness(program.format, logistics, alerts)
+    : null;
 
   function handleRowClick(registration: RegistrationRosterItem) {
     setSelectedRegistration(registration);
@@ -160,6 +206,51 @@ export function ProgramDetailContent({
                 <Badge variant="outline">Virtual Block</Badge>
               )}
             </div>
+
+            {/* Alerts Section - only for active non-on-demand programs */}
+            {program.format !== 'on-demand' &&
+             (program.days_until_start === null || program.days_until_start >= 0) && (
+              <div className="mt-4 pt-4 border-t">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    {/* Logistics Readiness */}
+                    {logisticsReadiness && (
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-muted-foreground">Logistics:</span>
+                        <LogisticsProgress
+                          completed={logisticsReadiness.completed}
+                          total={logisticsReadiness.total}
+                          warnings={logisticsReadiness.warnings}
+                        />
+                      </div>
+                    )}
+
+                    {/* Alert Count */}
+                    {alerts && (alerts.warningCount > 0 || alerts.criticalCount > 0) && (
+                      <AlertCountBadge
+                        warningCount={alerts.warningCount}
+                        criticalCount={alerts.criticalCount}
+                      />
+                    )}
+                  </div>
+
+                  {/* Expand/Collapse button if alerts exist */}
+                  {alerts && alerts.alerts.length > 0 && (
+                    <button
+                      onClick={() => setAlertsExpanded(!alertsExpanded)}
+                      className="text-sm text-muted-foreground hover:text-foreground"
+                    >
+                      {alertsExpanded ? 'Hide details' : 'Show details'}
+                    </button>
+                  )}
+                </div>
+
+                {/* Alert Breakdown (expanded) */}
+                {alertsExpanded && alerts && (
+                  <AlertBreakdown alerts={alerts.alerts} className="mt-3" />
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
