@@ -29,7 +29,7 @@ export function ProgramStatusBadge({ enrolledCount, showCount = true, className 
 
   return (
     <Badge variant={variant} className={className}>
-      {label}{showCount && ` | ${enrolledCount}`}
+      {label}{showCount && ` (${enrolledCount})`}
     </Badge>
   );
 }
