@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Calendar, MapPin, Users } from 'lucide-react';
+import { useProgramsChat } from '../chat-context';
 import { toast } from 'sonner';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/dashboard-kit/components/ui/tabs';
 import { Badge } from '@/dashboard-kit/components/ui/badge';
@@ -46,6 +47,24 @@ export function ProgramDetailContent({
   const [logistics, setLogistics] = useState<ProgramLogistics | null>(null);
   const [alerts, setAlerts] = useState<AlertSummary | null>(null);
   const [alertsExpanded, setAlertsExpanded] = useState(false);
+
+  // Chat context for program-aware queries
+  const { setProgramContext } = useProgramsChat();
+
+  // Set program context for AI chat when viewing detail page
+  useEffect(() => {
+    if (program) {
+      setProgramContext({
+        id: program.id,
+        name: program.instance_name
+      });
+    }
+
+    return () => {
+      // Clear context when leaving detail page
+      setProgramContext(null);
+    };
+  }, [program, setProgramContext]);
 
   // Get blocks for this program
   const blocks = getBlocksForProgram(program.program_name);
