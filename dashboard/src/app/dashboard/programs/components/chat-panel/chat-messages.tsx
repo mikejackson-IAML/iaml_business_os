@@ -4,6 +4,8 @@ import { useEffect, useRef } from 'react';
 import { useProgramsChat, ChatMessage } from '../../chat-context';
 import { cn } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
+import { ResultTable } from './result-table';
+import { ResultChart } from './result-chart';
 
 function formatTimestamp(date: Date): string {
   return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -18,19 +20,24 @@ function MessageContent({ message }: { message: ChatMessage }) {
         <div className="whitespace-pre-wrap">{message.content}</div>
       )}
       {hasData && (
-        <div className="mt-2 p-2 rounded bg-muted/50 text-xs text-muted-foreground">
+        <>
           {message.data!.format === 'table' && (
-            <span>[Table: {message.data!.result.length} rows]</span>
+            <ResultTable data={message.data!.result} />
           )}
-          {message.data!.format === 'chart' && (
-            <span>[Chart: {message.data!.chartConfig?.title || 'Bar chart'}]</span>
+          {message.data!.format === 'chart' && message.data!.chartConfig && (
+            <ResultChart
+              data={message.data!.result}
+              config={message.data!.chartConfig}
+            />
           )}
           {message.data!.format === 'text' && (
-            <span className="text-primary font-medium text-sm">
-              {String(message.data!.result[0]?.value ?? message.data!.result[0])}
-            </span>
+            <div className="mt-2 p-3 bg-primary/10 rounded-lg">
+              <span className="text-2xl font-bold">
+                {String(message.data!.result[0]?.value ?? message.data!.result[0])}
+              </span>
+            </div>
           )}
-        </div>
+        </>
       )}
     </div>
   );
