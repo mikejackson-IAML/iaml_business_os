@@ -228,7 +228,13 @@ Plans:
 4. Results display as tables or charts
 5. Archived programs queryable
 
-**Plans:** TBD during planning phase
+**Plans:** 4 plans
+
+Plans:
+- [ ] 07-01-PLAN.md — SSE streaming chat API endpoint
+- [ ] 07-02-PLAN.md — Chat panel UI components and context
+- [ ] 07-03-PLAN.md — Result renderers (table and chart)
+- [ ] 07-04-PLAN.md — Layout integration and floating button
 
 ---
 
@@ -242,7 +248,7 @@ Plans:
 | 4. Logistics Tab | 4/4 | Complete |
 | 5. Attendance/Evaluations Tab | 4/4 | Complete |
 | 6. Program Status & Alerts | 3/3 | Complete |
-| 7. AI Reporting Chat | 0/TBD | Not Started |
+| 7. AI Reporting Chat | 0/4 | Not Started |
 
 ---
 *Roadmap created: 2026-01-30*
