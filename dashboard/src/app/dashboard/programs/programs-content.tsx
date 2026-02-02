@@ -11,6 +11,7 @@ import { cn, formatDateShort } from '@/dashboard-kit/lib/utils';
 import type { ProgramListItem } from '@/lib/api/programs-queries';
 import { ProgramStatusBadge } from './components/program-status-badge';
 import { LogisticsProgress } from './components/logistics-progress';
+import { AlertCountBadge } from './components/alert-count-badge';
 import { ProgramFilters } from './components/program-filters';
 import { ArchiveToggle } from './components/archive-toggle';
 
@@ -44,24 +45,58 @@ export function ProgramsContent({
   // Calculate logistics readiness for each program
   const getLogisticsStats = (program: ProgramListItem) => {
     const isVirtual = program.format === 'virtual';
-    const total = isVirtual ? 6 : 10; // Virtual tracks 6 items, in-person tracks 10
+    const isOnDemand = program.format === 'on-demand';
 
-    // Count completed items based on available fields
+    // On-demand programs don't track logistics
+    if (isOnDemand) return { completed: 0, total: 0, warnings: 0, criticals: 0 };
+
+    // Completed programs don't need warnings
+    if (program.days_until_start !== null && program.days_until_start < 0) {
+      return { completed: 0, total: 0, warnings: 0, criticals: 0 };
+    }
+
+    const total = isVirtual ? 6 : 10;
+    const daysUntil = program.days_until_start ?? 999;
+
+    // Count completed items
     let completed = 0;
     if (program.faculty_confirmed) completed++;
     if (program.venue_confirmed) completed++;
     if (program.materials_ordered) completed++;
     if (program.materials_received) completed++;
-    // Additional items would be tracked in the readiness table
-    // For now, use readiness_score as a proxy
+    // Use readiness_score as proxy for remaining items
     const scoreBasedCompleted = Math.round((program.readiness_score / 100) * total);
     completed = Math.max(completed, scoreBasedCompleted);
 
-    // Calculate warnings (items past threshold but not complete)
-    // For simplicity, 0 warnings for now - will be enhanced in Phase 6
-    const warnings = 0;
+    // Calculate warnings based on thresholds
+    let warnings = 0;
+    let criticals = 0;
 
-    return { completed, total, warnings };
+    // Instructor (warning <=45d, critical <=30d)
+    if (!program.faculty_confirmed) {
+      if (daysUntil <= 30) criticals++;
+      else if (daysUntil <= 45) warnings++;
+    }
+
+    // Venue (in-person only, warning <=90d, critical <=60d)
+    if (!isVirtual && !program.venue_confirmed) {
+      if (daysUntil <= 60) criticals++;
+      else if (daysUntil <= 90) warnings++;
+    }
+
+    // Materials ordered (warning <=45d, critical <=30d)
+    if (!program.materials_ordered) {
+      if (daysUntil <= 30) criticals++;
+      else if (daysUntil <= 45) warnings++;
+    }
+
+    // Registration alerts (warning <=45d, critical <=30d if <6 registrations)
+    if (program.current_enrolled < 6) {
+      if (daysUntil <= 30) criticals++;
+      else if (daysUntil <= 45) warnings++;
+    }
+
+    return { completed, total, warnings, criticals };
   };
 
   // Format location display
@@ -306,24 +341,38 @@ export function ProgramsContent({
 
                           {/* Status badge - for certificates, show combined count */}
                           <td className="px-4 py-4">
-                            <ProgramStatusBadge
-                              enrolledCount={isCertificate
-                                ? program.current_enrolled + program.child_total_enrolled
-                                : program.current_enrolled}
-                              showCount={true}
-                            />
+                            {program.format === 'on-demand' ? (
+                              <span className="text-xs text-muted-foreground">N/A</span>
+                            ) : (program.days_until_start !== null && program.days_until_start < 0) ? (
+                              <Badge variant="secondary">Completed</Badge>
+                            ) : (
+                              <ProgramStatusBadge
+                                enrolledCount={isCertificate
+                                  ? program.current_enrolled + program.child_total_enrolled
+                                  : program.current_enrolled}
+                                showCount={true}
+                              />
+                            )}
                           </td>
 
                           {/* Logistics */}
                           <td className="px-4 py-4">
                             {program.format === 'on-demand' ? (
                               <span className="text-xs text-muted-foreground">N/A</span>
+                            ) : (program.days_until_start !== null && program.days_until_start < 0) ? (
+                              <span className="text-xs text-muted-foreground">Completed</span>
                             ) : (
-                              <LogisticsProgress
-                                completed={logistics.completed}
-                                total={logistics.total}
-                                warnings={logistics.warnings}
-                              />
+                              <div className="flex items-center gap-3">
+                                <LogisticsProgress
+                                  completed={logistics.completed}
+                                  total={logistics.total}
+                                  warnings={logistics.warnings}
+                                />
+                                <AlertCountBadge
+                                  warningCount={logistics.warnings}
+                                  criticalCount={logistics.criticals}
+                                />
+                              </div>
                             )}
                           </td>
 
