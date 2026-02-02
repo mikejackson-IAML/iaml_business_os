@@ -13,11 +13,11 @@ See: `.planning-programs/AUTONOMOUS-BUILD-GUIDE.md` (pre-answered decisions)
 **Milestone:** v1.0
 **Status:** In Progress
 **Phase:** 06-program-status-alerts (6 of 7)
-**Plan:** 1 of 3 complete
+**Plan:** 2 of 3 complete
 
-Progress: [###################################-----] 88%
+Progress: [####################################----] 92%
 
-Phase 06 in progress - Alert calculation utility complete
+Phase 06 in progress - Status badges and alert display on programs list complete
 
 ## Quick Context
 
@@ -84,6 +84,9 @@ Phase 06 in progress - Alert calculation utility complete
 | 2026-02-02 | Alert calculation in TypeScript utility | Better testability than SQL views |
 | 2026-02-02 | 11 alert threshold pairs from PROG-60 | Centralized constants for consistency |
 | 2026-02-02 | Payment alerts rolled up to program level | Single alert "3 invoices past due" vs multiple |
+| 2026-02-02 | Badge format uses parentheses not pipe | "GO (8)" per CONTEXT.md decision |
+| 2026-02-02 | Alert thresholds checked: instructor 30/45d, venue 60/90d | Simplified threshold checks for list view |
+| 2026-02-02 | AlertCountBadge returns null when no alerts | Clean display per CONTEXT.md "no visual noise" |
 
 ## Session Log
 
@@ -112,6 +115,7 @@ Phase 06 in progress - Alert calculation utility complete
 | 2026-02-01 | Completed 05-02-PLAN.md | Attendance Tab UI - 3min |
 | 2026-02-01 | Completed 05-04-PLAN.md | Tab Integration - 2min |
 | 2026-02-02 | Completed 06-01-PLAN.md | Alert Calculation Utility - 1min |
+| 2026-02-02 | Completed 06-02-PLAN.md | Status Badge UI - 2min |
 
 ## Blockers
 
@@ -127,8 +131,8 @@ Phase 06 in progress - Alert calculation utility complete
 ## Session Continuity
 
 - **Last session:** 2026-02-02
-- **Stopped at:** Completed 06-01-PLAN.md (Alert Calculation Utility)
-- **Next step:** Continue with 06-02-PLAN.md (Status Badge UI)
+- **Stopped at:** Completed 06-02-PLAN.md (Status Badge UI)
+- **Next step:** Continue with 06-03-PLAN.md (Program Detail Alerts)
 - **Resume file:** None
 
 ## Key Reference Documents
@@ -171,6 +175,7 @@ Per AUTONOMOUS-BUILD-GUIDE.md:
 | 05 | 02 | Attendance Tab UI | 3min | b9e1d1fe, 39e00523, 06d793a2 |
 | 05 | 04 | Tab Integration | 2min | 9c9d6279, f5c87eaa, 94310cb3 |
 | 06 | 01 | Alert Calculation Utility | 1min | d18a946c |
+| 06 | 02 | Status Badge UI | 2min | f75f8621, 88b8e3ee, 3fe680a0 |
 
 ---
-*Last updated: 2026-02-02T16:16Z*
+*Last updated: 2026-02-02T16:22Z*
