@@ -101,10 +101,10 @@
 
 ### AI Reporting Chat
 
-- [ ] **PROG-61**: Chat interface to query program data in natural language
-- [ ] **PROG-62**: Support queries like: "Compare Austin ERL 2025 vs 2024", "Which companies sent the most attendees?", "Average revenue per program by city"
-- [ ] **PROG-63**: Display results as tables or simple charts
-- [ ] **PROG-64**: Query archived programs as well as upcoming
+- [x] **PROG-61**: Chat interface to query program data in natural language
+- [x] **PROG-62**: Support queries like: "Compare Austin ERL 2025 vs 2024", "Which companies sent the most attendees?", "Average revenue per program by city"
+- [x] **PROG-63**: Display results as tables or simple charts
+- [x] **PROG-64**: Query archived programs as well as upcoming
 
 ### Data & Integration
 
@@ -135,7 +135,7 @@
 | PROG-33 to PROG-44 | Phase 4: Logistics Tab | Complete |
 | PROG-45 to PROG-52 | Phase 5: Attendance/Evaluations Tab | Complete |
 | PROG-53 to PROG-60 | Phase 6: Program Status & Alerts | Complete |
-| PROG-61 to PROG-64 | Phase 7: AI Reporting Chat | Pending |
+| PROG-61 to PROG-64 | Phase 7: AI Reporting Chat | Complete |
 | PROG-65 to PROG-69 | Phase 3: Contact Panel (integrations) | Complete |
 | PROG-70 | Phase 1: Foundation | Complete |
 
