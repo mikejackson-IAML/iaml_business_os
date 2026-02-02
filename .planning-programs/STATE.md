@@ -12,12 +12,12 @@ See: `.planning-programs/AUTONOMOUS-BUILD-GUIDE.md` (pre-answered decisions)
 
 **Milestone:** v1.0
 **Status:** In Progress
-**Phase:** 05-attendance-evaluations (5 of 7) - COMPLETE
-**Plan:** 4 of 4 complete
+**Phase:** 06-program-status-alerts (6 of 7)
+**Plan:** 1 of 3 complete
 
-Progress: [##################################----] 86%
+Progress: [###################################-----] 88%
 
-**Phase 05 Complete!** Ready to proceed to Phase 06 (Program Status & Alerts)
+Phase 06 in progress - Alert calculation utility complete
 
 ## Quick Context
 
@@ -81,6 +81,9 @@ Progress: [##################################----] 86%
 | 2026-02-01 | Fragment for paired Reg/Att table cells | Clean JSX for multiple cells per block |
 | 2026-02-01 | hr element for separator in AttendanceTab | Dashboard-kit lacks Separator component |
 | 2026-02-01 | Registrations API supports includeAttendance param | Extends base data with attendance fields |
+| 2026-02-02 | Alert calculation in TypeScript utility | Better testability than SQL views |
+| 2026-02-02 | 11 alert threshold pairs from PROG-60 | Centralized constants for consistency |
+| 2026-02-02 | Payment alerts rolled up to program level | Single alert "3 invoices past due" vs multiple |
 
 ## Session Log
 
@@ -108,6 +111,7 @@ Progress: [##################################----] 86%
 | 2026-02-01 | Completed 05-03-PLAN.md | Evaluations Section UI - 3min |
 | 2026-02-01 | Completed 05-02-PLAN.md | Attendance Tab UI - 3min |
 | 2026-02-01 | Completed 05-04-PLAN.md | Tab Integration - 2min |
+| 2026-02-02 | Completed 06-01-PLAN.md | Alert Calculation Utility - 1min |
 
 ## Blockers
 
@@ -122,9 +126,9 @@ Progress: [##################################----] 86%
 
 ## Session Continuity
 
-- **Last session:** 2026-02-01
-- **Stopped at:** Completed 05-04-PLAN.md (Tab Integration) - Phase 05 Complete
-- **Next step:** Proceed to Phase 06 (Program Status & Alerts)
+- **Last session:** 2026-02-02
+- **Stopped at:** Completed 06-01-PLAN.md (Alert Calculation Utility)
+- **Next step:** Continue with 06-02-PLAN.md (Status Badge UI)
 - **Resume file:** None
 
 ## Key Reference Documents
@@ -166,6 +170,7 @@ Per AUTONOMOUS-BUILD-GUIDE.md:
 | 05 | 03 | Evaluations Section UI | 3min | b23268c4, 06d2ff72, af347cef |
 | 05 | 02 | Attendance Tab UI | 3min | b9e1d1fe, 39e00523, 06d793a2 |
 | 05 | 04 | Tab Integration | 2min | 9c9d6279, f5c87eaa, 94310cb3 |
+| 06 | 01 | Alert Calculation Utility | 1min | d18a946c |
 
 ---
-*Last updated: 2026-02-01T22:43Z*
+*Last updated: 2026-02-02T16:16Z*
