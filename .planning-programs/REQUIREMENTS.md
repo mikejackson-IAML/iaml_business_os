@@ -81,14 +81,14 @@
 
 ### Program Status & Logistics Readiness
 
-- [ ] **PROG-53**: Display program status badge (GO/CLOSE/NEEDS) based on registration count
-- [ ] **PROG-54**: GO status when 6+ full registrations
-- [ ] **PROG-55**: CLOSE status when 4-5 registrations
-- [ ] **PROG-56**: NEEDS REGISTRATIONS status when 0-3 registrations
-- [ ] **PROG-57**: Display logistics readiness as "X/Y items - Z warnings" format
-- [ ] **PROG-58**: In-person programs track 10 logistics items
-- [ ] **PROG-59**: Virtual programs track 6 logistics items (no hotel/venue/AV)
-- [ ] **PROG-60**: Generate alerts based on days-until-program thresholds:
+- [x] **PROG-53**: Display program status badge (GO/CLOSE/NEEDS) based on registration count
+- [x] **PROG-54**: GO status when 6+ full registrations
+- [x] **PROG-55**: CLOSE status when 4-5 registrations
+- [x] **PROG-56**: NEEDS REGISTRATIONS status when 0-3 registrations
+- [x] **PROG-57**: Display logistics readiness as "X/Y items - Z warnings" format
+- [x] **PROG-58**: In-person programs track 10 logistics items
+- [x] **PROG-59**: Virtual programs track 6 logistics items (no hotel/venue/AV)
+- [x] **PROG-60**: Generate alerts based on days-until-program thresholds:
   - No instructor: warning <=45 days, critical <=30 days
   - Hotel/room block/venue: warning <=90 days, critical <=60 days
   - BEO not received: warning <=10 days, critical <=7 days
@@ -134,7 +134,7 @@
 | PROG-20 to PROG-32 | Phase 3: Contact Panel | Complete |
 | PROG-33 to PROG-44 | Phase 4: Logistics Tab | Complete |
 | PROG-45 to PROG-52 | Phase 5: Attendance/Evaluations Tab | Complete |
-| PROG-53 to PROG-60 | Phase 6: Program Status & Alerts | Pending |
+| PROG-53 to PROG-60 | Phase 6: Program Status & Alerts | Complete |
 | PROG-61 to PROG-64 | Phase 7: AI Reporting Chat | Pending |
 | PROG-65 to PROG-69 | Phase 3: Contact Panel (integrations) | Complete |
 | PROG-70 | Phase 1: Foundation | Complete |
