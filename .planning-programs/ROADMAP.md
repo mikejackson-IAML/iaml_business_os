@@ -173,10 +173,10 @@ Plans:
 **Plans:** 4 plans
 
 Plans:
-- [ ] 05-01-PLAN.md — Schema (attendance column, evaluation tables) and query/mutation functions
-- [ ] 05-02-PLAN.md — Attendance roster UI with per-block checkboxes and bulk actions
-- [ ] 05-03-PLAN.md — Evaluations UI (aggregate scores, individual response cards)
-- [ ] 05-04-PLAN.md — Tab integration into program detail
+- [x] 05-01-PLAN.md — Schema (attendance column, evaluation tables) and query/mutation functions
+- [x] 05-02-PLAN.md — Attendance roster UI with per-block checkboxes and bulk actions
+- [x] 05-03-PLAN.md — Evaluations UI (aggregate scores, individual response cards)
+- [x] 05-04-PLAN.md — Tab integration into program detail
 
 ---
 
@@ -204,7 +204,12 @@ Plans:
    - Registrations: warn <=45d, crit <=30d
    - Unpaid: warn at due, crit 14+ days past
 
-**Plans:** TBD during planning phase
+**Plans:** 3 plans
+
+Plans:
+- [ ] 06-01-PLAN.md — Alert calculation utility with threshold constants and types
+- [ ] 06-02-PLAN.md — Status badge format update and alert badges on programs list
+- [ ] 06-03-PLAN.md — Alert breakdown display in program detail header
 
 ---
 
@@ -236,7 +241,7 @@ Plans:
 | 3. Contact Panel | 4/4 | Complete |
 | 4. Logistics Tab | 4/4 | Complete |
 | 5. Attendance/Evaluations Tab | 4/4 | Complete |
-| 6. Program Status & Alerts | 0/TBD | Not Started |
+| 6. Program Status & Alerts | 0/3 | Planning Complete |
 | 7. AI Reporting Chat | 0/TBD | Not Started |
 
 ---
@@ -246,3 +251,4 @@ Plans:
 *Phase 3 complete: 2026-01-31*
 *Phase 4 complete: 2026-02-01*
 *Phase 5 complete: 2026-02-01*
+*Phase 6 planned: 2026-02-02*
