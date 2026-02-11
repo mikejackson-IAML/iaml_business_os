@@ -1,0 +1,12 @@
+{
+  "project": "Marketing Analytics Dashboard",
+  "planning_root": ".planning/marketing-analytics",
+  "workflow": {
+    "mode": "yolo",
+    "depth": "comprehensive",
+    "parallelization": true,
+    "commit_docs": true
+  },
+  "created": "2026-02-11",
+  "notes": "Sales playbook analytics — pipeline, channels, campaigns, conversions. Fully independent from iOS app project at .planning/"
+}
