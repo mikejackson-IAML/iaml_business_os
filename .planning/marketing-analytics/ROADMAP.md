@@ -33,13 +33,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Running `SELECT refresh_analytics_views()` completes successfully and logs to `analytics_sync_log`
   4. All 5 materialized views exist and can be queried directly
   5. Conversion deduplication constraint exists -- a contact cannot be attributed to multiple channels for the same registration
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 01-01: Create classify_tier() function and analytics_sync_log table
-- [ ] 01-02: Create all 5 materialized views with unique indexes for CONCURRENTLY refresh
-- [ ] 01-03: Create all RPC functions with tier filter parameter and conversion deduplication logic
-- [ ] 01-04: Create refresh_analytics_views() function and seed sync_log with initial rows
+- [ ] 01-01-PLAN.md -- Create classify_tier() function, analytics_sync_log table, and conversion_attributed_channel column
+- [ ] 01-02-PLAN.md -- Create all 5 materialized views with unique indexes for CONCURRENTLY refresh
+- [ ] 01-03-PLAN.md -- Create all 6 RPC functions with tier filter parameter
+- [ ] 01-04-PLAN.md -- Create refresh_analytics_views() function and seed sync_log with initial rows
 
 ### Phase 2: SmartLead Ingestion
 **Goal**: SmartLead campaign data flows into Supabase automatically every 15 minutes with sync health tracking
@@ -164,7 +164,7 @@ Note: Phases 2, 3, and 5 (data ingestion) can overlap with each other as they ar
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Schema Foundation | 0/4 | Not started | - |
+| 1. Schema Foundation | 0/4 | Planned | - |
 | 2. SmartLead Ingestion | 0/3 | Not started | - |
 | 3. HeyReach Enhancement | 0/2 | Not started | - |
 | 4. Dashboard Core | 0/6 | Not started | - |
