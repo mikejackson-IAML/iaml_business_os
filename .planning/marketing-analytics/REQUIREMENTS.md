@@ -109,50 +109,50 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SCHEMA-01 | TBD | Pending |
-| SCHEMA-02 | TBD | Pending |
-| SCHEMA-03 | TBD | Pending |
-| SCHEMA-04 | TBD | Pending |
-| SCHEMA-05 | TBD | Pending |
-| SCHEMA-06 | TBD | Pending |
-| SYNC-01 | TBD | Pending |
-| SYNC-02 | TBD | Pending |
-| SYNC-03 | TBD | Pending |
-| SYNC-04 | TBD | Pending |
-| SYNC-05 | TBD | Pending |
-| SYNC-06 | TBD | Pending |
-| PIPE-01 | TBD | Pending |
-| PIPE-02 | TBD | Pending |
-| PIPE-03 | TBD | Pending |
-| CHAN-01 | TBD | Pending |
-| CHAN-02 | TBD | Pending |
-| CHAN-03 | TBD | Pending |
-| CHAN-04 | TBD | Pending |
-| CAMP-01 | TBD | Pending |
-| CAMP-02 | TBD | Pending |
-| CAMP-03 | TBD | Pending |
-| CAMP-04 | TBD | Pending |
-| CAMP-05 | TBD | Pending |
-| CAMP-06 | TBD | Pending |
-| CONV-01 | TBD | Pending |
-| CONV-02 | TBD | Pending |
-| CONV-03 | TBD | Pending |
-| CONV-04 | TBD | Pending |
-| CONV-05 | TBD | Pending |
-| CONV-06 | TBD | Pending |
-| UX-01 | TBD | Pending |
-| UX-02 | TBD | Pending |
-| UX-03 | TBD | Pending |
-| UX-04 | TBD | Pending |
-| UX-05 | TBD | Pending |
-| UX-06 | TBD | Pending |
-| UX-07 | TBD | Pending |
+| SCHEMA-01 | Phase 1: Schema Foundation | Pending |
+| SCHEMA-02 | Phase 1: Schema Foundation | Pending |
+| SCHEMA-03 | Phase 1: Schema Foundation | Pending |
+| SCHEMA-04 | Phase 1: Schema Foundation | Pending |
+| SCHEMA-05 | Phase 1: Schema Foundation | Pending |
+| SCHEMA-06 | Phase 1: Schema Foundation | Pending |
+| SYNC-01 | Phase 2: SmartLead Ingestion | Pending |
+| SYNC-02 | Phase 5: GHL Ingestion | Pending |
+| SYNC-03 | Phase 3: HeyReach Enhancement | Pending |
+| SYNC-04 | Phase 3: HeyReach Enhancement | Pending |
+| SYNC-05 | Phase 2: SmartLead Ingestion | Pending |
+| SYNC-06 | Phase 2: SmartLead Ingestion | Pending |
+| PIPE-01 | Phase 4: Dashboard Core | Pending |
+| PIPE-02 | Phase 4: Dashboard Core | Pending |
+| PIPE-03 | Phase 4: Dashboard Core | Pending |
+| CHAN-01 | Phase 4: Dashboard Core | Pending |
+| CHAN-02 | Phase 4: Dashboard Core | Pending |
+| CHAN-03 | Phase 4: Dashboard Core | Pending |
+| CHAN-04 | Phase 7: Conversion Tracking | Pending |
+| CAMP-01 | Phase 6: Campaign Management | Pending |
+| CAMP-02 | Phase 6: Campaign Management | Pending |
+| CAMP-03 | Phase 6: Campaign Management | Pending |
+| CAMP-04 | Phase 6: Campaign Management | Pending |
+| CAMP-05 | Phase 6: Campaign Management | Pending |
+| CAMP-06 | Phase 6: Campaign Management | Pending |
+| CONV-01 | Phase 7: Conversion Tracking | Pending |
+| CONV-02 | Phase 7: Conversion Tracking | Pending |
+| CONV-03 | Phase 7: Conversion Tracking | Pending |
+| CONV-04 | Phase 7: Conversion Tracking | Pending |
+| CONV-05 | Phase 7: Conversion Tracking | Pending |
+| CONV-06 | Phase 7: Conversion Tracking | Pending |
+| UX-01 | Phase 4: Dashboard Core | Pending |
+| UX-02 | Phase 4: Dashboard Core | Pending |
+| UX-03 | Phase 4: Dashboard Core | Pending |
+| UX-04 | Phase 8: Polish & Resilience | Pending |
+| UX-05 | Phase 4: Dashboard Core | Pending |
+| UX-06 | Phase 4: Dashboard Core | Pending |
+| UX-07 | Phase 8: Polish & Resilience | Pending |
 
 **Coverage:**
-- v1 requirements: 37 total
-- Mapped to phases: 0 (pending roadmap)
-- Unmapped: 37
+- v1 requirements: 38 total (6 Schema + 6 Sync + 3 Pipeline + 4 Channel + 6 Campaign + 6 Conversion + 7 UX)
+- Mapped to phases: 38
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-11*
-*Last updated: 2026-02-11 after initial definition*
+*Last updated: 2026-02-11 after roadmap creation -- all requirements mapped to phases*
