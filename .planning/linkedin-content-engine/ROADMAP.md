@@ -8,7 +8,7 @@
 
 | Phase | Name | Status | Workflows | Dashboard Work | Requirements |
 |-------|------|--------|-----------|----------------|--------------|
-| 1 | Foundation | ✅ Done | — | Scaffold | FOUND-01..04 |
+| 1 | Foundation | Done | — | Scaffold | FOUND-01..04 |
 | 2 | Daily RSS Research | In Progress | WF1 | — | RES-01, RES-02, RES-05, RES-06 |
 | 3 | Weekly Deep Research | Planned | WF2 | — | RES-03, RES-04, RES-05, RES-06 |
 | 4 | Topic Scoring & Selection | Planned | WF3 | This Week (interactive) | SCORE-01..04 |
@@ -24,7 +24,7 @@
 ```
 Phase 1 ✅
   ├── Phase 2 (Daily RSS Research) ← IN PROGRESS
-  └── Phase 3 (Weekly Deep Research)
+  └── Phase 3 (Weekly Deep Research) ← PLANNED (1 plan)
         └── Phase 4 (Topic Scoring) ← depends on 2 + 3
               └── Phase 5 (Content Generation) ← depends on 4
                     └── Phase 6 (Publishing) ← depends on 5
@@ -92,6 +92,10 @@ Plans:
 - **Dependencies:** Phase 1 ✅
 - **Requirements:** RES-03, RES-04, RES-05, RES-06
 - **Note:** Can run in parallel with Phase 2
+- **Plans:** 1 plan
+
+Plans:
+- [ ] 03-01-PLAN.md — Build WF2 Weekly Deep Research workflow (Reddit + LinkedIn via Apify) + docs + n8n-brain registration
 
 ### Success Criteria
 - [ ] WF2 (Weekly Deep Research) built and active in n8n
@@ -104,7 +108,7 @@ Plans:
 
 ### Technical Notes
 - Apify actors for Reddit and LinkedIn scraping
-- Use Apify queue pattern (webhook adds to queue, schedule processes)
+- Use Apify synchronous run endpoint (run-sync-get-dataset-items) for simplicity
 - Budget: $57-79/mo Apify Starter plan
 - Credential: Apify API token hardcoded in workflow
 
