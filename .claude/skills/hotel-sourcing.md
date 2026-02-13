@@ -18,27 +18,49 @@ Query Supabase RPC `get_programs_for_hotel_sourcing()` which returns upcoming in
 - Cancellation: generous no-penalty terms (ideally cancel within ~2 weeks)
 - Prefer Marriott properties when feasible
 
-### Meeting Space Rules
-- Each concurrent program requires its own dedicated meeting room
-- Setup types:
-  - "Investigations" programs → ROUNDS (round tables)
-  - All other programs → CLASSROOM
-- Meeting days calculation:
-  - If `duration_days` = 4.5 → 5 meeting days
-  - Otherwise → integer value of `duration_days`
-- Meeting date range: `start_date` to `start_date + (meeting_days - 1)`
+### Meeting Space Rules — CRITICAL
+
+**Key principle: Count PARENT PROGRAMS, not blocks.**
+
+A "Certificate" program (e.g., Certificate in Employee Relations Law) runs for 5 days and contains multiple blocks (Comprehensive Labor Relations, Discrimination Prevention, Special Issues). These blocks **share one meeting room** — they are sequential sessions within the same program, not concurrent programs.
+
+**What counts as 1 program = 1 meeting room:**
+- Certificate in Employee Relations Law (5 days) = 1 room Mon-Fri
+- Certificate in Employee Benefits Law (5 days) = 1 room Mon-Fri
+- Certificate in Workplace Investigations (2 days) = 1 room Mon-Tue
+- Certificate in Strategic HR Leadership (5 days) = 1 room Mon-Fri
+- Advanced Certificate in Strategic Employment Law (2 days) = 1 room Mon-Tue
+
+**What does NOT count as separate programs:**
+- Comprehensive Labor Relations (block within Employee Relations Law cert)
+- Discrimination Prevention & Defense (block within Employee Relations Law cert)
+- Retirement Plans (block within Employee Benefits Law cert)
+- HR Law Fundamentals (block within Strategic HR Leadership cert)
+
+**Setup types:**
+- Programs with "Investigations" in name → ROUNDS (round tables)
+- All other programs → CLASSROOM
+
+### Room Duration Rules
+- 5-day certificate programs → 1 room Mon-Fri
+- 4.5-day programs → 1 room Mon-Fri (round up)
+- 2-day programs → 1 room Mon-Tue (or appropriate 2-day span)
+- 1-day programs → 1 room for that day
 
 ### Grouping Logic
 1. Group programs by location (city, state)
-2. Within each location, merge overlapping date windows
-3. For each merged window, calculate max simultaneous rooms needed by setup type
-4. Determine day-of-week ranges for each setup type
-5. Count unique programs per location (for "*X programs total" line)
+2. Identify parent/certificate programs (ignore constituent blocks)
+3. For each parent program, determine:
+   - Room duration (Mon-Fri vs Mon-Tue etc.)
+   - Setup type (rounds vs classroom)
+4. Count rooms by duration and setup type
+5. Sum total programs per location
 
 ### Program Counting
-- Count unique "base" programs per location (e.g., Certificate in Employee Relations Law = 1 program)
-- Do NOT count sub-blocks separately (e.g., if a certificate has 3 blocks, count as 1 program)
-- The program count helps the coordinator understand scale/complexity
+- Count **parent certificate programs only**
+- The blocks within a certificate are NOT separate programs
+- Total programs = sum of all room requirements (e.g., 2 Mon-Fri + 1 Mon-Tue = 3 programs)
+- If database returns blocks separately, group by parent_program_id or by certificate name pattern
 
 ## Output Format
 
@@ -108,15 +130,20 @@ Thanks!
 ## Execution Steps
 
 1. **Fetch data**: Call Supabase RPC `get_programs_for_hotel_sourcing()`
-2. **Process data**:
-   - Parse dates and durations
-   - Determine setup type (rounds vs classroom) based on program name
-   - Calculate meeting days per program
+2. **Identify parent programs**:
+   - Filter to only parent/certificate programs (not blocks)
+   - Use `parent_program_id IS NULL` or identify by "Certificate" naming pattern
+   - Blocks like "Comprehensive Labor Relations" should be excluded if their parent cert is already counted
 3. **Group by location**: Create location buckets with (city, state)
-4. **Merge date windows**: Within each location, merge overlapping meeting date ranges
-5. **Calculate concurrency**: For each merged window, count max simultaneous rooms by setup type
-6. **Generate email**: Format per the output specification above
-7. **Display to user**: Show the generated email for copying
+4. **Categorize by room duration**:
+   - 5-day programs → Mon-Fri bucket
+   - 2-day programs → Mon-Tue bucket (or appropriate span)
+   - 1-day programs → single day bucket
+5. **Determine setup type**: "Investigations" → rounds, everything else → classroom
+6. **Count rooms per bucket**: Sum programs in each duration/setup combination
+7. **Calculate total**: Sum all room counts = total programs
+8. **Generate email**: Format per the output specification above
+9. **Display to user**: Show the generated email for copying
 
 ## Notes
 - This skill queries live Supabase data
