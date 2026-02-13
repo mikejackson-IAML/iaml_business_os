@@ -10,28 +10,28 @@ See: .planning/marketing-analytics/PROJECT.md (updated 2026-02-11)
 ## Current Position
 
 Phase: 1 of 8 (Schema Foundation)
-Plan: 1 of 4 in current phase
-Status: Executing
-Last activity: 2026-02-13 -- Completed 01-01-PLAN.md (classify_tier, sync_log, conversion column)
+Plan: 2 of 4 in current phase
+Status: In progress
+Last activity: 2026-02-13 -- Completed 01-02-PLAN.md (5 materialized views with unique indexes)
 
-Progress: [█░░░░░░░░░] 5%
+Progress: [██░░░░░░░░] 10%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 1
+- Total plans completed: 2
 - Average duration: 3 min
-- Total execution time: 0.05 hours
+- Total execution time: 0.1 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1 | 1 | 3 min | 3.0 min |
+| 1 | 2 | 6 min | 3.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (3 min)
-- Trend: Starting
+- Last 5 plans: 01-01 (3 min), 01-02 (3 min)
+- Trend: Consistent
 
 *Updated after each plan completion*
 
@@ -48,6 +48,9 @@ Recent decisions affecting current work:
 - [Roadmap]: Tier filter baked into RPC functions from Phase 1 (not bolted on later)
 - [01-01]: classify_tier() CASE order checks "director" before "executive" -- "Executive Director" maps to directors
 - [01-01]: IMMUTABLE volatility for classify_tier() enables materialized view optimization
+- [01-02]: Migration renamed from 20260212 to 20260213001 to avoid Supabase CLI timestamp collision
+- [01-02]: Channel scoreboard registrations use conversion_attributed_channel for SCHEMA-06 dedup at view level
+- [01-02]: mv_campaign_step_metrics uses LEFT JOINs so steps with no activity still appear
 
 ### Pending Todos
 
@@ -59,9 +62,10 @@ None yet.
 - SmartLead campaign ID mapping: campaign_channels.platform_campaign_id must be populated before sync works
 - GHL sub-account dedup settings: Must verify "Allow Duplicate Contact" config before Phase 5
 - Gemini reply classification: Verify HeyReach receiver writes reply_sentiment to campaign_activity.metadata
+- Migration naming: This repo has multiple files sharing date prefixes, causing Supabase CLI conflicts. Future migrations should use unique timestamps (e.g., YYYYMMDDNNN pattern).
 
 ## Session Continuity
 
 Last session: 2026-02-13
-Stopped at: Completed 01-01, executing wave 2 next
+Stopped at: Completed 01-02, ready for wave 3 (plans 01-03 + 01-04)
 Resume file: None
