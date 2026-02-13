@@ -9,7 +9,7 @@
 | Phase | Name | Status | Workflows | Dashboard Work | Requirements |
 |-------|------|--------|-----------|----------------|--------------|
 | 1 | Foundation | ✅ Done | — | Scaffold | FOUND-01..04 |
-| 2 | Daily RSS Research | Planned | WF1 | — | RES-01, RES-02, RES-05, RES-06 |
+| 2 | Daily RSS Research | In Progress | WF1 | — | RES-01, RES-02, RES-05, RES-06 |
 | 3 | Weekly Deep Research | Planned | WF2 | — | RES-03, RES-04, RES-05, RES-06 |
 | 4 | Topic Scoring & Selection | Planned | WF3 | This Week (interactive) | SCORE-01..04 |
 | 5 | Content Generation & Drafts | Planned | WF4 | Drafts (interactive) | GEN-01..05 |
@@ -23,7 +23,7 @@
 
 ```
 Phase 1 ✅
-  ├── Phase 2 (Daily RSS Research)
+  ├── Phase 2 (Daily RSS Research) ← IN PROGRESS
   └── Phase 3 (Weekly Deep Research)
         └── Phase 4 (Topic Scoring) ← depends on 2 + 3
               └── Phase 5 (Content Generation) ← depends on 4
@@ -59,10 +59,14 @@ Phase 1 ✅
 
 ## Phase 2: Daily RSS Research
 
-- **Status:** Planned
+- **Status:** In Progress
 - **Goal:** Build n8n workflow that monitors HR/AI RSS feeds daily and stores signals in Supabase.
 - **Dependencies:** Phase 1 ✅
 - **Requirements:** RES-01, RES-02, RES-05, RES-06
+- **Plans:** 1 plan
+
+Plans:
+- [ ] 02-01-PLAN.md — Build WF1 Daily RSS Monitor workflow + docs + n8n-brain registration
 
 ### Success Criteria
 - [ ] WF1 (Daily RSS Monitor) built and active in n8n
