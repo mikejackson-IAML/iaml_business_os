@@ -330,3 +330,39 @@ Schedule (Sun/Fri) --> Determine Mode --> Call AI Analysis API
 - Claude (AI analysis and suggestions)
 - Supabase (task creation via Postgres)
 - Slack (success logging and error alerts)
+
+---
+
+## LinkedIn Content Engine
+
+### WF1: Daily RSS Monitor
+
+**File:** `n8n-workflows/linkedin-engine/wf1-daily-rss-monitor.json`
+**n8n Workflow ID:** TBD (import pending)
+**Status:** Ready to Import
+**Trigger:** Schedule (Daily 6:00 AM CST / 12:00 UTC)
+**Documentation:** [README-wf1-daily-rss-monitor.md](README-wf1-daily-rss-monitor.md)
+
+Scans 7 HR/AI news sources daily, classifies articles with Claude Sonnet (keywords, topic category, sentiment), and stores signals in `linkedin_engine.research_signals` via Supabase REST API.
+
+#### How It Works
+
+```
+Schedule (6 AM CST)
+  |-- RSS: SHRM -> Tag: SHRM --------------|
+  |-- RSS: HR Dive -> Tag: HR Dive --------|
+  |-- RSS: EEOC -> Tag: EEOC -------------|
+  |-- RSS: DOL -> Tag: DOL ---------------+-> Filter Last 48h -> Has Items? -> Split Batches
+  |-- RSS: Littler -> Tag: Littler --------|       | (loop)
+  |-- RSS: Jackson Lewis -> Tag: JL ------|   Wait 1s -> Claude Classify -> Parse -> Insert Signal
+  '-- RSS: Fisher Phillips -> Tag: FP ----'       | (done)
+                                              Log Workflow Run
+
+Error Trigger -> Log Error to Supabase (canary)
+```
+
+#### Services
+
+- Supabase REST (signal storage, run logging, error logging)
+- Claude Sonnet (article classification)
+- RSS feeds (7 HR/AI news sources)
