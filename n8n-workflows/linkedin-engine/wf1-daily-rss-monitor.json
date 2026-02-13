@@ -1,0 +1,644 @@
+{
+  "name": "WF1: Daily RSS Monitor (LinkedIn Content Engine)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 12 * * *"
+            }
+          ]
+        }
+      },
+      "id": "schedule-daily-6am-cst",
+      "name": "Daily 6 AM CST",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 400]
+    },
+    {
+      "parameters": {
+        "url": "https://www.shrm.org/rss/pages/custom-rss.aspx",
+        "options": {}
+      },
+      "id": "rss-shrm",
+      "name": "RSS: SHRM",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [300, 0],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "https://www.hrdive.com/feeds/news/",
+        "options": {}
+      },
+      "id": "rss-hr-dive",
+      "name": "RSS: HR Dive",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [300, 150],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "https://www.eeoc.gov/newsroom/rss",
+        "options": {}
+      },
+      "id": "rss-eeoc",
+      "name": "RSS: EEOC Press",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [300, 300],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "https://www.dol.gov/rss/releases.xml",
+        "options": {}
+      },
+      "id": "rss-dol",
+      "name": "RSS: DOL News",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [300, 450],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "https://www.littler.com/rss.xml",
+        "options": {}
+      },
+      "id": "rss-littler",
+      "name": "RSS: Littler Mendelson",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [300, 600],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "https://www.jacksonlewis.com/feed",
+        "options": {}
+      },
+      "id": "rss-jackson-lewis",
+      "name": "RSS: Jackson Lewis",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [300, 750],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "https://www.fisherphillips.com/rss",
+        "options": {}
+      },
+      "id": "rss-fisher-phillips",
+      "name": "RSS: Fisher Phillips",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [300, 900],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"source\": \"shrm\",\n  \"source_url\": \"{{ $json.link || $json.url || '' }}\",\n  \"title\": \"{{ $json.title || '' }}\",\n  \"body_text\": \"{{ ($json.content || $json.description || $json['content:encoded'] || '').substring(0, 5000) }}\",\n  \"author\": \"{{ $json.creator || $json.author || '' }}\",\n  \"pub_date\": \"{{ $json.pubDate || $json.isoDate || '' }}\"\n}",
+        "options": {}
+      },
+      "id": "tag-shrm",
+      "name": "Tag: SHRM",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [550, 0]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"source\": \"hr_dive\",\n  \"source_url\": \"{{ $json.link || $json.url || '' }}\",\n  \"title\": \"{{ $json.title || '' }}\",\n  \"body_text\": \"{{ ($json.content || $json.description || $json['content:encoded'] || '').substring(0, 5000) }}\",\n  \"author\": \"{{ $json.creator || $json.author || '' }}\",\n  \"pub_date\": \"{{ $json.pubDate || $json.isoDate || '' }}\"\n}",
+        "options": {}
+      },
+      "id": "tag-hr-dive",
+      "name": "Tag: HR Dive",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [550, 150]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"source\": \"eeoc\",\n  \"source_url\": \"{{ $json.link || $json.url || '' }}\",\n  \"title\": \"{{ $json.title || '' }}\",\n  \"body_text\": \"{{ ($json.content || $json.description || $json['content:encoded'] || '').substring(0, 5000) }}\",\n  \"author\": \"{{ $json.creator || $json.author || '' }}\",\n  \"pub_date\": \"{{ $json.pubDate || $json.isoDate || '' }}\"\n}",
+        "options": {}
+      },
+      "id": "tag-eeoc",
+      "name": "Tag: EEOC",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [550, 300]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"source\": \"dol\",\n  \"source_url\": \"{{ $json.link || $json.url || '' }}\",\n  \"title\": \"{{ $json.title || '' }}\",\n  \"body_text\": \"{{ ($json.content || $json.description || $json['content:encoded'] || '').substring(0, 5000) }}\",\n  \"author\": \"{{ $json.creator || $json.author || '' }}\",\n  \"pub_date\": \"{{ $json.pubDate || $json.isoDate || '' }}\"\n}",
+        "options": {}
+      },
+      "id": "tag-dol",
+      "name": "Tag: DOL",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [550, 450]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"source\": \"littler\",\n  \"source_url\": \"{{ $json.link || $json.url || '' }}\",\n  \"title\": \"{{ $json.title || '' }}\",\n  \"body_text\": \"{{ ($json.content || $json.description || $json['content:encoded'] || '').substring(0, 5000) }}\",\n  \"author\": \"{{ $json.creator || $json.author || '' }}\",\n  \"pub_date\": \"{{ $json.pubDate || $json.isoDate || '' }}\"\n}",
+        "options": {}
+      },
+      "id": "tag-littler",
+      "name": "Tag: Littler",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [550, 600]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"source\": \"jackson_lewis\",\n  \"source_url\": \"{{ $json.link || $json.url || '' }}\",\n  \"title\": \"{{ $json.title || '' }}\",\n  \"body_text\": \"{{ ($json.content || $json.description || $json['content:encoded'] || '').substring(0, 5000) }}\",\n  \"author\": \"{{ $json.creator || $json.author || '' }}\",\n  \"pub_date\": \"{{ $json.pubDate || $json.isoDate || '' }}\"\n}",
+        "options": {}
+      },
+      "id": "tag-jackson-lewis",
+      "name": "Tag: Jackson Lewis",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [550, 750]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"source\": \"fisher_phillips\",\n  \"source_url\": \"{{ $json.link || $json.url || '' }}\",\n  \"title\": \"{{ $json.title || '' }}\",\n  \"body_text\": \"{{ ($json.content || $json.description || $json['content:encoded'] || '').substring(0, 5000) }}\",\n  \"author\": \"{{ $json.creator || $json.author || '' }}\",\n  \"pub_date\": \"{{ $json.pubDate || $json.isoDate || '' }}\"\n}",
+        "options": {}
+      },
+      "id": "tag-fisher-phillips",
+      "name": "Tag: Fisher Phillips",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [550, 900]
+    },
+    {
+      "parameters": {
+        "jsCode": "const cutoff = new Date(Date.now() - 48 * 60 * 60 * 1000);\nconst items = $input.all();\nconst recent = items.filter(item => {\n  const pubDate = new Date(item.json.pub_date);\n  return pubDate > cutoff;\n});\nreturn recent.length > 0 ? recent : [{ json: { _empty: true } }];"
+      },
+      "id": "filter-recent-items",
+      "name": "Filter Last 48 Hours",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [800, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "not-empty",
+              "leftValue": "={{ $json._empty }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notTrue"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "has-new-items",
+      "name": "Has New Items?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1050, 400]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "process-one-at-a-time",
+      "name": "Process One at a Time",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [1300, 300]
+    },
+    {
+      "parameters": {
+        "amount": 1,
+        "unit": "seconds"
+      },
+      "id": "rate-limit-wait",
+      "name": "Wait 1s (Rate Limit)",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1550, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"claude-sonnet-4-20250514\",\n  \"max_tokens\": 500,\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Analyze this HR/AI news article and return ONLY valid JSON (no markdown, no code fences).\\n\\nTitle: {{ $json.title }}\\nBody: {{ $json.body_text.substring(0, 3000) }}\\nSource: {{ $json.source }}\\n\\nReturn this exact JSON structure:\\n{\\n  \\\"keywords\\\": [\\\"keyword1\\\", \\\"keyword2\\\", \\\"keyword3\\\"],\\n  \\\"topic_category\\\": \\\"one of: ai_compliance, ai_hiring, surveillance, employment_law, hr_tech, legacy_pivot, build_in_public\\\",\\n  \\\"sentiment\\\": \\\"one of: positive, negative, neutral, concerned, confused\\\"\\n}\\n\\nRules:\\n- keywords: 3-7 specific terms from the article (not generic words)\\n- topic_category: pick the BEST match from the list. If about AI regulation/rules = ai_compliance. If about AI in recruitment = ai_hiring. If about employee monitoring = surveillance. If about labor law/EEOC/DOL = employment_law. If about HR software/tools = hr_tech. Default to employment_law if unclear.\\n- sentiment: overall tone of the article toward its subject\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "id": "classify-with-claude",
+      "name": "Classify with Claude",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1800, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "anthropic-api",
+          "name": "Anthropic API"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\n\n// Get the original item data from the batch\nconst originalItem = $('Process One at a Time').first().json;\n\n// Parse Claude's response\nlet classification;\ntry {\n  const responseText = item.content?.[0]?.text || '{}';\n  // Strip any markdown code fences if present\n  const cleaned = responseText.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n  classification = JSON.parse(cleaned);\n} catch (e) {\n  classification = {\n    keywords: [],\n    topic_category: 'employment_law',\n    sentiment: 'neutral'\n  };\n}\n\n// Validate topic_category\nconst validCategories = ['ai_compliance', 'ai_hiring', 'surveillance', 'employment_law', 'hr_tech', 'legacy_pivot', 'build_in_public'];\nif (!validCategories.includes(classification.topic_category)) {\n  classification.topic_category = 'employment_law';\n}\n\n// Validate sentiment\nconst validSentiments = ['positive', 'negative', 'neutral', 'concerned', 'confused'];\nif (!validSentiments.includes(classification.sentiment)) {\n  classification.sentiment = 'neutral';\n}\n\n// Calculate signal_week (Monday of current week)\nconst now = new Date();\nconst dayOfWeek = now.getDay();\nconst diff = now.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);\nconst monday = new Date(now.getFullYear(), now.getMonth(), diff);\nconst signalWeek = monday.toISOString().split('T')[0];\n\nreturn [{\n  json: {\n    source: originalItem.source,\n    source_url: originalItem.source_url,\n    title: originalItem.title,\n    body_text: originalItem.body_text,\n    author: originalItem.author,\n    keywords: classification.keywords || [],\n    topic_category: classification.topic_category,\n    sentiment: classification.sentiment,\n    signal_week: signalWeek,\n    platform_engagement: {},\n    processed: false\n  }\n}];"
+      },
+      "id": "parse-classification",
+      "name": "Parse Claude Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2050, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/research_signals",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"source\": \"{{ $json.source }}\",\n  \"source_url\": \"{{ $json.source_url }}\",\n  \"title\": \"{{ $json.title }}\",\n  \"body_text\": \"{{ $json.body_text }}\",\n  \"author\": \"{{ $json.author }}\",\n  \"keywords\": {{ JSON.stringify($json.keywords) }},\n  \"topic_category\": \"{{ $json.topic_category }}\",\n  \"sentiment\": \"{{ $json.sentiment }}\",\n  \"signal_week\": \"{{ $json.signal_week }}\",\n  \"platform_engagement\": {},\n  \"processed\": false\n}",
+        "options": {}
+      },
+      "id": "insert-research-signal",
+      "name": "Insert Research Signal",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2300, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/workflow_runs",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow_name\": \"wf1-daily-rss-monitor\",\n  \"status\": \"completed\",\n  \"items_processed\": {{ $('Filter Last 48 Hours').all().length || 0 }},\n  \"metadata\": { \"sources\": [\"shrm\", \"hr_dive\", \"eeoc\", \"dol\", \"littler\", \"jackson_lewis\", \"fisher_phillips\"] }\n}",
+        "options": {}
+      },
+      "id": "log-workflow-run",
+      "name": "Log Workflow Run",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2300, 550],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {},
+      "id": "error-trigger",
+      "name": "On Error",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [0, 800]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/workflow_errors",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow_name\": \"wf1-daily-rss-monitor\",\n  \"error_message\": \"{{ $json.message || 'Unknown error' }}\",\n  \"error_node\": \"{{ $json.node?.name || 'unknown' }}\",\n  \"execution_id\": \"{{ $json.execution?.id || '' }}\",\n  \"timestamp\": \"{{ $now.toISO() }}\"\n}",
+        "options": {}
+      },
+      "id": "log-error-to-supabase",
+      "name": "Log Error to Supabase",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [300, 800],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {},
+      "id": "end-no-items",
+      "name": "End - No New Items",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [1300, 550]
+    }
+  ],
+  "connections": {
+    "Daily 6 AM CST": {
+      "main": [
+        [
+          { "node": "RSS: SHRM", "type": "main", "index": 0 },
+          { "node": "RSS: HR Dive", "type": "main", "index": 0 },
+          { "node": "RSS: EEOC Press", "type": "main", "index": 0 },
+          { "node": "RSS: DOL News", "type": "main", "index": 0 },
+          { "node": "RSS: Littler Mendelson", "type": "main", "index": 0 },
+          { "node": "RSS: Jackson Lewis", "type": "main", "index": 0 },
+          { "node": "RSS: Fisher Phillips", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "RSS: SHRM": {
+      "main": [
+        [
+          { "node": "Tag: SHRM", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "RSS: HR Dive": {
+      "main": [
+        [
+          { "node": "Tag: HR Dive", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "RSS: EEOC Press": {
+      "main": [
+        [
+          { "node": "Tag: EEOC", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "RSS: DOL News": {
+      "main": [
+        [
+          { "node": "Tag: DOL", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "RSS: Littler Mendelson": {
+      "main": [
+        [
+          { "node": "Tag: Littler", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "RSS: Jackson Lewis": {
+      "main": [
+        [
+          { "node": "Tag: Jackson Lewis", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "RSS: Fisher Phillips": {
+      "main": [
+        [
+          { "node": "Tag: Fisher Phillips", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Tag: SHRM": {
+      "main": [
+        [
+          { "node": "Filter Last 48 Hours", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Tag: HR Dive": {
+      "main": [
+        [
+          { "node": "Filter Last 48 Hours", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Tag: EEOC": {
+      "main": [
+        [
+          { "node": "Filter Last 48 Hours", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Tag: DOL": {
+      "main": [
+        [
+          { "node": "Filter Last 48 Hours", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Tag: Littler": {
+      "main": [
+        [
+          { "node": "Filter Last 48 Hours", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Tag: Jackson Lewis": {
+      "main": [
+        [
+          { "node": "Filter Last 48 Hours", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Tag: Fisher Phillips": {
+      "main": [
+        [
+          { "node": "Filter Last 48 Hours", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Filter Last 48 Hours": {
+      "main": [
+        [
+          { "node": "Has New Items?", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Has New Items?": {
+      "main": [
+        [
+          { "node": "Process One at a Time", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "End - No New Items", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Process One at a Time": {
+      "main": [
+        [
+          { "node": "Wait 1s (Rate Limit)", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "Log Workflow Run", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Wait 1s (Rate Limit)": {
+      "main": [
+        [
+          { "node": "Classify with Claude", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Classify with Claude": {
+      "main": [
+        [
+          { "node": "Parse Claude Response", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Parse Claude Response": {
+      "main": [
+        [
+          { "node": "Insert Research Signal", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Insert Research Signal": {
+      "main": [
+        [
+          { "node": "Process One at a Time", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "On Error": {
+      "main": [
+        [
+          { "node": "Log Error to Supabase", "type": "main", "index": 0 }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "instanceId": "IAML-Business-OS"
+  },
+  "pinData": {},
+  "versionId": "1.0.0",
+  "triggerCount": 1,
+  "tags": [
+    {
+      "name": "linkedin-content-engine",
+      "createdAt": "2026-02-13T00:00:00.000Z",
+      "updatedAt": "2026-02-13T00:00:00.000Z"
+    }
+  ]
+}
