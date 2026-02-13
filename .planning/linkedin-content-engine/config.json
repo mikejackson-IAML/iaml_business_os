@@ -1,0 +1,12 @@
+{
+  "project": "LinkedIn Content Engine",
+  "current_milestone": "v1.0",
+  "workflow": {
+    "mode": "yolo",
+    "depth": "comprehensive",
+    "parallelization": true,
+    "commit_docs": true
+  },
+  "created": "2026-02-13",
+  "notes": "LinkedIn content automation - 8 n8n workflows + dashboard integration"
+}
