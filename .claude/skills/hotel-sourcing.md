@@ -33,6 +33,12 @@ Query Supabase RPC `get_programs_for_hotel_sourcing()` which returns upcoming in
 2. Within each location, merge overlapping date windows
 3. For each merged window, calculate max simultaneous rooms needed by setup type
 4. Determine day-of-week ranges for each setup type
+5. Count unique programs per location (for "*X programs total" line)
+
+### Program Counting
+- Count unique "base" programs per location (e.g., Certificate in Employee Relations Law = 1 program)
+- Do NOT count sub-blocks separately (e.g., if a certificate has 3 blocks, count as 1 program)
+- The program count helps the coordinator understand scale/complexity
 
 ## Output Format
 
@@ -44,6 +50,7 @@ Generate email addressed to "Mike" with:
    - Total meeting space needed (simultaneous):
      - X meeting rooms: Day-Day (classroom)
      - Y meeting rooms: Day-Day (rounds)
+   - **Program count**: Add "*X programs total" at end of each location section
 3. **Request section** - Ask coordinator to return:
    - Guest room rate + mandatory fees
    - Meeting room rental + waivers/concessions
@@ -77,11 +84,13 @@ We're planning our spring/summer 2026 programming and need to source hotels for 
 - Total meeting space needed (simultaneous):
   - 2 meeting rooms: Mon–Fri (classroom)
   - 1 meeting room: Mon–Tue (rounds)
+*3 programs total
 
 **Chicago, IL — May 4–8, 2026**
 - Total meeting space needed (simultaneous):
-  - 2 meeting rooms: Mon–Tue (classroom)
-  - 1 meeting room: Wed–Fri (classroom)
+  - 1 meeting room: Mon–Fri (classroom)
+  - 1 meeting room: Mon–Tue (classroom)
+*2 programs total
 
 [...additional locations...]
 
