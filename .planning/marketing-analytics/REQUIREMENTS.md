@@ -9,12 +9,12 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Schema & Data Layer
 
-- [ ] **SCHEMA-01**: Supabase materialized views pre-compute pipeline funnel, channel scoreboard, campaign metrics, and conversion data
-- [ ] **SCHEMA-02**: RPC functions power all dashboard queries with optional tier filter parameter
-- [ ] **SCHEMA-03**: `classify_tier(job_title)` function maps contact titles to Directors/Executives/Managers tiers
-- [ ] **SCHEMA-04**: `analytics_sync_log` table tracks data freshness per platform (SmartLead, HeyReach, GHL)
-- [ ] **SCHEMA-05**: `refresh_analytics_views()` function refreshes all materialized views in one call
-- [ ] **SCHEMA-06**: Conversion deduplication enforced at contact level (one contact = one registration = one attributed channel)
+- [x] **SCHEMA-01**: Supabase materialized views pre-compute pipeline funnel, channel scoreboard, campaign metrics, and conversion data
+- [x] **SCHEMA-02**: RPC functions power all dashboard queries with optional tier filter parameter
+- [x] **SCHEMA-03**: `classify_tier(job_title)` function maps contact titles to Directors/Executives/Managers tiers
+- [x] **SCHEMA-04**: `analytics_sync_log` table tracks data freshness per platform (SmartLead, HeyReach, GHL)
+- [x] **SCHEMA-05**: `refresh_analytics_views()` function refreshes all materialized views in one call
+- [x] **SCHEMA-06**: Conversion deduplication enforced at contact level (one contact = one registration = one attributed channel)
 
 ### Data Ingestion
 
@@ -109,12 +109,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SCHEMA-01 | Phase 1: Schema Foundation | Pending |
-| SCHEMA-02 | Phase 1: Schema Foundation | Pending |
-| SCHEMA-03 | Phase 1: Schema Foundation | Pending |
-| SCHEMA-04 | Phase 1: Schema Foundation | Pending |
-| SCHEMA-05 | Phase 1: Schema Foundation | Pending |
-| SCHEMA-06 | Phase 1: Schema Foundation | Pending |
+| SCHEMA-01 | Phase 1: Schema Foundation | Complete |
+| SCHEMA-02 | Phase 1: Schema Foundation | Complete |
+| SCHEMA-03 | Phase 1: Schema Foundation | Complete |
+| SCHEMA-04 | Phase 1: Schema Foundation | Complete |
+| SCHEMA-05 | Phase 1: Schema Foundation | Complete |
+| SCHEMA-06 | Phase 1: Schema Foundation | Complete |
 | SYNC-01 | Phase 2: SmartLead Ingestion | Pending |
 | SYNC-02 | Phase 5: GHL Ingestion | Pending |
 | SYNC-03 | Phase 3: HeyReach Enhancement | Pending |

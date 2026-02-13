@@ -12,7 +12,7 @@ This roadmap delivers a marketing analytics dashboard that shows whether IAML's 
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Schema Foundation** - Materialized views, RPC functions, tier classification, and sync tracking table
+- [x] **Phase 1: Schema Foundation** - Materialized views, RPC functions, tier classification, and sync tracking table
 - [ ] **Phase 2: SmartLead Ingestion** - n8n workflow syncing SmartLead stats into Supabase with sync logging and view refresh
 - [ ] **Phase 3: HeyReach Enhancement** - Multi-campaign support and materialized view refresh for existing HeyReach receiver
 - [ ] **Phase 4: Dashboard Core** - Analytics page with pipeline funnel, channel scoreboard, tier filter, and navigation
@@ -36,10 +36,10 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 4 plans
 
 Plans:
-- [ ] 01-01-PLAN.md -- Create classify_tier() function, analytics_sync_log table, and conversion_attributed_channel column
-- [ ] 01-02-PLAN.md -- Create all 5 materialized views with unique indexes for CONCURRENTLY refresh
-- [ ] 01-03-PLAN.md -- Create all 6 RPC functions with tier filter parameter
-- [ ] 01-04-PLAN.md -- Create refresh_analytics_views() function and seed sync_log with initial rows
+- [x] 01-01-PLAN.md -- Create classify_tier() function, analytics_sync_log table, and conversion_attributed_channel column
+- [x] 01-02-PLAN.md -- Create all 5 materialized views with unique indexes for CONCURRENTLY refresh
+- [x] 01-03-PLAN.md -- Create all 6 RPC functions with tier filter parameter
+- [x] 01-04-PLAN.md -- Create refresh_analytics_views() function and seed sync_log with initial rows
 
 ### Phase 2: SmartLead Ingestion
 **Goal**: SmartLead campaign data flows into Supabase automatically every 15 minutes with sync health tracking
@@ -164,7 +164,7 @@ Note: Phases 2, 3, and 5 (data ingestion) can overlap with each other as they ar
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Schema Foundation | 0/4 | Planned | - |
+| 1. Schema Foundation | 4/4 | Complete | 2026-02-13 |
 | 2. SmartLead Ingestion | 0/3 | Not started | - |
 | 3. HeyReach Enhancement | 0/2 | Not started | - |
 | 4. Dashboard Core | 0/6 | Not started | - |
