@@ -224,3 +224,30 @@ Project: business-os-production (already linked). Credentials configured in `.en
 ### n8n-mcp Setup (Optional)
 
 For node schemas, validation, and workflow management: [n8n-mcp](https://github.com/czlonkowski/n8n-mcp). Configure with `N8N_API_URL` and `N8N_API_KEY` env vars.
+
+## Autonomous Build Mode (BUILD-PLAN.md)
+
+When a `BUILD-PLAN.md` file exists in the project root, this project uses pre-made decisions as the single source of truth. BUILD-PLAN.md is produced in Claude.ai using the question-anticipator skill and contains every decision needed for fully autonomous GSD execution.
+
+### Rules When BUILD-PLAN.md Exists
+
+1. **NEVER ask the human clarifying questions** if the answer exists in BUILD-PLAN.md
+2. **During `/gsd:new-project`:** Extract all context from BUILD-PLAN.md instead of interviewing the user:
+   - Section 1 (Project Vision) → PROJECT.md
+   - Section 3 (Requirements) → REQUIREMENTS.md
+   - Section 4 (Phases & Roadmap) → ROADMAP.md
+   - Section 2 (Technical Architecture) → technical context in PROJECT.md
+3. **During `/gsd:discuss-phase N`:** Read the phase details from BUILD-PLAN.md Section 4 and Section 15 (Verification Criteria). Generate CONTEXT.md for the phase without asking questions. Map:
+   - "Phase-specific decisions" → CONTEXT.md `<decisions>` section
+   - "Claude's discretion for this phase" → CONTEXT.md `### Claude's Discretion`
+   - Relevant details from Sections 2, 5, 6, 7, 8 → CONTEXT.md implementation decisions
+4. **During `/gsd:plan-phase N`:** Use BUILD-PLAN.md Sections 2, 5, 6, 7, 8 as context for task-level planning. Section 15 verification criteria become `must_haves` in plan frontmatter.
+5. **During `/gsd:execute-phase N`:** Execute autonomously. Only pause if something is genuinely blocked (missing API key, broken dependency, etc.).
+6. **If BUILD-PLAN.md doesn't cover something:** Make the best reasonable default decision, document it in the SUMMARY.md, and continue. Do NOT stop to ask.
+
+### Build Preferences (Autonomous Mode)
+- Commit after every completed task
+- Use conventional commit messages
+- Run tests after each task if test framework is configured
+- Prefer explicit over clever code
+- Section 14 of BUILD-PLAN.md lists the ONLY things that may require human input — everything else is pre-decided
