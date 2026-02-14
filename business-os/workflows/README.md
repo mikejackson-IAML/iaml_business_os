@@ -401,3 +401,46 @@ Error Trigger -> Log Error to Supabase (canary)
 - Apify (Reddit + LinkedIn scraping via sync endpoint)
 - Claude Sonnet (signal classification: keywords, topic_category, sentiment)
 - Supabase REST (dedup check, signal storage, run logging, error logging)
+
+### WF3: Topic Scoring Engine
+
+**File:** `n8n-workflows/linkedin-engine/wf3-topic-scoring-engine.json`
+**n8n Workflow ID:** TBD (import pending)
+**Status:** Ready to Import
+**Trigger:** Schedule (Monday 5:00 AM CST / 11:00 UTC)
+**Documentation:** [README-wf3-topic-scoring-engine.md](README-wf3-topic-scoring-engine.md)
+
+Scores and ranks this week's research topics across 5 dimensions (engagement, freshness, content gap, positioning, format) using a two-pass Claude architecture. Clusters raw signals into 6-10 topics, scores each, and inserts ranked results into `linkedin_engine.topic_recommendations`.
+
+#### How It Works
+
+```
+Schedule (Monday 5 AM CST)
+  |
+  Calc Week & Log Start
+  |
+  Fetch Unprocessed Signals -> Normalize -> Has Signals?
+                                              |          \
+                                            [yes]       [no] -> Log Empty Run
+                                              |
+                                   Prepare for Clustering
+                                              |
+                                   Claude Pass 1: Cluster Topics (6-10 clusters)
+                                              |
+                                   Parse Clustering Response
+                                              |
+                                   SplitInBatches (1 topic at a time)
+                                              | (loop)
+                                   Claude Pass 2: Score Topic (5 dimensions)
+                                              |
+                                   Parse Score & Calculate Total -> Insert Topic
+                                              | (done)
+                                   Mark Signals Processed -> Log Run Complete
+
+Error Trigger -> Log Error (canary)
+```
+
+#### Services
+
+- Claude Sonnet (topic clustering + 5-dimension scoring)
+- Supabase REST (signal reads, topic inserts, run logging, signal processing)
