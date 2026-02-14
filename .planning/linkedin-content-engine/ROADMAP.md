@@ -120,6 +120,11 @@ Plans:
 - **Goal:** Build scoring engine that ranks topics 0-100 across 5 dimensions and enables dashboard approval.
 - **Dependencies:** Phase 2 + Phase 3
 - **Requirements:** SCORE-01, SCORE-02, SCORE-03, SCORE-04
+- **Plans:** 2 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — Build WF3 Topic Scoring Engine n8n workflow (two-pass Claude: cluster + score) + docs + n8n-brain
+- [ ] 04-02-PLAN.md — Interactive dashboard "This Week" tab with score bars, approve/reject, API route
 
 ### Success Criteria
 - [ ] WF3 (Topic Scoring Engine) built and active in n8n
