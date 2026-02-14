@@ -3,9 +3,11 @@
 
 import OpenAI from 'openai';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+function getOpenAI() {
+  return new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+}
 
 /**
  * Generate a single embedding vector from text.
@@ -15,7 +17,7 @@ export async function generateEmbedding(text: string): Promise<number[]> {
     throw new Error('Cannot generate embedding for empty text');
   }
 
-  const response = await openai.embeddings.create({
+  const response = await getOpenAI().embeddings.create({
     model: 'text-embedding-3-small',
     input: text,
   });
@@ -36,7 +38,7 @@ export async function generateEmbeddings(texts: string[]): Promise<number[][]> {
     throw new Error('All texts must be non-empty');
   }
 
-  const response = await openai.embeddings.create({
+  const response = await getOpenAI().embeddings.create({
     model: 'text-embedding-3-small',
     input: texts,
   });
