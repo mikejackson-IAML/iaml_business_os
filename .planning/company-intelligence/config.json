@@ -1,0 +1,12 @@
+{
+  "project": "IAML Company Intelligence Engine",
+  "project_key": "company-intelligence",
+  "workflow": {
+    "mode": "yolo",
+    "depth": "comprehensive",
+    "parallelization": true,
+    "commit_docs": true
+  },
+  "created": "2026-02-13",
+  "notes": "Automated company intelligence pipeline — n8n workflows + Supabase + Apollo.io + Apify + Claude API"
+}
