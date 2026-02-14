@@ -125,13 +125,66 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| — | — | — |
+| DB-01 | Phase 1: Database Foundation | Pending |
+| DB-02 | Phase 1: Database Foundation | Pending |
+| DB-03 | Phase 1: Database Foundation | Pending |
+| DB-04 | Phase 1: Database Foundation | Pending |
+| DB-05 | Phase 1: Database Foundation | Pending |
+| DB-06 | Phase 1: Database Foundation | Pending |
+| DB-07 | Phase 1: Database Foundation | Pending |
+| DB-08 | Phase 1: Database Foundation | Pending |
+| DB-09 | Phase 1: Database Foundation | Pending |
+| ING-01 | Phase 2: Company Ingestion | Pending |
+| ING-02 | Phase 2: Company Ingestion | Pending |
+| ING-03 | Phase 2: Company Ingestion | Pending |
+| ING-04 | Phase 2: Company Ingestion | Pending |
+| ING-05 | Phase 2: Company Ingestion | Pending |
+| ING-06 | Phase 2: Company Ingestion | Pending |
+| ING-07 | Phase 2: Company Ingestion | Pending |
+| ENR-01 | Phase 3: Enrichment Pipeline | Pending |
+| ENR-02 | Phase 3: Enrichment Pipeline | Pending |
+| ENR-03 | Phase 3: Enrichment Pipeline | Pending |
+| ENR-04 | Phase 3: Enrichment Pipeline | Pending |
+| ENR-05 | Phase 3: Enrichment Pipeline | Pending |
+| ENR-06 | Phase 3: Enrichment Pipeline | Pending |
+| ENR-07 | Phase 3: Enrichment Pipeline | Pending |
+| ENR-08 | Phase 3: Enrichment Pipeline | Pending |
+| ENR-09 | Phase 3: Enrichment Pipeline | Pending |
+| ENR-10 | Phase 3: Enrichment Pipeline | Pending |
+| SCR-01 | Phase 4: Scoring Engine | Pending |
+| SCR-02 | Phase 4: Scoring Engine | Pending |
+| SCR-03 | Phase 4: Scoring Engine | Pending |
+| SCR-04 | Phase 4: Scoring Engine | Pending |
+| SCR-05 | Phase 4: Scoring Engine | Pending |
+| SCR-06 | Phase 4: Scoring Engine | Pending |
+| SCR-07 | Phase 4: Scoring Engine | Pending |
+| DEL-01 | Phase 5: Weekly Delivery | Pending |
+| DEL-02 | Phase 5: Weekly Delivery | Pending |
+| DEL-03 | Phase 5: Weekly Delivery | Pending |
+| DEL-04 | Phase 5: Weekly Delivery | Pending |
+| DEL-05 | Phase 5: Weekly Delivery | Pending |
+| DEL-06 | Phase 5: Weekly Delivery | Pending |
+| DEL-07 | Phase 5: Weekly Delivery | Pending |
+| DEL-08 | Phase 5: Weekly Delivery | Pending |
+| REV-01 | Phase 6: Review Processing & Outreach | Pending |
+| REV-02 | Phase 6: Review Processing & Outreach | Pending |
+| REV-03 | Phase 6: Review Processing & Outreach | Pending |
+| REV-04 | Phase 6: Review Processing & Outreach | Pending |
+| REV-05 | Phase 6: Review Processing & Outreach | Pending |
+| REV-06 | Phase 6: Review Processing & Outreach | Pending |
+| REV-07 | Phase 6: Review Processing & Outreach | Pending |
+| REV-08 | Phase 6: Review Processing & Outreach | Pending |
+| FBK-01 | Phase 7: Scoring Feedback Loop | Pending |
+| FBK-02 | Phase 7: Scoring Feedback Loop | Pending |
+| FBK-03 | Phase 7: Scoring Feedback Loop | Pending |
+| FBK-04 | Phase 7: Scoring Feedback Loop | Pending |
+| FBK-05 | Phase 7: Scoring Feedback Loop | Pending |
 
 **Coverage:**
-- v1 requirements: 48 total
-- Mapped to phases: 0
-- Unmapped: 48
+- v1 requirements: 54 total
+- Mapped to phases: 54
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-13*
-*Last updated: 2026-02-13 after initial definition*
+*Last updated: 2026-02-13 after roadmap creation*
