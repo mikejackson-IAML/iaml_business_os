@@ -366,3 +366,38 @@ Error Trigger -> Log Error to Supabase (canary)
 - Supabase REST (signal storage, run logging, error logging)
 - Claude Sonnet (article classification)
 - RSS feeds (7 HR/AI news sources)
+
+### WF2: Weekly Deep Research
+
+**File:** `n8n-workflows/linkedin-engine/wf2-weekly-deep-research.json`
+**n8n Workflow ID:** TBD (import pending)
+**Status:** Ready to Import
+**Trigger:** Schedule (Sunday 8:00 PM CST / Monday 2:00 AM UTC)
+**Documentation:** [README-wf2-weekly-deep-research.md](README-wf2-weekly-deep-research.md)
+
+Scrapes Reddit (7 subreddits) and LinkedIn (HR/AI keyword search) via Apify, classifies each signal with Claude Sonnet, de-duplicates against existing entries, and stores results in `linkedin_engine.research_signals`.
+
+#### How It Works
+
+```
+Schedule (Sun 8 PM CST)
+  |
+  Log Workflow Start
+  |-- Reddit: Apify sync scrape (7 subreddits) -> Filter 50+ upvotes ---|
+  |-- LinkedIn: Apify sync scrape (keyword search) -> Normalize posts ---+-> Merge
+                                                                              |
+                                                         Split Batches -> Stash Signal
+                                                              | (loop)
+                                                   Dedup Check -> Is New? -> Claude Classify
+                                                              |              -> Parse -> Insert
+                                                              | (done)
+                                                   Count Inserted -> Log Workflow Complete
+
+Error Trigger -> Log Error to Supabase (canary)
+```
+
+#### Services
+
+- Apify (Reddit + LinkedIn scraping via sync endpoint)
+- Claude Sonnet (signal classification: keywords, topic_category, sentiment)
+- Supabase REST (dedup check, signal storage, run logging, error logging)
