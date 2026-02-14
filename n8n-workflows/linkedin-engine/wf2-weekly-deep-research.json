@@ -1,0 +1,882 @@
+{
+  "name": "LinkedIn Engine: WF2 Weekly Deep Research",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 2,
+              "triggerAtMinute": 0,
+              "triggerAtDay": 1
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/workflow_runs",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow_name\": \"wf2-weekly-deep-research\",\n  \"n8n_execution_id\": \"{{ $execution.id }}\",\n  \"status\": \"running\",\n  \"metadata\": {\"started_by\": \"schedule\"}\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "log-workflow-start",
+      "name": "Log Workflow Start",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"subreddits\": [\n    {\"name\": \"humanresources\", \"url\": \"https://www.reddit.com/r/humanresources/top/?t=week\"},\n    {\"name\": \"AskHR\", \"url\": \"https://www.reddit.com/r/AskHR/top/?t=week\"},\n    {\"name\": \"antiwork\", \"url\": \"https://www.reddit.com/r/antiwork/top/?t=week\"},\n    {\"name\": \"recruiting\", \"url\": \"https://www.reddit.com/r/recruiting/top/?t=week\"},\n    {\"name\": \"employmentlaw\", \"url\": \"https://www.reddit.com/r/employmentlaw/top/?t=week\"},\n    {\"name\": \"artificial\", \"url\": \"https://www.reddit.com/r/artificial/top/?t=week\"},\n    {\"name\": \"MachineLearning\", \"url\": \"https://www.reddit.com/r/MachineLearning/top/?t=week\"}\n  ],\n  \"apify_actor_id\": \"trudax/reddit-scraper-lite\"\n}",
+        "options": {}
+      },
+      "id": "set-reddit-config",
+      "name": "Set Reddit Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [460, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.apify.com/v2/acts/{{ $json.apify_actor_id }}/run-sync-get-dataset-items?token={{ $env.APIFY_API_TOKEN || '' }}&timeout=300",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"startUrls\": [\n    {\"url\": \"https://www.reddit.com/r/humanresources/top/?t=week\"},\n    {\"url\": \"https://www.reddit.com/r/AskHR/top/?t=week\"},\n    {\"url\": \"https://www.reddit.com/r/antiwork/top/?t=week\"},\n    {\"url\": \"https://www.reddit.com/r/recruiting/top/?t=week\"},\n    {\"url\": \"https://www.reddit.com/r/employmentlaw/top/?t=week\"},\n    {\"url\": \"https://www.reddit.com/r/artificial/top/?t=week\"},\n    {\"url\": \"https://www.reddit.com/r/MachineLearning/top/?t=week\"}\n  ],\n  \"maxItems\": 200,\n  \"sort\": \"top\",\n  \"time\": \"week\",\n  \"skipComments\": true\n}",
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "id": "run-reddit-actor",
+      "name": "Run Reddit Actor (Sync)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [700, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Filter Reddit posts with 50+ upvotes and normalize to common format\nfunction getMondayOfWeek(date) {\n  const d = new Date(date);\n  const day = d.getDay();\n  const diff = d.getDate() - day + (day === 0 ? -6 : 1);\n  d.setDate(diff);\n  return d.toISOString().split('T')[0];\n}\n\nconst items = $input.all();\nconst seen = new Set();\nconst results = [];\n\nfor (const item of items) {\n  const post = item.json;\n  \n  // Handle both array-of-posts (sync endpoint returns array) and single post\n  const posts = Array.isArray(post) ? post : [post];\n  \n  for (const p of posts) {\n    // Get upvotes from various possible field names\n    const upvotes = p.upVotes || p.ups || p.score || p.numberOfUpVotes || 0;\n    \n    // Filter: must have 50+ upvotes\n    if (upvotes < 50) continue;\n    \n    // Build source URL\n    const sourceUrl = p.url || (p.permalink ? `https://www.reddit.com${p.permalink}` : null);\n    if (!sourceUrl || !p.title) continue;\n    \n    // Deduplicate within batch\n    if (seen.has(sourceUrl)) continue;\n    seen.add(sourceUrl);\n    \n    results.push({\n      json: {\n        source: 'reddit',\n        source_url: sourceUrl,\n        title: p.title,\n        body_text: (p.selftext || p.body || p.text || '').substring(0, 5000),\n        author: p.author || p.username || p.user || 'unknown',\n        platform_engagement: {\n          upvotes: upvotes,\n          comments: p.numberOfComments || p.numComments || p.num_comments || p.comments || 0,\n          subreddit: p.subreddit || p.community || p.communityName || p.dataSubreddit || ''\n        },\n        collected_date: new Date().toISOString(),\n        signal_week: getMondayOfWeek(new Date())\n      }\n    });\n  }\n}\n\n// Return at least an empty item if no results\nif (results.length === 0) {\n  return [{ json: { _empty: true, source: 'reddit', count: 0 } }];\n}\n\nreturn results;"
+      },
+      "id": "filter-reddit-upvotes",
+      "name": "Filter Reddit 50+ Upvotes",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [940, 200]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"apify_actor_id\": \"curious_coder/linkedin-post-search-scraper\",\n  \"search_keywords\": [\n    \"HR artificial intelligence\",\n    \"AI hiring compliance\",\n    \"HR technology automation\",\n    \"employment law AI\",\n    \"AI workplace surveillance\",\n    \"CHRO artificial intelligence\",\n    \"HR tech 2026\"\n  ],\n  \"max_posts\": 50\n}",
+        "options": {}
+      },
+      "id": "set-linkedin-config",
+      "name": "Set LinkedIn Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [460, 600]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.apify.com/v2/acts/{{ $json.apify_actor_id }}/run-sync-get-dataset-items?token={{ $env.APIFY_API_TOKEN || '' }}&timeout=300",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"searchKeywords\": {{ JSON.stringify($json.search_keywords) }},\n  \"maxResults\": {{ $json.max_posts }},\n  \"sortBy\": \"relevance\",\n  \"datePosted\": \"past-week\"\n}",
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "id": "run-linkedin-actor",
+      "name": "Run LinkedIn Actor (Sync)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [700, 600]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Normalize LinkedIn posts and filter for meaningful engagement\nfunction getMondayOfWeek(date) {\n  const d = new Date(date);\n  const day = d.getDay();\n  const diff = d.getDate() - day + (day === 0 ? -6 : 1);\n  d.setDate(diff);\n  return d.toISOString().split('T')[0];\n}\n\nconst items = $input.all();\nconst seen = new Set();\nconst results = [];\n\nfor (const item of items) {\n  const post = item.json;\n  const posts = Array.isArray(post) ? post : [post];\n  \n  for (const p of posts) {\n    const likes = p.totalReactionCount || p.likes || p.reactions || p.numLikes || 0;\n    const comments = p.commentsCount || p.comments || p.numComments || 0;\n    \n    // Filter: must have 20+ likes OR 5+ comments\n    if (likes < 20 && comments < 5) continue;\n    \n    const sourceUrl = p.url || p.postUrl || p.shareUrl || p.link || null;\n    const bodyText = p.text || p.content || p.postText || p.description || '';\n    \n    if (!sourceUrl || !bodyText) continue;\n    \n    // Deduplicate within batch\n    if (seen.has(sourceUrl)) continue;\n    seen.add(sourceUrl);\n    \n    results.push({\n      json: {\n        source: 'linkedin',\n        source_url: sourceUrl,\n        title: bodyText.substring(0, 200),\n        body_text: bodyText.substring(0, 5000),\n        author: p.authorName || (p.author && p.author.name) || p.profileName || p.authorFullName || 'unknown',\n        platform_engagement: {\n          likes: likes,\n          comments: comments,\n          shares: p.repostsCount || p.shares || p.reposts || p.numShares || 0,\n          author_followers: p.authorFollowerCount || p.followerCount || p.numFollowers || null\n        },\n        collected_date: new Date().toISOString(),\n        signal_week: getMondayOfWeek(new Date())\n      }\n    });\n  }\n}\n\n// Return at least an empty item if no results\nif (results.length === 0) {\n  return [{ json: { _empty: true, source: 'linkedin', count: 0 } }];\n}\n\nreturn results;"
+      },
+      "id": "normalize-linkedin-posts",
+      "name": "Normalize LinkedIn Posts",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [940, 600]
+    },
+    {
+      "parameters": {
+        "mode": "append",
+        "options": {}
+      },
+      "id": "merge-all-signals",
+      "name": "Merge All Signals",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [1200, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Remove empty marker items from branches that returned no results\nconst items = $input.all();\nconst filtered = items.filter(item => !item.json._empty);\n\nif (filtered.length === 0) {\n  return [{ json: { _noSignals: true, total_inserted: 0, reddit_count: 0, linkedin_count: 0 } }];\n}\n\nreturn filtered;"
+      },
+      "id": "filter-empty-signals",
+      "name": "Filter Empty Signals",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1420, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-signals",
+              "leftValue": "={{ $json._noSignals }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notTrue"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "has-signals-check",
+      "name": "Has Signals?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1640, 400]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "split-into-batches",
+      "name": "Split Into Batches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [1880, 300]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"_originalSignal\": {\n    \"source\": \"{{ $json.source }}\",\n    \"source_url\": \"{{ $json.source_url }}\",\n    \"title\": {{ JSON.stringify($json.title || '') }},\n    \"body_text\": {{ JSON.stringify(($json.body_text || '').substring(0, 5000)) }},\n    \"author\": {{ JSON.stringify($json.author || '') }},\n    \"platform_engagement\": {{ JSON.stringify($json.platform_engagement || {}) }},\n    \"collected_date\": \"{{ $json.collected_date }}\",\n    \"signal_week\": \"{{ $json.signal_week }}\"\n  },\n  \"source_url\": \"{{ $json.source_url }}\"\n}",
+        "options": {}
+      },
+      "id": "stash-original-signal",
+      "name": "Stash Original Signal",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [2100, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/research_signals?source_url=eq.{{ encodeURIComponent($json.source_url) }}&select=id",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "dedup-check-supabase",
+      "name": "Dedup Check Supabase",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2320, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "is-new-signal",
+              "leftValue": "={{ Array.isArray($json) ? $json.length : ($json.id ? 1 : 0) }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "is-new-signal",
+      "name": "Is New Signal?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2540, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"claude-sonnet-4-20250514\",\n  \"max_tokens\": 500,\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": {{ JSON.stringify('Analyze this social media post and return a JSON object with exactly these fields:\\n\\n1. keywords: array of 3-7 relevant keywords (lowercase)\\n2. topic_category: exactly one of: ai_compliance, ai_hiring, surveillance, employment_law, hr_tech, legacy_pivot, build_in_public\\n3. sentiment: exactly one of: positive, negative, neutral, concerned, confused\\n\\nPost source: ' + ($('Stash Original Signal').item.json._originalSignal.source || '') + '\\nTitle: ' + ($('Stash Original Signal').item.json._originalSignal.title || '') + '\\nBody: ' + (($('Stash Original Signal').item.json._originalSignal.body_text || '').substring(0, 2000)) + '\\n\\nReturn ONLY valid JSON, no markdown, no explanation. Example:\\n{\"keywords\": [\"ai\", \"hiring\", \"bias\"], \"topic_category\": \"ai_hiring\", \"sentiment\": \"concerned\"}') }}\n    }\n  ]\n}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "claude-classify-signal",
+      "name": "Claude Classify Signal",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2780, 200],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "anthropic-api",
+          "name": "Anthropic API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse Claude response and merge with original signal data\nconst item = $input.first();\nconst originalSignal = $('Stash Original Signal').item.json._originalSignal;\n\ntry {\n  const claudeText = item.json.content?.[0]?.text || item.json.content || '{}';\n  const cleaned = claudeText.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n  const classification = JSON.parse(cleaned);\n\n  const validCategories = ['ai_compliance', 'ai_hiring', 'surveillance', 'employment_law', 'hr_tech', 'legacy_pivot', 'build_in_public'];\n  const validSentiments = ['positive', 'negative', 'neutral', 'concerned', 'confused'];\n\n  return [{\n    json: {\n      source: originalSignal.source,\n      source_url: originalSignal.source_url,\n      title: originalSignal.title,\n      body_text: originalSignal.body_text,\n      author: originalSignal.author,\n      platform_engagement: originalSignal.platform_engagement,\n      collected_date: originalSignal.collected_date,\n      signal_week: originalSignal.signal_week,\n      keywords: Array.isArray(classification.keywords) ? classification.keywords : [],\n      topic_category: validCategories.includes(classification.topic_category) ? classification.topic_category : 'hr_tech',\n      sentiment: validSentiments.includes(classification.sentiment) ? classification.sentiment : 'neutral',\n      processed: false\n    }\n  }];\n} catch (e) {\n  // If Claude response fails to parse, insert with defaults\n  return [{\n    json: {\n      source: originalSignal.source,\n      source_url: originalSignal.source_url,\n      title: originalSignal.title,\n      body_text: originalSignal.body_text,\n      author: originalSignal.author,\n      platform_engagement: originalSignal.platform_engagement,\n      collected_date: originalSignal.collected_date,\n      signal_week: originalSignal.signal_week,\n      keywords: [],\n      topic_category: 'hr_tech',\n      sentiment: 'neutral',\n      processed: false\n    }\n  }];\n}"
+      },
+      "id": "parse-claude-response",
+      "name": "Parse Claude Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3000, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/research_signals",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"source\": {{ JSON.stringify($json.source) }},\n  \"source_url\": {{ JSON.stringify($json.source_url) }},\n  \"title\": {{ JSON.stringify($json.title) }},\n  \"body_text\": {{ JSON.stringify($json.body_text) }},\n  \"author\": {{ JSON.stringify($json.author) }},\n  \"platform_engagement\": {{ JSON.stringify($json.platform_engagement) }},\n  \"keywords\": {{ JSON.stringify($json.keywords) }},\n  \"topic_category\": {{ JSON.stringify($json.topic_category) }},\n  \"sentiment\": {{ JSON.stringify($json.sentiment) }},\n  \"collected_date\": {{ JSON.stringify($json.collected_date) }},\n  \"signal_week\": {{ JSON.stringify($json.signal_week) }},\n  \"processed\": false\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "insert-signal-supabase",
+      "name": "Insert Signal Supabase",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3220, 200],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Count inserted signals after all batches complete\n// This node receives items that were successfully inserted\nconst allItems = $('Insert Signal Supabase').all();\n\nlet redditCount = 0;\nlet linkedinCount = 0;\n\nfor (const item of allItems) {\n  const source = item.json.source || (item.json[0] && item.json[0].source) || '';\n  if (source === 'reddit') redditCount++;\n  else if (source === 'linkedin') linkedinCount++;\n}\n\nreturn [{\n  json: {\n    total_inserted: allItems.length,\n    reddit_count: redditCount,\n    linkedin_count: linkedinCount\n  }\n}];"
+      },
+      "id": "count-inserted",
+      "name": "Count Inserted Signals",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2100, 500]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/workflow_runs?workflow_name=eq.wf2-weekly-deep-research&status=eq.running&order=started_at.desc&limit=1",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"status\": \"completed\",\n  \"completed_at\": \"{{ $now.toISO() }}\",\n  \"items_processed\": {{ $json.total_inserted }},\n  \"metadata\": {\n    \"reddit_signals\": {{ $json.reddit_count }},\n    \"linkedin_signals\": {{ $json.linkedin_count }}\n  }\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "log-workflow-complete",
+      "name": "Log Workflow Complete",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2320, 500],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// No signals to process - log zero count\nreturn [{\n  json: {\n    total_inserted: 0,\n    reddit_count: 0,\n    linkedin_count: 0\n  }\n}];"
+      },
+      "id": "no-signals-count",
+      "name": "No Signals Count",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1880, 500]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/workflow_runs?workflow_name=eq.wf2-weekly-deep-research&status=eq.running&order=started_at.desc&limit=1",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"status\": \"completed\",\n  \"completed_at\": \"{{ $now.toISO() }}\",\n  \"items_processed\": 0,\n  \"metadata\": {\n    \"reddit_signals\": 0,\n    \"linkedin_signals\": 0,\n    \"note\": \"No signals passed filters\"\n  }\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "log-workflow-complete-empty",
+      "name": "Log Workflow Complete (Empty)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2100, 600],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "catch-errors",
+      "name": "Catch Errors",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [1200, 800]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/workflow_errors",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow_name\": \"wf2-weekly-deep-research\",\n  \"error_message\": {{ JSON.stringify($json.execution?.error?.message || $json.message || 'Unknown error') }},\n  \"error_details\": {{ JSON.stringify($json) }},\n  \"n8n_execution_id\": \"{{ $execution.id }}\",\n  \"occurred_at\": \"{{ $now.toISO() }}\"\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "post-error-to-supabase",
+      "name": "Post Error to Supabase",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1440, 800],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/workflow_runs?workflow_name=eq.wf2-weekly-deep-research&status=eq.running&order=started_at.desc&limit=1",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"status\": \"failed\",\n  \"completed_at\": \"{{ $now.toISO() }}\",\n  \"error_message\": {{ JSON.stringify($json.execution?.error?.message || $json.message || 'Unknown error') }}\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "log-workflow-failed",
+      "name": "Log Workflow Failed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1680, 800],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Log Workflow Start",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Workflow Start": {
+      "main": [
+        [
+          {
+            "node": "Set Reddit Config",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Set LinkedIn Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Reddit Config": {
+      "main": [
+        [
+          {
+            "node": "Run Reddit Actor (Sync)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run Reddit Actor (Sync)": {
+      "main": [
+        [
+          {
+            "node": "Filter Reddit 50+ Upvotes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Reddit 50+ Upvotes": {
+      "main": [
+        [
+          {
+            "node": "Merge All Signals",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set LinkedIn Config": {
+      "main": [
+        [
+          {
+            "node": "Run LinkedIn Actor (Sync)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run LinkedIn Actor (Sync)": {
+      "main": [
+        [
+          {
+            "node": "Normalize LinkedIn Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize LinkedIn Posts": {
+      "main": [
+        [
+          {
+            "node": "Merge All Signals",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge All Signals": {
+      "main": [
+        [
+          {
+            "node": "Filter Empty Signals",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Empty Signals": {
+      "main": [
+        [
+          {
+            "node": "Has Signals?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Signals?": {
+      "main": [
+        [
+          {
+            "node": "Split Into Batches",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Signals Count",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Into Batches": {
+      "main": [
+        [
+          {
+            "node": "Count Inserted Signals",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stash Original Signal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Stash Original Signal": {
+      "main": [
+        [
+          {
+            "node": "Dedup Check Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dedup Check Supabase": {
+      "main": [
+        [
+          {
+            "node": "Is New Signal?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is New Signal?": {
+      "main": [
+        [
+          {
+            "node": "Claude Classify Signal",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Split Into Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude Classify Signal": {
+      "main": [
+        [
+          {
+            "node": "Parse Claude Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Claude Response": {
+      "main": [
+        [
+          {
+            "node": "Insert Signal Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Signal Supabase": {
+      "main": [
+        [
+          {
+            "node": "Split Into Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Count Inserted Signals": {
+      "main": [
+        [
+          {
+            "node": "Log Workflow Complete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Signals Count": {
+      "main": [
+        [
+          {
+            "node": "Log Workflow Complete (Empty)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Catch Errors": {
+      "main": [
+        [
+          {
+            "node": "Post Error to Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post Error to Supabase": {
+      "main": [
+        [
+          {
+            "node": "Log Workflow Failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "executionTimeout": 600,
+    "timezone": "America/Chicago"
+  },
+  "versionId": "wf2-v1-20260213",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1f7825745c8d832579f8944a8977ccc40cc1572556aae3f7808e4ba42337190b"
+  },
+  "tags": [
+    {
+      "name": "linkedin-content-engine"
+    }
+  ]
+}
