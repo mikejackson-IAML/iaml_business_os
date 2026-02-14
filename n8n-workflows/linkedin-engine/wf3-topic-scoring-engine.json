@@ -1,0 +1,723 @@
+{
+  "name": "WF3: Topic Scoring Engine",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 11 * * 1"
+            }
+          ]
+        }
+      },
+      "id": "schedule-monday-5am-cst",
+      "name": "Monday 5 AM CST",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Calculate signal_week (Monday of current week) and generate run metadata\nfunction getMondayOfWeek(date) {\n  const d = new Date(date);\n  const day = d.getDay();\n  const diff = d.getDate() - day + (day === 0 ? -6 : 1);\n  d.setDate(diff);\n  return d.toISOString().split('T')[0];\n}\n\n// Generate UUID v4\nfunction uuidv4() {\n  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {\n    const r = Math.random() * 16 | 0;\n    const v = c === 'x' ? r : (r & 0x3 | 0x8);\n    return v.toString(16);\n  });\n}\n\nconst now = new Date();\nconst signalWeek = getMondayOfWeek(now);\n\nreturn [{\n  json: {\n    signal_week: signalWeek,\n    week_of: signalWeek,\n    run_id: uuidv4(),\n    started_at: now.toISOString()\n  }\n}];"
+      },
+      "id": "calc-week-and-start-run",
+      "name": "Calc Week & Start Run",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [260, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/workflow_runs",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow_name\": \"wf3-topic-scoring-engine\",\n  \"n8n_execution_id\": \"{{ $execution.id }}\",\n  \"status\": \"running\",\n  \"started_at\": \"{{ $json.started_at }}\",\n  \"items_processed\": 0,\n  \"metadata\": {\"started_by\": \"schedule\", \"run_id\": \"{{ $json.run_id }}\"}\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "log-run-start",
+      "name": "Log Run Start",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [520, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/research_signals?processed=eq.false&signal_week=eq.{{ $('Calc Week & Start Run').first().json.signal_week }}&select=id,source,source_url,title,body_text,author,platform_engagement,keywords,topic_category,sentiment,collected_date",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "fetch-unprocessed-signals",
+      "name": "Fetch Unprocessed Signals",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [780, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Normalize the Supabase response and check if we have signals\n// n8n HTTP Request can return Supabase array responses in different formats:\n// - As individual items (one per row) if array is non-empty\n// - As a single item containing an empty array if no rows\n// This code node normalizes both cases.\n\nconst allItems = $input.all();\nconst signals = [];\n\nfor (const item of allItems) {\n  // If the item itself is a signal (has an id field), add it\n  if (item.json && item.json.id) {\n    signals.push(item.json);\n  }\n  // If the item is an array of signals (Supabase returned as array)\n  else if (Array.isArray(item.json)) {\n    for (const sig of item.json) {\n      if (sig && sig.id) {\n        signals.push(sig);\n      }\n    }\n  }\n}\n\nif (signals.length === 0) {\n  return [{ json: { _empty: true, signal_count: 0 } }];\n}\n\n// Return all signals as individual items, plus metadata on the first\nreturn signals.map((sig, i) => ({\n  json: {\n    ...sig,\n    _empty: false\n  }\n}));"
+      },
+      "id": "normalize-signals",
+      "name": "Normalize Signals",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1040, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "not-empty",
+              "leftValue": "={{ $json._empty }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notTrue"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-has-signals",
+      "name": "Has Signals?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1300, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/workflow_runs",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow_name\": \"wf3-topic-scoring-engine\",\n  \"status\": \"completed\",\n  \"completed_at\": \"{{ $now.toISO() }}\",\n  \"items_processed\": 0,\n  \"metadata\": {\"reason\": \"no_unprocessed_signals\"}\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "log-empty-run",
+      "name": "Log Empty Run",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1560, 600],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare signals for Claude clustering\n// 1. Capture all signal IDs for later marking as processed (race-safe)\n// 2. Truncate body_text to 500 chars for clustering prompt (saves tokens)\n// 3. Build JSON string of all signals for Claude\n\nconst allItems = $input.all();\nconst signalArray = allItems.map(item => item.json);\n\n// Capture all signal IDs for race-safe processing later\nconst signalIdsToProcess = signalArray.map(s => s.id);\n\n// Build truncated signals for Claude clustering prompt\nconst signalsForClaude = signalArray.map(s => ({\n  id: s.id,\n  source: s.source,\n  title: s.title || '',\n  body_text: (s.body_text || '').substring(0, 500),\n  keywords: s.keywords || [],\n  topic_category: s.topic_category || '',\n  platform_engagement: s.platform_engagement || {}\n}));\n\nreturn [{\n  json: {\n    signal_ids_to_process: signalIdsToProcess,\n    signals_for_claude: JSON.stringify(signalsForClaude),\n    signal_count: signalArray.length,\n    full_signals: signalArray,\n    week_of: $('Calc Week & Start Run').first().json.week_of\n  }\n}];"
+      },
+      "id": "prepare-signals-for-clustering",
+      "name": "Prepare Signals for Clustering",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1560, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"claude-sonnet-4-20250514\",\n  \"max_tokens\": 4000,\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": {{ JSON.stringify('You are a content strategist analyzing research signals for a LinkedIn content engine targeting HR professionals interested in AI. The author is Mike Van Horn, \\\"The HR Technologist\\\" -- CEO of IAML, a 45-year employment law training company (est. 1979). He sits at the intersection of AI expertise and HR/employment law.\\n\\nHere are this week\\'s research signals:\\n\\n' + $json.signals_for_claude + '\\n\\nGroup these signals into 6-10 distinct TOPIC CLUSTERS. Each topic should represent a single coherent theme that could become one LinkedIn post.\\n\\nRules:\\n- A signal can belong to only one topic\\n- Topics should be specific enough for a single LinkedIn post (not \\\"AI in HR\\\" -- too broad)\\n- Each topic needs a clear, specific angle that differentiates it\\n- Prioritize topics where multiple signals converge (stronger signal = better topic)\\n- Include the source signal IDs for each topic so we can trace back\\n- Include 2-3 specific facts/stats from the constituent signals as key_data_points\\n\\nRespond with ONLY a valid JSON object (no markdown fences, no commentary). Use this exact structure:\\n{\\n  \\\"topics\\\": [\\n    {\\n      \\\"topic_title\\\": \\\"Specific, actionable title\\\",\\n      \\\"angle\\\": \\\"The unique perspective or hook\\\",\\n      \\\"signal_ids\\\": [\\\"uuid1\\\", \\\"uuid2\\\"],\\n      \\\"key_data_points\\\": [\\\"fact 1\\\", \\\"fact 2\\\"]\\n    }\\n  ]\\n}') }}\n    }\n  ]\n}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "claude-cluster-topics",
+      "name": "Claude: Cluster Topics",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1820, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "anthropic-api",
+          "name": "Anthropic API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse the Claude clustering response\n// Extract topics array, attach full signal data for each topic\n\nconst claudeResponse = $input.first().json;\nconst prepData = $('Prepare Signals for Clustering').first().json;\nconst fullSignals = prepData.full_signals;\nconst signalIdsToProcess = prepData.signal_ids_to_process;\nconst weekOf = prepData.week_of;\n\n// Parse Claude response text\nlet topics;\ntry {\n  const responseText = claudeResponse.content?.[0]?.text || '{}';\n  const cleaned = responseText.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n  const parsed = JSON.parse(cleaned);\n  topics = parsed.topics || [];\n} catch (e) {\n  // If parsing fails, create a single topic from all signals\n  topics = [{\n    topic_title: 'Weekly HR/AI Research Roundup',\n    angle: 'Aggregate of this week\\'s top signals',\n    signal_ids: signalIdsToProcess,\n    key_data_points: ['Multiple signals aggregated due to clustering parse error']\n  }];\n}\n\n// Build lookup map for full signal data\nconst signalMap = {};\nfor (const sig of fullSignals) {\n  signalMap[sig.id] = sig;\n}\n\n// Output one item per topic with full signal data attached\nconst output = topics.map(topic => {\n  // Look up full signals for this topic\n  const topicSignals = (topic.signal_ids || []).map(id => signalMap[id]).filter(Boolean);\n\n  return {\n    json: {\n      topic_title: topic.topic_title,\n      angle: topic.angle,\n      signal_ids: topic.signal_ids || [],\n      key_data_points: topic.key_data_points || [],\n      signals: topicSignals,\n      week_of: weekOf,\n      signal_ids_to_process: signalIdsToProcess,\n      signal_count: signalIdsToProcess.length,\n      topic_count: topics.length\n    }\n  };\n});\n\nreturn output;"
+      },
+      "id": "parse-clustering-response",
+      "name": "Parse Clustering Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2080, 300]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "split-topics-batch",
+      "name": "Score Topics (Batch)",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [2340, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"claude-sonnet-4-20250514\",\n  \"max_tokens\": 1500,\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": {{ JSON.stringify('Score this topic for a LinkedIn content engine. The author is Mike Van Horn, \\\"The HR Technologist\\\" -- CEO of IAML (est. 1979), a 45-year employment law training company. He sits at the intersection of genuine AI expertise (n8n workflows, Claude Code, multi-agent orchestration) and deep-domain HR/employment law knowledge from IAML\\'s faculty of practicing attorneys.\\n\\nTOPIC: ' + $json.topic_title + '\\nANGLE: ' + $json.angle + '\\nSOURCE SIGNALS: ' + JSON.stringify(($json.signals || []).map(s => ({ source: s.source, title: s.title, body_text: (s.body_text || '').substring(0, 500), platform_engagement: s.platform_engagement || {}, collected_date: s.collected_date }))) + '\\nKEY DATA POINTS: ' + JSON.stringify($json.key_data_points || []) + '\\nTODAY: ' + new Date().toISOString().split('T')[0] + '\\nNUMBER OF SOURCE SIGNALS: ' + ($json.signal_ids || []).length + '\\n\\nScore across exactly 5 dimensions using these rubrics:\\n\\n1. ENGAGEMENT SIGNAL STRENGTH (0-25):\\n   - Reddit post 100+ upvotes from source signals: +5\\n   - Reddit post 50+ comments from source signals: +5\\n   - LinkedIn post 500+ likes from source signals: +5\\n   - 3+ sources covering same topic (multi-source convergence): +5\\n   - Strong community discussion/debate evident: +5\\n   IMPORTANT: RSS signals (shrm, hr_dive, eeoc, dol, littler, jackson_lewis, fisher_phillips) have NO platform_engagement data. Score engagement for RSS-heavy topics based on multi-source coverage (+5 for 3+ sources covering same topic). Only use upvote/like thresholds for Reddit and LinkedIn signals that have platform_engagement data.\\n\\n2. FRESHNESS & TIMING (0-25):\\n   - Regulatory announcement in past 48 hrs: +10\\n   - Court decision in past 7 days: +8\\n   - Trending in past 3 days: +7\\n   - 4-7 days old but still growing: +5\\n   - Evergreen with new data/angle: +3\\n\\n3. CONTENT GAP ANALYSIS (0-20):\\n   - No LinkedIn posts found on this specific angle: +10\\n   - Existing posts are low-quality/surface-level: +7\\n   - Topic covered but Mike\\'s AI angle is unique: +5\\n   - Well-covered by multiple thought leaders: +0\\n\\n4. POSITIONING ALIGNMENT (0-15, plus up to +3 AEO bonus):\\n   - Directly AI + HR/employment law: +15\\n   - AI-adjacent with clear HR implications: +10\\n   - HR topic where AI angle can be added: +7\\n   - General HR without AI connection: +3\\n   - AEO BONUS: +3 if topic naturally allows use of any of these terms: \\\"Agentic RAG\\\", \\\"Compliance Guardrails\\\", \\\"Multi-Agent Orchestration\\\", \\\"HR Agentic Systems\\\". Only apply if the terms fit naturally -- do NOT force them.\\n   NOTE: positioning_score can be up to 18 (15 base + 3 AEO bonus). This is by design.\\n\\n5. FORMAT POTENTIAL (0-15):\\n   - Complex topic perfect for carousel breakdown: +10\\n   - Contrarian angle ideal for text-only: +8\\n   - Data-heavy content for visual/infographic: +7\\n   - Story/narrative opportunity: +5\\n   - Simple topic: +2\\n\\nAlso provide:\\n- recommended_format: one of \\\"text\\\", \\\"carousel\\\", \\\"data_graphic\\\"\\n- recommended_series: one of \\\"not_being_told\\\", \\\"compliance_radar\\\", \\\"ask_ai_guy\\\", \\\"flex\\\"\\n- hook_suggestion: A punchy 1-2 sentence hook for this topic (first 2 lines of a LinkedIn post)\\n- scoring_rationale: Brief explanation of why you scored each dimension as you did\\n\\nRespond with ONLY a valid JSON object (no markdown fences, no commentary):\\n{\\n  \\\"engagement_score\\\": <0-25>,\\n  \\\"freshness_score\\\": <0-25>,\\n  \\\"gap_score\\\": <0-20>,\\n  \\\"positioning_score\\\": <0-18>,\\n  \\\"format_score\\\": <0-15>,\\n  \\\"recommended_format\\\": \\\"text|carousel|data_graphic\\\",\\n  \\\"recommended_series\\\": \\\"not_being_told|compliance_radar|ask_ai_guy|flex\\\",\\n  \\\"hook_suggestion\\\": \\\"...\\\",\\n  \\\"scoring_rationale\\\": \\\"...\\\"\\n}') }}\n    }\n  ]\n}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "claude-score-topic",
+      "name": "Claude: Score Topic",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2600, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "anthropic-api",
+          "name": "Anthropic API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse Claude scoring response, validate ranges, calculate total score\n// Build insert payload for topic_recommendations table\n\nconst claudeResponse = $input.first().json;\nconst topicData = $('Score Topics (Batch)').first().json;\n\n// Parse Claude response\nlet scores;\ntry {\n  const responseText = claudeResponse.content?.[0]?.text || '{}';\n  const cleaned = responseText.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n  scores = JSON.parse(cleaned);\n} catch (e) {\n  // Default scores if parsing fails\n  scores = {\n    engagement_score: 5,\n    freshness_score: 5,\n    gap_score: 5,\n    positioning_score: 5,\n    format_score: 5,\n    recommended_format: 'text',\n    recommended_series: 'flex',\n    hook_suggestion: topicData.topic_title,\n    scoring_rationale: 'Default scores applied due to parse error'\n  };\n}\n\n// Validate and clamp score ranges\nfunction clamp(val, min, max) {\n  const num = parseInt(val) || 0;\n  return Math.max(min, Math.min(max, num));\n}\n\nconst engagementScore = clamp(scores.engagement_score, 0, 25);\nconst freshnessScore = clamp(scores.freshness_score, 0, 25);\nconst gapScore = clamp(scores.gap_score, 0, 20);\n// Positioning can be 0-18 (15 base + 3 AEO bonus)\nconst positioningScore = clamp(scores.positioning_score, 0, 18);\nconst formatScore = clamp(scores.format_score, 0, 15);\n\n// Total score: sum of all dimensions (can exceed 100 due to AEO bonus -- by design)\nconst totalScore = engagementScore + freshnessScore + gapScore + positioningScore + formatScore;\n\n// Validate recommended_format\nconst validFormats = ['text', 'carousel', 'data_graphic'];\nconst recommendedFormat = validFormats.includes(scores.recommended_format)\n  ? scores.recommended_format\n  : 'text';\n\n// Validate recommended_series\nconst validSeries = ['not_being_told', 'compliance_radar', 'ask_ai_guy', 'flex'];\nconst recommendedSeries = validSeries.includes(scores.recommended_series)\n  ? scores.recommended_series\n  : 'flex';\n\n// Build insert payload for topic_recommendations\nreturn [{\n  json: {\n    week_of: topicData.week_of,\n    topic_title: topicData.topic_title,\n    angle: topicData.angle,\n    total_score: totalScore,\n    engagement_score: engagementScore,\n    freshness_score: freshnessScore,\n    gap_score: gapScore,\n    positioning_score: positioningScore,\n    format_score: formatScore,\n    recommended_format: recommendedFormat,\n    recommended_series: recommendedSeries,\n    hook_suggestion: scores.hook_suggestion || '',\n    key_data_points: topicData.key_data_points || [],\n    source_signal_ids: topicData.signal_ids || [],\n    status: 'pending',\n    // Carry forward for later nodes\n    signal_ids_to_process: topicData.signal_ids_to_process,\n    signal_count: topicData.signal_count,\n    topic_count: topicData.topic_count\n  }\n}];"
+      },
+      "id": "parse-score-and-total",
+      "name": "Parse Score & Calculate Total",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2860, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/topic_recommendations",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"week_of\": \"{{ $json.week_of }}\",\n  \"topic_title\": {{ JSON.stringify($json.topic_title) }},\n  \"angle\": {{ JSON.stringify($json.angle) }},\n  \"total_score\": {{ $json.total_score }},\n  \"engagement_score\": {{ $json.engagement_score }},\n  \"freshness_score\": {{ $json.freshness_score }},\n  \"gap_score\": {{ $json.gap_score }},\n  \"positioning_score\": {{ $json.positioning_score }},\n  \"format_score\": {{ $json.format_score }},\n  \"recommended_format\": \"{{ $json.recommended_format }}\",\n  \"recommended_series\": \"{{ $json.recommended_series }}\",\n  \"hook_suggestion\": {{ JSON.stringify($json.hook_suggestion) }},\n  \"key_data_points\": {{ JSON.stringify($json.key_data_points) }},\n  \"source_signal_ids\": {{ JSON.stringify($json.source_signal_ids) }},\n  \"status\": \"pending\"\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "insert-topic-recommendation",
+      "name": "Insert Topic Recommendation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3120, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// After all topics scored and inserted, prepare for marking signals processed\n// Retrieve the signal_ids_to_process from the first topic item\nconst firstTopic = $('Parse Clustering Response').first().json;\n\nreturn [{\n  json: {\n    signal_ids_to_process: firstTopic.signal_ids_to_process,\n    signal_count: firstTopic.signal_count,\n    topic_count: firstTopic.topic_count,\n    week_of: firstTopic.week_of\n  }\n}];"
+      },
+      "id": "prepare-mark-processed",
+      "name": "Prepare Mark Processed",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2600, 100]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/research_signals?id=in.({{ $json.signal_ids_to_process.join(',') }})",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"processed\": true\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "mark-signals-processed",
+      "name": "Mark Signals Processed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2860, 100],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/workflow_runs",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow_name\": \"wf3-topic-scoring-engine\",\n  \"status\": \"completed\",\n  \"completed_at\": \"{{ $now.toISO() }}\",\n  \"items_processed\": {{ $json.topic_count || 0 }},\n  \"metadata\": {\n    \"signals_processed\": {{ $json.signal_count || 0 }},\n    \"topics_created\": {{ $json.topic_count || 0 }}\n  }\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "log-run-complete",
+      "name": "Log Run Complete",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3120, 100],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "error-trigger",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [0, 800]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/workflow_runs",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow_name\": \"wf3-topic-scoring-engine\",\n  \"status\": \"failed\",\n  \"completed_at\": \"{{ $now.toISO() }}\",\n  \"error_message\": {{ JSON.stringify($json.execution?.error?.message || $json.message || 'Unknown error') }}\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "log-error",
+      "name": "Log Error",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [260, 800],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Monday 5 AM CST": {
+      "main": [
+        [
+          {
+            "node": "Calc Week & Start Run",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calc Week & Start Run": {
+      "main": [
+        [
+          {
+            "node": "Log Run Start",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Run Start": {
+      "main": [
+        [
+          {
+            "node": "Fetch Unprocessed Signals",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Unprocessed Signals": {
+      "main": [
+        [
+          {
+            "node": "Normalize Signals",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Signals": {
+      "main": [
+        [
+          {
+            "node": "Has Signals?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Signals?": {
+      "main": [
+        [
+          {
+            "node": "Prepare Signals for Clustering",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Empty Run",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Signals for Clustering": {
+      "main": [
+        [
+          {
+            "node": "Claude: Cluster Topics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude: Cluster Topics": {
+      "main": [
+        [
+          {
+            "node": "Parse Clustering Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Clustering Response": {
+      "main": [
+        [
+          {
+            "node": "Score Topics (Batch)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score Topics (Batch)": {
+      "main": [
+        [
+          {
+            "node": "Prepare Mark Processed",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Claude: Score Topic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude: Score Topic": {
+      "main": [
+        [
+          {
+            "node": "Parse Score & Calculate Total",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Score & Calculate Total": {
+      "main": [
+        [
+          {
+            "node": "Insert Topic Recommendation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Topic Recommendation": {
+      "main": [
+        [
+          {
+            "node": "Score Topics (Batch)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Mark Processed": {
+      "main": [
+        [
+          {
+            "node": "Mark Signals Processed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Signals Processed": {
+      "main": [
+        [
+          {
+            "node": "Log Run Complete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Log Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "any",
+    "executionTimeout": 600,
+    "timezone": "America/Chicago"
+  },
+  "versionId": "wf3-v1-20260213",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1f7825745c8d832579f8944a8977ccc40cc1572556aae3f7808e4ba42337190b"
+  },
+  "tags": [
+    {
+      "name": "linkedin-content-engine"
+    }
+  ]
+}
