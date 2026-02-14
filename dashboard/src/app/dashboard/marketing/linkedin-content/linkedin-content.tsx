@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Linkedin,
   CalendarDays,
@@ -13,6 +15,10 @@ import {
   PenLine,
   Users,
   Hash,
+  ThumbsUp,
+  ThumbsDown,
+  X,
+  Undo2,
 } from 'lucide-react';
 import Link from 'next/link';
 import { MetricCard } from '@/dashboard-kit/components/dashboard/metric-card';
@@ -21,7 +27,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/dashboard-kit/compon
 import { FallingPattern } from '@/components/ui/falling-pattern';
 import { UserMenu } from '@/components/UserMenu';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
-import type { LinkedInContentSummary } from '@/lib/api/linkedin-content-queries';
+import type { LinkedInContentSummary, TopicRecommendationDb } from '@/lib/api/linkedin-content-queries';
 
 interface LinkedInContentDashboardProps {
   data: LinkedInContentSummary;
@@ -77,8 +83,41 @@ export function LinkedInContentDashboard({ data }: LinkedInContentDashboardProps
     hookLibraryCount,
   } = data;
 
-  const approvedTopics = thisWeekTopics.filter((t) => t.status === 'approved').length;
-  const pendingTopics = thisWeekTopics.filter((t) => t.status === 'pending').length;
+  const router = useRouter();
+  const [topicStatuses, setTopicStatuses] = useState<Record<string, string>>({});
+
+  function getEffectiveStatus(topic: TopicRecommendationDb): string {
+    return topicStatuses[topic.id] || topic.status;
+  }
+
+  async function handleStatusChange(
+    topicId: string,
+    newStatus: 'approved' | 'rejected' | 'pending'
+  ) {
+    const previousStatus =
+      topicStatuses[topicId] ||
+      thisWeekTopics.find((t) => t.id === topicId)?.status ||
+      'pending';
+
+    // Optimistic update
+    setTopicStatuses((prev) => ({ ...prev, [topicId]: newStatus }));
+
+    try {
+      const res = await fetch(`/api/linkedin-content/topics/${topicId}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (!res.ok) throw new Error('Failed to update');
+      router.refresh(); // Revalidate server data
+    } catch {
+      // Revert on failure
+      setTopicStatuses((prev) => ({ ...prev, [topicId]: previousStatus }));
+    }
+  }
+
+  const approvedTopics = thisWeekTopics.filter((t) => getEffectiveStatus(t) === 'approved').length;
+  const pendingTopics = thisWeekTopics.filter((t) => getEffectiveStatus(t) === 'pending').length;
   const pendingDrafts = drafts.filter((d) => d.status === 'draft').length;
   const scheduledPosts = drafts.filter((d) => d.status === 'scheduled').length;
 
@@ -184,6 +223,16 @@ export function LinkedInContentDashboard({ data }: LinkedInContentDashboardProps
                   <CardHeader>
                     <CardTitle className="text-heading-md">Recommended Topics</CardTitle>
                   </CardHeader>
+                  {thisWeekTopics.length > 0 && (
+                    <div className="flex items-center justify-between px-6 pb-2">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <CheckCircle2 className="h-4 w-4 text-green-500" />
+                        <span>
+                          {thisWeekTopics.filter((t) => getEffectiveStatus(t) === 'approved').length} of 3-4 approved for this week
+                        </span>
+                      </div>
+                    </div>
+                  )}
                   <CardContent>
                     {thisWeekTopics.length === 0 ? (
                       <div className="text-center py-12 text-muted-foreground">
@@ -196,40 +245,123 @@ export function LinkedInContentDashboard({ data }: LinkedInContentDashboardProps
                       </div>
                     ) : (
                       <div className="space-y-3">
-                        {thisWeekTopics.map((topic) => (
-                          <div
-                            key={topic.id}
-                            className="flex items-start justify-between p-4 rounded-lg bg-background-card-light border border-border"
-                          >
-                            <div className="flex-1 min-w-0 mr-4">
-                              <div className="flex items-center gap-2 mb-1">
-                                <h3 className="font-medium text-foreground">
-                                  {topic.topic_title}
-                                </h3>
-                                <StatusBadge status={topic.status} />
+                        {thisWeekTopics.map((topic) => {
+                          const effectiveStatus = getEffectiveStatus(topic);
+                          const isApproved = effectiveStatus === 'approved';
+                          const isRejected = effectiveStatus === 'rejected';
+                          const isPending = effectiveStatus === 'pending';
+
+                          const scoreDimensions = [
+                            { label: 'ENG', score: topic.engagement_score, max: 25 },
+                            { label: 'FRS', score: topic.freshness_score, max: 25 },
+                            { label: 'GAP', score: topic.gap_score, max: 20 },
+                            { label: 'POS', score: topic.positioning_score, max: 15 },
+                            { label: 'FMT', score: topic.format_score, max: 15 },
+                          ];
+
+                          return (
+                            <div
+                              key={topic.id}
+                              className={`p-4 rounded-lg bg-background-card-light border ${
+                                isApproved
+                                  ? 'border-green-500 border-l-4'
+                                  : isRejected
+                                    ? 'border-border opacity-60'
+                                    : 'border-border'
+                              }`}
+                            >
+                              <div className="flex items-start justify-between">
+                                <div className="flex-1 min-w-0 mr-4">
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <h3 className="font-medium text-foreground">
+                                      {topic.topic_title}
+                                    </h3>
+                                    <StatusBadge status={effectiveStatus} />
+                                  </div>
+                                  {topic.angle && (
+                                    <p className="text-sm text-muted-foreground mb-1">
+                                      {topic.angle}
+                                    </p>
+                                  )}
+                                  {topic.hook_suggestion && (
+                                    <p className="text-sm italic text-muted-foreground mb-2">
+                                      &ldquo;{topic.hook_suggestion}&rdquo;
+                                    </p>
+                                  )}
+                                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                                    {topic.recommended_series && (
+                                      <span>
+                                        {SERIES_LABELS[topic.recommended_series] || topic.recommended_series}
+                                      </span>
+                                    )}
+                                    {topic.recommended_format && (
+                                      <span className="capitalize">{topic.recommended_format}</span>
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="text-right shrink-0">
+                                  <div className="text-2xl font-semibold text-foreground">
+                                    {topic.total_score ?? '\u2014'}
+                                  </div>
+                                  <div className="text-xs text-muted-foreground">score</div>
+                                </div>
                               </div>
-                              {topic.angle && (
-                                <p className="text-sm text-muted-foreground mb-2">
-                                  {topic.angle}
-                                </p>
-                              )}
-                              <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                                {topic.recommended_series && (
-                                  <span>{SERIES_LABELS[topic.recommended_series] || topic.recommended_series}</span>
+
+                              {/* Score breakdown bars */}
+                              <div className="flex gap-3 mt-3 flex-wrap">
+                                {scoreDimensions.map((d) => (
+                                  <div key={d.label} className="text-center min-w-[48px] flex-1">
+                                    <div className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">
+                                      {d.label}
+                                    </div>
+                                    <div className="w-full bg-muted rounded-full h-1.5 mt-1">
+                                      <div
+                                        className="bg-accent-primary rounded-full h-1.5 transition-all"
+                                        style={{
+                                          width: `${Math.min(((d.score ?? 0) / d.max) * 100, 100)}%`,
+                                        }}
+                                      />
+                                    </div>
+                                    <div className="text-xs text-muted-foreground mt-0.5">
+                                      {d.score ?? 0}/{d.max}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+
+                              {/* Approve/Reject/Undo buttons */}
+                              <div className="flex items-center gap-2 mt-3">
+                                {isPending && (
+                                  <>
+                                    <button
+                                      onClick={() => handleStatusChange(topic.id, 'approved')}
+                                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-md bg-green-600 text-white hover:bg-green-700 transition-colors"
+                                    >
+                                      <ThumbsUp className="h-3.5 w-3.5" />
+                                      Approve
+                                    </button>
+                                    <button
+                                      onClick={() => handleStatusChange(topic.id, 'rejected')}
+                                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-md bg-red-600 text-white hover:bg-red-700 transition-colors"
+                                    >
+                                      <X className="h-3.5 w-3.5" />
+                                      Reject
+                                    </button>
+                                  </>
                                 )}
-                                {topic.recommended_format && (
-                                  <span className="capitalize">{topic.recommended_format}</span>
+                                {(isApproved || isRejected) && (
+                                  <button
+                                    onClick={() => handleStatusChange(topic.id, 'pending')}
+                                    className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                                  >
+                                    <Undo2 className="h-3.5 w-3.5" />
+                                    Undo
+                                  </button>
                                 )}
                               </div>
                             </div>
-                            <div className="text-right shrink-0">
-                              <div className="text-2xl font-semibold text-foreground">
-                                {topic.total_score ?? '—'}
-                              </div>
-                              <div className="text-xs text-muted-foreground">score</div>
-                            </div>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     )}
                   </CardContent>
