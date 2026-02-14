@@ -22,8 +22,8 @@ Paste the prompt at the bottom of this document into a fresh Claude Code session
 
 ## Decisions Made
 
-1. **Shield App rejected** — No public API, dashboard-only. Replaced by Apify scraping + Buffer API for analytics.
-2. **LinkedIn publishing** — Use Buffer ($5/mo) for automated publishing to personal profile. Phase 1 fallback: manual copy/paste from dashboard queue.
+1. **Shield App rejected** — No public API, dashboard-only. Replaced by Apify scraping for analytics.
+2. **LinkedIn publishing** — Use n8n's native LinkedIn node (OAuth2) for automated publishing to personal profile. Buffer rejected — no public API for new developers since 2019. Zero additional cost.
 3. **Slack role** — Notification layer only (alerts). All approvals happen in the dashboard.
 4. **Schema** — Dedicated `linkedin_engine` schema in Supabase.
 5. **Workflows consolidated** — Pre-Post Warming + Strategic Commenting merged into one "Engagement Engine" workflow (8 total workflows, not 9).
@@ -89,10 +89,10 @@ No workflow architecture changes needed. The pillar is a content-layer concern t
 | Apify (Starter + actors) | $57-79 | Reddit, LinkedIn scraping, analytics |
 | Claude API (Sonnet) | $2-3 | Generation, scoring, comments |
 | Supabase Pro | $0 incremental | Already paying |
-| Buffer Essentials | $5 | Publishing + basic analytics API |
+| LinkedIn publishing | $0 | n8n native LinkedIn node (OAuth2) |
 | Slack | $0 | Free tier, webhooks only |
-| **Total** | **$64-87/mo** | |
-| **Incremental** | **~$26-48/mo** | On top of existing services |
+| **Total** | **$59-82/mo** | |
+| **Incremental** | **~$21-43/mo** | On top of existing services |
 
 ---
 

@@ -1,0 +1,347 @@
+{
+  "name": "Web Intel - Internal Link Analyzer",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 5 1 * *"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Monthly 1st 5am CT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "internal-link-analyzer",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "webhook-prod",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-200, 0],
+      "webhookId": "internal-link-analyzer-webhook"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/rpc/get_indexable_pages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "Content-Type", "value": "application/json"}
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\"p_limit\": 200}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "fetch-pages",
+      "name": "Fetch Indexable Pages",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 0],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "loop-pages",
+      "name": "Loop Over Pages",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.url }}",
+        "options": {
+          "timeout": 10000,
+          "response": {
+            "response": {
+              "fullResponse": false,
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "fetch-page",
+      "name": "Fetch Page",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Analyze internal links on the page\nconst inputData = $input.first().json;\nconst html = inputData.data || inputData.body || '';\nconst url = $('Loop Over Pages').first().json.url;\nconst siteOrigin = 'https://iaml.com';\n\n// Find all internal links\nconst linkMatches = html.match(/<a[^>]+href=[\"']([^\"']+)[\"'][^>]*>/gi) || [];\n\nlet internalLinks = 0;\nlet externalLinks = 0;\n\nlinkMatches.forEach(link => {\n  const hrefMatch = link.match(/href=[\"']([^\"']+)[\"']/);\n  if (!hrefMatch) return;\n  \n  const href = hrefMatch[1];\n  \n  if (href.startsWith('#') || href.startsWith('javascript:') || href.startsWith('mailto:')) return;\n  \n  if (href.startsWith('/') || href.startsWith(siteOrigin)) {\n    internalLinks++;\n  } else if (href.startsWith('http')) {\n    externalLinks++;\n  }\n});\n\nconst hasLowInternalLinks = internalLinks < 3;\n\nreturn [{ \n  json: { \n    url,\n    internal_link_count: internalLinks,\n    external_link_count: externalLinks,\n    total_links: internalLinks + externalLinks,\n    has_low_internal_links: hasLowInternalLinks,\n    analyzed_at: new Date().toISOString()\n  } \n}];"
+      },
+      "id": "analyze-links",
+      "name": "Analyze Links",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [880, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "low-links",
+              "leftValue": "={{ $json.has_low_internal_links }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ]
+        }
+      },
+      "id": "check-low-links",
+      "name": "Low Internal Links?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1100, 0]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "issue_type",
+              "name": "issue_type",
+              "value": "low_internal_links",
+              "type": "string"
+            },
+            {
+              "id": "detected_at",
+              "name": "detected_at",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "set-issue-type",
+      "name": "Set Issue Type",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1320, -100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/rpc/log_internal_link_issue",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "Content-Type", "value": "application/json"}
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ p_url: $json.url, p_internal_link_count: $json.internal_link_count, p_external_link_count: $json.external_link_count, p_issue_type: $json.issue_type }) }}",
+        "options": {
+          "timeout": 10000,
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "id": "store-issue",
+      "name": "Store Link Issue",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1540, -100],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "error-trigger",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [0, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "const error = $input.first().json;\nconst staticData = $getWorkflowStaticData('global');\nconst runId = staticData.run_id || null;\n\nconst errorData = {\n  run_id: runId,\n  workflow_name: 'Web Intel - Internal Link Analyzer',\n  workflow_id: 'mUNKkdaPIPxfhhvJ',\n  execution_id: $execution.id,\n  error_message: error.message || error.error?.message || 'Unknown error',\n  error_node: error.node?.name || error.workflow?.lastNodeExecuted || 'Unknown',\n  error_node_type: error.node?.type || 'unknown',\n  error_details: JSON.stringify(error),\n  timestamp: new Date().toISOString()\n};\n\nreturn [{ json: errorData }];"
+      },
+      "id": "parse-error",
+      "name": "Parse Error Details",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [220, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/rpc/log_workflow_error",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ p_run_id: $json.run_id || null, p_error_message: $json.error_message, p_error_node: $json.error_node, p_error_node_type: $json.error_node_type, p_error_details: $json.error_details }) }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "id": "log-error-db",
+      "name": "Log Error to DB",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [440, 400],
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ text: ':rotating_light: *Workflow Error*\\n*Workflow:* ' + $json.workflow_name + '\\n*Node:* ' + $json.error_node + '\\n*Error:* ' + $json.error_message + '\\n*Execution:* ' + $json.execution_id }) }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "id": "send-error-slack",
+      "name": "Send Error Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 400],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/rpc/mark_notifications_sent",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ p_run_id: $json.run_id, p_slack_sent: true, p_email_sent: false }) }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "id": "mark-error-notified",
+      "name": "Mark Error Notified",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, 400],
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Monthly 1st 5am CT": {
+      "main": [[{"node": "Fetch Indexable Pages", "type": "main", "index": 0}]]
+    },
+    "Webhook": {
+      "main": [[{"node": "Fetch Indexable Pages", "type": "main", "index": 0}]]
+    },
+    "Fetch Indexable Pages": {
+      "main": [[{"node": "Loop Over Pages", "type": "main", "index": 0}]]
+    },
+    "Loop Over Pages": {
+      "main": [[{"node": "Fetch Page", "type": "main", "index": 0}]]
+    },
+    "Fetch Page": {
+      "main": [[{"node": "Analyze Links", "type": "main", "index": 0}]]
+    },
+    "Analyze Links": {
+      "main": [[{"node": "Low Internal Links?", "type": "main", "index": 0}]]
+    },
+    "Low Internal Links?": {
+      "main": [
+        [{"node": "Set Issue Type", "type": "main", "index": 0}],
+        [{"node": "Loop Over Pages", "type": "main", "index": 0}]
+      ]
+    },
+    "Set Issue Type": {
+      "main": [[{"node": "Store Link Issue", "type": "main", "index": 0}]]
+    },
+    "Store Link Issue": {
+      "main": [[{"node": "Loop Over Pages", "type": "main", "index": 0}]]
+    },
+    "Error Trigger": {
+      "main": [[{"node": "Parse Error Details", "type": "main", "index": 0}]]
+    },
+    "Parse Error Details": {
+      "main": [[{"node": "Log Error to DB", "type": "main", "index": 0}]]
+    },
+    "Log Error to DB": {
+      "main": [[{"node": "Send Error Slack", "type": "main", "index": 0}]]
+    },
+    "Send Error Slack": {
+      "main": [[{"node": "Mark Error Notified", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

@@ -387,15 +387,25 @@
     {
       "parameters": {},
       "id": "error-trigger",
-      "name": "On Error",
+      "name": "Error Trigger",
       "type": "n8n-nodes-base.errorTrigger",
       "typeVersion": 1,
       "position": [0, 800]
     },
     {
       "parameters": {
+        "jsCode": "const error = $input.first().json;\nconst staticData = $getWorkflowStaticData('global');\nconst runId = staticData.run_id || null;\n\nconst errorData = {\n  run_id: runId,\n  workflow_name: 'WF1: Daily RSS Monitor (LinkedIn Content Engine)',\n  workflow_id: 'wf1-daily-rss-monitor',\n  execution_id: $execution.id,\n  error_message: error.message || error.error?.message || 'Unknown error',\n  error_node: error.node?.name || error.workflow?.lastNodeExecuted || 'Unknown',\n  error_node_type: error.node?.type || 'unknown',\n  error_details: JSON.stringify(error),\n  timestamp: new Date().toISOString()\n};\n\nreturn [{ json: errorData }];"
+      },
+      "id": "parse-error",
+      "name": "Parse Error Details",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [220, 800]
+    },
+    {
+      "parameters": {
         "method": "POST",
-        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/workflow_errors",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/rpc/log_workflow_error",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
         "sendHeaders": true,
@@ -408,34 +418,79 @@
             {
               "name": "Prefer",
               "value": "return=minimal"
-            },
-            {
-              "name": "Content-Profile",
-              "value": "linkedin_engine"
-            },
-            {
-              "name": "Accept-Profile",
-              "value": "linkedin_engine"
             }
           ]
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"workflow_name\": \"wf1-daily-rss-monitor\",\n  \"error_message\": \"{{ $json.message || 'Unknown error' }}\",\n  \"error_node\": \"{{ $json.node?.name || 'unknown' }}\",\n  \"execution_id\": \"{{ $json.execution?.id || '' }}\",\n  \"timestamp\": \"{{ $now.toISO() }}\"\n}",
+        "jsonBody": "={\n  \"p_run_id\": {{ $json.run_id ? '\"' + $json.run_id + '\"' : 'null' }},\n  \"p_error_message\": \"{{ $json.error_message }}\",\n  \"p_error_node\": \"{{ $json.error_node }}\",\n  \"p_error_node_type\": \"{{ $json.error_node_type }}\",\n  \"p_error_details\": {{ $json.error_details }}\n}",
         "options": {}
       },
-      "id": "log-error-to-supabase",
-      "name": "Log Error to Supabase",
+      "id": "log-error-db",
+      "name": "Log Error to DB",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [300, 800],
+      "position": [440, 800],
       "credentials": {
         "httpHeaderAuth": {
           "id": "Dy6aCSbL5Tup4TnE",
           "name": "Supabase REST"
         }
       },
-      "onError": "continueRegularOutput"
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \":rotating_light: Workflow Error: WF1 Daily RSS Monitor\",\n  \"blocks\": [\n    {\n      \"type\": \"header\",\n      \"text\": { \"type\": \"plain_text\", \"text\": \":rotating_light: Workflow Error\", \"emoji\": true }\n    },\n    {\n      \"type\": \"section\",\n      \"text\": {\n        \"type\": \"mrkdwn\",\n        \"text\": \"*Workflow:* WF1: Daily RSS Monitor (LinkedIn Content Engine)\\n*Failed Node:* {{ $('Parse Error Details').first().json.error_node }}\\n*Error:* {{ $('Parse Error Details').first().json.error_message.substring(0, 200) }}\"\n      }\n    },\n    {\n      \"type\": \"section\",\n      \"text\": {\n        \"type\": \"mrkdwn\",\n        \"text\": \"*Time:* {{ $('Parse Error Details').first().json.timestamp }}\"\n      }\n    }\n  ]\n}",
+        "options": {}
+      },
+      "id": "send-error-slack",
+      "name": "Send Error Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 800],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/rpc/mark_workflow_notified",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_run_id\": \"{{ $('Parse Error Details').first().json.run_id }}\",\n  \"p_slack_notified\": true,\n  \"p_email_notified\": false\n}",
+        "options": {}
+      },
+      "id": "mark-error-notified",
+      "name": "Mark Error Notified",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, 800],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      },
+      "continueOnFail": true
     },
     {
       "parameters": {},
@@ -613,10 +668,31 @@
         ]
       ]
     },
-    "On Error": {
+    "Error Trigger": {
       "main": [
         [
-          { "node": "Log Error to Supabase", "type": "main", "index": 0 }
+          { "node": "Parse Error Details", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Parse Error Details": {
+      "main": [
+        [
+          { "node": "Log Error to DB", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Log Error to DB": {
+      "main": [
+        [
+          { "node": "Send Error Slack", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Send Error Slack": {
+      "main": [
+        [
+          { "node": "Mark Error Notified", "type": "main", "index": 0 }
         ]
       ]
     }

@@ -2,7 +2,7 @@
   "project": "LinkedIn Content Engine",
   "current_milestone": "v1.0",
   "workflow": {
-    "mode": "yolo",
+    "mode": "standard",
     "depth": "comprehensive",
     "parallelization": true,
     "commit_docs": true

@@ -101,7 +101,7 @@ Reference whichever phase is currently active:
 | Database | Supabase (PostgreSQL) | supabase-rest (Dy6aCSbL5Tup4TnE) |
 | AI generation | Claude API (Sonnet) | anthropic-api |
 | Reddit/LinkedIn scraping | Apify | hardcoded_in_workflow (apify_api_KN1g...) |
-| LinkedIn publishing | Buffer API | NEW — needs setup |
+| LinkedIn publishing | n8n native LinkedIn node (OAuth2) | linkedInOAuth2Api — needs setup in n8n |
 | Notifications | Slack webhook | slack-web-intel (needs new channel/webhook for LinkedIn) |
 | Dashboard | Next.js 16 + React 19 + Tailwind + Radix UI + Tremor | Supabase SSR client |
 | Error handling | Canary pattern | canary_error_handling (Dy6aCSbL5Tup4TnE) |
@@ -474,7 +474,7 @@ Use these exact credential IDs when building workflows:
 | Supabase REST API | Dy6aCSbL5Tup4TnE | httpHeaderAuth | USE THIS for all Supabase. HTTP Request nodes only. |
 | Anthropic/Claude | anthropic-api | httpHeaderAuth | Claude API for content generation |
 | Apify | hardcoded in workflow | api_token | Token: apify_api_KN1g... |
-| Slack (#web-intel) | https://hooks.slack.com/services/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 | webhook | Need new channel/webhook for LinkedIn |
+| Slack (#web-intel) | https://hooks.slack.com/services/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 | webhook | #linkedin-content channel created |
 | n8n API | eyJhbG... (see n8n-brain) | apiKey | For workflow management |
 | Error handling | Dy6aCSbL5Tup4TnE | httpHeaderAuth | POST to /rest/v1/workflow_errors |
 
@@ -488,12 +488,12 @@ Use these exact credential IDs when building workflows:
 
 ## BUILD SEQUENCE (Step by Step)
 
-### Phase 1: Foundation (Start Here)
-1. Run Supabase migration to create `linkedin_engine` schema + all tables + indexes
-2. Create new Slack channel #linkedin-content + webhook
-3. Register Buffer account, get API key, register credential in n8n-brain
-4. Scaffold dashboard page at `/dashboard/marketing/linkedin-content`
-5. Create content calendar entries for next 4 weeks (empty slots)
+### Phase 1: Foundation (Start Here) ✅ COMPLETE
+1. ✅ Run Supabase migration to create `linkedin_engine` schema + all tables + indexes
+2. ✅ Create new Slack channel #linkedin-content (webhook TBD)
+3. ✅ LinkedIn publishing: n8n native LinkedIn node (OAuth2) — credential setup needed in n8n
+4. ✅ Scaffold dashboard page at `/dashboard/marketing/linkedin-content`
+5. ✅ Create content calendar entries for next 4 weeks (empty slots)
 
 ### Phase 2: Research Workflows
 6. Build Workflow 1: Daily RSS Monitor (SHRM, HR Dive, EEOC, DOL, law firm blogs)

@@ -9,8 +9,8 @@
 | Phase | Name | Status | Workflows | Dashboard Work | Requirements |
 |-------|------|--------|-----------|----------------|--------------|
 | 1 | Foundation | Done | — | Scaffold | FOUND-01..04 |
-| 2 | Daily RSS Research | In Progress | WF1 | — | RES-01, RES-02, RES-05, RES-06 |
-| 3 | Weekly Deep Research | Planned | WF2 | — | RES-03, RES-04, RES-05, RES-06 |
+| 2 | Daily RSS Research | Built (awaiting import) | WF1 | — | RES-01, RES-02, RES-05, RES-06 |
+| 3 | Weekly Deep Research | Built (awaiting import) | WF2 | — | RES-03, RES-04, RES-05, RES-06 |
 | 4 | Topic Scoring & Selection | Planned | WF3 | This Week (interactive) | SCORE-01..04 |
 | 5 | Content Generation & Drafts | Planned | WF4 | Drafts (interactive) | GEN-01..05 |
 | 6 | Publishing | Planned | WF5 | Calendar updates | PUB-01..05 |
@@ -23,8 +23,8 @@
 
 ```
 Phase 1 ✅
-  ├── Phase 2 (Daily RSS Research) ← IN PROGRESS
-  └── Phase 3 (Weekly Deep Research) ← PLANNED (1 plan)
+  ├── Phase 2 (Daily RSS Research) ← BUILT (awaiting import)
+  └── Phase 3 (Weekly Deep Research) ← BUILT (awaiting import)
         └── Phase 4 (Topic Scoring) ← depends on 2 + 3
               └── Phase 5 (Content Generation) ← depends on 4
                     └── Phase 6 (Publishing) ← depends on 5
