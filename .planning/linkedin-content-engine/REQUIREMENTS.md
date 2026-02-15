@@ -74,18 +74,22 @@
 ## Scoring
 
 ### SCORE-01: Multi-Dimensional Topic Scoring
+- **Status:** ✅ Complete
 - **Description:** Topics scored 0-100 across 5 dimensions: engagement signal (0-25), freshness (0-25), content gap (0-20), positioning alignment (0-15), format potential (0-15).
 - **Acceptance:** All 5 dimension scores stored individually in `topic_recommendations`. Total score is the sum.
 
 ### SCORE-02: AEO Bonus
+- **Status:** ✅ Complete
 - **Description:** +3 bonus points in positioning alignment score when a topic naturally allows use of AEO terms (Agentic RAG, Compliance Guardrails, Multi-Agent Orchestration, HR Agentic Systems).
 - **Acceptance:** AEO bonus applied and reflected in `positioning_score`.
 
 ### SCORE-03: Ranked Topic Brief
+- **Status:** ✅ Complete
 - **Description:** Scored topics sent to dashboard as a ranked list with scores, angles, and recommended formats.
 - **Acceptance:** Topics visible in dashboard "This Week" tab, sorted by `total_score` descending.
 
 ### SCORE-04: Topic Approve/Reject
+- **Status:** ✅ Complete
 - **Description:** Dashboard "This Week" tab allows approving or rejecting recommended topics for the week. Pick 3-4 topics.
 - **Acceptance:** Status changes from `pending` to `approved` or `rejected`. `approved_at` timestamp set on approval.
 

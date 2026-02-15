@@ -11,7 +11,7 @@
 | 1 | Foundation | Done | — | Scaffold | FOUND-01..04 |
 | 2 | Daily RSS Research | Built (awaiting import) | WF1 | — | RES-01, RES-02, RES-05, RES-06 |
 | 3 | Weekly Deep Research | Built (awaiting import) | WF2 | — | RES-03, RES-04, RES-05, RES-06 |
-| 4 | Topic Scoring & Selection | Planned | WF3 | This Week (interactive) | SCORE-01..04 |
+| 4 | Topic Scoring & Selection | Done | WF3 | This Week (interactive) | SCORE-01..04 |
 | 5 | Content Generation & Drafts | Planned | WF4 | Drafts (interactive) | GEN-01..05 |
 | 6 | Publishing | Planned | WF5 | Calendar updates | PUB-01..05 |
 | 7 | Engagement Engine | Planned | WF6 | Engagement (enhanced) | ENG-01..04 |
@@ -25,7 +25,7 @@
 Phase 1 ✅
   ├── Phase 2 (Daily RSS Research) ← BUILT (awaiting import)
   └── Phase 3 (Weekly Deep Research) ← BUILT (awaiting import)
-        └── Phase 4 (Topic Scoring) ← depends on 2 + 3
+        └── Phase 4 (Topic Scoring) ✅
               └── Phase 5 (Content Generation) ← depends on 4
                     └── Phase 6 (Publishing) ← depends on 5
                           ├── Phase 7 (Engagement) ← depends on 6
@@ -114,26 +114,26 @@ Plans:
 
 ---
 
-## Phase 4: Topic Scoring & Selection
+## Phase 4: Topic Scoring & Selection ✅
 
-- **Status:** Planned
+- **Status:** Complete
 - **Goal:** Build scoring engine that ranks topics 0-100 across 5 dimensions and enables dashboard approval.
 - **Dependencies:** Phase 2 + Phase 3
 - **Requirements:** SCORE-01, SCORE-02, SCORE-03, SCORE-04
 - **Plans:** 2 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Build WF3 Topic Scoring Engine n8n workflow (two-pass Claude: cluster + score) + docs + n8n-brain
-- [ ] 04-02-PLAN.md — Interactive dashboard "This Week" tab with score bars, approve/reject, API route
+- [x] 04-01-PLAN.md — Build WF3 Topic Scoring Engine n8n workflow (two-pass Claude: cluster + score) + docs
+- [x] 04-02-PLAN.md — Interactive dashboard "This Week" tab with score bars, approve/reject, API route
 
 ### Success Criteria
-- [ ] WF3 (Topic Scoring Engine) built and active in n8n
-- [ ] Runs Monday 5 AM CST (after weekend research completes)
-- [ ] Scores across 5 dimensions: engagement (0-25), freshness (0-25), gap (0-20), positioning (0-15), format (0-15)
-- [ ] AEO bonus (+3 points) applied when topic allows AEO terms
-- [ ] Ranked topics visible in dashboard "This Week" tab
-- [ ] Users can approve/reject topics (pick 3-4 per week)
-- [ ] Dashboard tab is interactive (not just display)
+- [x] WF3 (Topic Scoring Engine) built (awaiting n8n import)
+- [x] Runs Monday 5 AM CST (after weekend research completes)
+- [x] Scores across 5 dimensions: engagement (0-25), freshness (0-25), gap (0-20), positioning (0-15), format (0-15)
+- [x] AEO bonus (+3 points) applied when topic allows AEO terms
+- [x] Ranked topics visible in dashboard "This Week" tab
+- [x] Users can approve/reject topics (pick 3-4 per week)
+- [x] Dashboard tab is interactive (not just display)
 
 ### Technical Notes
 - Scoring algorithm detailed in PROMPT.md
