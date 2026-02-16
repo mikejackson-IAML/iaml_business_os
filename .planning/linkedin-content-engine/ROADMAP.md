@@ -148,6 +148,11 @@ Plans:
 - **Goal:** Build content generation pipeline that creates post drafts with hooks, and enable dashboard review/approval.
 - **Dependencies:** Phase 4
 - **Requirements:** GEN-01, GEN-02, GEN-03, GEN-04, GEN-05
+- **Plans:** 2 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — Schema migration + TypeScript types + WF4 Content Generation Pipeline n8n workflow
+- [ ] 05-02-PLAN.md — Dashboard API routes + mutations + interactive Drafts tab UI + topic-approval webhook trigger
 
 ### Success Criteria
 - [ ] WF4 (Content Generation Pipeline) built and active in n8n
