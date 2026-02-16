@@ -98,22 +98,27 @@
 ## Generation
 
 ### GEN-01: Hook Variations
+- **Status:** ✅ Complete
 - **Description:** Content generation produces 3 hook variations per approved topic (data/statistic, contrarian, observation).
 - **Acceptance:** 3 distinct hooks stored per post draft in `posts` table.
 
 ### GEN-02: Full Post Generation
+- **Status:** ✅ Complete
 - **Description:** Full post text generated following brand voice guidelines. Target 1,800-2,000 characters. Includes pillar framing and AEO terms where natural.
 - **Acceptance:** `full_text` populated, follows formatting rules (hook + white space + short paragraphs + binary CTA + hashtags).
 
 ### GEN-03: First Comment Generation
+- **Status:** ✅ Complete
 - **Description:** First comment text generated for each post (link to resource, extended thought, or seeding question).
 - **Acceptance:** `first_comment_text` populated for every draft.
 
 ### GEN-04: Series and Pillar Assignment
+- **Status:** ✅ Complete
 - **Description:** Posts include series assignment (not_being_told, compliance_radar, ask_ai_guy, flex) and pillar framing (legacy_future, building_in_public, partnered_authority).
 - **Acceptance:** Both `series` and `pillar` fields populated on every post.
 
 ### GEN-05: Draft Review UI
+- **Status:** ✅ Complete
 - **Description:** Dashboard "Drafts" tab allows reviewing generated posts, selecting hook variation (A/B/C), approving, editing, or rejecting.
 - **Acceptance:** Users can view full post text, switch between hooks, edit inline, and change status.
 

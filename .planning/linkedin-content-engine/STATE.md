@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | **Milestone** | v1.0 |
-| **Current Phase** | 5 (Content Generation & Drafts) -- Complete |
+| **Current Phase** | 6 (Publishing) -- next to plan |
 | **Last Completed Phase** | 5 (Content Generation & Drafts) |
 | **Phases Awaiting Import** | 2 (WF1), 3 (WF2), 4 (WF3), 5 (WF4) |
 | **Last Updated** | 2026-02-15 |
@@ -60,7 +60,7 @@ Progress: [=====-----] 50% (5/10 phases)
 ## Next Action
 
 1. Import WF1, WF2, WF3, WF4 into n8n and test
-2. Plan Phase 6 (Publishing)
+2. `/gsd:discuss-phase 6 --project linkedin-content-engine` or `/gsd:plan-phase 6 --project linkedin-content-engine`
 
 ## Decisions Log
 
@@ -104,5 +104,5 @@ Progress: [=====-----] 50% (5/10 phases)
 ## Session Continuity
 
 Last session: 2026-02-15
-Stopped at: Completed 05-02-PLAN.md (Dashboard Drafts Tab)
+Stopped at: Phase 5 complete, verified
 Resume file: None

@@ -12,7 +12,7 @@
 | 2 | Daily RSS Research | Built (awaiting import) | WF1 | — | RES-01, RES-02, RES-05, RES-06 |
 | 3 | Weekly Deep Research | Built (awaiting import) | WF2 | — | RES-03, RES-04, RES-05, RES-06 |
 | 4 | Topic Scoring & Selection | Done | WF3 | This Week (interactive) | SCORE-01..04 |
-| 5 | Content Generation & Drafts | Planned | WF4 | Drafts (interactive) | GEN-01..05 |
+| 5 | Content Generation & Drafts | Done | WF4 | Drafts (interactive) | GEN-01..05 |
 | 6 | Publishing | Planned | WF5 | Calendar updates | PUB-01..05 |
 | 7 | Engagement Engine | Planned | WF6 | Engagement (enhanced) | ENG-01..04 |
 | 8 | Post-Publish Monitor | Planned | WF7 | — | MON-01..03 |
@@ -26,7 +26,7 @@ Phase 1 ✅
   ├── Phase 2 (Daily RSS Research) ← BUILT (awaiting import)
   └── Phase 3 (Weekly Deep Research) ← BUILT (awaiting import)
         └── Phase 4 (Topic Scoring) ✅
-              └── Phase 5 (Content Generation) ← depends on 4
+              └── Phase 5 (Content Generation) ✅
                     └── Phase 6 (Publishing) ← depends on 5
                           ├── Phase 7 (Engagement) ← depends on 6
                           └── Phase 8 (Monitoring) ← depends on 6
@@ -142,27 +142,27 @@ Plans:
 
 ---
 
-## Phase 5: Content Generation & Drafts
+## Phase 5: Content Generation & Drafts ✅
 
-- **Status:** Planned
+- **Status:** Complete
 - **Goal:** Build content generation pipeline that creates post drafts with hooks, and enable dashboard review/approval.
-- **Dependencies:** Phase 4
+- **Dependencies:** Phase 4 ✅
 - **Requirements:** GEN-01, GEN-02, GEN-03, GEN-04, GEN-05
 - **Plans:** 2 plans
 
 Plans:
-- [ ] 05-01-PLAN.md — Schema migration + TypeScript types + WF4 Content Generation Pipeline n8n workflow
-- [ ] 05-02-PLAN.md — Dashboard API routes + mutations + interactive Drafts tab UI + topic-approval webhook trigger
+- [x] 05-01-PLAN.md — Schema migration + TypeScript types + WF4 Content Generation Pipeline n8n workflow
+- [x] 05-02-PLAN.md — Dashboard API routes + mutations + interactive Drafts tab UI + topic-approval webhook trigger
 
 ### Success Criteria
-- [ ] WF4 (Content Generation Pipeline) built and active in n8n
-- [ ] Triggered when topics are approved in dashboard
-- [ ] Generates 3 hook variations per topic (data, contrarian, observation)
-- [ ] Full post text follows brand voice (1,800-2,000 chars, no emojis, binary CTA)
-- [ ] First comment text generated for each post
-- [ ] Series and pillar assigned to each post
-- [ ] Dashboard "Drafts" tab allows hook selection (A/B/C), edit, approve, reject
-- [ ] Pillar-specific framing applied per PROMPT.md template
+- [x] WF4 (Content Generation Pipeline) built and active in n8n
+- [x] Triggered when topics are approved in dashboard
+- [x] Generates 3 hook variations per topic (data, contrarian, observation)
+- [x] Full post text follows brand voice (1,800-2,000 chars, no emojis, binary CTA)
+- [x] First comment text generated for each post
+- [x] Series and pillar assigned to each post
+- [x] Dashboard "Drafts" tab allows hook selection (A/B/C), edit, approve, reject
+- [x] Pillar-specific framing applied per PROMPT.md template
 
 ### Technical Notes
 - Generation prompt template in PROMPT.md
