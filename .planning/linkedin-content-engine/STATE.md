@@ -5,9 +5,9 @@
 | Field | Value |
 |-------|-------|
 | **Milestone** | v1.0 |
-| **Current Phase** | 6 (Publishing) -- next to plan |
-| **Last Completed Phase** | 5 (Content Generation & Drafts) |
-| **Phases Awaiting Import** | 2 (WF1), 3 (WF2), 4 (WF3), 5 (WF4) |
+| **Current Phase** | 6 (Publishing) -- complete |
+| **Last Completed Phase** | 6 (Publishing) |
+| **Phases Awaiting Import** | 2 (WF1), 3 (WF2), 4 (WF3), 5 (WF4), 6 (WF5) |
 | **Last Updated** | 2026-02-15 |
 
 ## Phase Status
@@ -19,13 +19,13 @@
 | 3 | Weekly Deep Research | Built -- awaiting n8n import + test |
 | 4 | Topic Scoring & Selection | Done (WF3 awaiting n8n import, dashboard deployed) |
 | 5 | Content Generation & Drafts | Done (WF4 built, Drafts tab deployed, awaiting n8n import) |
-| 6 | Publishing | Ready to plan |
-| 7 | Engagement Engine | Blocked by 6 |
-| 8 | Post-Publish Monitor | Blocked by 6 |
+| 6 | Publishing | Done (WF5 built, awaiting LinkedIn OAuth2 setup + n8n import) |
+| 7 | Engagement Engine | Ready to plan |
+| 8 | Post-Publish Monitor | Ready to plan |
 | 9 | Analytics & Feedback Loop | Blocked by 8 |
 | 10 | Enrichment | Blocked by 9 |
 
-Progress: [=====-----] 50% (5/10 phases)
+Progress: [======----] 60% (6/10 phases)
 
 ## Artifacts Awaiting Import
 
@@ -57,10 +57,19 @@ Progress: [=====-----] 50% (5/10 phases)
 - **Nodes:** 20 nodes, webhook trigger (POST `linkedin-content-generate`)
 - **Action:** Import into n8n, verify credentials, test with approved topic_id
 
+### WF5: Publishing & First Comment
+- **JSON:** `n8n-workflows/linkedin-engine/wf5-publishing-first-comment.json`
+- **README:** `business-os/workflows/README-wf5-publishing-first-comment.md`
+- **n8n-brain:** Pattern not yet registered
+- **Nodes:** 32 nodes, schedule trigger Tue-Fri 8 AM CST
+- **Prerequisites:** LinkedIn OAuth2 setup (developer app, credential in n8n, Person URN)
+- **Action:** Complete OAuth2 setup, replace PLACEHOLDER values, import into n8n, test, activate
+
 ## Next Action
 
-1. Import WF1, WF2, WF3, WF4 into n8n and test
-2. `/gsd:discuss-phase 6 --project linkedin-content-engine` or `/gsd:plan-phase 6 --project linkedin-content-engine`
+1. Import WF1-WF5 into n8n and test
+2. Complete LinkedIn OAuth2 setup for WF5 (see README-wf5-publishing-first-comment.md Prerequisites)
+3. `/gsd:discuss-phase 7 --project linkedin-content-engine` or `/gsd:plan-phase 7 --project linkedin-content-engine`
 
 ## Decisions Log
 
@@ -91,6 +100,12 @@ Progress: [=====-----] 50% (5/10 phases)
 | 2026-02-15 | Hook selector as clickable cards (3-col) | Visual comparison over tabs for A/B/C hook selection |
 | 2026-02-15 | Added 'rejected' to PostDb status type | Was missing from union, needed for draft rejection flow |
 | 2026-02-15 | Topic approval auto-triggers WF4 | Fire-and-forget webhook POST on status change to 'approved' |
+| 2026-02-15 | Phase 6 Plan 1 executed | WF5 built (32 nodes), publishing + first comment workflow |
+| 2026-02-15 | LinkedIn native node for posts, HTTP Request for comments | n8n LinkedIn node can't comment, use predefinedCredentialType |
+| 2026-02-15 | 45-second wait for first comment | Under 65s n8n threshold, workflow stays in-process |
+| 2026-02-15 | PLACEHOLDER approach for LinkedIn OAuth2 | User replaces after manual OAuth2 setup (5-step process) |
+| 2026-02-15 | Retry-once-revert pattern | Publish fails -> 5 min wait -> retry -> revert to approved + alert |
+| 2026-02-15 | Comment failure keeps post published | Post is live on LinkedIn, only comment failed |
 
 ## Open Questions
 
@@ -99,10 +114,12 @@ Progress: [=====-----] 50% (5/10 phases)
 - APIFY_API_TOKEN env var needs to be set in n8n settings
 - WF3 n8n-brain pattern needs manual registration
 - WF4 n8n-brain pattern needs registration after import
+- WF5 n8n-brain pattern needs registration after import
 - supabase db push migration history is out of sync -- needs repair or continued Management API workaround
+- LinkedIn OAuth2 setup must be completed before WF5 can be activated
 
 ## Session Continuity
 
 Last session: 2026-02-15
-Stopped at: Phase 5 complete, verified
+Stopped at: Phase 6 complete, WF5 built
 Resume file: None
