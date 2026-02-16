@@ -5,9 +5,9 @@
 | Field | Value |
 |-------|-------|
 | **Milestone** | v1.0 |
-| **Current Phase** | 6 (Publishing) -- complete |
-| **Last Completed Phase** | 6 (Publishing) |
-| **Phases Awaiting Import** | 2 (WF1), 3 (WF2), 4 (WF3), 5 (WF4), 6 (WF5) |
+| **Current Phase** | 7 (Engagement Engine) -- Plan 1 complete |
+| **Last Completed Phase** | 7 (Engagement Engine) Plan 1 |
+| **Phases Awaiting Import** | 2 (WF1), 3 (WF2), 4 (WF3), 5 (WF4), 6 (WF5), 7 (WF6) |
 | **Last Updated** | 2026-02-15 |
 
 ## Phase Status
@@ -20,12 +20,12 @@
 | 4 | Topic Scoring & Selection | Done (WF3 awaiting n8n import, dashboard deployed) |
 | 5 | Content Generation & Drafts | Done (WF4 built, Drafts tab deployed, awaiting n8n import) |
 | 6 | Publishing | Done (WF5 built, awaiting LinkedIn OAuth2 setup + n8n import) |
-| 7 | Engagement Engine | Ready to plan |
+| 7 | Engagement Engine | Plan 1 done (WF6 built, schema deployed, awaiting n8n import + network data) |
 | 8 | Post-Publish Monitor | Ready to plan |
 | 9 | Analytics & Feedback Loop | Blocked by 8 |
 | 10 | Enrichment | Blocked by 9 |
 
-Progress: [======----] 60% (6/10 phases)
+Progress: [=======---] 70% (7/10 phases)
 
 ## Artifacts Awaiting Import
 
@@ -65,11 +65,21 @@ Progress: [======----] 60% (6/10 phases)
 - **Prerequisites:** LinkedIn OAuth2 setup (developer app, credential in n8n, Person URN)
 - **Action:** Complete OAuth2 setup, replace PLACEHOLDER values, import into n8n, test, activate
 
+### WF6: Engagement Engine
+- **JSON:** `n8n-workflows/linkedin-engine/wf6-engagement-engine.json`
+- **README:** `business-os/workflows/README-wf6-engagement-engine.md`
+- **n8n-brain:** Pattern not yet registered
+- **Nodes:** 49 nodes, dual schedule trigger (daily 7 AM + warming 7:40 AM Tue-Fri)
+- **Prerequisites:** APIFY_API_TOKEN env var in n8n, engagement_network table populated
+- **Action:** Set APIFY_API_TOKEN, populate network contacts, import into n8n, test, activate
+
 ## Next Action
 
-1. Import WF1-WF5 into n8n and test
+1. Import WF1-WF6 into n8n and test
 2. Complete LinkedIn OAuth2 setup for WF5 (see README-wf5-publishing-first-comment.md Prerequisites)
-3. `/gsd:discuss-phase 7 --project linkedin-content-engine` or `/gsd:plan-phase 7 --project linkedin-content-engine`
+3. Set APIFY_API_TOKEN in n8n environment variables
+4. Populate engagement_network table with 20-30 initial contacts
+5. Plan Phase 8 (Post-Publish Monitor) or Phase 7 Plan 2 (Engagement dashboard tab)
 
 ## Decisions Log
 
@@ -106,6 +116,12 @@ Progress: [======----] 60% (6/10 phases)
 | 2026-02-15 | PLACEHOLDER approach for LinkedIn OAuth2 | User replaces after manual OAuth2 setup (5-step process) |
 | 2026-02-15 | Retry-once-revert pattern | Publish fails -> 5 min wait -> retry -> revert to approved + alert |
 | 2026-02-15 | Comment failure keeps post published | Post is live on LinkedIn, only comment failed |
+| 2026-02-15 | Phase 7 Plan 1 executed | WF6 built (49 nodes), engagement_digests table deployed |
+| 2026-02-15 | Dual schedule trigger in one workflow | Daily 7 AM + warming 7:40 AM Tue-Fri share same credential set |
+| 2026-02-15 | Apify batching at 8 profiles per call | Stays under 300s sync timeout, 6 concurrent profile processing |
+| 2026-02-15 | Engagement score: likes*1 + comments*3 + shares*2 | Comments weighted 3x (LinkedIn values them 8x more than likes) |
+| 2026-02-15 | Warming target scoring algorithm | category match +3, tier_1 +2, tier_2 +1, not-engaged-48h +1 |
+| 2026-02-15 | Management API token from macOS keychain | go-keyring base64 encoded token at "Supabase CLI" / "supabase" |
 
 ## Open Questions
 
@@ -115,11 +131,13 @@ Progress: [======----] 60% (6/10 phases)
 - WF3 n8n-brain pattern needs manual registration
 - WF4 n8n-brain pattern needs registration after import
 - WF5 n8n-brain pattern needs registration after import
+- WF6 n8n-brain pattern needs registration after import
 - supabase db push migration history is out of sync -- needs repair or continued Management API workaround
 - LinkedIn OAuth2 setup must be completed before WF5 can be activated
+- Engagement network needs to be populated with 20-30 contacts before WF6 produces useful results
 
 ## Session Continuity
 
 Last session: 2026-02-15
-Stopped at: Phase 6 complete, WF5 built
+Stopped at: Phase 7 Plan 1 complete, WF6 built
 Resume file: None
