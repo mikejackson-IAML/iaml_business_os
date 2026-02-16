@@ -43,7 +43,7 @@ export interface PostDb {
   carousel_pdf_url: string | null;
   hashtags: string[] | null;
   tagged_people: string[] | null;
-  status: 'draft' | 'approved' | 'scheduled' | 'published' | 'failed';
+  status: 'draft' | 'approved' | 'rejected' | 'scheduled' | 'published' | 'failed';
   scheduled_for: string | null;
   published_at: string | null;
   created_at: string;
