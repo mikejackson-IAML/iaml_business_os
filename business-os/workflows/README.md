@@ -482,3 +482,35 @@ Error Trigger -> Log Error -> Slack Error Alert
 - Claude Sonnet (content generation -- brand voice, pillar framing, AEO terms)
 - Supabase REST (topic/signal/hook reads, post insert, calendar assignment, run logging)
 - Slack (success/error notifications)
+
+### WF5: Publishing & First Comment
+
+**File:** `n8n-workflows/linkedin-engine/wf5-publishing-first-comment.json`
+**n8n Workflow ID:** TBD (import pending)
+**Status:** Ready to Import
+**Trigger:** Schedule (Tue-Fri 8:00 AM CST / 14:00 UTC)
+**Documentation:** [README-wf5-publishing-first-comment.md](README-wf5-publishing-first-comment.md)
+
+Publishes approved LinkedIn posts on schedule, posts a first comment 45 seconds later, logs results to Supabase, and sends Slack notifications to #linkedin-content.
+
+#### How It Works
+
+```
+Schedule (Tue-Fri 8 AM CST)
+  |
+  Fetch Calendar Slot -> Has Approved Post? --NO--> Skip Silently
+  |YES
+  Set 'scheduled' -> LinkedIn: Publish Post --FAIL--> Retry -> Revert + Alert
+  |
+  Extract URN -> Update Post & Calendar -> Wait 45s -> Post Comment -> Slack Notify
+  |
+  Log Run Complete
+
+Error Trigger -> Log Error (canary) -> Slack Alert
+```
+
+#### Services
+
+- LinkedIn OAuth2 (post publishing + first comment via REST API)
+- Supabase REST (calendar/post reads, status updates, run logging)
+- Slack (success notifications + error alerts)
