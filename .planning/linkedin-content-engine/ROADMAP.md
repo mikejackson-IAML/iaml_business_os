@@ -178,6 +178,10 @@ Plans:
 - **Goal:** Build automated publishing workflow that posts approved content to LinkedIn and logs results.
 - **Dependencies:** Phase 5
 - **Requirements:** PUB-01, PUB-02, PUB-03, PUB-04, PUB-05
+- **Plans:** 1 plan
+
+Plans:
+- [ ] 06-01-PLAN.md — Build WF5 Publishing & First Comment n8n workflow + docs + workflow index update
 
 ### Success Criteria
 - [ ] WF5 (Publishing & First Comment) built and active in n8n
