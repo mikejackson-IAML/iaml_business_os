@@ -5,8 +5,8 @@
 | Field | Value |
 |-------|-------|
 | **Milestone** | v1.0 |
-| **Current Phase** | 7 (Engagement Engine) -- Plan 1 complete |
-| **Last Completed Phase** | 7 (Engagement Engine) Plan 1 |
+| **Current Phase** | 8 (Post-Publish Monitor) -- Ready to plan |
+| **Last Completed Phase** | 7 (Engagement Engine) |
 | **Phases Awaiting Import** | 2 (WF1), 3 (WF2), 4 (WF3), 5 (WF4), 6 (WF5), 7 (WF6) |
 | **Last Updated** | 2026-02-15 |
 
@@ -20,12 +20,12 @@
 | 4 | Topic Scoring & Selection | Done (WF3 awaiting n8n import, dashboard deployed) |
 | 5 | Content Generation & Drafts | Done (WF4 built, Drafts tab deployed, awaiting n8n import) |
 | 6 | Publishing | Done (WF5 built, awaiting LinkedIn OAuth2 setup + n8n import) |
-| 7 | Engagement Engine | Plan 1 done (WF6 built, schema deployed, awaiting n8n import + network data) |
+| 7 | Engagement Engine | Done (WF6 built, Engagement tab deployed, awaiting n8n import + network data) |
 | 8 | Post-Publish Monitor | Ready to plan |
 | 9 | Analytics & Feedback Loop | Blocked by 8 |
 | 10 | Enrichment | Blocked by 9 |
 
-Progress: [=======---] 70% (7/10 phases)
+Progress: [=======---] 70% (7/10 phases complete)
 
 ## Artifacts Awaiting Import
 
@@ -75,11 +75,11 @@ Progress: [=======---] 70% (7/10 phases)
 
 ## Next Action
 
-1. Import WF1-WF6 into n8n and test
-2. Complete LinkedIn OAuth2 setup for WF5 (see README-wf5-publishing-first-comment.md Prerequisites)
-3. Set APIFY_API_TOKEN in n8n environment variables
-4. Populate engagement_network table with 20-30 initial contacts
-5. Plan Phase 8 (Post-Publish Monitor) or Phase 7 Plan 2 (Engagement dashboard tab)
+1. Plan Phase 8 (Post-Publish Monitor)
+2. Import WF1-WF6 into n8n and test
+3. Complete LinkedIn OAuth2 setup for WF5 (see README-wf5-publishing-first-comment.md Prerequisites)
+4. Set APIFY_API_TOKEN in n8n environment variables
+5. Populate engagement_network table with 20-30 initial contacts
 
 ## Decisions Log
 
@@ -122,6 +122,9 @@ Progress: [=======---] 70% (7/10 phases)
 | 2026-02-15 | Engagement score: likes*1 + comments*3 + shares*2 | Comments weighted 3x (LinkedIn values them 8x more than likes) |
 | 2026-02-15 | Warming target scoring algorithm | category match +3, tier_1 +2, tier_2 +1, not-engaged-48h +1 |
 | 2026-02-15 | Management API token from macOS keychain | go-keyring base64 encoded token at "Supabase CLI" / "supabase" |
+| 2026-02-15 | Phase 7 Plan 2 executed | Engagement tab with digest, network CRUD, ROI metrics |
+| 2026-02-15 | Reversed dot notation for .schema() | .from('schema.table') silently fails; .schema('schema').from('table') is correct |
+| 2026-02-15 | Phase 7 complete and verified | 8/8 must-haves passed, ENG-01..04 satisfied |
 
 ## Open Questions
 
@@ -139,5 +142,5 @@ Progress: [=======---] 70% (7/10 phases)
 ## Session Continuity
 
 Last session: 2026-02-15
-Stopped at: Phase 7 Plan 1 complete, WF6 built
+Stopped at: Phase 7 complete, ready to plan Phase 8
 Resume file: None

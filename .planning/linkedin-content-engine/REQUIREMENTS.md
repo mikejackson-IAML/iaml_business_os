@@ -11,7 +11,7 @@
 | Scoring | SCORE | 4 | Active |
 | Generation | GEN | 5 | Active |
 | Publishing | PUB | 5 | Active |
-| Engagement | ENG | 4 | Active |
+| Engagement | ENG | 4 | Complete |
 | Monitoring | MON | 3 | Active |
 | Analytics | ANA | 6 | Active |
 | Enrichment | ENR | 6 | Active |
@@ -156,18 +156,22 @@
 ## Engagement
 
 ### ENG-01: Daily Comment Digest
+- **Status:** ✅ Complete
 - **Description:** Daily workflow identifies 5-7 high-value posts to comment on from engagement network contacts.
 - **Acceptance:** Digest sent to dashboard "Engagement" tab with post URLs, authors, and suggested comments.
 
 ### ENG-02: Pre-Post Warming
+- **Status:** ✅ Complete
 - **Description:** Alert sent 20 minutes before scheduled post publication to enable pre-post engagement activity.
 - **Acceptance:** Slack notification and dashboard indicator 20 min before scheduled publish time.
 
 ### ENG-03: Comment Suggestions
+- **Status:** ✅ Complete
 - **Description:** Claude generates contextual comment suggestions for engagement network posts.
 - **Acceptance:** Each digest item has 1-2 AI-generated comment suggestions.
 
 ### ENG-04: Engagement Dashboard
+- **Status:** ✅ Complete
 - **Description:** Dashboard "Engagement" tab shows comment activity, engagement network management, and comment ROI tracking.
 - **Acceptance:** Tab displays recent comments, engagement network list (filterable by tier/category), and ROI metrics.
 

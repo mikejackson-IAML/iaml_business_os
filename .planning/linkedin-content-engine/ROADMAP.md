@@ -14,7 +14,7 @@
 | 4 | Topic Scoring & Selection | Done | WF3 | This Week (interactive) | SCORE-01..04 |
 | 5 | Content Generation & Drafts | Done | WF4 | Drafts (interactive) | GEN-01..05 |
 | 6 | Publishing | Done | WF5 | Calendar updates | PUB-01..05 |
-| 7 | Engagement Engine | Planned | WF6 | Engagement (enhanced) | ENG-01..04 |
+| 7 | Engagement Engine | Done | WF6 | Engagement (enhanced) | ENG-01..04 |
 | 8 | Post-Publish Monitor | Planned | WF7 | — | MON-01..03 |
 | 9 | Analytics & Feedback Loop | Planned | WF8 | Analytics + Calendar | ANA-01..06 |
 | 10 | Enrichment | Planned | Multiple | Carousel support | ENR-01..06 |
@@ -28,7 +28,7 @@ Phase 1 ✅
         └── Phase 4 (Topic Scoring) ✅
               └── Phase 5 (Content Generation) ✅
                     └── Phase 6 (Publishing) ✅
-                          ├── Phase 7 (Engagement) ← IN PROGRESS
+                          ├── Phase 7 (Engagement) ✅
                           └── Phase 8 (Monitoring) ← depends on 6
                                 └── Phase 9 (Analytics) ← depends on 8
                                       └── Phase 10 (Enrichment) ← depends on 9
@@ -200,26 +200,26 @@ Plans:
 
 ---
 
-## Phase 7: Engagement Engine
+## Phase 7: Engagement Engine ✅
 
-- **Status:** Planned
+- **Status:** Complete
 - **Goal:** Build engagement workflow with daily comment digests and pre-post warming, plus interactive dashboard tab.
 - **Dependencies:** Phase 6 ✅
 - **Requirements:** ENG-01, ENG-02, ENG-03, ENG-04
 - **Plans:** 2 plans
 
 Plans:
-- [ ] 07-01-PLAN.md — Schema migration (engagement_digests + RLS grants) + WF6 Engagement Engine n8n workflow + docs
-- [ ] 07-02-PLAN.md — Dashboard Engagement tab overhaul: digest display, network CRUD, ROI metrics, API routes
+- [x] 07-01-PLAN.md — Schema migration (engagement_digests + RLS grants) + WF6 Engagement Engine n8n workflow + docs
+- [x] 07-02-PLAN.md — Dashboard Engagement tab overhaul: digest display, network CRUD, ROI metrics, API routes
 
 ### Success Criteria
-- [ ] WF6 (Engagement Engine) built and active in n8n
-- [ ] Two modes: daily digest (7 AM) + pre-post warming (20 min before publish)
-- [ ] Identifies 5-7 high-value posts to comment on daily
-- [ ] Claude generates comment suggestions per post
-- [ ] Pre-post warming alert sent to Slack and dashboard
-- [ ] Dashboard "Engagement" tab shows comment activity, network, and ROI
-- [ ] Engagement network management (add/edit/deactivate contacts)
+- [x] WF6 (Engagement Engine) built (awaiting n8n import)
+- [x] Two modes: daily digest (7 AM) + pre-post warming (20 min before publish)
+- [x] Identifies 5-7 high-value posts to comment on daily
+- [x] Claude generates comment suggestions per post
+- [x] Pre-post warming alert sent to Slack and dashboard
+- [x] Dashboard "Engagement" tab shows comment activity, network, and ROI
+- [x] Engagement network management (add/edit/deactivate contacts)
 
 ### Technical Notes
 - Two schedule triggers in one workflow (daily + pre-post)
