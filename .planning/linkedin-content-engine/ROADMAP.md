@@ -13,7 +13,7 @@
 | 3 | Weekly Deep Research | Built (awaiting import) | WF2 | — | RES-03, RES-04, RES-05, RES-06 |
 | 4 | Topic Scoring & Selection | Done | WF3 | This Week (interactive) | SCORE-01..04 |
 | 5 | Content Generation & Drafts | Done | WF4 | Drafts (interactive) | GEN-01..05 |
-| 6 | Publishing | Planned | WF5 | Calendar updates | PUB-01..05 |
+| 6 | Publishing | Done | WF5 | Calendar updates | PUB-01..05 |
 | 7 | Engagement Engine | Planned | WF6 | Engagement (enhanced) | ENG-01..04 |
 | 8 | Post-Publish Monitor | Planned | WF7 | — | MON-01..03 |
 | 9 | Analytics & Feedback Loop | Planned | WF8 | Analytics + Calendar | ANA-01..06 |
@@ -172,25 +172,25 @@ Plans:
 
 ---
 
-## Phase 6: Publishing
+## Phase 6: Publishing ✅
 
-- **Status:** Planned
+- **Status:** Complete
 - **Goal:** Build automated publishing workflow that posts approved content to LinkedIn and logs results.
-- **Dependencies:** Phase 5
+- **Dependencies:** Phase 5 ✅
 - **Requirements:** PUB-01, PUB-02, PUB-03, PUB-04, PUB-05
 - **Plans:** 1 plan
 
 Plans:
-- [ ] 06-01-PLAN.md — Build WF5 Publishing & First Comment n8n workflow + docs + workflow index update
+- [x] 06-01-PLAN.md — Build WF5 Publishing & First Comment n8n workflow + docs + workflow index update
 
 ### Success Criteria
-- [ ] WF5 (Publishing & First Comment) built and active in n8n
-- [ ] Publishes approved posts Tue-Fri 8 AM CST via n8n LinkedIn OAuth2 node
-- [ ] First comment posted 30-60 seconds after main post
-- [ ] `linkedin_post_id` and `published_at` captured in Supabase
-- [ ] Slack notification sent to #linkedin-content on publish
-- [ ] Content calendar entry updated to `published` status
-- [ ] LinkedIn OAuth2 credential configured in n8n
+- [x] WF5 (Publishing & First Comment) built and active in n8n
+- [x] Publishes approved posts Tue-Fri 8 AM CST via n8n LinkedIn OAuth2 node
+- [x] First comment posted 30-60 seconds after main post
+- [x] `linkedin_post_id` and `published_at` captured in Supabase
+- [x] Slack notification sent to #linkedin-content on publish
+- [x] Content calendar entry updated to `published` status
+- [ ] LinkedIn OAuth2 credential configured in n8n (requires manual setup)
 
 ### Technical Notes
 - n8n native LinkedIn node (OAuth2) — credential `linkedInOAuth2Api` needs setup

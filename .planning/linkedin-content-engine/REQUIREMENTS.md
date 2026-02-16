@@ -127,22 +127,27 @@
 ## Publishing
 
 ### PUB-01: Automated Publishing
+- **Status:** ✅ Complete
 - **Description:** Approved posts published via n8n LinkedIn OAuth2 node. Schedule: Tue-Fri 8 AM CST.
 - **Acceptance:** Posts published to Mike's LinkedIn profile at scheduled time. `linkedin_post_id` captured.
 
 ### PUB-02: First Comment Posting
+- **Status:** ✅ Complete
 - **Description:** First comment posted 30-60 seconds after main post via LinkedIn API.
 - **Acceptance:** Comment appears on the published post within 60 seconds.
 
 ### PUB-03: Publication Logging
+- **Status:** ✅ Complete
 - **Description:** Publication logged to Supabase with `linkedin_post_id` and `published_at` timestamp.
 - **Acceptance:** Post status updated to `published`, `linkedin_post_id` and `published_at` fields populated.
 
 ### PUB-04: Slack Notification
+- **Status:** ✅ Complete
 - **Description:** Slack notification sent to #linkedin-content channel on successful publish.
 - **Acceptance:** Slack message includes post title, hook used, and link to LinkedIn post.
 
 ### PUB-05: Calendar Status Update
+- **Status:** ✅ Complete
 - **Description:** Content calendar entry updated to `published` status after successful publish.
 - **Acceptance:** Corresponding `content_calendar` row has `status = 'published'` and `post_id` linked.
 
@@ -251,7 +256,7 @@
 | SCORE-04 | 4 | — | This Week |
 | GEN-01..04 | 5 | WF4: Content Generation | Drafts |
 | GEN-05 | 5 | — | Drafts |
-| PUB-01..05 | 6 | WF5: Publishing & First Comment | Content Calendar |
+| PUB-01..05 | 6 ✅ | WF5: Publishing & First Comment | Content Calendar |
 | ENG-01..04 | 7 | WF6: Engagement Engine | Engagement |
 | MON-01..03 | 8 | WF7: Post-Publish Monitor | — |
 | ANA-01..06 | 9 | WF8: Analytics Feedback Loop | Analytics, Content Calendar |
