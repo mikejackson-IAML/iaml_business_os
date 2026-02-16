@@ -1,0 +1,772 @@
+{
+  "name": "WF4: Content Generation Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "linkedin-content-generate",
+        "responseMode": "immediately",
+        "responseData": "allEntries",
+        "options": {}
+      },
+      "id": "wf4-webhook-trigger",
+      "name": "Topic Approved Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 400],
+      "webhookId": "linkedin-content-generate"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Validate input and generate run metadata\n// Extract topic_id from webhook body, generate run_id, calculate week_of\n\nfunction getMondayOfWeek(date) {\n  const d = new Date(date);\n  const day = d.getDay();\n  const diff = d.getDate() - day + (day === 0 ? -6 : 1);\n  d.setDate(diff);\n  return d.toISOString().split('T')[0];\n}\n\nfunction uuidv4() {\n  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {\n    const r = Math.random() * 16 | 0;\n    const v = c === 'x' ? r : (r & 0x3 | 0x8);\n    return v.toString(16);\n  });\n}\n\nconst body = $input.first().json.body || $input.first().json;\nconst topicId = body.topic_id;\n\nif (!topicId) {\n  throw new Error('Missing required field: topic_id');\n}\n\nconst now = new Date();\n\nreturn [{\n  json: {\n    topic_id: topicId,\n    run_id: uuidv4(),\n    week_of: getMondayOfWeek(now),\n    started_at: now.toISOString()\n  }\n}];"
+      },
+      "id": "validate-input",
+      "name": "Validate Input & Generate Run ID",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [260, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/workflow_runs",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow_name\": \"wf4-content-generation-pipeline\",\n  \"n8n_execution_id\": \"{{ $execution.id }}\",\n  \"status\": \"running\",\n  \"started_at\": \"{{ $('Validate Input & Generate Run ID').first().json.started_at }}\",\n  \"items_processed\": 0,\n  \"metadata\": {\n    \"started_by\": \"webhook\",\n    \"run_id\": \"{{ $('Validate Input & Generate Run ID').first().json.run_id }}\",\n    \"topic_id\": \"{{ $('Validate Input & Generate Run ID').first().json.topic_id }}\"\n  }\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "log-run-start",
+      "name": "Log Run Start",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [520, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/topic_recommendations?id=eq.{{ $('Validate Input & Generate Run ID').first().json.topic_id }}&select=*",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Accept",
+              "value": "application/vnd.pgrst.object+json"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "fetch-approved-topic",
+      "name": "Fetch Approved Topic",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [780, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract source_signal_ids from the topic and build the query URL\n// Also normalize the topic data for downstream nodes\n\nconst topic = $input.first().json;\n\nif (!topic || !topic.id) {\n  throw new Error('Topic not found for the given topic_id');\n}\n\nconst signalIds = topic.source_signal_ids || [];\nconst signalIdsString = signalIds.join(',');\n\nreturn [{\n  json: {\n    topic: topic,\n    signal_ids_query: signalIdsString,\n    has_signals: signalIds.length > 0\n  }\n}];"
+      },
+      "id": "prepare-signal-fetch",
+      "name": "Prepare Signal Fetch",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1040, 400]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/research_signals?id=in.({{ $json.signal_ids_query }})&select=title,body_text,source,keywords,topic_category",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "fetch-source-signals",
+      "name": "Fetch Source Signals",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1300, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/hooks?status=eq.active&order=score.desc&limit=5&select=hook_text,hook_category",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "fetch-top-hooks",
+      "name": "Fetch Top Hooks",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1300, 600],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/content_calendar?status=eq.open&post_date=gte.{{ $now.toISODate() }}&order=post_date.asc&limit=1&select=*",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "find-calendar-slot",
+      "name": "Find Calendar Slot",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1300, 200],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Assemble the full context package for Claude content generation\n// Combines topic, research signals, top hooks, and calendar slot\n// Builds the prompt following the PROMPT.md template\n\nconst prepData = $('Prepare Signal Fetch').first().json;\nconst topic = prepData.topic;\n\n// Get signals -- may be array of items or a single empty array response\nconst signalsRaw = $('Fetch Source Signals').all();\nlet signals = [];\nfor (const item of signalsRaw) {\n  if (item.json && item.json.title) {\n    signals.push(item.json);\n  } else if (Array.isArray(item.json)) {\n    signals = signals.concat(item.json.filter(s => s && s.title));\n  }\n}\n\n// Get top hooks\nconst hooksRaw = $('Fetch Top Hooks').all();\nlet topHooks = [];\nfor (const item of hooksRaw) {\n  if (item.json && item.json.hook_text) {\n    topHooks.push(item.json);\n  } else if (Array.isArray(item.json)) {\n    topHooks = topHooks.concat(item.json.filter(h => h && h.hook_text));\n  }\n}\n\n// Get calendar slot (may be empty array if no open slots)\nconst calendarRaw = $('Find Calendar Slot').all();\nlet calendarSlot = null;\nfor (const item of calendarRaw) {\n  if (item.json && item.json.id) {\n    calendarSlot = item.json;\n    break;\n  } else if (Array.isArray(item.json) && item.json.length > 0 && item.json[0].id) {\n    calendarSlot = item.json[0];\n    break;\n  }\n}\n\n// Determine series and pillar\nconst series = topic.recommended_series || (calendarSlot ? calendarSlot.series : 'flex');\nconst pillar = calendarSlot ? (calendarSlot.pillar || 'legacy_future') : 'legacy_future';\n\n// Build research context (truncate body_text to 500 chars per signal)\nconst researchContext = signals.map(s =>\n  s.title + ' [' + (s.source || 'unknown') + ']: ' + (s.body_text || '').substring(0, 500)\n).join('\\n\\n');\n\n// Build hook patterns\nconst hookPatterns = topHooks.map(h =>\n  '- [' + (h.hook_category || 'unknown') + '] ' + h.hook_text\n).join('\\n');\n\n// Pillar-specific framing instructions\nlet pillarFraming = '';\nif (pillar === 'legacy_future') {\n  pillarFraming = 'PILLAR FRAMING: Legacy & Future -- Contrast IAML\\'s institutional track record (est. 1979, 80,000+ professionals trained) with what Agentic AI now makes possible. Frame as business evolution, not personal history.';\n} else if (pillar === 'building_in_public') {\n  pillarFraming = 'PILLAR FRAMING: Building in Public -- Include a specific technical detail: a code snippet, workflow logic, or automation result. Show the build, not just the theory.';\n} else if (pillar === 'partnered_authority') {\n  pillarFraming = 'PILLAR FRAMING: Partnered Authority -- Reference IAML faculty/attorney expertise. Show the translation: legal knowledge turned into an AI guardrail or automated rule.';\n}\n\n// Build the full prompt\nconst systemPrompt = 'You are writing a LinkedIn post for Mike Van Horn, \"The HR Technologist.\" Mike runs IAML (est. 1979), a 45-year employment law training company, and has genuine expertise in AI and automation -- he builds HR compliance tools using Claude Code and multi-agent systems. He is NOT an attorney or HR practitioner. His unique position: access to deep-domain expertise (IAML\\'s practicing attorneys) + technical rapid prototyping capability.\\n\\nBRAND VOICE: Innovative, grounded, technically curious, and radically focused on efficiency. \"Smart friend at a conference who happens to be in the trenches building AI tools.\" Observer and builder, never prescriber.';\n\nconst userPrompt = `TOPIC: ${topic.topic_title}\nANGLE: ${topic.angle || 'No specific angle provided'}\nFORMAT: ${topic.recommended_format || 'text'}\nSERIES: ${series}\nPILLAR: ${pillar}\nKEY DATA POINTS: ${JSON.stringify(topic.key_data_points || [])}\n\nRESEARCH CONTEXT:\n${researchContext || 'No research signals available'}\n\nPRODUCT PHASE: Phase 1 (Current): The Ingestion Engine -- Building an agent that takes messy HR policy documents and outputs structured AI logic.\n\nHOOK PATTERNS TO CONSIDER:\n${hookPatterns || 'No hook library data available'}\n\n${pillarFraming}\n\nAEO (AI ENGINE OPTIMIZATION) -- Weave these terms naturally where relevant:\n- \"Agentic RAG\" (when discussing AI that retrieves and reasons over documents)\n- \"Compliance Guardrails\" (when discussing AI safety/rules for HR)\n- \"Multi-Agent Orchestration\" (when discussing automated workflows)\n- \"HR Agentic Systems\" (when discussing AI tools for HR operations)\nDo NOT force these terms. Use them only when they fit the topic naturally.\n\nRULES:\n- Target 1,800-2,000 characters for the full post text\n- Generate 3 hook variations: data/statistic (Hook A), contrarian (Hook B), observation (Hook C)\n- First 2 lines MUST be a punchy hook, followed by 2 lines of white space\n- Break text every 2-3 lines for mobile (short, scannable paragraphs)\n- End with a \"binary\" or \"low-friction\" question to drive comment volume\n- NO links in post body (put in first comment)\n- NO emojis in body text\n- Maximum 3-5 hashtags at the very end\n- NEVER give legal advice\n- NEVER use: \"delve,\" \"landscape,\" \"in today's rapidly evolving,\" \"it's important to note,\" \"I'm excited to share\"\n- NEVER use corporate jargon: \"leverage,\" \"synergize,\" \"paradigm shift\"\n- Use concrete specifics, not vague claims\n- One idea per post -- go deep, not wide\n\nAlso generate:\n- A first comment (link to relevant resource, extended thought, or seeding question)\n- If format is carousel: an outline of 5-8 slides with title and key point per slide\n\nRespond with ONLY valid JSON (no markdown fences, no commentary). Use this exact structure:\n{\n  \"hook_a\": { \"text\": \"data/statistic hook text\", \"category\": \"data\" },\n  \"hook_b\": { \"text\": \"contrarian hook text\", \"category\": \"contrarian\" },\n  \"hook_c\": { \"text\": \"observation hook text\", \"category\": \"observation\" },\n  \"full_text\": \"complete post text using Hook A, 1800-2000 characters, with hashtags at end\",\n  \"first_comment_text\": \"first comment text with links and extended context\",\n  \"hashtags\": [\"hashtag1\", \"hashtag2\", \"hashtag3\"],\n  \"series\": \"${series}\",\n  \"pillar\": \"${pillar}\"\n}`;\n\nreturn [{\n  json: {\n    system_prompt: systemPrompt,\n    user_prompt: userPrompt,\n    topic: topic,\n    calendar_slot: calendarSlot,\n    series: series,\n    pillar: pillar\n  }\n}];"
+      },
+      "id": "assemble-context",
+      "name": "Assemble Context Package",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1560, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"claude-sonnet-4-20250514\",\n  \"max_tokens\": 4000,\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": {{ JSON.stringify($json.system_prompt + '\\n\\n' + $json.user_prompt) }}\n    }\n  ]\n}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "claude-generate-content",
+      "name": "Claude: Generate Content",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1820, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "anthropic-api",
+          "name": "Anthropic API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse the Claude content generation response\n// Extract hooks, full_text, first_comment, hashtags\n// Build hook_variations JSONB array\n// Handle parse failures gracefully\n\nconst claudeResponse = $input.first().json;\nconst contextData = $('Assemble Context Package').first().json;\nconst topic = contextData.topic;\n\nlet result;\nlet parseFailed = false;\nlet rawResponse = '';\n\ntry {\n  rawResponse = claudeResponse.content?.[0]?.text || '{}';\n  const cleaned = rawResponse.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n  result = JSON.parse(cleaned);\n} catch (e) {\n  parseFailed = true;\n  result = {\n    hook_a: { text: topic.hook_suggestion || topic.topic_title, category: 'data' },\n    hook_b: { text: topic.topic_title, category: 'contrarian' },\n    hook_c: { text: topic.topic_title, category: 'observation' },\n    full_text: 'GENERATION FAILED: Parse error. Raw response saved in generation_instructions for debugging.',\n    first_comment_text: '',\n    hashtags: [],\n    series: contextData.series,\n    pillar: contextData.pillar\n  };\n}\n\n// Check for stop_reason = max_tokens (truncated response)\nconst stopReason = claudeResponse.stop_reason || '';\nif (stopReason === 'max_tokens' && !parseFailed) {\n  parseFailed = true;\n  result.full_text = result.full_text || 'GENERATION TRUNCATED: Claude hit max_tokens limit. Retry with shorter context.';\n}\n\n// Build hook_variations JSONB array\nconst hookVariations = [\n  { text: result.hook_a?.text || '', category: result.hook_a?.category || 'data', variation: 'A' },\n  { text: result.hook_b?.text || '', category: result.hook_b?.category || 'contrarian', variation: 'B' },\n  { text: result.hook_c?.text || '', category: result.hook_c?.category || 'observation', variation: 'C' }\n];\n\n// Default selected hook is Hook A (data variation)\nconst selectedHook = hookVariations[0];\n\n// Build the post insert payload\nconst postPayload = {\n  topic_id: topic.id,\n  hook_text: selectedHook.text,\n  hook_category: selectedHook.category,\n  hook_variation: 'A',\n  hook_variations: hookVariations,\n  full_text: result.full_text || '',\n  first_comment_text: result.first_comment_text || '',\n  format: topic.recommended_format || 'text',\n  series: result.series || contextData.series,\n  pillar: result.pillar || contextData.pillar,\n  hashtags: result.hashtags || [],\n  status: 'draft',\n  generation_status: parseFailed ? 'failed' : 'completed',\n  generation_instructions: parseFailed ? ('Parse error. Raw response: ' + rawResponse.substring(0, 2000)) : null\n};\n\nreturn [{\n  json: {\n    post_payload: postPayload,\n    topic: topic,\n    calendar_slot: contextData.calendar_slot,\n    parse_failed: parseFailed\n  }\n}];"
+      },
+      "id": "parse-generation-response",
+      "name": "Parse Generation Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2080, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/posts",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.post_payload) }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "insert-post-draft",
+      "name": "Insert Post Draft",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2340, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract the inserted post ID and prepare calendar slot update\n// Handle both array and object responses from Supabase\n\nconst insertResponse = $input.first().json;\nconst prevData = $('Parse Generation Response').first().json;\nconst calendarSlot = prevData.calendar_slot;\nconst topic = prevData.topic;\n\n// Supabase return=representation returns array or single object\nlet postId;\nif (Array.isArray(insertResponse)) {\n  postId = insertResponse[0]?.id;\n} else {\n  postId = insertResponse.id;\n}\n\nif (!postId) {\n  // Try to extract from the response body directly\n  postId = insertResponse?.id || null;\n}\n\nreturn [{\n  json: {\n    post_id: postId,\n    topic_id: topic.id,\n    topic_title: topic.topic_title,\n    calendar_slot: calendarSlot,\n    has_calendar_slot: calendarSlot !== null && calendarSlot !== undefined,\n    series: prevData.post_payload?.series || 'flex',\n    pillar: prevData.post_payload?.pillar || 'legacy_future',\n    parse_failed: prevData.parse_failed\n  }\n}];"
+      },
+      "id": "extract-post-id",
+      "name": "Extract Post ID",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2600, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-slot",
+              "leftValue": "={{ $json.has_calendar_slot }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-calendar-slot",
+      "name": "Has Calendar Slot?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2860, 400]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/content_calendar?id=eq.{{ $('Extract Post ID').first().json.calendar_slot.id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"post_id\": \"{{ $('Extract Post ID').first().json.post_id }}\",\n  \"topic_id\": \"{{ $('Extract Post ID').first().json.topic_id }}\",\n  \"status\": \"generated\"\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "assign-calendar-slot",
+      "name": "Assign Calendar Slot",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3120, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"Content draft generated for: *{{ $('Extract Post ID').first().json.topic_title }}*\\nSeries: {{ $('Extract Post ID').first().json.series }}\\nPillar: {{ $('Extract Post ID').first().json.pillar }}\\nHooks: 3 variations ready\\n<https://dashboard.realtyamp.ai/dashboard/marketing/linkedin-content|Review in Dashboard>\"\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "slack-notification",
+      "name": "Slack Notification",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3380, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/workflow_runs",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow_name\": \"wf4-content-generation-pipeline\",\n  \"status\": \"completed\",\n  \"completed_at\": \"{{ $now.toISO() }}\",\n  \"items_processed\": 1,\n  \"metadata\": {\n    \"topic_id\": \"{{ $('Extract Post ID').first().json.topic_id }}\",\n    \"post_id\": \"{{ $('Extract Post ID').first().json.post_id }}\",\n    \"parse_failed\": {{ $('Extract Post ID').first().json.parse_failed }}\n  }\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "log-run-complete",
+      "name": "Log Run Complete",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3640, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "error-trigger",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [0, 800]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/workflow_runs",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow_name\": \"wf4-content-generation-pipeline\",\n  \"status\": \"failed\",\n  \"completed_at\": \"{{ $now.toISO() }}\",\n  \"error_message\": {{ JSON.stringify($json.execution?.error?.message || $json.message || 'Unknown error') }}\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "log-error",
+      "name": "Log Error",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [260, 800],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"Content generation FAILED\\nError: {{ JSON.stringify($json.execution?.error?.message || $json.message || 'Unknown error').replace(/\\\"/g, '') }}\\nManual retry available in dashboard.\"\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "slack-error-alert",
+      "name": "Slack Error Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [520, 800]
+    }
+  ],
+  "connections": {
+    "Topic Approved Webhook": {
+      "main": [
+        [
+          {
+            "node": "Validate Input & Generate Run ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Input & Generate Run ID": {
+      "main": [
+        [
+          {
+            "node": "Log Run Start",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Run Start": {
+      "main": [
+        [
+          {
+            "node": "Fetch Approved Topic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Approved Topic": {
+      "main": [
+        [
+          {
+            "node": "Prepare Signal Fetch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Signal Fetch": {
+      "main": [
+        [
+          {
+            "node": "Fetch Source Signals",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fetch Top Hooks",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Find Calendar Slot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Source Signals": {
+      "main": [
+        [
+          {
+            "node": "Assemble Context Package",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Top Hooks": {
+      "main": [
+        [
+          {
+            "node": "Assemble Context Package",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Calendar Slot": {
+      "main": [
+        [
+          {
+            "node": "Assemble Context Package",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assemble Context Package": {
+      "main": [
+        [
+          {
+            "node": "Claude: Generate Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude: Generate Content": {
+      "main": [
+        [
+          {
+            "node": "Parse Generation Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Generation Response": {
+      "main": [
+        [
+          {
+            "node": "Insert Post Draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Post Draft": {
+      "main": [
+        [
+          {
+            "node": "Extract Post ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Post ID": {
+      "main": [
+        [
+          {
+            "node": "Has Calendar Slot?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Calendar Slot?": {
+      "main": [
+        [
+          {
+            "node": "Assign Calendar Slot",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Slack Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assign Calendar Slot": {
+      "main": [
+        [
+          {
+            "node": "Slack Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack Notification": {
+      "main": [
+        [
+          {
+            "node": "Log Run Complete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Log Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Error": {
+      "main": [
+        [
+          {
+            "node": "Slack Error Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "any",
+    "executionTimeout": 600,
+    "timezone": "America/Chicago"
+  },
+  "versionId": "wf4-v1-20260215",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1f7825745c8d832579f8944a8977ccc40cc1572556aae3f7808e4ba42337190b"
+  },
+  "tags": [
+    {
+      "name": "linkedin-content-engine"
+    }
+  ]
+}

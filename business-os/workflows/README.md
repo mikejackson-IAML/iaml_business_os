@@ -444,3 +444,41 @@ Error Trigger -> Log Error (canary)
 
 - Claude Sonnet (topic clustering + 5-dimension scoring)
 - Supabase REST (signal reads, topic inserts, run logging, signal processing)
+
+### WF4: Content Generation Pipeline
+
+**File:** `n8n-workflows/linkedin-engine/wf4-content-generation-pipeline.json`
+**n8n Workflow ID:** TBD (import pending)
+**Status:** Ready to Import
+**Trigger:** Webhook (POST to `linkedin-content-generate`)
+**Documentation:** [README-wf4-content-generation-pipeline.md](README-wf4-content-generation-pipeline.md)
+
+Takes approved topics and generates complete LinkedIn post drafts with 3 hook variations (data, contrarian, observation), full post text following brand voice, and first comment text via Claude Sonnet. Assigns drafts to calendar slots and notifies via Slack.
+
+#### How It Works
+
+```
+Webhook (POST topic_id)
+  |
+  Validate Input & Log Run Start
+  |
+  Fetch Approved Topic -> Prepare Signal Fetch
+  |
+  +-- Fetch Source Signals ---|
+  +-- Fetch Top Hooks --------+-> Assemble Context Package
+  '-- Find Calendar Slot -----|
+  |
+  Claude: Generate Content (3 hooks + full post + first comment)
+  |
+  Parse Response -> Insert Post Draft -> Assign Calendar Slot
+  |
+  Slack Notification -> Log Run Complete
+
+Error Trigger -> Log Error -> Slack Error Alert
+```
+
+#### Services
+
+- Claude Sonnet (content generation -- brand voice, pillar framing, AEO terms)
+- Supabase REST (topic/signal/hook reads, post insert, calendar assignment, run logging)
+- Slack (success/error notifications)
