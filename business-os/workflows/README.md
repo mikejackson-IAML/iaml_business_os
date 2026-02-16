@@ -514,3 +514,43 @@ Error Trigger -> Log Error (canary) -> Slack Alert
 - LinkedIn OAuth2 (post publishing + first comment via REST API)
 - Supabase REST (calendar/post reads, status updates, run logging)
 - Slack (success notifications + error alerts)
+
+### WF6: Engagement Engine
+
+**File:** `n8n-workflows/linkedin-engine/wf6-engagement-engine.json`
+**n8n Workflow ID:** TBD (import pending)
+**Status:** Ready to Import
+**Trigger A:** Schedule (Daily 7:00 AM CST / 13:00 UTC)
+**Trigger B:** Schedule (Tue-Fri 7:40 AM CST / 13:40 UTC)
+**Documentation:** [README-wf6-engagement-engine.md](README-wf6-engagement-engine.md)
+
+Daily engagement digest and pre-post warming engine. Scrapes network contacts' recent posts via Apify, generates AI comment suggestions via Claude Sonnet, stores digest items in Supabase, and sends Slack notifications.
+
+#### How It Works
+
+```
+Branch A: Daily Digest (7 AM CST daily)
+  |
+  Fetch Network -> Apify Scrape (batched) -> Filter 24h -> Rank Top 7
+  |
+  Claude: Comment Suggestions -> Store Digest -> Slack Digest
+  |
+  Update last_monitored -> Log Complete
+
+Branch B: Pre-Post Warming (7:40 AM Tue-Fri)
+  |
+  Fetch Calendar -> Has Post? -> Fetch Post Details
+  |
+  Score Warming Targets -> Apify Scrape -> Filter Best Post
+  |
+  Claude: Warming Comments -> Store Warming -> Slack Alert -> Log Complete
+
+Error Trigger -> Log Error (canary) -> Slack Alert
+```
+
+#### Services
+
+- Apify (LinkedIn profile post scraping via harvestapi/linkedin-profile-posts)
+- Claude Sonnet (comment suggestion generation with brand voice)
+- Supabase REST (engagement_network, engagement_digests, content_calendar, workflow_runs)
+- Slack (daily digest + warming alert notifications)

@@ -1,0 +1,1704 @@
+{
+  "name": "WF6: Engagement Engine",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 13 * * *"
+            }
+          ]
+        }
+      },
+      "id": "wf6-schedule-daily",
+      "name": "Daily 7 AM CST",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build date info and generate run_id for workflow tracking\n\nfunction uuidv4() {\n  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {\n    const r = Math.random() * 16 | 0;\n    const v = c === 'x' ? r : (r & 0x3 | 0x8);\n    return v.toString(16);\n  });\n}\n\nconst today = $now.toISODate();\n\nreturn [{\n  json: {\n    today: today,\n    digest_date: today,\n    run_id: uuidv4(),\n    started_at: new Date().toISOString(),\n    trigger_type: 'daily_digest'\n  }\n}];"
+      },
+      "id": "wf6-build-date",
+      "name": "Build Date & Run ID",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [260, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/workflow_runs",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow_name\": \"wf6-engagement-engine\",\n  \"n8n_execution_id\": \"{{ $execution.id }}\",\n  \"status\": \"running\",\n  \"started_at\": \"{{ $('Build Date & Run ID').first().json.started_at }}\",\n  \"items_processed\": 0,\n  \"metadata\": {\n    \"run_id\": \"{{ $('Build Date & Run ID').first().json.run_id }}\",\n    \"trigger_type\": \"daily_digest\",\n    \"today\": \"{{ $('Build Date & Run ID').first().json.today }}\"\n  }\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf6-log-start",
+      "name": "Log Run Start",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [520, 200],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/engagement_network?active=eq.true&linkedin_url=not.is.null&select=id,linkedin_name,linkedin_url,linkedin_headline,follower_count,tier,category,last_monitored,last_engaged",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf6-fetch-network",
+      "name": "Fetch Network Contacts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [780, 200],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Normalize Supabase response and check if we have contacts\nconst allItems = $input.all();\nconst contacts = [];\n\nfor (const item of allItems) {\n  if (item.json && item.json.id) {\n    contacts.push(item.json);\n  } else if (Array.isArray(item.json)) {\n    for (const c of item.json) {\n      if (c && c.id) contacts.push(c);\n    }\n  }\n}\n\nif (contacts.length === 0) {\n  return [{ json: { has_contacts: false, contact_count: 0, contacts: [] } }];\n}\n\nreturn [{ json: { has_contacts: true, contact_count: contacts.length, contacts: contacts } }];"
+      },
+      "id": "wf6-normalize-contacts",
+      "name": "Normalize Contacts",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1040, 200]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-contacts",
+              "leftValue": "={{ $json.has_contacts }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "wf6-check-contacts",
+      "name": "Has Contacts?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1300, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build batches of profile URLs for Apify scraping\n// Batch into groups of 8 to stay under 300s timeout\n\nconst data = $input.first().json;\nconst contacts = data.contacts || [];\n\n// Validate LinkedIn URLs\nconst validContacts = contacts.filter(c => \n  c.linkedin_url && c.linkedin_url.startsWith('https://www.linkedin.com/in/')\n);\n\n// Build batches of 8\nconst batchSize = 8;\nconst batches = [];\nfor (let i = 0; i < validContacts.length; i += batchSize) {\n  const batch = validContacts.slice(i, i + batchSize);\n  batches.push({\n    profileUrls: batch.map(c => c.linkedin_url),\n    contacts: batch\n  });\n}\n\nif (batches.length === 0) {\n  return [{ json: { has_batches: false, batch_count: 0 } }];\n}\n\n// Output each batch as a separate item for SplitInBatches\nreturn batches.map((batch, i) => ({\n  json: {\n    has_batches: true,\n    batch_index: i,\n    batch_count: batches.length,\n    profileUrls: batch.profileUrls,\n    contacts: batch.contacts,\n    all_contacts: validContacts\n  }\n}));"
+      },
+      "id": "wf6-build-profile-urls",
+      "name": "Build Profile URL Batches",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1560, 200]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "wf6-batch-scrape",
+      "name": "Scrape Batches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [1820, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.apify.com/v2/acts/harvestapi~linkedin-profile-posts/run-sync-get-dataset-items?token={{ $env.APIFY_API_TOKEN }}&timeout=300",
+        "authentication": "noAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"profileUrls\": {{ JSON.stringify($json.profileUrls) }},\n  \"maxPosts\": 5,\n  \"scrapeReactions\": false,\n  \"scrapeComments\": false,\n  \"includeReposts\": false\n}",
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "id": "wf6-scrape-posts",
+      "name": "Apify: Scrape Posts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2080, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Filter scraped posts to last 24 hours and min engagement threshold\n// Map each post back to its contact from the engagement_network\n\nconst scrapedItems = $input.all();\nconst batchData = $('Scrape Batches').first().json;\nconst contacts = batchData.contacts || [];\n\n// Build lookup by profile URL / publicIdentifier\nconst contactMap = {};\nfor (const c of contacts) {\n  if (c.linkedin_url) {\n    // Extract identifier from URL\n    const match = c.linkedin_url.match(/linkedin\\.com\\/in\\/([^\\/\\?]+)/);\n    if (match) {\n      contactMap[match[1].toLowerCase()] = c;\n    }\n    contactMap[c.linkedin_url.toLowerCase()] = c;\n  }\n}\n\nconst now = new Date();\nconst oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);\nconst MIN_ENGAGEMENT = 5;\n\nconst filteredPosts = [];\n\nfor (const item of scrapedItems) {\n  const post = item.json;\n  if (!post || !post.content) continue;\n\n  // Check recency (last 24 hours)\n  const postedAt = post.postedAt ? new Date(post.postedAt) : null;\n  if (!postedAt || postedAt < oneDayAgo) continue;\n\n  // Check minimum engagement\n  const likes = post.likes || 0;\n  const comments = post.comments || 0;\n  const shares = post.shares || 0;\n  const totalEngagement = likes + comments + shares;\n  if (totalEngagement < MIN_ENGAGEMENT) continue;\n\n  // Match to contact\n  let matchedContact = null;\n  const pubId = (post.publicIdentifier || '').toLowerCase();\n  const linkedinUrl = (post.linkedinUrl || '').toLowerCase();\n  \n  if (pubId && contactMap[pubId]) {\n    matchedContact = contactMap[pubId];\n  } else if (linkedinUrl) {\n    const urlMatch = linkedinUrl.match(/linkedin\\.com\\/in\\/([^\\/\\?]+)/);\n    if (urlMatch && contactMap[urlMatch[1].toLowerCase()]) {\n      matchedContact = contactMap[urlMatch[1].toLowerCase()];\n    }\n  }\n\n  filteredPosts.push({\n    post_url: post.linkedinUrl || post.url || '',\n    post_content: (post.content || '').substring(0, 2000),\n    post_content_short: (post.content || '').substring(0, 500),\n    author_name: post.name || (matchedContact ? matchedContact.linkedin_name : 'Unknown'),\n    author_url: matchedContact ? matchedContact.linkedin_url : '',\n    author_followers: matchedContact ? matchedContact.follower_count : null,\n    contact_id: matchedContact ? matchedContact.id : null,\n    contact_tier: matchedContact ? matchedContact.tier : null,\n    likes: likes,\n    comments: comments,\n    shares: shares,\n    total_engagement: totalEngagement,\n    posted_at: post.postedAt\n  });\n}\n\n// Store for accumulation across batches\nreturn [{ json: { filtered_posts: filteredPosts, batch_post_count: filteredPosts.length } }];"
+      },
+      "id": "wf6-filter-recent",
+      "name": "Filter Recent Posts",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2340, 200]
+    },
+    {
+      "parameters": {
+        "resume": "timeInterval",
+        "interval": 1,
+        "unit": "seconds"
+      },
+      "id": "wf6-wait-batch",
+      "name": "Wait 1s Between Batches",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [2600, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Rank all filtered posts from all batches and select top 7\n// This runs after SplitInBatches completes (done output)\n\n// Collect all filtered_posts from all batch iterations\nconst allBatchResults = $('Filter Recent Posts').all();\nlet allPosts = [];\n\nfor (const item of allBatchResults) {\n  const posts = item.json.filtered_posts || [];\n  allPosts = allPosts.concat(posts);\n}\n\n// Deduplicate by post_url\nconst seen = new Set();\nconst uniquePosts = allPosts.filter(p => {\n  const key = p.post_url || p.post_content_short;\n  if (seen.has(key)) return false;\n  seen.add(key);\n  return true;\n});\n\n// Rank by engagement score with tier bonus\n// (likes * 1) + (comments * 3) + (shares * 2) + tier_1 bonus (+10)\nconst ranked = uniquePosts.map(p => ({\n  ...p,\n  engagement_score: (p.likes * 1) + (p.comments * 3) + (p.shares * 2) + (p.contact_tier === 'tier_1' ? 10 : 0)\n}));\n\n// Sort by engagement score descending\nranked.sort((a, b) => b.engagement_score - a.engagement_score);\n\n// Select top 7 (if fewer than 5, take all)\nconst selected = ranked.slice(0, 7);\n\nif (selected.length === 0) {\n  return [{ json: { has_posts: false, selected_count: 0, selected_posts: [] } }];\n}\n\nreturn [{ json: { has_posts: true, selected_count: selected.length, selected_posts: selected } }];"
+      },
+      "id": "wf6-rank-select",
+      "name": "Rank & Select Top 7",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2080, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-posts",
+              "leftValue": "={{ $json.has_posts }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "wf6-check-posts",
+      "name": "Has Posts?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2340, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare posts for Claude comment generation\n// Output each post as a separate item for batch processing\n\nconst data = $input.first().json;\nconst posts = data.selected_posts || [];\n\nreturn posts.map((post, i) => ({\n  json: {\n    ...post,\n    post_index: i,\n    total_posts: posts.length\n  }\n}));"
+      },
+      "id": "wf6-prepare-comment-gen",
+      "name": "Prepare for Comment Gen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2600, 0]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "wf6-comment-batch",
+      "name": "Comment Gen (Batch)",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [2860, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"claude-sonnet-4-20250514\",\n  \"max_tokens\": 800,\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": {{ JSON.stringify('You are a LinkedIn engagement strategist for Mike Van Horn, \"The HR Technologist\" -- CEO of IAML, a 45-year employment law training company. Mike sits at the intersection of genuine AI expertise (n8n workflows, Claude Code, multi-agent orchestration) and deep-domain HR/employment law knowledge.\\n\\nBrand voice: technically curious, observer/builder tone, never prescriptive. Subtle IAML references ONLY when directly relevant (\"We\\'ve seen this at IAML...\" style). Never hard-sell in others\\' comment sections.\\n\\nGenerate 2 comment suggestions for this LinkedIn post:\\n\\nAuthor: ' + $json.author_name + '\\nPost content: ' + ($json.post_content || '').substring(0, 1000) + '\\n\\nComment A: insight/value-add style -- share a relevant perspective, data point, or experience that adds to the conversation.\\nComment B: question/discussion style -- ask a thoughtful question that demonstrates expertise and invites dialogue.\\n\\nLength guidelines:\\n- Short (1-2 sentences) for simple agreement/support\\n- Medium (2-4 sentences) for insights and value-adds\\n- Longer only for high-value opportunities with Tier 1 contacts\\n\\nRespond with ONLY valid JSON (no markdown, no commentary):\\n{\"suggestions\": [{\"style\": \"insight\", \"text\": \"...\"}, {\"style\": \"question\", \"text\": \"...\"}]}') }}\n    }\n  ]\n}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "wf6-generate-comments",
+      "name": "Claude: Generate Comments",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3120, 0],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "anthropic-api",
+          "name": "Anthropic API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse Claude comment suggestions and build digest item\nconst claudeResponse = $input.first().json;\nconst postData = $('Comment Gen (Batch)').first().json;\n\nlet suggestions;\ntry {\n  const responseText = claudeResponse.content?.[0]?.text || '{}';\n  const cleaned = responseText.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n  const parsed = JSON.parse(cleaned);\n  suggestions = parsed.suggestions || [];\n} catch (e) {\n  suggestions = [\n    { style: 'insight', text: 'Great perspective on this topic. The intersection with AI compliance is particularly relevant right now.' },\n    { style: 'question', text: 'How are you seeing organizations adapt their approach to this? Curious about what\\'s working in practice.' }\n  ];\n}\n\nconst digestDate = $('Build Date & Run ID').first().json.digest_date;\n\nreturn [{\n  json: {\n    digest_date: digestDate,\n    digest_type: 'daily',\n    target_post_url: postData.post_url || null,\n    target_post_content: (postData.post_content || '').substring(0, 500),\n    target_author: postData.author_name || null,\n    target_author_url: postData.author_url || null,\n    target_author_followers: postData.author_followers || null,\n    network_contact_id: postData.contact_id || null,\n    post_engagement: {\n      likes: postData.likes || 0,\n      comments: postData.comments || 0,\n      shares: postData.shares || 0\n    },\n    comment_suggestions: suggestions,\n    status: 'pending'\n  }\n}];"
+      },
+      "id": "wf6-parse-suggestions",
+      "name": "Parse Comment Suggestions",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3380, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/engagement_digests",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"digest_date\": \"{{ $json.digest_date }}\",\n  \"digest_type\": \"{{ $json.digest_type }}\",\n  \"target_post_url\": {{ JSON.stringify($json.target_post_url) }},\n  \"target_post_content\": {{ JSON.stringify($json.target_post_content) }},\n  \"target_author\": {{ JSON.stringify($json.target_author) }},\n  \"target_author_url\": {{ JSON.stringify($json.target_author_url) }},\n  \"target_author_followers\": {{ $json.target_author_followers || 'null' }},\n  \"network_contact_id\": {{ JSON.stringify($json.network_contact_id) }},\n  \"post_engagement\": {{ JSON.stringify($json.post_engagement) }},\n  \"comment_suggestions\": {{ JSON.stringify($json.comment_suggestions) }},\n  \"status\": \"pending\"\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf6-store-digest-item",
+      "name": "Store Digest Item",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3640, 0],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resume": "timeInterval",
+        "interval": 1,
+        "unit": "seconds"
+      },
+      "id": "wf6-wait-comment-gen",
+      "name": "Wait 1s Rate Limit",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [3900, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// After all digest items stored, update last_monitored on scraped contacts\n// and prepare summary for Slack notification\n\nconst allDigestItems = $('Parse Comment Suggestions').all();\nconst allContacts = $('Build Profile URL Batches').first().json.all_contacts || [];\n\n// Get unique contact IDs that were scraped\nconst contactIds = [...new Set(allContacts.map(c => c.id).filter(Boolean))];\n\n// Build digest summary for Slack\nconst digestItems = allDigestItems.map(item => item.json);\n\nreturn [{\n  json: {\n    contact_ids: contactIds,\n    digest_count: digestItems.length,\n    digest_items: digestItems,\n    digest_date: $('Build Date & Run ID').first().json.digest_date\n  }\n}];"
+      },
+      "id": "wf6-prepare-update",
+      "name": "Prepare Update & Slack",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3120, -200]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/engagement_network?id=in.({{ $json.contact_ids.join(',') }})",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"last_monitored\": \"{{ $now.toISO() }}\"\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf6-update-monitored",
+      "name": "Update last_monitored",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3380, -200],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"blocks\": [\n    {\n      \"type\": \"section\",\n      \"text\": {\n        \"type\": \"mrkdwn\",\n        \"text\": \":speech_balloon: *Daily Engagement Digest*\\n\\n*{{ $('Prepare Update & Slack').first().json.digest_count }} posts to engage with today* ({{ $('Prepare Update & Slack').first().json.digest_date }})\\n\\n{{ $('Prepare Update & Slack').first().json.digest_items.slice(0, 5).map((item, i) => ':small_blue_diamond: *' + (item.target_author || 'Unknown') + '* (' + (item.target_author_followers || 0) + ' followers)\\n>' + (item.target_post_content || '').substring(0, 100) + '...\\n>:thumbsup: ' + (item.post_engagement?.likes || 0) + ' :speech_balloon: ' + (item.post_engagement?.comments || 0) + ' :arrows_counterclockwise: ' + (item.post_engagement?.shares || 0) + '\\n>_Insight:_ ' + (item.comment_suggestions?.[0]?.text || '').substring(0, 120) + '...' ).join('\\n\\n') }}\\n\\n:point_right: View full digest in dashboard\"\n      }\n    }\n  ]\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf6-slack-digest",
+      "name": "Slack: Daily Digest",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3640, -200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/workflow_runs",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow_name\": \"wf6-engagement-engine\",\n  \"status\": \"completed\",\n  \"completed_at\": \"{{ $now.toISO() }}\",\n  \"items_processed\": {{ $('Prepare Update & Slack').first().json.digest_count || 0 }},\n  \"metadata\": {\n    \"trigger_type\": \"daily_digest\",\n    \"posts_found\": {{ $('Prepare Update & Slack').first().json.digest_count || 0 }},\n    \"contacts_scraped\": {{ $('Prepare Update & Slack').first().json.contact_ids.length || 0 }}\n  }\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf6-log-daily-complete",
+      "name": "Log Daily Complete",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3900, -200],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/workflow_runs",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow_name\": \"wf6-engagement-engine\",\n  \"status\": \"completed\",\n  \"completed_at\": \"{{ $now.toISO() }}\",\n  \"items_processed\": 0,\n  \"metadata\": {\n    \"trigger_type\": \"daily_digest\",\n    \"skip_reason\": \"No contacts or no recent posts found\"\n  }\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf6-log-daily-skip",
+      "name": "Log Daily Skip",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1560, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "40 13 * * 2-5"
+            }
+          ]
+        }
+      },
+      "id": "wf6-schedule-warming",
+      "name": "Warming Tue-Fri 7:40 AM CST",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 800]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build date info for warming branch\n\nfunction uuidv4() {\n  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {\n    const r = Math.random() * 16 | 0;\n    const v = c === 'x' ? r : (r & 0x3 | 0x8);\n    return v.toString(16);\n  });\n}\n\nconst today = $now.toISODate();\n\nreturn [{\n  json: {\n    today: today,\n    run_id: uuidv4(),\n    started_at: new Date().toISOString(),\n    trigger_type: 'warming'\n  }\n}];"
+      },
+      "id": "wf6-warming-date",
+      "name": "Build Warming Date",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [260, 800]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/workflow_runs",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow_name\": \"wf6-engagement-engine\",\n  \"n8n_execution_id\": \"{{ $execution.id }}\",\n  \"status\": \"running\",\n  \"started_at\": \"{{ $('Build Warming Date').first().json.started_at }}\",\n  \"items_processed\": 0,\n  \"metadata\": {\n    \"run_id\": \"{{ $('Build Warming Date').first().json.run_id }}\",\n    \"trigger_type\": \"warming\",\n    \"today\": \"{{ $('Build Warming Date').first().json.today }}\"\n  }\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf6-log-warming-start",
+      "name": "Log Warming Start",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [520, 800],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/content_calendar?post_date=eq.{{ $('Build Warming Date').first().json.today }}&select=id,post_id,series,pillar",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf6-fetch-today-post",
+      "name": "Fetch Today's Calendar",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [780, 800],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Check if today has a scheduled/approved post\nconst response = $input.first().json;\nlet slots = [];\n\nif (Array.isArray(response)) {\n  slots = response;\n} else if (response && response.id) {\n  slots = [response];\n}\n\n// Find first slot with a post_id\nconst slotWithPost = slots.find(s => s.post_id !== null && s.post_id !== undefined);\n\nif (!slotWithPost) {\n  return [{\n    json: {\n      has_post: false,\n      skip_reason: slots.length === 0 ? 'No calendar slot for today' : 'Calendar slot has no linked post_id'\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    has_post: true,\n    post_id: slotWithPost.post_id,\n    series: slotWithPost.series || '',\n    pillar: slotWithPost.pillar || ''\n  }\n}];"
+      },
+      "id": "wf6-check-calendar",
+      "name": "Check Calendar Slot",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1040, 800]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-post-today",
+              "leftValue": "={{ $json.has_post }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "wf6-check-post-exists",
+      "name": "Post Today?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1300, 800]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/posts?id=eq.{{ $('Check Calendar Slot').first().json.post_id }}&select=id,topic_id,hook_text,full_text,series,pillar",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Accept",
+              "value": "application/vnd.pgrst.object+json"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf6-fetch-post-detail",
+      "name": "Fetch Post Details",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1560, 800],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/engagement_network?active=eq.true&linkedin_url=not.is.null&select=*",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf6-fetch-warming-network",
+      "name": "Fetch Warming Network",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1820, 800],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Score contacts for warming relevance based on upcoming post topic\n// Algorithm from RESEARCH.md:\n//   - Same category as post topic: +3\n//   - Tier 1: +2, Tier 2: +1\n//   - Not engaged in last 48h: +1\n//   - Select top 4\n\nconst allItems = $input.all();\nconst contacts = [];\n\nfor (const item of allItems) {\n  if (item.json && item.json.id) {\n    contacts.push(item.json);\n  } else if (Array.isArray(item.json)) {\n    for (const c of item.json) {\n      if (c && c.id) contacts.push(c);\n    }\n  }\n}\n\nconst postData = $('Fetch Post Details').first().json;\nconst calendarData = $('Check Calendar Slot').first().json;\n\n// Determine post topic category from series/pillar\nconst postSeries = postData.series || calendarData.series || '';\nconst postPillar = postData.pillar || calendarData.pillar || '';\nconst postText = (postData.hook_text || '') + ' ' + (postData.full_text || '').substring(0, 200);\n\n// Map series to likely categories\nconst seriesCategoryMap = {\n  'not_being_told': ['ai_policy', 'employment_attorney'],\n  'compliance_radar': ['employment_attorney', 'hr_leader'],\n  'ask_ai_guy': ['hr_tech', 'ai_policy'],\n  'flex': ['hr_leader', 'hr_tech', 'journalist']\n};\n\nconst relevantCategories = seriesCategoryMap[postSeries] || ['hr_leader', 'hr_tech'];\n\nconst now = new Date();\nconst twoDaysAgo = new Date(now.getTime() - 48 * 60 * 60 * 1000);\n\n// Score each contact\nconst scored = contacts\n  .filter(c => c.linkedin_url && c.linkedin_url.startsWith('https://www.linkedin.com/in/'))\n  .map(c => {\n    let score = 0;\n\n    // Same category as post topic\n    if (c.category && relevantCategories.includes(c.category)) score += 3;\n\n    // Tier bonus\n    if (c.tier === 'tier_1') score += 2;\n    else if (c.tier === 'tier_2') score += 1;\n\n    // Not engaged recently (avoid over-engagement)\n    const lastEngaged = c.last_engaged ? new Date(c.last_engaged) : null;\n    if (!lastEngaged || lastEngaged < twoDaysAgo) score += 1;\n\n    return { ...c, warming_score: score };\n  });\n\n// Sort by score descending, take top 4\nscored.sort((a, b) => b.warming_score - a.warming_score);\nconst selected = scored.slice(0, 4);\n\nif (selected.length === 0) {\n  return [{ json: { has_targets: false, target_count: 0 } }];\n}\n\nreturn [{\n  json: {\n    has_targets: true,\n    target_count: selected.length,\n    warming_targets: selected,\n    post_context: {\n      hook_text: postData.hook_text || '',\n      series: postSeries,\n      pillar: postPillar,\n      post_summary: postText.substring(0, 300)\n    }\n  }\n}];"
+      },
+      "id": "wf6-select-warming-targets",
+      "name": "Select Warming Targets",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2080, 800]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-targets",
+              "leftValue": "={{ $json.has_targets }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "wf6-check-warming-targets",
+      "name": "Has Warming Targets?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2340, 800]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.apify.com/v2/acts/harvestapi~linkedin-profile-posts/run-sync-get-dataset-items?token={{ $env.APIFY_API_TOKEN }}&timeout=300",
+        "authentication": "noAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"profileUrls\": {{ JSON.stringify($json.warming_targets.map(t => t.linkedin_url)) }},\n  \"maxPosts\": 3,\n  \"scrapeReactions\": false,\n  \"scrapeComments\": false,\n  \"includeReposts\": false\n}",
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "id": "wf6-scrape-warming-posts",
+      "name": "Apify: Warming Posts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2600, 800]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Filter warming posts: most recent post per contact (last 48h)\n// Select the best post per contact (highest engagement)\n\nconst scrapedItems = $input.all();\nconst targetData = $('Select Warming Targets').first().json;\nconst warmingTargets = targetData.warming_targets || [];\n\n// Build contact lookup\nconst contactMap = {};\nfor (const t of warmingTargets) {\n  if (t.linkedin_url) {\n    const match = t.linkedin_url.match(/linkedin\\.com\\/in\\/([^\\/\\?]+)/);\n    if (match) contactMap[match[1].toLowerCase()] = t;\n  }\n}\n\nconst now = new Date();\nconst twoDaysAgo = new Date(now.getTime() - 48 * 60 * 60 * 1000);\n\n// Group posts by contact\nconst postsByContact = {};\n\nfor (const item of scrapedItems) {\n  const post = item.json;\n  if (!post || !post.content) continue;\n\n  const postedAt = post.postedAt ? new Date(post.postedAt) : null;\n  if (!postedAt || postedAt < twoDaysAgo) continue;\n\n  // Match to contact\n  const pubId = (post.publicIdentifier || '').toLowerCase();\n  let contact = null;\n  if (pubId && contactMap[pubId]) {\n    contact = contactMap[pubId];\n  }\n\n  if (!contact) continue;\n\n  const contactKey = contact.id;\n  const engagement = (post.likes || 0) + (post.comments || 0) * 3 + (post.shares || 0) * 2;\n\n  if (!postsByContact[contactKey] || engagement > postsByContact[contactKey].engagement) {\n    postsByContact[contactKey] = {\n      post_url: post.linkedinUrl || post.url || '',\n      post_content: (post.content || '').substring(0, 2000),\n      post_content_short: (post.content || '').substring(0, 500),\n      author_name: contact.linkedin_name,\n      author_url: contact.linkedin_url,\n      author_followers: contact.follower_count,\n      contact_id: contact.id,\n      likes: post.likes || 0,\n      comments: post.comments || 0,\n      shares: post.shares || 0,\n      engagement: engagement\n    };\n  }\n}\n\nconst selectedPosts = Object.values(postsByContact);\n\nreturn [{\n  json: {\n    warming_posts: selectedPosts,\n    warming_post_count: selectedPosts.length,\n    post_context: targetData.post_context\n  }\n}];"
+      },
+      "id": "wf6-filter-warming-posts",
+      "name": "Filter Warming Posts",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2860, 800]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare warming posts for Claude comment generation\n// Output each post as separate item\n\nconst data = $input.first().json;\nconst posts = data.warming_posts || [];\nconst postContext = data.post_context || {};\n\nreturn posts.map((post, i) => ({\n  json: {\n    ...post,\n    post_context: postContext,\n    post_index: i,\n    total_warming_posts: posts.length\n  }\n}));"
+      },
+      "id": "wf6-prepare-warming-gen",
+      "name": "Prepare Warming Gen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3120, 800]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "wf6-warming-comment-batch",
+      "name": "Warming Comment (Batch)",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [3380, 800]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"claude-sonnet-4-20250514\",\n  \"max_tokens\": 800,\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": {{ JSON.stringify('You are a LinkedIn engagement strategist for Mike Van Horn, \"The HR Technologist\" -- CEO of IAML.\\n\\nIMPORTANT CONTEXT: Mike is about to publish a LinkedIn post in ~20 minutes about:\\nTopic: ' + ($json.post_context?.hook_text || 'HR/AI topic') + '\\nSeries: ' + ($json.post_context?.series || '') + '\\nSummary: ' + ($json.post_context?.post_summary || '') + '\\n\\nGenerate warming comments for this network post that seed related conversations. The goal is to warm the network so Mike\\'s upcoming post gets better reach.\\n\\nTarget post to comment on:\\nAuthor: ' + $json.author_name + '\\nPost content: ' + ($json.post_content || '').substring(0, 800) + '\\n\\nComment A: value-add style -- share an insight that subtly connects to the topic Mike is about to post about.\\nComment B: question style -- ask a question that invites dialogue related to the upcoming post\\'s theme.\\n\\nBrand voice: technically curious, observer/builder tone, never prescriptive. Subtle IAML references only when natural.\\n\\nRespond with ONLY valid JSON (no markdown, no commentary):\\n{\"suggestions\": [{\"style\": \"insight\", \"text\": \"...\"}, {\"style\": \"question\", \"text\": \"...\"}]}') }}\n    }\n  ]\n}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "wf6-generate-warming-comments",
+      "name": "Claude: Warming Comments",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3640, 800],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "anthropic-api",
+          "name": "Anthropic API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse warming comment suggestions and build warming digest item\nconst claudeResponse = $input.first().json;\nconst postData = $('Warming Comment (Batch)').first().json;\n\nlet suggestions;\ntry {\n  const responseText = claudeResponse.content?.[0]?.text || '{}';\n  const cleaned = responseText.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n  const parsed = JSON.parse(cleaned);\n  suggestions = parsed.suggestions || [];\n} catch (e) {\n  suggestions = [\n    { style: 'insight', text: 'Interesting perspective -- we have been exploring similar territory at IAML.' },\n    { style: 'question', text: 'How are you thinking about the AI implications here? Would love to hear more.' }\n  ];\n}\n\nconst today = $('Build Warming Date').first().json.today;\nconst postContext = postData.post_context || {};\n\nreturn [{\n  json: {\n    digest_date: today,\n    digest_type: 'warming',\n    target_post_url: postData.post_url || null,\n    target_post_content: (postData.post_content || '').substring(0, 500),\n    target_author: postData.author_name || null,\n    target_author_url: postData.author_url || null,\n    target_author_followers: postData.author_followers || null,\n    network_contact_id: postData.contact_id || null,\n    post_engagement: {\n      likes: postData.likes || 0,\n      comments: postData.comments || 0,\n      shares: postData.shares || 0\n    },\n    comment_suggestions: suggestions,\n    status: 'pending',\n    warming_context: 'Upcoming post: ' + (postContext.hook_text || '') + ' [' + (postContext.series || '') + ']'\n  }\n}];"
+      },
+      "id": "wf6-parse-warming-suggestions",
+      "name": "Parse Warming Suggestions",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3900, 800]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/engagement_digests",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"digest_date\": \"{{ $json.digest_date }}\",\n  \"digest_type\": \"{{ $json.digest_type }}\",\n  \"target_post_url\": {{ JSON.stringify($json.target_post_url) }},\n  \"target_post_content\": {{ JSON.stringify($json.target_post_content) }},\n  \"target_author\": {{ JSON.stringify($json.target_author) }},\n  \"target_author_url\": {{ JSON.stringify($json.target_author_url) }},\n  \"target_author_followers\": {{ $json.target_author_followers || 'null' }},\n  \"network_contact_id\": {{ JSON.stringify($json.network_contact_id) }},\n  \"post_engagement\": {{ JSON.stringify($json.post_engagement) }},\n  \"comment_suggestions\": {{ JSON.stringify($json.comment_suggestions) }},\n  \"status\": \"pending\",\n  \"warming_context\": {{ JSON.stringify($json.warming_context) }}\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf6-store-warming",
+      "name": "Store Warming Item",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [4160, 800],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resume": "timeInterval",
+        "interval": 1,
+        "unit": "seconds"
+      },
+      "id": "wf6-wait-warming-gen",
+      "name": "Wait 1s Warming",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [4420, 800]
+    },
+    {
+      "parameters": {
+        "jsCode": "// After all warming items stored, build summary for Slack\n\nconst allWarmingItems = $('Parse Warming Suggestions').all();\nconst warmingItems = allWarmingItems.map(item => item.json);\nconst postContext = $('Select Warming Targets').first().json.post_context || {};\n\nreturn [{\n  json: {\n    warming_count: warmingItems.length,\n    warming_items: warmingItems,\n    post_context: postContext,\n    today: $('Build Warming Date').first().json.today\n  }\n}];"
+      },
+      "id": "wf6-prepare-warming-slack",
+      "name": "Prepare Warming Slack",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3640, 600]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"blocks\": [\n    {\n      \"type\": \"section\",\n      \"text\": {\n        \"type\": \"mrkdwn\",\n        \"text\": \":fire: *Pre-Post Warming Alert*\\n\\n:clock8: *Publishing in ~20 minutes:* {{ $json.post_context?.hook_text || 'Upcoming post' }}\\n*Series:* {{ $json.post_context?.series || 'N/A' }}\\n\\n*{{ $json.warming_count }} warming targets to engage with NOW:*\\n\\n{{ $json.warming_items.map((item, i) => ':small_orange_diamond: *' + (item.target_author || 'Unknown') + '*\\n>' + (item.target_post_content || '').substring(0, 100) + '...\\n>_Insight:_ ' + (item.comment_suggestions?.[0]?.text || '').substring(0, 120) + '...' ).join('\\n\\n') }}\\n\\n:zap: *Engage with these posts NOW to warm the network before publishing!*\"\n      }\n    }\n  ]\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf6-slack-warming",
+      "name": "Slack: Warming Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3900, 600]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/workflow_runs",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow_name\": \"wf6-engagement-engine\",\n  \"status\": \"completed\",\n  \"completed_at\": \"{{ $now.toISO() }}\",\n  \"items_processed\": {{ $('Prepare Warming Slack').first().json.warming_count || 0 }},\n  \"metadata\": {\n    \"trigger_type\": \"warming\",\n    \"warming_targets\": {{ $('Prepare Warming Slack').first().json.warming_count || 0 }},\n    \"post_topic\": {{ JSON.stringify($('Prepare Warming Slack').first().json.post_context?.hook_text || '') }}\n  }\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf6-log-warming-complete",
+      "name": "Log Warming Complete",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [4160, 600],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/workflow_runs",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow_name\": \"wf6-engagement-engine\",\n  \"status\": \"completed\",\n  \"completed_at\": \"{{ $now.toISO() }}\",\n  \"items_processed\": 0,\n  \"metadata\": {\n    \"trigger_type\": \"warming\",\n    \"skip_reason\": \"No post scheduled today or no warming targets found\"\n  }\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf6-log-warming-skip",
+      "name": "Log Warming Skip",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1560, 1000],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "wf6-error-trigger",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [0, 1200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/workflow_errors",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow_name\": \"wf6-engagement-engine\",\n  \"error_message\": {{ JSON.stringify($json.execution?.error?.message || $json.message || 'Unknown error') }},\n  \"error_node\": {{ JSON.stringify($json.execution?.lastNodeExecuted || 'unknown') }},\n  \"error_details\": {{ JSON.stringify($json.execution?.error || {}) }},\n  \"execution_id\": \"{{ $execution.id }}\"\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf6-log-error",
+      "name": "Log Error (Canary)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [260, 1200],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"blocks\": [\n    {\n      \"type\": \"section\",\n      \"text\": {\n        \"type\": \"mrkdwn\",\n        \"text\": \":rotating_light: *WF6 Engagement Engine ERROR*\\n\\n*Error:* {{ JSON.stringify($json.execution?.error?.message || $json.message || 'Unknown error').replace(/\\\"/g, '').substring(0, 500) }}\\n*Node:* {{ $json.execution?.lastNodeExecuted || 'unknown' }}\\n*Execution:* {{ $execution.id }}\\n*Action:* Check n8n execution log for details.\"\n      }\n    }\n  ]\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf6-slack-error",
+      "name": "Slack Error Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [520, 1200]
+    }
+  ],
+  "connections": {
+    "Daily 7 AM CST": {
+      "main": [
+        [
+          {
+            "node": "Build Date & Run ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Date & Run ID": {
+      "main": [
+        [
+          {
+            "node": "Log Run Start",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Run Start": {
+      "main": [
+        [
+          {
+            "node": "Fetch Network Contacts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Network Contacts": {
+      "main": [
+        [
+          {
+            "node": "Normalize Contacts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Contacts": {
+      "main": [
+        [
+          {
+            "node": "Has Contacts?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Contacts?": {
+      "main": [
+        [
+          {
+            "node": "Build Profile URL Batches",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Daily Skip",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Profile URL Batches": {
+      "main": [
+        [
+          {
+            "node": "Scrape Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape Batches": {
+      "main": [
+        [
+          {
+            "node": "Rank & Select Top 7",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Apify: Scrape Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Apify: Scrape Posts": {
+      "main": [
+        [
+          {
+            "node": "Filter Recent Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Recent Posts": {
+      "main": [
+        [
+          {
+            "node": "Wait 1s Between Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 1s Between Batches": {
+      "main": [
+        [
+          {
+            "node": "Scrape Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rank & Select Top 7": {
+      "main": [
+        [
+          {
+            "node": "Has Posts?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Posts?": {
+      "main": [
+        [
+          {
+            "node": "Prepare for Comment Gen",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Daily Skip",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare for Comment Gen": {
+      "main": [
+        [
+          {
+            "node": "Comment Gen (Batch)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Comment Gen (Batch)": {
+      "main": [
+        [
+          {
+            "node": "Prepare Update & Slack",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Claude: Generate Comments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude: Generate Comments": {
+      "main": [
+        [
+          {
+            "node": "Parse Comment Suggestions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Comment Suggestions": {
+      "main": [
+        [
+          {
+            "node": "Store Digest Item",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Digest Item": {
+      "main": [
+        [
+          {
+            "node": "Wait 1s Rate Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 1s Rate Limit": {
+      "main": [
+        [
+          {
+            "node": "Comment Gen (Batch)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Update & Slack": {
+      "main": [
+        [
+          {
+            "node": "Update last_monitored",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update last_monitored": {
+      "main": [
+        [
+          {
+            "node": "Slack: Daily Digest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack: Daily Digest": {
+      "main": [
+        [
+          {
+            "node": "Log Daily Complete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Warming Tue-Fri 7:40 AM CST": {
+      "main": [
+        [
+          {
+            "node": "Build Warming Date",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Warming Date": {
+      "main": [
+        [
+          {
+            "node": "Log Warming Start",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Warming Start": {
+      "main": [
+        [
+          {
+            "node": "Fetch Today's Calendar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Today's Calendar": {
+      "main": [
+        [
+          {
+            "node": "Check Calendar Slot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Calendar Slot": {
+      "main": [
+        [
+          {
+            "node": "Post Today?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post Today?": {
+      "main": [
+        [
+          {
+            "node": "Fetch Post Details",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Warming Skip",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Post Details": {
+      "main": [
+        [
+          {
+            "node": "Fetch Warming Network",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Warming Network": {
+      "main": [
+        [
+          {
+            "node": "Select Warming Targets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select Warming Targets": {
+      "main": [
+        [
+          {
+            "node": "Has Warming Targets?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Warming Targets?": {
+      "main": [
+        [
+          {
+            "node": "Apify: Warming Posts",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Warming Skip",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Apify: Warming Posts": {
+      "main": [
+        [
+          {
+            "node": "Filter Warming Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Warming Posts": {
+      "main": [
+        [
+          {
+            "node": "Prepare Warming Gen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Warming Gen": {
+      "main": [
+        [
+          {
+            "node": "Warming Comment (Batch)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Warming Comment (Batch)": {
+      "main": [
+        [
+          {
+            "node": "Prepare Warming Slack",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Claude: Warming Comments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude: Warming Comments": {
+      "main": [
+        [
+          {
+            "node": "Parse Warming Suggestions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Warming Suggestions": {
+      "main": [
+        [
+          {
+            "node": "Store Warming Item",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Warming Item": {
+      "main": [
+        [
+          {
+            "node": "Wait 1s Warming",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 1s Warming": {
+      "main": [
+        [
+          {
+            "node": "Warming Comment (Batch)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Warming Slack": {
+      "main": [
+        [
+          {
+            "node": "Slack: Warming Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack: Warming Alert": {
+      "main": [
+        [
+          {
+            "node": "Log Warming Complete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Log Error (Canary)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Error (Canary)": {
+      "main": [
+        [
+          {
+            "node": "Slack Error Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "any",
+    "executionTimeout": 600,
+    "timezone": "America/Chicago"
+  },
+  "versionId": "wf6-v1-20260215",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1f7825745c8d832579f8944a8977ccc40cc1572556aae3f7808e4ba42337190b"
+  },
+  "tags": [
+    {
+      "name": "linkedin-content-engine"
+    }
+  ]
+}
