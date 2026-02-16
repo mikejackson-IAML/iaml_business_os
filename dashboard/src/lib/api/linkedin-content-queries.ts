@@ -152,6 +152,29 @@ export interface EngagementDigestDb {
   created_at: string;
 }
 
+export interface PostIncomingCommentDb {
+  id: string;
+  post_id: string;
+  linkedin_comment_id: string | null;
+  commenter_name: string | null;
+  commenter_url: string | null;
+  commenter_headline: string | null;
+  comment_text: string;
+  comment_posted_at: string | null;
+  comment_likes: number;
+  comment_replies_count: number;
+  comment_type: 'question' | 'agreement' | 'disagreement' | 'addition' | 'spam' | null;
+  reply_suggestion: string | null;
+  reply_posted: boolean;
+  reply_posted_at: string | null;
+  parent_comment_id: string | null;
+  thread_state: 'new' | 'follow_up_sent' | 'resolved';
+  detected_at: string;
+  poll_sequence: number | null;
+  notified: boolean;
+  created_at: string;
+}
+
 export interface HookDb {
   id: string;
   hook_text: string;
@@ -182,6 +205,7 @@ export interface LinkedInContentSummary {
   todayDigest: EngagementDigestDb[];
   engagementNetworkFull: EngagementNetworkDb[];
   engagementROI: { totalCommentsThisWeek: number; avgRoiScore: number; totalLikesReceived: number; totalRepliesReceived: number };
+  incomingComments: PostIncomingCommentDb[];
 }
 
 // ============================================
@@ -428,6 +452,27 @@ export async function getEngagementROIMetrics(): Promise<{
 }
 
 /**
+ * Get recent incoming comments on our published posts (for Engagement tab)
+ */
+export async function getRecentIncomingComments(): Promise<PostIncomingCommentDb[]> {
+  const supabase = getServerClient();
+
+  const { data, error } = await supabase
+    .schema('linkedin_engine').from('post_incoming_comments')
+    .select('*')
+    .neq('comment_type', 'spam')
+    .order('detected_at', { ascending: false })
+    .limit(20);
+
+  if (error) {
+    console.error('Error fetching incoming comments:', error);
+    return [];
+  }
+
+  return (data as PostIncomingCommentDb[]) || [];
+}
+
+/**
  * Get hook library count
  */
 export async function getHookLibraryCount(): Promise<number> {
@@ -482,6 +527,7 @@ export async function getLinkedInContentDashboardData(): Promise<LinkedInContent
     todayDigest,
     engagementNetworkFull,
     engagementROI,
+    incomingComments,
   ] = await Promise.all([
     getThisWeekTopics(),
     getDraftPosts(),
@@ -494,6 +540,7 @@ export async function getLinkedInContentDashboardData(): Promise<LinkedInContent
     getTodayDigest(),
     getEngagementNetworkFull(),
     getEngagementROIMetrics(),
+    getRecentIncomingComments(),
   ]);
 
   return {
@@ -508,5 +555,6 @@ export async function getLinkedInContentDashboardData(): Promise<LinkedInContent
     todayDigest,
     engagementNetworkFull,
     engagementROI,
+    incomingComments,
   };
 }
