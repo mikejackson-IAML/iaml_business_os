@@ -5,10 +5,10 @@
 | Field | Value |
 |-------|-------|
 | **Milestone** | v1.0 |
-| **Current Phase** | 8 (Post-Publish Monitor) -- Ready to plan |
+| **Current Phase** | 8 (Post-Publish Monitor) -- In progress (1/3 plans complete) |
 | **Last Completed Phase** | 7 (Engagement Engine) |
 | **Phases Awaiting Import** | 2 (WF1), 3 (WF2), 4 (WF3), 5 (WF4), 6 (WF5), 7 (WF6) |
-| **Last Updated** | 2026-02-15 |
+| **Last Updated** | 2026-02-16 |
 
 ## Phase Status
 
@@ -21,7 +21,7 @@
 | 5 | Content Generation & Drafts | Done (WF4 built, Drafts tab deployed, awaiting n8n import) |
 | 6 | Publishing | Done (WF5 built, awaiting LinkedIn OAuth2 setup + n8n import) |
 | 7 | Engagement Engine | Done (WF6 built, Engagement tab deployed, awaiting n8n import + network data) |
-| 8 | Post-Publish Monitor | Ready to plan |
+| 8 | Post-Publish Monitor | In progress (schema + types done, WF7 + dashboard UI remaining) |
 | 9 | Analytics & Feedback Loop | Blocked by 8 |
 | 10 | Enrichment | Blocked by 9 |
 
@@ -75,11 +75,12 @@ Progress: [=======---] 70% (7/10 phases complete)
 
 ## Next Action
 
-1. Plan Phase 8 (Post-Publish Monitor)
-2. Import WF1-WF6 into n8n and test
-3. Complete LinkedIn OAuth2 setup for WF5 (see README-wf5-publishing-first-comment.md Prerequisites)
-4. Set APIFY_API_TOKEN in n8n environment variables
-5. Populate engagement_network table with 20-30 initial contacts
+1. Execute Phase 8 Plan 2 (WF7 n8n workflow build)
+2. Execute Phase 8 Plan 3 (dashboard incoming comments UI)
+3. Import WF1-WF7 into n8n and test
+4. Complete LinkedIn OAuth2 setup for WF5
+5. Set APIFY_API_TOKEN in n8n environment variables
+6. Populate engagement_network table with 20-30 initial contacts
 
 ## Decisions Log
 
@@ -125,6 +126,9 @@ Progress: [=======---] 70% (7/10 phases complete)
 | 2026-02-15 | Phase 7 Plan 2 executed | Engagement tab with digest, network CRUD, ROI metrics |
 | 2026-02-15 | Reversed dot notation for .schema() | .from('schema.table') silently fails; .schema('schema').from('table') is correct |
 | 2026-02-15 | Phase 7 complete and verified | 8/8 must-haves passed, ENG-01..04 satisfied |
+| 2026-02-16 | Phase 8 Plan 1 executed | Monitoring schema + TypeScript types deployed |
+| 2026-02-16 | UNIQUE index on linkedin_comment_id | Enables Supabase upsert ON CONFLICT for Apify comment dedup |
+| 2026-02-16 | Monitoring columns on posts table | monitoring_status, monitoring_started_at, last_polled_at, monitoring_ends_at |
 
 ## Open Questions
 
@@ -141,6 +145,6 @@ Progress: [=======---] 70% (7/10 phases complete)
 
 ## Session Continuity
 
-Last session: 2026-02-15
-Stopped at: Phase 7 complete, ready to plan Phase 8
+Last session: 2026-02-16
+Stopped at: Completed 08-01-PLAN.md (Phase 8 Plan 1)
 Resume file: None
