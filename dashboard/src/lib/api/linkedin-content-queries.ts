@@ -39,6 +39,7 @@ export interface PostDb {
   first_comment_text: string | null;
   format: string | null;
   series: string | null;
+  pillar: string | null;
   carousel_pdf_url: string | null;
   hashtags: string[] | null;
   tagged_people: string[] | null;
@@ -46,6 +47,9 @@ export interface PostDb {
   scheduled_for: string | null;
   published_at: string | null;
   created_at: string;
+  hook_variations: { text: string; category: string; variation: string }[] | null;
+  generation_status: 'pending' | 'generating' | 'completed' | 'failed' | 'regenerating' | null;
+  generation_instructions: string | null;
 }
 
 export interface PostAnalyticsDb {
@@ -70,6 +74,7 @@ export interface ContentCalendarDb {
   post_date: string;
   day_of_week: string | null;
   series: string | null;
+  pillar: string | null;
   recommended_format: string | null;
   topic_id: string | null;
   post_id: string | null;
