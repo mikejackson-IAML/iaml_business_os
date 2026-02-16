@@ -5,8 +5,8 @@
 | Field | Value |
 |-------|-------|
 | **Milestone** | v1.0 |
-| **Current Phase** | 5 (Content Generation & Drafts) -- Plan 1 complete |
-| **Last Completed Phase** | 4 (Topic Scoring & Selection) |
+| **Current Phase** | 5 (Content Generation & Drafts) -- Complete |
+| **Last Completed Phase** | 5 (Content Generation & Drafts) |
 | **Phases Awaiting Import** | 2 (WF1), 3 (WF2), 4 (WF3), 5 (WF4) |
 | **Last Updated** | 2026-02-15 |
 
@@ -18,12 +18,14 @@
 | 2 | Daily RSS Research | Built -- awaiting n8n import + test |
 | 3 | Weekly Deep Research | Built -- awaiting n8n import + test |
 | 4 | Topic Scoring & Selection | Done (WF3 awaiting n8n import, dashboard deployed) |
-| 5 | Content Generation & Drafts | Plan 1 done (WF4 built, schema migrated, awaiting n8n import) |
-| 6 | Publishing | Blocked by 5 |
+| 5 | Content Generation & Drafts | Done (WF4 built, Drafts tab deployed, awaiting n8n import) |
+| 6 | Publishing | Ready to plan |
 | 7 | Engagement Engine | Blocked by 6 |
 | 8 | Post-Publish Monitor | Blocked by 6 |
 | 9 | Analytics & Feedback Loop | Blocked by 8 |
 | 10 | Enrichment | Blocked by 9 |
+
+Progress: [=====-----] 50% (5/10 phases)
 
 ## Artifacts Awaiting Import
 
@@ -58,7 +60,7 @@
 ## Next Action
 
 1. Import WF1, WF2, WF3, WF4 into n8n and test
-2. Plan next phase or Phase 5 Plan 2 (dashboard Drafts tab) if needed
+2. Plan Phase 6 (Publishing)
 
 ## Decisions Log
 
@@ -84,6 +86,11 @@
 | 2026-02-15 | hook_variations JSONB on single post row | Stores all 3 hooks in JSONB array, Hook A selected by default |
 | 2026-02-15 | Calendar slot assigned on draft creation | Not on topic approval, because series/pillar confirmed during generation |
 | 2026-02-15 | Migration via Management API workaround | supabase db push blocked by pre-existing history sync issues |
+| 2026-02-15 | Phase 5 Plan 2 executed | Drafts tab with hook selector, edit, approve/reject, regeneration |
+| 2026-02-15 | Focused single-draft view for review | One draft at a time with navigation, more space for hook comparison |
+| 2026-02-15 | Hook selector as clickable cards (3-col) | Visual comparison over tabs for A/B/C hook selection |
+| 2026-02-15 | Added 'rejected' to PostDb status type | Was missing from union, needed for draft rejection flow |
+| 2026-02-15 | Topic approval auto-triggers WF4 | Fire-and-forget webhook POST on status change to 'approved' |
 
 ## Open Questions
 
@@ -97,5 +104,5 @@
 ## Session Continuity
 
 Last session: 2026-02-15
-Stopped at: Completed 05-01-PLAN.md (WF4 Content Generation Pipeline)
+Stopped at: Completed 05-02-PLAN.md (Dashboard Drafts Tab)
 Resume file: None
