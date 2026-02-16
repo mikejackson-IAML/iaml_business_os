@@ -1,0 +1,1203 @@
+{
+  "name": "WF5: Publishing & First Comment",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 14 * * 2-5"
+            }
+          ]
+        }
+      },
+      "id": "wf5-schedule-trigger",
+      "name": "Tue-Fri 8 AM CST",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build today's date using workflow timezone (America/Chicago)\n// Generate run_id for workflow_runs tracking\n\nfunction uuidv4() {\n  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {\n    const r = Math.random() * 16 | 0;\n    const v = c === 'x' ? r : (r & 0x3 | 0x8);\n    return v.toString(16);\n  });\n}\n\nconst today = $now.toISODate();\n\nreturn [{\n  json: {\n    today: today,\n    run_id: uuidv4(),\n    started_at: new Date().toISOString(),\n    person_urn: 'urn:li:person:PLACEHOLDER_PERSON_URN',\n    retry_count: 0\n  }\n}];"
+      },
+      "id": "wf5-build-date",
+      "name": "Build Today's Date",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [260, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/workflow_runs",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow_name\": \"wf5-publishing-first-comment\",\n  \"n8n_execution_id\": \"{{ $execution.id }}\",\n  \"status\": \"running\",\n  \"started_at\": \"{{ $('Build Today\\'s Date').first().json.started_at }}\",\n  \"items_processed\": 0,\n  \"metadata\": {\n    \"run_id\": \"{{ $('Build Today\\'s Date').first().json.run_id }}\",\n    \"today\": \"{{ $('Build Today\\'s Date').first().json.today }}\"\n  }\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf5-log-run-start",
+      "name": "Log Run Start",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [520, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/content_calendar?post_date=eq.{{ $('Build Today\\'s Date').first().json.today }}&select=*",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf5-fetch-calendar",
+      "name": "Fetch Calendar Slot",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [780, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Check if we have a calendar slot with a linked post_id\n// The Supabase response is an array of matching rows\n\nconst response = $input.first().json;\nlet slots = [];\n\nif (Array.isArray(response)) {\n  slots = response;\n} else if (response && response.id) {\n  slots = [response];\n}\n\n// Find first slot with a post_id\nconst slotWithPost = slots.find(s => s.post_id !== null && s.post_id !== undefined);\n\nif (!slotWithPost) {\n  return [{\n    json: {\n      has_slot: false,\n      skip_reason: slots.length === 0 ? 'No calendar slot for today' : 'Calendar slot has no linked post_id'\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    has_slot: true,\n    calendar_id: slotWithPost.id,\n    post_id: slotWithPost.post_id,\n    series: slotWithPost.series || null,\n    pillar: slotWithPost.pillar || null\n  }\n}];"
+      },
+      "id": "wf5-check-calendar",
+      "name": "Check Calendar Slot",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1040, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-slot-with-post",
+              "leftValue": "={{ $json.has_slot }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "wf5-if-has-slot",
+      "name": "Has Calendar Slot?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1300, 400]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/posts?id=eq.{{ $('Check Calendar Slot').first().json.post_id }}&select=*",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Accept",
+              "value": "application/vnd.pgrst.object+json"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf5-fetch-post",
+      "name": "Fetch Post Details",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1560, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "is-approved",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "approved",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "wf5-if-approved",
+      "name": "Post Approved?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1820, 400]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/posts?id=eq.{{ $('Check Calendar Slot').first().json.post_id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"status\": \"scheduled\"}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf5-set-scheduled",
+      "name": "Set Status Scheduled",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2080, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare data for LinkedIn publish node\n// Pass forward all needed data from previous nodes\n\nconst post = $('Fetch Post Details').first().json;\nconst calendarData = $('Check Calendar Slot').first().json;\nconst dateData = $('Build Today\\'s Date').first().json;\n\nreturn [{\n  json: {\n    post_id: calendarData.post_id,\n    calendar_id: calendarData.calendar_id,\n    full_text: post.full_text || '',\n    first_comment_text: post.first_comment_text || '',\n    hook_text: post.hook_text || '',\n    hook_category: post.hook_category || '',\n    hook_variation: post.hook_variation || '',\n    series: post.series || calendarData.series || '',\n    pillar: post.pillar || calendarData.pillar || '',\n    person_urn: dateData.person_urn,\n    retry_count: dateData.retry_count\n  }\n}];"
+      },
+      "id": "wf5-prepare-publish",
+      "name": "Prepare Publish Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2340, 400]
+    },
+    {
+      "parameters": {
+        "person": "={{ $json.person_urn }}",
+        "text": "={{ $json.full_text }}",
+        "options": {}
+      },
+      "id": "wf5-linkedin-publish",
+      "name": "LinkedIn: Publish Post",
+      "type": "n8n-nodes-base.linkedIn",
+      "typeVersion": 1,
+      "position": [2600, 400],
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "PLACEHOLDER_LINKEDIN_CREDENTIAL_ID",
+          "name": "LinkedIn OAuth2"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract the post URN from the LinkedIn node response\n// The LinkedIn n8n node may return the URN in different fields\n// Check multiple locations for compatibility\n\nconst response = $input.first().json;\nconst prevData = $('Prepare Publish Data').first().json;\n\n// Check possible URN locations\nlet postUrn = response.id || response.urn || response['x-restli-id'];\n\n// If using HTTP Request node, check headers\nif (!postUrn && response.$response?.headers?.['x-restli-id']) {\n  postUrn = response.$response.headers['x-restli-id'];\n}\n\n// Try activity field\nif (!postUrn && response.activity) {\n  postUrn = 'urn:li:activity:' + response.activity;\n}\n\nif (!postUrn) {\n  throw new Error('Failed to extract LinkedIn post URN from response. Response keys: ' + Object.keys(response).join(', '));\n}\n\n// Construct the LinkedIn post URL\nconst linkedinUrl = `https://www.linkedin.com/feed/update/${postUrn}`;\n\nreturn [{\n  json: {\n    linkedin_post_urn: postUrn,\n    linkedin_url: linkedinUrl,\n    published_at: new Date().toISOString(),\n    post_id: prevData.post_id,\n    calendar_id: prevData.calendar_id,\n    first_comment_text: prevData.first_comment_text,\n    hook_text: prevData.hook_text,\n    hook_category: prevData.hook_category,\n    hook_variation: prevData.hook_variation,\n    series: prevData.series,\n    pillar: prevData.pillar,\n    full_text: prevData.full_text,\n    person_urn: prevData.person_urn\n  }\n}];"
+      },
+      "id": "wf5-extract-urn",
+      "name": "Extract Post URN",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2860, 400]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/posts?id=eq.{{ $json.post_id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"status\": \"published\",\n  \"linkedin_post_id\": \"{{ $('Extract Post URN').first().json.linkedin_post_urn }}\",\n  \"published_at\": \"{{ $('Extract Post URN').first().json.published_at }}\"\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf5-update-post-published",
+      "name": "Update Post Published",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3120, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/content_calendar?id=eq.{{ $('Extract Post URN').first().json.calendar_id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"status\": \"published\"}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf5-update-calendar-published",
+      "name": "Update Calendar Published",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3380, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resume": "timeInterval",
+        "interval": 45,
+        "unit": "seconds"
+      },
+      "id": "wf5-wait-45s",
+      "name": "Wait 45 Seconds",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [3640, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.linkedin.com/rest/socialActions/{{ encodeURIComponent($('Extract Post URN').first().json.linkedin_post_urn) }}/comments",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "linkedInOAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-Restli-Protocol-Version",
+              "value": "2.0.0"
+            },
+            {
+              "name": "LinkedIn-Version",
+              "value": "202402"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"actor\": \"{{ $('Extract Post URN').first().json.person_urn }}\",\n  \"object\": \"{{ $('Extract Post URN').first().json.linkedin_post_urn }}\",\n  \"message\": {\n    \"text\": {{ JSON.stringify($('Extract Post URN').first().json.first_comment_text) }}\n  }\n}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "wf5-post-first-comment",
+      "name": "Post First Comment",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3900, 400],
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "PLACEHOLDER_LINKEDIN_CREDENTIAL_ID",
+          "name": "LinkedIn OAuth2"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"blocks\": [\n    {\n      \"type\": \"section\",\n      \"text\": {\n        \"type\": \"mrkdwn\",\n        \"text\": \":white_check_mark: *Published to LinkedIn*\\n\\n*Title:* {{ $('Extract Post URN').first().json.hook_text }}\\n*Series:* {{ $('Extract Post URN').first().json.series }}\\n*Pillar:* {{ $('Extract Post URN').first().json.pillar }}\\n*Hook:* {{ $('Extract Post URN').first().json.hook_category }} ({{ $('Extract Post URN').first().json.hook_variation }})\\n*Characters:* {{ $('Extract Post URN').first().json.full_text.length }}\\n*Link:* <{{ $('Extract Post URN').first().json.linkedin_url }}|View on LinkedIn>\"\n      }\n    }\n  ]\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf5-slack-success",
+      "name": "Slack Success Notification",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [4160, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/workflow_runs",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow_name\": \"wf5-publishing-first-comment\",\n  \"status\": \"completed\",\n  \"completed_at\": \"{{ $now.toISO() }}\",\n  \"items_processed\": 1,\n  \"metadata\": {\n    \"post_id\": \"{{ $('Extract Post URN').first().json.post_id }}\",\n    \"linkedin_post_urn\": \"{{ $('Extract Post URN').first().json.linkedin_post_urn }}\",\n    \"linkedin_url\": \"{{ $('Extract Post URN').first().json.linkedin_url }}\"\n  }\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf5-log-run-complete",
+      "name": "Log Run Complete",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [4420, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Log skip - no calendar slot or post not approved\n// Determine the skip reason from upstream data\n\nlet skipReason = 'Unknown';\n\ntry {\n  const calendarCheck = $('Check Calendar Slot').first().json;\n  if (!calendarCheck.has_slot) {\n    skipReason = calendarCheck.skip_reason || 'No calendar slot with linked post for today';\n  } else {\n    const post = $('Fetch Post Details').first().json;\n    skipReason = `Post status is '${post.status}' (not approved)`;\n  }\n} catch (e) {\n  skipReason = 'No calendar slot for today';\n}\n\nreturn [{\n  json: {\n    skip_reason: skipReason\n  }\n}];"
+      },
+      "id": "wf5-log-skip-reason",
+      "name": "Log Skip Reason",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2080, 600]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/workflow_runs",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow_name\": \"wf5-publishing-first-comment\",\n  \"status\": \"completed\",\n  \"completed_at\": \"{{ $now.toISO() }}\",\n  \"items_processed\": 0,\n  \"metadata\": {\n    \"skip_reason\": \"{{ $json.skip_reason }}\"\n  }\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf5-log-skip-run",
+      "name": "Log Skip Run",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2340, 600],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Check retry count for LinkedIn publish failure\n// If retry_count < 1, allow one retry\n\nconst prevData = $('Prepare Publish Data').first().json;\nconst currentRetryCount = prevData.retry_count || 0;\nconst MAX_RETRIES = 1;\n\nif (currentRetryCount < MAX_RETRIES) {\n  return [{\n    json: {\n      should_retry: true,\n      retry_count: currentRetryCount + 1,\n      post_id: prevData.post_id,\n      calendar_id: prevData.calendar_id,\n      full_text: prevData.full_text,\n      first_comment_text: prevData.first_comment_text,\n      hook_text: prevData.hook_text,\n      hook_category: prevData.hook_category,\n      hook_variation: prevData.hook_variation,\n      series: prevData.series,\n      pillar: prevData.pillar,\n      person_urn: prevData.person_urn\n    }\n  }];\n} else {\n  return [{\n    json: {\n      should_retry: false,\n      post_id: prevData.post_id,\n      calendar_id: prevData.calendar_id\n    }\n  }];\n}"
+      },
+      "id": "wf5-check-retry",
+      "name": "Check Retry Count",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2860, 700]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "should-retry",
+              "leftValue": "={{ $json.should_retry }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "wf5-if-should-retry",
+      "name": "Should Retry?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [3120, 700]
+    },
+    {
+      "parameters": {
+        "resume": "timeInterval",
+        "interval": 5,
+        "unit": "minutes"
+      },
+      "id": "wf5-wait-5min-retry",
+      "name": "Wait 5 Min Retry",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [3380, 650]
+    },
+    {
+      "parameters": {
+        "person": "={{ $('Check Retry Count').first().json.person_urn }}",
+        "text": "={{ $('Check Retry Count').first().json.full_text }}",
+        "options": {}
+      },
+      "id": "wf5-linkedin-retry",
+      "name": "LinkedIn: Retry Publish",
+      "type": "n8n-nodes-base.linkedIn",
+      "typeVersion": 1,
+      "position": [3640, 650],
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "PLACEHOLDER_LINKEDIN_CREDENTIAL_ID",
+          "name": "LinkedIn OAuth2"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/posts?id=eq.{{ $json.post_id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"status\": \"approved\"}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf5-revert-to-approved",
+      "name": "Revert to Approved",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3380, 800],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"blocks\": [\n    {\n      \"type\": \"section\",\n      \"text\": {\n        \"type\": \"mrkdwn\",\n        \"text\": \":x: *LinkedIn Publish FAILED*\\n\\n*Post ID:* {{ $json.post_id }}\\n*Error:* Publish failed after retry. Post reverted to 'approved' status.\\n*Action:* Will automatically retry on next scheduled run if calendar slot exists.\"\n      }\n    }\n  ]\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf5-slack-publish-error",
+      "name": "Slack Publish Error",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3640, 800]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Comment failed - retry once\n// The post stays published regardless of comment outcome\n\nconst urnData = $('Extract Post URN').first().json;\n\nreturn [{\n  json: {\n    linkedin_post_urn: urnData.linkedin_post_urn,\n    linkedin_url: urnData.linkedin_url,\n    first_comment_text: urnData.first_comment_text,\n    person_urn: urnData.person_urn,\n    post_id: urnData.post_id,\n    hook_text: urnData.hook_text,\n    hook_category: urnData.hook_category,\n    hook_variation: urnData.hook_variation,\n    series: urnData.series,\n    pillar: urnData.pillar,\n    full_text: urnData.full_text\n  }\n}];"
+      },
+      "id": "wf5-comment-retry-prep",
+      "name": "Comment Retry Prep",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3900, 650]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.linkedin.com/rest/socialActions/{{ encodeURIComponent($json.linkedin_post_urn) }}/comments",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "linkedInOAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-Restli-Protocol-Version",
+              "value": "2.0.0"
+            },
+            {
+              "name": "LinkedIn-Version",
+              "value": "202402"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"actor\": \"{{ $json.person_urn }}\",\n  \"object\": \"{{ $json.linkedin_post_urn }}\",\n  \"message\": {\n    \"text\": {{ JSON.stringify($json.first_comment_text) }}\n  }\n}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "wf5-comment-retry",
+      "name": "Retry First Comment",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [4160, 650],
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "PLACEHOLDER_LINKEDIN_CREDENTIAL_ID",
+          "name": "LinkedIn OAuth2"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"blocks\": [\n    {\n      \"type\": \"section\",\n      \"text\": {\n        \"type\": \"mrkdwn\",\n        \"text\": \":warning: *First Comment FAILED*\\n\\nPost was published successfully but the first comment could not be posted after retry.\\n*Post:* <{{ $('Extract Post URN').first().json.linkedin_url }}|View on LinkedIn>\\n*Action:* Post the first comment manually.\"\n      }\n    }\n  ]\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf5-slack-comment-error",
+      "name": "Slack Comment Error",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [4160, 850]
+    },
+    {
+      "parameters": {},
+      "id": "wf5-error-trigger",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [0, 1000]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/workflow_runs",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            },
+            {
+              "name": "Accept-Profile",
+              "value": "linkedin_engine"
+            },
+            {
+              "name": "Content-Profile",
+              "value": "linkedin_engine"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow_name\": \"wf5-publishing-first-comment\",\n  \"status\": \"failed\",\n  \"completed_at\": \"{{ $now.toISO() }}\",\n  \"error_message\": {{ JSON.stringify($json.execution?.error?.message || $json.message || 'Unknown error') }}\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf5-log-error",
+      "name": "Log Error (Canary)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [260, 1000],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"blocks\": [\n    {\n      \"type\": \"section\",\n      \"text\": {\n        \"type\": \"mrkdwn\",\n        \"text\": \":rotating_light: *WF5 Publishing Workflow ERROR*\\n\\n*Error:* {{ JSON.stringify($json.execution?.error?.message || $json.message || 'Unknown error').replace(/\\\"/g, '').substring(0, 500) }}\\n*Execution:* {{ $execution.id }}\\n*Action:* Check n8n execution log for details.\"\n      }\n    }\n  ]\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf5-slack-error-canary",
+      "name": "Slack Error Alert (Canary)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [520, 1000]
+    }
+  ],
+  "connections": {
+    "Tue-Fri 8 AM CST": {
+      "main": [
+        [
+          {
+            "node": "Build Today's Date",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Today's Date": {
+      "main": [
+        [
+          {
+            "node": "Log Run Start",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Run Start": {
+      "main": [
+        [
+          {
+            "node": "Fetch Calendar Slot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Calendar Slot": {
+      "main": [
+        [
+          {
+            "node": "Check Calendar Slot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Calendar Slot": {
+      "main": [
+        [
+          {
+            "node": "Has Calendar Slot?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Calendar Slot?": {
+      "main": [
+        [
+          {
+            "node": "Fetch Post Details",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Skip Reason",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Post Details": {
+      "main": [
+        [
+          {
+            "node": "Post Approved?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post Approved?": {
+      "main": [
+        [
+          {
+            "node": "Set Status Scheduled",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Skip Reason",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Status Scheduled": {
+      "main": [
+        [
+          {
+            "node": "Prepare Publish Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Publish Data": {
+      "main": [
+        [
+          {
+            "node": "LinkedIn: Publish Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LinkedIn: Publish Post": {
+      "main": [
+        [
+          {
+            "node": "Extract Post URN",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check Retry Count",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Post URN": {
+      "main": [
+        [
+          {
+            "node": "Update Post Published",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Post Published": {
+      "main": [
+        [
+          {
+            "node": "Update Calendar Published",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Calendar Published": {
+      "main": [
+        [
+          {
+            "node": "Wait 45 Seconds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 45 Seconds": {
+      "main": [
+        [
+          {
+            "node": "Post First Comment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post First Comment": {
+      "main": [
+        [
+          {
+            "node": "Slack Success Notification",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Comment Retry Prep",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack Success Notification": {
+      "main": [
+        [
+          {
+            "node": "Log Run Complete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Skip Reason": {
+      "main": [
+        [
+          {
+            "node": "Log Skip Run",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Retry Count": {
+      "main": [
+        [
+          {
+            "node": "Should Retry?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Should Retry?": {
+      "main": [
+        [
+          {
+            "node": "Wait 5 Min Retry",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Revert to Approved",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 5 Min Retry": {
+      "main": [
+        [
+          {
+            "node": "LinkedIn: Retry Publish",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LinkedIn: Retry Publish": {
+      "main": [
+        [
+          {
+            "node": "Extract Post URN",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Revert to Approved",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Revert to Approved": {
+      "main": [
+        [
+          {
+            "node": "Slack Publish Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Comment Retry Prep": {
+      "main": [
+        [
+          {
+            "node": "Retry First Comment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retry First Comment": {
+      "main": [
+        [
+          {
+            "node": "Slack Success Notification",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Slack Comment Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Log Error (Canary)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Error (Canary)": {
+      "main": [
+        [
+          {
+            "node": "Slack Error Alert (Canary)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "any",
+    "executionTimeout": 600,
+    "timezone": "America/Chicago"
+  },
+  "versionId": "wf5-v1-20260215",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1f7825745c8d832579f8944a8977ccc40cc1572556aae3f7808e4ba42337190b"
+  },
+  "tags": [
+    {
+      "name": "linkedin-content-engine"
+    }
+  ]
+}
