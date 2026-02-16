@@ -28,10 +28,8 @@ export async function updateTopicStatus(
     updateData.approved_at = null;
   }
 
-  // Use dot notation to match existing query patterns in linkedin-content-queries.ts
-  // The Database type doesn't include linkedin_engine schema, so .schema() fails TS checks
   const { data, error } = await supabase
-    .from('linkedin_engine.topic_recommendations')
+    .schema('linkedin_engine').from('topic_recommendations')
     .update(updateData as never)
     .eq('id', id)
     .select()
@@ -61,7 +59,7 @@ export async function updateDraftStatus(
   }
 
   const { data, error } = await supabase
-    .from('linkedin_engine.posts')
+    .schema('linkedin_engine').from('posts')
     .update(updateData as never)
     .eq('id', id)
     .select()
@@ -93,7 +91,7 @@ export async function selectHookVariation(
   const supabase = getServerClient();
 
   const { data, error } = await supabase
-    .from('linkedin_engine.posts')
+    .schema('linkedin_engine').from('posts')
     .update({
       hook_text: selected.text,
       hook_category: selected.category,
@@ -127,7 +125,7 @@ export async function updateDraftText(
   if (updates.hook_text !== undefined) updateData.hook_text = updates.hook_text;
 
   const { data, error } = await supabase
-    .from('linkedin_engine.posts')
+    .schema('linkedin_engine').from('posts')
     .update(updateData as never)
     .eq('id', id)
     .select()
@@ -155,7 +153,7 @@ export async function triggerRegeneration(
 
   // Fetch the post to get topic_id
   const { data: post, error: fetchError } = await supabase
-    .from('linkedin_engine.posts')
+    .schema('linkedin_engine').from('posts')
     .select('topic_id')
     .eq('id', id)
     .single();
@@ -167,7 +165,7 @@ export async function triggerRegeneration(
 
   // Mark the post as regenerating with instructions
   const { error: updateError } = await supabase
-    .from('linkedin_engine.posts')
+    .schema('linkedin_engine').from('posts')
     .update({
       generation_status: 'regenerating',
       generation_instructions: instructions,
@@ -210,7 +208,7 @@ export async function assignCalendarSlot(
   const supabase = getServerClient();
 
   const { data, error } = await supabase
-    .from('linkedin_engine.content_calendar')
+    .schema('linkedin_engine').from('content_calendar')
     .update({
       post_id: postId,
       status: 'generated',
@@ -242,7 +240,7 @@ export async function createNetworkContact(contact: {
   const supabase = getServerClient();
 
   const { data, error } = await supabase
-    .from('linkedin_engine.engagement_network')
+    .schema('linkedin_engine').from('engagement_network')
     .insert({
       linkedin_name: contact.linkedin_name,
       linkedin_url: contact.linkedin_url,
@@ -281,7 +279,7 @@ export async function updateNetworkContact(
   if (updates.follower_count !== undefined) updateData.follower_count = updates.follower_count;
 
   const { data, error } = await supabase
-    .from('linkedin_engine.engagement_network')
+    .schema('linkedin_engine').from('engagement_network')
     .update(updateData as never)
     .eq('id', id)
     .select()
@@ -302,7 +300,7 @@ export async function deactivateNetworkContact(id: string): Promise<EngagementNe
   const supabase = getServerClient();
 
   const { data, error } = await supabase
-    .from('linkedin_engine.engagement_network')
+    .schema('linkedin_engine').from('engagement_network')
     .update({ active: false } as never)
     .eq('id', id)
     .select()
@@ -331,7 +329,7 @@ export async function updateDigestItemStatus(
   }
 
   const { data, error } = await supabase
-    .from('linkedin_engine.engagement_digests')
+    .schema('linkedin_engine').from('engagement_digests')
     .update(updateData as never)
     .eq('id', id)
     .select()

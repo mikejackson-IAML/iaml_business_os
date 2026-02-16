@@ -201,7 +201,7 @@ export async function getThisWeekTopics(): Promise<TopicRecommendationDb[]> {
   const weekOf = monday.toISOString().split('T')[0];
 
   const { data, error } = await supabase
-    .from('linkedin_engine.topic_recommendations')
+    .schema('linkedin_engine').from('topic_recommendations')
     .select('*')
     .eq('week_of', weekOf)
     .order('total_score', { ascending: false });
@@ -221,7 +221,7 @@ export async function getDraftPosts(): Promise<PostDb[]> {
   const supabase = getServerClient();
 
   const { data, error } = await supabase
-    .from('linkedin_engine.posts')
+    .schema('linkedin_engine').from('posts')
     .select('*')
     .in('status', ['draft', 'approved', 'scheduled'])
     .order('created_at', { ascending: false })
@@ -247,7 +247,7 @@ export async function getUpcomingCalendar(): Promise<ContentCalendarDb[]> {
   const endDate = fourWeeks.toISOString().split('T')[0];
 
   const { data, error } = await supabase
-    .from('linkedin_engine.content_calendar')
+    .schema('linkedin_engine').from('content_calendar')
     .select('*')
     .gte('post_date', today)
     .lte('post_date', endDate)
@@ -268,7 +268,7 @@ export async function getRecentPublishedPosts(): Promise<PostDb[]> {
   const supabase = getServerClient();
 
   const { data, error } = await supabase
-    .from('linkedin_engine.posts')
+    .schema('linkedin_engine').from('posts')
     .select('*')
     .eq('status', 'published')
     .order('published_at', { ascending: false })
@@ -289,7 +289,7 @@ export async function getLatestWeeklyAnalytics(): Promise<WeeklyAnalyticsDb | nu
   const supabase = getServerClient();
 
   const { data, error } = await supabase
-    .from('linkedin_engine.weekly_analytics')
+    .schema('linkedin_engine').from('weekly_analytics')
     .select('*')
     .order('week_of', { ascending: false })
     .limit(1)
@@ -311,7 +311,7 @@ export async function getEngagementNetworkSummary(): Promise<{ total: number; ti
   const supabase = getServerClient();
 
   const { data, error } = await supabase
-    .from('linkedin_engine.engagement_network')
+    .schema('linkedin_engine').from('engagement_network')
     .select('tier')
     .eq('active', true);
 
@@ -335,7 +335,7 @@ export async function getRecentComments(): Promise<CommentActivityDb[]> {
   const supabase = getServerClient();
 
   const { data, error } = await supabase
-    .from('linkedin_engine.comment_activity')
+    .schema('linkedin_engine').from('comment_activity')
     .select('*')
     .order('commented_at', { ascending: false })
     .limit(10);
@@ -356,7 +356,7 @@ export async function getTodayDigest(): Promise<EngagementDigestDb[]> {
   const today = new Date().toISOString().split('T')[0];
 
   const { data, error } = await supabase
-    .from('linkedin_engine.engagement_digests')
+    .schema('linkedin_engine').from('engagement_digests')
     .select('*')
     .eq('digest_date', today)
     .order('created_at', { ascending: true });
@@ -376,7 +376,7 @@ export async function getEngagementNetworkFull(): Promise<EngagementNetworkDb[]>
   const supabase = getServerClient();
 
   const { data, error } = await supabase
-    .from('linkedin_engine.engagement_network')
+    .schema('linkedin_engine').from('engagement_network')
     .select('*')
     .order('tier', { ascending: true })
     .order('linkedin_name', { ascending: true });
@@ -402,7 +402,7 @@ export async function getEngagementROIMetrics(): Promise<{
   const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
 
   const { data, error } = await supabase
-    .from('linkedin_engine.comment_activity')
+    .schema('linkedin_engine').from('comment_activity')
     .select('likes_received, replies_received, roi_score')
     .gte('commented_at', oneWeekAgo);
 
@@ -434,7 +434,7 @@ export async function getHookLibraryCount(): Promise<number> {
   const supabase = getServerClient();
 
   const { count, error } = await supabase
-    .from('linkedin_engine.hooks')
+    .schema('linkedin_engine').from('hooks')
     .select('*', { count: 'exact', head: true })
     .eq('status', 'active');
 
@@ -453,7 +453,7 @@ export async function getPostAnalytics(postId: string): Promise<PostAnalyticsDb[
   const supabase = getServerClient();
 
   const { data, error } = await supabase
-    .from('linkedin_engine.post_analytics')
+    .schema('linkedin_engine').from('post_analytics')
     .select('*')
     .eq('post_id', postId)
     .order('captured_at', { ascending: true });
