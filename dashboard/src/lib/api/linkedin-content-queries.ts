@@ -134,6 +134,24 @@ export interface CommentActivityDb {
   created_at: string;
 }
 
+export interface EngagementDigestDb {
+  id: string;
+  digest_date: string;
+  digest_type: 'daily' | 'warming';
+  target_post_url: string | null;
+  target_post_content: string | null;
+  target_author: string | null;
+  target_author_url: string | null;
+  target_author_followers: number | null;
+  network_contact_id: string | null;
+  post_engagement: { likes: number; comments: number; shares: number } | null;
+  comment_suggestions: { style: string; text: string }[] | null;
+  status: 'pending' | 'completed' | 'skipped';
+  completed_at: string | null;
+  warming_context: string | null;
+  created_at: string;
+}
+
 export interface HookDb {
   id: string;
   hook_text: string;
