@@ -27,8 +27,8 @@ Phase 1 ✅
   └── Phase 3 (Weekly Deep Research) ← BUILT (awaiting import)
         └── Phase 4 (Topic Scoring) ✅
               └── Phase 5 (Content Generation) ✅
-                    └── Phase 6 (Publishing) ← depends on 5
-                          ├── Phase 7 (Engagement) ← depends on 6
+                    └── Phase 6 (Publishing) ✅
+                          ├── Phase 7 (Engagement) ← IN PROGRESS
                           └── Phase 8 (Monitoring) ← depends on 6
                                 └── Phase 9 (Analytics) ← depends on 8
                                       └── Phase 10 (Enrichment) ← depends on 9
@@ -203,9 +203,14 @@ Plans:
 ## Phase 7: Engagement Engine
 
 - **Status:** Planned
-- **Goal:** Build engagement workflow with daily comment digests and pre-post warming, plus dashboard tab.
-- **Dependencies:** Phase 6
+- **Goal:** Build engagement workflow with daily comment digests and pre-post warming, plus interactive dashboard tab.
+- **Dependencies:** Phase 6 ✅
 - **Requirements:** ENG-01, ENG-02, ENG-03, ENG-04
+- **Plans:** 2 plans
+
+Plans:
+- [ ] 07-01-PLAN.md — Schema migration (engagement_digests + RLS grants) + WF6 Engagement Engine n8n workflow + docs
+- [ ] 07-02-PLAN.md — Dashboard Engagement tab overhaul: digest display, network CRUD, ROI metrics, API routes
 
 ### Success Criteria
 - [ ] WF6 (Engagement Engine) built and active in n8n
