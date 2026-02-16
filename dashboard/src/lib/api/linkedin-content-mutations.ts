@@ -6,6 +6,8 @@ import type {
   TopicRecommendationDb,
   PostDb,
   ContentCalendarDb,
+  EngagementNetworkDb,
+  EngagementDigestDb,
 } from './linkedin-content-queries';
 
 /**
@@ -223,4 +225,122 @@ export async function assignCalendarSlot(
   }
 
   return data as ContentCalendarDb;
+}
+
+/**
+ * Create a new engagement network contact.
+ */
+export async function createNetworkContact(contact: {
+  linkedin_name: string;
+  linkedin_url: string;
+  linkedin_headline?: string;
+  follower_count?: number;
+  tier: 'tier_1' | 'tier_2';
+  category: string;
+  notes?: string;
+}): Promise<EngagementNetworkDb> {
+  const supabase = getServerClient();
+
+  const { data, error } = await supabase
+    .from('linkedin_engine.engagement_network')
+    .insert({
+      linkedin_name: contact.linkedin_name,
+      linkedin_url: contact.linkedin_url,
+      linkedin_headline: contact.linkedin_headline || null,
+      follower_count: contact.follower_count || null,
+      tier: contact.tier,
+      category: contact.category,
+      notes: contact.notes || null,
+      active: true,
+    } as never)
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Network contact creation error:', error);
+    throw new Error('Failed to create network contact');
+  }
+
+  return data as EngagementNetworkDb;
+}
+
+/**
+ * Update an engagement network contact's fields.
+ */
+export async function updateNetworkContact(
+  id: string,
+  updates: { tier?: string; category?: string; notes?: string; linkedin_headline?: string; follower_count?: number }
+): Promise<EngagementNetworkDb> {
+  const supabase = getServerClient();
+
+  const updateData: Record<string, unknown> = {};
+  if (updates.tier !== undefined) updateData.tier = updates.tier;
+  if (updates.category !== undefined) updateData.category = updates.category;
+  if (updates.notes !== undefined) updateData.notes = updates.notes;
+  if (updates.linkedin_headline !== undefined) updateData.linkedin_headline = updates.linkedin_headline;
+  if (updates.follower_count !== undefined) updateData.follower_count = updates.follower_count;
+
+  const { data, error } = await supabase
+    .from('linkedin_engine.engagement_network')
+    .update(updateData as never)
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Network contact update error:', error);
+    throw new Error('Failed to update network contact');
+  }
+
+  return data as EngagementNetworkDb;
+}
+
+/**
+ * Soft-delete (deactivate) an engagement network contact.
+ */
+export async function deactivateNetworkContact(id: string): Promise<EngagementNetworkDb> {
+  const supabase = getServerClient();
+
+  const { data, error } = await supabase
+    .from('linkedin_engine.engagement_network')
+    .update({ active: false } as never)
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Network contact deactivation error:', error);
+    throw new Error('Failed to deactivate network contact');
+  }
+
+  return data as EngagementNetworkDb;
+}
+
+/**
+ * Update a digest item's status to completed or skipped.
+ */
+export async function updateDigestItemStatus(
+  id: string,
+  status: 'completed' | 'skipped'
+): Promise<EngagementDigestDb> {
+  const supabase = getServerClient();
+
+  const updateData: Record<string, unknown> = { status };
+  if (status === 'completed') {
+    updateData.completed_at = new Date().toISOString();
+  }
+
+  const { data, error } = await supabase
+    .from('linkedin_engine.engagement_digests')
+    .update(updateData as never)
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Digest item status update error:', error);
+    throw new Error('Failed to update digest item status');
+  }
+
+  return data as EngagementDigestDb;
 }

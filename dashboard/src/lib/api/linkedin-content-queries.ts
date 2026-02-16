@@ -179,6 +179,9 @@ export interface LinkedInContentSummary {
   engagementNetwork: { total: number; tier1: number; tier2: number };
   recentComments: CommentActivityDb[];
   hookLibraryCount: number;
+  todayDigest: EngagementDigestDb[];
+  engagementNetworkFull: EngagementNetworkDb[];
+  engagementROI: { totalCommentsThisWeek: number; avgRoiScore: number; totalLikesReceived: number; totalRepliesReceived: number };
 }
 
 // ============================================
@@ -346,6 +349,85 @@ export async function getRecentComments(): Promise<CommentActivityDb[]> {
 }
 
 /**
+ * Get today's engagement digest items (daily + warming)
+ */
+export async function getTodayDigest(): Promise<EngagementDigestDb[]> {
+  const supabase = getServerClient();
+  const today = new Date().toISOString().split('T')[0];
+
+  const { data, error } = await supabase
+    .from('linkedin_engine.engagement_digests')
+    .select('*')
+    .eq('digest_date', today)
+    .order('created_at', { ascending: true });
+
+  if (error) {
+    console.error('Error fetching today digest:', error);
+    return [];
+  }
+
+  return (data as EngagementDigestDb[]) || [];
+}
+
+/**
+ * Get full engagement network (all contacts, not just summary)
+ */
+export async function getEngagementNetworkFull(): Promise<EngagementNetworkDb[]> {
+  const supabase = getServerClient();
+
+  const { data, error } = await supabase
+    .from('linkedin_engine.engagement_network')
+    .select('*')
+    .order('tier', { ascending: true })
+    .order('linkedin_name', { ascending: true });
+
+  if (error) {
+    console.error('Error fetching engagement network:', error);
+    return [];
+  }
+
+  return (data as EngagementNetworkDb[]) || [];
+}
+
+/**
+ * Get weekly engagement ROI metrics from comment_activity
+ */
+export async function getEngagementROIMetrics(): Promise<{
+  totalCommentsThisWeek: number;
+  avgRoiScore: number;
+  totalLikesReceived: number;
+  totalRepliesReceived: number;
+}> {
+  const supabase = getServerClient();
+  const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+
+  const { data, error } = await supabase
+    .from('linkedin_engine.comment_activity')
+    .select('likes_received, replies_received, roi_score')
+    .gte('commented_at', oneWeekAgo);
+
+  if (error) {
+    console.error('Error fetching ROI metrics:', error);
+    return { totalCommentsThisWeek: 0, avgRoiScore: 0, totalLikesReceived: 0, totalRepliesReceived: 0 };
+  }
+
+  const rows = data || [];
+  const totalComments = rows.length;
+  const avgRoi = totalComments > 0
+    ? rows.reduce((sum: number, r: { roi_score: number | null }) => sum + (r.roi_score || 0), 0) / totalComments
+    : 0;
+  const totalLikes = rows.reduce((sum: number, r: { likes_received: number }) => sum + (r.likes_received || 0), 0);
+  const totalReplies = rows.reduce((sum: number, r: { replies_received: number }) => sum + (r.replies_received || 0), 0);
+
+  return {
+    totalCommentsThisWeek: totalComments,
+    avgRoiScore: Math.round(avgRoi * 10) / 10,
+    totalLikesReceived: totalLikes,
+    totalRepliesReceived: totalReplies,
+  };
+}
+
+/**
  * Get hook library count
  */
 export async function getHookLibraryCount(): Promise<number> {
@@ -397,6 +479,9 @@ export async function getLinkedInContentDashboardData(): Promise<LinkedInContent
     engagementNetwork,
     recentComments,
     hookLibraryCount,
+    todayDigest,
+    engagementNetworkFull,
+    engagementROI,
   ] = await Promise.all([
     getThisWeekTopics(),
     getDraftPosts(),
@@ -406,6 +491,9 @@ export async function getLinkedInContentDashboardData(): Promise<LinkedInContent
     getEngagementNetworkSummary(),
     getRecentComments(),
     getHookLibraryCount(),
+    getTodayDigest(),
+    getEngagementNetworkFull(),
+    getEngagementROIMetrics(),
   ]);
 
   return {
@@ -417,5 +505,8 @@ export async function getLinkedInContentDashboardData(): Promise<LinkedInContent
     engagementNetwork,
     recentComments,
     hookLibraryCount,
+    todayDigest,
+    engagementNetworkFull,
+    engagementROI,
   };
 }
