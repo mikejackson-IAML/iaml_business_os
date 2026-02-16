@@ -1,3 +1,7 @@
 {
-  "supabase_project_key": "iaml-business-os"
+  "supabase_project_key": "iaml-business-os",
+  "github_repo": "mikejackson-IAML/iaml_business_os",
+  "vercel_project": "prj_iRNgvKZrAgWySjnFGFc9tQmq2QvR",
+  "vercel_team": "team_nXCjBef1u15tNqJVG03J2eys",
+  "n8n_url": "https://n8n.realtyamp.ai"
 }
