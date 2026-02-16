@@ -15,7 +15,7 @@
 | 5 | Content Generation & Drafts | Done | WF4 | Drafts (interactive) | GEN-01..05 |
 | 6 | Publishing | Done | WF5 | Calendar updates | PUB-01..05 |
 | 7 | Engagement Engine | Done | WF6 | Engagement (enhanced) | ENG-01..04 |
-| 8 | Post-Publish Monitor | Planned | WF7 | — | MON-01..03 |
+| 8 | Post-Publish Monitor | Planned | WF7 | Engagement (comments) | MON-01..03 |
 | 9 | Analytics & Feedback Loop | Planned | WF8 | Analytics + Calendar | ANA-01..06 |
 | 10 | Enrichment | Planned | Multiple | Carousel support | ENR-01..06 |
 
@@ -232,10 +232,15 @@ Plans:
 ## Phase 8: Post-Publish Monitor
 
 - **Status:** Planned
-- **Goal:** Build monitoring workflow that tracks comments and engagement velocity on published posts.
-- **Dependencies:** Phase 6
+- **Goal:** Build monitoring workflow that tracks comments and engagement velocity on published posts, with comment classification, reply suggestions, and viral detection.
+- **Dependencies:** Phase 6 ✅
 - **Requirements:** MON-01, MON-02, MON-03
-- **Note:** Can run in parallel with Phase 7
+- **Plans:** 3 plans
+
+Plans:
+- [ ] 08-01-PLAN.md — Schema migration (post_incoming_comments table + monitoring columns + anon grants) + TypeScript types
+- [ ] 08-02-PLAN.md — WF7 Post-Publish Monitor n8n workflow (state-driven polling, Apify comment scraping, Claude classification, velocity tracking, viral detection, Slack alerts) + docs
+- [ ] 08-03-PLAN.md — Dashboard incoming comments section on Engagement tab (comment display, type badges, reply suggestions)
 
 ### Success Criteria
 - [ ] WF7 (Post-Publish Monitor) built and active in n8n
@@ -246,8 +251,12 @@ Plans:
 - [ ] `post_analytics` rows captured at increasing intervals
 
 ### Technical Notes
-- Dynamic polling schedule: 10 min for 2 hrs → 30 min for 6 hrs → hourly for 24 hrs → daily for 7 days
-- LinkedIn API polling for post comments and reactions
+- State-driven polling (schedule trigger + Supabase state) -- NOT Wait node loops
+- Apify `harvestapi~linkedin-post-comments` for comment scraping (LinkedIn API `r_member_social` is CLOSED)
+- Dynamic polling: 10 min for 2 hrs, 30 min for 6 hrs, hourly for 24 hrs, daily for 7 days
+- Comment dedup via `linkedin_comment_id` unique index
+- Viral threshold: 2x rolling average (or 20+ fixed fallback before 5 posts)
+- Disagreement two-step strategy: follow-up question first, then acknowledge-and-bridge
 - Claude Sonnet for comment classification and reply generation
 
 ---
