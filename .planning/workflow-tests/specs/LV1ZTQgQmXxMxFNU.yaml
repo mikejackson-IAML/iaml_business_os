@@ -1,0 +1,63 @@
+workflow_id: LV1ZTQgQmXxMxFNU
+workflow_name: Colleague Expansion Trigger
+tested_at: "2026-02-24T17:43:35Z"
+tested_by: test-workflow-auto
+status: verified
+
+coverage:
+  nodes: 18/18 (100%)
+  branches: 2/2 (100%)
+
+scenarios:
+  - name: happy_path
+    description: Valid registration ID - triggers true branch, tags contacts, queues search, logs, slacks
+    payload:
+      registration_id: "09621303-6664-4b09-85ff-f91daa3c9b23"
+    execution_id: "203409"
+    expected_branch: "Registration Found? → true"
+    result: success
+
+  - name: not_found
+    description: Non-existent UUID - triggers false branch, returns 404
+    payload:
+      registration_id: "00000000-0000-0000-0000-000000000000"
+    execution_id: "203406"
+    expected_branch: "Registration Found? → false"
+    result: success
+
+  - name: invalid_input
+    description: Non-UUID string - triggers error in Validate Input, error handler chain runs
+    payload:
+      registration_id: "not-a-uuid"
+    execution_id: "203407"
+    expected_branch: error_handler
+    result: error_expected
+
+  - name: error_handler
+    description: Error handler execution triggered by invalid input scenario
+    execution_id: "203408"
+    result: success
+
+fixes_applied:
+  - issue: "Webhook responseMode was 'onReceived' instead of 'responseNode'"
+    node: "Webhook - POST /colleague-expansion"
+    fix: "Set parameters.responseMode = 'responseNode' (top-level, not in options)"
+
+  - issue: "$env.SUPABASE_URL not available on self-hosted n8n"
+    nodes: ["Get Registration Details", "Tag Company Contacts for CE", "Queue Sales Nav Search", "Log Activity", "Log Error to DB"]
+    fix: "Replaced $env.SUPABASE_URL with hardcoded https://mnkuffgxemfyitcjnjdc.supabase.co"
+
+  - issue: "tag_contacts_for_ce RPC referenced non-existent 'unsubscribed' column"
+    fix: "Removed unsubscribed check from RPC, smartlead_status already covers this"
+
+  - issue: "sales_nav_searches status 'queued' not in check constraint"
+    node: "Queue Sales Nav Search"
+    fix: "Changed status from 'queued' to 'pending'"
+
+  - issue: "campaign_activity type 'colleague_expansion_triggered' not in check constraint"
+    node: "Log Activity"
+    fix: "Added 'colleague_expansion_triggered' to campaign_activity_activity_type_check constraint"
+
+  - issue: "log_workflow_error RPC param name mismatch (p_error_type vs p_error_node_type)"
+    node: "Log Error to DB"
+    fix: "Changed p_error_type to p_error_node_type in jsonBody"

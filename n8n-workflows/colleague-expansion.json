@@ -5,15 +5,17 @@
       "parameters": {
         "httpMethod": "POST",
         "path": "colleague-expansion",
-        "options": {
-          "responseMode": "responseNode"
-        }
+        "options": {},
+        "responseMode": "responseNode"
       },
       "id": "ce-webhook",
       "name": "Webhook - POST /colleague-expansion",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [-1800, 400],
+      "position": [
+        -1800,
+        400
+      ],
       "webhookId": "colleague-expansion"
     },
     {
@@ -24,12 +26,15 @@
       "name": "Validate Input",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [-1580, 400]
+      "position": [
+        -1580,
+        400
+      ]
     },
     {
       "parameters": {
         "method": "GET",
-        "url": "={{ $env.SUPABASE_URL }}/rest/v1/registrations",
+        "url": "=https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/registrations",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
         "sendQuery": true,
@@ -59,7 +64,10 @@
       "name": "Get Registration Details",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [-1360, 400],
+      "position": [
+        -1360,
+        400
+      ],
       "alwaysOutputData": true,
       "credentials": {
         "httpHeaderAuth": {
@@ -70,13 +78,16 @@
     },
     {
       "parameters": {
-        "jsCode": "// PostgREST returns an array — extract first item\nconst result = $input.first().json;\nconst reg = Array.isArray(result) ? result[0] : result;\nreturn [{ json: reg || {} }];"
+        "jsCode": "// PostgREST returns an array \u2014 extract first item\nconst result = $input.first().json;\nconst reg = Array.isArray(result) ? result[0] : result;\nreturn [{ json: reg || {} }];"
       },
       "id": "ce-extract-reg",
       "name": "Extract Registration",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [-1140, 400]
+      "position": [
+        -1140,
+        400
+      ]
     },
     {
       "parameters": {
@@ -105,7 +116,10 @@
       "name": "Registration Found?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
-      "position": [-920, 400]
+      "position": [
+        -920,
+        400
+      ]
     },
     {
       "parameters": {
@@ -115,12 +129,15 @@
       "name": "Prepare Search Params",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [-700, 300]
+      "position": [
+        -700,
+        300
+      ]
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "={{ $env.SUPABASE_URL }}/rest/v1/rpc/tag_contacts_for_ce",
+        "url": "=https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/rpc/tag_contacts_for_ce",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
@@ -132,7 +149,10 @@
       "name": "Tag Company Contacts for CE",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [-480, 300],
+      "position": [
+        -480,
+        300
+      ],
       "alwaysOutputData": true,
       "credentials": {
         "httpHeaderAuth": {
@@ -149,12 +169,15 @@
       "name": "Count Tagged Contacts",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [-260, 300]
+      "position": [
+        -260,
+        300
+      ]
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "={{ $env.SUPABASE_URL }}/rest/v1/sales_nav_searches",
+        "url": "=https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/sales_nav_searches",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
         "sendHeaders": true,
@@ -168,14 +191,17 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"search_name\": \"{{ $json.sales_nav_search_name }}\",\n  \"search_url\": \"{{ $json.sales_nav_search_url }}\",\n  \"status\": \"queued\",\n  \"requested_by\": \"colleague-expansion\",\n  \"metadata\": {\n    \"triggered_by\": \"colleague_expansion\",\n    \"registration_id\": \"{{ $json.registration_id }}\",\n    \"company_name\": \"{{ $json.company_name }}\",\n    \"tagged_contacts\": {{ $json.tagged_contacts_count }}\n  }\n}",
+        "jsonBody": "={\n  \"search_name\": \"{{ $json.sales_nav_search_name }}\",\n  \"search_url\": \"{{ $json.sales_nav_search_url }}\",\n  \"status\": \"pending\",\n  \"requested_by\": \"colleague-expansion\",\n  \"metadata\": {\n    \"triggered_by\": \"colleague_expansion\",\n    \"registration_id\": \"{{ $json.registration_id }}\",\n    \"company_name\": \"{{ $json.company_name }}\",\n    \"tagged_contacts\": {{ $json.tagged_contacts_count }}\n  }\n}",
         "options": {}
       },
       "id": "ce-queue-search",
       "name": "Queue Sales Nav Search",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [-40, 300],
+      "position": [
+        -40,
+        300
+      ],
       "alwaysOutputData": true,
       "onError": "continueRegularOutput",
       "credentials": {
@@ -188,7 +214,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "={{ $env.SUPABASE_URL }}/rest/v1/campaign_activity",
+        "url": "=https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/campaign_activity",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
         "sendHeaders": true,
@@ -202,14 +228,17 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"activity_type\": \"colleague_expansion_triggered\",\n  \"description\": \"Colleague expansion triggered for {{ $('Count Tagged Contacts').first().json.company_name }} ({{ $('Count Tagged Contacts').first().json.tagged_contacts_count }} contacts tagged)\",\n  \"source_system\": \"colleague-expansion-workflow\",\n  \"metadata\": {\n    \"registration_id\": \"{{ $('Count Tagged Contacts').first().json.registration_id }}\",\n    \"company_name\": \"{{ $('Count Tagged Contacts').first().json.company_name }}\",\n    \"registrant_email\": \"{{ $('Count Tagged Contacts').first().json.registrant_email }}\",\n    \"tagged_contacts_count\": {{ $('Count Tagged Contacts').first().json.tagged_contacts_count }}\n  },\n  \"activity_at\": \"{{ $now.toISO() }}\"\n}",
+        "jsonBody": "={\n  \"activity_type\": \"colleague_expansion_triggered\",\n  \"channel\": \"colleague-expansion-workflow\",\n  \"metadata\": {\n    \"description\": \"Colleague expansion triggered for {{ $('Count Tagged Contacts').first().json.company_name }} ({{ $('Count Tagged Contacts').first().json.tagged_contacts_count }} contacts tagged)\",\n    \"registration_id\": \"{{ $('Count Tagged Contacts').first().json.registration_id }}\",\n    \"company_name\": \"{{ $('Count Tagged Contacts').first().json.company_name }}\",\n    \"registrant_email\": \"{{ $('Count Tagged Contacts').first().json.registrant_email }}\",\n    \"tagged_contacts_count\": {{ $('Count Tagged Contacts').first().json.tagged_contacts_count }}\n  },\n  \"activity_at\": \"{{ $now.toISO() }}\"\n}",
         "options": {}
       },
       "id": "ce-log-activity",
       "name": "Log Activity",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [180, 300],
+      "position": [
+        180,
+        300
+      ],
       "alwaysOutputData": true,
       "onError": "continueRegularOutput",
       "credentials": {
@@ -227,7 +256,10 @@
       "name": "Build Slack Summary",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [400, 300]
+      "position": [
+        400,
+        300
+      ]
     },
     {
       "parameters": {
@@ -242,7 +274,10 @@
       "name": "Send Slack Summary",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [620, 300],
+      "position": [
+        620,
+        300
+      ],
       "onError": "continueRegularOutput"
     },
     {
@@ -257,7 +292,10 @@
       "name": "Respond - Success",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [840, 300]
+      "position": [
+        840,
+        300
+      ]
     },
     {
       "parameters": {
@@ -271,7 +309,10 @@
       "name": "Respond - Not Found",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [-700, 560]
+      "position": [
+        -700,
+        560
+      ]
     },
     {
       "parameters": {},
@@ -279,7 +320,10 @@
       "name": "Error Trigger",
       "type": "n8n-nodes-base.errorTrigger",
       "typeVersion": 1,
-      "position": [-260, 700]
+      "position": [
+        -260,
+        700
+      ]
     },
     {
       "parameters": {
@@ -289,24 +333,30 @@
       "name": "Parse Error Details",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [-40, 700]
+      "position": [
+        -40,
+        700
+      ]
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "={{ $env.SUPABASE_URL }}/rest/v1/rpc/log_workflow_error",
+        "url": "=https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/rpc/log_workflow_error",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"p_run_id\": null,\n  \"p_error_message\": \"{{ $json.error_message.replace(/\"/g, '\\\\\"') }}\",\n  \"p_error_node\": \"{{ $json.error_node }}\",\n  \"p_error_type\": \"{{ $json.error_node_type }}\",\n  \"p_error_details\": {{ $json.error_details }}\n}",
+        "jsonBody": "={\n  \"p_run_id\": null,\n  \"p_error_message\": \"{{ $json.error_message.replace(/\"/g, '\\\\\"') }}\",\n  \"p_error_node\": \"{{ $json.error_node }}\",\n  \"p_error_node_type\": \"{{ $json.error_node_type }}\",\n  \"p_error_details\": {{ $json.error_details }}\n}",
         "options": {}
       },
       "id": "ce-log-error",
       "name": "Log Error to DB",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [180, 700],
+      "position": [
+        180,
+        700
+      ],
       "onError": "continueRegularOutput",
       "credentials": {
         "httpHeaderAuth": {
@@ -328,85 +378,184 @@
       "name": "Send Error Slack",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [400, 700],
+      "position": [
+        400,
+        700
+      ],
       "onError": "continueRegularOutput"
     }
   ],
   "connections": {
     "Webhook - POST /colleague-expansion": {
       "main": [
-        [{ "node": "Validate Input", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Validate Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Validate Input": {
       "main": [
-        [{ "node": "Get Registration Details", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Get Registration Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Get Registration Details": {
       "main": [
-        [{ "node": "Extract Registration", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Extract Registration",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Extract Registration": {
       "main": [
-        [{ "node": "Registration Found?", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Registration Found?",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Registration Found?": {
       "main": [
-        [{ "node": "Prepare Search Params", "type": "main", "index": 0 }],
-        [{ "node": "Respond - Not Found", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Prepare Search Params",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond - Not Found",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Prepare Search Params": {
       "main": [
-        [{ "node": "Tag Company Contacts for CE", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Tag Company Contacts for CE",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Tag Company Contacts for CE": {
       "main": [
-        [{ "node": "Count Tagged Contacts", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Count Tagged Contacts",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Count Tagged Contacts": {
       "main": [
-        [{ "node": "Queue Sales Nav Search", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Queue Sales Nav Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Queue Sales Nav Search": {
       "main": [
-        [{ "node": "Log Activity", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Log Activity",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Log Activity": {
       "main": [
-        [{ "node": "Build Slack Summary", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Build Slack Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Build Slack Summary": {
       "main": [
-        [{ "node": "Send Slack Summary", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Send Slack Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Send Slack Summary": {
       "main": [
-        [{ "node": "Respond - Success", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Respond - Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Error Trigger": {
       "main": [
-        [{ "node": "Parse Error Details", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Parse Error Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Parse Error Details": {
       "main": [
-        [{ "node": "Log Error to DB", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Log Error to DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Log Error to DB": {
       "main": [
-        [{ "node": "Send Error Slack", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Send Error Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     }
   },
@@ -416,8 +565,14 @@
   "meta": {},
   "pinData": {},
   "tags": [
-    { "name": "business-os" },
-    { "name": "sales" },
-    { "name": "colleague-expansion" }
+    {
+      "name": "business-os"
+    },
+    {
+      "name": "sales"
+    },
+    {
+      "name": "colleague-expansion"
+    }
   ]
 }
