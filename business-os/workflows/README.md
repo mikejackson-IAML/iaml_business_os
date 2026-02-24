@@ -149,37 +149,6 @@ After importing and testing, store this pattern for future reference:
 
 ---
 
-## HeyReach Activity Receiver
-
-**n8n Workflow ID:** `9bt5BdyoosqB8ChU`
-**Status:** Active
-**Trigger:** Webhook
-**URL:** https://n8n.realtyamp.ai/workflow/9bt5BdyoosqB8ChU
-**Documentation:** [README-heyreach-activity-receiver.md](README-heyreach-activity-receiver.md)
-
-Receives LinkedIn activity webhooks from HeyReach, logs to campaign tracking, classifies replies with Gemini AI, and routes qualified leads to GHL.
-
-### How It Works
-
-```
-HeyReach Webhook → Normalize URL → Check Duplicate → Lookup/Create Contact
-                                                            ↓
-                                              Get Campaign Context → Log Activity
-                                                            ↓
-                                              Is Reply? → Gemini AI Classification
-                                                            ↓
-                                              Assign GHL Branch → Push to GHL
-```
-
-### Services
-
-- HeyReach (webhook source)
-- Supabase (contact & activity storage)
-- Gemini AI (reply classification)
-- GHL (CRM routing)
-
----
-
 ## Faculty Scheduler - Cancellation Re-release
 
 **n8n Workflow ID:** TBD (import pending)

@@ -67,7 +67,7 @@ function getHeyReachPattern() {
         "n8n-nodes-base.noOp",
       ],
       trigger_type: "webhook",
-      source_workflow_id: "9bt5BdyoosqB8ChU",
+      source_workflow_id: "G8d0Jyyf7OHSgr99",
       source_workflow_name: "HeyReach Activity Receiver",
       notes:
         "Complex webhook receiver with AI classification. Key patterns: LinkedIn URL normalization, duplicate checking via metadata JSONB, AI reply classification with Gemini, GHL branch routing. Uses alwaysOutputData on all Postgres nodes.",

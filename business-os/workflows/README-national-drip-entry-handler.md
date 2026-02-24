@@ -155,7 +155,7 @@ This workflow is the **funnel exit handler** in the IAML sales pipeline:
 
 Related workflows:
 - `SmartLead Activity Receiver` (3KqJGyOOHSSaC7pU) — receives sequence completion events from SmartLead
-- `HeyReach Activity Receiver` (9bt5BdyoosqB8ChU) — LinkedIn sequence completions
+- `HeyReach Activity Receiver` (G8d0Jyyf7OHSgr99) — LinkedIn sequence completions
 - `Lifecycle Manager - Stale Contacts` (6PdgkfipCXPU0FHL) — handles contacts stalled in other stages
 
 ## Tags

@@ -232,7 +232,6 @@ These workflows should NOT be included in monitoring (test, old, or inactive):
 | `JDDLOllBozWaW1AT` | Smartlead Activity Receiver | Active | No - duplicate |
 | `Ro1NOdYxZieyDelS` | Smartlead Activity Receiver | Inactive | No |
 | `G8d0Jyyf7OHSgr99` | HeyReach Activity Receiver | Active | Yes |
-| `9bt5BdyoosqB8ChU` | HeyReach Activity Receiver | Active | No - older |
 | `JnkjiIEG2ldKYD87` | HeyReach Activity Receiver | Inactive | No |
 | `IshJyOdRDNHy7wfz` | GHL Activity Receiver | Active | Yes |
 | `FZlfss8fCJLGwgiZ` | GHL Activity Receiver | Inactive | No |

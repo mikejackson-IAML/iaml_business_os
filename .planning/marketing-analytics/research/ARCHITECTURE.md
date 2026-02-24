@@ -448,7 +448,7 @@ Call refresh_analytics_views() RPC
 
 ### Workflow 2: HeyReach Activity Receiver (EXISTS)
 
-**Already operational** as workflow `9bt5BdyoosqB8ChU`. Receives webhooks for:
+**Already operational** as workflow `G8d0Jyyf7OHSgr99`. Receives webhooks for:
 - `connection_request_sent` -> logged
 - `connection_request_accepted` -> logged + channel status updated
 - `message_sent` -> logged
@@ -743,7 +743,7 @@ HeyReach Platform (LinkedIn automation)
        | Webhook fires on each event
        | POST /webhook/heyreach-activity
        v
-n8n HeyReach Activity Receiver (workflow 9bt5BdyoosqB8ChU)
+n8n HeyReach Activity Receiver (workflow G8d0Jyyf7OHSgr99)
   - Already normalizes, deduplicates, logs to campaign_activity
   - Already classifies replies with Gemini AI
   - Already routes to GHL branches
