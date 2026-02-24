@@ -162,32 +162,15 @@ async function checkCoverage() {
       }
 
       // Track branch coverage by examining which downstream nodes executed
+      // and which outputs actually produced data
       for (const branch of branchOutputs) {
         if (!nodesRunSet.has(branch.nodeName)) continue;
 
-        // Check if downstream nodes for this output executed
-        const nodeConns = connections[branch.nodeName] || {};
-        const outputKey = Object.keys(nodeConns)[branch.outputIndex];
-        const downstreamConns = outputKey ? nodeConns[outputKey] : null;
-
-        if (downstreamConns) {
-          // Check if any downstream node from this specific output ran
-          for (const conn of downstreamConns) {
-            if (conn.length > 0 && nodesRunSet.has(conn[0].node)) {
-              branch.covered = true;
-              if (!branch.coveredBy.includes(execId)) {
-                branch.coveredBy.push(execId);
-              }
-              break;
-            }
-          }
-        }
-
-        // Alternative: check runData for the branch node to see which output was used
+        // Primary: check runData for the branch node to see which output was used
+        // n8n stores output data per output index in data.main[outputIndex]
         const branchRunData = runData[branch.nodeName];
         if (branchRunData && Array.isArray(branchRunData)) {
           for (const run of branchRunData) {
-            // n8n stores output data per output index
             if (run.data?.main) {
               const outputData = run.data.main[branch.outputIndex];
               if (outputData && outputData.length > 0) {
@@ -196,6 +179,24 @@ async function checkCoverage() {
                   branch.coveredBy.push(execId);
                 }
               }
+            }
+          }
+        }
+
+        // Fallback: Check if downstream nodes for this specific output executed
+        // n8n connection structure: { "main": [[output0_conns], [output1_conns], ...] }
+        if (!branch.covered) {
+          const nodeConns = connections[branch.nodeName] || {};
+          const mainConns = nodeConns.main || [];
+          const outputConns = mainConns[branch.outputIndex] || [];
+
+          for (const conn of outputConns) {
+            if (conn.node && nodesRunSet.has(conn.node)) {
+              branch.covered = true;
+              if (!branch.coveredBy.includes(execId)) {
+                branch.coveredBy.push(execId);
+              }
+              break;
             }
           }
         }

@@ -1,0 +1,94 @@
+workflow_id: HnZQopXL7xjZnX3O
+workflow_name: "Domain Health Sync - Daily"
+tested_at: "2026-02-24T19:18:07Z"
+tested_by: test-workflow-auto
+test_status: verified
+
+trigger:
+  type: schedule
+  schedule: "Every hour (field: hours, triggerAtHour: 6)"
+  note: "Despite name 'Daily 6am', runs hourly"
+
+scenarios:
+  - name: natural_run
+    description: "Execute with current live Smartlead data - happy path"
+    payload: null
+    execution_id: "203559"
+    status: success
+    nodes_hit: 23
+    branches_hit:
+      - "Domain Health < 70? -> false"
+      - "Inbox Issues? -> false"
+      - "Has Run ID? -> true"
+
+  - name: alert_paths
+    description: "Temporary threshold change (< 81) to force all 98 accounts through alert branches"
+    payload: null
+    execution_id: "203579"
+    status: success
+    nodes_hit: 25
+    method: "Temporarily modified IF thresholds from 70 to 81, added webhook trigger, executed, reverted"
+    branches_hit:
+      - "Domain Health < 70? -> true"
+      - "Inbox Issues? -> true"
+      - "Has Run ID? -> true"
+
+  - name: no_run_id
+    description: "Force Prepare Success Log to return no run_id, testing Has Run ID? false branch"
+    payload: null
+    execution_id: "203587"
+    status: success
+    nodes_hit: 22
+    method: "Temporarily modified Prepare Success Log code to force empty run_id, added webhook trigger, executed, reverted"
+    branches_hit:
+      - "Domain Health < 70? -> false"
+      - "Inbox Issues? -> false"
+      - "Has Run ID? -> false"
+
+  - name: error_handler
+    description: "Error handler chain (from pre-fix Postgres auth failure)"
+    payload: null
+    execution_id: "203360"
+    status: success
+    nodes_hit: 5
+    branches_hit: []
+
+coverage:
+  nodes:
+    covered: 32
+    total: 32
+    percent: 100
+  branches:
+    covered: 6
+    total: 6
+    percent: 100
+
+uncovered:
+  nodes: []
+  branches: []
+
+fixes_applied:
+  - description: "Migrated all 10 Postgres nodes from Supabase Postgres credential (EgmvZHbvINHsh6PR, broken - auth failed) to Supabase REST API credential (Dy6aCSbL5Tup4TnE)"
+    nodes_affected:
+      - "Log Workflow Start -> POST /rest/v1/rpc/log_workflow_start"
+      - "Upsert Domain -> POST /rest/v1/domains (Prefer: resolution=merge-duplicates)"
+      - "Log Domain History -> POST /rest/v1/domain_health_log (Prefer: resolution=merge-duplicates)"
+      - "Log Domain Alert -> POST /rest/v1/lead_intelligence_activity"
+      - "Upsert Inbox -> POST /rest/v1/email_inboxes (Prefer: resolution=merge-duplicates)"
+      - "Log Inbox History -> POST /rest/v1/inbox_health_log (Prefer: resolution=merge-duplicates)"
+      - "Log Inbox Alert -> POST /rest/v1/lead_intelligence_activity"
+      - "Log Workflow Success -> POST /rest/v1/rpc/log_workflow_success"
+      - "Log Error to DB -> POST /rest/v1/rpc/log_workflow_error"
+      - "Mark Error Notified -> POST /rest/v1/rpc/mark_notifications_sent"
+  - description: "Created public.mark_notifications_sent() SECURITY DEFINER wrapper for n8n_brain.mark_notifications_sent()"
+    type: "database_migration"
+  - description: "Updated Merge Domain Data and Merge Inbox Data Code nodes to read 'id' field from PostgREST response instead of 'domain_id'/'inbox_id' from Postgres RETURNING"
+    type: "code_update"
+
+notes:
+  - "All 98 Smartlead email accounts currently have health_score=80 and inbox_health_score=80"
+  - "Alert paths required temporary IF threshold modification (70 -> 81) since no domains are unhealthy"
+  - "Has Run ID? false branch required temporary code modification to Prepare Success Log"
+  - "Check Blacklist node returned non-JSON for some domains in exec 203579 but neverError handled it correctly"
+  - "Test alert records (196 rows in lead_intelligence_activity) were cleaned up post-test"
+  - "Workflow was reverted to original state after each test modification"

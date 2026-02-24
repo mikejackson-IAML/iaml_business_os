@@ -1,0 +1,129 @@
+workflow_id: b2XTKw8oy1lNKIDj
+workflow_name: Smartlead Inbox Ramp-Up
+tested_at: "2026-02-24T19:20:00Z"
+tested_by: test-workflow-auto
+test_status: verified
+
+trigger_type: schedule
+trigger_details: "Weekly Monday 8am + Manual Trigger"
+
+scenarios:
+  - name: natural_schedule_run
+    description: "Scheduled execution via Weekly Monday 8am trigger. All accounts at target."
+    payload: null
+    expected_path:
+      - Weekly Monday 8am
+      - Log Start
+      - Get Ramp Config
+      - Fetch All Accounts
+      - "Needs Limit Increase? (FALSE)"
+      - No Updates Needed
+      - Aggregate Updates
+      - Slack Notification
+      - Log Success
+    execution_ids:
+      - "203032"
+
+  - name: false_branch_webhook
+    description: "Webhook trigger, all 98 accounts at target limit (50/day)"
+    payload: null
+    expected_path:
+      - Test Webhook
+      - Log Start
+      - Get Ramp Config
+      - Fetch All Accounts
+      - "Needs Limit Increase? (FALSE)"
+      - No Updates Needed
+      - Aggregate Updates
+      - Slack Notification
+      - Log Success
+    execution_ids:
+      - "203580"
+
+  - name: true_and_false_branch
+    description: "1 account temporarily lowered to 49/day to trigger TRUE branch"
+    payload: null
+    expected_path:
+      - Test Webhook
+      - Log Start
+      - Get Ramp Config
+      - Fetch All Accounts
+      - "Needs Limit Increase? (TRUE for 1, FALSE for 97)"
+      - Update Daily Limit
+      - Prepare Log Data
+      - Log Update
+      - No Updates Needed
+      - Aggregate Updates
+      - Slack Notification
+      - Log Success
+    execution_ids:
+      - "203582"
+    notes: |
+      Temporarily lowered account 14853578 (m.jackson@septicleadsdirect.com)
+      from 50 to 49/day via Smartlead API. Workflow updated it back to 50.
+      Account verified restored after test.
+
+  - name: deliberate_error_main_flow
+    description: "Webhook trigger with broken RPC URL to trigger error handling"
+    payload: null
+    expected_path:
+      - Test Webhook
+      - Log Start
+      - Get Ramp Config (ERROR)
+    execution_ids:
+      - "203588"
+    notes: "Temporarily changed Get Ramp Config URL to INVALID_FUNCTION_FOR_TESTING"
+
+  - name: error_handling_chain
+    description: "Error handler execution triggered by deliberate error"
+    payload: null
+    expected_path:
+      - Error Trigger
+      - Parse Error
+      - Log Error to Dashboard
+      - Error Slack Alert
+      - Mark Error Notified
+    execution_ids:
+      - "203589"
+    notes: |
+      All 5 error handling nodes executed successfully.
+      Mark Error Notified received null run_id (expected - error occurred
+      before Log Start returned). Function correctly rejected null UUID.
+
+coverage:
+  node_coverage: "17/18 (94%)"
+  branch_coverage: "2/2 (100%)"
+  executions: 5
+  fixes: 1
+
+fixes_applied:
+  - description: "Added Mark Error Notified node to complete 5-node error handling chain"
+    details: |
+      Original workflow had 4 error handling nodes. Added Mark Error Notified as
+      the 5th node per WORKFLOW-STANDARDS.md, using Supabase REST API credential
+      (Dy6aCSbL5Tup4TnE) to call mark_notifications_sent RPC.
+  - description: "Added continueOnFail to Log Error to Dashboard and Error Slack Alert"
+    details: |
+      Ensures error chain completes even if individual nodes fail (e.g. null run_id).
+
+uncovered_nodes:
+  - name: Manual Trigger
+    type: manualTrigger
+    reason: "UI-only trigger, cannot be executed via API. Zero business logic - functionally identical to schedule trigger."
+
+uncovered_branches: []
+
+compliance:
+  error_handling: "5-node chain complete (Error Trigger -> Parse Error -> Log Error to Dashboard -> Error Slack Alert -> Mark Error Notified)"
+  business_os_tag: true
+  supabase_rest_api: "All Supabase interactions use REST API credential Dy6aCSbL5Tup4TnE"
+  postgres_nodes: none
+
+notes: |
+  Workflow runs daily at 8am, fetches all 98 Smartlead email accounts, checks if any
+  have message_per_day below the ramp target (currently week 5, target 50/day).
+  Since ramp-up is complete (all accounts at 50), the FALSE path normally executes.
+  TRUE branch was tested by temporarily lowering one account to 49/day.
+  Error handling chain was tested by temporarily breaking the Get Ramp Config URL.
+  All modifications were safely reverted after testing.
+  Previous test: 53% node / 50% branch -> Now: 94% node / 100% branch.

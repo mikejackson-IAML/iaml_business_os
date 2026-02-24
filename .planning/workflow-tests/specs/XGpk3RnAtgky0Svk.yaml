@@ -1,0 +1,66 @@
+workflow_id: XGpk3RnAtgky0Svk
+workflow_name: Domain Capacity Tracker
+tested_at: "2026-02-24T22:30:00Z"
+tested_by: test-workflow-auto
+test_status: verified
+
+trigger_type: schedule
+trigger_config:
+  interval: every 12 hours
+
+scenarios:
+  - name: natural_run
+    description: Execute with current live data via scheduled trigger
+    payload: null
+    execution_id: "203341"
+    result: success
+    nodes_hit:
+      - Every 12 Hours
+      - Calculate Capacity
+      - Post Report
+
+  - name: error_handling_test
+    description: Deliberately injected error in Calculate Capacity to test full error handling chain
+    payload: null
+    method: error_injection
+    injection_node: Calculate Capacity
+    injection_code: "throw new Error('TEST_ERROR: Deliberately triggered for error handling test');"
+    execution_id: "203451"
+    result: success
+    nodes_hit:
+      - Error Trigger
+      - Parse Error Details
+      - Log Error to DB
+      - Send Error Slack
+      - Mark Error Notified
+
+coverage:
+  nodes:
+    covered: 8
+    total: 8
+    percent: 100
+  branches:
+    covered: 0
+    total: 0
+    percent: 100
+
+uncovered_nodes: []
+uncovered_branches: []
+
+fixes_applied: []
+
+compliance:
+  error_handling: true
+  business_os_tag: true
+  postgres_nodes: 0
+  supabase_rest_api: true
+
+notes: |
+  Re-verified 2026-02-24. Simple workflow with no branch points. Main path calculates
+  domain email capacity from hardcoded domain data and posts a report to Slack every 12h.
+  Error handling chain (5-node canary) logs errors to Supabase DB via REST API, sends
+  Slack alert, and marks notifications as sent. All 8 nodes covered across 2 executions.
+  Note: Log Error to DB and Mark Error Notified nodes use onError: continueRegularOutput
+  so the chain completes even if Supabase calls fail. Send Error Slack also has this
+  setting. The Supabase URL in error nodes (wkfbpsuergpzvhmujfms.supabase.co) uses
+  credential Dy6aCSbL5Tup4TnE (Supabase REST API) as required.
