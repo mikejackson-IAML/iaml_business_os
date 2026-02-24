@@ -1,0 +1,47 @@
+workflow_id: 4GRjkhilT4d47rx4
+workflow_name: Web Intel - Backlink Profile Sync
+tested_at: "2026-02-23T18:26:00Z"
+tested_by: test-workflow-auto
+status: tested
+
+coverage:
+  nodes: 5/8 (63%)
+  branches: 0/0 (100%)
+
+executions:
+  - id: "201484"
+    scenario: natural_run
+    status: success
+    nodes_hit: 5
+    notes: Main path executed successfully. DataForSEO returned backlinks, upserted to Supabase.
+
+  - id: "201487"
+    scenario: error_path_attempt
+    status: success
+    nodes_hit: 5
+    notes: Attempted to trigger error with INVALID_ENDPOINT but DataForSEO returned 200 with error in body.
+
+uncovered:
+  - node: On Error
+    type: errorTrigger
+    reason: Error trigger only fires on workflow-level failure. DataForSEO returns 200 on invalid endpoints so HTTP node doesn't throw.
+
+  - node: Format Self Error
+    type: code
+    reason: Downstream of untriggerable error trigger.
+
+  - node: Email Fallback Alert
+    type: httpRequest
+    reason: Downstream of untriggerable error trigger.
+
+fixes_applied: []
+
+compliance:
+  error_handling: true
+  business_os_tag: true
+  postgres_nodes: none
+
+notes: |
+  Standard canary error pattern. Main path works perfectly — fetches 1000 backlinks from DataForSEO,
+  transforms them, upserts via RPC, and logs success. Error chain is structurally correct but
+  untestable without setting HTTP node to throw on non-2xx responses.

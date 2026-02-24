@@ -1,0 +1,170 @@
+workflow_id: WOMC0v0PDa8Wd3ie
+workflow_name: "Web Intel - Credential Validator"
+url: https://n8n.realtyamp.ai/workflow/WOMC0v0PDa8Wd3ie
+tested_at: "2026-02-23T20:39:39Z"
+tested_by: test-workflow-auto
+test_status: tested
+
+trigger:
+  type: scheduleTrigger
+  config:
+    cron: "0 5 * * 1"
+    description: "Weekly Monday 5am CT"
+  test_method: ui_execute
+  notes: "Executed via Playwright UI clicking 'Execute workflow' button"
+
+# Workflow Structure (after fixes)
+nodes:
+  total: 13
+  covered: 9
+  percent: 69
+  list:
+    - name: "Weekly Monday 5am CT"
+      type: scheduleTrigger
+      covered: true
+      by: ["201684", "201695"]
+    - name: "Test GA4 Connection"
+      type: httpRequest
+      covered: true
+      by: ["201684", "201695"]
+      notes: "GA4 OAuth2 credential not configured - continueOnFail catches error"
+    - name: "Test DataForSEO Connection"
+      type: httpRequest
+      covered: true
+      by: ["201684", "201695"]
+      notes: "httpBasicAuth credential not configured - continueOnFail catches error"
+    - name: "Test Supabase Connection"
+      type: httpRequest
+      covered: true
+      by: ["201684", "201695"]
+      notes: "Converted from Postgres to HTTP Request with Supabase REST API credential Dy6aCSbL5Tup4TnE"
+    - name: "Test Slack Connection"
+      type: httpRequest
+      covered: true
+      by: ["201684", "201695"]
+      notes: "Working - Slack webhook returns ok"
+    - name: "Merge Results"
+      type: merge
+      covered: true
+      by: ["201684", "201695"]
+      notes: "append mode with numberInputs: 4"
+    - name: "Analyze Results"
+      type: code
+      covered: true
+      by: ["201684", "201695"]
+      notes: "Analyzes 4 test results, computes failed_count and failed_services"
+    - name: "Has Failures?"
+      type: switch
+      covered: true
+      by: ["201684", "201695"]
+      notes: "Switch v3.2 Expression mode: {{ $json.failed_count > 0 ? 0 : 1 }}"
+    - name: "Alert Credential Failure"
+      type: httpRequest
+      covered: true
+      by: ["201684"]
+      notes: "Sends formatted Slack alert listing failed/working services"
+    - name: "Error Trigger"
+      type: errorTrigger
+      covered: false
+      reason: "Standard error handling chain - only fires on unhandled workflow errors"
+    - name: "Parse Error Details"
+      type: code
+      covered: false
+      reason: "Part of standard error handling chain"
+    - name: "Log Error to DB"
+      type: httpRequest
+      covered: false
+      reason: "Part of standard error handling chain - uses Supabase REST API"
+    - name: "Send Error to Slack"
+      type: httpRequest
+      covered: false
+      reason: "Part of standard error handling chain - sends to error Slack channel"
+
+branches:
+  total: 2
+  covered: 2
+  percent: 100
+  list:
+    - node: "Has Failures?"
+      output: "0 (failures exist)"
+      covered: true
+      by: ["201684"]
+      description: "Failures detected - routes to Alert Credential Failure"
+    - node: "Has Failures?"
+      output: "1 (all ok)"
+      covered: true
+      by: ["201695"]
+      description: "No failures - workflow ends cleanly (no-op path)"
+
+executions:
+  - id: "201684"
+    scenario: "failure_path_ga4_missing"
+    status: success
+    nodes_hit: 9
+    branches_hit: ["Has Failures? -> output 0 (failures)"]
+    notes: "Real execution with GA4+DataForSEO credentials missing. failed_count=1, routes to Alert Credential Failure."
+  - id: "201695"
+    scenario: "all_ok_path_forced"
+    status: success
+    nodes_hit: 8
+    branches_hit: ["Has Failures? -> output 1 (all ok)"]
+    notes: "Executed with temp-modified Analyze Results code forcing failed_count=0. Switch routes to output 1. Original code restored after."
+
+# Structural changes applied during this test session
+fixes_applied:
+  - fix_id: 1
+    node: "Has Failures?"
+    issue: "n8n If node v2 always routes to true branch regardless of condition (known n8n bug)"
+    fix: "Replaced If node v2 with Switch node v3.2 in Expression mode using {{ $json.failed_count > 0 ? 0 : 1 }}"
+    verified: true
+    notes: "Both branches now properly covered"
+
+  - fix_id: 2
+    node: "Test Supabase Connection"
+    issue: "Postgres credential EgmvZHbvINHsh6PR not available"
+    fix: "Replaced Postgres node with HTTP Request node using Supabase REST API (credential Dy6aCSbL5Tup4TnE)"
+    verified: true
+
+  - fix_id: 3
+    node: "Error handling chain"
+    issue: "Workflow had no error handling"
+    fix: "Added standard 4-node error handling chain: Error Trigger -> Parse Error Details -> Log Error to DB -> Send Error to Slack"
+    verified: false
+    notes: "Error chain is identical to all other Business OS workflows; cannot be triggered in normal test execution"
+
+  - fix_id: 4
+    node: "Workflow tags"
+    issue: "Missing business-os tag"
+    fix: "Added business-os tag (ID: 1zxF5MuBKtthenZd)"
+    verified: true
+
+issues_found:
+  - severity: low
+    description: "GA4 OAuth2 credential not configured in n8n"
+    node: "Test GA4 Connection"
+    recommendation: "Configure googleAnalyticsOAuth2 credential"
+  - severity: low
+    description: "DataForSEO httpBasicAuth credential not configured in n8n"
+    node: "Test DataForSEO Connection"
+    recommendation: "Configure httpBasicAuth credential for DataForSEO API"
+  - severity: info
+    description: "check-coverage.js reports only 1 branch for Switch node due to connections structure"
+    recommendation: "Script enhancement: detect Switch node numberOutputs parameter for accurate branch counting"
+
+compliance:
+  has_error_handling: true
+  has_business_os_tag: true
+  has_slack_alerts: true
+  has_dashboard_logging: true
+  postgres_nodes: none
+  continueOnFail_on_test_nodes: true
+
+error_fixes_discovered:
+  - error: "Code doesn't return items properly"
+    node_type: "n8n-nodes-base.code"
+    context: "Multi-output Code node with runOnceForAllItems mode on n8n v1.106.3"
+    fix: "n8n v1.106.3 does not support multi-output Code nodes. Replace with Switch node v3.2 in Expression mode."
+  - error: "n8n If node v2 always routes to true regardless of condition"
+    node_type: "n8n-nodes-base.if"
+    context: "If node v2 with any condition type (boolean, number, string)"
+    fix: "Replace If node v2 with Switch node v3.2 in Expression mode for reliable conditional routing."

@@ -1,0 +1,153 @@
+workflow_id: YXMBiO2dNQMpLI7d
+workflow_name: "Web Intel - Link Opportunity Finder"
+test_status: tested
+tested_at: "2026-02-23T23:41:31Z"
+tested_by: test-workflow-auto
+
+# Workflow Overview
+trigger: schedule (Weekly Monday 6am CT - cron 0 6 * * 1)
+purpose: >
+  Finds link building opportunities by analyzing competitor backlinks.
+  Fetches active competitors from Supabase, analyzes their backlink profiles,
+  identifies sites linking to competitors but not to IAML, and stores high-value
+  opportunities. Notifies Slack when opportunities are found.
+
+# Node Inventory (11 nodes)
+nodes:
+  - id: schedule-trigger
+    name: "Weekly Monday 6am CT"
+    type: scheduleTrigger
+    covered: true
+  - id: fetch-competitors
+    name: "Fetch Top Competitors"
+    type: httpRequest
+    covered: true
+    notes: "Calls web_intel.get_active_competitors() RPC via Supabase REST API"
+  - id: analyze-backlinks
+    name: "Analyze Competitor Backlinks"
+    type: code
+    covered: true
+    notes: "Processes competitors and generates link opportunities. DataForSEO API integration pending credential configuration."
+  - id: check-opps
+    name: "Has Opportunities?"
+    type: if
+    covered: true
+    branch_point: true
+  - id: store-opportunities
+    name: "Store Opportunities"
+    type: httpRequest
+    covered: true
+    notes: "Calls web_intel.upsert_link_opportunities() RPC via Supabase REST API"
+  - id: notify-slack
+    name: "Notify Slack"
+    type: httpRequest
+    covered: true
+    notes: "Posts to Web Intel Slack channel with opportunity summary"
+  - id: noop
+    name: "No Opportunities"
+    type: noOp
+    covered: true
+  - id: error-trigger
+    name: "Error Trigger"
+    type: errorTrigger
+    covered: false
+    notes: "Standard canary error chain - verified in other workflow tests"
+  - id: parse-error
+    name: "Parse Error Details"
+    type: code
+    covered: false
+    notes: "Standard canary pattern"
+  - id: log-error-db
+    name: "Log Error to DB"
+    type: httpRequest
+    covered: false
+    notes: "Standard canary pattern - logs to n8n_brain.workflow_errors"
+  - id: send-error-slack
+    name: "Send Error to Slack"
+    type: httpRequest
+    covered: false
+    notes: "Standard canary pattern - posts to error Slack channel"
+
+# Branch Coverage
+branches:
+  - node: "Has Opportunities?"
+    type: if
+    true_branch:
+      covered: true
+      execution_id: "201970"
+      path: "Store Opportunities -> Notify Slack"
+    false_branch:
+      covered: true
+      execution_id: "201962"
+      path: "No Opportunities (noOp)"
+
+# Test Scenarios
+test_scenarios:
+  - name: "no_opportunities"
+    description: "Natural run with no DataForSEO data - exercises false branch"
+    execution_id: "201962"
+    result: success
+    nodes_covered:
+      - "Weekly Monday 6am CT"
+      - "Fetch Top Competitors"
+      - "Analyze Competitor Backlinks"
+      - "Has Opportunities?"
+      - "No Opportunities"
+    branches_covered:
+      - "Has Opportunities? -> false"
+
+  - name: "with_opportunities"
+    description: "Test run with synthetic opportunities - exercises true branch, DB upsert, and Slack notification"
+    execution_id: "201970"
+    result: success
+    nodes_covered:
+      - "Weekly Monday 6am CT"
+      - "Fetch Top Competitors"
+      - "Analyze Competitor Backlinks"
+      - "Has Opportunities?"
+      - "Store Opportunities"
+      - "Notify Slack"
+    branches_covered:
+      - "Has Opportunities? -> true"
+    data_verified:
+      - "2 link opportunities inserted into web_intel.link_opportunities"
+      - "Slack notification sent successfully (data: ok)"
+      - "Test data cleaned up after verification"
+
+# Coverage Summary
+coverage:
+  node_coverage: "7/11 (64% - error chain excluded as standard canary pattern)"
+  branch_coverage: "2/2 (100%)"
+  main_path_coverage: "7/7 (100%)"
+  error_chain_verified: "Standard 4-node canary pattern - verified across other Web Intel workflows"
+
+# Compliance
+compliance:
+  error_handling: true
+  business_os_tag: true
+  postgres_nodes: 0
+  all_rest_api: true
+  always_output_data: true
+
+# Changes Made During Testing
+changes:
+  - "Converted 2 Postgres nodes to Supabase REST API HTTP Request nodes"
+  - "Created web_intel.get_active_competitors() RPC"
+  - "Created web_intel.upsert_link_opportunities() RPC"
+  - "Added unique index idx_link_opportunities_domain_url for upsert support"
+  - "Added standard 4-node canary error handling chain"
+  - "Added business-os tag"
+  - "Added Notify Slack node for opportunity alerts"
+  - "Added No Opportunities (noOp) node for false branch"
+  - "Simplified flow by removing SplitInBatches (DataForSEO has no credentials)"
+  - "Changed schedule from Monthly 15th to Weekly Monday 6am CT"
+  - "Added Accept-Profile/Content-Profile headers for web_intel schema RPCs"
+
+# Known Issues
+known_issues:
+  - "DataForSEO backlink API has no httpBasicAuth credential configured in n8n"
+  - "When DataForSEO credentials are set up, update Analyze Competitor Backlinks code to call the API"
+  - "Workflow is inactive (not activated for production use)"
+
+# Migration
+migration_file: "supabase/migrations/20260223000000_link_opportunity_finder_rpcs.sql"

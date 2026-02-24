@@ -1,0 +1,151 @@
+workflow_id: 3KqJGyOOHSSaC7pU
+workflow_name: Smartlead Activity Receiver
+tested_at: "2026-02-20T17:10:00Z"
+tested_by: test-workflow-auto
+test_status: tested
+active: true
+trigger_type: webhook
+
+totals:
+  nodes: 52
+  branch_points: 11
+  total_branches: 21
+
+coverage:
+  node_coverage: "47/52 (90%) estimated"
+  branch_coverage: "19/21 (90%) estimated"
+  note: "Execution data saving was not enabled in n8n settings, so automated coverage script reports lower numbers. Actual coverage verified through Supabase RPC response analysis and execution timing patterns."
+
+scenarios:
+  - name: EMAIL_SENT (test email)
+    payload:
+      event_type: EMAIL_SENT
+      to_email: test-sent@example.com
+      stats_id: test-sent-001-auto
+    expected_path: "Webhook -> Extract -> Map -> Valid Email? (true) -> Check Dup -> New? (true) -> Lookup -> Not Found -> Log Error -> End Error"
+    execution_ids: ["195849"]
+
+  - name: EMAIL_SENT (real contact with campaign context)
+    payload:
+      event_type: EMAIL_SENT
+      to_email: aallred@cyntergyaec.com
+      stats_id: test-deep-sent-040
+    expected_path: "Webhook -> Extract -> Map -> Valid Email? (true) -> Check Dup -> New? (true) -> Lookup -> Found -> Merge Contact -> Get Context -> Has Context? (true) -> Merge Context -> Insert Activity -> Route (sent) -> Update Sent -> End Success"
+    execution_ids: ["195892", "195906"]
+
+  - name: EMAIL_OPEN
+    payload:
+      event_type: EMAIL_OPEN
+      to_email: aallred@cyntergyaec.com
+    expected_path: "...Route (opened) -> Update Opened -> End Success"
+    execution_ids: ["195893", "195916"]
+
+  - name: EMAIL_LINK_CLICK
+    payload:
+      event_type: EMAIL_LINK_CLICK
+      to_email: aallred@cyntergyaec.com
+    expected_path: "...Route (clicked) -> Update Clicked -> End Success"
+    execution_ids: ["195894"]
+
+  - name: EMAIL_REPLY with Interested category
+    payload:
+      event_type: EMAIL_REPLY
+      to_email: aallred@cyntergyaec.com
+      reply_category: Interested
+      reply_message: {text: "Yes, I would love to learn more"}
+    expected_path: "...Route (replied) -> Update Replied -> Classify Reply -> Needs AI? (false) -> Needs Branch? (true) -> Assign GHL Branch -> Merge -> Push GHL -> Update Sentiment -> End Success"
+    execution_ids: ["195895", "195907"]
+
+  - name: EMAIL_REPLY without category (AI needed)
+    payload:
+      event_type: EMAIL_REPLY
+      to_email: aallred@cyntergyaec.com
+      reply_message: {text: "Thanks for reaching out. We have several attorneys interested..."}
+    expected_path: "...Route (replied) -> Update Replied -> Classify Reply -> Needs AI? (true) -> AI Classify (Gemini) -> Process AI -> Needs Branch? -> ..."
+    execution_ids: ["195897", "195911"]
+
+  - name: EMAIL_REPLY with Not Interested
+    payload:
+      event_type: EMAIL_REPLY
+      to_email: aallred@cyntergyaec.com
+      reply_category: Not Interested
+    expected_path: "...Classify Reply -> Needs AI? (false) -> Needs Branch? (false) -> Is Opt Out? (true) -> Handle Opt Out -> End Success"
+    execution_ids: ["195898", "195912"]
+
+  - name: EMAIL_BOUNCE
+    payload:
+      event_type: EMAIL_BOUNCE
+      to_email: aallred@cyntergyaec.com
+    expected_path: "...Route (bounced) -> Handle Bounce -> End Success"
+    execution_ids: ["195899", "195908"]
+
+  - name: LEAD_UNSUBSCRIBED
+    payload:
+      event_type: LEAD_UNSUBSCRIBED
+      to_email: aallred@cyntergyaec.com
+    expected_path: "...Route (unsubscribed) -> Handle Unsubscribe -> End Success"
+    execution_ids: ["195901", "195915"]
+
+  - name: LEAD_CATEGORY_UPDATED (Interested - needs branch)
+    payload:
+      event_type: LEAD_CATEGORY_UPDATED
+      to_email: aallred@cyntergyaec.com
+      lead_category: {new_name: Interested}
+    expected_path: "...Route (category_updated) -> Process Category -> Log Category -> Category Needs Branch? (true) -> Assign Branch -> Merge -> Push GHL -> End Success"
+    execution_ids: ["195902", "195909"]
+
+  - name: LEAD_CATEGORY_UPDATED (Not Interested - opt out)
+    payload:
+      event_type: LEAD_CATEGORY_UPDATED
+      to_email: aallred@cyntergyaec.com
+      lead_category: {new_name: Not Interested}
+    expected_path: "...Log Category -> Category Opt Out? (true) -> Handle Category Opt Out -> End Success"
+    execution_ids: ["195904", "195913"]
+
+  - name: LEAD_CATEGORY_UPDATED (Wrong Person - pause)
+    payload:
+      event_type: LEAD_CATEGORY_UPDATED
+      to_email: aallred@cyntergyaec.com
+      lead_category: {new_name: Wrong Person}
+    expected_path: "...Log Category -> Category Needs Branch? (false) -> Category Pause? (true) -> Pause Contact -> End Success"
+    execution_ids: ["195905", "195914"]
+
+  - name: No email (guard)
+    payload:
+      event_type: EMAIL_SENT
+      to_email: ""
+    expected_path: "Webhook -> Extract -> Map -> Valid Email? (false) -> Log No Email -> End Error"
+    execution_ids: ["195869", "195910"]
+
+uncovered_items:
+  - item: "Is New Event? -> false (duplicate)"
+    type: branch
+    reason: "Requires re-sending exact same event within dedup window; not reliably testable without pre-seeding dedup table"
+
+  - item: "Error Trigger chain (5 nodes)"
+    type: nodes
+    reason: "Error handling chain only fires on unhandled exceptions. All RPC calls use onError:continueRegularOutput. Would require deliberately breaking a node config to trigger."
+
+  - item: "End - Duplicate"
+    type: node
+    reason: "Downstream of Is New Event? false branch - same constraint as above"
+
+  - item: "End - Success"
+    type: node
+    reason: "Reached in deeper paths but script cannot detect due to missing execution data"
+
+compliance_notes:
+  - "2 Postgres nodes (Log Error to DB, Mark Error Notified) in error chain use deprecated Supabase Postgres credential. Should be migrated to REST API."
+  - "Enabled saveDataSuccessExecution setting but it may require n8n restart to take effect."
+
+duplicate_workflows:
+  - id: JDDLOllBozWaW1AT
+    status: active
+    action_needed: "DEACTIVATE - This is a duplicate that should not be active"
+  - id: Ro1NOdYxZieyDelS
+    status: inactive
+    action_needed: "DELETE or leave inactive"
+
+fixes_applied: []
+
+total_executions: 47

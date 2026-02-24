@@ -1,0 +1,141 @@
+workflow_id: 72QZmkSRZm35twAu
+workflow_name: "Web Intel - Competitive Gap Finder"
+workflow_url: https://n8n.realtyamp.ai/workflow/72QZmkSRZm35twAu
+tested_at: "2026-02-23T20:32:00Z"
+tested_by: test-workflow-auto
+test_status: tested
+
+trigger:
+  type: schedule
+  cron: "0 7 * * 1"
+  description: "Weekly Monday 7am CT"
+
+structural_fixes:
+  - type: error_handling
+    action: "Replaced old 3-node error chain (On Error -> Format Self Error -> Email Fallback Alert) with standard 4-node canary chain (Error Trigger -> Parse Error Details -> Log Error to DB -> Send Error to Slack)"
+  - type: credential_fix
+    action: "Converted Fetch Competitive Gaps from hardcoded API keys to Supabase REST API credential (Dy6aCSbL5Tup4TnE)"
+  - type: tag_added
+    action: "Added business-os tag (1zxF5MuBKtthenZd)"
+
+nodes:
+  total: 9
+  covered: 8
+  percent: 89
+  list:
+    - name: "Weekly Monday 7am CT"
+      type: scheduleTrigger
+      covered: false
+      reason: "Schedule trigger cannot be externally invoked; tested via temporary webhook to same downstream path"
+    - name: "Fetch Competitive Gaps"
+      type: httpRequest
+      covered: true
+      by: ["201666", "201678", "201680"]
+      notes: "Uses Supabase REST API credential (Dy6aCSbL5Tup4TnE)"
+    - name: "Analyze Gaps"
+      type: code
+      covered: true
+      by: ["201666", "201678", "201680"]
+    - name: "Has Gaps?"
+      type: if
+      covered: true
+      by: ["201666", "201678"]
+    - name: "Send to Slack"
+      type: httpRequest
+      covered: true
+      by: ["201666"]
+    - name: "Error Trigger"
+      type: errorTrigger
+      covered: true
+      by: ["201681"]
+    - name: "Parse Error Details"
+      type: code
+      covered: true
+      by: ["201681"]
+    - name: "Log Error to DB"
+      type: httpRequest
+      covered: true
+      by: ["201681"]
+    - name: "Send Error to Slack"
+      type: httpRequest
+      covered: true
+      by: ["201681"]
+
+branches:
+  total: 2
+  covered: 2
+  percent: 100
+  list:
+    - node: "Has Gaps?"
+      output: "true"
+      covered: true
+      by: ["201666"]
+    - node: "Has Gaps?"
+      output: "false"
+      covered: true
+      by: ["201678"]
+
+executions:
+  - id: "201666"
+    scenario: happy_path_with_gaps
+    status: success
+    trigger: webhook
+    nodes_run: 5
+    path: "webhook -> fetch -> analyze -> has_gaps(true) -> slack"
+    notes: "Full main path with live data. Fetched competitive gaps, sent Slack notification."
+
+  - id: "201678"
+    scenario: no_gaps_false_branch
+    status: success
+    trigger: webhook
+    nodes_run: 4
+    path: "webhook -> fetch -> analyze(forced_false) -> has_gaps(false)"
+    notes: "Forced has_gaps=false via temporary code modification. Covered FALSE branch of IF node."
+
+  - id: "201680"
+    scenario: error_handling_trigger
+    status: error
+    trigger: webhook
+    nodes_run: 3
+    path: "webhook -> fetch -> analyze(error)"
+    notes: "Deliberate throw in Analyze Gaps to trigger error handling chain."
+
+  - id: "201681"
+    scenario: error_handling_chain
+    status: success
+    trigger: error_handler
+    nodes_run: 4
+    path: "error_trigger -> parse_error -> log_db -> slack_error"
+    notes: "Full 4-node error handling chain executed successfully. Logged to DB and sent Slack alert."
+
+fixes_applied:
+  - issue: "Old 3-node error handling (On Error -> Format Self Error -> Email Fallback Alert)"
+    fix: "Replaced with standard 4-node canary chain (Error Trigger -> Parse Error Details -> Log Error to DB -> Send Error to Slack)"
+    nodes_affected: ["On Error", "Format Self Error", "Email Fallback Alert"]
+
+  - issue: "Hardcoded Supabase API keys in Fetch Competitive Gaps headers"
+    fix: "Converted to use Supabase REST API credential (Dy6aCSbL5Tup4TnE) via genericCredentialType/httpHeaderAuth"
+    nodes_affected: ["Fetch Competitive Gaps"]
+
+  - issue: "Missing business-os tag"
+    fix: "Added business-os tag (1zxF5MuBKtthenZd)"
+
+acceptable_exceptions:
+  - node: "Weekly Monday 7am CT"
+    type: scheduleTrigger
+    reason: "Schedule triggers cannot be externally triggered via API. Full downstream path was tested via temporary webhook trigger connecting to same nodes."
+
+coverage_summary:
+  node_coverage: "8/9 (89%)"
+  branch_coverage: "2/2 (100%)"
+  error_handling: "4/4 nodes tested"
+  acceptable_gaps: 1
+  reason: "Only gap is scheduleTrigger node (standard exception for schedule-triggered workflows)"
+
+compliance:
+  has_error_handling: true
+  standard_4_node_chain: true
+  has_slack_alerts: true
+  has_dashboard_logging: true
+  has_business_os_tag: true
+  no_broken_postgres: true

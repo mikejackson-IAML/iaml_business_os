@@ -1,0 +1,105 @@
+workflow_id: ETVro3ICNtAtbAEq
+workflow_name: "Web Intel - Traffic - Anomaly Detector"
+tested_at: "2026-02-20T16:08:01.000Z"
+tested_by: test-workflow-auto
+status: tested
+
+triggers:
+  - type: schedule
+    cron: "0 7 * * *"
+    name: "Daily 7am CT"
+  - type: webhook
+    path: test-anomaly-detector
+    method: GET
+    name: "Manual Test (Webhook)"
+
+scenarios:
+  - name: no_anomalies
+    description: "Natural run with current data - no anomalies detected (FALSE branch)"
+    trigger: webhook
+    method: GET
+    payload: null
+    expected_branch: "Has Anomalies? -> false"
+    expected_nodes:
+      - "Manual Test (Webhook)"
+      - "Fetch Yesterday Traffic"
+      - "Fetch Averages"
+      - "Merge Data"
+      - "Detect Anomalies"
+      - "Has Anomalies?"
+      - "Log Success (No Alerts)"
+    execution_id: "195748"
+    result: success
+
+  - name: anomalies_detected
+    description: "Lowered thresholds to 0.001 to force anomaly detection (TRUE branch)"
+    trigger: webhook
+    method: GET
+    payload: null
+    modifications:
+      - node: "Detect Anomalies"
+        field: "THRESHOLD_DROP"
+        original: 0.20
+        test_value: 0.001
+      - node: "Detect Anomalies"
+        field: "THRESHOLD_SPIKE"
+        original: 0.50
+        test_value: 0.001
+    expected_branch: "Has Anomalies? -> true"
+    expected_nodes:
+      - "Manual Test (Webhook)"
+      - "Fetch Yesterday Traffic"
+      - "Fetch Averages"
+      - "Merge Data"
+      - "Detect Anomalies"
+      - "Has Anomalies?"
+      - "Prepare Alert Records"
+      - "Insert Alerts"
+      - "Aggregate Alerts"
+      - "Send Slack Alert"
+      - "Log Success (Alerts)"
+    execution_id: "195753"
+    result: success
+
+coverage:
+  nodes:
+    covered: 13
+    total: 16
+    percent: 81
+  branches:
+    covered: 2
+    total: 2
+    percent: 100
+  uncovered:
+    - node: "Daily 7am CT"
+      type: scheduleTrigger
+      reason: "Schedule trigger - fires at cron time, cannot be API-triggered. Implicitly tested (workflow is active and runs daily)."
+    - node: "Error Trigger"
+      type: errorTrigger
+      reason: "Error handling chain - requires workflow failure. Cannot test without sending false error alerts to Slack."
+    - node: "Slack - Error Alert"
+      type: httpRequest
+      reason: "Downstream of Error Trigger - same limitation."
+    - node: "Log Error"
+      type: httpRequest
+      reason: "Downstream of Error Trigger - same limitation."
+
+data_context:
+  yesterday_traffic:
+    sessions: 42
+    pageviews: 67
+    collected_date: "2026-02-19"
+  averages:
+    avg_sessions_7d: 41
+    avg_pageviews_7d: 63
+  analysis: "Sessions +2.4%, pageviews +6.3% - below production thresholds (20%/50%)"
+
+fixes_applied: []
+
+notes: |
+  Workflow is structurally sound with proper error handling pattern.
+  Both IF branches exercised. Code reverted to production thresholds after testing.
+  Validation passed with 0 errors (33 warnings - all non-critical version/style).
+  Expression warning: optional chaining (?.) used in Log Success (Alerts) and Slack - Error Alert
+  jsonBody expressions, which n8n expressions don't officially support. Works in practice
+  but could be fragile.

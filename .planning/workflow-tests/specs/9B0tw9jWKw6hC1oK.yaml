@@ -1,0 +1,82 @@
+workflow_id: 9B0tw9jWKw6hC1oK
+workflow_name: "Web Intel - Rankings - Daily Tracker"
+tested_at: "2026-02-20T16:12:00Z"
+tested_by: test-workflow-auto
+status: tested
+
+trigger:
+  primary: scheduleTrigger (Daily 5am CT - cron 0 5 * * *)
+  secondary: webhook (rankings-daily)
+  test_via: webhook
+
+scenarios:
+  - name: natural_run
+    description: "Execute via webhook trigger with live data"
+    trigger: webhook
+    payload: {}
+    expected_nodes:
+      - Webhook
+      - Fetch Keywords
+      - Prepare Tasks
+      - DataForSEO API
+      - Parse All Rankings
+      - Store Rankings
+      - Log Success
+
+  - name: error_handler
+    description: "Error handler chain triggered by Store Rankings failure (before fix)"
+    trigger: error_trigger
+    expected_nodes:
+      - Error Trigger
+      - Parse Error Details
+      - Send Error Slack
+
+executions:
+  - id: "195761"
+    scenario: natural_run
+    status: success
+    nodes_hit: 7
+    duration_ms: 5687
+    notes: "Full main path success after responseFormat fix"
+
+  - id: "195747"
+    scenario: error_handler
+    status: success
+    nodes_hit: 3
+    duration_ms: 109
+    notes: "Error handler chain triggered by Store Rankings JSON parse failure"
+
+  - id: "195744"
+    scenario: natural_run
+    status: error
+    nodes_hit: 6
+    duration_ms: 9050
+    error_node: Store Rankings
+    error_message: "Response body is not valid JSON. Change Response Format to Text"
+    notes: "Pre-fix execution that revealed the responseFormat issue"
+
+coverage:
+  nodes:
+    covered: 10
+    total: 11
+    percent: 91
+  branches:
+    covered: 0
+    total: 0
+    percent: 100
+
+uncovered:
+  - node: "Daily 5am CT"
+    type: scheduleTrigger
+    reason: "Schedule triggers cannot be API-triggered; tested via webhook entry point instead"
+
+fixes_applied:
+  - node: Store Rankings
+    issue: "Response body is not valid JSON (Supabase RPC returns UUID, not JSON)"
+    fix: "Set options.response.response.responseFormat to 'text'"
+    brain_fix_id: "20ee72a6-f92e-474a-b289-07e4a99c4989"
+
+  - node: Log Success
+    issue: "Same potential issue - insert_collection_log also returns UUID"
+    fix: "Set options.response.response.responseFormat to 'text' (preventive)"
+    brain_fix_id: "c5a084b3-e2fd-4813-840c-129b680126a8"

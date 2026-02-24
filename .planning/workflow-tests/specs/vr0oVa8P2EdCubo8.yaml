@@ -1,0 +1,69 @@
+workflow_id: vr0oVa8P2EdCubo8
+workflow_name: "Web Intel - Rankings - Volume Updater"
+tested_at: "2026-02-20T16:22:01Z"
+tested_by: test-workflow-auto
+test_status: tested
+
+trigger_type: schedule
+trigger_cron: "0 3 1 * *"
+
+scenarios:
+  - name: natural_run
+    description: "Execute with current live data (scheduled trigger)"
+    payload: null
+    execution_ids:
+      - "195781"  # Full success - all 9 main flow nodes
+    result: success
+    nodes_hit: 9
+
+  - name: credential_error
+    description: "DataForSEO credential missing triggers error handler chain"
+    payload: null
+    execution_ids:
+      - "195770"  # Main flow errored at DataForSEO node
+      - "195771"  # Error handler chain executed successfully
+    result: error_handled
+    nodes_hit: 9  # 5 main + 4 error handler
+
+coverage:
+  nodes:
+    covered: 13
+    total: 13
+    percent: 100
+  branches:
+    covered: 0
+    total: 0
+    percent: 100
+
+fixes_applied:
+  - type: connection_fix
+    description: "SplitInBatches output 0 (done) was connected to Prepare Request instead of output 1 (loop). Rewired to correct outputs."
+    nodes_affected:
+      - "Split Into Batches"
+      - "Prepare Request"
+      - "Prepare Log Entry"
+
+  - type: credential_creation
+    description: "Created DataForSEO API httpBasicAuth credential (ID: ckscJd1wm7nCDu7p). Original credential N5IZDJlcXNhJSNRP was missing."
+    nodes_affected:
+      - "DataForSEO - Get Volumes"
+
+  - type: code_fix
+    description: "Fixed Prepare Request code to use DataForSEO keywords array format (plural) instead of individual keyword tasks (singular). API expects {keywords: ['word1', 'word2']} not [{keyword: 'word1'}, {keyword: 'word2'}]."
+    nodes_affected:
+      - "Prepare Request"
+
+  - type: tag_addition
+    description: "Added business-os tag to workflow"
+
+compliance:
+  error_handling: true
+  business_os_tag: true
+  validation: passed
+  warnings: 18  # Outdated type versions, code error handling suggestions
+
+notes: |
+  - DataForSEO search volume successfully returned: asset management certification (210), infrastructure asset management (260)
+  - Supabase update_keyword_volume RPC works correctly
+  - Error handler chain (Error Trigger -> Parse Error Details -> Log Error to DB -> Send Error to Slack) fully tested and working
+  - Slack webhook successfully delivered error notification

@@ -1,0 +1,1001 @@
+{
+  "name": "Sales Navigator Results Handler",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "sales-nav-results",
+        "options": {}
+      },
+      "id": "snr-webhook-trigger",
+      "name": "Webhook: Apify Callback",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-1800, 400],
+      "webhookId": "sales-nav-results"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 10
+            }
+          ]
+        }
+      },
+      "id": "snr-schedule-trigger",
+      "name": "Schedule: Check Completed",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [-1800, 600]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/rpc/log_workflow_start",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_workflow_id\": \"sales-nav-results-handler\",\n  \"p_workflow_name\": \"Sales Navigator Results Handler\",\n  \"p_execution_id\": \"{{ $execution.id }}\",\n  \"p_trigger_type\": \"schedule\",\n  \"p_trigger_data\": {}\n}",
+        "options": {}
+      },
+      "id": "snr-log-start",
+      "name": "Log Workflow Start",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-1600, 600],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "supabase-rest-api",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/sales_nav_searches",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "select",
+              "value": "id,search_name,search_url,apify_run_id,apify_dataset_id,started_at"
+            },
+            {
+              "name": "status",
+              "value": "eq.processing"
+            },
+            {
+              "name": "apify_run_id",
+              "value": "not.is.null"
+            },
+            {
+              "name": "order",
+              "value": "started_at.asc"
+            },
+            {
+              "name": "limit",
+              "value": "5"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "snr-get-processing",
+      "name": "Get Processing Searches",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-1400, 600],
+      "alwaysOutputData": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "supabase-rest-api",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Store run_id and parse webhook payload\nconst body = $input.first().json.body || $input.first().json;\nconst runId = body.actorRunId || body.runId || body.id;\nconst status = body.status || 'SUCCEEDED';\n\nif (!runId) {\n  throw new Error('No run ID in webhook payload');\n}\n\nreturn {\n  json: {\n    apify_run_id: runId,\n    apify_status: status,\n    source: 'webhook'\n  }\n};"
+      },
+      "id": "snr-parse-webhook",
+      "name": "Parse Webhook",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-1600, 400]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/sales_nav_searches",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "select",
+              "value": "id,search_name,search_url,apify_run_id,apify_dataset_id"
+            },
+            {
+              "name": "apify_run_id",
+              "value": "=eq.{{ $json.apify_run_id }}"
+            },
+            {
+              "name": "status",
+              "value": "eq.processing"
+            },
+            {
+              "name": "limit",
+              "value": "1"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "snr-find-search",
+      "name": "Find Search by Run ID",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-1400, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "supabase-rest-api",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Check if search found\nconst result = $input.first().json;\nconst search = Array.isArray(result) ? result[0] : result;\nconst found = search && search.id;\n\nreturn [{ json: { found: !!found, search: search || null } }];"
+      },
+      "id": "snr-check-found",
+      "name": "Check Found",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-1200, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-search",
+              "leftValue": "={{ $json.found }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "snr-has-search",
+      "name": "Found Search?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [-1000, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Store run_id and check processing searches\nconst logResult = $('Log Workflow Start').first().json;\nconst searches = $('Get Processing Searches').first().json;\n\nconst staticData = $getWorkflowStaticData('global');\nstaticData.run_id = logResult.run_id || logResult;\n\nconst hasSearches = Array.isArray(searches) ? searches.length > 0 : (searches && searches.id);\nconst searchList = Array.isArray(searches) ? searches : (searches && searches.id ? [searches] : []);\n\nreturn [{ json: { has_processing: hasSearches, searches: searchList } }];"
+      },
+      "id": "snr-check-processing",
+      "name": "Check Processing",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-1200, 600]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-processing",
+              "leftValue": "={{ $json.has_processing }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "snr-has-processing",
+      "name": "Has Processing?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [-1000, 600]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Split searches for processing\nconst searches = $json.searches || [];\nreturn searches.map(s => ({ json: s }));"
+      },
+      "id": "snr-split-processing",
+      "name": "Split Processing Items",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-800, 504]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.apify.com/v2/actor-runs/{{ $json.apify_run_id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "options": {}
+      },
+      "id": "snr-check-run-status",
+      "name": "Check Apify Run Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-600, 504],
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "apify-token",
+          "name": "Apify API Token"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const runData = $input.first().json;\nconst searchData = $('Split Processing Items').first().json;\n\nconst status = runData.data?.status || runData.status;\nconst isCompleted = ['SUCCEEDED', 'FAILED', 'ABORTED', 'TIMED-OUT'].includes(status);\n\nreturn {\n  json: {\n    search_id: searchData.id,\n    search_name: searchData.search_name,\n    apify_run_id: searchData.apify_run_id,\n    apify_dataset_id: runData.data?.defaultDatasetId || searchData.apify_dataset_id,\n    apify_status: status,\n    is_completed: isCompleted,\n    is_success: status === 'SUCCEEDED'\n  }\n};"
+      },
+      "id": "snr-process-status",
+      "name": "Process Run Status",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-400, 504]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "is-completed",
+              "leftValue": "={{ $json.is_completed }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "snr-is-completed",
+      "name": "Run Completed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [-200, 504]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "is-success",
+              "leftValue": "={{ $json.is_success }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "snr-is-success",
+      "name": "Was Successful?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [0, 400]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.apify.com/v2/datasets/{{ $json.apify_dataset_id }}/items",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "format",
+              "value": "json"
+            },
+            {
+              "name": "clean",
+              "value": "true"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "snr-fetch-results",
+      "name": "Fetch Dataset Results",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [200, 304],
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "apify-token",
+          "name": "Apify API Token"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const results = $input.first().json;\nconst searchInfo = $('Was Successful?').first().json;\n\nlet profiles = Array.isArray(results) ? results : (results.data || results.items || []);\n\nif (!profiles || profiles.length === 0) {\n  return {\n    json: {\n      search_id: searchInfo.search_id,\n      profiles_count: 0,\n      profiles: [],\n      message: 'No profiles found in search results'\n    }\n  };\n}\n\nconst transformedProfiles = profiles.map(p => ({\n  linkedin_id: p.id || p.memberId,\n  linkedin_url: p.linkedinUrl || p.profileUrl,\n  public_identifier: p.publicIdentifier || p.username,\n  first_name: p.firstName,\n  last_name: p.lastName,\n  full_name: p.fullName || `${p.firstName || ''} ${p.lastName || ''}`.trim(),\n  headline: p.headline,\n  location: p.location?.linkedinText || p.location?.text || p.location,\n  location_parsed: typeof p.location === 'object' ? p.location.parsed : null,\n  current_company: p.currentPosition?.[0]?.companyName || p.company,\n  current_title: p.currentPosition?.[0]?.position || p.headline?.split(' at ')?.[0] || p.title,\n  about: p.about,\n  photo_url: p.photo,\n  is_premium: p.premium || false,\n  is_open_to_work: p.openToWork || false,\n  is_hiring: p.hiring || false,\n  connections_count: p.connectionsCount,\n  follower_count: p.followerCount,\n  experience: p.experience || [],\n  education: p.education || [],\n  skills: p.skills || [],\n  raw_data: p\n}));\n\nreturn {\n  json: {\n    search_id: searchInfo.search_id,\n    profiles_count: transformedProfiles.length,\n    profiles: transformedProfiles\n  }\n};"
+      },
+      "id": "snr-transform-results",
+      "name": "Transform Results",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [400, 304]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/rpc/insert_sales_nav_profiles",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_search_id\": \"{{ $json.search_id }}\",\n  \"p_profiles\": {{ JSON.stringify($json.profiles) }}\n}",
+        "options": {}
+      },
+      "id": "snr-insert-profiles",
+      "name": "Insert Profiles",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [600, 304],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "supabase-rest-api",
+          "name": "Supabase REST API"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/rpc/process_sales_nav_to_contacts",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_search_id\": \"{{ $('Transform Results').first().json.search_id }}\"\n}",
+        "options": {}
+      },
+      "id": "snr-process-contacts",
+      "name": "Process into Contacts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [800, 304],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "supabase-rest-api",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/sales_nav_searches?id=eq.{{ $('Transform Results').first().json.search_id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"status\": \"completed\",\n  \"completed_at\": \"{{ $now.toISO() }}\"\n}",
+        "options": {}
+      },
+      "id": "snr-mark-completed",
+      "name": "Mark Search Completed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1000, 304],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "supabase-rest-api",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.N8N_WEBHOOK_BASE_URL }}/webhook/waterfall-enrichment",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"source\": \"sales_nav_scraper\",\n  \"search_id\": \"{{ $('Transform Results').first().json.search_id }}\",\n  \"profiles_count\": {{ $('Transform Results').first().json.profiles_count }}\n}",
+        "options": {
+          "timeout": 5000
+        }
+      },
+      "id": "snr-trigger-enrichment",
+      "name": "Trigger Enrichment Workflow",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1200, 304],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/lead_intelligence_activity",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"activity_type\": \"import_completed\",\n  \"description\": \"Sales Navigator search completed: {{ $('Transform Results').first().json.profiles_count }} profiles extracted\",\n  \"source_name\": \"sales_navigator\",\n  \"metadata\": {{ JSON.stringify({ search_id: $('Transform Results').first().json.search_id, profiles_found: $('Transform Results').first().json.profiles_count }) }}\n}",
+        "options": {}
+      },
+      "id": "snr-log-activity",
+      "name": "Log Activity",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1400, 304],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "supabase-rest-api",
+          "name": "Supabase REST API"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/sales_nav_searches?id=eq.{{ $json.search_id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"status\": \"failed\",\n  \"metadata\": {\"apify_status\": \"{{ $json.apify_status }}\"},\n  \"completed_at\": \"{{ $now.toISO() }}\"\n}",
+        "options": {}
+      },
+      "id": "snr-mark-failed",
+      "name": "Mark as Failed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [200, 496],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "supabase-rest-api",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"message\": \"Run still processing, will check again\",\n  \"search_id\": \"{{ $json.search_id }}\",\n  \"apify_status\": \"{{ $json.apify_status }}\"\n}",
+        "options": {}
+      },
+      "id": "snr-still-processing",
+      "name": "Still Processing",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [0, 600]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"message\": \"No processing searches to check\"\n}",
+        "options": {}
+      },
+      "id": "snr-no-processing",
+      "name": "No Processing Searches",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-800, 700]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"message\": \"Search not found for run ID\",\n  \"source\": \"webhook\"\n}",
+        "options": {}
+      },
+      "id": "snr-search-not-found",
+      "name": "Search Not Found",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-800, 500]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare success log\nconst staticData = $getWorkflowStaticData('global');\nconst runId = staticData.run_id;\n\nreturn [{ json: { run_id: runId, has_run_id: !!runId } }];"
+      },
+      "id": "snr-prepare-success",
+      "name": "Prepare Success Log",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1600, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-run-id",
+              "leftValue": "={{ $json.has_run_id }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "snr-check-run-id",
+      "name": "Has Run ID?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1800, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/rpc/log_workflow_success",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_run_id\": \"{{ $json.run_id }}\",\n  \"p_output_data\": {\"status\": \"completed\"}\n}",
+        "options": {}
+      },
+      "id": "snr-log-success",
+      "name": "Log Workflow Success",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2000, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "supabase-rest-api",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse error details\nconst error = $input.first().json;\nconst staticData = $getWorkflowStaticData('global');\nconst runId = staticData.run_id;\n\nconst errorMessage = error.message || error.error || JSON.stringify(error);\nconst errorNode = $execution?.customData?.lastNodeExecuted || 'unknown';\n\nreturn [{\n  json: {\n    run_id: runId,\n    error_message: errorMessage.substring(0, 1000),\n    error_node: errorNode,\n    error_node_type: 'unknown',\n    error_details: JSON.stringify({ execution_id: $execution.id })\n  }\n}];"
+      },
+      "id": "snr-parse-error",
+      "name": "Parse Error Details",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-1600, 800]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/rpc/log_workflow_error",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_run_id\": {{ $json.run_id ? '\"' + $json.run_id + '\"' : 'null' }},\n  \"p_error_message\": \"{{ $json.error_message.replace(/\"/g, '\\\\\"') }}\",\n  \"p_error_node\": \"{{ $json.error_node }}\",\n  \"p_error_type\": \"{{ $json.error_node_type }}\",\n  \"p_error_details\": {{ $json.error_details }}\n}",
+        "options": {}
+      },
+      "id": "snr-log-error",
+      "name": "Log Error to DB",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-1400, 800],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "supabase-rest-api",
+          "name": "Supabase REST API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook: Apify Callback": {
+      "main": [
+        [
+          {
+            "node": "Parse Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Webhook": {
+      "main": [
+        [
+          {
+            "node": "Find Search by Run ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Search by Run ID": {
+      "main": [
+        [
+          {
+            "node": "Check Found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Found": {
+      "main": [
+        [
+          {
+            "node": "Found Search?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Found Search?": {
+      "main": [
+        [
+          {
+            "node": "Split Processing Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Search Not Found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule: Check Completed": {
+      "main": [
+        [
+          {
+            "node": "Log Workflow Start",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Workflow Start": {
+      "main": [
+        [
+          {
+            "node": "Get Processing Searches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Processing Searches": {
+      "main": [
+        [
+          {
+            "node": "Check Processing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Processing": {
+      "main": [
+        [
+          {
+            "node": "Has Processing?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Processing?": {
+      "main": [
+        [
+          {
+            "node": "Split Processing Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Processing Searches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Processing Items": {
+      "main": [
+        [
+          {
+            "node": "Check Apify Run Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Apify Run Status": {
+      "main": [
+        [
+          {
+            "node": "Process Run Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Run Status": {
+      "main": [
+        [
+          {
+            "node": "Run Completed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run Completed?": {
+      "main": [
+        [
+          {
+            "node": "Was Successful?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Still Processing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Was Successful?": {
+      "main": [
+        [
+          {
+            "node": "Fetch Dataset Results",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mark as Failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Dataset Results": {
+      "main": [
+        [
+          {
+            "node": "Transform Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transform Results": {
+      "main": [
+        [
+          {
+            "node": "Insert Profiles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Profiles": {
+      "main": [
+        [
+          {
+            "node": "Process into Contacts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process into Contacts": {
+      "main": [
+        [
+          {
+            "node": "Mark Search Completed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Search Completed": {
+      "main": [
+        [
+          {
+            "node": "Trigger Enrichment Workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trigger Enrichment Workflow": {
+      "main": [
+        [
+          {
+            "node": "Log Activity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Activity": {
+      "main": [
+        [
+          {
+            "node": "Prepare Success Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark as Failed": {
+      "main": [
+        [
+          {
+            "node": "Prepare Success Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Still Processing": {
+      "main": [
+        [
+          {
+            "node": "Prepare Success Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Processing Searches": {
+      "main": [
+        [
+          {
+            "node": "Prepare Success Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Success Log": {
+      "main": [
+        [
+          {
+            "node": "Has Run ID?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Run ID?": {
+      "main": [
+        [
+          {
+            "node": "Log Workflow Success",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Parse Error Details": {
+      "main": [
+        [
+          {
+            "node": "Log Error to DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "2",
+  "meta": {
+    "instanceId": "sales-nav-results-handler"
+  },
+  "tags": [
+    {
+      "name": "lead-intelligence",
+      "id": "tag-lead-intel"
+    },
+    {
+      "name": "sales-navigator",
+      "id": "tag-sales-nav"
+    }
+  ]
+}

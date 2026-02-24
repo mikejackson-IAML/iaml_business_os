@@ -2,6 +2,7 @@
 // Uses Claude tool_use to extract structured memories from conversations
 
 import Anthropic from '@anthropic-ai/sdk';
+import { logApiUsage } from '@/lib/api/usage-tracking';
 
 export type MemoryType =
   | 'decision'
@@ -87,6 +88,15 @@ export async function extractMemories(
       ],
     });
 
+    // Log API usage
+    logApiUsage({
+      department: 'planning',
+      feature: 'memory-extraction',
+      model: 'claude-sonnet-4-20250514',
+      inputTokens: response.usage.input_tokens,
+      outputTokens: response.usage.output_tokens,
+    });
+
     // Find tool_use block in response
     const toolBlock = response.content.find(
       (block): block is Anthropic.ToolUseBlock => block.type === 'tool_use'
@@ -127,6 +137,15 @@ export async function generateSummary(conversationText: string): Promise<string>
           content: conversationText,
         },
       ],
+    });
+
+    // Log API usage
+    logApiUsage({
+      department: 'planning',
+      feature: 'summary-generation',
+      model: 'claude-sonnet-4-20250514',
+      inputTokens: response.usage.input_tokens,
+      outputTokens: response.usage.output_tokens,
     });
 
     const textBlock = response.content.find(

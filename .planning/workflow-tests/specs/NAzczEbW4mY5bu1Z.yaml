@@ -1,0 +1,95 @@
+workflow_id: NAzczEbW4mY5bu1Z
+workflow_name: "LinkedIn Engine: WF2 Weekly Deep Research"
+tested_at: "2026-02-20T21:00:00Z"
+tested_by: test-workflow-auto
+test_status: needs_review
+
+coverage:
+  nodes: "19/26 (73%)"
+  branches: "2/4 (50%)"
+  executions: 17
+
+scenarios:
+  - name: "Full pipeline (webhook trigger)"
+    trigger: webhook
+    url: "https://n8n.realtyamp.ai/webhook/wf2-test"
+    method: GET
+    expected_branches:
+      - "Has Signals? → true"
+      - "Is New Signal? → true"
+    execution_ids:
+      - "196170"  # SUCCESS - Reddit worked, SplitInBatches broke (pre-dedup fix)
+      - "196177"  # ERROR - Claude model name wrong (claude-sonnet-4-20250514)
+      - "196188"  # ERROR - Claude model name wrong (claude-sonnet-4-6-20250116)
+      - "196196"  # ERROR - Anthropic billing depleted
+      - "196203"  # ERROR - Anthropic billing depleted (error handler chain verified)
+
+  - name: "Error handler chain"
+    trigger: error
+    expected_nodes:
+      - "Catch Errors"
+      - "Post Error to Supabase"
+      - "Log Workflow Failed"
+    execution_ids:
+      - "196208"  # SUCCESS - full error chain (Post Error + Log Failed)
+
+uncovered:
+  nodes:
+    - name: "Schedule Trigger"
+      reason: "Trigger node - always skipped when using webhook"
+    - name: "Parse Claude Response"
+      reason: "Blocked by Anthropic API billing (no credits)"
+    - name: "Insert Signal Supabase"
+      reason: "Blocked by Anthropic API billing (downstream of Claude)"
+    - name: "Count Inserted Signals"
+      reason: "Blocked by Anthropic API billing (downstream)"
+    - name: "Log Workflow Complete"
+      reason: "Blocked by Anthropic API billing (downstream)"
+    - name: "No Signals Count"
+      reason: "Requires Has Signals? false branch (both Apify actors produce 0 valid signals)"
+    - name: "Log Workflow Complete (Empty)"
+      reason: "Same as No Signals Count"
+
+  branches:
+    - node: "Has Signals?"
+      output: "false"
+      reason: "Reddit consistently produces 7-14 valid signals; would require both actors to fail"
+    - node: "Is New Signal?"
+      output: "false"
+      reason: "Requires Claude + Insert to have worked first (to create duplicates)"
+
+fixes_applied:
+  - node: "Run Reddit Actor (Sync)"
+    fix: "Changed Apify actor ID from slash to tilde format (trudax/reddit-scraper-lite → trudax~reddit-scraper-lite)"
+  - node: "Run Reddit Actor (Sync)"
+    fix: "Reduced maxItems from 200 to 30 to fit within Apify 300s sync timeout"
+  - node: "Has Signals?"
+    fix: "Changed typeValidation from strict to loose (undefined source field was failing)"
+  - node: "Is New Signal?"
+    fix: "Changed typeValidation from strict to loose"
+  - node: "Stash Original Signal"
+    fix: "Converted from Set node (raw JSON) to Code node for safe JSON construction"
+  - node: "Dedup Check Supabase"
+    fix: "Added alwaysOutputData: true (empty [] response produced 0 items, breaking SplitInBatches loop)"
+  - node: "Run Reddit Actor (Sync)"
+    fix: "Added onError: continueRegularOutput for graceful degradation"
+  - node: "Run LinkedIn Actor (Sync)"
+    fix: "Added onError: continueRegularOutput (LinkedIn actor trial expired)"
+  - node: "Filter Reddit 50+ Upvotes"
+    fix: "Added error item skip logic for continueOnFail output"
+  - node: "Normalize LinkedIn Posts"
+    fix: "Added error item skip logic for continueOnFail output"
+  - node: "Claude Classify Signal"
+    fix: "Updated model to claude-sonnet-4-6 (previous models returned 400)"
+  - node: "Post Error to Supabase"
+    fix: "Added Accept-Profile/Content-Profile: linkedin_engine headers (table is in linkedin_engine schema, not public)"
+  - node: "Post Error to Supabase"
+    fix: "Added onError: continueRegularOutput so error chain continues to Log Workflow Failed"
+
+escalation:
+  - issue: "Anthropic API credit balance depleted"
+    impact: "Blocks Claude Classify Signal and all downstream nodes (Parse, Insert, Count, Log Complete)"
+    action: "Top up Anthropic API credits at console.anthropic.com"
+  - issue: "LinkedIn Apify actor trial expired"
+    impact: "curious_coder~linkedin-post-search-scraper returns 'actor-is-not-rented' error"
+    action: "Rent actor on Apify ($49/mo) or find alternative LinkedIn scraper"

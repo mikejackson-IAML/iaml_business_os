@@ -1,5 +1,5 @@
 {
-  "name": "Waterfall Enrichment (LinkedIn → Apollo → NeverBounce)",
+  "name": "Waterfall Enrichment (Apollo → Hunter.io → NeverBounce)",
   "nodes": [
     {
       "parameters": {
@@ -16,7 +16,7 @@
       "name": "Schedule Trigger",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
-      "position": [-1600, 400]
+      "position": [-1800, 400]
     },
     {
       "parameters": {
@@ -25,30 +25,94 @@
         "options": {}
       },
       "id": "wf-enrich-webhook",
-      "name": "Manual Trigger / Connection Accepted",
+      "name": "Webhook Trigger",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [-1600, 600],
+      "position": [-1800, 600],
       "webhookId": "waterfall-enrichment"
     },
     {
       "parameters": {
-        "operation": "executeQuery",
-        "query": "-- Get LinkedIn-only contacts that need email enrichment\n-- Priority: Recently connected > campaign enrolled > by creation date\nSELECT \n  c.id as contact_id,\n  c.first_name,\n  c.last_name,\n  c.company,\n  c.job_title,\n  c.linkedin_url,\n  cc.id as campaign_contact_id,\n  ccc.linkedin_connected,\n  ccc.linkedin_connected_at\nFROM contacts c\nJOIN campaign_contacts cc ON c.id = cc.contact_id\nLEFT JOIN campaign_contact_channels ccc ON ccc.campaign_contact_id = cc.id \n  AND ccc.campaign_channel_id = 'cc111111-2222-3333-4444-555566667777'\nWHERE cc.campaign_id = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'\n  AND cc.status = 'active'\n  AND c.linkedin_url IS NOT NULL\n  AND c.linkedin_url != ''\n  AND (c.email IS NULL OR c.email = '')  -- No email yet\n  AND (c.email_validation_result IS NULL OR c.email_validation_result NOT IN ('valid', 'invalid'))  -- Not yet validated\nORDER BY \n  ccc.linkedin_connected DESC NULLS LAST,  -- Prioritize connected contacts\n  cc.created_at ASC\nLIMIT 25  -- Batch size (Apollo credit conscious)",
+        "method": "POST",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/rpc/log_workflow_start",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_workflow_id\": \"waterfall-enrichment\",\n  \"p_workflow_name\": \"Waterfall Enrichment\",\n  \"p_execution_id\": \"{{ $execution.id }}\",\n  \"p_trigger_type\": \"schedule\",\n  \"p_trigger_data\": {}\n}",
+        "options": {}
+      },
+      "id": "wf-enrich-log-start",
+      "name": "Log Workflow Start",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-1600, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "supabase-rest-api",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/contacts",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "select",
+              "value": "id,first_name,last_name,company,job_title,title,linkedin_url,lead_source"
+            },
+            {
+              "name": "linkedin_url",
+              "value": "not.is.null"
+            },
+            {
+              "name": "email",
+              "value": "is.null"
+            },
+            {
+              "name": "enriched_at",
+              "value": "is.null"
+            },
+            {
+              "name": "limit",
+              "value": "25"
+            },
+            {
+              "name": "order",
+              "value": "created_at.desc"
+            }
+          ]
+        },
         "options": {}
       },
       "id": "wf-enrich-query",
       "name": "Get Contacts Without Email",
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.5,
-      "position": [-1200, 400],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-1400, 400],
       "alwaysOutputData": true,
       "credentials": {
-        "postgres": {
-          "id": "EgmvZHbvINHsh6PR",
-          "name": "Supabase Postgres"
+        "httpHeaderAuth": {
+          "id": "supabase-rest-api",
+          "name": "Supabase REST API"
         }
       }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Store run_id from log start and check if we have contacts\nconst logResult = $('Log Workflow Start').first().json;\nconst contacts = $('Get Contacts Without Email').first().json;\n\nconst staticData = $getWorkflowStaticData('global');\nstaticData.run_id = logResult.run_id || logResult;\n\n// Check if contacts is an array with items\nconst hasContacts = Array.isArray(contacts) ? contacts.length > 0 : (contacts && contacts.id);\n\nreturn [{ json: { has_contacts: hasContacts, contacts: Array.isArray(contacts) ? contacts : [contacts].filter(c => c && c.id) } }];"
+      },
+      "id": "wf-enrich-check-contacts",
+      "name": "Check Contacts",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-1200, 400]
     },
     {
       "parameters": {
@@ -61,11 +125,11 @@
           "conditions": [
             {
               "id": "has-contacts",
-              "leftValue": "={{ $json.length || ($json.contact_id ? 1 : 0) }}",
-              "rightValue": 0,
+              "leftValue": "={{ $json.has_contacts }}",
+              "rightValue": true,
               "operator": {
-                "type": "number",
-                "operation": "gt"
+                "type": "boolean",
+                "operation": "equals"
               }
             }
           ],
@@ -80,12 +144,24 @@
       "position": [-1000, 400]
     },
     {
-      "parameters": {},
+      "parameters": {
+        "jsCode": "// Split contacts array into individual items\nconst contacts = $json.contacts || [];\nreturn contacts.map(c => ({ json: c }));"
+      },
       "id": "wf-enrich-split",
-      "name": "Split Out Items",
-      "type": "n8n-nodes-base.splitOut",
-      "typeVersion": 1,
+      "name": "Split Contacts",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [-800, 304]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Normalize the contact data\nconst contact = $input.first().json;\n\nreturn {\n  json: {\n    contact_id: contact.id,\n    first_name: contact.first_name,\n    last_name: contact.last_name,\n    company: contact.company,\n    job_title: contact.job_title || contact.title,\n    linkedin_url: contact.linkedin_url,\n    lead_source: contact.lead_source\n  }\n};"
+      },
+      "id": "wf-enrich-normalize",
+      "name": "Normalize Contact",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-600, 304]
     },
     {
       "parameters": {
@@ -102,7 +178,7 @@
       "name": "Apollo Enrichment",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [-600, 304],
+      "position": [-400, 304],
       "credentials": {
         "httpHeaderAuth": {
           "id": "apollo-api-key",
@@ -113,13 +189,13 @@
     },
     {
       "parameters": {
-        "jsCode": "const input = $input.first().json;\nconst originalContact = $('Split Out Items').first().json;\n\n// Extract email from Apollo response\nlet email = null;\nlet apolloData = {};\n\nif (input && input.person) {\n  const person = input.person;\n  email = person.email || null;\n  apolloData = {\n    apollo_id: person.id,\n    email: email,\n    phone: person.phone_numbers?.[0]?.sanitized_number || null,\n    title: person.title || null,\n    organization: person.organization?.name || null,\n    linkedin_url: person.linkedin_url || null\n  };\n}\n\nreturn {\n  json: {\n    ...originalContact,\n    enriched_email: email,\n    apollo_data: apolloData,\n    needs_validation: email !== null\n  }\n};"
+        "jsCode": "const input = $input.first().json;\nconst originalContact = $('Normalize Contact').first().json;\n\nlet email = null;\nlet enrichSource = null;\nlet enrichData = {};\n\nif (input && input.person) {\n  const person = input.person;\n  email = person.email || null;\n  enrichSource = email ? 'apollo' : null;\n  enrichData = {\n    apollo_id: person.id,\n    email: email,\n    phone: person.phone_numbers?.[0]?.sanitized_number || null,\n    title: person.title || null,\n    organization: person.organization?.name || null,\n    linkedin_url: person.linkedin_url || null,\n    city: person.city || null,\n    state: person.state || null,\n    country: person.country || null\n  };\n}\n\nreturn {\n  json: {\n    ...originalContact,\n    enriched_email: email,\n    enrich_source: enrichSource,\n    enrich_data: enrichData,\n    apollo_found_email: email !== null\n  }\n};"
       },
       "id": "wf-enrich-extract-apollo",
       "name": "Extract Apollo Data",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [-400, 304]
+      "position": [-200, 304]
     },
     {
       "parameters": {
@@ -131,7 +207,80 @@
           },
           "conditions": [
             {
-              "id": "has-email",
+              "id": "apollo-has-email",
+              "leftValue": "={{ $json.enriched_email }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "wf-enrich-apollo-found",
+      "name": "Apollo Found Email?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [0, 304]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.hunter.io/v2/email-finder",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "api_key",
+              "value": "ced4702d22990bb80dbb7967db225492f2c24f9a"
+            },
+            {
+              "name": "first_name",
+              "value": "={{ $json.first_name }}"
+            },
+            {
+              "name": "last_name",
+              "value": "={{ $json.last_name }}"
+            },
+            {
+              "name": "company",
+              "value": "={{ $json.company }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "wf-enrich-hunter",
+      "name": "Hunter.io Fallback",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [200, 400],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const hunterResponse = $input.first().json;\nconst contactData = $('Apollo Found Email?').first().json;\n\nlet email = null;\nlet enrichSource = null;\nlet enrichData = contactData.enrich_data || {};\n\nif (hunterResponse && hunterResponse.data && hunterResponse.data.email) {\n  email = hunterResponse.data.email;\n  enrichSource = 'hunter';\n  enrichData = {\n    ...enrichData,\n    hunter_email: email,\n    hunter_score: hunterResponse.data.score,\n    hunter_position: hunterResponse.data.position,\n    hunter_company: hunterResponse.data.company,\n    hunter_sources: hunterResponse.data.sources?.length || 0\n  };\n}\n\nreturn {\n  json: {\n    ...contactData,\n    enriched_email: email,\n    enrich_source: enrichSource || contactData.enrich_source,\n    enrich_data: enrichData,\n    hunter_found_email: email !== null\n  }\n};"
+      },
+      "id": "wf-enrich-extract-hunter",
+      "name": "Extract Hunter Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [400, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-email-after-waterfall",
               "leftValue": "={{ $json.enriched_email }}",
               "rightValue": "",
               "operator": {
@@ -148,7 +297,7 @@
       "name": "Found Email?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [-200, 304]
+      "position": [600, 304]
     },
     {
       "parameters": {
@@ -163,36 +312,121 @@
       "name": "NeverBounce Validation",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [0, 208],
+      "position": [800, 208],
       "onError": "continueRegularOutput"
     },
     {
       "parameters": {
-        "jsCode": "const nbResponse = $input.first().json;\nconst contactData = $('Found Email?').first().json;\n\n// NeverBounce result codes:\n// 0 = valid, 1 = invalid, 2 = disposable, 3 = catchall, 4 = unknown\nconst resultMap = {\n  0: 'valid',\n  1: 'invalid',\n  2: 'invalid',  // disposable\n  3: 'catch_all',\n  4: 'unknown'\n};\n\nconst resultCode = nbResponse.result;\nconst validationResult = resultMap[resultCode] || 'unknown';\nconst isUsable = ['valid', 'catch_all'].includes(validationResult);\n\nreturn {\n  json: {\n    ...contactData,\n    email_validation_result: validationResult,\n    email_validation_code: resultCode,\n    email_is_usable: isUsable,\n    neverbounce_response: nbResponse\n  }\n};"
+        "jsCode": "const nbResponse = $input.first().json;\nconst contactData = $('Found Email?').first().json;\n\n// NeverBounce result codes:\n// 0 = valid, 1 = invalid, 2 = disposable, 3 = catchall, 4 = unknown\nconst resultMap = {\n  0: 'valid',\n  1: 'invalid',\n  2: 'invalid',\n  3: 'catch_all',\n  4: 'unknown'\n};\n\nconst resultCode = nbResponse.result;\nconst validationResult = resultMap[resultCode] || 'unknown';\n\nreturn {\n  json: {\n    ...contactData,\n    email_validation_result: validationResult,\n    email_validation_code: resultCode,\n    neverbounce_response: nbResponse\n  }\n};"
       },
       "id": "wf-enrich-process-nb",
       "name": "Process NeverBounce Result",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [200, 208]
+      "position": [1000, 208]
     },
     {
       "parameters": {
-        "operation": "executeQuery",
-        "query": "=-- Update contact with enriched email and validation\nUPDATE contacts\nSET \n  email = '{{ $json.enriched_email }}',\n  email_status = '{{ $json.email_validation_result }}',\n  email_validation_result = '{{ $json.email_validation_result }}',\n  email_validated_at = NOW(),\n  email_validation_source = 'neverbounce',\n  email_validation_details = '{{ JSON.stringify({\n    source: \"waterfall_enrichment\",\n    apollo_data: $json.apollo_data,\n    neverbounce_code: $json.email_validation_code,\n    enriched_at: $now.toISO()\n  }) }}'::jsonb,\n  updated_at = NOW()\nWHERE id = '{{ $json.contact_id }}'",
+        "method": "PATCH",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/contacts?id=eq.{{ $json.contact_id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"email\": \"{{ $json.enriched_email }}\",\n  \"email_status\": \"{{ $json.email_validation_result }}\",\n  \"email_validation_result\": \"{{ $json.email_validation_result }}\",\n  \"email_validation_source\": \"neverbounce\",\n  \"enrichment_source\": \"{{ $json.enrich_source }}\",\n  \"enrichment_data\": {{ JSON.stringify($json.enrich_data) }},\n  \"enriched_at\": \"{{ $now.toISO() }}\",\n  \"email_validated_at\": \"{{ $now.toISO() }}\"\n}",
         "options": {}
       },
       "id": "wf-enrich-update-contact",
-      "name": "Update Contact with Email",
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.5,
-      "position": [400, 208],
+      "name": "Update Contact in Supabase",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1200, 208],
       "credentials": {
-        "postgres": {
-          "id": "EgmvZHbvINHsh6PR",
-          "name": "Supabase Postgres"
+        "httpHeaderAuth": {
+          "id": "supabase-rest-api",
+          "name": "Supabase REST API"
         }
       }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/lead_intelligence_activity",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"activity_type\": \"enrichment_completed\",\n  \"description\": \"Enriched: {{ $('Process NeverBounce Result').first().json.first_name }} {{ $('Process NeverBounce Result').first().json.last_name }} via {{ $('Process NeverBounce Result').first().json.enrich_source }}\",\n  \"source_name\": \"waterfall_enrichment\",\n  \"metadata\": {{ JSON.stringify({ contact_id: $('Process NeverBounce Result').first().json.contact_id, email: $('Process NeverBounce Result').first().json.enriched_email, source: $('Process NeverBounce Result').first().json.enrich_source, validation: $('Process NeverBounce Result').first().json.email_validation_result }) }}\n}",
+        "options": {}
+      },
+      "id": "wf-enrich-log-activity",
+      "name": "Log Enrichment Activity",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1400, 208],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "supabase-rest-api",
+          "name": "Supabase REST API"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/contacts?id=eq.{{ $json.contact_id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"enrichment_source\": \"none_found\",\n  \"enrichment_data\": {{ JSON.stringify($json.enrich_data || {}) }},\n  \"enriched_at\": \"{{ $now.toISO() }}\"\n}",
+        "options": {}
+      },
+      "id": "wf-enrich-mark-no-email",
+      "name": "Mark No Email Found",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [800, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "supabase-rest-api",
+          "name": "Supabase REST API"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"success\": true,\n  \"processed_count\": 0,\n  \"message\": \"No contacts need enrichment\"\n}",
+        "options": {}
+      },
+      "id": "wf-enrich-no-contacts",
+      "name": "No Contacts Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-800, 496]
+    },
+    {
+      "parameters": {
+        "amount": 2
+      },
+      "id": "wf-enrich-wait",
+      "name": "Wait 2 Seconds",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1600, 208]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare success log\nconst staticData = $getWorkflowStaticData('global');\nconst runId = staticData.run_id;\n\nreturn [{ json: { run_id: runId, has_run_id: !!runId } }];"
+      },
+      "id": "wf-enrich-prepare-success",
+      "name": "Prepare Success Log",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1800, 300]
     },
     {
       "parameters": {
@@ -204,8 +438,8 @@
           },
           "conditions": [
             {
-              "id": "email-usable",
-              "leftValue": "={{ $('Process NeverBounce Result').first().json.email_is_usable }}",
+              "id": "has-run-id",
+              "leftValue": "={{ $json.has_run_id }}",
               "rightValue": true,
               "operator": {
                 "type": "boolean",
@@ -217,121 +451,67 @@
         },
         "options": {}
       },
-      "id": "wf-enrich-is-usable",
-      "name": "Email Usable?",
+      "id": "wf-enrich-check-run-id",
+      "name": "Has Run ID?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [600, 208]
+      "position": [2000, 300]
     },
     {
       "parameters": {
-        "operation": "executeQuery",
-        "query": "=-- Add contact to SmartLead channel now that we have valid email\nINSERT INTO campaign_contact_channels (campaign_contact_id, campaign_channel_id, status)\nVALUES (\n  '{{ $('Process NeverBounce Result').first().json.campaign_contact_id }}',\n  'cc222222-3333-4444-5555-666677778888',\n  'pending'\n)\nON CONFLICT (campaign_contact_id, campaign_channel_id) \nDO UPDATE SET status = 'pending', updated_at = NOW()",
+        "method": "POST",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/rpc/log_workflow_success",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_run_id\": \"{{ $json.run_id }}\",\n  \"p_output_data\": {\"status\": \"completed\"}\n}",
         "options": {}
       },
-      "id": "wf-enrich-add-to-smartlead",
-      "name": "Add to SmartLead Channel",
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.5,
-      "position": [800, 112],
+      "id": "wf-enrich-log-success",
+      "name": "Log Workflow Success",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2200, 200],
       "credentials": {
-        "postgres": {
-          "id": "EgmvZHbvINHsh6PR",
-          "name": "Supabase Postgres"
+        "httpHeaderAuth": {
+          "id": "supabase-rest-api",
+          "name": "Supabase REST API"
         }
       }
     },
     {
       "parameters": {
-        "operation": "executeQuery",
-        "query": "=-- Log enrichment activity\nINSERT INTO campaign_activity (\n  campaign_contact_id,\n  activity_type,\n  channel,\n  metadata\n) VALUES (\n  '{{ $('Process NeverBounce Result').first().json.campaign_contact_id }}',\n  'contact_created',\n  'system',\n  '{{ JSON.stringify({\n    action: \"email_enriched\",\n    email: $('Process NeverBounce Result').first().json.enriched_email,\n    validation_result: $('Process NeverBounce Result').first().json.email_validation_result,\n    source: \"apollo\",\n    validator: \"neverbounce\",\n    added_to_smartlead: $('Process NeverBounce Result').first().json.email_is_usable\n  }) }}'::jsonb\n)",
+        "jsCode": "// Parse error details\nconst error = $input.first().json;\nconst staticData = $getWorkflowStaticData('global');\nconst runId = staticData.run_id;\n\nconst errorMessage = error.message || error.error || JSON.stringify(error);\nconst errorNode = $execution?.customData?.lastNodeExecuted || 'unknown';\n\nreturn [{\n  json: {\n    run_id: runId,\n    error_message: errorMessage.substring(0, 1000),\n    error_node: errorNode,\n    error_node_type: 'unknown',\n    error_details: JSON.stringify({ execution_id: $execution.id })\n  }\n}];"
+      },
+      "id": "wf-enrich-parse-error",
+      "name": "Parse Error Details",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-1400, 700]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/rpc/log_workflow_error",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_run_id\": {{ $json.run_id ? '\"' + $json.run_id + '\"' : 'null' }},\n  \"p_error_message\": \"{{ $json.error_message.replace(/\"/g, '\\\\\"') }}\",\n  \"p_error_node\": \"{{ $json.error_node }}\",\n  \"p_error_type\": \"{{ $json.error_node_type }}\",\n  \"p_error_details\": {{ $json.error_details }}\n}",
         "options": {}
       },
-      "id": "wf-enrich-log-activity",
-      "name": "Log Enrichment Activity",
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.5,
-      "position": [1000, 112],
+      "id": "wf-enrich-log-error",
+      "name": "Log Error to DB",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-1200, 700],
       "credentials": {
-        "postgres": {
-          "id": "EgmvZHbvINHsh6PR",
-          "name": "Supabase Postgres"
+        "httpHeaderAuth": {
+          "id": "supabase-rest-api",
+          "name": "Supabase REST API"
         }
-      },
-      "onError": "continueRegularOutput"
-    },
-    {
-      "parameters": {
-        "operation": "executeQuery",
-        "query": "=-- Log that email was invalid\nINSERT INTO campaign_activity (\n  campaign_contact_id,\n  activity_type,\n  channel,\n  metadata\n) VALUES (\n  '{{ $('Process NeverBounce Result').first().json.campaign_contact_id }}',\n  'status_changed',\n  'system',\n  '{{ JSON.stringify({\n    action: \"email_invalid\",\n    email: $('Process NeverBounce Result').first().json.enriched_email,\n    validation_result: $('Process NeverBounce Result').first().json.email_validation_result,\n    source: \"apollo\",\n    validator: \"neverbounce\"\n  }) }}'::jsonb\n)",
-        "options": {}
-      },
-      "id": "wf-enrich-log-invalid",
-      "name": "Log Invalid Email",
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.5,
-      "position": [800, 304],
-      "credentials": {
-        "postgres": {
-          "id": "EgmvZHbvINHsh6PR",
-          "name": "Supabase Postgres"
-        }
-      },
-      "onError": "continueRegularOutput"
-    },
-    {
-      "parameters": {
-        "operation": "executeQuery",
-        "query": "=-- Log that no email was found for this contact\nINSERT INTO campaign_activity (\n  campaign_contact_id,\n  activity_type,\n  channel,\n  metadata\n) VALUES (\n  '{{ $json.campaign_contact_id }}',\n  'status_changed',\n  'system',\n  '{{ JSON.stringify({\n    action: \"enrichment_no_email\",\n    source: \"apollo\",\n    first_name: $json.first_name,\n    last_name: $json.last_name,\n    company: $json.company\n  }) }}'::jsonb\n)",
-        "options": {}
-      },
-      "id": "wf-enrich-log-no-email",
-      "name": "Log No Email Found",
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.5,
-      "position": [0, 400],
-      "credentials": {
-        "postgres": {
-          "id": "EgmvZHbvINHsh6PR",
-          "name": "Supabase Postgres"
-        }
-      },
-      "onError": "continueRegularOutput"
-    },
-    {
-      "parameters": {
-        "mode": "raw",
-        "jsonOutput": "={\n  \"success\": true,\n  \"processed_count\": 0,\n  \"message\": \"No contacts need enrichment\",\n  \"timestamp\": \"{{ $now.toISO() }}\"\n}",
-        "options": {}
-      },
-      "id": "wf-enrich-no-contacts",
-      "name": "No Contacts Response",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [-800, 496]
-    },
-    {
-      "parameters": {
-        "batchSize": 1,
-        "options": {
-          "reset": false
-        }
-      },
-      "id": "wf-enrich-loop",
-      "name": "Rate Limit Loop",
-      "type": "n8n-nodes-base.splitInBatches",
-      "typeVersion": 3,
-      "position": [-600, 500]
-    },
-    {
-      "parameters": {
-        "amount": 2
-      },
-      "id": "wf-enrich-wait",
-      "name": "Wait 2 Seconds",
-      "type": "n8n-nodes-base.wait",
-      "typeVersion": 1.1,
-      "position": [1200, 112]
+      }
     }
   ],
   "connections": {
@@ -339,14 +519,25 @@
       "main": [
         [
           {
-            "node": "Get Contacts Without Email",
+            "node": "Log Workflow Start",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Manual Trigger / Connection Accepted": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Log Workflow Start",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Workflow Start": {
       "main": [
         [
           {
@@ -361,6 +552,17 @@
       "main": [
         [
           {
+            "node": "Check Contacts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Contacts": {
+      "main": [
+        [
+          {
             "node": "Has Contacts?",
             "type": "main",
             "index": 0
@@ -372,7 +574,7 @@
       "main": [
         [
           {
-            "node": "Split Out Items",
+            "node": "Split Contacts",
             "type": "main",
             "index": 0
           }
@@ -386,7 +588,18 @@
         ]
       ]
     },
-    "Split Out Items": {
+    "Split Contacts": {
+      "main": [
+        [
+          {
+            "node": "Normalize Contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Contact": {
       "main": [
         [
           {
@@ -412,6 +625,46 @@
       "main": [
         [
           {
+            "node": "Apollo Found Email?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Apollo Found Email?": {
+      "main": [
+        [
+          {
+            "node": "Found Email?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Hunter.io Fallback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hunter.io Fallback": {
+      "main": [
+        [
+          {
+            "node": "Extract Hunter Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Hunter Data": {
+      "main": [
+        [
+          {
             "node": "Found Email?",
             "type": "main",
             "index": 0
@@ -430,7 +683,7 @@
         ],
         [
           {
-            "node": "Log No Email Found",
+            "node": "Mark No Email Found",
             "type": "main",
             "index": 0
           }
@@ -452,43 +705,14 @@
       "main": [
         [
           {
-            "node": "Update Contact with Email",
+            "node": "Update Contact in Supabase",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Update Contact with Email": {
-      "main": [
-        [
-          {
-            "node": "Email Usable?",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Email Usable?": {
-      "main": [
-        [
-          {
-            "node": "Add to SmartLead Channel",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Log Invalid Email",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Add to SmartLead Channel": {
+    "Update Contact in Supabase": {
       "main": [
         [
           {
@@ -509,22 +733,90 @@
           }
         ]
       ]
+    },
+    "Wait 2 Seconds": {
+      "main": [
+        [
+          {
+            "node": "Prepare Success Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Contacts Response": {
+      "main": [
+        [
+          {
+            "node": "Prepare Success Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark No Email Found": {
+      "main": [
+        [
+          {
+            "node": "Prepare Success Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Success Log": {
+      "main": [
+        [
+          {
+            "node": "Has Run ID?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Run ID?": {
+      "main": [
+        [
+          {
+            "node": "Log Workflow Success",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Parse Error Details": {
+      "main": [
+        [
+          {
+            "node": "Log Error to DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
   "settings": {
     "executionOrder": "v1",
     "saveManualExecutions": true,
-    "callerPolicy": "workflowsFromSameOwner"
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
   },
-  "versionId": "1",
+  "versionId": "5",
   "meta": {
-    "instanceId": "alumni-reconnect-enrichment"
+    "instanceId": "waterfall-enrichment-pipeline"
   },
   "tags": [
     {
-      "name": "alumni-reconnect",
-      "id": "tag-alumni"
+      "name": "lead-intelligence",
+      "id": "tag-lead-intel"
     },
     {
       "name": "enrichment",

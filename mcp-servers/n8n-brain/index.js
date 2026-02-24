@@ -210,6 +210,11 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               type: "object",
               description: "Example of the correct configuration",
             },
+            error_category: {
+              type: "string",
+              description:
+                "Error category (auto-detected if omitted): connection, authentication, data_format, timeout, node_config, rate_limit, server_error, unknown",
+            },
           },
           required: ["error_message", "fix_description"],
         },
@@ -228,6 +233,11 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             node_type: {
               type: "string",
               description: "The node type to narrow results",
+            },
+            error_category: {
+              type: "string",
+              description:
+                "Filter by error category: connection, authentication, data_format, timeout, node_config, rate_limit, server_error",
             },
           },
           required: ["error_message"],

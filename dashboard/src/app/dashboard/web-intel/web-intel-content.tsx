@@ -77,7 +77,8 @@ export function WebIntelContent({
   const recommendationCount = transformedRecs.length;
 
   return (
-    <div className="p-6 lg:p-8 space-y-6">
+    <div className="relative min-h-screen w-full">
+      <div className="relative z-10 p-6 lg:p-8 space-y-6">
       {/* Header */}
       <header className="mb-8">
         <div className="flex items-center justify-between mb-2">
@@ -268,6 +269,7 @@ export function WebIntelContent({
           />
         </TabsContent>
       </Tabs>
+      </div>
     </div>
   );
 }

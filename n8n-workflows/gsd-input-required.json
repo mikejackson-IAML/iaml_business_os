@@ -1,0 +1,90 @@
+{
+  "name": "GSD Input Required",
+  "id": "YIr6VqggeG6N0s1Y",
+  "nodes": [
+    {
+      "id": "webhook-1",
+      "name": "GSD Input Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-400, 300],
+      "webhookId": "gsd-input-v2",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "gsd-input",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "code-1",
+      "name": "Extract Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-180, 300],
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nconst body = input.body || input;\n\nreturn [{\n  json: {\n    type: body.type || 'unknown',\n    project: body.project || 'unknown',\n    phase: body.phase || '',\n    plan: body.plan || '',\n    summary: body.summary || 'Input required',\n    details: body.details || '',\n    action_needed: body.action_needed || 'Please respond',\n    session_url: body.session_url || '',\n    timestamp: new Date().toISOString()\n  }\n}];"
+      }
+    },
+    {
+      "id": "code-2",
+      "name": "Build Slack Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [40, 300],
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\nconst typeEmoji = {'checkpoint': ':pause_button:', 'decision': ':thinking_face:', 'blocked': ':octagonal_sign:', 'verification': ':white_check_mark:', 'test': ':test_tube:', 'unknown': ':bell:'};\nconst emoji = typeEmoji[data.type] || ':bell:';\n\nlet location = '';\nif (data.phase && data.plan) location = '*Phase:* ' + data.phase + ' | *Plan:* ' + data.plan;\nelse if (data.phase) location = '*Phase:* ' + data.phase;\nelse if (data.plan) location = '*Plan:* ' + data.plan;\n\nconst blocks = [\n  {type: 'header', text: {type: 'plain_text', text: emoji + ' GSD Input Required', emoji: true}},\n  {type: 'section', fields: [{type: 'mrkdwn', text: '*Project:*\\n' + data.project}, {type: 'mrkdwn', text: '*Type:*\\n' + data.type}]}\n];\n\nif (location) blocks.push({type: 'section', text: {type: 'mrkdwn', text: location}});\nblocks.push({type: 'section', text: {type: 'mrkdwn', text: '*Summary:*\\n' + data.summary}});\nif (data.details && data.details.trim()) blocks.push({type: 'section', text: {type: 'mrkdwn', text: '*Details:*\\n' + data.details}});\nblocks.push({type: 'section', text: {type: 'mrkdwn', text: '*Action needed:*\\n' + data.action_needed}});\nif (data.session_url && data.session_url.trim()) blocks.push({type: 'actions', elements: [{type: 'button', text: {type: 'plain_text', text: 'Open Claude Session', emoji: true}, url: data.session_url, action_id: 'open_session'}]});\nblocks.push({type: 'divider'}, {type: 'context', elements: [{type: 'mrkdwn', text: 'Received at ' + data.timestamp}]});\n\nreturn [{json: {...data, slack_blocks: blocks, slack_text: 'GSD Input Required: ' + data.project + ' - ' + data.summary}}];"
+      }
+    },
+    {
+      "id": "http-1",
+      "name": "Send to Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [260, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/YOUR_SLACK_WEBHOOK_URL",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ text: $json.slack_text, blocks: $json.slack_blocks }) }}",
+        "options": {}
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "respond-1",
+      "name": "Return Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [480, 300],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: true, message: 'Notification sent', project: $('Extract Payload').first().json.project }) }}",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "GSD Input Webhook": {
+      "main": [[{"node": "Extract Payload", "type": "main", "index": 0}]]
+    },
+    "Extract Payload": {
+      "main": [[{"node": "Build Slack Message", "type": "main", "index": 0}]]
+    },
+    "Build Slack Message": {
+      "main": [[{"node": "Send to Slack", "type": "main", "index": 0}]]
+    },
+    "Send to Slack": {
+      "main": [[{"node": "Return Success", "type": "main", "index": 0}]]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "notes": "Sends Slack notifications when Claude Cloud needs human input during GSD execution. Webhook URL: https://n8n.realtyamp.ai/webhook/gsd-input"
+  },
+  "tags": ["operations", "gsd", "notifications"]
+}

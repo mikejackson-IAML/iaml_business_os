@@ -1,0 +1,68 @@
+workflow_id: DtCML41ZGWAR2Srf
+workflow_name: "Web Intel - Traffic - Source Breakdown"
+tested_at: "2026-02-20T05:05:25Z"
+tested_by: test-workflow-auto
+test_status: verified
+
+trigger:
+  type: schedule
+  schedule: "Daily 6:30am CT (cron: 30 6 * * *)"
+  alt_trigger: "Manual Test (Webhook) - GET /webhook/test-traffic-source"
+
+nodes:
+  total: 9
+  covered: 8
+  uncovered:
+    - name: "Daily 6:30am CT"
+      type: scheduleTrigger
+      reason: "Schedule triggers cannot be invoked via API; verified running daily via execution history"
+
+scenarios:
+  - name: natural_run
+    description: "Execute full pipeline with live GA4 data via webhook trigger"
+    method: GET
+    webhook_path: test-traffic-source
+    payload: null
+    execution_id: "194920"
+    status: success
+    nodes_executed:
+      - "Manual Test (Webhook)"
+      - "GA4 - Fetch Source Metrics"
+      - "Transform to JSONB"
+      - "Supabase - Update Source Breakdown"
+      - "Log Success"
+    data_verified:
+      ga4_channels: ["Direct", "Organic Search", "Referral"]
+      total_sessions: 58
+      source_breakdown_keys: ["direct", "organic_search", "referral", "organic_social", "email", "paid_search", "paid_social", "display", "affiliates", "unassigned"]
+
+  - name: error_path
+    description: "Error handling path triggered by original bug (pre-fix)"
+    execution_id: "194912"
+    status: success
+    nodes_executed:
+      - "Error Trigger"
+      - "Slack - Error Alert"
+      - "Log Error"
+    verified: "Slack notification sent, error logged to Supabase"
+
+coverage:
+  node_percent: 89
+  branch_percent: 100
+  note: "8/9 nodes. scheduleTrigger excluded (untestable via API, verified via execution history)"
+
+fixes_applied:
+  - node: "Supabase - Update Source Breakdown"
+    issue: "Cannot read properties of undefined (reading 'data')"
+    root_cause: "RPC update_source_breakdown returns void; responseFormat:json caused n8n to fail parsing empty body"
+    fix: "Removed responseFormat:json from node options (changed options from {response:{response:{responseFormat:'json'}}} to {})"
+    brain_fix_id: "487bbd8b-5ae6-41b5-b1c0-f515f493e5fe"
+    verified: true
+
+compliance:
+  error_handling: true
+  business_os_tag: true
+  postgres_always_output: "n/a (no Postgres nodes)"
+  validation_profile: strict
+  validation_errors: 0
+  validation_warnings: 21

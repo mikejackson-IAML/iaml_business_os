@@ -1,0 +1,1354 @@
+{
+  "name": "PhantomBuster Sales Navigator Scraper",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "id": "pb-schedule-trigger",
+      "name": "Schedule: Daily 9am",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [-1800, 400]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "pb-queue-url",
+        "options": {}
+      },
+      "id": "pb-webhook-trigger",
+      "name": "Webhook: Queue URL",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-1800, 200],
+      "webhookId": "pb-queue-url"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "pb-test-main",
+        "options": {}
+      },
+      "id": "pb-test-trigger",
+      "name": "Test: Trigger Main Flow",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-1800, 600],
+      "webhookId": "pb-test-main"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/rpc/log_workflow_start",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_workflow_id\": \"phantombuster-sales-nav-scraper\",\n  \"p_workflow_name\": \"PhantomBuster Sales Navigator Scraper\",\n  \"p_execution_id\": \"{{ $execution.id }}\"\n}",
+        "options": {}
+      },
+      "id": "pb-log-start",
+      "name": "Log Workflow Start",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-1600, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse webhook input for queue URL request\nconst body = $input.first().json.body || $input.first().json;\nlet searchName = body.search_name || body.searchName || 'Unnamed Search';\nlet searchUrl = body.url || body.search_url || body.searchUrl || '';\nlet pbAgentId = body.pb_agent_id || body.phantombuster_agent_id || null;\n\n// Validate URL\nif (!searchUrl.includes('linkedin.com/sales')) {\n  throw new Error('Invalid Sales Navigator URL. Must contain linkedin.com/sales');\n}\n\nreturn [{\n  json: {\n    search_name: searchName,\n    search_url: searchUrl,\n    pb_agent_id: pbAgentId\n  }\n}];"
+      },
+      "id": "pb-parse-webhook",
+      "name": "Parse Webhook Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-1600, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/rpc/queue_pb_search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_search_name\": \"{{ $json.search_name }}\",\n  \"p_search_url\": \"{{ $json.search_url }}\",\n  \"p_pb_agent_id\": {{ $json.pb_agent_id ? '\"' + $json.pb_agent_id + '\"' : 'null' }}\n}",
+        "options": {}
+      },
+      "id": "pb-queue-search",
+      "name": "Queue Search in DB",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-1400, 200],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "pb-webhook-response",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [-1200, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Store run_id from log start\nconst logResult = $('Log Workflow Start').first().json;\nconst staticData = $getWorkflowStaticData('global');\nstaticData.run_id = logResult.run_id || logResult;\n\nreturn [{ json: { run_id: staticData.run_id } }];"
+      },
+      "id": "pb-store-run-id",
+      "name": "Store Run ID",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-1400, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/rpc/check_pb_daily_limit",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "pb-check-limit",
+      "name": "Check Daily Limit",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-1200, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "limit-check",
+              "leftValue": "={{ $json.limit_reached }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "pb-limit-check",
+      "name": "Daily Limit OK?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [-1000, 400]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\"message\": \"Daily limit reached. Will resume tomorrow.\"}",
+        "options": {}
+      },
+      "id": "pb-limit-reached",
+      "name": "Limit Reached - Stop",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-800, 550]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/rpc/get_next_pb_search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "pb-get-next",
+      "name": "Get Next Search",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-800, 400],
+      "alwaysOutputData": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Check if we have a search to process\nconst result = $input.first().json;\nconst hasSearch = Array.isArray(result) ? result.length > 0 : (result && result.id);\nconst search = Array.isArray(result) ? result[0] : result;\n\n// Store daily limit info for later\nconst dailyLimit = $('Check Daily Limit').first().json;\n\nreturn [{\n  json: {\n    has_search: !!(hasSearch && search && search.id),\n    search: search || null,\n    daily_remaining: dailyLimit.remaining,\n    profiles_scraped_today: dailyLimit.profiles_scraped\n  }\n}];"
+      },
+      "id": "pb-check-search",
+      "name": "Check Search Available",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-600, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-search",
+              "leftValue": "={{ $json.has_search }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "pb-has-search",
+      "name": "Has Search?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [-400, 400]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\"message\": \"No pending searches to process\"}",
+        "options": {}
+      },
+      "id": "pb-no-search",
+      "name": "No Pending Searches",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-200, 550]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/rpc/mark_pb_search_in_progress",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_search_id\": \"{{ $json.search.id }}\",\n  \"p_pb_agent_id\": {{ $json.search.pb_agent_id ? '\"' + $json.search.pb_agent_id + '\"' : 'null' }}\n}",
+        "options": {}
+      },
+      "id": "pb-mark-in-progress",
+      "name": "Mark In Progress",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-200, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare PhantomBuster launch parameters\nconst searchData = $('Check Search Available').first().json;\nconst search = searchData.search;\nconst dailyRemaining = searchData.daily_remaining;\n\n// Option A: 1500 profiles per run (matches PhantomBuster config)\n// Use min of 1500 or remaining daily limit\nconst batchSize = Math.min(1500, dailyRemaining);\n\n// Get offset for resume (0 for new searches, current_offset for paused)\nconst offset = search.current_offset || 0;\n\n// Default Phantom ID: IAML Sales Nav Scraper\nconst defaultPhantomId = '261754944017446';\n\nreturn [{\n  json: {\n    search_id: search.id,\n    search_name: search.search_name,\n    search_url: search.search_url,\n    pb_agent_id: search.pb_agent_id || defaultPhantomId,\n    offset: offset,\n    batch_size: batchSize,\n    is_resume: search.status === 'paused'\n  }\n}];"
+      },
+      "id": "pb-prepare-launch",
+      "name": "Prepare Launch Params",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [0, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.phantombuster.com/api/v2/agents/launch",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"id\": \"{{ $json.pb_agent_id }}\"\n}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "pb-launch-agent",
+      "name": "Launch PhantomBuster",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [200, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "dvpqARPbngYw9Pgn",
+          "name": "PhantomBuster API Key"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Process launch response\nconst response = $input.first().json;\nconst launchParams = $('Prepare Launch Params').first().json;\n\nif (response.containerId) {\n  return [{\n    json: {\n      success: true,\n      search_id: launchParams.search_id,\n      container_id: response.containerId,\n      pb_agent_id: launchParams.pb_agent_id || response.agentId,\n      batch_size: launchParams.batch_size\n    }\n  }];\n} else {\n  return [{\n    json: {\n      success: false,\n      search_id: launchParams.search_id,\n      error: response.error || response.message || 'Unknown PhantomBuster error'\n    }\n  }];\n}"
+      },
+      "id": "pb-process-launch",
+      "name": "Process Launch Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [400, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "launch-success",
+              "leftValue": "={{ $json.success }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "pb-launch-success",
+      "name": "Launch OK?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [600, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/rpc/update_pb_search_progress",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_search_id\": \"{{ $json.search_id }}\",\n  \"p_profiles_added\": 0,\n  \"p_new_status\": \"failed\"\n}",
+        "options": {}
+      },
+      "id": "pb-mark-failed",
+      "name": "Mark Search Failed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [800, 550],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 30,
+        "unit": "seconds"
+      },
+      "id": "pb-wait-1",
+      "name": "Wait 30s",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [800, 400]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.phantombuster.com/api/v2/agents/fetch?id={{ $json.pb_agent_id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "pb-poll-status",
+      "name": "Poll Agent Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1000, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "dvpqARPbngYw9Pgn",
+          "name": "PhantomBuster API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Check agent status\nconst response = $input.first().json;\nconst prevData = $('Process Launch Response').first().json;\n\n// FIXED: PhantomBuster uses lastEndType, not lastEndStatus\nconst status = response.lastEndType || response.status || 'unknown';\nconst isRunning = status === 'running' || status === 'launched';\nconst isFinished = status === 'finished' || status === 'success';\nconst isFailed = status === 'error' || status === 'failed';\n\n// Get static data for poll count\nconst staticData = $getWorkflowStaticData('global');\nstaticData.poll_count = (staticData.poll_count || 0) + 1;\n\n// Max 60 polls (30 minutes) - Option A scrapes up to 1500 profiles\nconst maxPolls = 60;\nconst shouldContinuePolling = isRunning && staticData.poll_count < maxPolls;\n\nreturn [{\n  json: {\n    search_id: prevData.search_id,\n    container_id: prevData.container_id,\n    pb_agent_id: prevData.pb_agent_id,\n    batch_size: prevData.batch_size,\n    status: status,\n    is_running: isRunning,\n    is_finished: isFinished,\n    is_failed: isFailed,\n    should_poll: shouldContinuePolling,\n    poll_count: staticData.poll_count,\n    output_url: response.s3Folder || null\n  }\n}];"
+      },
+      "id": "pb-check-status",
+      "name": "Check Agent Status",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1200, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "should-poll",
+              "leftValue": "={{ $json.should_poll }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "pb-poll-check",
+      "name": "Keep Polling?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1400, 400]
+    },
+    {
+      "parameters": {
+        "amount": 30,
+        "unit": "seconds"
+      },
+      "id": "pb-wait-2",
+      "name": "Wait 30s (poll)",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1600, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "is-finished",
+              "leftValue": "={{ $json.is_finished }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "pb-finished-check",
+      "name": "Finished OK?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1600, 500]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.phantombuster.com/api/v2/agents/fetch-output?id={{ $json.pb_agent_id }}&mode=most-recent",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "pb-fetch-output",
+      "name": "Fetch Results",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1800, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "dvpqARPbngYw9Pgn",
+          "name": "PhantomBuster API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Transform PhantomBuster output to our format\nconst output = $input.first().json;\nconst prevData = $('Check Agent Status').first().json;\n\n// PhantomBuster returns results in various formats\nlet profiles = [];\n\n// Try to extract profiles from different response structures\nif (output.output && Array.isArray(output.output)) {\n  profiles = output.output;\n} else if (output.resultObject && Array.isArray(output.resultObject)) {\n  profiles = output.resultObject;\n} else if (Array.isArray(output)) {\n  profiles = output;\n} else if (output.data && Array.isArray(output.data)) {\n  profiles = output.data;\n}\n\n// Filter out any non-profile objects\nprofiles = profiles.filter(p => p && (p.profileUrl || p.linkedInProfileUrl || p.profile_url));\n\nreturn [{\n  json: {\n    search_id: prevData.search_id,\n    pb_agent_id: prevData.pb_agent_id,\n    container_id: prevData.container_id,\n    profiles: profiles,\n    profile_count: profiles.length,\n    batch_size: prevData.batch_size\n  }\n}];"
+      },
+      "id": "pb-transform-output",
+      "name": "Transform Results",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2000, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/rpc/insert_pb_profiles",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_search_id\": \"{{ $json.search_id }}\",\n  \"p_profiles\": {{ JSON.stringify($json.profiles) }}\n}",
+        "options": {}
+      },
+      "id": "pb-insert-profiles",
+      "name": "Insert Profiles",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2200, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get insert result and prepare progress update\nconst insertResult = $input.first().json;\nconst transformData = $('Transform Results').first().json;\n\nconst profilesAdded = insertResult.inserted || 0;\n\nreturn [{\n  json: {\n    search_id: transformData.search_id,\n    pb_agent_id: transformData.pb_agent_id,\n    profiles_added: profilesAdded,\n    profiles_skipped: insertResult.skipped || 0,\n    total_in_batch: transformData.profile_count,\n    sales_nav_search_id: insertResult.sales_nav_search_id\n  }\n}];"
+      },
+      "id": "pb-process-insert",
+      "name": "Process Insert Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2400, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/rpc/update_pb_search_progress",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_search_id\": \"{{ $json.search_id }}\",\n  \"p_profiles_added\": {{ $json.profiles_added }},\n  \"p_pb_container_id\": \"{{ $json.pb_agent_id }}\"\n}",
+        "options": {}
+      },
+      "id": "pb-update-progress",
+      "name": "Update Progress",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2600, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/rpc/process_sales_nav_to_contacts",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_search_id\": \"{{ $('Process Insert Result').first().json.sales_nav_search_id }}\"\n}",
+        "options": {}
+      },
+      "id": "pb-process-contacts",
+      "name": "Process to Contacts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2800, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Check daily limit after processing to see if we should continue or pause\nconst processResult = $('Process Insert Result').first().json;\nconst dailyLimit = $('Check Daily Limit').first().json;\nconst newDayTotal = dailyLimit.profiles_scraped + processResult.profiles_added;\nconst limitReached = newDayTotal >= dailyLimit.daily_limit;\n\nreturn [{\n  json: {\n    search_id: processResult.search_id,\n    profiles_added: processResult.profiles_added,\n    day_total: newDayTotal,\n    daily_limit: dailyLimit.daily_limit,\n    limit_reached: limitReached,\n    should_continue: !limitReached\n  }\n}];"
+      },
+      "id": "pb-check-continue",
+      "name": "Check If Continue",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3000, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "limit-reached",
+              "leftValue": "={{ $json.limit_reached }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "pb-limit-after",
+      "name": "Limit Hit?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [3200, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/rpc/pause_pb_search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_search_id\": \"{{ $json.search_id }}\"\n}",
+        "options": {}
+      },
+      "id": "pb-pause-search",
+      "name": "Pause for Tomorrow",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3400, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare final success log\nconst staticData = $getWorkflowStaticData('global');\nconst runId = staticData.run_id;\n\n// Clear poll count for next run\nstaticData.poll_count = 0;\n\nconst checkContinue = $('Check If Continue').first().json;\n\nreturn [{\n  json: {\n    run_id: runId,\n    has_run_id: !!runId,\n    profiles_added: checkContinue.profiles_added,\n    day_total: checkContinue.day_total,\n    status: checkContinue.limit_reached ? 'paused_daily_limit' : 'batch_complete'\n  }\n}];"
+      },
+      "id": "pb-prepare-success",
+      "name": "Prepare Success Log",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3400, 500]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-run-id",
+              "leftValue": "={{ $json.has_run_id }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "pb-check-run-id",
+      "name": "Has Run ID?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [3600, 500]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/rpc/log_workflow_success",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_run_id\": \"{{ $json.run_id }}\"\n}",
+        "options": {}
+      },
+      "id": "pb-log-success",
+      "name": "Log Success",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3800, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Handle timeout or failure\nconst prevData = $input.first().json;\nreturn [{\n  json: {\n    search_id: prevData.search_id,\n    error: prevData.is_failed ? 'PhantomBuster agent failed' : 'PhantomBuster agent timed out',\n    status: prevData.status,\n    poll_count: prevData.poll_count\n  }\n}];"
+      },
+      "id": "pb-handle-failure",
+      "name": "Handle Failure",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1800, 650]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/rpc/update_pb_search_progress",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_search_id\": \"{{ $json.search_id }}\",\n  \"p_profiles_added\": 0,\n  \"p_new_status\": \"failed\"\n}",
+        "options": {}
+      },
+      "id": "pb-mark-failed-2",
+      "name": "Mark Failed (Timeout)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2000, 650],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "pb-error-trigger",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [-1800, 900]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse error details from the error trigger\nconst error = $input.first().json;\nconst execution = error.execution || {};\nconst errorInfo = error.error || {};\n\nreturn [{\n  json: {\n    workflow_id: 'phantombuster-sales-nav-scraper',\n    workflow_name: 'PhantomBuster Sales Navigator Scraper',\n    execution_id: execution.id || 'unknown',\n    error_message: errorInfo.message || 'Unknown error',\n    error_node: errorInfo.node || 'unknown',\n    error_timestamp: new Date().toISOString(),\n    full_error: JSON.stringify(errorInfo, null, 2)\n  }\n}];"
+      },
+      "id": "pb-parse-error",
+      "name": "Parse Error Details",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-1600, 900]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mnkuffgxemfyitcjnjdc.supabase.co/rest/v1/workflow_errors",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow_id\": \"{{ $json.workflow_id }}\",\n  \"workflow_name\": \"{{ $json.workflow_name }}\",\n  \"execution_id\": \"{{ $json.execution_id }}\",\n  \"error_message\": \"{{ $json.error_message }}\",\n  \"error_node\": \"{{ $json.error_node }}\",\n  \"error_details\": {{ $json.full_error }}\n}",
+        "options": {}
+      },
+      "id": "pb-log-error",
+      "name": "Log Error to DB",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-1400, 900],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "post",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "#n8n-alerts"
+        },
+        "text": "=:warning: *PhantomBuster Sales Nav Scraper Error*\n\n*Error:* {{ $json.error_message }}\n*Node:* {{ $json.error_node }}\n*Execution:* {{ $json.execution_id }}\n*Time:* {{ $json.error_timestamp }}",
+        "otherOptions": {}
+      },
+      "id": "pb-error-slack",
+      "name": "Error Slack Alert",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [-1200, 900],
+      "credentials": {
+        "slackApi": {
+          "id": "gfhzQBbkS30Y3XlJ",
+          "name": "Slack account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule: Daily 9am": {
+      "main": [
+        [
+          {
+            "node": "Log Workflow Start",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook: Queue URL": {
+      "main": [
+        [
+          {
+            "node": "Parse Webhook Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Workflow Start": {
+      "main": [
+        [
+          {
+            "node": "Store Run ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Webhook Input": {
+      "main": [
+        [
+          {
+            "node": "Queue Search in DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Queue Search in DB": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Run ID": {
+      "main": [
+        [
+          {
+            "node": "Check Daily Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Daily Limit": {
+      "main": [
+        [
+          {
+            "node": "Daily Limit OK?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Daily Limit OK?": {
+      "main": [
+        [
+          {
+            "node": "Get Next Search",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Limit Reached - Stop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit Reached - Stop": {
+      "main": [
+        [
+          {
+            "node": "Prepare Success Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Next Search": {
+      "main": [
+        [
+          {
+            "node": "Check Search Available",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Search Available": {
+      "main": [
+        [
+          {
+            "node": "Has Search?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Search?": {
+      "main": [
+        [
+          {
+            "node": "Mark In Progress",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Pending Searches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Pending Searches": {
+      "main": [
+        [
+          {
+            "node": "Prepare Success Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark In Progress": {
+      "main": [
+        [
+          {
+            "node": "Prepare Launch Params",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Launch Params": {
+      "main": [
+        [
+          {
+            "node": "Launch PhantomBuster",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Launch PhantomBuster": {
+      "main": [
+        [
+          {
+            "node": "Process Launch Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Launch Response": {
+      "main": [
+        [
+          {
+            "node": "Launch OK?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Launch OK?": {
+      "main": [
+        [
+          {
+            "node": "Wait 30s",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mark Search Failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Search Failed": {
+      "main": [
+        [
+          {
+            "node": "Prepare Success Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 30s": {
+      "main": [
+        [
+          {
+            "node": "Poll Agent Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Poll Agent Status": {
+      "main": [
+        [
+          {
+            "node": "Check Agent Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Agent Status": {
+      "main": [
+        [
+          {
+            "node": "Keep Polling?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keep Polling?": {
+      "main": [
+        [
+          {
+            "node": "Wait 30s (poll)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Finished OK?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 30s (poll)": {
+      "main": [
+        [
+          {
+            "node": "Poll Agent Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Finished OK?": {
+      "main": [
+        [
+          {
+            "node": "Fetch Results",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Handle Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Results": {
+      "main": [
+        [
+          {
+            "node": "Transform Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transform Results": {
+      "main": [
+        [
+          {
+            "node": "Insert Profiles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Profiles": {
+      "main": [
+        [
+          {
+            "node": "Process Insert Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Insert Result": {
+      "main": [
+        [
+          {
+            "node": "Update Progress",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Progress": {
+      "main": [
+        [
+          {
+            "node": "Process to Contacts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process to Contacts": {
+      "main": [
+        [
+          {
+            "node": "Check If Continue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check If Continue": {
+      "main": [
+        [
+          {
+            "node": "Limit Hit?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit Hit?": {
+      "main": [
+        [
+          {
+            "node": "Pause for Tomorrow",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Success Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pause for Tomorrow": {
+      "main": [
+        [
+          {
+            "node": "Prepare Success Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Success Log": {
+      "main": [
+        [
+          {
+            "node": "Has Run ID?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Run ID?": {
+      "main": [
+        [
+          {
+            "node": "Log Success",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Handle Failure": {
+      "main": [
+        [
+          {
+            "node": "Mark Failed (Timeout)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Failed (Timeout)": {
+      "main": [
+        [
+          {
+            "node": "Prepare Success Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Test: Trigger Main Flow": {
+      "main": [
+        [
+          {
+            "node": "Log Workflow Start",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Parse Error Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Error Details": {
+      "main": [
+        [
+          {
+            "node": "Log Error to DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Error to DB": {
+      "main": [
+        [
+          {
+            "node": "Error Slack Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "executionTimeout": 3600,
+    "timezone": "UTC"
+  },
+  "meta": {
+    "instanceId": "phantombuster-sales-nav-scraper"
+  },
+  "tags": [
+    {
+      "name": "lead-intelligence",
+      "id": "tag-lead-intel"
+    },
+    {
+      "name": "sales-navigator",
+      "id": "tag-sales-nav"
+    },
+    {
+      "name": "phantombuster",
+      "id": "tag-phantombuster"
+    }
+  ]
+}

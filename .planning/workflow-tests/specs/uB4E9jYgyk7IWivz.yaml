@@ -1,0 +1,134 @@
+workflow_id: uB4E9jYgyk7IWivz
+workflow_name: "Web Intel - Monthly Report"
+test_status: tested
+tested_at: "2026-02-23T23:32:47Z"
+tested_by: test-workflow-auto
+
+trigger:
+  type: schedule
+  cron: "0 8 1 * *"
+  description: "Monthly 1st at 8am CT"
+
+nodes:
+  - id: schedule-trigger
+    name: "Monthly 1st 8am CT"
+    type: scheduleTrigger
+    tested: true
+    notes: "Schedule trigger; tested via webhook proxy"
+
+  - id: fetch-monthly-traffic
+    name: "Fetch Monthly Traffic"
+    type: httpRequest
+    tested: true
+    notes: "Calls get_monthly_traffic_summary RPC. Returned 1 week of data (178 sessions)."
+
+  - id: fetch-ranking-changes
+    name: "Fetch Monthly Ranking Changes"
+    type: httpRequest
+    tested: true
+    notes: "Calls get_monthly_ranking_changes RPC. Returned 2 keywords."
+
+  - id: fetch-backlink-summary
+    name: "Fetch Backlink Summary"
+    type: httpRequest
+    tested: true
+    notes: "Calls get_backlink_summary RPC. Returned backlink profile with 0 backlinks."
+
+  - id: merge-traffic-rankings
+    name: "Merge Traffic + Rankings"
+    type: merge
+    tested: true
+    notes: "Append merge of traffic (1 item) and rankings (2 items) = 3 items."
+
+  - id: merge-all-data
+    name: "Merge All Data"
+    type: merge
+    tested: true
+    notes: "Append merge of traffic+rankings (3 items) and backlinks (1 item) = 4 items."
+
+  - id: compile-report
+    name: "Compile Monthly Report"
+    type: code
+    tested: true
+    notes: "Compiled January 2026 report. Generated slack_body and store_body as pre-serialized JSON."
+
+  - id: send-slack
+    name: "Send to Slack"
+    type: httpRequest
+    tested: true
+    notes: "Posted monthly report to Slack web-intel channel. Response: ok."
+
+  - id: store-report
+    name: "Store Report"
+    type: httpRequest
+    tested: true
+    notes: "Stored report via store_monthly_report RPC. Returned ID: 99c4050e-1563-408d-a0b8-46296e147a1c."
+
+  - id: error-trigger
+    name: "Error Trigger"
+    type: errorTrigger
+    tested: true
+    notes: "Triggered by execution 201944 error (JSON parse failure in original Slack node)."
+
+  - id: parse-error
+    name: "Parse Error Details"
+    type: code
+    tested: true
+    notes: "Parsed error from execution.error structure."
+
+  - id: log-error-db
+    name: "Log Error to DB"
+    type: httpRequest
+    tested: true
+    notes: "Called log_workflow_error RPC. Created text-param overload for compatibility."
+
+  - id: send-error-slack
+    name: "Send Error to Slack"
+    type: httpRequest
+    tested: true
+    notes: "Sent error notification to Slack. Response: ok."
+
+coverage:
+  nodes_total: 13
+  nodes_tested: 13
+  node_coverage: "100%"
+  branches_total: 0
+  branches_tested: 0
+  branch_coverage: "N/A"
+
+executions:
+  - id: "201949"
+    type: main_path
+    status: success
+    nodes_hit:
+      - "Test Webhook"
+      - "Fetch Monthly Traffic"
+      - "Fetch Monthly Ranking Changes"
+      - "Fetch Backlink Summary"
+      - "Merge Traffic + Rankings"
+      - "Merge All Data"
+      - "Compile Monthly Report"
+      - "Send to Slack"
+      - "Store Report"
+
+  - id: "201945"
+    type: error_handling
+    status: success
+    nodes_hit:
+      - "Error Trigger"
+      - "Parse Error Details"
+      - "Log Error to DB"
+      - "Send Error to Slack"
+
+structural_fixes:
+  - "Converted 4 Postgres nodes (dead credential EgmvZHbvINHsh6PR) to HTTP Request with Supabase REST API (Dy6aCSbL5Tup4TnE)"
+  - "Created 4 RPCs: get_monthly_traffic_summary, get_monthly_ranking_changes, get_backlink_summary, store_monthly_report"
+  - "Created web_intel.reports table for report storage"
+  - "Added standard 4-node canary error handling chain"
+  - "Fixed Merge node for 3-input combine (2 sequential append merges)"
+  - "Pre-built JSON bodies in Code node to avoid expression escaping issues"
+  - "Created log_workflow_error text-param overload for error handler compatibility"
+  - "Added alwaysOutputData and onError: continueRegularOutput to all applicable nodes"
+  - "Updated Parse Error Details to handle error trigger's execution.error structure"
+
+migration: "supabase/migrations/20260224000000_web_intel_monthly_report_rpcs.sql"

@@ -1,0 +1,729 @@
+{
+  "name": "Sales Navigator Profile Scraper",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "sales-nav-scraper",
+        "options": {}
+      },
+      "id": "sn-webhook-trigger",
+      "name": "Webhook: Receive Search URLs",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-1800, 400],
+      "webhookId": "sales-nav-scraper"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 5
+            }
+          ]
+        }
+      },
+      "id": "sn-schedule-trigger",
+      "name": "Schedule: Process Queue",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [-1800, 600]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/rpc/log_workflow_start",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_workflow_id\": \"sales-nav-scraper\",\n  \"p_workflow_name\": \"Sales Navigator Profile Scraper\",\n  \"p_execution_id\": \"{{ $execution.id }}\",\n  \"p_trigger_type\": \"schedule\",\n  \"p_trigger_data\": {}\n}",
+        "options": {}
+      },
+      "id": "sn-log-start",
+      "name": "Log Workflow Start",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-1600, 600],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body || $input.first().json;\nlet searchName = body.search_name || body.searchName || 'Unnamed';\nlet searchUrl = body.url || body.search_url || body.searchUrl || '';\nlet requestedBy = body.requested_by || body.requestedBy || 'webhook';\nlet sourceWorkflow = body.source_workflow || body.sourceWorkflow || null;\n\nif (!searchUrl.includes('linkedin.com/sales/search') && !searchUrl.includes('linkedin.com/sales/lead')) {\n  throw new Error('Invalid Sales Navigator URL');\n}\n\nreturn [{\n  json: {\n    search_url: searchUrl,\n    search_name: searchName,\n    requested_by: requestedBy,\n    source_workflow: sourceWorkflow\n  }\n}];"
+      },
+      "id": "sn-parse-webhook",
+      "name": "Parse Webhook Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-1600, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/sales_nav_searches",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"search_name\": \"{{ $json.search_name }}\",\n  \"search_url\": \"{{ $json.search_url }}\",\n  \"status\": \"pending\",\n  \"requested_by\": \"{{ $json.requested_by }}\",\n  \"source_workflow\": {{ $json.source_workflow ? '\"' + $json.source_workflow + '\"' : 'null' }},\n  \"metadata\": {}\n}",
+        "options": {}
+      },
+      "id": "sn-queue-search",
+      "name": "Queue Search in DB",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-1400, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\"success\": true, \"message\": \"Search queued for processing\"}",
+        "options": {}
+      },
+      "id": "sn-webhook-response",
+      "name": "Set Success Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-1200, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Store run_id from log start\nconst logResult = $('Log Workflow Start').first().json;\nconst staticData = $getWorkflowStaticData('global');\nstaticData.run_id = logResult.run_id || logResult;\n\nreturn [{ json: { run_id: staticData.run_id } }];"
+      },
+      "id": "sn-store-run-id",
+      "name": "Store Run ID",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-1400, 600]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/sales_nav_searches",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "select",
+              "value": "id,search_name,search_url,requested_by"
+            },
+            {
+              "name": "status",
+              "value": "eq.pending"
+            },
+            {
+              "name": "order",
+              "value": "queued_at.asc"
+            },
+            {
+              "name": "limit",
+              "value": "1"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "sn-get-next",
+      "name": "Get Next Pending Search",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-1200, 600],
+      "alwaysOutputData": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Check if we have a pending search\nconst result = $input.first().json;\nconst hasSearch = Array.isArray(result) ? result.length > 0 : (result && result.id);\nconst search = Array.isArray(result) ? result[0] : result;\n\nreturn [{ json: { has_pending: hasSearch, search: search || null } }];"
+      },
+      "id": "sn-check-pending",
+      "name": "Check Pending",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-1000, 600]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-pending",
+              "leftValue": "={{ $json.has_pending }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "sn-has-pending",
+      "name": "Has Pending Search?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [-800, 600]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/sales_nav_searches?id=eq.{{ $json.search.id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"status\": \"processing\",\n  \"started_at\": \"{{ $now.toISO() }}\"\n}",
+        "options": {}
+      },
+      "id": "sn-mark-processing",
+      "name": "Mark as Processing",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-600, 504],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get search data from the check pending node\nconst searchData = $('Check Pending').first().json.search;\nreturn [{ json: searchData }];"
+      },
+      "id": "sn-get-search-data",
+      "name": "Get Search Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-400, 504]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/bestscrapers~linkedin-sales-navigator-scraper/runs",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"sales_url\": \"{{ $json.search_url }}\",\n  \"limit\": 250\n}",
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "id": "sn-call-apify",
+      "name": "Call Apify Actor",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-200, 504],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "fviASwmDK4KqD9y0",
+          "name": "Apify API Token"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nconst searchData = $('Get Search Data').first().json;\n\nif (input.data && input.data.id) {\n  return {\n    json: {\n      success: true,\n      search_id: searchData.id,\n      apify_run_id: input.data.id,\n      apify_dataset_id: input.data.defaultDatasetId,\n      status: input.data.status\n    }\n  };\n} else {\n  return {\n    json: {\n      success: false,\n      search_id: searchData.id,\n      error: input.error || input.message || JSON.stringify(input) || 'Unknown error'\n    }\n  };\n}"
+      },
+      "id": "sn-process-apify-response",
+      "name": "Process Apify Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [0, 504]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "apify-success",
+              "leftValue": "={{ $json.success }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "sn-apify-success",
+      "name": "Apify Started?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [200, 504]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/sales_nav_searches?id=eq.{{ $json.search_id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"apify_run_id\": \"{{ $json.apify_run_id }}\",\n  \"apify_dataset_id\": \"{{ $json.apify_dataset_id }}\",\n  \"cost_per_search\": 0.50,\n  \"cost_per_result\": 0.01\n}",
+        "options": {}
+      },
+      "id": "sn-update-apify-info",
+      "name": "Update with Apify Info",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [400, 408],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/sales_nav_searches?id=eq.{{ $json.search_id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"status\": \"failed\",\n  \"metadata\": {\"error\": \"{{ $json.error.replace(/\"/g, '\\\\\"') }}\"},\n  \"completed_at\": \"{{ $now.toISO() }}\"\n}",
+        "options": {}
+      },
+      "id": "sn-mark-failed",
+      "name": "Mark as Failed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [400, 600],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\"message\": \"No pending searches to process\"}",
+        "options": {}
+      },
+      "id": "sn-no-pending",
+      "name": "No Pending Searches",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-600, 696]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare success log\nconst staticData = $getWorkflowStaticData('global');\nconst runId = staticData.run_id;\n\nreturn [{ json: { run_id: runId, has_run_id: !!runId } }];"
+      },
+      "id": "sn-prepare-success",
+      "name": "Prepare Success Log",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [600, 500]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-run-id",
+              "leftValue": "={{ $json.has_run_id }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "sn-check-run-id",
+      "name": "Has Run ID?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [800, 500]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/rpc/log_workflow_success",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_run_id\": \"{{ $json.run_id }}\",\n  \"p_output_data\": {\"status\": \"completed\"}\n}",
+        "options": {}
+      },
+      "id": "sn-log-success",
+      "name": "Log Workflow Success",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1000, 400],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse error details\nconst error = $input.first().json;\nconst staticData = $getWorkflowStaticData('global');\nconst runId = staticData.run_id;\n\nconst errorMessage = error.message || error.error || JSON.stringify(error);\nconst errorNode = $execution?.customData?.lastNodeExecuted || 'unknown';\n\nreturn [{\n  json: {\n    run_id: runId,\n    error_message: errorMessage.substring(0, 1000),\n    error_node: errorNode,\n    error_node_type: 'unknown',\n    error_details: JSON.stringify({ execution_id: $execution.id })\n  }\n}];"
+      },
+      "id": "sn-parse-error",
+      "name": "Parse Error Details",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-1600, 800]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SUPABASE_URL}}/rest/v1/rpc/log_workflow_error",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_run_id\": {{ $json.run_id ? '\"' + $json.run_id + '\"' : 'null' }},\n  \"p_error_message\": \"{{ $json.error_message.replace(/\"/g, '\\\\\"') }}\",\n  \"p_error_node\": \"{{ $json.error_node }}\",\n  \"p_error_type\": \"{{ $json.error_node_type }}\",\n  \"p_error_details\": {{ $json.error_details }}\n}",
+        "options": {}
+      },
+      "id": "sn-log-error",
+      "name": "Log Error to DB",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-1400, 800],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook: Receive Search URLs": {
+      "main": [
+        [
+          {
+            "node": "Parse Webhook Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Webhook Input": {
+      "main": [
+        [
+          {
+            "node": "Queue Search in DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Queue Search in DB": {
+      "main": [
+        [
+          {
+            "node": "Set Success Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule: Process Queue": {
+      "main": [
+        [
+          {
+            "node": "Log Workflow Start",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Workflow Start": {
+      "main": [
+        [
+          {
+            "node": "Store Run ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Run ID": {
+      "main": [
+        [
+          {
+            "node": "Get Next Pending Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Next Pending Search": {
+      "main": [
+        [
+          {
+            "node": "Check Pending",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Pending": {
+      "main": [
+        [
+          {
+            "node": "Has Pending Search?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Pending Search?": {
+      "main": [
+        [
+          {
+            "node": "Mark as Processing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Pending Searches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark as Processing": {
+      "main": [
+        [
+          {
+            "node": "Get Search Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Search Data": {
+      "main": [
+        [
+          {
+            "node": "Call Apify Actor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Apify Actor": {
+      "main": [
+        [
+          {
+            "node": "Process Apify Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Apify Response": {
+      "main": [
+        [
+          {
+            "node": "Apify Started?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Apify Started?": {
+      "main": [
+        [
+          {
+            "node": "Update with Apify Info",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mark as Failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update with Apify Info": {
+      "main": [
+        [
+          {
+            "node": "Prepare Success Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark as Failed": {
+      "main": [
+        [
+          {
+            "node": "Prepare Success Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Pending Searches": {
+      "main": [
+        [
+          {
+            "node": "Prepare Success Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Success Log": {
+      "main": [
+        [
+          {
+            "node": "Has Run ID?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Run ID?": {
+      "main": [
+        [
+          {
+            "node": "Log Workflow Success",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Parse Error Details": {
+      "main": [
+        [
+          {
+            "node": "Log Error to DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "meta": {
+    "instanceId": "sales-nav-scraper"
+  },
+  "tags": [
+    {
+      "name": "lead-intelligence",
+      "id": "tag-lead-intel"
+    },
+    {
+      "name": "sales-navigator",
+      "id": "tag-sales-nav"
+    }
+  ]
+}

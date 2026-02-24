@@ -1,0 +1,58 @@
+workflow_id: 25KaAvlPHwZ8R88v
+workflow_name: "Web Intel - GSC - Index Coverage Sync"
+workflow_url: https://n8n.realtyamp.ai/workflow/25KaAvlPHwZ8R88v
+test_date: "2026-02-23"
+tested_by: test-workflow-auto
+test_status: broken
+
+# Analysis
+analysis:
+  result: workflow_not_found
+  description: >
+    Workflow 25KaAvlPHwZ8R88v does not exist in the n8n instance.
+    It was registered in the workflow_registry table but was never
+    actually created as an n8n workflow. The n8n API returns 404
+    for both the standard and docs MCP tools.
+  registry_entry:
+    is_active: false
+    category: web_intelligence
+    department: Web Intelligence
+    trigger_type: schedule
+    schedule: "Daily 4am CT"
+    services: [gsc, supabase]
+    description: "Syncs index coverage data from Google Search Console. Tracks indexed, excluded, and error pages over time."
+
+# Structural Compliance
+structural_compliance:
+  status: not_applicable
+  reason: "Workflow does not exist in n8n"
+
+# Coverage
+coverage:
+  node_coverage: "0/0 (N/A)"
+  branch_coverage: "0/0 (N/A)"
+  status: not_applicable
+
+# Test Scenarios
+test_scenarios: []
+
+# Execution IDs
+execution_ids: []
+
+# Notes
+notes: |
+  This workflow was part of the Web Intel GSC suite that was batch-registered
+  in the workflow_registry during the initial setup. Similar GSC workflows
+  that DO exist and are verified:
+    - IJss2eV5Jg9C1Xyr: Web Intel - GSC - Search Performance (verified)
+    - RS5KDyZFlbybFkWy: Web Intel - GSC - Core Web Vitals Monitor (verified)
+    - g6W58UpTlKmxi4k3: Web Intel - GSC - Sitemap Status Monitor (verified)
+    - c7unJvBZ20ukIdVm: Web Intel - GSC - Index Error Alerter (verified)
+
+  Other GSC workflows also not found in n8n:
+    - 9EBf7fQpSHouh5w8: Web Intel - GSC - Mobile Usability Checker (broken)
+    - LrQW5mTWvQ0hXuia: Web Intel - GSC - Crawl Stats Analyzer (untested)
+
+  Recommendation: Either build this workflow or remove the phantom registry
+  entry. The Index Error Alerter (c7unJvBZ20ukIdVm) likely covers some of
+  the same territory by monitoring index errors from GSC.

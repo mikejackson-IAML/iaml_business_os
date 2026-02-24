@@ -10,6 +10,7 @@ import type {
 } from '@anthropic-ai/sdk/resources/messages';
 import { getMobileHealthData } from './mobile-health';
 import { triggerWorkflow, getAvailableWorkflows, getWorkflowById } from './workflow-triggers';
+import { logApiUsage } from './usage-tracking';
 
 // ==================== Message Types ====================
 
@@ -429,6 +430,15 @@ export async function processChatWithTools(
 
     // Get final message to check stop reason
     const finalMessage = await stream.finalMessage();
+
+    // Log API usage for this iteration
+    logApiUsage({
+      department: 'mobile',
+      feature: 'chat',
+      model: 'claude-sonnet-4-5-20250929',
+      inputTokens: finalMessage.usage.input_tokens,
+      outputTokens: finalMessage.usage.output_tokens,
+    });
 
     // If no tool use, we're done
     if (finalMessage.stop_reason !== 'tool_use') {

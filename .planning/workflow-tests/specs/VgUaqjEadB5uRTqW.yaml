@@ -1,0 +1,141 @@
+workflow_id: VgUaqjEadB5uRTqW
+workflow_name: "Web Intel - Health Checker"
+workflow_url: https://n8n.realtyamp.ai/workflow/VgUaqjEadB5uRTqW
+test_status: tested
+tested_at: "2026-02-23T22:48:00Z"
+tested_by: test-workflow-auto
+
+# Structural compliance
+compliance:
+  error_handling: standard_4_node_canary
+  business_os_tag: true
+  always_output_data: true
+  postgres_nodes_replaced: true
+  postgres_replacement_method: supabase_rest_rpc
+
+# Node inventory (11 nodes total)
+nodes:
+  main_path:
+    - id: schedule-trigger
+      name: "Daily 6am CT"
+      type: scheduleTrigger
+    - id: fetch-workflow-health
+      name: "Fetch Workflow Health"
+      type: httpRequest
+      credential: Dy6aCSbL5Tup4TnE (Supabase REST API / httpHeaderAuth)
+      rpc: get_web_intel_workflow_health
+    - id: fetch-data-health
+      name: "Fetch Data Health"
+      type: httpRequest
+      credential: Dy6aCSbL5Tup4TnE (Supabase REST API / httpHeaderAuth)
+      rpc: get_web_intel_data_health
+    - id: merge-health
+      name: "Merge Health Data"
+      type: merge
+      mode: append
+    - id: analyze-health
+      name: "Analyze Health"
+      type: code
+      description: "Analyzes workflow health and data freshness, produces has_issues boolean"
+    - id: check-issues
+      name: "Has Issues?"
+      type: if
+      condition: "$json.has_issues === true (boolean equals)"
+    - id: send-alert
+      name: "Send Health Alert"
+      type: httpRequest
+      target: Slack webhook
+  error_chain:
+    - id: error-trigger
+      name: "Error Trigger"
+      type: errorTrigger
+    - id: parse-error
+      name: "Parse Error Details"
+      type: code
+    - id: log-error-db
+      name: "Log Error to DB"
+      type: httpRequest
+      credential: Dy6aCSbL5Tup4TnE (Supabase REST API / httpHeaderAuth)
+      rpc: log_workflow_error
+    - id: send-error-slack
+      name: "Send Error to Slack"
+      type: httpRequest
+      target: Slack error webhook
+
+# Branch points
+branches:
+  - node: "Has Issues?"
+    type: if
+    outputs:
+      - name: "true"
+        target: "Send Health Alert"
+        description: "Issues found (stale workflows, failures, missing data)"
+      - name: "false"
+        target: "(end)"
+        description: "All healthy, no alert needed"
+
+# Test scenarios
+test_scenarios:
+  - name: natural_run_true_branch
+    description: "Natural run with live data - stale workflows trigger TRUE branch"
+    execution_id: "201875"
+    status: success
+    branch_taken: "Has Issues? -> true"
+    nodes_covered:
+      - "Test Webhook"
+      - "Fetch Workflow Health"
+      - "Fetch Data Health"
+      - "Merge Health Data"
+      - "Analyze Health"
+      - "Has Issues?"
+      - "Send Health Alert"
+
+  - name: healthy_system_false_branch
+    description: "Forced healthy output to test FALSE branch (no issues)"
+    execution_id: "201874"
+    status: success
+    branch_taken: "Has Issues? -> false"
+    nodes_covered:
+      - "Test Webhook"
+      - "Fetch Workflow Health"
+      - "Fetch Data Health"
+      - "Merge Health Data"
+      - "Analyze Health"
+      - "Has Issues?"
+
+  - name: error_handling_chain
+    description: "Error triggered by credential mismatch during initial test"
+    execution_id: "201848"
+    status: success
+    nodes_covered:
+      - "Error Trigger"
+      - "Parse Error Details"
+      - "Log Error to DB"
+      - "Send Error to Slack"
+
+# Coverage
+coverage:
+  nodes:
+    total: 11
+    covered: 11
+    percentage: 100
+  branches:
+    total: 2
+    covered: 2
+    percentage: 100
+
+# Migrations created
+migrations:
+  - file: supabase/migrations/20260223000000_web_intel_health_check_rpcs.sql
+    description: "Created RPCs get_web_intel_workflow_health and get_web_intel_data_health"
+
+# Changes made during testing
+changes:
+  - "Replaced 2 Postgres nodes with HTTP Request nodes using Supabase REST RPCs"
+  - "Added standard 4-node canary error handling chain"
+  - "Added business-os tag"
+  - "Added alwaysOutputData to main path nodes"
+  - "Changed Merge node from combine to append mode"
+  - "Fixed IF node condition from number gt to boolean equals"
+  - "Added has_issues boolean field to Analyze Health output"
+  - "Fixed credential type from supabaseApi to httpHeaderAuth"

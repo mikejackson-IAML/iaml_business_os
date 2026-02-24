@@ -2,6 +2,93 @@
 
 n8n workflows for the Business OS automation platform.
 
+## Colleague Expansion Trigger
+
+**File:** `n8n-workflows/colleague-expansion.json`
+**n8n Workflow ID:** TBD (import pending)
+**Status:** Ready to Import
+**Trigger:** Webhook `POST /colleague-expansion`
+**Docs:** [README-colleague-expansion.md](./README-colleague-expansion.md)
+
+Implements the IAML sales playbook's #1 expansion play: every registration triggers automated outreach to all HR contacts we know at that company. Tags existing contacts with `smartlead_status = queued_ce` for the SL-CE SmartLead sequence, and queues a Sales Navigator search to find new HR contacts at that company. Must fire within 48 hours of registration.
+
+---
+
+## Post-Program: What You Missed Sender
+
+**n8n Workflow ID:** `JJa8FJaHrQm9t8sM`
+**Status:** Active
+**URL:** https://n8n.realtyamp.ai/workflow/JJa8FJaHrQm9t8sM
+**Trigger:** Daily Schedule (9am CT) + Webhook `POST /wym-sender-trigger`
+**Docs:** [README-what-you-missed-sender.md](./README-what-you-missed-sender.md)
+
+Implements the IAML post-program playbook rule: contacts in the SL-LP-GEO pipeline for a city who did NOT register receive a "What You Missed" follow-up 3-5 days after the program ends. Queries `program_instances` for recently completed in-person programs, finds non-converting contacts in that city, adds them to SmartLead campaign `SL-LP-GEO` (ID: 2927777), and marks `smartlead_status = wym_queued`.
+
+---
+
+## Local Program Campaign Launcher
+
+**n8n Workflow ID:** `ieFVoSyC2QDyPuXn`
+**Status:** Active
+**URL:** https://n8n.realtyamp.ai/workflow/ieFVoSyC2QDyPuXn
+**Trigger:** Schedule (1st of month, 6am CT) + Webhook `POST /local-campaign-launcher`
+**Docs:** [README-local-campaign-launcher.md](./README-local-campaign-launcher.md)
+
+Implements the IAML sales playbook rule: contacts in states with upcoming in-person programs (3-12 months out) receive location-specific SL-LP-GEO outreach BEFORE generic national sequences. Queries `program_instances` for upcoming in-person programs, identifies Tier 1/2 contacts in matching states, and tags them with `smartlead_status = queued_local` for pickup by the Supabase-to-SmartLead Exporter.
+
+---
+
+## National Drip Entry Handler
+
+**File:** `n/a — created directly in n8n`
+**n8n Workflow ID:** `5gz9jEI4ftQ6wwLZ`
+**Status:** Active
+**URL:** https://n8n.realtyamp.ai/workflow/5gz9jEI4ftQ6wwLZ
+**Trigger:** Daily Schedule (7am CT) + Webhook `POST /national-drip-entry`
+**Docs:** [README-national-drip-entry-handler.md](./README-national-drip-entry-handler.md)
+
+Automates the sales playbook rule: contacts who complete any active sequence without converting enter SL-ND-NURTURE (National Drip) after a 7-day cooldown. Queries both `contacts` and `campaign_contacts` tables, deduplicates, adds to SmartLead in batches of 50, and updates Supabase status to `national_drip`. Posts daily summary to Slack.
+
+**Setup required:** Create SL-ND-NURTURE campaign in SmartLead and set `ND_CAMPAIGN_ID` n8n variable.
+
+---
+
+## Sales Navigator Pipeline (Apify)
+
+**Files:** `sales-nav-scraper.json`, `sales-nav-results-handler.json`, `waterfall-enrichment.json`
+**Status:** Active
+**Docs:** [README-sales-nav-scraper.md](./README-sales-nav-scraper.md)
+
+Lead enrichment pipeline: Sales Nav search URL → Apify scraping → Apollo + Hunter.io email lookup → NeverBounce validation → stored in Supabase contacts. Queue searches with `/queue-sales-nav`.
+
+---
+
+## PhantomBuster Sales Navigator Scraper
+
+**File:** `phantombuster-sales-nav-scraper.json`
+**n8n Workflow ID:** `krhBQQ4QUUzIOjpy`
+**Status:** Active
+**URL:** https://n8n.realtyamp.ai/workflow/krhBQQ4QUUzIOjpy
+**Trigger:** Daily Schedule (9am) + Webhook
+**Webhook URL:** `https://n8n.realtyamp.ai/webhook/pb-queue-url`
+**Docs:** [README-phantombuster-sales-nav.md](./README-phantombuster-sales-nav.md)
+
+Alternative scraper using PhantomBuster with resumable progress. Features daily limits (1,500 profiles/day), automatic pause/resume, and integrates with the same `sales_nav_profiles` → `contacts` pipeline.
+
+### Key Features
+
+- **Resumable** - Paused searches resume exactly where they left off
+- **Daily limits** - Conservative 1,500/day to avoid detection
+- **Queue system** - Add URLs via webhook, processes one at a time
+
+### Webhook Usage
+
+```bash
+curl -X POST https://n8n.realtyamp.ai/webhook/pb-queue-url \
+  -H "Content-Type: application/json" \
+  -d '{"search_name": "VP Marketing", "search_url": "https://linkedin.com/sales/..."}'
+```
+
 ## Uptime Monitor
 
 **File:** `uptime-monitor.json`
@@ -554,3 +641,90 @@ Error Trigger -> Log Error (canary) -> Slack Alert
 - Claude Sonnet (comment suggestion generation with brand voice)
 - Supabase REST (engagement_network, engagement_digests, content_calendar, workflow_runs)
 - Slack (daily digest + warming alert notifications)
+---
+
+## GSD Input Required
+
+**File:** `gsd-input-required.json`
+**n8n Workflow ID:** `YIr6VqggeG6N0s1Y`
+**Status:** Active
+**Trigger:** Webhook (POST)
+**URL:** `https://n8n.realtyamp.ai/webhook/gsd-input`
+**Documentation:** [README-gsd-input-required.md](README-gsd-input-required.md)
+
+Sends Slack notifications when Claude Cloud needs human input during automated GSD project execution.
+
+### How It Works
+
+```
+Webhook (POST) --> Extract Payload --> Build Slack Message --> Send to #claude-needs-input
+                                                                         |
+                                                          Return Success Response
+```
+
+### Notification Types
+
+| Type | Description |
+|------|-------------|
+| `checkpoint` | Claude hit a task requiring verification or human action |
+| `decision` | Architectural or implementation choice required |
+| `blocked` | Authentication gate, failure, or dependency issue |
+| `verification` | Phase complete, needs human verification |
+
+### Services
+
+- Slack (#claude-needs-input channel)
+
+---
+
+## Nightly Workflow Testing
+
+**Script:** `scripts/test-workflows-nightly.sh`
+**Command:** `/test-nightly`
+**Status:** Active
+
+Automated nightly testing of all unverified n8n workflows with email summary.
+
+### How It Works
+
+```
+Query Registry (unverified) --> For each workflow:
+                                  RALPH Loop (load, check, diagnose, fix, verify)
+                                       |
+                                  Collect Results --> Build HTML Email
+                                       |
+                                  Send via SendGrid --> mike.jackson@iaml.com
+```
+
+### Usage
+
+```bash
+# Run from Claude Code
+/test-nightly
+
+# Run directly
+./scripts/test-workflows-nightly.sh --all    # All unverified
+./scripts/test-workflows-nightly.sh 5        # Next 5
+./scripts/test-workflows-nightly.sh          # Next 3 (default)
+```
+
+### Email Summary
+
+HTML email sent to `mike.jackson@iaml.com` containing:
+- Summary stats (tested, passed, needs attention)
+- "Ready for Verification" table with clickable n8n links
+- "Needs Attention" table with error descriptions
+
+### Configuration
+
+Requires in `.env.local`:
+- `SUPABASE_URL` - Supabase project URL
+- `SUPABASE_SERVICE_KEY` - Service role key
+- `SENDGRID_API_KEY` - SendGrid API key for email delivery
+
+### Services
+
+- Supabase (workflow registry)
+- n8n (workflow testing via MCP)
+- SendGrid (email delivery)
+- n8n-brain (error pattern learning)

@@ -1,0 +1,81 @@
+workflow_id: epBJOsp9Nco2aa93
+workflow_name: "Web Intel - Trend Spotter"
+test_date: "2026-02-23"
+tested_by: test-workflow-auto
+test_status: tested
+
+structure:
+  total_nodes: 12
+  trigger: scheduleTrigger (Friday 6am CT)
+  branch_points:
+    - node: "Has Trends?"
+      type: if
+      branches: [true, false]
+  error_handling: standard-4-node-canary
+  postgres_nodes: 0
+  http_request_nodes: 6
+
+compliance:
+  error_handling: true
+  postgres_converted: true
+  always_output_data: true
+  schema_headers: true  # Accept-Profile/Content-Profile: web_intel
+
+rpcs_created:
+  - name: web_intel.get_weekly_traffic_summary
+    purpose: Aggregate daily_traffic into weekly buckets (last 8 weeks)
+  - name: web_intel.get_ranking_history_for_trends
+    purpose: Get keyword ranking history for trend analysis (last 28 days)
+  - name: web_intel.store_trend
+    purpose: Insert a trend record into web_intel.trends
+
+test_scenarios:
+  - name: no_trends_detected
+    description: "Natural run with current live data - no significant trends"
+    execution_id: "201961"
+    status: success
+    nodes_executed:
+      - "Weekly Friday 6am CT"
+      - "Fetch Weekly Traffic"
+      - "Fetch Ranking History"
+      - "Merge Data"
+      - "Analyze Trends"
+      - "Has Trends?"
+    branch_taken: "Has Trends? -> false"
+    notes: "Traffic change was -7.8% (below 10% threshold). Ranking positions all NULL."
+
+  - name: trend_detected
+    description: "Run with boosted traffic data to trigger trend detection"
+    execution_id: "201963"
+    status: success
+    nodes_executed:
+      - "Weekly Friday 6am CT"
+      - "Fetch Weekly Traffic"
+      - "Fetch Ranking History"
+      - "Merge Data"
+      - "Analyze Trends"
+      - "Has Trends?"
+      - "Store Trends"
+      - "Notify Trend"
+    branch_taken: "Has Trends? -> true"
+    notes: "Traffic boosted +200/day to create 239.6% increase. Store Trends and Notify Trend both fired. Slack notification sent successfully."
+
+  - name: error_handling_chain
+    description: "Standard 4-node canary error handling (structural verification)"
+    status: structural_pass
+    nodes:
+      - "Error Trigger"
+      - "Parse Error Details"
+      - "Log Error to DB"
+      - "Send Error to Slack"
+    notes: "Same pattern as all other Web Intel workflows. Verified structurally."
+
+coverage:
+  node_coverage: "8/8 main path + 4 error handling (structural)"
+  branch_coverage: "2/2 (true + false)"
+  main_path_percentage: 100
+  branch_percentage: 100
+
+data_cleanup:
+  - "Reverted daily_traffic sessions boost (+200) on 2026-02-16 to 2026-02-22"
+  - "Deleted test trend records from web_intel.trends"

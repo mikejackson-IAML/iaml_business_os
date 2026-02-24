@@ -4,6 +4,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@/lib/supabase/server';
 import { generateEmbedding } from '@/lib/planning/embeddings';
+import { logApiUsage } from '@/lib/api/usage-tracking';
 import Anthropic from '@anthropic-ai/sdk';
 
 export const runtime = 'nodejs';
@@ -106,6 +107,16 @@ export async function POST(request: NextRequest) {
       system:
         "You are a planning assistant. Answer the user's question based on the memories from their planning sessions. Cite specific memories when relevant. If the memories don't contain enough information, say so honestly. Be conversational and helpful.",
       messages,
+    });
+
+    // Log API usage
+    logApiUsage({
+      department: 'planning',
+      feature: 'ask',
+      model: 'claude-sonnet-4-20250514',
+      inputTokens: response.usage.input_tokens,
+      outputTokens: response.usage.output_tokens,
+      projectId: projectId || undefined,
     });
 
     const answer =

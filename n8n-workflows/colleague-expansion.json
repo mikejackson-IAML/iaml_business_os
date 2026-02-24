@@ -1,0 +1,423 @@
+{
+  "name": "Colleague Expansion Trigger",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "colleague-expansion",
+        "options": {
+          "responseMode": "responseNode"
+        }
+      },
+      "id": "ce-webhook",
+      "name": "Webhook - POST /colleague-expansion",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-1800, 400],
+      "webhookId": "colleague-expansion"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body || $input.first().json;\nconst registrationId = body.registration_id;\n\nif (!registrationId) {\n  throw new Error('Missing required field: registration_id');\n}\n\n// Basic UUID validation\nconst uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;\nif (!uuidRegex.test(registrationId)) {\n  throw new Error('Invalid registration_id: must be a UUID, got: ' + registrationId);\n}\n\nreturn [{ json: { registration_id: registrationId } }];"
+      },
+      "id": "ce-validate",
+      "name": "Validate Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-1580, 400]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/registrations",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "select",
+              "value": "id,first_name,last_name,email,company_name,job_title,program_instance_id,registration_date"
+            },
+            {
+              "name": "id",
+              "value": "={{ 'eq.' + $json.registration_id }}"
+            },
+            {
+              "name": "cancelled_at",
+              "value": "is.null"
+            },
+            {
+              "name": "limit",
+              "value": "1"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ce-get-registration",
+      "name": "Get Registration Details",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-1360, 400],
+      "alwaysOutputData": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// PostgREST returns an array — extract first item\nconst result = $input.first().json;\nconst reg = Array.isArray(result) ? result[0] : result;\nreturn [{ json: reg || {} }];"
+      },
+      "id": "ce-extract-reg",
+      "name": "Extract Registration",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-1140, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "reg-found",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "ce-reg-check",
+      "name": "Registration Found?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [-920, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "const reg = $input.first().json;\n\nconst companyName = (reg.company_name || '').trim();\nif (!companyName) {\n  throw new Error('Registration has no company_name: ' + reg.id);\n}\n\n// Build ILIKE pattern\nconst companyPattern = '%' + companyName + '%';\n\n// Build Sales Navigator search URL for HR contacts at this company\nconst titleKeyword = 'HR OR \"Human Resources\" OR \"People Operations\" OR \"Benefits\" OR \"Talent\"';\nconst encodedCompany = encodeURIComponent(companyName);\nconst encodedTitle = encodeURIComponent(titleKeyword);\nconst salesNavUrl = `https://www.linkedin.com/sales/search/people?query=(company%3A(name%3A${encodedCompany})%2Ctitle%3A(keyword%3A${encodedTitle}))`;\n\nreturn [{\n  json: {\n    registration_id: reg.id,\n    first_name: reg.first_name || '',\n    last_name: reg.last_name || '',\n    registrant_email: reg.email || '',\n    company_name: companyName,\n    company_pattern: companyPattern,\n    program_name: 'IAML Program',\n    sales_nav_search_name: 'CE: HR at ' + companyName,\n    sales_nav_search_url: salesNavUrl\n  }\n}];"
+      },
+      "id": "ce-prepare",
+      "name": "Prepare Search Params",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-700, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/rpc/tag_contacts_for_ce",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_company_pattern\": \"{{ $json.company_pattern }}\",\n  \"p_exclude_email\": \"{{ $json.registrant_email }}\"\n}",
+        "options": {}
+      },
+      "id": "ce-tag-contacts",
+      "name": "Tag Company Contacts for CE",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-480, 300],
+      "alwaysOutputData": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Count tagged contacts from RPC response\nconst result = $input.first().json;\nconst taggedContacts = Array.isArray(result) ? result : (result ? [result] : []);\nconst params = $('Prepare Search Params').first().json;\n\nreturn [{\n  json: {\n    ...params,\n    tagged_contacts_count: taggedContacts.length\n  }\n}];"
+      },
+      "id": "ce-count",
+      "name": "Count Tagged Contacts",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-260, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/sales_nav_searches",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Prefer",
+              "value": "return=representation,resolution=merge-duplicates"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"search_name\": \"{{ $json.sales_nav_search_name }}\",\n  \"search_url\": \"{{ $json.sales_nav_search_url }}\",\n  \"status\": \"queued\",\n  \"requested_by\": \"colleague-expansion\",\n  \"metadata\": {\n    \"triggered_by\": \"colleague_expansion\",\n    \"registration_id\": \"{{ $json.registration_id }}\",\n    \"company_name\": \"{{ $json.company_name }}\",\n    \"tagged_contacts\": {{ $json.tagged_contacts_count }}\n  }\n}",
+        "options": {}
+      },
+      "id": "ce-queue-search",
+      "name": "Queue Sales Nav Search",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-40, 300],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/campaign_activity",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"activity_type\": \"colleague_expansion_triggered\",\n  \"description\": \"Colleague expansion triggered for {{ $('Count Tagged Contacts').first().json.company_name }} ({{ $('Count Tagged Contacts').first().json.tagged_contacts_count }} contacts tagged)\",\n  \"source_system\": \"colleague-expansion-workflow\",\n  \"metadata\": {\n    \"registration_id\": \"{{ $('Count Tagged Contacts').first().json.registration_id }}\",\n    \"company_name\": \"{{ $('Count Tagged Contacts').first().json.company_name }}\",\n    \"registrant_email\": \"{{ $('Count Tagged Contacts').first().json.registrant_email }}\",\n    \"tagged_contacts_count\": {{ $('Count Tagged Contacts').first().json.tagged_contacts_count }}\n  },\n  \"activity_at\": \"{{ $now.toISO() }}\"\n}",
+        "options": {}
+      },
+      "id": "ce-log-activity",
+      "name": "Log Activity",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [180, 300],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const params = $('Count Tagged Contacts').first().json;\n\nconst registrantName = `${params.first_name} ${params.last_name}`.trim() || params.registrant_email;\n\nconst message = `:handshake: *Colleague Expansion Triggered*\\n\\n` +\n  `*Registrant:* ${registrantName} (${params.registrant_email})\\n` +\n  `*Company:* ${params.company_name}\\n\\n` +\n  `*Existing contacts tagged for CE:* ${params.tagged_contacts_count}\\n` +\n  `*Sales Nav search queued:* ${params.sales_nav_search_name}\\n\\n` +\n  `Tagged contacts will be exported to SmartLead SL-CE on next exporter run (~2 hrs).`;\n\nreturn [{ json: { slack_message: message, ...params } }];"
+      },
+      "id": "ce-build-summary",
+      "name": "Build Slack Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [400, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ text: $json.slack_message }) }}",
+        "options": {}
+      },
+      "id": "ce-slack",
+      "name": "Send Slack Summary",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [620, 300],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: true, message: 'Colleague expansion triggered', company: $('Count Tagged Contacts').first().json.company_name, tagged_contacts: $('Count Tagged Contacts').first().json.tagged_contacts_count, sales_nav_search_queued: true }) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "ce-respond-success",
+      "name": "Respond - Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [840, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: false, error: 'Registration not found or cancelled', registration_id: $('Validate Input').first().json.registration_id }) }}",
+        "options": {
+          "responseCode": 404
+        }
+      },
+      "id": "ce-respond-notfound",
+      "name": "Respond - Not Found",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [-700, 560]
+    },
+    {
+      "parameters": {},
+      "id": "ce-error-trigger",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [-260, 700]
+    },
+    {
+      "parameters": {
+        "jsCode": "const error = $input.first().json;\n\nconst errorData = {\n  workflow_name: 'Colleague Expansion Trigger',\n  workflow_id: 'colleague-expansion',\n  execution_id: $execution.id,\n  error_message: error.message || error.error?.message || 'Unknown error',\n  error_node: error.node?.name || error.workflow?.lastNodeExecuted || 'Unknown',\n  error_node_type: error.node?.type || 'unknown',\n  error_details: JSON.stringify(error),\n  timestamp: new Date().toISOString()\n};\n\nreturn [{ json: errorData }];"
+      },
+      "id": "ce-parse-error",
+      "name": "Parse Error Details",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-40, 700]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/rpc/log_workflow_error",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"p_run_id\": null,\n  \"p_error_message\": \"{{ $json.error_message.replace(/\"/g, '\\\\\"') }}\",\n  \"p_error_node\": \"{{ $json.error_node }}\",\n  \"p_error_type\": \"{{ $json.error_node_type }}\",\n  \"p_error_details\": {{ $json.error_details }}\n}",
+        "options": {}
+      },
+      "id": "ce-log-error",
+      "name": "Log Error to DB",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [180, 700],
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Dy6aCSbL5Tup4TnE",
+          "name": "Supabase REST API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \":rotating_light: *Colleague Expansion Error*\\n\\n*Error:* {{ $json.error_message }}\\n*Node:* {{ $json.error_node }}\\n*Time:* {{ $json.timestamp }}\"\n}",
+        "options": {}
+      },
+      "id": "ce-error-slack",
+      "name": "Send Error Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [400, 700],
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "connections": {
+    "Webhook - POST /colleague-expansion": {
+      "main": [
+        [{ "node": "Validate Input", "type": "main", "index": 0 }]
+      ]
+    },
+    "Validate Input": {
+      "main": [
+        [{ "node": "Get Registration Details", "type": "main", "index": 0 }]
+      ]
+    },
+    "Get Registration Details": {
+      "main": [
+        [{ "node": "Extract Registration", "type": "main", "index": 0 }]
+      ]
+    },
+    "Extract Registration": {
+      "main": [
+        [{ "node": "Registration Found?", "type": "main", "index": 0 }]
+      ]
+    },
+    "Registration Found?": {
+      "main": [
+        [{ "node": "Prepare Search Params", "type": "main", "index": 0 }],
+        [{ "node": "Respond - Not Found", "type": "main", "index": 0 }]
+      ]
+    },
+    "Prepare Search Params": {
+      "main": [
+        [{ "node": "Tag Company Contacts for CE", "type": "main", "index": 0 }]
+      ]
+    },
+    "Tag Company Contacts for CE": {
+      "main": [
+        [{ "node": "Count Tagged Contacts", "type": "main", "index": 0 }]
+      ]
+    },
+    "Count Tagged Contacts": {
+      "main": [
+        [{ "node": "Queue Sales Nav Search", "type": "main", "index": 0 }]
+      ]
+    },
+    "Queue Sales Nav Search": {
+      "main": [
+        [{ "node": "Log Activity", "type": "main", "index": 0 }]
+      ]
+    },
+    "Log Activity": {
+      "main": [
+        [{ "node": "Build Slack Summary", "type": "main", "index": 0 }]
+      ]
+    },
+    "Build Slack Summary": {
+      "main": [
+        [{ "node": "Send Slack Summary", "type": "main", "index": 0 }]
+      ]
+    },
+    "Send Slack Summary": {
+      "main": [
+        [{ "node": "Respond - Success", "type": "main", "index": 0 }]
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [{ "node": "Parse Error Details", "type": "main", "index": 0 }]
+      ]
+    },
+    "Parse Error Details": {
+      "main": [
+        [{ "node": "Log Error to DB", "type": "main", "index": 0 }]
+      ]
+    },
+    "Log Error to DB": {
+      "main": [
+        [{ "node": "Send Error Slack", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {},
+  "pinData": {},
+  "tags": [
+    { "name": "business-os" },
+    { "name": "sales" },
+    { "name": "colleague-expansion" }
+  ]
+}

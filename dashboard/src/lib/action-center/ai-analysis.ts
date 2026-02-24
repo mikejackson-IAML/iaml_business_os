@@ -7,6 +7,7 @@
 
 import Anthropic from '@anthropic-ai/sdk';
 import { getServerClient } from '@/lib/supabase/server';
+import { logApiUsage } from '@/lib/api/usage-tracking';
 import type { TaskExtended } from '@/lib/api/task-types';
 import type {
   AIAnalysisMode,
@@ -306,6 +307,15 @@ export async function callClaudeAPI(
           content: prompt,
         },
       ],
+    });
+
+    // Log API usage
+    logApiUsage({
+      department: 'action-center',
+      feature: 'ai-analysis',
+      model: MODEL_ID,
+      inputTokens: message.usage.input_tokens,
+      outputTokens: message.usage.output_tokens,
     });
 
     // Extract text content from response

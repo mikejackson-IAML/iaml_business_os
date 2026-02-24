@@ -1,0 +1,153 @@
+# Web Intel - Error Handler Test Specification
+# Workflow ID: 3aUQ6BQkiS5HphxA
+# Tested: 2026-02-20T05:04:40Z by test-workflow-auto
+# Status: verified
+
+workflow_id: "3aUQ6BQkiS5HphxA"
+workflow_name: "Web Intel - Error Handler"
+
+execution_method: "webhook"
+
+test_cases:
+  # Critical severity - authentication keyword
+  - name: "critical_auth_error"
+    description: "Error with 'authentication' keyword should classify as critical and route to Alert Critical Error"
+    input:
+      workflow_id: "TEST-001"
+      workflow_name: "Test Workflow - Auth Error"
+      error_message: "authentication failed: invalid API key for Google Search Console"
+      error_type: "auth_error"
+      node_name: "Fetch GSC Data"
+      execution_id: "test-exec-001"
+    expected:
+      status: "success"
+      severity: "critical"
+      isCritical: true
+      branch: "Is Critical? -> true -> Alert Critical Error"
+      nodes_executed:
+        - "Error Webhook"
+        - "Process Error"
+        - "Log Error to DB"
+        - "Is Critical?"
+        - "Alert Critical Error"
+
+  # Critical severity - credential keyword
+  - name: "critical_credential_error"
+    description: "Error with 'credential' keyword should classify as critical and route to Alert Critical Error"
+    input:
+      workflow_id: "TEST-005"
+      workflow_name: "Test Workflow - Credential Error"
+      error_message: "credential expired: GA4 service account token needs refresh"
+      error_type: "credential_error"
+      node_name: "Fetch GA4 Data"
+      execution_id: "test-exec-005"
+    expected:
+      status: "success"
+      severity: "critical"
+      isCritical: true
+      branch: "Is Critical? -> true -> Alert Critical Error"
+
+  # Warning severity - timeout keyword
+  - name: "warning_timeout_error"
+    description: "Error with 'timeout' keyword should classify as warning and route to Alert Warning"
+    input:
+      workflow_id: "TEST-002"
+      workflow_name: "Test Workflow - Timeout"
+      error_message: "timeout exceeded: request took longer than 30000ms waiting for rate limit reset"
+      error_type: "timeout_error"
+      node_name: "Fetch Rankings"
+      execution_id: "test-exec-002"
+    expected:
+      status: "success"
+      severity: "warning"
+      isCritical: false
+      branch: "Is Critical? -> false -> Alert Warning"
+      nodes_executed:
+        - "Error Webhook"
+        - "Process Error"
+        - "Log Error to DB"
+        - "Is Critical?"
+        - "Alert Warning"
+
+  # Info severity - not found keyword
+  - name: "info_not_found_error"
+    description: "Error with 'not found' keyword should classify as info and route to Alert Warning"
+    input:
+      workflow_id: "TEST-003"
+      workflow_name: "Test Workflow - Not Found"
+      error_message: "Resource not found: page /blog/old-article does not exist in sitemap"
+      error_type: "not_found"
+      node_name: "Check Page Status"
+      execution_id: "test-exec-003"
+    expected:
+      status: "success"
+      severity: "info"
+      isCritical: false
+      branch: "Is Critical? -> false -> Alert Warning"
+
+  # Default severity - generic error
+  - name: "default_generic_error"
+    description: "Generic error without keywords should classify as warning (default) and route to Alert Warning"
+    input:
+      workflow_id: "TEST-004"
+      workflow_name: "Test Workflow - Generic Error"
+      error_message: "Unexpected column type mismatch in data transformation"
+      error_type: "runtime_error"
+      node_name: "Transform Data"
+      execution_id: "test-exec-004"
+    expected:
+      status: "success"
+      severity: "warning"
+      isCritical: false
+      branch: "Is Critical? -> false -> Alert Warning"
+
+max_fix_iterations: 5
+timeout_seconds: 60
+
+critical_nodes:
+  - "Error Webhook"
+  - "Process Error"
+  - "Log Error to DB"
+  - "Is Critical?"
+  - "Alert Critical Error"
+  - "Alert Warning"
+
+skip_learning: false
+
+tags:
+  - "error-handling"
+  - "web-intel"
+  - "slack-alerts"
+  - "severity-classification"
+
+notes: |
+  This is the centralized error handler for all Web Intel workflows.
+  It receives error payloads via POST webhook at /webhook/web-intel-error.
+
+  Severity classification logic in Process Error node:
+  - "authentication" or "credential" in error_message -> severity: critical, isCritical: true
+  - "timeout" or "rate limit" in error_message -> severity: warning, isCritical: false
+  - "not found" in error_message -> severity: info, isCritical: false
+  - Default -> severity: warning, isCritical: false
+
+  Flow:
+  - Error Webhook -> Process Error -> (parallel) Log Error to DB AND Is Critical?
+  - Is Critical? TRUE -> Alert Critical Error (Slack with rotating_light emoji)
+  - Is Critical? FALSE -> Alert Warning (Slack with warning emoji)
+
+  Self-error handler (not testable via webhook):
+  - On Error -> Format Self Error -> Email Fallback Alert
+  - Only fires when this workflow itself encounters an internal error
+  - Uses zapmail API for email delivery as last-resort notification
+
+  Coverage gaps:
+  - On Error, Format Self Error, Email Fallback Alert (self-error path)
+  - These require the workflow itself to fail internally
+  - Not safe to test on a production-active workflow
+
+  Test executions (2026-02-20):
+  - 194911: critical_auth_error -> Alert Critical Error (verified)
+  - 194913: warning_timeout_error -> Alert Warning (verified)
+  - 194916: info_not_found_error -> Alert Warning (verified)
+  - 194917: default_generic_error -> Alert Warning (verified)
+  - 194918: critical_credential_error -> Alert Critical Error (verified)

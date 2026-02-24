@@ -18,6 +18,7 @@ import { detectResearchMarkers, stripResearchMarkers } from '@/lib/planning/rese
 import { extractMemories } from '@/lib/planning/memory-extraction';
 import { generateEmbedding } from '@/lib/planning/embeddings';
 import { createServerClient } from '@/lib/supabase/server';
+import { logApiUsage } from '@/lib/api/usage-tracking';
 import type { PhaseType } from '@/dashboard-kit/types/departments/planning';
 
 export const runtime = 'nodejs';
@@ -145,6 +146,18 @@ export async function POST(request: NextRequest) {
             controller.enqueue(encoder.encode(formatSSE({ type: 'text', content: text })));
           }
         }
+
+        // Log API usage after stream completes
+        const finalMessage = await messageStream.finalMessage();
+        logApiUsage({
+          department: 'planning',
+          feature: 'chat',
+          model: 'claude-sonnet-4-20250514',
+          inputTokens: finalMessage.usage.input_tokens,
+          outputTokens: finalMessage.usage.output_tokens,
+          projectId,
+          conversationId,
+        });
 
         // Detect markers before stripping
         const hasCompletion = detectCompletionMarker(fullContent);

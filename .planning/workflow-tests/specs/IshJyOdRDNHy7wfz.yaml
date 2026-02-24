@@ -1,0 +1,85 @@
+workflow_id: IshJyOdRDNHy7wfz
+workflow_name: GHL Activity Receiver
+tested_at: "2026-02-20T17:01:00Z"
+tested_by: test-workflow-auto
+test_status: tested
+trigger_type: webhook
+webhook_path: ghl
+http_method: POST
+
+coverage:
+  nodes:
+    covered: 6
+    total: 10
+    percent: 60
+    display: "6/10 (60%)"
+  branches:
+    covered: 2
+    total: 2
+    percent: 100
+    display: "2/2 (100%)"
+  main_path:
+    covered: 6
+    total: 6
+    percent: 100
+
+scenarios:
+  - name: valid_email_event
+    description: "GHL email_opened event with valid email - triggers true branch"
+    payload:
+      event_type: email_opened
+      webhook_id: test-001
+      email: jane.doe@testcompany.com
+      contact_id: ghl-contact-123
+      first_name: Jane
+      last_name: Doe
+      workflow_name: "Quarterly Update Q1"
+      subject: "Upcoming IAML Programs"
+      timestamp: "2026-02-20T10:00:00Z"
+    expected_branch: "Has Valid Email?->true"
+    expected_response:
+      status: success
+      event_type: opened
+      contact_email: jane.doe@testcompany.com
+    execution_id: "195857"
+    result: pass
+
+  - name: no_email_event
+    description: "GHL opportunity_created event with no email - triggers false branch"
+    payload:
+      event_type: opportunity_created
+      webhook_id: test-002
+      contact_id: ghl-contact-456
+      first_name: John
+      last_name: Smith
+      workflow_name: "New Opportunity"
+      subject: ""
+      timestamp: "2026-02-20T10:05:00Z"
+    expected_branch: "Has Valid Email?->false"
+    expected_response:
+      status: error
+      error: no_email_in_payload
+    execution_id: "195865"
+    result: pass
+
+uncovered_nodes:
+  - name: Error Trigger
+    type: errorTrigger
+    reason: "Infrastructure error handler - only fires on uncaught runtime errors. Cannot be triggered via webhook payloads due to safe fallback defaults in all upstream nodes."
+  - name: Parse Error Details
+    type: code
+    reason: "Part of error handling chain - depends on Error Trigger"
+  - name: Log Error to DB
+    type: httpRequest
+    reason: "Part of error handling chain - depends on Error Trigger"
+  - name: Send Error Slack
+    type: httpRequest
+    reason: "Part of error handling chain - depends on Error Trigger"
+
+fixes_applied: []
+
+notes:
+  - "Workflow maps 20+ GHL event types to normalized activity types (sent, opened, clicked, bounced, unsubscribed, replied, status_changed, tag_changed, etc.)"
+  - "Also calculates engagement flags (is_engagement_event, is_reply_event, is_pause_event, is_conversion_event) and engagement levels (warm, engaged, hot)"
+  - "Duplicate workflow FZlfss8fCJLGwgiZ exists but is inactive - this (IshJyOdRDNHy7wfz) is the primary"
+  - "Uses responseNode mode - webhook responds via End - Success or End - No Email nodes"

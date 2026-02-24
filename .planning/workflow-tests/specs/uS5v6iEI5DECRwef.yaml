@@ -1,0 +1,93 @@
+workflow_id: uS5v6iEI5DECRwef
+workflow_name: "Web Intel - GSC - Index Coverage Sync"
+tested_at: "2026-02-23T23:01:00Z"
+tested_by: test-workflow-auto
+
+summary:
+  node_coverage: "7/12 (58%)"
+  branch_coverage: "2/2 (100%)"
+  main_flow_coverage: "8/8 (100%)"
+  executions: 3
+  status: tested
+
+scenarios:
+  - name: happy_path_no_issues
+    description: "GSC returns page data, coverage is healthy (88.89%), has_issues=false. Goes through false branch directly to Log Success."
+    execution_id: "201906"
+    trigger: webhook
+    nodes_hit:
+      - "Manual Trigger (Webhook)"
+      - "GSC - Page Data"
+      - "Analyze Coverage"
+      - "Supabase - Store Coverage"
+      - "Has Issues?"
+      - "Log Success (RPC)"
+    branches_hit:
+      - "Has Issues? -> false"
+    result: success
+
+  - name: issues_detected_alert
+    description: "GSC returns data but coverage analysis detects issues (error_count > 5 or coverage < 80%). Goes through true branch to Send Alert then Log Success."
+    execution_id: "201907"
+    trigger: webhook
+    nodes_hit:
+      - "Manual Trigger (Webhook)"
+      - "GSC - Page Data"
+      - "Analyze Coverage"
+      - "Supabase - Store Coverage"
+      - "Has Issues?"
+      - "Send Alert (Slack)"
+      - "Log Success (RPC)"
+    branches_hit:
+      - "Has Issues? -> true"
+    result: success
+
+  - name: initial_run_with_if_fix
+    description: "First execution before IF node fix. Both branches fired due to alwaysOutputData. Shows data flow works end-to-end."
+    execution_id: "201886"
+    trigger: webhook
+    nodes_hit:
+      - "Manual Trigger (Webhook)"
+      - "GSC - Page Data"
+      - "Analyze Coverage"
+      - "Supabase - Store Coverage"
+      - "Has Issues?"
+      - "Send Alert (Slack)"
+      - "Log Success (RPC)"
+    branches_hit:
+      - "Has Issues? -> true"
+      - "Has Issues? -> false"
+    result: success
+    notes: "Pre-fix execution. IF node alwaysOutputData caused both branches to fire."
+
+uncovered_nodes:
+  - name: "Daily 4am CT"
+    type: scheduleTrigger
+    reason: "Schedule trigger equivalent to webhook trigger. Both feed into GSC - Page Data. Documented exception."
+  - name: "Error Trigger"
+    type: errorTrigger
+    reason: "Standard 4-node error chain. Only fires on workflow-level errors. Documented exception."
+  - name: "Parse Error Details"
+    type: code
+    reason: "Error chain node. Standard exception."
+  - name: "Log Error to DB"
+    type: httpRequest
+    reason: "Error chain node. Standard exception."
+  - name: "Send Error to Slack"
+    type: httpRequest
+    reason: "Error chain node. Standard exception."
+
+database:
+  migration: "supabase/migrations/20260224000001_gsc_index_coverage_rpcs.sql"
+  rpcs_created:
+    - "web_intel.upsert_index_coverage"
+    - "public.upsert_index_coverage"
+  table: "web_intel.index_coverage"
+
+notes: |
+  Workflow built from scratch following GSC Search Performance and Crawl Stats Analyzer patterns.
+  Uses GSC Search Analytics API with page dimension to derive index coverage metrics.
+  Coverage data stored via upsert RPC. IF node branches on has_issues boolean.
+  Alert sent to Slack notification webhook when issues detected.
+  Standard 4-node error handling chain included.
+  All main flow nodes covered. Schedule trigger and error chain are documented exceptions.

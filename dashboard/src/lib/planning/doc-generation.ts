@@ -3,6 +3,7 @@
 
 import Anthropic from '@anthropic-ai/sdk';
 import { createServerClient } from '@/lib/supabase/server';
+import { logApiUsage } from '@/lib/api/usage-tracking';
 import { DOC_TEMPLATES, DOC_FILE_PATHS, DOC_TYPE_LABELS } from './doc-templates';
 import type { DocumentType } from './doc-templates';
 
@@ -169,6 +170,16 @@ ${template}
         content: `Generate the ${label} document based on this project context:\n\n${projectContext}`,
       },
     ],
+  });
+
+  // Log API usage
+  logApiUsage({
+    department: 'planning',
+    feature: 'doc-generation',
+    model: 'claude-sonnet-4-20250514',
+    inputTokens: response.usage.input_tokens,
+    outputTokens: response.usage.output_tokens,
+    projectId,
   });
 
   const toolBlock = response.content.find(

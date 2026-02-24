@@ -1,384 +1,292 @@
 # N8N Workflow Testing Agent
 
-> **CEO Summary:** An automated system that tests n8n workflows, diagnoses failures using the n8n-brain learning layer, applies fixes, and learns from each resolution to prevent the same errors in the future.
+> **CEO Summary:** An automated system that tests n8n workflows with full node and branch coverage — every single node must execute, every IF/Switch branch must be triggered, and every error path must be verified. It generates seed data, runs multiple executions, diagnoses and fixes failures using the n8n-brain learning layer, and produces a coverage report so thorough that you only need to glance and approve.
 
 ---
 
 ## Architecture Overview
 
-The Testing Agent orchestrates existing MCP tools to create an autonomous test-diagnose-fix loop:
+The Testing Agent orchestrates MCP tools to create an autonomous test loop with full coverage tracking:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                         TESTING AGENT ORCHESTRATOR                       │
+│                     FULL COVERAGE TESTING AGENT                          │
 │                                                                          │
-│  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐     │
-│  │  Test           │    │  Diagnosis      │    │  Fix            │     │
-│  │  Specification  │───▶│  Engine         │───▶│  Applier        │     │
-│  │  Parser         │    │                 │    │                 │     │
-│  └─────────────────┘    └─────────────────┘    └─────────────────┘     │
-│           │                      │                      │               │
-└───────────┼──────────────────────┼──────────────────────┼───────────────┘
-            │                      │                      │
-            ▼                      ▼                      ▼
-    ┌───────────────┐      ┌───────────────┐      ┌───────────────┐
-    │   n8n MCP     │      │  n8n-brain    │      │   n8n MCP     │
-    │               │      │               │      │               │
-    │ • run_webhook │      │ • lookup_     │      │ • update_     │
-    │ • get_exec    │      │   error_fix   │      │   workflow    │
-    │ • list_exec   │      │ • store_      │      │ • activate    │
-    │ • get_workflow│      │   error_fix   │      │               │
-    └───────────────┘      │ • calculate_  │      └───────────────┘
-                           │   confidence  │
-                           └───────────────┘
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌────────────┐ │
+│  │  Workflow     │  │  Seed Data   │  │  Coverage    │  │  Fix       │ │
+│  │  Analyzer    │──▶│  Generator  │──▶│  Tracker    │──▶│  Engine    │ │
+│  │              │  │              │  │              │  │            │ │
+│  └──────────────┘  └──────────────┘  └──────────────┘  └────────────┘ │
+│         │                 │                 │                 │         │
+└─────────┼─────────────────┼─────────────────┼─────────────────┼─────────┘
+          │                 │                 │                 │
+          ▼                 ▼                 ▼                 ▼
+  ┌───────────────┐  ┌───────────────┐  ┌───────────────┐  ┌──────────┐
+  │   n8n MCP     │  │  n8n MCP      │  │  n8n MCP      │  │ n8n MCP  │
+  │               │  │               │  │               │  │          │
+  │ • get_workflow│  │ • test_       │  │ • executions  │  │ • update │
+  │ • validate   │  │   workflow    │  │   (get full)  │  │   _work  │
+  │              │  │ • run_webhook │  │               │  │   flow   │
+  └───────────────┘  └───────────────┘  └───────────────┘  └──────────┘
+                                               │
+                                               ▼
+                                       ┌───────────────┐
+                                       │  n8n-brain    │
+                                       │               │
+                                       │ • lookup_fix  │
+                                       │ • store_fix   │
+                                       │ • confidence  │
+                                       │ • patterns    │
+                                       └───────────────┘
 ```
 
 ---
 
-## Core Components
+## Core Concept: Full Coverage Testing
 
-### 1. Test Specification Schema
+Unlike basic "does the workflow run?" testing, full coverage testing ensures:
 
-Each workflow requires a test specification (stored in `.planning/workflow-tests/`):
+1. **Every node executes** at least once across all test runs
+2. **Every branch is triggered** — both sides of IF nodes, all Switch cases, Filter pass/reject
+3. **Error handling chains are verified** — the error path is deliberately triggered
+4. **Coverage is measured and reported** — with exact node/branch percentages
 
-```yaml
-# test-spec.yaml
-workflow_id: "HnZQopXL7xjZnX3O"
-workflow_name: "Airtable to GHL Contact Sync"
-execution_method: "webhook"  # or "poll_history" for scheduled workflows
+This is achieved through **seed data generation** — analyzing branch conditions and creating test payloads that exercise each path.
 
-# Test cases
-test_cases:
-  - name: "happy_path"
-    description: "Standard contact with all fields"
-    input:
-      firstName: "John"
-      lastName: "Doe"
-      email: "john@example.com"
-      phone: "555-1234"
-    expected:
-      status: "success"
-      output_contains:
-        contactId: "string"
+---
 
-  - name: "missing_optional_field"
-    description: "Contact without phone number"
-    input:
-      firstName: "Jane"
-      lastName: "Smith"
-      email: "jane@example.com"
-    expected:
-      status: "success"
+## The 8-Phase Protocol
 
-  - name: "invalid_email"
-    description: "Should handle gracefully"
-    input:
-      firstName: "Bad"
-      lastName: "Email"
-      email: "not-an-email"
-    expected:
-      status: "error"
-      error_contains: "invalid email"
+### Phase 1: Health Check
+- Verify n8n MCP connection
+- Verify n8n-brain connection
+- Set terminal tab name for tracking
 
-# Execution settings
-max_fix_iterations: 5
-timeout_seconds: 60
+### Phase 2: Load & Analyze Workflow
+- Fetch workflow structure via `n8n_get_workflow`
+- Build **node inventory**: every node with ID, name, type, connections
+- Identify **branch points**: IF, Switch, Filter, Router nodes
+- Map **all execution paths** through the workflow
+- Identify trigger type (webhook, schedule, manual, sub-workflow)
 
-# Critical nodes that must succeed
-critical_nodes:
-  - "GHL Create Contact"
-  - "Airtable Trigger"
-```
+### Phase 3: Seed Data Generation
+- For each branch point, read the condition from `parameters`
+- Generate test payloads that trigger each branch direction:
+  - IF nodes: one payload for true, one for false
+  - Switch nodes: one payload per case + default
+  - Filter nodes: one that passes, one that's filtered
+- Handle non-webhook workflows:
+  - Scheduled: use manual trigger via `n8n_test_workflow`
+  - Sub-workflows: create temporary webhook test harness
+  - Error triggers: deliberately cause an error in the parent workflow
 
-### 2. Execution Methods
+### Phase 4: Structural Compliance (Auto-Fix)
+- Check error handling chain exists → add if missing
+- Check `business-os` tag → add if missing
+- Check `alwaysOutputData` on Postgres nodes → enable if missing
+- Validate with strict profile → fix any errors
+- Brain lookup before every fix attempt
 
-#### Method A: Webhook Execution (Direct)
+### Phase 5: Execute All Scenarios
+- Initialize coverage tracker (all nodes/branches marked uncovered)
+- For each seed data scenario:
+  1. Execute workflow via `n8n_test_workflow`
+  2. Get execution results with node-level data
+  3. Parse `resultData.runData` to identify which nodes executed
+  4. Update coverage tracker
+  5. If error: brain lookup → fix → re-execute (max 5 per scenario)
 
-For workflows with Webhook trigger nodes:
+### Phase 6: Coverage Gap Filling
+- If coverage < 100%, analyze gaps
+- Generate additional scenarios targeting uncovered nodes/branches
+- Execute gap-filling scenarios (max 3 additional rounds)
+- Document any items that can't be tested with reasons
 
-```
-1. n8n.run_webhook(workflowName, testData)
-2. n8n.get_execution(executionId) → detailed results
-```
+### Phase 7: Finalize & Learn
+- Update workflow registry with coverage numbers
+- Store new error fixes in n8n-brain
+- Report fix results for known fixes
+- Record action for confidence calibration
+- Save test spec YAML for regression testing
 
-#### Method B: Poll History (Scheduled/Manual)
+### Phase 8: Verification Report
+- Comprehensive report with:
+  - Node coverage: X/Y (%)
+  - Branch coverage: X/Y (%)
+  - Execution table with IDs, scenarios, nodes hit
+  - Node coverage map (every node, covered by which execution)
+  - Branch coverage map (every branch direction, covered by which execution)
+  - Fixes applied with source (brain vs. new)
+  - Structural compliance checklist
+  - Uncovered items with reasons
 
-For scheduled or manual trigger workflows:
+---
 
-```
-1. Activate workflow: n8n.activate_workflow(id)
-2. Trigger externally (manual click, wait for schedule)
-3. Poll: n8n.list_executions(workflowId, status="*")
-4. Wait for new execution to appear
-5. n8n.get_execution(executionId) → detailed results
-```
+## Seed Data Generation Strategy
 
-#### Method C: Test Harness (Recommended for Complex Testing)
-
-Create a test harness workflow that:
-1. Accepts test payload via webhook
-2. Calls target workflow via Execute Workflow node
-3. Returns results directly
-
-This enables testing ANY workflow type via webhook.
-
-### 3. Diagnosis Engine
-
-When execution fails, the diagnosis engine:
-
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                      DIAGNOSIS FLOW                                  │
-└─────────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-                 ┌────────────────────────┐
-                 │ Extract Error Context  │
-                 │ • error_message        │
-                 │ • failed_node          │
-                 │ • input_data           │
-                 │ • upstream_outputs     │
-                 └────────────────────────┘
-                              │
-                              ▼
-                 ┌────────────────────────┐
-                 │ n8n-brain:             │
-                 │ lookup_error_fix()     │
-                 └────────────────────────┘
-                              │
-              ┌───────────────┴───────────────┐
-              │                               │
-        KNOWN FIX                       NO KNOWN FIX
-              │                               │
-              ▼                               ▼
-     ┌────────────────┐           ┌────────────────────┐
-     │ Apply Known    │           │ Pattern Matching   │
-     │ Fix            │           │ Diagnosis          │
-     └────────────────┘           └────────────────────┘
-                                              │
-                                              ▼
-                                  ┌────────────────────┐
-                                  │ Generate Fix or    │
-                                  │ ESCALATE           │
-                                  └────────────────────┘
-```
-
-#### Error Pattern Matching
-
-| Error Pattern | Diagnosis | Auto-Fix Strategy |
-|---------------|-----------|-------------------|
-| `Cannot read property 'X' of undefined` | Field path mismatch | Compare expression to actual input, suggest correct path |
-| `No items to process` | Empty array from previous node | Add IF node with empty check, or use "Always Output Data" |
-| `Invalid JSON` | Malformed expression | Parse and fix JSON syntax |
-| `401 / 403 Unauthorized` | Credential issue | **ESCALATE** - requires human |
-| `Resource not found` | Invalid ID reference | Check ID format, may need lookup |
-| `Timeout` | External service slow | Increase timeout setting |
-| `Rate limit exceeded` | Too many API calls | Add delay/backoff |
-| `Required field missing` | Node config incomplete | Check schema, add missing field |
-
-### 4. State Management
-
-Testing state is tracked in `.planning/workflow-tests/STATE.json`:
-
+### IF Node Analysis (v1)
 ```json
 {
-  "current_test": {
-    "workflow_id": "HnZQopXL7xjZnX3O",
-    "test_case": "happy_path",
-    "iteration": 2,
-    "status": "fixing"
-  },
-  "fix_history": [
-    {
-      "iteration": 1,
-      "error": "Cannot read property 'email' of undefined",
-      "fix_applied": "Changed expression from $json.email to $json.contact.email",
-      "fix_source": "n8n-brain lookup",
-      "result": "still_failing"
+  "parameters": {
+    "conditions": {
+      "boolean": [{
+        "value1": "={{ $json.items.length }}",
+        "value2": 0,
+        "operation": "notEqual"
+      }]
     }
-  ],
-  "learning_queue": []
+  }
+}
+```
+→ True payload: `{"items": [{"id": 1}]}` (length > 0)
+→ False payload: `{"items": []}` (length = 0)
+
+### IF Node Analysis (v2)
+```json
+{
+  "parameters": {
+    "conditions": {
+      "options": {
+        "rules": [{
+          "leftValue": "={{ $json.status }}",
+          "rightValue": "active",
+          "operator": { "type": "string", "operation": "equals" }
+        }]
+      }
+    }
+  }
+}
+```
+→ True payload: `{"status": "active"}`
+→ False payload: `{"status": "inactive"}`
+
+### Switch Node Analysis
+```json
+{
+  "parameters": {
+    "rules": {
+      "values": [
+        { "outputKey": "email", "conditions": { "options": { "rules": [{ "leftValue": "={{ $json.channel }}", "rightValue": "email" }] } } },
+        { "outputKey": "slack", "conditions": { "options": { "rules": [{ "leftValue": "={{ $json.channel }}", "rightValue": "slack" }] } } }
+      ]
+    }
+  }
+}
+```
+→ Case 1 payload: `{"channel": "email"}`
+→ Case 2 payload: `{"channel": "slack"}`
+→ Default payload: `{"channel": "unknown"}`
+
+### Non-Webhook Workflows
+
+| Type | Strategy |
+|------|----------|
+| Schedule | Use `n8n_test_workflow` (manual trigger). Workflow pulls its own data. |
+| Sub-workflow | Create temp webhook → Execute Workflow → Respond to Webhook. Delete after. |
+| Error Trigger | Trigger error in parent workflow. Verify error chain executes. |
+
+---
+
+## Node Coverage Tracking
+
+After each execution, parse the execution data:
+
+```
+Execution Data Structure:
+{
+  "data": {
+    "resultData": {
+      "runData": {
+        "Webhook": [{ "startTime": "...", "executionTime": 5, "data": {...} }],
+        "Parse Data": [{ "startTime": "...", "executionTime": 12, "data": {...} }],
+        "IF Check": [{ "startTime": "...", "executionTime": 1, "data": {...} }],
+        "Process Items": [{ "startTime": "...", "executionTime": 45, "data": {...} }]
+      }
+    }
+  }
 }
 ```
 
----
+Every key in `runData` = a node that executed. Compare against the total node list from the workflow definition to calculate coverage.
 
-## Orchestration Flow
-
-### Main Loop (RALPH-Inspired)
-
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                          MAIN LOOP                                   │
-└─────────────────────────────────────────────────────────────────────┘
-
-STEP 1: INITIALIZE
-├── Load test specification
-├── Set iteration = 0
-├── Initialize fix_history = []
-└── Load workflow: n8n.get_workflow(id)
-
-STEP 2: PRE-FLIGHT CHECK
-├── n8n-brain.calculate_confidence(task)
-├── Validate workflow structure
-└── Check credentials: n8n-brain.get_credential(services)
-
-STEP 3: EXECUTE TEST ◄────────────────────────────────────────┐
-├── Execute workflow with test payload                         │
-├── Wait for completion (webhook) or poll (scheduled)          │
-└── n8n.get_execution(id) → detailed results                   │
-                                                               │
-STEP 4: EVALUATE RESULTS                                       │
-├── Parse execution data                                       │
-├── Compare against expected outcomes                          │
-└── If SUCCESS → STEP 8                                        │
-    If FAILURE → STEP 5                                        │
-                                                               │
-STEP 5: DIAGNOSE FAILURE                                       │
-├── Extract: error_message, failed_node, input_data            │
-├── n8n-brain.lookup_error_fix(error, node_type)               │
-└── If KNOWN FIX → STEP 6                                      │
-    If UNKNOWN → Run diagnosis patterns → STEP 6 or ESCALATE   │
-                                                               │
-STEP 6: APPLY FIX                                              │
-├── Generate fixed workflow JSON                               │
-├── n8n.update_workflow(id, fixed_json)                        │
-├── Add to fix_history                                         │
-└── iteration++                                                │
-                                                               │
-STEP 7: ITERATION CHECK                                        │
-├── If iteration >= max_iterations → ESCALATE                  │
-├── If same error repeating → ESCALATE (circular fix)          │
-└── Else → LOOP BACK TO STEP 3 ────────────────────────────────┘
-
-STEP 8: FINALIZE
-├── If fix was applied: n8n-brain.store_error_fix(error, fix)
-├── n8n-brain.record_action(outcome)
-├── Update workflow registry: mark_workflow_tested()
-└── Return SUCCESS report
-```
-
-### Escalation Protocol
-
-When the agent cannot resolve an issue:
-
-```markdown
-## ESCALATION: Workflow Test Failed
-
-**Workflow:** {name} ({id})
-**Test Case:** {test_case_name}
-**Iterations Attempted:** {count}
-
-### Error Summary
-{final_error_message}
-
-### Failed Node
-**Node:** {node_name}
-**Type:** {node_type}
-**Input Data:**
-```json
-{input_data}
-```
-
-### Fix Attempts
-| # | Error | Fix Attempted | Result |
-|---|-------|---------------|--------|
-| 1 | ... | ... | ... |
-
-### Diagnosis
-{Why fixes didn't work}
-
-### Recommended Action
-{Suggested manual investigation}
-
-### Context Files
-- Workflow JSON: {path}
-- Execution data: {path}
-```
+For branch tracking: check the connection metadata and `sourceOutputIndex` to determine which output of a branch node was taken.
 
 ---
 
-## Integration with Existing Systems
+## Coverage Thresholds
+
+| Node Coverage | Branch Coverage | Result Status |
+|--------------|----------------|--------------|
+| 100% | 100% | `verified` (interactive) / `tested` (nightly) |
+| >= 90% | >= 80% | `tested` with gaps documented |
+| < 90% | < 80% | `needs_review` |
+
+Acceptable reasons for < 100% coverage:
+- External service dependencies that can't be mocked
+- Destructive operations with no test data
+- Rate-limited APIs
+- Sub-workflows requiring complex setup
+
+All gaps must be explicitly documented.
+
+---
+
+## Integration Points
 
 ### n8n-brain Learning Loop
 
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│                    LEARNING INTEGRATION                              │
-└─────────────────────────────────────────────────────────────────────┘
-
 BEFORE TESTING:
-├── find_similar_patterns(services) → Check for existing templates
+├── find_similar_patterns(services) → Reuse proven templates
 ├── lookup_error_fix(common_errors) → Pre-load known issues
 └── calculate_confidence(task) → Determine autonomy level
 
 DURING TESTING:
-├── lookup_error_fix(error) → Check for known solution
-└── get_credential(service) → Get correct credential ID
+├── lookup_error_fix(error) → Check for known fix BEFORE debugging
+├── get_credential(service) → Get correct credential ID
+└── report_fix_result(fix_id, worked) → Track fix effectiveness
 
 AFTER SUCCESS:
-├── store_error_fix(error, fix) → Save for future use
-├── report_fix_result(fix_id, worked=true) → Update success rate
-├── record_action(task, outcome="success") → Log for confidence calibration
-└── store_pattern(workflow) → If novel pattern worth saving
+├── store_error_fix(error, fix) → Save new fixes for future use
+├── record_action(task, outcome="success") → Calibrate confidence
+└── store_pattern(workflow) → Save novel patterns
 
-AFTER FAILURE (escalation):
-├── record_action(task, outcome="failure") → Log for analysis
+AFTER FAILURE:
+├── record_action(task, outcome="failure") → Track failure patterns
 └── store_error_fix(error, attempted_fixes) → Even failed fixes are useful
 ```
 
-### GSD Integration
-
-The testing agent follows GSD patterns:
-
-| GSD Pattern | Testing Agent Equivalent |
-|-------------|-------------------------|
-| STATE.md | `.planning/workflow-tests/STATE.json` |
-| SUMMARY.md | Test execution report |
-| Checkpoint protocol | Escalation to human |
-| Deviation rules | Auto-fix vs escalate logic |
-| Wave execution | Multiple test cases in parallel |
-
 ### Workflow Registry Integration
 
-After successful testing, update the registry:
-
+Test results update the registry with coverage data:
 ```sql
 SELECT n8n_brain.mark_workflow_tested(
-  'HnZQopXL7xjZnX3O',
+  'workflow_id',
   'verified',
-  'testing-agent',
-  'All 3 test cases passed. Fixed field mapping issue.'
+  'test-workflow-auto',
+  'Node coverage: 14/14 (100%). Branch coverage: 6/6 (100%). Executions: 3. Fixes: 1.'
 );
 ```
 
+### Test Spec Persistence
+
+After testing, a YAML spec is saved to `.planning/workflow-tests/specs/{id}.yaml` enabling:
+- **Regression testing**: replay exact scenarios on future changes
+- **Nightly monitoring**: re-run specs to catch regressions
+- **Documentation**: human-readable record of what was tested
+
 ---
 
-## Implementation Plan
+## Entry Points
 
-### Phase 1: Core Infrastructure
-
-1. **Test specification parser** - YAML/JSON schema validation
-2. **Execution wrapper** - Handle webhook vs poll methods
-3. **Result comparator** - Match execution output against expectations
-
-### Phase 2: Diagnosis Engine
-
-1. **Error extraction** - Parse execution data structure
-2. **Pattern matcher** - Implement diagnosis rules
-3. **Fix generator** - Create corrected workflow JSON
-
-### Phase 3: Orchestration Loop
-
-1. **Main loop** - Implement iteration control
-2. **State tracking** - Persist progress across retries
-3. **Escalation** - Format reports for human review
-
-### Phase 4: Learning Integration
-
-1. **n8n-brain hooks** - Connect lookup/store at right points
-2. **Confidence scoring** - Use scores to adjust autonomy
-3. **Pattern storage** - Save successful workflows
+| Command | Purpose |
+|---------|---------|
+| `/test-workflow-auto <id>` | Full coverage test of a single workflow |
+| `/test-workflow --bulk N` | Test N workflows from queue |
+| `/workflow-queue claim` | Claim next workflow for testing |
+| `/test-nightly` | Run nightly batch via script |
+| `/test-results` | Morning review of nightly results |
+| `/done-testing` | Wrap up and release claim |
 
 ---
 
@@ -388,33 +296,35 @@ SELECT n8n_brain.mark_workflow_tested(
 .planning/
 └── workflow-tests/
     ├── STATE.json              # Current testing state
-    ├── specs/                  # Test specifications
-    │   ├── airtable-to-ghl.yaml
-    │   └── smartlead-sync.yaml
+    ├── specs/                  # Test specifications (YAML)
+    │   ├── EXAMPLE.yaml        # Template
+    │   └── {workflow_id}.yaml  # Generated per workflow
     ├── results/                # Test execution results
-    │   └── 2026-01-20/
-    │       └── airtable-to-ghl-result.json
+    │   └── YYYY-MM-DD/
+    │       ├── {workflow_id}.md # Full test report
+    │       ├── SUMMARY.md      # Aggregated summary
+    │       ├── results.json    # Machine-readable results
+    │       └── nightly-run-*.log
     └── escalations/            # Escalation reports
-        └── 2026-01-20/
-            └── smartlead-sync-escalation.md
+        └── YYYY-MM-DD/
 ```
 
 ---
 
-## Skill Entry Point
+## Diagnosis Patterns
 
-The testing agent is invoked via skill:
-
-```
-/test-workflow <workflow_id_or_name> [--test-case <name>] [--all]
-```
-
-Options:
-- `workflow_id_or_name`: Target workflow
-- `--test-case`: Run specific test case
-- `--all`: Run all test cases
-- `--create-spec`: Interactive test spec creation
-- `--dry-run`: Validate without executing
+| Priority | Error Pattern | Diagnosis | Auto-Fix |
+|----------|--------------|-----------|----------|
+| 1 | `401/403 Unauthorized` | Credential issue | NO — escalate |
+| 2 | `Cannot read property X` | Expression path wrong | YES — fix path |
+| 3 | `No items to process` | Empty array | YES — alwaysOutputData |
+| 4 | `Invalid JSON` | Expression syntax | YES — fix syntax |
+| 5 | `Required field missing` | Node config | YES — add field |
+| 6 | `404 Not Found` | Resource ID wrong | MAYBE — check format |
+| 7 | `429 Rate Limit` | Too many calls | YES — add Wait node |
+| 8 | `ETIMEDOUT/ECONNREFUSED` | Service down | NO — escalate |
+| 9 | `Duplicate key` | Upsert needed | YES — add conflict handler |
+| 10 | Missing error handling | No error chain | YES — add standard pattern |
 
 ---
 
@@ -422,10 +332,10 @@ Options:
 
 The testing agent is complete when:
 
-1. ✅ Can execute workflows via webhook or poll
-2. ✅ Diagnoses failures using n8n-brain lookups
-3. ✅ Applies fixes and retries automatically
-4. ✅ Learns from successful fixes
-5. ✅ Escalates appropriately when stuck
-6. ✅ Integrates with workflow registry
-7. ✅ Follows GSD patterns for state management
+1. Every node in the workflow has executed at least once
+2. Every branch of every decision node has been triggered
+3. Error handling chain has been verified (if present)
+4. All fixes are stored in n8n-brain for future use
+5. Coverage report is comprehensive enough for human sign-off without re-testing
+6. Test spec is saved for regression testing
+7. Workflow registry is updated with coverage numbers

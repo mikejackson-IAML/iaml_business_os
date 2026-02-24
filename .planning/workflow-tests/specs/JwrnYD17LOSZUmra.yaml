@@ -1,0 +1,92 @@
+workflow_id: JwrnYD17LOSZUmra
+workflow_name: "Web Intel - Rankings - Opportunity Finder"
+workflow_url: https://n8n.realtyamp.ai/workflow/JwrnYD17LOSZUmra
+tested_at: "2026-02-20T16:43:41Z"
+tested_by: test-workflow-auto
+test_status: tested
+
+scenarios:
+  - name: natural_run_no_opportunities
+    description: "Execute with no striking distance data (positions null)"
+    execution_id: "195802"
+    status: success
+    branch_taken: "Has Opportunities? -> true (alwaysOutputData ensures 1+ items)"
+    notes: >
+      Even with empty RPC response, alwaysOutputData:true on Fetch node
+      means IF condition $input.all().length > 0 is always true.
+      False branch is unreachable with current config.
+
+  - name: with_opportunities
+    description: "Execute with seeded ranking positions (7 and 14)"
+    execution_id: "195810"
+    status: success
+    branch_taken: "Has Opportunities? -> true"
+    test_data_setup: >
+      Temporarily set daily_rankings positions to 7 (page 1 opp)
+      and 14 (page 2 opp) for today's date. Restored to null after.
+    notes: >
+      Full true path executed: Fetch -> IF -> Format Digest ->
+      Slack -> Create Alert -> Insert Alert -> Log Success
+
+coverage:
+  node_coverage: "7/11 (64%)"
+  branch_coverage: "1/2 (50%)"
+  executions: 2
+  fixes: 0
+
+uncovered:
+  nodes:
+    - name: "Weekly Monday 4am CT"
+      type: scheduleTrigger
+      reason: "Schedule trigger -- tested via webhook trigger instead. Same downstream path."
+
+    - name: "Error Trigger"
+      type: errorTrigger
+      reason: "Only fires on workflow error. Cannot be triggered externally. Standard pattern verified by inspection."
+
+    - name: "Parse Error Details"
+      type: code
+      reason: "Part of error handling chain. Standard pattern verified by inspection."
+
+    - name: "Send Error Slack"
+      type: httpRequest
+      reason: "Part of error handling chain. Standard Slack webhook pattern."
+
+  branches:
+    - node: "Has Opportunities?"
+      output: "false"
+      reason: >
+        Unreachable. alwaysOutputData:true on Fetch Striking Distance
+        ensures at least 1 n8n item always passes through. The IF condition
+        $input.all().length > 0 always evaluates to true. Minor design issue
+        but false path only calls Log Success which is a no-op.
+
+infrastructure_fixes:
+  - type: view_creation
+    description: >
+      Created missing web_intel.striking_distance view that the
+      get_striking_distance_opportunities RPC depends on. The view was
+      defined in migrations_archive but not present in the live database.
+    sql: >
+      CREATE OR REPLACE VIEW web_intel.striking_distance AS
+      SELECT tk.id as keyword_id, tk.keyword, tk.search_volume, tk.priority,
+        tk.target_url, dr.position, dr.ranking_url,
+        CASE WHEN dr.position BETWEEN 4 AND 10 THEN 'page_1_opportunity'
+             WHEN dr.position BETWEEN 11 AND 20 THEN 'page_2_opportunity'
+        END as opportunity_type,
+        COALESCE(tk.search_volume, 100) * (21 - dr.position) as opportunity_score
+      FROM web_intel.tracked_keywords tk
+      JOIN web_intel.daily_rankings dr ON tk.id = dr.keyword_id
+        AND dr.collected_date = CURRENT_DATE
+      WHERE tk.status = 'active' AND dr.position BETWEEN 4 AND 20
+      ORDER BY opportunity_score DESC
+
+design_notes:
+  - issue: "IF condition checks n8n item count instead of response array length"
+    detail: >
+      The IF node uses $input.all().length > 0 which counts n8n items,
+      not the data array length. Combined with alwaysOutputData:true,
+      the false branch is unreachable. To fix, the condition should
+      check the actual response data, e.g. $json.length or similar.
+    severity: low
+    impact: "When no opportunities exist, a Slack message is still sent with 0 counts"

@@ -1,0 +1,142 @@
+workflow_id: heGC1O1wf9IZTSqW
+workflow_name: "Web Intel - New/Lost Backlink Detector"
+url: https://n8n.realtyamp.ai/workflow/heGC1O1wf9IZTSqW
+test_status: verified
+tested_at: "2026-02-23T23:34:36Z"
+tested_by: test-workflow-auto
+
+trigger:
+  type: schedule
+  cron: "0 5 * * *"
+  description: Daily at 5am CT
+
+nodes:
+  - id: schedule-trigger
+    name: "Daily 5am CT"
+    type: scheduleTrigger
+    tested: true
+
+  - id: fetch-new
+    name: "Fetch New Backlinks (RPC)"
+    type: httpRequest
+    tested: true
+    notes: "Calls web_intel.get_new_backlinks() RPC. Converted from Postgres node."
+
+  - id: fetch-lost
+    name: "Fetch Lost Backlinks (RPC)"
+    type: httpRequest
+    tested: true
+    notes: "Calls web_intel.get_lost_backlinks() RPC. Converted from Postgres node."
+
+  - id: merge-changes
+    name: "Merge Changes"
+    type: merge
+    tested: true
+    notes: "Append mode (changed from combine) to properly merge parallel RPC outputs."
+
+  - id: process-changes
+    name: "Process Changes"
+    type: code
+    tested: true
+    notes: "Processes merged backlink arrays. Handles both array and single-object RPC responses."
+
+  - id: check-changes
+    name: "Has Changes?"
+    type: if
+    tested: true
+    branches:
+      true:
+        tested: true
+        execution_id: "201952"
+        notes: "314 lost backlinks detected. Slack notification sent."
+      false:
+        tested: true
+        execution_id: "201953"
+        notes: "No changes detected after all lost backlinks were already marked."
+
+  - id: send-slack
+    name: "Send to Slack"
+    type: httpRequest
+    tested: true
+    notes: "Web Intel Slack webhook. Formats backlink changes with DA metrics."
+
+  - id: mark-lost
+    name: "Mark Lost Backlinks (RPC)"
+    type: httpRequest
+    tested: true
+    notes: "Calls web_intel.mark_lost_backlinks() RPC. Marked 314 backlinks as lost."
+
+  - id: error-trigger
+    name: "Error Trigger"
+    type: errorTrigger
+    tested: true
+    notes: "Triggered by execution 201947 merge error."
+
+  - id: parse-error
+    name: "Parse Error Details"
+    type: code
+    tested: true
+
+  - id: log-error-db
+    name: "Log Error to DB"
+    type: httpRequest
+    tested: true
+    notes: "Calls log_workflow_error RPC via Supabase REST API."
+
+  - id: send-error-slack
+    name: "Send Error to Slack"
+    type: httpRequest
+    tested: true
+    notes: "Posts to error Slack webhook."
+
+coverage:
+  node_coverage: "12/12 (100%)"
+  branch_coverage: "2/2 (100%)"
+  error_handling: "4/4 nodes tested"
+
+executions:
+  - id: "201952"
+    scenario: "has_changes_true"
+    description: "Lost backlinks detected (314 stale active backlinks). True branch fires."
+    result: success
+    nodes_hit:
+      - "Daily 5am CT"
+      - "Fetch New Backlinks (RPC)"
+      - "Fetch Lost Backlinks (RPC)"
+      - "Merge Changes"
+      - "Process Changes"
+      - "Has Changes? (true)"
+      - "Send to Slack"
+      - "Mark Lost Backlinks (RPC)"
+
+  - id: "201953"
+    scenario: "has_changes_false"
+    description: "No changes after all lost links already marked. False branch fires."
+    result: success
+    nodes_hit:
+      - "Daily 5am CT"
+      - "Fetch New Backlinks (RPC)"
+      - "Fetch Lost Backlinks (RPC)"
+      - "Merge Changes"
+      - "Process Changes"
+      - "Has Changes? (false)"
+
+  - id: "201948"
+    scenario: "error_handling"
+    description: "Error handler triggered by merge failure in execution 201947."
+    result: success
+    mode: error
+    nodes_hit:
+      - "Error Trigger"
+      - "Parse Error Details"
+      - "Log Error to DB"
+      - "Send Error to Slack"
+
+structural_fixes:
+  - "Converted 3 Postgres nodes (EgmvZHbvINHsh6PR credential) to HTTP Request with Supabase REST API (Dy6aCSbL5Tup4TnE)"
+  - "Created 3 new RPCs: get_new_backlinks(), get_lost_backlinks(), mark_lost_backlinks()"
+  - "Migration: supabase/migrations/20260223000001_backlink_detector_rpcs.sql"
+  - "Added standard 4-node error handling chain"
+  - "Added business-os tag"
+  - "Changed schedule from weekly Monday 4am to daily 5am CT"
+  - "Changed Merge mode from combine to append for reliable parallel branch merging"

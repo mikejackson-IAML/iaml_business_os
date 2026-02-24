@@ -1,0 +1,101 @@
+workflow_id: UTwZ1v1EffRRT2dv
+workflow_name: "Web Intel - Rankings - Alert Notifier"
+tested_at: "2026-02-20T16:36:00.000Z"
+tested_by: test-workflow-auto
+test_status: tested
+trigger_type: webhook
+webhook_path: rank-alert
+http_method: POST
+
+scenarios:
+  - name: happy_path_ranking_changes
+    description: "Send valid ranking alert data with critical, warning, and info changes"
+    payload:
+      categorized:
+        critical:
+          - keyword: "employment law training"
+            yesterday_position: 5
+            today_position: 15
+            position_change: 10
+            change_type: ranking_drop
+        warning:
+          - keyword: "hr compliance course"
+            yesterday_position: 8
+            today_position: 12
+            position_change: 4
+            change_type: ranking_drop
+        info:
+          - keyword: "labor law seminar"
+            yesterday_position: 20
+            today_position: 10
+            position_change: -10
+            change_type: ranking_gain
+      counts:
+        total: 3
+        critical: 1
+        warning: 1
+        info: 1
+    expected_branch: "Should Send?->true"
+    expected_response:
+      success: true
+      counts:
+        total: 3
+    execution_id: "195796"
+    result: success
+
+  - name: skip_path_no_changes
+    description: "Send null data to trigger skip path"
+    payload:
+      categorized: null
+      counts: null
+    expected_branch: "Should Send?->false"
+    expected_response:
+      success: true
+      skipped: true
+      reason: "No ranking changes"
+    execution_id: "195798"
+    result: success
+
+  - name: edge_case_null_keyword
+    description: "Send data with null keyword to test resilience"
+    payload:
+      categorized:
+        critical:
+          - keyword: null
+      counts:
+        total: 1
+        critical: 1
+        warning: 0
+        info: 0
+    expected_branch: "Should Send?->true"
+    execution_id: "195800"
+    result: success
+
+coverage:
+  node_coverage: "8/12 (67%)"
+  branch_coverage: "2/2 (100%)"
+  executions: 3
+  fixes_applied: 1
+
+uncovered_nodes:
+  - name: "Error Trigger"
+    type: errorTrigger
+    reason: "Standard error handling pattern - only fires on unhandled production errors, cannot be triggered via webhook responseNode mode"
+  - name: "Parse Error Details"
+    type: code
+    reason: "Part of error handling chain"
+  - name: "Log Error to DB"
+    type: httpRequest
+    reason: "Part of error handling chain"
+  - name: "Send Error to Slack"
+    type: httpRequest
+    reason: "Part of error handling chain"
+
+fixes:
+  - type: tag
+    description: "Added missing business-os tag"
+
+notes: |
+  All functional/business-logic nodes covered at 100%. Both IF branches tested.
+  Error handling chain uses standard pattern confirmed by n8n-brain preferences.
+  Webhook uses responseNode mode which prevents Error Trigger from firing on test calls.

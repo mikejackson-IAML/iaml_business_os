@@ -1,0 +1,164 @@
+workflow_id: mO9fbehGJFBPGIDU
+workflow_name: "Web Intel - Weekly Digest"
+workflow_url: https://n8n.realtyamp.ai/workflow/mO9fbehGJFBPGIDU
+tested_at: "2026-02-24T01:15:23Z"
+tested_by: test-workflow-auto
+
+# Structural Changes Made
+changes:
+  - type: postgres_to_rest
+    description: "Converted 5 Postgres nodes to HTTP Request with Supabase REST API RPCs"
+    nodes_affected:
+      - "Fetch Weekly Traffic -> get_weekly_traffic_summary RPC"
+      - "Fetch Ranking Changes -> get_weekly_ranking_changes RPC"
+      - "Fetch Backlinks -> get_weekly_backlink_summary RPC"
+      - "Fetch Alerts -> get_weekly_alerts_summary RPC"
+      - "Store Report -> store_weekly_digest RPC"
+    credential: "Dy6aCSbL5Tup4TnE (Supabase REST API)"
+  - type: merge_topology
+    description: "Restructured 4-input merge into chain of 2-input merges: Traffic+Rankings, Backlinks+Alerts, then All Data"
+  - type: error_handling
+    description: "Added standard 4-node canary error handling chain"
+    nodes_added:
+      - "Error Trigger"
+      - "Parse Error Details"
+      - "Log Error to DB"
+      - "Send Error to Slack"
+  - type: always_output_data
+    description: "Added alwaysOutputData: true to all data processing nodes"
+  - type: rpc_migration
+    description: "Created 5 new RPCs via migration 20260224000003_web_intel_weekly_digest_rpcs.sql"
+    rpcs_created:
+      - "get_weekly_traffic_summary()"
+      - "get_weekly_ranking_changes()"
+      - "get_weekly_backlink_summary()"
+      - "get_weekly_alerts_summary()"
+      - "store_weekly_digest(date, date, text, text, jsonb, jsonb)"
+
+# Coverage Results
+coverage:
+  node_coverage: "15/16 (94%)"
+  branch_coverage: "0/0 (100%)"
+  uncovered_nodes:
+    - name: "Weekly Monday 7am CT"
+      type: scheduleTrigger
+      reason: "Standard exception - functionally equivalent to webhook trigger used for testing"
+
+# Test Executions
+executions:
+  - id: "202091"
+    scenario: happy_path
+    status: success
+    trigger: webhook
+    nodes_hit: 11
+    description: "Full happy path - fetches all 4 data sources, merges, compiles digest, sends to Slack, stores report"
+    nodes_covered:
+      - "Test Webhook"
+      - "Fetch Weekly Traffic"
+      - "Fetch Ranking Changes"
+      - "Fetch Backlinks"
+      - "Fetch Alerts"
+      - "Merge Traffic + Rankings"
+      - "Merge Backlinks + Alerts"
+      - "Merge All Data"
+      - "Compile Digest"
+      - "Send to Slack"
+      - "Store Report"
+
+  - id: "202096"
+    scenario: error_trigger
+    status: error
+    trigger: webhook
+    nodes_hit: 9
+    description: "Intentional error in Compile Digest to trigger error handling chain"
+    error_message: "Test error for coverage - weekly digest error chain test"
+    error_node: "Compile Digest"
+
+  - id: "202097"
+    scenario: error_chain
+    status: success
+    trigger: error
+    nodes_hit: 4
+    description: "Error handler execution - confirms full error chain works"
+    nodes_covered:
+      - "Error Trigger"
+      - "Parse Error Details"
+      - "Log Error to DB"
+      - "Send Error to Slack"
+
+# Node Inventory (15 nodes after removing test webhook)
+nodes:
+  - id: schedule-trigger
+    name: "Weekly Monday 7am CT"
+    type: scheduleTrigger
+    purpose: "Triggers weekly on Monday at 7am CT"
+
+  - id: fetch-traffic
+    name: "Fetch Weekly Traffic"
+    type: httpRequest
+    purpose: "Calls get_weekly_traffic_summary RPC for 7-day traffic data"
+
+  - id: fetch-rankings
+    name: "Fetch Ranking Changes"
+    type: httpRequest
+    purpose: "Calls get_weekly_ranking_changes RPC for ranking change events"
+
+  - id: fetch-backlinks
+    name: "Fetch Backlinks"
+    type: httpRequest
+    purpose: "Calls get_weekly_backlink_summary RPC for backlink profile data"
+
+  - id: fetch-alerts
+    name: "Fetch Alerts"
+    type: httpRequest
+    purpose: "Calls get_weekly_alerts_summary RPC for alert counts"
+
+  - id: merge-traffic-rankings
+    name: "Merge Traffic + Rankings"
+    type: merge
+    purpose: "Appends traffic and rankings data into single stream"
+
+  - id: merge-backlinks-alerts
+    name: "Merge Backlinks + Alerts"
+    type: merge
+    purpose: "Appends backlinks and alerts data into single stream"
+
+  - id: merge-all-data
+    name: "Merge All Data"
+    type: merge
+    purpose: "Combines all 4 data streams for digest compilation"
+
+  - id: compile-digest
+    name: "Compile Digest"
+    type: code
+    purpose: "Assembles all metrics into formatted Slack message and store body"
+
+  - id: send-slack
+    name: "Send to Slack"
+    type: httpRequest
+    purpose: "Posts formatted weekly digest to Slack"
+
+  - id: store-report
+    name: "Store Report"
+    type: httpRequest
+    purpose: "Stores digest in web_intel.reports via store_weekly_digest RPC"
+
+  - id: error-trigger
+    name: "Error Trigger"
+    type: errorTrigger
+    purpose: "Catches workflow errors"
+
+  - id: parse-error
+    name: "Parse Error Details"
+    type: code
+    purpose: "Extracts structured error information"
+
+  - id: log-error-db
+    name: "Log Error to DB"
+    type: httpRequest
+    purpose: "Logs error to Supabase via log_workflow_error RPC"
+
+  - id: send-error-slack
+    name: "Send Error to Slack"
+    type: httpRequest
+    purpose: "Sends error notification to Slack error channel"

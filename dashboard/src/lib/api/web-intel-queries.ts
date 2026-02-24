@@ -581,7 +581,7 @@ export async function getDailyTraffic(days: number = 30): Promise<DailyTrafficDb
   const supabase = getServerClient();
 
   const { data, error } = await supabase
-    .from('web_intel.daily_traffic')
+    .from('web_intel_daily_traffic')
     .select('*')
     .order('collected_date', { ascending: false })
     .limit(days);
@@ -603,7 +603,7 @@ export async function getTopPages(days: number = 7, limit: number = 10): Promise
   startDate.setDate(startDate.getDate() - days);
 
   const { data, error } = await supabase
-    .from('web_intel.page_traffic')
+    .from('web_intel_page_traffic')
     .select('*')
     .gte('collected_date', startDate.toISOString().split('T')[0])
     .order('pageviews', { ascending: false })
@@ -626,7 +626,7 @@ export async function getTrafficSources(days: number = 30): Promise<TrafficSourc
   startDate.setDate(startDate.getDate() - days);
 
   const { data, error } = await supabase
-    .from('web_intel.traffic_sources')
+    .from('web_intel_traffic_sources')
     .select('*')
     .gte('collected_date', startDate.toISOString().split('T')[0])
     .order('collected_date', { ascending: true });
@@ -646,7 +646,7 @@ export async function getTrackedKeywords(status: string = 'active'): Promise<Tra
   const supabase = getServerClient();
 
   const { data, error } = await supabase
-    .from('web_intel.tracked_keywords')
+    .from('web_intel_tracked_keywords')
     .select('*')
     .eq('status', status)
     .order('priority', { ascending: true }) // critical, high, medium, low
@@ -678,7 +678,7 @@ export async function getDailyRankings(days: number = 7): Promise<DailyRankingDb
   startDate.setDate(startDate.getDate() - days);
 
   const { data, error } = await supabase
-    .from('web_intel.daily_rankings')
+    .from('web_intel_daily_rankings')
     .select('*')
     .gte('collected_date', startDate.toISOString().split('T')[0])
     .order('collected_date', { ascending: false });
@@ -703,7 +703,7 @@ export async function getRankingChanges(
   startDate.setDate(startDate.getDate() - days);
 
   let query = supabase
-    .from('web_intel.ranking_change_events')
+    .from('web_intel_ranking_change_events')
     .select('*')
     .gte('detected_date', startDate.toISOString().split('T')[0]);
 
@@ -730,7 +730,7 @@ export async function getCoreWebVitals(): Promise<CoreWebVitalsDb[]> {
   const supabase = getServerClient();
 
   const { data, error } = await supabase
-    .from('web_intel.core_web_vitals')
+    .from('web_intel_core_web_vitals')
     .select('*')
     .order('collected_date', { ascending: false })
     .limit(2); // Get most recent for mobile + desktop
@@ -750,7 +750,7 @@ export async function getIndexCoverage(): Promise<IndexCoverageDb | null> {
   const supabase = getServerClient();
 
   const { data, error } = await supabase
-    .from('web_intel.index_coverage')
+    .from('web_intel_index_coverage')
     .select('*')
     .order('collected_date', { ascending: false })
     .limit(1)
@@ -780,7 +780,7 @@ export async function getSearchPerformance(
   startDate.setDate(startDate.getDate() - days);
 
   const { data, error } = await supabase
-    .from('web_intel.search_performance')
+    .from('web_intel_search_performance')
     .select('*')
     .gte('collected_date', startDate.toISOString().split('T')[0])
     .order('clicks', { ascending: false })
@@ -800,7 +800,7 @@ export async function getSearchPerformance(
 export async function getContentDecay(unresolvedOnly: boolean = true): Promise<ContentDecayDb[]> {
   const supabase = getServerClient();
 
-  let query = supabase.from('web_intel.content_decay').select('*');
+  let query = supabase.from('web_intel_content_decay').select('*');
 
   if (unresolvedOnly) {
     query = query.eq('is_addressed', false);
@@ -823,7 +823,7 @@ export async function getBacklinkProfile(): Promise<BacklinkProfileDb | null> {
   const supabase = getServerClient();
 
   const { data, error } = await supabase
-    .from('web_intel.backlink_profile')
+    .from('web_intel_backlink_profile')
     .select('*')
     .order('collected_date', { ascending: false })
     .limit(1)
@@ -847,7 +847,7 @@ export async function getBacklinkProfile(): Promise<BacklinkProfileDb | null> {
 export async function getWebIntelAlerts(unresolvedOnly: boolean = true): Promise<WebIntelAlertDb[]> {
   const supabase = getServerClient();
 
-  let query = supabase.from('web_intel.alerts').select('*');
+  let query = supabase.from('web_intel_alerts').select('*');
 
   if (unresolvedOnly) {
     query = query.is('acknowledged_at', null);
@@ -874,93 +874,116 @@ export async function getWebIntelAlerts(unresolvedOnly: boolean = true): Promise
 
 /**
  * Fetch content decay with joined inventory data (URL, title, word_count)
+ * Uses separate queries since FK joins don't work with views
  */
 export async function getContentDecayWithInventory(
   limit: number = 5
 ): Promise<ContentDecayWithInventory[]> {
   const supabase = getServerClient();
 
-  const { data, error } = await (
-    supabase.from('web_intel.content_decay') as any
-  )
-    .select(
-      `
-      *,
-      content_inventory:content_id (
-        url,
-        title,
-        word_count
-      )
-    `
-    )
+  // Fetch content decay data
+  const { data: decayData, error: decayError } = await supabase
+    .from('web_intel_content_decay')
+    .select('*')
     .eq('is_addressed', false)
     .order('decay_percentage', { ascending: false })
     .limit(limit);
 
-  if (error) {
-    console.error('Error fetching content decay with inventory:', error);
+  if (decayError) {
+    console.error('Error fetching content decay:', decayError);
     return [];
   }
 
+  if (!decayData || decayData.length === 0) {
+    return [];
+  }
+
+  // Get unique content IDs
+  const contentIds = [...new Set(decayData.map((d: any) => d.content_id))];
+
+  // Fetch inventory data for these IDs
+  const { data: inventoryData } = await supabase
+    .from('web_intel_content_inventory')
+    .select('id, url, title, word_count')
+    .in('id', contentIds);
+
+  // Create lookup map
+  const inventoryMap = new Map((inventoryData || []).map((i: any) => [i.id, i]));
+
   // Transform and flatten
-  return (data || []).map((item: any) => ({
-    id: item.id,
-    contentId: item.content_id,
-    detectedDate: new Date(item.detected_date),
-    baselineSessions: item.baseline_sessions,
-    currentSessions: item.current_sessions,
-    decayPercentage: item.decay_percentage ? Number(item.decay_percentage) : null,
-    severity: item.severity,
-    isAddressed: item.is_addressed,
-    url: item.content_inventory?.url || '',
-    title: item.content_inventory?.title || null,
-    wordCount: item.content_inventory?.word_count || null,
-  }));
+  return decayData.map((item: any) => {
+    const inventory = inventoryMap.get(item.content_id);
+    return {
+      id: item.id,
+      contentId: item.content_id,
+      detectedDate: new Date(item.detected_date),
+      baselineSessions: item.baseline_sessions,
+      currentSessions: item.current_sessions,
+      decayPercentage: item.decay_percentage ? Number(item.decay_percentage) : null,
+      severity: item.severity,
+      isAddressed: item.is_addressed,
+      url: inventory?.url || '',
+      title: inventory?.title || null,
+      wordCount: inventory?.word_count || null,
+    };
+  });
 }
 
 /**
  * Fetch thin content with joined inventory data (URL, title)
+ * Uses separate queries since FK joins don't work with views
  */
 export async function getThinContentWithInventory(
   limit: number = 5
 ): Promise<ThinContentWithInventory[]> {
   const supabase = getServerClient();
 
-  const { data, error } = await (
-    supabase.from('web_intel.thin_content') as any
-  )
-    .select(
-      `
-      *,
-      content_inventory:content_id (
-        url,
-        title
-      )
-    `
-    )
+  // Fetch thin content data
+  const { data: thinData, error: thinError } = await supabase
+    .from('web_intel_thin_content')
+    .select('*')
     .eq('is_addressed', false)
     .order('bounce_rate', { ascending: false })
     .limit(limit);
 
-  if (error) {
-    console.error('Error fetching thin content with inventory:', error);
+  if (thinError) {
+    console.error('Error fetching thin content:', thinError);
     return [];
   }
 
+  if (!thinData || thinData.length === 0) {
+    return [];
+  }
+
+  // Get unique content IDs
+  const contentIds = [...new Set(thinData.map((d: any) => d.content_id))];
+
+  // Fetch inventory data for these IDs
+  const { data: inventoryData } = await supabase
+    .from('web_intel_content_inventory')
+    .select('id, url, title')
+    .in('id', contentIds);
+
+  // Create lookup map
+  const inventoryMap = new Map((inventoryData || []).map((i: any) => [i.id, i]));
+
   // Transform and flatten
-  return (data || []).map((item: any) => ({
-    id: item.id,
-    contentId: item.content_id,
-    detectedDate: new Date(item.detected_date),
-    wordCount: item.word_count,
-    avgTimeOnPage: item.avg_time_on_page ? Number(item.avg_time_on_page) : null,
-    bounceRate: item.bounce_rate ? Number(item.bounce_rate) : null,
-    reason: item.reason,
-    recommendation: item.recommendation,
-    isAddressed: item.is_addressed,
-    url: item.content_inventory?.url || '',
-    title: item.content_inventory?.title || null,
-  }));
+  return thinData.map((item: any) => {
+    const inventory = inventoryMap.get(item.content_id);
+    return {
+      id: item.id,
+      contentId: item.content_id,
+      detectedDate: new Date(item.detected_date),
+      wordCount: item.word_count,
+      avgTimeOnPage: item.avg_time_on_page ? Number(item.avg_time_on_page) : null,
+      bounceRate: item.bounce_rate ? Number(item.bounce_rate) : null,
+      reason: item.reason,
+      recommendation: item.recommendation,
+      isAddressed: item.is_addressed,
+      url: inventory?.url || '',
+      title: inventory?.title || null,
+    };
+  });
 }
 
 /**
@@ -970,7 +993,7 @@ export async function getContentSummary(): Promise<ContentSummary> {
   const supabase = getServerClient();
 
   const { data, error } = await (
-    supabase.from('web_intel.content_inventory') as any
+    supabase.from('web_intel_content_inventory') as any
   )
     .select('word_count')
     .eq('status', 'active');
@@ -999,7 +1022,7 @@ export async function getContentSummary(): Promise<ContentSummary> {
 export async function getCompetitors(): Promise<Competitor[]> {
   const supabase = getServerClient();
 
-  const { data, error } = await (supabase.from('web_intel.competitors') as any)
+  const { data, error } = await (supabase.from('web_intel_competitors') as any)
     .select('*')
     .eq('is_active', true)
     .order('domain', { ascending: true });
@@ -1018,7 +1041,7 @@ export async function getCompetitors(): Promise<Competitor[]> {
 export async function getSerpShare(): Promise<SerpShare | null> {
   const supabase = getServerClient();
 
-  const { data, error } = await (supabase.from('web_intel.serp_share') as any)
+  const { data, error } = await (supabase.from('web_intel_serp_share') as any)
     .select('*')
     .order('collected_date', { ascending: false })
     .limit(1)
@@ -1038,54 +1061,60 @@ export async function getSerpShare(): Promise<SerpShare | null> {
 
 /**
  * Fetch shared keywords with our position and competitor positions
- * Joins daily_rankings (latest) with tracked_keywords
+ * Uses separate queries since FK joins don't work with views
  */
 export async function getSharedKeywords(limit: number = 10): Promise<SharedKeyword[]> {
   const supabase = getServerClient();
 
-  // Get latest rankings with competitor positions joined to tracked_keywords
-  const { data, error } = await (
-    supabase.from('web_intel.daily_rankings') as any
-  )
-    .select(`
-      keyword_id,
-      position,
-      competitor_positions,
-      collected_date,
-      tracked_keywords:keyword_id (
-        id,
-        keyword,
-        priority
-      )
-    `)
+  // Get latest rankings with competitor positions
+  const { data: rankingsData, error: rankingsError } = await supabase
+    .from('web_intel_daily_rankings')
+    .select('keyword_id, position, competitor_positions, collected_date')
     .order('collected_date', { ascending: false })
-    .limit(limit * 2); // Fetch extra to handle deduplication
+    .limit(limit * 3); // Fetch extra to handle deduplication
 
-  if (error) {
-    console.error('Error fetching shared keywords:', error);
+  if (rankingsError) {
+    console.error('Error fetching rankings for shared keywords:', rankingsError);
+    return [];
+  }
+
+  if (!rankingsData || rankingsData.length === 0) {
     return [];
   }
 
   // Deduplicate by keyword_id (keep latest entry for each keyword)
   const latestByKeyword = new Map<string, any>();
-  for (const item of data || []) {
+  for (const item of rankingsData) {
     if (!latestByKeyword.has(item.keyword_id)) {
       latestByKeyword.set(item.keyword_id, item);
     }
   }
 
+  // Get keyword IDs
+  const keywordIds = Array.from(latestByKeyword.keys());
+
+  // Fetch keyword details
+  const { data: keywordsData } = await supabase
+    .from('web_intel_tracked_keywords')
+    .select('id, keyword, priority')
+    .in('id', keywordIds);
+
+  // Create keyword lookup map
+  const keywordMap = new Map((keywordsData || []).map((k: any) => [k.id, k]));
+
   // Transform and filter to only those with competitor data
   const results: SharedKeyword[] = [];
   for (const item of Array.from(latestByKeyword.values())) {
     const competitors = item.competitor_positions || [];
+    const keyword = keywordMap.get(item.keyword_id);
     // Only include keywords that have at least one competitor position
-    if (competitors.length > 0 && item.tracked_keywords) {
+    if (competitors.length > 0 && keyword) {
       results.push({
         keywordId: item.keyword_id,
-        keyword: item.tracked_keywords.keyword,
+        keyword: keyword.keyword,
         ourPosition: item.position,
         competitorPositions: competitors,
-        priority: item.tracked_keywords.priority,
+        priority: keyword.priority,
       });
     }
   }
@@ -1112,7 +1141,7 @@ export async function getSharedKeywords(limit: number = 10): Promise<SharedKeywo
 export async function getRecommendations(activeOnly: boolean = true): Promise<RecommendationDb[]> {
   const supabase = getServerClient();
 
-  let query = (supabase.from('web_intel.recommendations') as any).select('*');
+  let query = (supabase.from('web_intel_recommendations') as any).select('*');
 
   if (activeOnly) {
     query = query.in('status', ['new', 'in_progress']);

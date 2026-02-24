@@ -1,0 +1,84 @@
+workflow_id: rF5rVvu53oHYNcVe
+workflow_name: "Web Intel - Traffic - Alert Notifier"
+tested_at: "2026-02-20T16:11:30Z"
+tested_by: test-workflow-auto
+status: verified
+
+coverage:
+  nodes: "9/9 (100%)"
+  branches: "2/2 (100%)"
+  executions: 4
+  fixes: 0
+
+scenarios:
+  - name: true_branch_with_anomalies
+    description: "Send traffic anomalies (critical, warning, info) to trigger TRUE branch of Should Send? and full Slack + Mark Notified + Log Success path"
+    execution_id: "195746"
+    payload:
+      collected_date: "2026-02-20"
+      anomalies:
+        - metric: organic_sessions
+          severity: critical
+          current: 145
+          expected: 320
+          change_percent: -54.7
+        - metric: direct_traffic
+          severity: warning
+          current: 89
+          expected: 150
+          change_percent: -40.7
+        - metric: referral_traffic
+          severity: info
+          current: 210
+          expected: 180
+          change_percent: 16.7
+    expected_branches:
+      - "Should Send? -> true"
+    nodes_hit:
+      - Webhook
+      - Format Slack Message
+      - "Should Send?"
+      - Send to Slack
+      - Mark Alerts Notified
+      - Log Success
+    result: success
+
+  - name: false_branch_empty_anomalies
+    description: "Send empty anomalies array to trigger skip=true, FALSE branch of Should Send?"
+    execution_id: "195749"
+    payload:
+      collected_date: "2026-02-20"
+      anomalies: []
+    expected_branches:
+      - "Should Send? -> false"
+    nodes_hit:
+      - Webhook
+      - Format Slack Message
+      - "Should Send?"
+    result: success
+
+  - name: error_handling_malformed_input
+    description: "Send malformed anomalies (string instead of array) to trigger error in Format Slack Message and test error handling chain"
+    execution_ids:
+      - "195759"  # main execution (errored)
+      - "195760"  # error handler execution (success)
+    payload:
+      collected_date: null
+      anomalies: "not_an_array"
+    expected_branches: []
+    nodes_hit:
+      - Webhook
+      - Format Slack Message
+      - Error Trigger
+      - "Slack - Error Alert"
+      - Log Error
+    result: error_handled
+
+uncovered: []
+
+notes: |
+  - Webhook is fire-and-forget (no Respond to Webhook node), returns "Workflow was started"
+  - Error handling chain tested by sending non-array anomalies which causes .filter() to fail in Code node
+  - Slack webhook sends to general error channel
+  - Mark Alerts Notified calls Supabase RPC mark_alerts_notified for traffic_drop and traffic_spike types
+  - Log Success calls Supabase RPC insert_collection_log

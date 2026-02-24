@@ -1,0 +1,109 @@
+workflow_id: UbnzS6cyOmeIAQg0
+workflow_name: "Web Intel - Traffic - Daily Collector"
+test_status: verified
+tested_at: "2026-02-19T21:00:00Z"
+tested_by: test-workflow-auto
+
+trigger:
+  type: schedule
+  cron: "0 6 * * *"
+  timezone: America/Chicago
+  note: "Cannot be triggered externally - schedule trigger only"
+
+nodes:
+  total: 9
+  happy_path:
+    - name: "Daily 6am CT"
+      type: scheduleTrigger
+      covered: true
+    - name: "GA4 - Fetch Daily Metrics"
+      type: httpRequest
+      covered: true
+    - name: "Transform to Schema"
+      type: code
+      covered: true
+    - name: "Supabase - Store Daily Traffic"
+      type: httpRequest
+      covered: true
+    - name: "Log Success"
+      type: httpRequest
+      covered: true
+  error_path:
+    - name: "Error Trigger"
+      type: errorTrigger
+      covered: true
+      coverage_source: historical
+    - name: "Process Error"
+      type: code
+      covered: true
+      coverage_source: historical
+    - name: "Log Error to DB"
+      type: httpRequest
+      covered: true
+      coverage_source: historical
+    - name: "Slack - Alert Error"
+      type: httpRequest
+      covered: true
+      coverage_source: historical
+
+coverage:
+  node_percent: 100
+  branch_percent: 100
+  branch_count: 0
+
+executions:
+  - id: "193513"
+    date: "2026-02-19T11:00:00Z"
+    status: success
+    nodes_covered: 5
+    path: happy
+  - id: "191691"
+    date: "2026-02-18T11:00:00Z"
+    status: success
+    nodes_covered: 5
+    path: happy
+  - historical_failures:
+      dates: ["2026-01-26"]
+      count: 2
+      path: error
+      evidence: "collection_log table entries with status=failed"
+
+data_verification:
+  daily_traffic_table:
+    recent_entries: 5
+    latest_date: "2026-02-19"
+    fields_populated: [sessions, users, pageviews, bounce_rate, avg_session_duration]
+  collection_log:
+    success_entries: 5
+    failure_entries: 2
+
+structural_validation:
+  errors: 0
+  warnings: 15
+  warning_categories:
+    - "Outdated node typeVersions (informational)"
+    - "HTTP Request nodes without per-node onError (global Error Trigger handles)"
+    - "Code nodes without explicit error handling (covered by workflow error trigger)"
+
+compliance:
+  error_handling: true
+  business_os_tag: true
+  verified_tag: true
+  postgres_nodes: 0
+  supabase_rest_api: true
+
+credentials:
+  - id: rKHgaeyPMzwy9EqL
+    name: "Google account (for dashboard)"
+    type: googleOAuth2Api
+  - id: Dy6aCSbL5Tup4TnE
+    name: "Supabase REST API"
+    type: httpHeaderAuth
+
+notes: |
+  Simple linear workflow with no branch points. Collects GA4 daily metrics
+  for iaml.com (property 521283124) and stores in web_intel.daily_traffic.
+  Uses insert_daily_traffic and insert_collection_log Supabase RPCs.
+  5+ consecutive successful daily runs confirm reliability.
+  Error path historically exercised during Jan 26 development.
+  Cloudflare blocks direct API access from dev machines - use MCP for testing.

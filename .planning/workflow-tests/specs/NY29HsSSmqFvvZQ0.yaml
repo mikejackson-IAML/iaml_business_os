@@ -1,0 +1,97 @@
+workflow_id: NY29HsSSmqFvvZQ0
+workflow_name: "Web Intel - Competitor Traffic Estimator"
+url: https://n8n.realtyamp.ai/workflow/NY29HsSSmqFvvZQ0
+tested_at: "2026-02-23T20:45:00Z"
+tested_by: test-workflow-auto
+test_status: tested
+
+trigger:
+  type: scheduleTrigger
+  cron: "0 4 1 * *"
+  note: "Monthly 1st at 4am CT. Tested via temporary webhook trigger."
+
+structural_changes:
+  - type: postgres_to_rest
+    node: "Fetch Competitors"
+    old_credential: "EgmvZHbvINHsh6PR (dead Supabase Postgres)"
+    new_credential: "Dy6aCSbL5Tup4TnE (Supabase REST API)"
+    method: "POST /rest/v1/rpc/get_active_competitors_for_traffic"
+    migration: "supabase/migrations/20260223000000_competitor_traffic_rpc.sql"
+  - type: error_chain_replacement
+    removed_nodes:
+      - "Format Self Error (code)"
+      - "Email Fallback Alert (httpRequest to ZeptoMail)"
+    added_nodes:
+      - "Parse Error Details (code)"
+      - "Log Error to DB (httpRequest to Supabase RPC)"
+      - "Send Error to Slack (httpRequest to Slack webhook)"
+  - type: loop_simplification
+    description: "Replaced SplitInBatches v3 loop with HTTP Request batching (batchSize=1, interval=1000ms)"
+    reason: "SplitInBatches v3 had persistent context issue causing immediate done signal"
+
+analysis:
+  total_nodes: 9
+  branch_points: 0
+  total_branches: 0
+  error_handling: true
+  compliance_issues: []
+
+coverage:
+  nodes:
+    covered: 8
+    total: 9
+    percent: 89
+    display: "8/9 (89%)"
+  branches:
+    covered: 0
+    total: 0
+    percent: 100
+    display: "0/0 (100%)"
+
+executions:
+  - id: "201704"
+    scenario: happy_path_real_domains
+    status: success
+    trigger: webhook
+    description: "Full main chain: fetch competitors from Supabase RPC, call DataForSEO for each, extract metrics, send Slack notifications"
+    nodes_hit: 5
+    nodes_hit_names:
+      - "Test Webhook"
+      - "Fetch Competitors"
+      - "DataForSEO - Domain Metrics"
+      - "Extract Metrics"
+      - "Send to Slack"
+
+  - id: "201708"
+    scenario: error_chain_test
+    status: success
+    trigger: error (from forced failure in 201707)
+    description: "Error chain validated: forced Code node error triggers full error handling path"
+    nodes_hit: 4
+    nodes_hit_names:
+      - "Error Trigger"
+      - "Parse Error Details"
+      - "Log Error to DB"
+      - "Send Error to Slack"
+
+uncovered_nodes:
+  - name: "Monthly 1st 4am CT"
+    type: scheduleTrigger
+    reason: "Schedule triggers cannot be fired in test mode. Functionally equivalent to Test Webhook trigger used during testing."
+
+blockers: []
+
+notes: |
+  Workflow is a monthly scheduled job that fetches competitor domains from
+  Supabase, calls DataForSEO for traffic metrics, and posts results to Slack.
+
+  All previously identified blockers have been resolved:
+  1. Dead Postgres credential replaced with Supabase REST API RPC call
+  2. Old ZeptoMail error handler replaced with standard 4-node error chain
+  3. SplitInBatches v3 removed (context bug) - replaced with HTTP batching
+
+  Created RPC function: public.get_active_competitors_for_traffic()
+  (SECURITY DEFINER, bypasses RLS, calls web_intel.competitors)
+
+  DataForSEO returns 40501 for "www." prefixed domains - workflow handles
+  gracefully with 0 defaults in Extract Metrics code node.

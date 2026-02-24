@@ -3,6 +3,7 @@
 
 import { NextResponse } from 'next/server';
 import { createServerClient } from '@/lib/supabase/server';
+import { logApiUsage } from '@/lib/api/usage-tracking';
 import Anthropic from '@anthropic-ai/sdk';
 
 export const runtime = 'nodejs';
@@ -145,6 +146,15 @@ Return a JSON array:
 [{ "project_id": "...", "score": N, "reasoning": "one line", "goal_alignment": "primary goal tag or none" }]`,
         },
       ],
+    });
+
+    // Log API usage
+    logApiUsage({
+      department: 'planning',
+      feature: 'prioritize',
+      model: 'claude-sonnet-4-20250514',
+      inputTokens: response.usage.input_tokens,
+      outputTokens: response.usage.output_tokens,
     });
 
     // 5. Parse response

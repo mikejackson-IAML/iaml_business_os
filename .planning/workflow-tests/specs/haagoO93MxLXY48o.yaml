@@ -1,0 +1,178 @@
+workflow_id: haagoO93MxLXY48o
+workflow_name: "Web Intel - Toxic Link Alerter"
+tested_at: "2026-02-24T01:23:29Z"
+tested_by: test-workflow-auto
+test_status: tested
+
+description: >
+  Identifies toxic/spammy backlinks that could harm SEO and alerts for disavow action.
+  Runs weekly on Wednesday at 6am CT. Fetches backlinks with spam_score >= 30 from
+  web_intel.backlinks via RPC, categorizes by severity (critical 70+, warning 50-69,
+  watch 30-49), marks critical as toxic in DB, and sends Slack alert.
+
+schedule: "0 6 * * 3"  # Wednesday 6am CT
+
+nodes:
+  total: 10
+  main_path:
+    - name: "Weekly Wednesday 6am CT"
+      type: scheduleTrigger
+      id: schedule-trigger
+    - name: "Fetch Toxic Links (RPC)"
+      type: httpRequest
+      id: fetch-toxic
+      endpoint: "POST /rpc/get_toxic_backlinks"
+      credential: Dy6aCSbL5Tup4TnE
+      alwaysOutputData: true
+    - name: "Analyze Toxic Links"
+      type: code
+      id: analyze-toxic
+      logic: "Categorizes links by severity, returns has_toxic boolean and total_toxic count"
+    - name: "Has Toxic?"
+      type: if
+      id: check-toxic
+      condition: "total_toxic > 0 (number, loose, with combinator)"
+    - name: "Mark as Toxic (RPC)"
+      type: httpRequest
+      id: mark-toxic
+      branch: "true"
+      endpoint: "POST /rpc/mark_backlinks_toxic"
+      credential: Dy6aCSbL5Tup4TnE
+    - name: "Send to Slack"
+      type: httpRequest
+      id: send-slack
+      branch: "true"
+      endpoint: "Slack web-intel channel"
+  error_handling:
+    - name: "Error Trigger"
+      type: errorTrigger
+      id: error-trigger
+    - name: "Parse Error Details"
+      type: code
+      id: parse-error
+    - name: "Log Error to DB"
+      type: httpRequest
+      id: log-error-db
+      endpoint: "POST /rpc/log_workflow_error"
+      credential: Dy6aCSbL5Tup4TnE
+    - name: "Send Error to Slack"
+      type: httpRequest
+      id: send-error-slack
+      endpoint: "Slack error channel"
+
+branches:
+  - node: "Has Toxic?"
+    type: if
+    outputs:
+      true: "Mark as Toxic (RPC) + Send to Slack (parallel)"
+      false: "No-op (workflow ends)"
+
+rpcs_used:
+  - name: web_intel.get_toxic_backlinks
+    params:
+      - p_min_spam_score (integer, default 30)
+      - p_limit (integer, default 50)
+    returns: "TABLE of backlink records with spam_score >= threshold"
+  - name: web_intel.mark_backlinks_toxic
+    params:
+      - p_min_spam_score (integer, default 70)
+    returns: "TABLE with updated_count"
+
+compliance:
+  error_handling: true
+  postgres_removed: true
+  rest_api_only: true
+  business_os_tag: true
+  alwaysOutputData_on_fetch: true
+
+test_scenarios:
+  - name: true_branch_toxic_found
+    description: "Seeded 4 backlinks (spam: 85, 72, 55, 35) then triggered workflow"
+    test_method: n8n_execution
+    execution_id: "202109"
+    trigger: webhook (temporary, removed after test)
+    steps:
+      - "Inserted 4 test backlinks into web_intel.backlinks"
+      - "Triggered workflow via webhook"
+      - "Fetch Toxic Links RPC returned 4 records"
+      - "Analyze code: has_toxic=true, total_toxic=4, 2 critical, 1 warning, 1 watch"
+      - "Has Toxic? IF node: true branch taken (total_toxic > 0)"
+      - "Mark as Toxic RPC: marked critical backlinks"
+      - "Slack webhook: sent toxic alert"
+      - "Cleaned up test data"
+    nodes_covered:
+      - fetch-toxic
+      - analyze-toxic
+      - check-toxic (true branch)
+      - mark-toxic
+      - send-slack
+    result: PASS
+
+  - name: false_branch_no_toxic
+    description: "No backlinks with spam_score >= 30 in database"
+    test_method: n8n_execution
+    execution_id: "202107"
+    trigger: webhook (temporary, removed after test)
+    steps:
+      - "Ensured no toxic backlinks in DB (all test data deleted)"
+      - "Triggered workflow via webhook"
+      - "Fetch Toxic Links RPC returned [] (alwaysOutputData passes empty item)"
+      - "Analyze code: has_toxic=false, total_toxic=0"
+      - "Has Toxic? IF node: false branch taken (total_toxic not > 0)"
+      - "Mark as Toxic and Send to Slack NOT executed (correct)"
+    nodes_covered:
+      - fetch-toxic
+      - analyze-toxic
+      - check-toxic (false branch)
+    result: PASS
+
+  - name: error_handling_chain
+    description: "Error in Has Toxic? code node triggered error handling chain"
+    test_method: n8n_execution
+    execution_id: "202102"
+    trigger: error propagation from failed Code node
+    steps:
+      - "Attempted Code node with multi-output routing (caused validation error)"
+      - "Error Trigger captured the error"
+      - "Parse Error Details extracted error info"
+      - "Log Error to DB: logged via log_workflow_error RPC"
+      - "Send Error to Slack: posted to error Slack channel"
+    nodes_covered:
+      - error-trigger
+      - parse-error
+      - log-error-db
+      - send-error-slack
+    result: PASS
+
+coverage:
+  nodes:
+    total: 10
+    covered: 9
+    percentage: 90
+    uncovered:
+      - "Weekly Wednesday 6am CT (scheduleTrigger - cannot be triggered externally)"
+  branches:
+    total: 2  # true + false on Has Toxic?
+    covered: 2
+    percentage: 100
+
+execution_ids:
+  - id: "202109"
+    scenario: true_branch_toxic_found
+    status: success
+    nodes_run: 6
+  - id: "202107"
+    scenario: false_branch_no_toxic
+    status: success
+    nodes_run: 4
+  - id: "202102"
+    scenario: error_handling_chain
+    status: success
+    nodes_run: 4
+
+structural_changes_this_session:
+  - "Added business-os tag via API"
+  - "Added alwaysOutputData to Fetch Toxic Links node (ensures downstream runs on empty results)"
+  - "Fixed IF node condition: added combinator field and changed to total_toxic > 0 (number type)"
+  - "Previous IF condition (boolean has_toxic == true) was not routing correctly without combinator"
+  - "Added neverError option to Fetch Toxic Links node"

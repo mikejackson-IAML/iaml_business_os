@@ -1,0 +1,62 @@
+workflow_id: 4ghDn661GG2k46HG
+workflow_name: "Web Intel - Rankings - SERP Features"
+tested_at: "2026-02-20T10:30:00Z"
+tested_by: test-workflow-auto
+status: tested
+
+trigger:
+  type: schedule
+  schedule: "Daily 5:15am CT"
+  external_trigger: false
+
+scenarios:
+  - name: natural_run
+    description: "Execute with current live data (scheduled trigger)"
+    payload: null
+    expected_branches:
+      - "Has Opportunities? -> true (most common)"
+    execution_ids:
+      - "195297"
+      - "193463"
+      - "191641"
+      - "189797"
+      - "187976"
+
+coverage:
+  node:
+    covered: 9
+    total: 12
+    percent: 75
+  branch:
+    covered: 1
+    total: 2
+    percent: 50
+
+uncovered:
+  nodes:
+    - name: "Error Trigger"
+      type: errorTrigger
+      reason: "Error handling chain - workflow has never errored in production (6 executions, all successful)"
+    - name: "Parse Error Details"
+      type: code
+      reason: "Part of error handling chain - only fires on workflow error"
+    - name: "Send Error Slack"
+      type: httpRequest
+      reason: "Part of error handling chain - would send real Slack alerts if triggered"
+  branches:
+    - node: "Has Opportunities?"
+      output: "false"
+      reason: "Data-dependent. The IF checks for keywords ranking 1-3 without IAML's featured snippet. Current tracked keywords always have opportunities. Cannot inject test data into schedule-triggered workflow without modifying production Supabase data."
+
+fixes_applied: []
+
+notes: |
+  Stable workflow running daily since Feb 15 2026. All executions follow the
+  true branch path (opportunities found -> create alert -> insert alert -> log success).
+  The Find FS Opportunities RPC always returns data because at least one tracked
+  keyword has competitor positions where IAML could capture a featured snippet.
+
+  Script fix: check-coverage.js was returning 0% coverage due to:
+  1. N8N_API_URL containing /api/v1 which doubled the path
+  2. Missing includeData=true query param on execution fetch
+  Both issues fixed in the script.

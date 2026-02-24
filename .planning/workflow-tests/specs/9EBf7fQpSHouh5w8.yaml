@@ -1,0 +1,55 @@
+workflow_id: 9EBf7fQpSHouh5w8
+workflow_name: "Web Intel - GSC - Mobile Usability Checker"
+workflow_url: https://n8n.realtyamp.ai/workflow/9EBf7fQpSHouh5w8
+test_status: broken
+tested_at: "2026-02-23T22:32:09Z"
+tested_by: test-workflow-auto
+
+# WORKFLOW DELETED FROM N8N
+# This workflow was deleted during the 2026-01-23 Web Intel audit.
+# Reason: The GSC `mobileUsabilityIssues` endpoint does not exist
+# in the Google Search Console API. The workflow used a non-existent
+# endpoint and could never execute successfully.
+# Reference: gsd-web-intelligence/WEB-INTEL-AUDIT-2026-01-23.md
+
+status_reason: |
+  Workflow no longer exists in n8n (returns 404 on API). Deleted during
+  2026-01-23 audit because the Google Search Console API has no
+  `mobileUsabilityIssues` endpoint. The workflow was fundamentally
+  broken by design and was correctly removed.
+
+original_structure:
+  nodes:
+    - name: "Weekly Wednesday 5am CT"
+      type: n8n-nodes-base.scheduleTrigger
+    - name: "GSC - Mobile Usability"
+      type: n8n-nodes-base.httpRequest
+      note: "Called non-existent endpoint: /v1/sites/{site}/mobileUsabilityIssues"
+    - name: "Analyze Issues"
+      type: n8n-nodes-base.code
+    - name: "Has Issues?"
+      type: n8n-nodes-base.if
+    - name: "Send to Slack"
+      type: n8n-nodes-base.httpRequest
+  connections:
+    - "Weekly Wednesday 5am CT -> GSC - Mobile Usability -> Analyze Issues -> Has Issues?"
+    - "Has Issues? (true) -> Send to Slack"
+    - "Has Issues? (false) -> (no action)"
+
+test_scenarios: []
+  # No test scenarios possible - workflow does not exist in n8n
+
+coverage:
+  node_coverage: "0/5 (0%)"
+  branch_coverage: "0/2 (0%)"
+  note: "Cannot achieve any coverage - workflow deleted from n8n"
+
+execution_ids: []
+
+recommendations:
+  - action: "Do NOT recreate"
+    reason: "Google Search Console API has no mobile usability endpoint"
+  - action: "Consider alternative"
+    reason: "Mobile usability data may be available via PageSpeed Insights API or Lighthouse audit"
+  - action: "Remove from registry or keep as broken"
+    reason: "Workflow is permanently non-functional"

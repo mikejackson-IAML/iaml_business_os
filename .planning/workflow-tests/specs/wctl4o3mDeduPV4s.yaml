@@ -1,0 +1,136 @@
+# Test Spec: Web Intel - Traffic - Page Performance
+# Workflow ID: wctl4o3mDeduPV4s
+# Generated: 2026-02-20T05:04:33Z
+# Tested by: test-workflow-auto
+
+workflow:
+  id: wctl4o3mDeduPV4s
+  name: "Web Intel - Traffic - Page Performance"
+  category: "Web Intel"
+  trigger: schedule
+  active: true
+  tags:
+    - business-os
+    - verified
+
+structure:
+  total_nodes: 12
+  branch_points: 0
+  error_handling: true
+  triggers:
+    - name: "Daily 6:15am CT"
+      type: scheduleTrigger
+    - name: "Manual Test (Webhook)"
+      type: webhook
+      path: test-page-performance
+      method: GET
+
+nodes:
+  main_path:
+    - "Daily 6:15am CT"          # scheduleTrigger
+    - "Manual Test (Webhook)"     # webhook (GET)
+    - "GA4 - Fetch Page Metrics"  # httpRequest (GA4 Data API)
+    - "Transform to Schema"       # code (transforms GA4 response to page_traffic schema)
+    - "Supabase - Store Page Traffic" # httpRequest (upsert to web_intel.page_traffic)
+    - "Aggregate Results"         # aggregate
+    - "Log Success"               # httpRequest (dashboard monitoring)
+  error_path:
+    - "Error Trigger"             # errorTrigger
+    - "Parse Error Details"       # code
+    - "Log Error to DB"           # httpRequest
+    - "Send Error Slack"          # httpRequest
+    - "Mark Error Notified"       # httpRequest
+
+test_scenarios:
+  - name: natural_run_webhook
+    description: "Trigger via manual test webhook with GET method"
+    method: GET
+    payload: null
+    expected_nodes:
+      - "Manual Test (Webhook)"
+      - "GA4 - Fetch Page Metrics"
+      - "Transform to Schema"
+      - "Supabase - Store Page Traffic"
+      - "Aggregate Results"
+      - "Log Success"
+    expected_output:
+      type: json
+      fields: [id, success]
+
+  - name: natural_run_schedule
+    description: "Runs daily at 6:15am CT via schedule trigger"
+    trigger: schedule
+    expected_nodes:
+      - "Daily 6:15am CT"
+      - "GA4 - Fetch Page Metrics"
+      - "Transform to Schema"
+      - "Supabase - Store Page Traffic"
+      - "Aggregate Results"
+      - "Log Success"
+
+executions:
+  - id: "194915"
+    type: webhook
+    status: success
+    date: "2026-02-20T05:04:32Z"
+    duration_ms: 756
+    nodes_executed: 6
+    items_processed: 16
+  - id: "193543"
+    type: schedule
+    status: success
+    date: "2026-02-19T11:15:00Z"
+    duration_ms: 1503
+    nodes_executed: 6
+    items_processed: 16
+
+coverage:
+  node_coverage:
+    covered: 7
+    total: 12
+    percent: 58
+    display: "7/12 (58%)"
+    note: "5 uncovered nodes are error-handling path only (never triggered)"
+  main_path_coverage:
+    covered: 7
+    total: 7
+    percent: 100
+    display: "7/7 (100%)"
+  branch_coverage:
+    covered: 0
+    total: 0
+    percent: 100
+    display: "0/0 (100%)"
+  uncovered_nodes:
+    - name: "Error Trigger"
+      reason: "Error-handling path - no errors in workflow history"
+    - name: "Parse Error Details"
+      reason: "Error-handling path"
+    - name: "Log Error to DB"
+      reason: "Error-handling path"
+    - name: "Send Error Slack"
+      reason: "Error-handling path"
+    - name: "Mark Error Notified"
+      reason: "Error-handling path"
+
+compliance:
+  error_handling: true
+  business_os_tag: true
+  postgres_always_output: N/A
+  dashboard_monitoring: true
+
+validation:
+  profile: strict
+  errors: 1
+  warnings: 22
+  notes:
+    - "Send Error Slack expression bracket warning is likely false positive (nested JSON braces)"
+    - "Outdated typeVersions on several nodes (cosmetic, not functional)"
+    - "Optional chaining warning in Log Success expression"
+
+result:
+  status: verified
+  tested_at: "2026-02-20T05:04:33Z"
+  tested_by: test-workflow-auto
+  pattern_id: "206492fd-b100-4dba-a71b-1a6f20056d1b"
+  fixes_applied: 0

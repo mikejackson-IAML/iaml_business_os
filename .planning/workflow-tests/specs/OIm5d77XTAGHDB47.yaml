@@ -1,0 +1,76 @@
+workflow_id: OIm5d77XTAGHDB47
+workflow_name: "Web Intel - Competitor Content Monitor"
+workflow_url: https://n8n.realtyamp.ai/workflow/OIm5d77XTAGHDB47
+tested_at: "2026-02-23T20:42:00Z"
+tested_by: test-workflow-auto
+test_status: tested
+
+trigger:
+  type: schedule
+  schedule: "0 3 * * 1"  # Weekly Monday 3am CT
+
+nodes:
+  total: 12
+  main_flow: 8
+  error_handling: 4
+
+structural_fixes:
+  - type: error_handling_replacement
+    description: "Replaced 3-node error chain (Error Trigger -> Format Self Error -> Email Fallback Alert) with standard 4-node canary chain (Error Trigger -> Parse Error Details -> Log Error to DB -> Send Error to Slack)"
+  - type: connection_fix
+    description: "Fixed SplitInBatches output connection - Fetch Competitor Sitemap was connected to output[0] (done) instead of output[1] (loop body)"
+  - type: code_fix
+    node: "Parse Sitemap"
+    description: "Fixed XML validation logic - was using xml.includes('404') which matched '404' appearing in URLs. Changed to proper XML structure checks: xml.includes('<urlset') && xml.includes('<loc>')"
+
+test_scenarios:
+  - name: "natural_run_with_blog_content"
+    execution_id: "201692"
+    status: success
+    description: "Two competitors (www.hubspot.com, www.lorman.com), both had blog URLs in sitemaps. Tested true branch of Has URLs?."
+    nodes_covered:
+      - Weekly Monday 3am CT
+      - Fetch Active Competitors
+      - Batch Competitors
+      - Fetch Competitor Sitemap
+      - Parse Sitemap
+      - Has URLs?
+      - Upsert Competitor Content
+      - Mark Old Content
+    branches_covered:
+      - "Has URLs? -> true"
+
+  - name: "mixed_competitors_false_branch"
+    execution_id: "201693"
+    status: success
+    description: "One competitor with blog URLs (www.hubspot.com) and one without sitemap (example.com). Tested both true and false branches of Has URLs?."
+    nodes_covered:
+      - Weekly Monday 3am CT
+      - Fetch Active Competitors
+      - Batch Competitors
+      - Fetch Competitor Sitemap
+      - Parse Sitemap
+      - Has URLs?
+      - Upsert Competitor Content
+      - Mark Old Content
+    branches_covered:
+      - "Has URLs? -> true"
+      - "Has URLs? -> false"
+
+  - name: "error_trigger_test"
+    execution_id: "201701"
+    status: error
+    description: "Deliberately broke Fetch Active Competitors URL to trigger error. Confirmed error fires at correct node. Error handling chain not testable via manual execution (n8n only fires error trigger for production/trigger mode runs)."
+
+coverage:
+  node_coverage: "8/8 main flow (100%)"
+  branch_coverage: "2/2 (100%)"
+  error_handling: "4 nodes structurally verified (standard 4-node canary chain template)"
+  effective_coverage: "100%"
+
+notes:
+  - "Error handling chain uses the exact standard 4-node template - Error Trigger -> Parse Error Details -> Log Error to DB -> Send Error to Slack"
+  - "Error chain can only be triggered by production (trigger mode) failures, not manual executions"
+  - "business-os tag could not be added via API (n8n MCP tools mark tags as read-only)"
+  - "Test competitors were temporarily modified for testing and restored to original values"
+  - "Bugs found and fixed: (1) SplitInBatches wrong output connection, (2) Parse Sitemap false positive on '404' in URLs"

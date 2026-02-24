@@ -1,0 +1,85 @@
+workflow_id: wQ0U9uUSHnIX0sdL
+workflow_name: "Web Intel - Rankings - Change Detector"
+workflow_url: https://n8n.realtyamp.ai/workflow/wQ0U9uUSHnIX0sdL
+tested_at: "2026-02-20T16:40:39Z"
+tested_by: test-workflow-auto
+test_status: tested
+
+trigger:
+  type: schedule
+  cron: "30 5 * * *"
+  description: Daily 5:30am CT
+  test_method: temporary_webhook_injection
+
+scenarios:
+  - name: no_changes_detected
+    description: "Natural run with no ranking changes - FALSE branch of IF"
+    execution_id: "195801"
+    status: success
+    branch: "Has Critical/Warning? -> false"
+    nodes_hit:
+      - TEST Webhook Trigger
+      - Fetch Ranking Changes
+      - Categorize by Severity
+      - "Has Critical/Warning?"
+      - Log Success
+
+  - name: critical_warning_alerts
+    description: "Forced alerts with test data - TRUE branch of IF"
+    execution_id: "195805"
+    status: error
+    error_node: "Trigger RNK-03 Notifier"
+    error_reason: "Downstream webhook web-intel/rank-alert returned 404 (RNK-03 workflow not active)"
+    branch: "Has Critical/Warning? -> true"
+    nodes_hit:
+      - TEST Webhook Trigger
+      - Fetch Ranking Changes
+      - Categorize by Severity
+      - "Has Critical/Warning?"
+      - Create Alert Records
+      - Insert Alerts
+      - Trigger RNK-03 Notifier
+    test_data_injected: true
+    test_data_cleaned: true
+
+  - name: error_handling_chain
+    description: "Error trigger fired by execution 195805 failure"
+    execution_id: "195807"
+    status: success
+    branch: error_path
+    nodes_hit:
+      - Error Trigger
+      - Parse Error Details
+      - Send Error Slack
+
+coverage:
+  nodes:
+    covered: 10
+    total: 11
+    percent: 91
+    display: "10/11 (91%)"
+  branches:
+    covered: 2
+    total: 2
+    percent: 100
+    display: "2/2 (100%)"
+
+uncovered:
+  - node: "Daily 5:30am CT"
+    type: scheduleTrigger
+    reason: "Schedule triggers cannot be externally triggered; fires on cron schedule only"
+
+findings:
+  - "RPC get_ranking_changes returns empty array when no changes exist"
+  - "Insert Alerts works correctly via insert_alert RPC"
+  - "Trigger RNK-03 Notifier calls webhook/web-intel/rank-alert which may need the RNK-03 workflow active"
+  - "Error handling chain fires correctly and sends Slack notification"
+  - "Code node handles empty array from RPC gracefully (no errors, sets has_alerts=false)"
+
+fixes_applied: 0
+notes: |
+  Testing used temporary webhook injection approach: a webhook trigger node was
+  added to the workflow, connected to Fetch Ranking Changes, then removed after
+  testing. The Categorize by Severity code was temporarily modified to force
+  has_alerts=true for TRUE branch coverage, then restored to original.
+  All test data (2 alert records) was cleaned from web_intel.alerts after testing.
