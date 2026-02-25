@@ -1731,7 +1731,7 @@
 
 .benefits-section h3 {
   font-size: 1.75rem;
-  font-weight: 600;
+  font-weight: 400;
   margin-bottom: var(--space-lg);
   color: var(--gray-700);
   letter-spacing: -0.01em;
@@ -1847,7 +1847,7 @@ hr.separator {
   color: var(--gray-900);
   margin-bottom: var(--space-lg);
   font-size: 48px;
-  font-weight: 600;
+  font-weight: 400;
 }
 
 .curriculum-header p {
@@ -1872,7 +1872,7 @@ hr.separator {
   color: var(--gray-900);
   margin-bottom: var(--space-lg);
   font-size: 48px;
-  font-weight: 600;
+  font-weight: 400;
 }
 
 .who-should-attend-section header p {
@@ -1924,7 +1924,7 @@ hr.separator {
 
 .curriculum-nav-card h3 {
   font-size: 1.25rem;
-  font-weight: 700;
+  font-weight: 400;
   color: var(--gray-900);
   margin-bottom: var(--space-md);
   line-height: 1.4;
@@ -2084,7 +2084,7 @@ hr.separator {
 .competency-text h4 {
   font-family: var(--font-body);
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--gray-900);
   margin: 0 0 var(--space-sm) 0;
   line-height: 1.4;
@@ -7895,7 +7895,7 @@ section {
   font-size: 1.25rem;
   margin-bottom: 0.5rem;
   color: #1f2937;
-  font-weight: 600;
+  font-weight: 400;
 }
 
 .faculty-title {
@@ -14376,7 +14376,7 @@ button#applyCouponBtn.btn-coupon {
 .pp-consultation-headline {
   font-family: var(--font-heading);
   font-size: 2.25rem;
-  font-weight: 600;
+  font-weight: 400;
   color: #1f2937;
   line-height: 1.2;
   margin-bottom: 20px;
@@ -14421,7 +14421,7 @@ button#applyCouponBtn.btn-coupon {
 .pp-consultation-step-title {
   font-family: var(--font-heading);
   font-size: 1.125rem;
-  font-weight: 600;
+  font-weight: 400;
   color: #1f2937;
   margin-bottom: 4px;
 }
