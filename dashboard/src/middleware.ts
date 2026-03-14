@@ -33,6 +33,17 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // Portal subdomain — redirect all non-portal paths to /portal
+  const hostname = request.headers.get('host') || '';
+  if (hostname.startsWith('portal.')) {
+    const pathname = request.nextUrl.pathname;
+    if (!pathname.startsWith('/portal') && !pathname.startsWith('/api/portal')) {
+      const url = request.nextUrl.clone();
+      url.pathname = '/portal';
+      return NextResponse.redirect(url);
+    }
+  }
+
   // Portal routes - PIN-based auth (separate from main dashboard auth)
   const isPortalRoute = request.nextUrl.pathname.startsWith('/portal');
   const isPortalLogin = request.nextUrl.pathname === '/portal/login';
