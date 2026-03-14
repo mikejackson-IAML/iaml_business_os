@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const PORTAL_PIN = process.env.PORTAL_PIN || '0000';
 const COOKIE_NAME = 'portal_auth';
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 30; // 30 days
 
 export async function POST(request: NextRequest) {
   const { pin } = await request.json();
+  const portalPin = process.env.PORTAL_PIN || '0000';
 
-  if (pin === PORTAL_PIN) {
+  if (pin === portalPin) {
     const response = NextResponse.json({ success: true });
     response.cookies.set(COOKIE_NAME, 'authenticated', {
       httpOnly: true,
