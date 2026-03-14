@@ -33,6 +33,25 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // Portal routes - PIN-based auth (separate from main dashboard auth)
+  const isPortalRoute = request.nextUrl.pathname.startsWith('/portal');
+  const isPortalLogin = request.nextUrl.pathname === '/portal/login';
+  const isPortalApi = request.nextUrl.pathname.startsWith('/api/portal');
+
+  if (isPortalRoute && !isPortalLogin && !isPortalApi) {
+    const portalAuth = request.cookies.get('portal_auth');
+    if (!portalAuth || portalAuth.value !== 'authenticated') {
+      const url = request.nextUrl.clone();
+      url.pathname = '/portal/login';
+      return NextResponse.redirect(url);
+    }
+    return supabaseResponse;
+  }
+
+  if (isPortalLogin || isPortalApi) {
+    return supabaseResponse;
+  }
+
   // Protected routes - require authentication
   const protectedRoutes = ['/dashboard', '/campaigns', '/contacts', '/settings'];
   const isProtectedRoute = protectedRoutes.some((route) =>
