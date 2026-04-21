@@ -162,11 +162,17 @@ function renderEmail({ evals, actionItems, windowLabel }) {
 
   const cardsHtml = evals.map(renderEvalCard).join('');
 
+  const closer = actionItems.length
+    ? 'Let me know which of the action items you want me to handle.'
+    : 'Nothing on your plate from yesterday. I’ll flag anything that needs your attention as it comes in.';
+
   return `
 <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Arial, sans-serif; max-width:720px; margin:0 auto; padding:24px; color:#1a1a2e; background:#ffffff;">
+  <p style="font-size:16px; margin:0 0 12px;">Hi Mike,</p>
+  <p style="font-size:16px; margin:0 0 20px;">Here’s yesterday’s evaluation activity.</p>
+
   <div style="border-bottom:1px solid #e5e7eb; padding-bottom:16px; margin-bottom:20px;">
-    <div style="font-size:12px; text-transform:uppercase; letter-spacing:0.08em; color:#6b7280;">IAML morning digest</div>
-    <h1 style="font-family:Georgia,serif; font-size:24px; margin:6px 0 0;">${esc(windowLabel)}</h1>
+    <div style="font-size:12px; text-transform:uppercase; letter-spacing:0.08em; color:#6b7280;">${esc(windowLabel)}</div>
     <div style="margin-top:6px; font-size:15px; color:#1a1a2e;">${summaryBits.join(' · ')}</div>
   </div>
 
@@ -174,7 +180,9 @@ function renderEmail({ evals, actionItems, windowLabel }) {
 
   ${cardsHtml}
 
-  <div style="margin-top:32px; font-size:12px; color:#9ca3af; text-align:center;">Generated from iaml_evaluations · unsubscribe by pausing the eval-morning-digest Vercel Cron</div>
+  <p style="font-size:15px; margin:28px 0 8px;">${esc(closer)}</p>
+  <p style="font-size:15px; margin:0 0 4px;">Thanks,</p>
+  <p style="font-size:15px; margin:0; font-weight:600; color:rgb(255,152,0);">Phoebe</p>
 </div>`;
 }
 
@@ -213,8 +221,9 @@ module.exports = async function handler(req, res) {
     });
 
     const html = renderEmail({ evals, actionItems, windowLabel });
-    const subjectSuffix = actionItems.length ? ` · ${actionItems.length} action item${actionItems.length > 1 ? 's' : ''}` : '';
-    const subject = `Morning digest: ${evals.length} evaluation${evals.length === 1 ? '' : 's'} yesterday${subjectSuffix}`;
+    const subject = actionItems.length
+      ? `Yesterday's evaluations (${evals.length}) — ${actionItems.length} need your eyes`
+      : `Yesterday's evaluations (${evals.length})`;
 
     const sg = await fetch('https://api.sendgrid.com/v3/mail/send', {
       method: 'POST',
@@ -224,7 +233,7 @@ module.exports = async function handler(req, res) {
       },
       body: JSON.stringify({
         personalizations: [{ to: [{ email: RECIPIENT }] }],
-        from:     { email: 'phoebe.harper@iaml.com', name: 'IAML Digest' },
+        from:     { email: 'phoebe.harper@iaml.com', name: 'Phoebe Harper' },
         reply_to: { email: 'phoebe.harper@iaml.com', name: 'Phoebe Harper' },
         subject,
         content: [{ type: 'text/html', value: html }],
