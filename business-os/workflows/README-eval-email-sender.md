@@ -104,6 +104,23 @@ UPDATE iaml_evaluations.program_evaluations
  WHERE id = '…';
 ```
 
+## Deferring full-certificate attendees
+
+Some attendees are enrolled in a multi-block certificate (e.g., Certificate in Employee Relations Law) and physically sit in every block session. For those people we want **one consolidated evaluation at program end**, not a separate eval per block.
+
+Mark them `skip_block_eval = true` on their `block_attendance` row:
+
+```sql
+UPDATE iaml_evaluations.block_attendance
+   SET skip_block_eval = TRUE,
+       notes = COALESCE(notes, '') || ' [deferred to end-of-week cert eval]'
+ WHERE program_instance_id = 'cf6bf230-b29c-4170-b624-18fc2d37fcec'::uuid
+   AND email IN ('nicole_bridges@ncci.com','lauren.clarke@owenscorning.com',
+                 'arivera@missionproduce.com','dgrajale@kua.com');
+```
+
+`eval_get_ready_to_send` filters these rows out in both the mint and queue phases, so they never receive a Block-1/2/3 email from this workflow. The attendance record is still preserved for roster/analytics.
+
 ## Manual first-send for an existing cohort
 
 If a program ended before this workflow existed, just call the RPC once from the Supabase SQL editor:
@@ -113,6 +130,14 @@ SELECT * FROM public.eval_get_ready_to_send(100);
 ```
 
 That will mint evals for every eligible registration. The next hourly n8n run picks them up and sends.
+
+## Direct-send fallback (`scripts/send-eval-batch.js`)
+
+If the n8n workflow is broken or unavailable, `scripts/send-eval-batch.js` pulls the same queue, composes identical emails, and fires via SendGrid directly. Used 2026-04-21 to send the first Atlanta CLR cohort when the n8n workflow was erroring at startup. Reads `SENDGRID_API_KEY` from root `.env.local` and `SUPABASE_SERVICE_ROLE_KEY` from `website/.env.vercel`.
+
+```
+node scripts/send-eval-batch.js
+```
 
 ## Related
 
