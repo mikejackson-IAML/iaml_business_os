@@ -1,5 +1,5 @@
 {
-  "generated": "2026-04-20T09:50:25.338Z",
+  "generated": "2026-04-21T09:16:03.192Z",
   "viewId": "viwgBsDDQfaHdPREf",
   "usedBy": [
     {
@@ -14,23 +14,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 28,
-        "Instance Name": "Discrimination Prevention & Defense - Apr 2026 - Atlanta",
+        "State/Province": "Georgia",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=2",
+        "End Date": "2026-04-23",
+        "Show on Website": true,
+        "Start Date": "2026-04-22",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c454ca7298b50b678d83.jpg",
         "Programs": [
           "rechzx0zHYQ5mYVWJ"
         ],
-        "Start Date": "2026-04-22",
-        "End Date": "2026-04-23",
+        "City": "Atlanta",
+        "Instance Name": "Discrimination Prevention & Defense - Apr 2026 - Atlanta",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Atlanta",
-        "State/Province": "Georgia",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=2",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:57:56.000Z",
         "Created By": {
@@ -44,11 +48,7 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-04-22T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c454ca7298b50b678d83.jpg",
         "Program Name": [
           "Discrimination Prevention & Defense"
         ]
@@ -59,22 +59,26 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 29,
-        "Instance Name": "Discrimination Prevention & Defense - Jun 2026 - Scottsdale",
+        "State/Province": "Arizona",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=2",
+        "End Date": "2026-06-04",
+        "Show on Website": true,
+        "Start Date": "2026-06-03",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c539d7ebf250f264ca1d.jpg",
         "Programs": [
           "rechzx0zHYQ5mYVWJ"
         ],
-        "Start Date": "2026-06-03",
-        "End Date": "2026-06-04",
+        "City": "Scottsdale",
+        "Instance Name": "Discrimination Prevention & Defense - Jun 2026 - Scottsdale",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Scottsdale",
-        "State/Province": "Arizona",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=2",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -88,11 +92,7 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-06-03T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c539d7ebf250f264ca1d.jpg",
         "Program Name": [
           "Discrimination Prevention & Defense"
         ]
@@ -103,23 +103,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 30,
-        "Instance Name": "Discrimination Prevention & Defense - Aug 2026 - Nashville",
+        "State/Province": "Tennessee",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=2",
+        "End Date": "2026-08-13",
+        "Show on Website": true,
+        "Start Date": "2026-08-12",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4d7d7ebf232b964bb15.jpg",
         "Programs": [
           "rechzx0zHYQ5mYVWJ"
         ],
-        "Start Date": "2026-08-12",
-        "End Date": "2026-08-13",
+        "City": "Nashville",
+        "Instance Name": "Discrimination Prevention & Defense - Aug 2026 - Nashville",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Nashville",
-        "State/Province": "Tennessee",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=2",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:23.000Z",
         "Created By": {
@@ -133,11 +137,7 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-08-12T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4d7d7ebf232b964bb15.jpg",
         "Program Name": [
           "Discrimination Prevention & Defense"
         ]
@@ -148,23 +148,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 31,
-        "Instance Name": "Discrimination Prevention & Defense - Oct 2026 - Las Vegas",
+        "State/Province": "Nevada",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=2",
+        "End Date": "2026-10-08",
+        "Show on Website": true,
+        "Start Date": "2026-10-07",
+        "Time Zone": "Pacific (PT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc3bbe750223056d60.jpg",
         "Programs": [
           "rechzx0zHYQ5mYVWJ"
         ],
-        "Start Date": "2026-10-07",
-        "End Date": "2026-10-08",
+        "City": "Las Vegas",
+        "Instance Name": "Discrimination Prevention & Defense - Oct 2026 - Las Vegas",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Las Vegas",
-        "State/Province": "Nevada",
-        "Time Zone": "Pacific (PT)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=2",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -178,11 +182,7 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-10-07T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc3bbe750223056d60.jpg",
         "Program Name": [
           "Discrimination Prevention & Defense"
         ]

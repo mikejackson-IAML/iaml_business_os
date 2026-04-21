@@ -1,5 +1,5 @@
 {
-  "generated": "2026-04-20T09:50:25.338Z",
+  "generated": "2026-04-21T09:16:03.192Z",
   "viewId": "viwfRNxWVMk9nUxCc",
   "usedBy": [
     {
@@ -14,23 +14,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 23,
-        "Instance Name": "Comprehensive Labor Relations - Apr 2026 - Atlanta",
+        "State/Province": "Georgia",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=1",
+        "End Date": "2026-04-21",
+        "Show on Website": true,
+        "Start Date": "2026-04-20",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c454ca7298b50b678d83.jpg",
         "Programs": [
           "recQz06guKmVLZ75d"
         ],
-        "Start Date": "2026-04-20",
-        "End Date": "2026-04-21",
+        "City": "Atlanta",
+        "Instance Name": "Comprehensive Labor Relations - Apr 2026 - Atlanta",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Atlanta",
-        "State/Province": "Georgia",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Closed",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=1",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:57:56.000Z",
         "Created By": {
@@ -44,11 +48,7 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-04-20T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c454ca7298b50b678d83.jpg",
         "Program Name": [
           "Comprehensive Labor Relations"
         ]
@@ -59,22 +59,26 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 24,
-        "Instance Name": "Comprehensive Labor Relations - Jun 2026 - Scottsdale",
+        "State/Province": "Arizona",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=1",
+        "End Date": "2026-06-02",
+        "Show on Website": true,
+        "Start Date": "2026-06-01",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c539d7ebf250f264ca1d.jpg",
         "Programs": [
           "recQz06guKmVLZ75d"
         ],
-        "Start Date": "2026-06-01",
-        "End Date": "2026-06-02",
+        "City": "Scottsdale",
+        "Instance Name": "Comprehensive Labor Relations - Jun 2026 - Scottsdale",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Scottsdale",
-        "State/Province": "Arizona",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=1",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:57:56.000Z",
         "Created By": {
@@ -88,11 +92,7 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-06-01T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c539d7ebf250f264ca1d.jpg",
         "Program Name": [
           "Comprehensive Labor Relations"
         ]
@@ -103,23 +103,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 25,
-        "Instance Name": "Comprehensive Labor Relations - Aug 2026 - Nashville",
+        "State/Province": "Tennessee",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=1",
+        "End Date": "2026-08-11",
+        "Show on Website": true,
+        "Start Date": "2026-08-10",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4d7d7ebf232b964bb15.jpg",
         "Programs": [
           "recQz06guKmVLZ75d"
         ],
-        "Start Date": "2026-08-10",
-        "End Date": "2026-08-11",
+        "City": "Nashville",
+        "Instance Name": "Comprehensive Labor Relations - Aug 2026 - Nashville",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Nashville",
-        "State/Province": "Tennessee",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=1",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:57:56.000Z",
         "Created By": {
@@ -133,11 +137,7 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-08-10T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4d7d7ebf232b964bb15.jpg",
         "Program Name": [
           "Comprehensive Labor Relations"
         ]
@@ -148,23 +148,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 26,
-        "Instance Name": "Comprehensive Labor Relations - Oct 2026 - Las Vegas",
+        "State/Province": "Nevada",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=1",
+        "End Date": "2026-10-06",
+        "Show on Website": true,
+        "Start Date": "2026-10-05",
+        "Time Zone": "Pacific (PT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc3bbe750223056d60.jpg",
         "Programs": [
           "recQz06guKmVLZ75d"
         ],
-        "Start Date": "2026-10-05",
-        "End Date": "2026-10-06",
+        "City": "Las Vegas",
+        "Instance Name": "Comprehensive Labor Relations - Oct 2026 - Las Vegas",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Las Vegas",
-        "State/Province": "Nevada",
-        "Time Zone": "Pacific (PT)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=1",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:23.000Z",
         "Created By": {
@@ -178,11 +182,7 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-10-05T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc3bbe750223056d60.jpg",
         "Program Name": [
           "Comprehensive Labor Relations"
         ]
@@ -193,23 +193,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 27,
-        "Instance Name": "Comprehensive Labor Relations - Jun 2026 - Austin",
+        "State/Province": "Texas",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=1",
+        "End Date": "2026-06-09",
+        "Show on Website": true,
+        "Start Date": "2026-06-08",
+        "Time Zone": "Central (CT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4719a634f6065ac7644.jpg",
         "Programs": [
           "recQz06guKmVLZ75d"
         ],
-        "Start Date": "2026-06-08",
-        "End Date": "2026-06-09",
+        "City": "Austin",
+        "Instance Name": "Comprehensive Labor Relations - Jun 2026 - Austin",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Austin",
-        "State/Province": "Texas",
-        "Time Zone": "Central (CT)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=1",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -223,11 +227,7 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-06-08T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4719a634f6065ac7644.jpg",
         "Program Name": [
           "Comprehensive Labor Relations"
         ]

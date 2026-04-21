@@ -1,5 +1,5 @@
 {
-  "generated": "2026-04-20T09:50:25.338Z",
+  "generated": "2026-04-21T09:16:03.192Z",
   "viewId": "viwI0VscueaVxM4Vk",
   "usedBy": [
     {
@@ -14,20 +14,26 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 58,
-        "Instance Name": "HR Law Fundamentals - Apr 2026",
+        "Registration URL": "https://iaml.com/register.html?format=virtual&program=strategic-hr&blocks=1",
+        "End Date": "2026-04-29",
+        "Block 1 Instructor": [
+          "recrHAK0n4YDIMthb"
+        ],
+        "Show on Website": true,
+        "Start Date": "2026-04-28",
+        "Format": "Virtual",
         "Programs": [
           "rech7dEY5PFO6Bwc3"
         ],
-        "Start Date": "2026-04-28",
-        "End Date": "2026-04-29",
+        "Instance Name": "HR Law Fundamentals - Apr 2026",
         "Duration (Days)": [
           2
         ],
-        "Format": "Virtual",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=virtual&program=strategic-hr&blocks=1",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -35,9 +41,6 @@
           "email": "mike.jackson@re-vitalized.com",
           "name": "Mike Jackson"
         },
-        "Block 1 Instructor": [
-          "recrHAK0n4YDIMthb"
-        ],
         "Full Name with Credentials (from Block 1 Instructor)": [
           "Ray Deeny, Esq."
         ],
@@ -46,9 +49,6 @@
         ],
         "Price Virtual (from PROGRAMS)": [
           1375
-        ],
-        "Min. Capacity": [
-          6
         ],
         "Registration Deadline": "2026-04-28T00:00:00.000Z",
         "Program Name": [
@@ -61,20 +61,23 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 59,
-        "Instance Name": "HR Law Fundamentals - Aug 2026",
+        "Registration URL": "https://iaml.com/register.html?format=virtual&program=strategic-hr&blocks=1",
+        "End Date": "2026-08-19",
+        "Show on Website": true,
+        "Start Date": "2026-08-18",
+        "Format": "Virtual",
         "Programs": [
           "rech7dEY5PFO6Bwc3"
         ],
-        "Start Date": "2026-08-18",
-        "End Date": "2026-08-19",
+        "Instance Name": "HR Law Fundamentals - Aug 2026",
         "Duration (Days)": [
           2
         ],
-        "Format": "Virtual",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=virtual&program=strategic-hr&blocks=1",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
@@ -87,9 +90,6 @@
         ],
         "Price Virtual (from PROGRAMS)": [
           1375
-        ],
-        "Min. Capacity": [
-          6
         ],
         "Registration Deadline": "2026-08-18T00:00:00.000Z",
         "Program Name": [
@@ -102,20 +102,23 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 60,
-        "Instance Name": "HR Law Fundamentals - Nov 2026",
+        "Registration URL": "https://iaml.com/register.html?format=virtual&program=strategic-hr&blocks=1",
+        "End Date": "2026-11-18",
+        "Show on Website": true,
+        "Start Date": "2026-11-17",
+        "Format": "Virtual",
         "Programs": [
           "rech7dEY5PFO6Bwc3"
         ],
-        "Start Date": "2026-11-17",
-        "End Date": "2026-11-18",
+        "Instance Name": "HR Law Fundamentals - Nov 2026",
         "Duration (Days)": [
           2
         ],
-        "Format": "Virtual",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=virtual&program=strategic-hr&blocks=1",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
@@ -128,9 +131,6 @@
         ],
         "Price Virtual (from PROGRAMS)": [
           1375
-        ],
-        "Min. Capacity": [
-          6
         ],
         "Registration Deadline": "2026-11-17T00:00:00.000Z",
         "Program Name": [

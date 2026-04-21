@@ -1,5 +1,5 @@
 {
-  "generated": "2026-04-20T09:50:25.338Z",
+  "generated": "2026-04-21T09:16:03.192Z",
   "viewId": "viwfys9oVCU3gFsel",
   "usedBy": [
     {
@@ -13,27 +13,31 @@
       "id": "recBFzMowFsTIIhRP",
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
+        "Block 3 Title": "Special Issues in Employment Law",
         "Instance ID": 11,
-        "Instance Name": "Certificate in Employee Relations Law - Apr 2026 - Atlanta",
+        "State/Province": "Georgia",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law",
+        "End Date": "2026-04-24",
+        "Block 1 Title": "Comprehensive Labor Relations",
+        "Show on Website": true,
+        "Start Date": "2026-04-20",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c454ca7298b50b678d83.jpg",
+        "Block 2 Title": "Discrimination Prevention & Defense",
         "Programs": [
           "recpV3zshcKYvwFdB"
         ],
-        "Start Date": "2026-04-20",
-        "End Date": "2026-04-24",
+        "City": "Atlanta",
+        "Instance Name": "Certificate in Employee Relations Law - Apr 2026 - Atlanta",
         "Duration (Days)": [
           4.5
         ],
-        "Format": "In-Person",
-        "City": "Atlanta",
-        "State/Province": "Georgia",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Closed",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law",
-        "Block 1 Title": "Comprehensive Labor Relations",
-        "Block 2 Title": "Discrimination Prevention & Defense",
-        "Block 3 Title": "Special Issues in Employment Law",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
@@ -47,11 +51,7 @@
         "Price Virtual (from PROGRAMS)": [
           2375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-04-20T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c454ca7298b50b678d83.jpg",
         "Program Name": [
           "Certificate in Employee Relations Law"
         ]
@@ -61,27 +61,31 @@
       "id": "recixY4EiubcUpVOL",
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
+        "Block 3 Title": "Special Issues in Employment Law",
         "Instance ID": 12,
-        "Instance Name": "Certificate in Employee Relations Law - Jun 2026 - Austin",
+        "State/Province": "Texas",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law",
+        "End Date": "2026-06-12",
+        "Block 1 Title": "Comprehensive Labor Relations",
+        "Show on Website": true,
+        "Start Date": "2026-06-08",
+        "Time Zone": "Central (CT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4719a634f6065ac7644.jpg",
+        "Block 2 Title": "Discrimination Prevention & Defense",
         "Programs": [
           "recpV3zshcKYvwFdB"
         ],
-        "Start Date": "2026-06-08",
-        "End Date": "2026-06-12",
+        "City": "Austin",
+        "Instance Name": "Certificate in Employee Relations Law - Jun 2026 - Austin",
         "Duration (Days)": [
           4.5
         ],
-        "Format": "In-Person",
-        "City": "Austin",
-        "State/Province": "Texas",
-        "Time Zone": "Central (CT)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law",
-        "Block 1 Title": "Comprehensive Labor Relations",
-        "Block 2 Title": "Discrimination Prevention & Defense",
-        "Block 3 Title": "Special Issues in Employment Law",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -95,11 +99,7 @@
         "Price Virtual (from PROGRAMS)": [
           2375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-06-08T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4719a634f6065ac7644.jpg",
         "Program Name": [
           "Certificate in Employee Relations Law"
         ]
@@ -109,27 +109,31 @@
       "id": "recIqNJQs2kIZxzZQ",
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
+        "Block 3 Title": "Special Issues in Employment Law",
         "Instance ID": 13,
-        "Instance Name": "Certificate in Employee Relations Law - Oct 2026 - Las Vegas",
+        "State/Province": "Nevada",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law",
+        "End Date": "2026-10-09",
+        "Block 1 Title": "Comprehensive Labor Relations",
+        "Show on Website": true,
+        "Start Date": "2026-10-05",
+        "Time Zone": "Pacific (PT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc3bbe750223056d60.jpg",
+        "Block 2 Title": "Discrimination Prevention & Defense",
         "Programs": [
           "recpV3zshcKYvwFdB"
         ],
-        "Start Date": "2026-10-05",
-        "End Date": "2026-10-09",
+        "City": "Las Vegas",
+        "Instance Name": "Certificate in Employee Relations Law - Oct 2026 - Las Vegas",
         "Duration (Days)": [
           4.5
         ],
-        "Format": "In-Person",
-        "City": "Las Vegas",
-        "State/Province": "Nevada",
-        "Time Zone": "Pacific (PT)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law",
-        "Block 1 Title": "Comprehensive Labor Relations",
-        "Block 2 Title": "Discrimination Prevention & Defense",
-        "Block 3 Title": "Special Issues in Employment Law",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
@@ -143,11 +147,7 @@
         "Price Virtual (from PROGRAMS)": [
           2375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-10-05T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc3bbe750223056d60.jpg",
         "Program Name": [
           "Certificate in Employee Relations Law"
         ]
@@ -157,26 +157,30 @@
       "id": "recWqOEM5M3ctIhZP",
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
+        "Block 3 Title": "Special Issues in Employment Law",
         "Instance ID": 14,
-        "Instance Name": "Certificate in Employee Relations Law - Jun 2026 - Scottsdale",
+        "State/Province": "Arizona",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law",
+        "End Date": "2026-06-05",
+        "Block 1 Title": "Comprehensive Labor Relations",
+        "Show on Website": true,
+        "Start Date": "2026-06-01",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c539d7ebf250f264ca1d.jpg",
+        "Block 2 Title": "Discrimination Prevention & Defense",
         "Programs": [
           "recpV3zshcKYvwFdB"
         ],
-        "Start Date": "2026-06-01",
-        "End Date": "2026-06-05",
+        "City": "Scottsdale",
+        "Instance Name": "Certificate in Employee Relations Law - Jun 2026 - Scottsdale",
         "Duration (Days)": [
           4.5
         ],
-        "Format": "In-Person",
-        "City": "Scottsdale",
-        "State/Province": "Arizona",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law",
-        "Block 1 Title": "Comprehensive Labor Relations",
-        "Block 2 Title": "Discrimination Prevention & Defense",
-        "Block 3 Title": "Special Issues in Employment Law",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -190,11 +194,7 @@
         "Price Virtual (from PROGRAMS)": [
           2375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-06-01T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c539d7ebf250f264ca1d.jpg",
         "Program Name": [
           "Certificate in Employee Relations Law"
         ]
@@ -204,27 +204,31 @@
       "id": "recy983tSyMrSx1L1",
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
+        "Block 3 Title": "Special Issues in Employment Law",
         "Instance ID": 15,
-        "Instance Name": "Certificate in Employee Relations Law - Aug 2026 - Nashville",
+        "State/Province": "Tennessee",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law",
+        "End Date": "2026-08-14",
+        "Block 1 Title": "Comprehensive Labor Relations",
+        "Show on Website": true,
+        "Start Date": "2026-08-10",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4d7d7ebf232b964bb15.jpg",
+        "Block 2 Title": "Discrimination Prevention & Defense",
         "Programs": [
           "recpV3zshcKYvwFdB"
         ],
-        "Start Date": "2026-08-10",
-        "End Date": "2026-08-14",
+        "City": "Nashville",
+        "Instance Name": "Certificate in Employee Relations Law - Aug 2026 - Nashville",
         "Duration (Days)": [
           4.5
         ],
-        "Format": "In-Person",
-        "City": "Nashville",
-        "State/Province": "Tennessee",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law",
-        "Block 1 Title": "Comprehensive Labor Relations",
-        "Block 2 Title": "Discrimination Prevention & Defense",
-        "Block 3 Title": "Special Issues in Employment Law",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:23.000Z",
         "Created By": {
@@ -238,11 +242,7 @@
         "Price Virtual (from PROGRAMS)": [
           2375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-08-10T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4d7d7ebf232b964bb15.jpg",
         "Program Name": [
           "Certificate in Employee Relations Law"
         ]

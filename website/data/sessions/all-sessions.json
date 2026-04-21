@@ -1,5 +1,5 @@
 {
-  "generated": "2026-04-20T09:50:25.338Z",
+  "generated": "2026-04-21T09:16:03.192Z",
   "version": "1.0.0",
   "source": "airtable",
   "recordCount": 70,
@@ -9,18 +9,21 @@
       "createdTime": "2025-12-17T21:30:24.000Z",
       "fields": {
         "Instance ID": 82,
-        "Instance Name": "Certificate in Employee Relations Law - On-Demand",
+        "Registration URL": "https://iaml.com/register.html?format=on-demand&program=employee-relations-law",
+        "Show on Website": true,
+        "Format": "On Demand",
         "Programs": [
           "recpV3zshcKYvwFdB"
         ],
+        "Instance Name": "Certificate in Employee Relations Law - On-Demand",
         "Duration (Days)": [
           4.5
         ],
-        "Format": "On Demand",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=on-demand&program=employee-relations-law",
         "Created Date": "2025-12-17T21:30:24.000Z",
         "Last Modified": "2026-01-18T15:59:23.000Z",
         "Created By": {
@@ -34,9 +37,6 @@
         "Price Virtual (from PROGRAMS)": [
           2375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Program Name": [
           "Certificate in Employee Relations Law"
         ]
@@ -47,18 +47,21 @@
       "createdTime": "2025-12-17T21:30:54.000Z",
       "fields": {
         "Instance ID": 83,
-        "Instance Name": "Certificate in Strategic HR Leadership - On-Demand",
+        "Registration URL": "https://iaml.com/register.html?format=on-demand&program=strategic-hr",
+        "Show on Website": true,
+        "Format": "On Demand",
         "Programs": [
           "recDaCk38nQE9NZaw"
         ],
+        "Instance Name": "Certificate in Strategic HR Leadership - On-Demand",
         "Duration (Days)": [
           4.5
         ],
-        "Format": "On Demand",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=on-demand&program=strategic-hr",
         "Created Date": "2025-12-17T21:30:54.000Z",
         "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
@@ -72,9 +75,6 @@
         "Price Virtual (from PROGRAMS)": [
           2375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Program Name": [
           "Certificate in Strategic HR Leadership"
         ]
@@ -85,18 +85,21 @@
       "createdTime": "2025-12-18T22:30:52.000Z",
       "fields": {
         "Instance ID": 84,
-        "Instance Name": "Certificate in Workplace Investigations - On-Demand",
+        "Registration URL": "https://iaml.com/register.html?format=on-demand&program=workplace-investigations",
+        "Show on Website": true,
+        "Format": "On Demand",
         "Programs": [
           "rec0VL17lJoFx3YbJ"
         ],
+        "Instance Name": "Certificate in Workplace Investigations - On-Demand",
         "Duration (Days)": [
           2
         ],
-        "Format": "On Demand",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=on-demand&program=workplace-investigations",
         "Created Date": "2025-12-18T22:30:52.000Z",
         "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
@@ -110,9 +113,6 @@
         "Price Virtual (from PROGRAMS)": [
           1575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Program Name": [
           "Certificate in Workplace Investigations"
         ]
@@ -123,16 +123,19 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 54,
-        "Instance Name": "Employment Law Update - Jan 2026",
+        "End Date": "2026-01-13",
+        "Show on Website": true,
+        "Start Date": "2026-01-13",
+        "Format": "Virtual",
         "Programs": [
           "recNdqdcDY2PRcQvB"
         ],
-        "Start Date": "2026-01-13",
-        "End Date": "2026-01-13",
-        "Format": "Virtual",
+        "Instance Name": "Employment Law Update - Jan 2026",
+        "Min. Capacity": [
+          10
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Closed",
-        "Show on Website": true,
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2025-12-15T19:43:01.000Z",
         "Created By": {
@@ -145,9 +148,6 @@
         ],
         "Price Virtual (from PROGRAMS)": [
           397
-        ],
-        "Min. Capacity": [
-          10
         ],
         "Registration Deadline": "2026-01-13T00:00:00.000Z",
         "Program Name": [
@@ -160,20 +160,23 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 48,
-        "Instance Name": "Comprehensive Labor Relations - Feb 2026",
+        "Registration URL": "https://iaml.com/register.html?format=virtual&program=employee-relations-law&blocks=1",
+        "End Date": "2026-02-25",
+        "Show on Website": true,
+        "Start Date": "2026-02-24",
+        "Format": "Virtual",
         "Programs": [
           "recQz06guKmVLZ75d"
         ],
-        "Start Date": "2026-02-24",
-        "End Date": "2026-02-25",
+        "Instance Name": "Comprehensive Labor Relations - Feb 2026",
         "Duration (Days)": [
           2
         ],
-        "Format": "Virtual",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Closed",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=virtual&program=employee-relations-law&blocks=1",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -187,9 +190,6 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-02-24T00:00:00.000Z",
         "Program Name": [
           "Comprehensive Labor Relations"
@@ -201,20 +201,23 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 51,
-        "Instance Name": "Discrimination Prevention & Defense - Mar 2026",
+        "Registration URL": "https://iaml.com/register.html?format=virtual&program=employee-relations-law&blocks=2",
+        "End Date": "2026-03-04",
+        "Show on Website": true,
+        "Start Date": "2026-03-03",
+        "Format": "Virtual",
         "Programs": [
           "rechzx0zHYQ5mYVWJ"
         ],
-        "Start Date": "2026-03-03",
-        "End Date": "2026-03-04",
+        "Instance Name": "Discrimination Prevention & Defense - Mar 2026",
         "Duration (Days)": [
           2
         ],
-        "Format": "Virtual",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Closed",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=virtual&program=employee-relations-law&blocks=2",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
@@ -228,9 +231,6 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-03-03T00:00:00.000Z",
         "Program Name": [
           "Discrimination Prevention & Defense"
@@ -242,20 +242,23 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 44,
-        "Instance Name": "Certificate in Workplace Investigations - Apr 2026",
+        "Registration URL": "https://iaml.com/register.html?format=virtual&program=workplace-investigations",
+        "End Date": "2026-04-02",
+        "Show on Website": true,
+        "Start Date": "2026-04-01",
+        "Format": "Virtual",
         "Programs": [
           "rec0VL17lJoFx3YbJ"
         ],
-        "Start Date": "2026-04-01",
-        "End Date": "2026-04-02",
+        "Instance Name": "Certificate in Workplace Investigations - Apr 2026",
         "Duration (Days)": [
           2
         ],
-        "Format": "Virtual",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Closed",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=virtual&program=workplace-investigations",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:23.000Z",
         "Created By": {
@@ -269,9 +272,6 @@
         "Price Virtual (from PROGRAMS)": [
           1575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-04-01T00:00:00.000Z",
         "Program Name": [
           "Certificate in Workplace Investigations"
@@ -283,16 +283,19 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 55,
-        "Instance Name": "Employment Law Update - Apr 2026",
+        "End Date": "2026-04-14",
+        "Show on Website": true,
+        "Start Date": "2026-04-14",
+        "Format": "Virtual",
         "Programs": [
           "recNdqdcDY2PRcQvB"
         ],
-        "Start Date": "2026-04-14",
-        "End Date": "2026-04-14",
-        "Format": "Virtual",
+        "Instance Name": "Employment Law Update - Apr 2026",
+        "Min. Capacity": [
+          10
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Closed",
-        "Show on Website": true,
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2025-12-15T19:43:01.000Z",
         "Created By": {
@@ -306,9 +309,6 @@
         "Price Virtual (from PROGRAMS)": [
           397
         ],
-        "Min. Capacity": [
-          10
-        ],
         "Registration Deadline": "2026-04-14T00:00:00.000Z",
         "Program Name": [
           "Employment Law Update"
@@ -320,23 +320,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 23,
-        "Instance Name": "Comprehensive Labor Relations - Apr 2026 - Atlanta",
+        "State/Province": "Georgia",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=1",
+        "End Date": "2026-04-21",
+        "Show on Website": true,
+        "Start Date": "2026-04-20",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c454ca7298b50b678d83.jpg",
         "Programs": [
           "recQz06guKmVLZ75d"
         ],
-        "Start Date": "2026-04-20",
-        "End Date": "2026-04-21",
+        "City": "Atlanta",
+        "Instance Name": "Comprehensive Labor Relations - Apr 2026 - Atlanta",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Atlanta",
-        "State/Province": "Georgia",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Closed",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=1",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:57:56.000Z",
         "Created By": {
@@ -350,11 +354,7 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-04-20T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c454ca7298b50b678d83.jpg",
         "Program Name": [
           "Comprehensive Labor Relations"
         ]
@@ -365,23 +365,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 20,
-        "Instance Name": "Certificate in Workplace Investigations - Apr 2026 - Atlanta",
+        "State/Province": "Georgia",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=workplace-investigations",
+        "End Date": "2026-04-21",
+        "Show on Website": true,
+        "Start Date": "2026-04-20",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4530190af72b8821455.jpg",
         "Programs": [
           "rec0VL17lJoFx3YbJ"
         ],
-        "Start Date": "2026-04-20",
-        "End Date": "2026-04-21",
+        "City": "Atlanta",
+        "Instance Name": "Certificate in Workplace Investigations - Apr 2026 - Atlanta",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Atlanta",
-        "State/Province": "Georgia",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Closed",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=workplace-investigations",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:57:56.000Z",
         "Created By": {
@@ -395,11 +399,7 @@
         "Price Virtual (from PROGRAMS)": [
           1575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-04-20T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4530190af72b8821455.jpg",
         "Program Name": [
           "Certificate in Workplace Investigations"
         ]
@@ -409,27 +409,31 @@
       "id": "recBFzMowFsTIIhRP",
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
+        "Block 3 Title": "Special Issues in Employment Law",
         "Instance ID": 11,
-        "Instance Name": "Certificate in Employee Relations Law - Apr 2026 - Atlanta",
+        "State/Province": "Georgia",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law",
+        "End Date": "2026-04-24",
+        "Block 1 Title": "Comprehensive Labor Relations",
+        "Show on Website": true,
+        "Start Date": "2026-04-20",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c454ca7298b50b678d83.jpg",
+        "Block 2 Title": "Discrimination Prevention & Defense",
         "Programs": [
           "recpV3zshcKYvwFdB"
         ],
-        "Start Date": "2026-04-20",
-        "End Date": "2026-04-24",
+        "City": "Atlanta",
+        "Instance Name": "Certificate in Employee Relations Law - Apr 2026 - Atlanta",
         "Duration (Days)": [
           4.5
         ],
-        "Format": "In-Person",
-        "City": "Atlanta",
-        "State/Province": "Georgia",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Closed",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law",
-        "Block 1 Title": "Comprehensive Labor Relations",
-        "Block 2 Title": "Discrimination Prevention & Defense",
-        "Block 3 Title": "Special Issues in Employment Law",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
@@ -443,11 +447,7 @@
         "Price Virtual (from PROGRAMS)": [
           2375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-04-20T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c454ca7298b50b678d83.jpg",
         "Program Name": [
           "Certificate in Employee Relations Law"
         ]
@@ -457,27 +457,31 @@
       "id": "recQVoaxrQPnaKMmj",
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
+        "Block 3 Title": "Welfare Benefits Plan Issues",
         "Instance ID": 9,
-        "Instance Name": "Certificate in Employee Benefits Law - Apr 2026 - Atlanta",
+        "State/Province": "Georgia",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-benefits-law",
+        "End Date": "2026-04-24",
+        "Block 1 Title": "Retirement Plans",
+        "Show on Website": true,
+        "Start Date": "2026-04-20",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4530190afcbbd821451.jpg",
+        "Block 2 Title": "Benefit Plan Claims, Appeals & Litigation",
         "Programs": [
           "rec87u6ENaVT3rTcF"
         ],
-        "Start Date": "2026-04-20",
-        "End Date": "2026-04-24",
+        "City": "Atlanta",
+        "Instance Name": "Certificate in Employee Benefits Law - Apr 2026 - Atlanta",
         "Duration (Days)": [
           4.5
         ],
-        "Format": "In-Person",
-        "City": "Atlanta",
-        "State/Province": "Georgia",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          4
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Closed",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-benefits-law",
-        "Block 1 Title": "Retirement Plans",
-        "Block 2 Title": "Benefit Plan Claims, Appeals & Litigation",
-        "Block 3 Title": "Welfare Benefits Plan Issues",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
@@ -491,11 +495,7 @@
         "Price Virtual (from PROGRAMS)": [
           2375
         ],
-        "Min. Capacity": [
-          4
-        ],
         "Registration Deadline": "2026-04-20T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4530190afcbbd821451.jpg",
         "Program Name": [
           "Certificate in Employee Benefits Law"
         ]
@@ -506,23 +506,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 36,
-        "Instance Name": "Retirement Plans - Apr 2026 - Atlanta",
+        "State/Province": "Georgia",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-benefits-law&blocks=1",
+        "End Date": "2026-04-21",
+        "Show on Website": true,
+        "Start Date": "2026-04-20",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4530190afcbbd821451.jpg",
         "Programs": [
           "recYxLoPK96olFjUN"
         ],
-        "Start Date": "2026-04-20",
-        "End Date": "2026-04-21",
+        "City": "Atlanta",
+        "Instance Name": "Retirement Plans - Apr 2026 - Atlanta",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Atlanta",
-        "State/Province": "Georgia",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          4
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Closed",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-benefits-law&blocks=1",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:23.000Z",
         "Created By": {
@@ -536,11 +540,7 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          4
-        ],
         "Registration Deadline": "2026-04-20T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4530190afcbbd821451.jpg",
         "Program Name": [
           "Retirement Plans"
         ]
@@ -551,23 +551,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 28,
-        "Instance Name": "Discrimination Prevention & Defense - Apr 2026 - Atlanta",
+        "State/Province": "Georgia",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=2",
+        "End Date": "2026-04-23",
+        "Show on Website": true,
+        "Start Date": "2026-04-22",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c454ca7298b50b678d83.jpg",
         "Programs": [
           "rechzx0zHYQ5mYVWJ"
         ],
-        "Start Date": "2026-04-22",
-        "End Date": "2026-04-23",
+        "City": "Atlanta",
+        "Instance Name": "Discrimination Prevention & Defense - Apr 2026 - Atlanta",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Atlanta",
-        "State/Province": "Georgia",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=2",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:57:56.000Z",
         "Created By": {
@@ -581,11 +585,7 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-04-22T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c454ca7298b50b678d83.jpg",
         "Program Name": [
           "Discrimination Prevention & Defense"
         ]
@@ -596,23 +596,27 @@
       "createdTime": "2025-12-15T19:56:06.000Z",
       "fields": {
         "Instance ID": 66,
-        "Instance Name": "\"Benefit Plan Claims, Appeals & Litigation\" - Apr 2026 - Atlanta",
+        "State/Province": "Georgia",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-benefits-law&blocks=2",
+        "End Date": "2026-04-22",
+        "Show on Website": true,
+        "Start Date": "2026-04-22",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4530190afcbbd821451.jpg",
         "Programs": [
           "rec6Jup8xHsP0CzlB"
         ],
-        "Start Date": "2026-04-22",
-        "End Date": "2026-04-22",
+        "City": "Atlanta",
+        "Instance Name": "\"Benefit Plan Claims, Appeals & Litigation\" - Apr 2026 - Atlanta",
         "Duration (Days)": [
           1
         ],
-        "Format": "In-Person",
-        "City": "Atlanta",
-        "State/Province": "Georgia",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          4
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-benefits-law&blocks=2",
         "Created Date": "2025-12-15T19:56:06.000Z",
         "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
@@ -626,11 +630,7 @@
         "Price Virtual (from PROGRAMS)": [
           575
         ],
-        "Min. Capacity": [
-          4
-        ],
         "Registration Deadline": "2026-04-22T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4530190afcbbd821451.jpg",
         "Program Name": [
           "Benefit Plan Claims, Appeals & Litigation"
         ]
@@ -641,23 +641,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 42,
-        "Instance Name": "Welfare Benefits Plan Issues - Apr 2026 - Atlanta",
+        "State/Province": "Georgia",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-benefits-law&blocks=3",
+        "End Date": "2026-04-24",
+        "Show on Website": true,
+        "Start Date": "2026-04-23",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4530190afcbbd821451.jpg",
         "Programs": [
           "recB2OKzGP1JWClv4"
         ],
-        "Start Date": "2026-04-23",
-        "End Date": "2026-04-24",
+        "City": "Atlanta",
+        "Instance Name": "Welfare Benefits Plan Issues - Apr 2026 - Atlanta",
         "Duration (Days)": [
           1.5
         ],
-        "Format": "In-Person",
-        "City": "Atlanta",
-        "State/Province": "Georgia",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          4
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-benefits-law&blocks=3",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:23.000Z",
         "Created By": {
@@ -671,11 +675,7 @@
         "Price Virtual (from PROGRAMS)": [
           975
         ],
-        "Min. Capacity": [
-          4
-        ],
         "Registration Deadline": "2026-04-23T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4530190afcbbd821451.jpg",
         "Program Name": [
           "Welfare Benefits Plan Issues"
         ]
@@ -686,23 +686,27 @@
       "createdTime": "2025-12-18T22:33:10.000Z",
       "fields": {
         "Instance ID": 85,
-        "Instance Name": "Special Issues in Employment Law - Apr 2026 - Atlanta",
+        "State/Province": "Georgia",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=3",
+        "End Date": "2026-04-24",
+        "Show on Website": true,
+        "Start Date": "2026-04-24",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c454ca7298b50b678d83.jpg",
         "Programs": [
           "recYXtvOXU1LaSJBl"
         ],
-        "Start Date": "2026-04-24",
-        "End Date": "2026-04-24",
+        "City": "Atlanta",
+        "Instance Name": "Special Issues in Employment Law - Apr 2026 - Atlanta",
         "Duration (Days)": [
           0.5
         ],
-        "Format": "In-Person",
-        "City": "Atlanta",
-        "State/Province": "Georgia",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=3",
         "Created Date": "2025-12-18T22:33:10.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -713,11 +717,7 @@
         "Price In-Person (from PROGRAMS)": [
           575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-04-24T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c454ca7298b50b678d83.jpg",
         "Program Name": [
           "Special Issues in Employment Law"
         ]
@@ -728,20 +728,26 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 58,
-        "Instance Name": "HR Law Fundamentals - Apr 2026",
+        "Registration URL": "https://iaml.com/register.html?format=virtual&program=strategic-hr&blocks=1",
+        "End Date": "2026-04-29",
+        "Block 1 Instructor": [
+          "recrHAK0n4YDIMthb"
+        ],
+        "Show on Website": true,
+        "Start Date": "2026-04-28",
+        "Format": "Virtual",
         "Programs": [
           "rech7dEY5PFO6Bwc3"
         ],
-        "Start Date": "2026-04-28",
-        "End Date": "2026-04-29",
+        "Instance Name": "HR Law Fundamentals - Apr 2026",
         "Duration (Days)": [
           2
         ],
-        "Format": "Virtual",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=virtual&program=strategic-hr&blocks=1",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -749,9 +755,6 @@
           "email": "mike.jackson@re-vitalized.com",
           "name": "Mike Jackson"
         },
-        "Block 1 Instructor": [
-          "recrHAK0n4YDIMthb"
-        ],
         "Full Name with Credentials (from Block 1 Instructor)": [
           "Ray Deeny, Esq."
         ],
@@ -760,9 +763,6 @@
         ],
         "Price Virtual (from PROGRAMS)": [
           1375
-        ],
-        "Min. Capacity": [
-          6
         ],
         "Registration Deadline": "2026-04-28T00:00:00.000Z",
         "Program Name": [
@@ -775,23 +775,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 35,
-        "Instance Name": "HR Law Fundamentals - May 2026 - Chicago",
+        "State/Province": "Illinois",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr&blocks=1",
+        "End Date": "2026-05-05",
+        "Show on Website": true,
+        "Start Date": "2026-05-04",
+        "Time Zone": "Central (CT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4903bbe756ba905677a.jpg",
         "Programs": [
           "rech7dEY5PFO6Bwc3"
         ],
-        "Start Date": "2026-05-04",
-        "End Date": "2026-05-05",
+        "City": "Chicago",
+        "Instance Name": "HR Law Fundamentals - May 2026 - Chicago",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Chicago",
-        "State/Province": "Illinois",
-        "Time Zone": "Central (CT)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr&blocks=1",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
@@ -805,11 +809,7 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-05-04T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4903bbe756ba905677a.jpg",
         "Program Name": [
           "HR Law Fundamentals"
         ]
@@ -820,23 +820,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 3,
-        "Instance Name": "Advanced Certificate in Strategic Employment Law - May 2026 - Chicago",
+        "State/Province": "Illinois",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-employment-law",
+        "End Date": "2026-05-05",
+        "Show on Website": true,
+        "Start Date": "2026-05-04",
+        "Time Zone": "Central (CT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4900d2b4852ad935a96.jpg",
         "Programs": [
           "recB6IPkkDoxoYabU"
         ],
-        "Start Date": "2026-05-04",
-        "End Date": "2026-05-05",
+        "City": "Chicago",
+        "Instance Name": "Advanced Certificate in Strategic Employment Law - May 2026 - Chicago",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Chicago",
-        "State/Province": "Illinois",
-        "Time Zone": "Central (CT)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-employment-law",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:23.000Z",
         "Created By": {
@@ -850,11 +854,7 @@
         "Price Virtual (from PROGRAMS)": [
           1575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-05-04T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4900d2b4852ad935a96.jpg",
         "Program Name": [
           "Advanced Certificate in Strategic Employment Law"
         ]
@@ -865,25 +865,45 @@
       "createdTime": "2025-12-15T19:56:06.000Z",
       "fields": {
         "Instance ID": 67,
-        "Instance Name": "Certificate in Strategic HR Leadership - May 2026 - Chicago",
+        "Room Block Booking Link": "www.espn.com",
+        "State/Province": "Illinois",
+        "Venue": [
+          "recPjG9qEaHDQ8fST"
+        ],
+        "Block 2 Instructor": [
+          "recrHAK0n4YDIMthb"
+        ],
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr",
+        "WiFi Cost": 0,
+        "Group Rate Cutoff Date": "2026-02-03",
+        "End Date": "2026-05-08",
+        "Resort Fee": 35,
+        "Block 1 Instructor": [
+          "rech00qD2rjunIoGX"
+        ],
+        "Block 1 Title": "HR Law Fundamentals",
+        "Hotel Booking Link": "https://www.caesars.com/book/hotel-calendar?dateSearchFormat=flexible-dates&flexibleMonth=January&propCode=flv",
+        "Show on Website": true,
+        "Room Rate": 298,
+        "Parking Fee": 50,
+        "Start Date": "2026-05-04",
+        "Time Zone": "Central (CT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4903bbe756ba905677a.jpg",
+        "Block 2 Title": "Strategic HR Management",
         "Programs": [
           "recDaCk38nQE9NZaw"
         ],
-        "Start Date": "2026-05-04",
-        "End Date": "2026-05-08",
+        "City": "Chicago",
+        "Instance Name": "Certificate in Strategic HR Leadership - May 2026 - Chicago",
         "Duration (Days)": [
           4.5
         ],
-        "Format": "In-Person",
-        "City": "Chicago",
-        "State/Province": "Illinois",
-        "Time Zone": "Central (CT)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr",
-        "Block 1 Title": "HR Law Fundamentals",
-        "Block 2 Title": "Strategic HR Management",
         "Created Date": "2025-12-15T19:56:06.000Z",
         "Last Modified": "2026-01-18T15:59:23.000Z",
         "Created By": {
@@ -891,14 +911,8 @@
           "email": "mike.jackson@re-vitalized.com",
           "name": "Mike Jackson"
         },
-        "Block 1 Instructor": [
-          "rech00qD2rjunIoGX"
-        ],
         "Full Name with Credentials (from Block 1 Instructor)": [
           "John Wymer, Esq."
-        ],
-        "Block 2 Instructor": [
-          "recrHAK0n4YDIMthb"
         ],
         "Full Name with Credentials (from Block 2 Instructor)": [
           "Ray Deeny, Esq."
@@ -909,14 +923,7 @@
         "Price Virtual (from PROGRAMS)": [
           2375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-05-04T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4903bbe756ba905677a.jpg",
-        "Venue": [
-          "recPjG9qEaHDQ8fST"
-        ],
         "Room Service (from Venue)": [
           true
         ],
@@ -959,13 +966,6 @@
         "Venue Name (from Venue)": [
           "Flamingo Las Vegas"
         ],
-        "Room Rate": 298,
-        "Resort Fee": 35,
-        "Parking Fee": 50,
-        "WiFi Cost": 0,
-        "Group Rate Cutoff Date": "2026-02-03",
-        "Hotel Booking Link": "https://www.caesars.com/book/hotel-calendar?dateSearchFormat=flexible-dates&flexibleMonth=January&propCode=flv",
-        "Room Block Booking Link": "www.espn.com",
         "Description (from Venue)": [
           "Stay and play in classic Vegas style at the center of The Strip. Your fabulous home away from home features everything from the all new Go Pool to a bustling casino and one-of-a-kind dining with Lisa Vanderpump and Gordon Ramsay. Flamingo gives each guest excitement, hospitality and a true Vegas experience that is Forever Fabulous"
         ],
@@ -979,23 +979,27 @@
       "createdTime": "2025-12-15T19:56:06.000Z",
       "fields": {
         "Instance ID": 71,
-        "Instance Name": "Strategic HR Management - May 2026 - Chicago",
+        "State/Province": "Illinois",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr&blocks=2",
+        "End Date": "2026-05-08",
+        "Show on Website": true,
+        "Start Date": "2026-05-06",
+        "Time Zone": "Central (CT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4903bbe756ba905677a.jpg",
         "Programs": [
           "recU3GZdrPt28Fvev"
         ],
-        "Start Date": "2026-05-06",
-        "End Date": "2026-05-08",
+        "City": "Chicago",
+        "Instance Name": "Strategic HR Management - May 2026 - Chicago",
         "Duration (Days)": [
           2.5
         ],
-        "Format": "In-Person",
-        "City": "Chicago",
-        "State/Province": "Illinois",
-        "Time Zone": "Central (CT)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr&blocks=2",
         "Created Date": "2025-12-15T19:56:06.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -1009,11 +1013,7 @@
         "Price Virtual (from PROGRAMS)": [
           1575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-05-06T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4903bbe756ba905677a.jpg",
         "Program Name": [
           "Strategic HR Management"
         ]
@@ -1024,20 +1024,26 @@
       "createdTime": "2025-12-15T19:56:06.000Z",
       "fields": {
         "Instance ID": 75,
-        "Instance Name": "Strategic HR Management - May 2026",
+        "Registration URL": "https://iaml.com/register.html?format=virtual&program=strategic-hr&blocks=2",
+        "End Date": "2026-05-20",
+        "Block 1 Instructor": [
+          "recCysOqbmx33qZGA"
+        ],
+        "Show on Website": true,
+        "Start Date": "2026-05-19",
+        "Format": "Virtual",
         "Programs": [
           "recU3GZdrPt28Fvev"
         ],
-        "Start Date": "2026-05-19",
-        "End Date": "2026-05-20",
+        "Instance Name": "Strategic HR Management - May 2026",
         "Duration (Days)": [
           2.5
         ],
-        "Format": "Virtual",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=virtual&program=strategic-hr&blocks=2",
         "Created Date": "2025-12-15T19:56:06.000Z",
         "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
@@ -1045,9 +1051,6 @@
           "email": "mike.jackson@re-vitalized.com",
           "name": "Mike Jackson"
         },
-        "Block 1 Instructor": [
-          "recCysOqbmx33qZGA"
-        ],
         "Full Name with Credentials (from Block 1 Instructor)": [
           "Dawn Kubik, Esq."
         ],
@@ -1056,9 +1059,6 @@
         ],
         "Price Virtual (from PROGRAMS)": [
           1575
-        ],
-        "Min. Capacity": [
-          6
         ],
         "Registration Deadline": "2026-05-19T00:00:00.000Z",
         "Program Name": [
@@ -1071,22 +1071,26 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 24,
-        "Instance Name": "Comprehensive Labor Relations - Jun 2026 - Scottsdale",
+        "State/Province": "Arizona",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=1",
+        "End Date": "2026-06-02",
+        "Show on Website": true,
+        "Start Date": "2026-06-01",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c539d7ebf250f264ca1d.jpg",
         "Programs": [
           "recQz06guKmVLZ75d"
         ],
-        "Start Date": "2026-06-01",
-        "End Date": "2026-06-02",
+        "City": "Scottsdale",
+        "Instance Name": "Comprehensive Labor Relations - Jun 2026 - Scottsdale",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Scottsdale",
-        "State/Province": "Arizona",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=1",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:57:56.000Z",
         "Created By": {
@@ -1100,11 +1104,7 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-06-01T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c539d7ebf250f264ca1d.jpg",
         "Program Name": [
           "Comprehensive Labor Relations"
         ]
@@ -1114,26 +1114,30 @@
       "id": "recWqOEM5M3ctIhZP",
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
+        "Block 3 Title": "Special Issues in Employment Law",
         "Instance ID": 14,
-        "Instance Name": "Certificate in Employee Relations Law - Jun 2026 - Scottsdale",
+        "State/Province": "Arizona",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law",
+        "End Date": "2026-06-05",
+        "Block 1 Title": "Comprehensive Labor Relations",
+        "Show on Website": true,
+        "Start Date": "2026-06-01",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c539d7ebf250f264ca1d.jpg",
+        "Block 2 Title": "Discrimination Prevention & Defense",
         "Programs": [
           "recpV3zshcKYvwFdB"
         ],
-        "Start Date": "2026-06-01",
-        "End Date": "2026-06-05",
+        "City": "Scottsdale",
+        "Instance Name": "Certificate in Employee Relations Law - Jun 2026 - Scottsdale",
         "Duration (Days)": [
           4.5
         ],
-        "Format": "In-Person",
-        "City": "Scottsdale",
-        "State/Province": "Arizona",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law",
-        "Block 1 Title": "Comprehensive Labor Relations",
-        "Block 2 Title": "Discrimination Prevention & Defense",
-        "Block 3 Title": "Special Issues in Employment Law",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -1147,11 +1151,7 @@
         "Price Virtual (from PROGRAMS)": [
           2375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-06-01T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c539d7ebf250f264ca1d.jpg",
         "Program Name": [
           "Certificate in Employee Relations Law"
         ]
@@ -1162,22 +1162,26 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 4,
-        "Instance Name": "Advanced Certificate in Strategic Employment Law - Jun 2026 - Scottsdale",
+        "State/Province": "Arizona",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-employment-law",
+        "End Date": "2026-06-02",
+        "Show on Website": true,
+        "Start Date": "2026-06-01",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c5393bbe752f6f05808f.jpg",
         "Programs": [
           "recB6IPkkDoxoYabU"
         ],
-        "Start Date": "2026-06-01",
-        "End Date": "2026-06-02",
+        "City": "Scottsdale",
+        "Instance Name": "Advanced Certificate in Strategic Employment Law - Jun 2026 - Scottsdale",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Scottsdale",
-        "State/Province": "Arizona",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-employment-law",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -1191,11 +1195,7 @@
         "Price Virtual (from PROGRAMS)": [
           1575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-06-01T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c5393bbe752f6f05808f.jpg",
         "Program Name": [
           "Advanced Certificate in Strategic Employment Law"
         ]
@@ -1206,22 +1206,26 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 29,
-        "Instance Name": "Discrimination Prevention & Defense - Jun 2026 - Scottsdale",
+        "State/Province": "Arizona",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=2",
+        "End Date": "2026-06-04",
+        "Show on Website": true,
+        "Start Date": "2026-06-03",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c539d7ebf250f264ca1d.jpg",
         "Programs": [
           "rechzx0zHYQ5mYVWJ"
         ],
-        "Start Date": "2026-06-03",
-        "End Date": "2026-06-04",
+        "City": "Scottsdale",
+        "Instance Name": "Discrimination Prevention & Defense - Jun 2026 - Scottsdale",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Scottsdale",
-        "State/Province": "Arizona",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=2",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -1235,11 +1239,7 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-06-03T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c539d7ebf250f264ca1d.jpg",
         "Program Name": [
           "Discrimination Prevention & Defense"
         ]
@@ -1250,22 +1250,26 @@
       "createdTime": "2025-12-18T22:33:15.000Z",
       "fields": {
         "Instance ID": 88,
-        "Instance Name": "Special Issues in Employment Law - Jun 2026 - Scottsdale",
+        "State/Province": "Arizona",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=3",
+        "End Date": "2026-06-05",
+        "Show on Website": true,
+        "Start Date": "2026-06-05",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c539d7ebf250f264ca1d.jpg",
         "Programs": [
           "recYXtvOXU1LaSJBl"
         ],
-        "Start Date": "2026-06-05",
-        "End Date": "2026-06-05",
+        "City": "Scottsdale",
+        "Instance Name": "Special Issues in Employment Law - Jun 2026 - Scottsdale",
         "Duration (Days)": [
           0.5
         ],
-        "Format": "In-Person",
-        "City": "Scottsdale",
-        "State/Province": "Arizona",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=3",
         "Created Date": "2025-12-18T22:33:15.000Z",
         "Last Modified": "2026-01-18T15:59:23.000Z",
         "Created By": {
@@ -1276,11 +1280,7 @@
         "Price In-Person (from PROGRAMS)": [
           575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-06-05T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c539d7ebf250f264ca1d.jpg",
         "Program Name": [
           "Special Issues in Employment Law"
         ]
@@ -1290,27 +1290,31 @@
       "id": "recixY4EiubcUpVOL",
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
+        "Block 3 Title": "Special Issues in Employment Law",
         "Instance ID": 12,
-        "Instance Name": "Certificate in Employee Relations Law - Jun 2026 - Austin",
+        "State/Province": "Texas",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law",
+        "End Date": "2026-06-12",
+        "Block 1 Title": "Comprehensive Labor Relations",
+        "Show on Website": true,
+        "Start Date": "2026-06-08",
+        "Time Zone": "Central (CT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4719a634f6065ac7644.jpg",
+        "Block 2 Title": "Discrimination Prevention & Defense",
         "Programs": [
           "recpV3zshcKYvwFdB"
         ],
-        "Start Date": "2026-06-08",
-        "End Date": "2026-06-12",
+        "City": "Austin",
+        "Instance Name": "Certificate in Employee Relations Law - Jun 2026 - Austin",
         "Duration (Days)": [
           4.5
         ],
-        "Format": "In-Person",
-        "City": "Austin",
-        "State/Province": "Texas",
-        "Time Zone": "Central (CT)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law",
-        "Block 1 Title": "Comprehensive Labor Relations",
-        "Block 2 Title": "Discrimination Prevention & Defense",
-        "Block 3 Title": "Special Issues in Employment Law",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -1324,11 +1328,7 @@
         "Price Virtual (from PROGRAMS)": [
           2375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-06-08T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4719a634f6065ac7644.jpg",
         "Program Name": [
           "Certificate in Employee Relations Law"
         ]
@@ -1339,23 +1339,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 27,
-        "Instance Name": "Comprehensive Labor Relations - Jun 2026 - Austin",
+        "State/Province": "Texas",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=1",
+        "End Date": "2026-06-09",
+        "Show on Website": true,
+        "Start Date": "2026-06-08",
+        "Time Zone": "Central (CT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4719a634f6065ac7644.jpg",
         "Programs": [
           "recQz06guKmVLZ75d"
         ],
-        "Start Date": "2026-06-08",
-        "End Date": "2026-06-09",
+        "City": "Austin",
+        "Instance Name": "Comprehensive Labor Relations - Jun 2026 - Austin",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Austin",
-        "State/Province": "Texas",
-        "Time Zone": "Central (CT)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=1",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -1369,11 +1373,7 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-06-08T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4719a634f6065ac7644.jpg",
         "Program Name": [
           "Comprehensive Labor Relations"
         ]
@@ -1384,23 +1384,27 @@
       "createdTime": "2025-12-18T22:33:15.000Z",
       "fields": {
         "Instance ID": 87,
-        "Instance Name": "Special Issues in Employment Law - Jun 2026 - Austin",
+        "State/Province": "Texas",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=3",
+        "End Date": "2026-06-12",
+        "Show on Website": true,
+        "Start Date": "2026-06-12",
+        "Time Zone": "Central (CT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4719a634f6065ac7644.jpg",
         "Programs": [
           "recYXtvOXU1LaSJBl"
         ],
-        "Start Date": "2026-06-12",
-        "End Date": "2026-06-12",
+        "City": "Austin",
+        "Instance Name": "Special Issues in Employment Law - Jun 2026 - Austin",
         "Duration (Days)": [
           0.5
         ],
-        "Format": "In-Person",
-        "City": "Austin",
-        "State/Province": "Texas",
-        "Time Zone": "Central (CT)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=3",
         "Created Date": "2025-12-18T22:33:15.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -1411,11 +1415,7 @@
         "Price In-Person (from PROGRAMS)": [
           575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-06-12T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4719a634f6065ac7644.jpg",
         "Program Name": [
           "Special Issues in Employment Law"
         ]
@@ -1426,20 +1426,23 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 45,
-        "Instance Name": "Certificate in Workplace Investigations - Jun 2026",
+        "Registration URL": "https://iaml.com/register.html?format=virtual&program=workplace-investigations",
+        "End Date": "2026-06-17",
+        "Show on Website": true,
+        "Start Date": "2026-06-16",
+        "Format": "Virtual",
         "Programs": [
           "rec0VL17lJoFx3YbJ"
         ],
-        "Start Date": "2026-06-16",
-        "End Date": "2026-06-17",
+        "Instance Name": "Certificate in Workplace Investigations - Jun 2026",
         "Duration (Days)": [
           2
         ],
-        "Format": "Virtual",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=virtual&program=workplace-investigations",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
@@ -1453,9 +1456,6 @@
         "Price Virtual (from PROGRAMS)": [
           1575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-06-16T00:00:00.000Z",
         "Program Name": [
           "Certificate in Workplace Investigations"
@@ -1467,16 +1467,19 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 56,
-        "Instance Name": "Employment Law Update - Jul 2026",
+        "End Date": "2026-07-09",
+        "Show on Website": true,
+        "Start Date": "2026-07-09",
+        "Format": "Virtual",
         "Programs": [
           "recNdqdcDY2PRcQvB"
         ],
-        "Start Date": "2026-07-09",
-        "End Date": "2026-07-09",
-        "Format": "Virtual",
+        "Instance Name": "Employment Law Update - Jul 2026",
+        "Min. Capacity": [
+          10
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2025-12-15T19:43:03.000Z",
         "Created By": {
@@ -1490,9 +1493,6 @@
         "Price Virtual (from PROGRAMS)": [
           397
         ],
-        "Min. Capacity": [
-          10
-        ],
         "Registration Deadline": "2026-07-09T00:00:00.000Z",
         "Program Name": [
           "Employment Law Update"
@@ -1504,23 +1504,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 34,
-        "Instance Name": "HR Law Fundamentals - Jul 2026 - Orlando",
+        "State/Province": "Florida",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr&blocks=1",
+        "End Date": "2026-07-14",
+        "Show on Website": true,
+        "Start Date": "2026-07-13",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c517d7ebf2abd764c4fd.jpg",
         "Programs": [
           "rech7dEY5PFO6Bwc3"
         ],
-        "Start Date": "2026-07-13",
-        "End Date": "2026-07-14",
+        "City": "Orlando",
+        "Instance Name": "HR Law Fundamentals - Jul 2026 - Orlando",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Orlando",
-        "State/Province": "Florida",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr&blocks=1",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:57:56.000Z",
         "Created By": {
@@ -1534,11 +1538,7 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-07-13T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c517d7ebf2abd764c4fd.jpg",
         "Program Name": [
           "HR Law Fundamentals"
         ]
@@ -1549,23 +1549,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 21,
-        "Instance Name": "Certificate in Workplace Investigations - Jul 2026 - Orlando",
+        "State/Province": "Florida",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=workplace-investigations",
+        "End Date": "2026-07-14",
+        "Show on Website": true,
+        "Start Date": "2026-07-13",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c51654328228ad15d3be.jpg",
         "Programs": [
           "rec0VL17lJoFx3YbJ"
         ],
-        "Start Date": "2026-07-13",
-        "End Date": "2026-07-14",
+        "City": "Orlando",
+        "Instance Name": "Certificate in Workplace Investigations - Jul 2026 - Orlando",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Orlando",
-        "State/Province": "Florida",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=workplace-investigations",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:23.000Z",
         "Created By": {
@@ -1579,11 +1583,7 @@
         "Price Virtual (from PROGRAMS)": [
           1575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-07-13T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c51654328228ad15d3be.jpg",
         "Program Name": [
           "Certificate in Workplace Investigations"
         ]
@@ -1594,25 +1594,29 @@
       "createdTime": "2025-12-15T19:56:06.000Z",
       "fields": {
         "Instance ID": 68,
-        "Instance Name": "Certificate in Strategic HR Leadership - Jul 2026 - Orlando",
+        "State/Province": "Florida",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr",
+        "End Date": "2026-07-17",
+        "Block 1 Title": "HR Law Fundamentals",
+        "Show on Website": true,
+        "Start Date": "2026-07-13",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c517d7ebf2abd764c4fd.jpg",
+        "Block 2 Title": "Strategic HR Management",
         "Programs": [
           "recDaCk38nQE9NZaw"
         ],
-        "Start Date": "2026-07-13",
-        "End Date": "2026-07-17",
+        "City": "Orlando",
+        "Instance Name": "Certificate in Strategic HR Leadership - Jul 2026 - Orlando",
         "Duration (Days)": [
           4.5
         ],
-        "Format": "In-Person",
-        "City": "Orlando",
-        "State/Province": "Florida",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr",
-        "Block 1 Title": "HR Law Fundamentals",
-        "Block 2 Title": "Strategic HR Management",
         "Created Date": "2025-12-15T19:56:06.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -1626,11 +1630,7 @@
         "Price Virtual (from PROGRAMS)": [
           2375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-07-13T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c517d7ebf2abd764c4fd.jpg",
         "Program Name": [
           "Certificate in Strategic HR Leadership"
         ]
@@ -1641,23 +1641,27 @@
       "createdTime": "2025-12-15T19:56:06.000Z",
       "fields": {
         "Instance ID": 72,
-        "Instance Name": "Strategic HR Management - Jul 2026 - Orlando",
+        "State/Province": "Florida",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr&blocks=2",
+        "End Date": "2026-07-17",
+        "Show on Website": true,
+        "Start Date": "2026-07-15",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c517d7ebf2abd764c4fd.jpg",
         "Programs": [
           "recU3GZdrPt28Fvev"
         ],
-        "Start Date": "2026-07-15",
-        "End Date": "2026-07-17",
+        "City": "Orlando",
+        "Instance Name": "Strategic HR Management - Jul 2026 - Orlando",
         "Duration (Days)": [
           2.5
         ],
-        "Format": "In-Person",
-        "City": "Orlando",
-        "State/Province": "Florida",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr&blocks=2",
         "Created Date": "2025-12-15T19:56:06.000Z",
         "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
@@ -1671,11 +1675,7 @@
         "Price Virtual (from PROGRAMS)": [
           1575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-07-15T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c517d7ebf2abd764c4fd.jpg",
         "Program Name": [
           "Strategic HR Management"
         ]
@@ -1686,20 +1686,23 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 49,
-        "Instance Name": "Comprehensive Labor Relations - Jul 2026",
+        "Registration URL": "https://iaml.com/register.html?format=virtual&program=employee-relations-law&blocks=1",
+        "End Date": "2026-07-22",
+        "Show on Website": true,
+        "Start Date": "2026-07-21",
+        "Format": "Virtual",
         "Programs": [
           "recQz06guKmVLZ75d"
         ],
-        "Start Date": "2026-07-21",
-        "End Date": "2026-07-22",
+        "Instance Name": "Comprehensive Labor Relations - Jul 2026",
         "Duration (Days)": [
           2
         ],
-        "Format": "Virtual",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=virtual&program=employee-relations-law&blocks=1",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:57:56.000Z",
         "Created By": {
@@ -1712,9 +1715,6 @@
         ],
         "Price Virtual (from PROGRAMS)": [
           1375
-        ],
-        "Min. Capacity": [
-          6
         ],
         "Registration Deadline": "2026-07-21T00:00:00.000Z",
         "Program Name": [
@@ -1727,20 +1727,23 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 52,
-        "Instance Name": "Discrimination Prevention & Defense - Jul 2026",
+        "Registration URL": "https://iaml.com/register.html?format=virtual&program=employee-relations-law&blocks=2",
+        "End Date": "2026-07-29",
+        "Show on Website": true,
+        "Start Date": "2026-07-28",
+        "Format": "Virtual",
         "Programs": [
           "rechzx0zHYQ5mYVWJ"
         ],
-        "Start Date": "2026-07-28",
-        "End Date": "2026-07-29",
+        "Instance Name": "Discrimination Prevention & Defense - Jul 2026",
         "Duration (Days)": [
           2
         ],
-        "Format": "Virtual",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=virtual&program=employee-relations-law&blocks=2",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:23.000Z",
         "Created By": {
@@ -1753,9 +1756,6 @@
         ],
         "Price Virtual (from PROGRAMS)": [
           1375
-        ],
-        "Min. Capacity": [
-          6
         ],
         "Registration Deadline": "2026-07-28T00:00:00.000Z",
         "Program Name": [
@@ -1768,23 +1768,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 25,
-        "Instance Name": "Comprehensive Labor Relations - Aug 2026 - Nashville",
+        "State/Province": "Tennessee",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=1",
+        "End Date": "2026-08-11",
+        "Show on Website": true,
+        "Start Date": "2026-08-10",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4d7d7ebf232b964bb15.jpg",
         "Programs": [
           "recQz06guKmVLZ75d"
         ],
-        "Start Date": "2026-08-10",
-        "End Date": "2026-08-11",
+        "City": "Nashville",
+        "Instance Name": "Comprehensive Labor Relations - Aug 2026 - Nashville",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Nashville",
-        "State/Province": "Tennessee",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=1",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:57:56.000Z",
         "Created By": {
@@ -1798,11 +1802,7 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-08-10T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4d7d7ebf232b964bb15.jpg",
         "Program Name": [
           "Comprehensive Labor Relations"
         ]
@@ -1813,23 +1813,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 5,
-        "Instance Name": "Advanced Certificate in Strategic Employment Law - Aug 2026 - Nashville",
+        "State/Province": "Tennessee",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-employment-law",
+        "End Date": "2026-08-11",
+        "Show on Website": true,
+        "Start Date": "2026-08-10",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4d73bbe75e604057064.jpg",
         "Programs": [
           "recB6IPkkDoxoYabU"
         ],
-        "Start Date": "2026-08-10",
-        "End Date": "2026-08-11",
+        "City": "Nashville",
+        "Instance Name": "Advanced Certificate in Strategic Employment Law - Aug 2026 - Nashville",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Nashville",
-        "State/Province": "Tennessee",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-employment-law",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -1843,11 +1847,7 @@
         "Price Virtual (from PROGRAMS)": [
           1575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-08-10T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4d73bbe75e604057064.jpg",
         "Program Name": [
           "Advanced Certificate in Strategic Employment Law"
         ]
@@ -1857,27 +1857,31 @@
       "id": "recy983tSyMrSx1L1",
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
+        "Block 3 Title": "Special Issues in Employment Law",
         "Instance ID": 15,
-        "Instance Name": "Certificate in Employee Relations Law - Aug 2026 - Nashville",
+        "State/Province": "Tennessee",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law",
+        "End Date": "2026-08-14",
+        "Block 1 Title": "Comprehensive Labor Relations",
+        "Show on Website": true,
+        "Start Date": "2026-08-10",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4d7d7ebf232b964bb15.jpg",
+        "Block 2 Title": "Discrimination Prevention & Defense",
         "Programs": [
           "recpV3zshcKYvwFdB"
         ],
-        "Start Date": "2026-08-10",
-        "End Date": "2026-08-14",
+        "City": "Nashville",
+        "Instance Name": "Certificate in Employee Relations Law - Aug 2026 - Nashville",
         "Duration (Days)": [
           4.5
         ],
-        "Format": "In-Person",
-        "City": "Nashville",
-        "State/Province": "Tennessee",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law",
-        "Block 1 Title": "Comprehensive Labor Relations",
-        "Block 2 Title": "Discrimination Prevention & Defense",
-        "Block 3 Title": "Special Issues in Employment Law",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:23.000Z",
         "Created By": {
@@ -1891,11 +1895,7 @@
         "Price Virtual (from PROGRAMS)": [
           2375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-08-10T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4d7d7ebf232b964bb15.jpg",
         "Program Name": [
           "Certificate in Employee Relations Law"
         ]
@@ -1906,23 +1906,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 30,
-        "Instance Name": "Discrimination Prevention & Defense - Aug 2026 - Nashville",
+        "State/Province": "Tennessee",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=2",
+        "End Date": "2026-08-13",
+        "Show on Website": true,
+        "Start Date": "2026-08-12",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4d7d7ebf232b964bb15.jpg",
         "Programs": [
           "rechzx0zHYQ5mYVWJ"
         ],
-        "Start Date": "2026-08-12",
-        "End Date": "2026-08-13",
+        "City": "Nashville",
+        "Instance Name": "Discrimination Prevention & Defense - Aug 2026 - Nashville",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Nashville",
-        "State/Province": "Tennessee",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=2",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:23.000Z",
         "Created By": {
@@ -1936,11 +1940,7 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-08-12T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4d7d7ebf232b964bb15.jpg",
         "Program Name": [
           "Discrimination Prevention & Defense"
         ]
@@ -1951,23 +1951,27 @@
       "createdTime": "2025-12-18T22:33:15.000Z",
       "fields": {
         "Instance ID": 86,
-        "Instance Name": "Special Issues in Employment Law - Aug 2026 - Nashville",
+        "State/Province": "Tennessee",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=3",
+        "End Date": "2026-08-14",
+        "Show on Website": true,
+        "Start Date": "2026-08-14",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4d7d7ebf232b964bb15.jpg",
         "Programs": [
           "recYXtvOXU1LaSJBl"
         ],
-        "Start Date": "2026-08-14",
-        "End Date": "2026-08-14",
+        "City": "Nashville",
+        "Instance Name": "Special Issues in Employment Law - Aug 2026 - Nashville",
         "Duration (Days)": [
           0.5
         ],
-        "Format": "In-Person",
-        "City": "Nashville",
-        "State/Province": "Tennessee",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=3",
         "Created Date": "2025-12-18T22:33:15.000Z",
         "Last Modified": "2026-01-18T16:04:45.000Z",
         "Created By": {
@@ -1978,11 +1982,7 @@
         "Price In-Person (from PROGRAMS)": [
           575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-08-14T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4d7d7ebf232b964bb15.jpg",
         "Program Name": [
           "Special Issues in Employment Law"
         ]
@@ -1993,20 +1993,23 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 59,
-        "Instance Name": "HR Law Fundamentals - Aug 2026",
+        "Registration URL": "https://iaml.com/register.html?format=virtual&program=strategic-hr&blocks=1",
+        "End Date": "2026-08-19",
+        "Show on Website": true,
+        "Start Date": "2026-08-18",
+        "Format": "Virtual",
         "Programs": [
           "rech7dEY5PFO6Bwc3"
         ],
-        "Start Date": "2026-08-18",
-        "End Date": "2026-08-19",
+        "Instance Name": "HR Law Fundamentals - Aug 2026",
         "Duration (Days)": [
           2
         ],
-        "Format": "Virtual",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=virtual&program=strategic-hr&blocks=1",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
@@ -2019,9 +2022,6 @@
         ],
         "Price Virtual (from PROGRAMS)": [
           1375
-        ],
-        "Min. Capacity": [
-          6
         ],
         "Registration Deadline": "2026-08-18T00:00:00.000Z",
         "Program Name": [
@@ -2034,20 +2034,23 @@
       "createdTime": "2025-12-15T19:56:06.000Z",
       "fields": {
         "Instance ID": 76,
-        "Instance Name": "Strategic HR Management - Aug 2026",
+        "Registration URL": "https://iaml.com/register.html?format=virtual&program=strategic-hr&blocks=2",
+        "End Date": "2026-08-26",
+        "Show on Website": true,
+        "Start Date": "2026-08-25",
+        "Format": "Virtual",
         "Programs": [
           "recU3GZdrPt28Fvev"
         ],
-        "Start Date": "2026-08-25",
-        "End Date": "2026-08-26",
+        "Instance Name": "Strategic HR Management - Aug 2026",
         "Duration (Days)": [
           2.5
         ],
-        "Format": "Virtual",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=virtual&program=strategic-hr&blocks=2",
         "Created Date": "2025-12-15T19:56:06.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -2061,9 +2064,6 @@
         "Price Virtual (from PROGRAMS)": [
           1575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-08-25T00:00:00.000Z",
         "Program Name": [
           "Strategic HR Management"
@@ -2075,23 +2075,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 33,
-        "Instance Name": "HR Law Fundamentals - Sep 2026 - Austin",
+        "State/Province": "Texas",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr&blocks=1",
+        "End Date": "2026-09-15",
+        "Show on Website": true,
+        "Start Date": "2026-09-14",
+        "Time Zone": "Central (CT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4719a634f30fdac7643.jpg",
         "Programs": [
           "rech7dEY5PFO6Bwc3"
         ],
-        "Start Date": "2026-09-14",
-        "End Date": "2026-09-15",
+        "City": "Austin",
+        "Instance Name": "HR Law Fundamentals - Sep 2026 - Austin",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Austin",
-        "State/Province": "Texas",
-        "Time Zone": "Central (CT)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr&blocks=1",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:57:56.000Z",
         "Created By": {
@@ -2105,11 +2109,7 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-09-14T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4719a634f30fdac7643.jpg",
         "Program Name": [
           "HR Law Fundamentals"
         ]
@@ -2120,23 +2120,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 37,
-        "Instance Name": "Retirement Plans - Sep 2026 - Austin",
+        "State/Province": "Texas",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-benefits-law&blocks=1",
+        "End Date": "2026-09-15",
+        "Show on Website": true,
+        "Start Date": "2026-09-14",
+        "Time Zone": "Central (CT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c471543282821a15bb9e.jpg",
         "Programs": [
           "recYxLoPK96olFjUN"
         ],
-        "Start Date": "2026-09-14",
-        "End Date": "2026-09-15",
+        "City": "Austin",
+        "Instance Name": "Retirement Plans - Sep 2026 - Austin",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Austin",
-        "State/Province": "Texas",
-        "Time Zone": "Central (CT)",
+        "Min. Capacity": [
+          4
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-benefits-law&blocks=1",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
@@ -2150,11 +2154,7 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          4
-        ],
         "Registration Deadline": "2026-09-14T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c471543282821a15bb9e.jpg",
         "Program Name": [
           "Retirement Plans"
         ]
@@ -2164,27 +2164,31 @@
       "id": "recarKnheF7YXcfsZ",
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
+        "Block 3 Title": "Welfare Benefits Plan Issues",
         "Instance ID": 10,
-        "Instance Name": "Certificate in Employee Benefits Law - Sep 2026 - Austin",
+        "State/Province": "Texas",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-benefits-law",
+        "End Date": "2026-09-18",
+        "Block 1 Title": "Retirement Plans",
+        "Show on Website": true,
+        "Start Date": "2026-09-14",
+        "Time Zone": "Central (CT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c471543282821a15bb9e.jpg",
+        "Block 2 Title": "Benefit Plan Claims, Appeals & Litigation",
         "Programs": [
           "rec87u6ENaVT3rTcF"
         ],
-        "Start Date": "2026-09-14",
-        "End Date": "2026-09-18",
+        "City": "Austin",
+        "Instance Name": "Certificate in Employee Benefits Law - Sep 2026 - Austin",
         "Duration (Days)": [
           4.5
         ],
-        "Format": "In-Person",
-        "City": "Austin",
-        "State/Province": "Texas",
-        "Time Zone": "Central (CT)",
+        "Min. Capacity": [
+          4
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-benefits-law",
-        "Block 1 Title": "Retirement Plans",
-        "Block 2 Title": "Benefit Plan Claims, Appeals & Litigation",
-        "Block 3 Title": "Welfare Benefits Plan Issues",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -2198,11 +2202,7 @@
         "Price Virtual (from PROGRAMS)": [
           2375
         ],
-        "Min. Capacity": [
-          4
-        ],
         "Registration Deadline": "2026-09-14T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c471543282821a15bb9e.jpg",
         "Program Name": [
           "Certificate in Employee Benefits Law"
         ]
@@ -2213,25 +2213,29 @@
       "createdTime": "2025-12-15T19:56:06.000Z",
       "fields": {
         "Instance ID": 69,
-        "Instance Name": "Certificate in Strategic HR Leadership - Sep 2026 - Austin",
+        "State/Province": "Texas",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr",
+        "End Date": "2026-09-18",
+        "Block 1 Title": "HR Law Fundamentals",
+        "Show on Website": true,
+        "Start Date": "2026-09-14",
+        "Time Zone": "Central (CT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4719a634f30fdac7643.jpg",
+        "Block 2 Title": "Strategic HR Management",
         "Programs": [
           "recDaCk38nQE9NZaw"
         ],
-        "Start Date": "2026-09-14",
-        "End Date": "2026-09-18",
+        "City": "Austin",
+        "Instance Name": "Certificate in Strategic HR Leadership - Sep 2026 - Austin",
         "Duration (Days)": [
           4.5
         ],
-        "Format": "In-Person",
-        "City": "Austin",
-        "State/Province": "Texas",
-        "Time Zone": "Central (CT)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr",
-        "Block 1 Title": "HR Law Fundamentals",
-        "Block 2 Title": "Strategic HR Management",
         "Created Date": "2025-12-15T19:56:06.000Z",
         "Last Modified": "2026-01-18T15:59:23.000Z",
         "Created By": {
@@ -2245,11 +2249,7 @@
         "Price Virtual (from PROGRAMS)": [
           2375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-09-14T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4719a634f30fdac7643.jpg",
         "Program Name": [
           "Certificate in Strategic HR Leadership"
         ]
@@ -2260,23 +2260,27 @@
       "createdTime": "2025-12-15T19:56:02.000Z",
       "fields": {
         "Instance ID": 65,
-        "Instance Name": "\"Benefit Plan Claims, Appeals & Litigation\" - Sep 2026 - Austin",
+        "State/Province": "Texas",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-benefits-law&blocks=2",
+        "End Date": "2026-09-16",
+        "Show on Website": true,
+        "Start Date": "2026-09-16",
+        "Time Zone": "Central (CT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c471543282821a15bb9e.jpg",
         "Programs": [
           "rec6Jup8xHsP0CzlB"
         ],
-        "Start Date": "2026-09-16",
-        "End Date": "2026-09-16",
+        "City": "Austin",
+        "Instance Name": "\"Benefit Plan Claims, Appeals & Litigation\" - Sep 2026 - Austin",
         "Duration (Days)": [
           1
         ],
-        "Format": "In-Person",
-        "City": "Austin",
-        "State/Province": "Texas",
-        "Time Zone": "Central (CT)",
+        "Min. Capacity": [
+          4
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-benefits-law&blocks=2",
         "Created Date": "2025-12-15T19:56:02.000Z",
         "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
@@ -2290,11 +2294,7 @@
         "Price Virtual (from PROGRAMS)": [
           575
         ],
-        "Min. Capacity": [
-          4
-        ],
         "Registration Deadline": "2026-09-16T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c471543282821a15bb9e.jpg",
         "Program Name": [
           "Benefit Plan Claims, Appeals & Litigation"
         ]
@@ -2305,23 +2305,27 @@
       "createdTime": "2025-12-15T19:56:06.000Z",
       "fields": {
         "Instance ID": 73,
-        "Instance Name": "Strategic HR Management - Sep 2026 - Austin",
+        "State/Province": "Texas",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr&blocks=2",
+        "End Date": "2026-09-18",
+        "Show on Website": true,
+        "Start Date": "2026-09-16",
+        "Time Zone": "Central (CT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4719a634f30fdac7643.jpg",
         "Programs": [
           "recU3GZdrPt28Fvev"
         ],
-        "Start Date": "2026-09-16",
-        "End Date": "2026-09-18",
+        "City": "Austin",
+        "Instance Name": "Strategic HR Management - Sep 2026 - Austin",
         "Duration (Days)": [
           2.5
         ],
-        "Format": "In-Person",
-        "City": "Austin",
-        "State/Province": "Texas",
-        "Time Zone": "Central (CT)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr&blocks=2",
         "Created Date": "2025-12-15T19:56:06.000Z",
         "Last Modified": "2026-01-18T15:59:23.000Z",
         "Created By": {
@@ -2335,11 +2339,7 @@
         "Price Virtual (from PROGRAMS)": [
           1575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-09-16T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4719a634f30fdac7643.jpg",
         "Program Name": [
           "Strategic HR Management"
         ]
@@ -2350,23 +2350,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 43,
-        "Instance Name": "Welfare Benefits Plan Issues - Sep 2026 - Austin",
+        "State/Province": "Texas",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-benefits-law&blocks=3",
+        "End Date": "2026-09-18",
+        "Show on Website": true,
+        "Start Date": "2026-09-17",
+        "Time Zone": "Central (CT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c471543282821a15bb9e.jpg",
         "Programs": [
           "recB2OKzGP1JWClv4"
         ],
-        "Start Date": "2026-09-17",
-        "End Date": "2026-09-18",
+        "City": "Austin",
+        "Instance Name": "Welfare Benefits Plan Issues - Sep 2026 - Austin",
         "Duration (Days)": [
           1.5
         ],
-        "Format": "In-Person",
-        "City": "Austin",
-        "State/Province": "Texas",
-        "Time Zone": "Central (CT)",
+        "Min. Capacity": [
+          4
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-benefits-law&blocks=3",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -2380,11 +2384,7 @@
         "Price Virtual (from PROGRAMS)": [
           975
         ],
-        "Min. Capacity": [
-          4
-        ],
         "Registration Deadline": "2026-09-17T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c471543282821a15bb9e.jpg",
         "Program Name": [
           "Welfare Benefits Plan Issues"
         ]
@@ -2395,20 +2395,23 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 46,
-        "Instance Name": "Certificate in Workplace Investigations - Sep 2026",
+        "Registration URL": "https://iaml.com/register.html?format=virtual&program=workplace-investigations",
+        "End Date": "2026-09-23",
+        "Show on Website": true,
+        "Start Date": "2026-09-22",
+        "Format": "Virtual",
         "Programs": [
           "rec0VL17lJoFx3YbJ"
         ],
-        "Start Date": "2026-09-22",
-        "End Date": "2026-09-23",
+        "Instance Name": "Certificate in Workplace Investigations - Sep 2026",
         "Duration (Days)": [
           2
         ],
-        "Format": "Virtual",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=virtual&program=workplace-investigations",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
@@ -2422,9 +2425,6 @@
         "Price Virtual (from PROGRAMS)": [
           1575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-09-22T00:00:00.000Z",
         "Program Name": [
           "Certificate in Workplace Investigations"
@@ -2436,23 +2436,27 @@
       "createdTime": "2025-12-15T19:35:27.000Z",
       "fields": {
         "Instance ID": 2,
-        "Instance Name": "Advanced Certificate in Employee Benefits Law - Oct 2026 - Las Vegas",
+        "State/Province": "Nevada",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=advanced-benefits-law",
+        "End Date": "2026-10-06",
+        "Show on Website": true,
+        "Start Date": "2026-10-05",
+        "Time Zone": "Pacific (PT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc2c8abeb190c41d25.jpeg",
         "Programs": [
           "recG7N84DEwcrXPex"
         ],
-        "Start Date": "2026-10-05",
-        "End Date": "2026-10-06",
+        "City": "Las Vegas",
+        "Instance Name": "Advanced Certificate in Employee Benefits Law - Oct 2026 - Las Vegas",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Las Vegas",
-        "State/Province": "Nevada",
-        "Time Zone": "Pacific (PT)",
+        "Min. Capacity": [
+          4
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=advanced-benefits-law",
         "Created Date": "2025-12-15T19:35:27.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -2466,11 +2470,7 @@
         "Price Virtual (from PROGRAMS)": [
           1575
         ],
-        "Min. Capacity": [
-          4
-        ],
         "Registration Deadline": "2026-10-05T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc2c8abeb190c41d25.jpeg",
         "Program Name": [
           "Advanced Certificate in Employee Benefits Law"
         ]
@@ -2481,23 +2481,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 22,
-        "Instance Name": "Certificate in Workplace Investigations - Oct 2026 - Las Vegas",
+        "State/Province": "Nevada",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=workplace-investigations",
+        "End Date": "2026-10-06",
+        "Show on Website": true,
+        "Start Date": "2026-10-05",
+        "Time Zone": "Pacific (PT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc59a0a606ca77df9b.jpg",
         "Programs": [
           "rec0VL17lJoFx3YbJ"
         ],
-        "Start Date": "2026-10-05",
-        "End Date": "2026-10-06",
+        "City": "Las Vegas",
+        "Instance Name": "Certificate in Workplace Investigations - Oct 2026 - Las Vegas",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Las Vegas",
-        "State/Province": "Nevada",
-        "Time Zone": "Pacific (PT)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=workplace-investigations",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:57:56.000Z",
         "Created By": {
@@ -2511,11 +2515,7 @@
         "Price Virtual (from PROGRAMS)": [
           1575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-10-05T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc59a0a606ca77df9b.jpg",
         "Program Name": [
           "Certificate in Workplace Investigations"
         ]
@@ -2525,27 +2525,31 @@
       "id": "recIqNJQs2kIZxzZQ",
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
+        "Block 3 Title": "Special Issues in Employment Law",
         "Instance ID": 13,
-        "Instance Name": "Certificate in Employee Relations Law - Oct 2026 - Las Vegas",
+        "State/Province": "Nevada",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law",
+        "End Date": "2026-10-09",
+        "Block 1 Title": "Comprehensive Labor Relations",
+        "Show on Website": true,
+        "Start Date": "2026-10-05",
+        "Time Zone": "Pacific (PT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc3bbe750223056d60.jpg",
+        "Block 2 Title": "Discrimination Prevention & Defense",
         "Programs": [
           "recpV3zshcKYvwFdB"
         ],
-        "Start Date": "2026-10-05",
-        "End Date": "2026-10-09",
+        "City": "Las Vegas",
+        "Instance Name": "Certificate in Employee Relations Law - Oct 2026 - Las Vegas",
         "Duration (Days)": [
           4.5
         ],
-        "Format": "In-Person",
-        "City": "Las Vegas",
-        "State/Province": "Nevada",
-        "Time Zone": "Pacific (PT)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law",
-        "Block 1 Title": "Comprehensive Labor Relations",
-        "Block 2 Title": "Discrimination Prevention & Defense",
-        "Block 3 Title": "Special Issues in Employment Law",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
@@ -2559,11 +2563,7 @@
         "Price Virtual (from PROGRAMS)": [
           2375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-10-05T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc3bbe750223056d60.jpg",
         "Program Name": [
           "Certificate in Employee Relations Law"
         ]
@@ -2574,23 +2574,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 26,
-        "Instance Name": "Comprehensive Labor Relations - Oct 2026 - Las Vegas",
+        "State/Province": "Nevada",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=1",
+        "End Date": "2026-10-06",
+        "Show on Website": true,
+        "Start Date": "2026-10-05",
+        "Time Zone": "Pacific (PT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc3bbe750223056d60.jpg",
         "Programs": [
           "recQz06guKmVLZ75d"
         ],
-        "Start Date": "2026-10-05",
-        "End Date": "2026-10-06",
+        "City": "Las Vegas",
+        "Instance Name": "Comprehensive Labor Relations - Oct 2026 - Las Vegas",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Las Vegas",
-        "State/Province": "Nevada",
-        "Time Zone": "Pacific (PT)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=1",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:23.000Z",
         "Created By": {
@@ -2604,11 +2608,7 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-10-05T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc3bbe750223056d60.jpg",
         "Program Name": [
           "Comprehensive Labor Relations"
         ]
@@ -2619,23 +2619,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 31,
-        "Instance Name": "Discrimination Prevention & Defense - Oct 2026 - Las Vegas",
+        "State/Province": "Nevada",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=2",
+        "End Date": "2026-10-08",
+        "Show on Website": true,
+        "Start Date": "2026-10-07",
+        "Time Zone": "Pacific (PT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc3bbe750223056d60.jpg",
         "Programs": [
           "rechzx0zHYQ5mYVWJ"
         ],
-        "Start Date": "2026-10-07",
-        "End Date": "2026-10-08",
+        "City": "Las Vegas",
+        "Instance Name": "Discrimination Prevention & Defense - Oct 2026 - Las Vegas",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Las Vegas",
-        "State/Province": "Nevada",
-        "Time Zone": "Pacific (PT)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=2",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -2649,11 +2653,7 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-10-07T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc3bbe750223056d60.jpg",
         "Program Name": [
           "Discrimination Prevention & Defense"
         ]
@@ -2664,23 +2664,27 @@
       "createdTime": "2025-12-18T22:33:15.000Z",
       "fields": {
         "Instance ID": 89,
-        "Instance Name": "Special Issues in Employment Law - Oct 2026 - Las Vegas",
+        "State/Province": "Nevada",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=3",
+        "End Date": "2026-10-09",
+        "Show on Website": true,
+        "Start Date": "2026-10-09",
+        "Time Zone": "Pacific (PT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc3bbe750223056d60.jpg",
         "Programs": [
           "recYXtvOXU1LaSJBl"
         ],
-        "Start Date": "2026-10-09",
-        "End Date": "2026-10-09",
+        "City": "Las Vegas",
+        "Instance Name": "Special Issues in Employment Law - Oct 2026 - Las Vegas",
         "Duration (Days)": [
           0.5
         ],
-        "Format": "In-Person",
-        "City": "Las Vegas",
-        "State/Province": "Nevada",
-        "Time Zone": "Pacific (PT)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=3",
         "Created Date": "2025-12-18T22:33:15.000Z",
         "Last Modified": "2026-01-18T15:57:56.000Z",
         "Created By": {
@@ -2691,11 +2695,7 @@
         "Price In-Person (from PROGRAMS)": [
           575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-10-09T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc3bbe750223056d60.jpg",
         "Program Name": [
           "Special Issues in Employment Law"
         ]
@@ -2706,16 +2706,19 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 57,
-        "Instance Name": "Employment Law Update - Oct 2026",
+        "End Date": "2026-10-13",
+        "Show on Website": true,
+        "Start Date": "2026-10-13",
+        "Format": "Virtual",
         "Programs": [
           "recNdqdcDY2PRcQvB"
         ],
-        "Start Date": "2026-10-13",
-        "End Date": "2026-10-13",
-        "Format": "Virtual",
+        "Instance Name": "Employment Law Update - Oct 2026",
+        "Min. Capacity": [
+          10
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2025-12-15T19:43:03.000Z",
         "Created By": {
@@ -2729,9 +2732,6 @@
         "Price Virtual (from PROGRAMS)": [
           397
         ],
-        "Min. Capacity": [
-          10
-        ],
         "Registration Deadline": "2026-10-13T00:00:00.000Z",
         "Program Name": [
           "Employment Law Update"
@@ -2743,20 +2743,23 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 50,
-        "Instance Name": "Comprehensive Labor Relations - Oct 2026",
+        "Registration URL": "https://iaml.com/register.html?format=virtual&program=employee-relations-law&blocks=1",
+        "End Date": "2026-10-21",
+        "Show on Website": true,
+        "Start Date": "2026-10-20",
+        "Format": "Virtual",
         "Programs": [
           "recQz06guKmVLZ75d"
         ],
-        "Start Date": "2026-10-20",
-        "End Date": "2026-10-21",
+        "Instance Name": "Comprehensive Labor Relations - Oct 2026",
         "Duration (Days)": [
           2
         ],
-        "Format": "Virtual",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=virtual&program=employee-relations-law&blocks=1",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
@@ -2770,9 +2773,6 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-10-20T00:00:00.000Z",
         "Program Name": [
           "Comprehensive Labor Relations"
@@ -2784,20 +2784,23 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 53,
-        "Instance Name": "Discrimination Prevention & Defense - Oct 2026",
+        "Registration URL": "https://iaml.com/register.html?format=virtual&program=employee-relations-law&blocks=2",
+        "End Date": "2026-10-28",
+        "Show on Website": true,
+        "Start Date": "2026-10-27",
+        "Format": "Virtual",
         "Programs": [
           "rechzx0zHYQ5mYVWJ"
         ],
-        "Start Date": "2026-10-27",
-        "End Date": "2026-10-28",
+        "Instance Name": "Discrimination Prevention & Defense - Oct 2026",
         "Duration (Days)": [
           2
         ],
-        "Format": "Virtual",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=virtual&program=employee-relations-law&blocks=2",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:23.000Z",
         "Created By": {
@@ -2811,9 +2814,6 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-10-27T00:00:00.000Z",
         "Program Name": [
           "Discrimination Prevention & Defense"
@@ -2825,23 +2825,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 6,
-        "Instance Name": "Advanced Certificate in Strategic Employment Law - Nov 2026 - Washington",
+        "State/Province": "D.C.",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-employment-law",
+        "End Date": "2026-11-10",
+        "Show on Website": true,
+        "Start Date": "2026-11-09",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c5513bbe7570830583d7.jpg",
         "Programs": [
           "recB6IPkkDoxoYabU"
         ],
-        "Start Date": "2026-11-09",
-        "End Date": "2026-11-10",
+        "City": "Washington",
+        "Instance Name": "Advanced Certificate in Strategic Employment Law - Nov 2026 - Washington",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Washington",
-        "State/Province": "D.C.",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-employment-law",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
@@ -2855,11 +2859,7 @@
         "Price Virtual (from PROGRAMS)": [
           1575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-11-09T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c5513bbe7570830583d7.jpg",
         "Program Name": [
           "Advanced Certificate in Strategic Employment Law"
         ]
@@ -2870,23 +2870,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 32,
-        "Instance Name": "HR Law Fundamentals - Nov 2026 - Washington",
+        "State/Province": "D.C.",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr&blocks=1",
+        "End Date": "2026-11-10",
+        "Show on Website": true,
+        "Start Date": "2026-11-09",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c5513bbe75c4290583d8.jpg",
         "Programs": [
           "rech7dEY5PFO6Bwc3"
         ],
-        "Start Date": "2026-11-09",
-        "End Date": "2026-11-10",
+        "City": "Washington",
+        "Instance Name": "HR Law Fundamentals - Nov 2026 - Washington",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Washington",
-        "State/Province": "D.C.",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr&blocks=1",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -2900,11 +2904,7 @@
         "Price Virtual (from PROGRAMS)": [
           1375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-11-09T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c5513bbe75c4290583d8.jpg",
         "Program Name": [
           "HR Law Fundamentals"
         ]
@@ -2915,25 +2915,29 @@
       "createdTime": "2025-12-15T19:56:06.000Z",
       "fields": {
         "Instance ID": 70,
-        "Instance Name": "Certificate in Strategic HR Leadership - Nov 2026 - Washington",
+        "State/Province": "D.C.",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr",
+        "End Date": "2026-11-13",
+        "Block 1 Title": "HR Law Fundamentals",
+        "Show on Website": true,
+        "Start Date": "2026-11-09",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c5513bbe75c4290583d8.jpg",
+        "Block 2 Title": "Strategic HR Management",
         "Programs": [
           "recDaCk38nQE9NZaw"
         ],
-        "Start Date": "2026-11-09",
-        "End Date": "2026-11-13",
+        "City": "Washington",
+        "Instance Name": "Certificate in Strategic HR Leadership - Nov 2026 - Washington",
         "Duration (Days)": [
           4.5
         ],
-        "Format": "In-Person",
-        "City": "Washington",
-        "State/Province": "D.C.",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr",
-        "Block 1 Title": "HR Law Fundamentals",
-        "Block 2 Title": "Strategic HR Management",
         "Created Date": "2025-12-15T19:56:06.000Z",
         "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
@@ -2947,11 +2951,7 @@
         "Price Virtual (from PROGRAMS)": [
           2375
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-11-09T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c5513bbe75c4290583d8.jpg",
         "Program Name": [
           "Certificate in Strategic HR Leadership"
         ]
@@ -2962,23 +2962,27 @@
       "createdTime": "2025-12-15T19:56:06.000Z",
       "fields": {
         "Instance ID": 74,
-        "Instance Name": "Strategic HR Management - Nov 2026 - Washington",
+        "State/Province": "D.C.",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr&blocks=2",
+        "End Date": "2026-11-13",
+        "Show on Website": true,
+        "Start Date": "2026-11-11",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c5513bbe75c4290583d8.jpg",
         "Programs": [
           "recU3GZdrPt28Fvev"
         ],
-        "Start Date": "2026-11-11",
-        "End Date": "2026-11-13",
+        "City": "Washington",
+        "Instance Name": "Strategic HR Management - Nov 2026 - Washington",
         "Duration (Days)": [
           2.5
         ],
-        "Format": "In-Person",
-        "City": "Washington",
-        "State/Province": "D.C.",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr&blocks=2",
         "Created Date": "2025-12-15T19:56:06.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -2992,11 +2996,7 @@
         "Price Virtual (from PROGRAMS)": [
           1575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-11-11T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c5513bbe75c4290583d8.jpg",
         "Program Name": [
           "Strategic HR Management"
         ]
@@ -3007,20 +3007,23 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 60,
-        "Instance Name": "HR Law Fundamentals - Nov 2026",
+        "Registration URL": "https://iaml.com/register.html?format=virtual&program=strategic-hr&blocks=1",
+        "End Date": "2026-11-18",
+        "Show on Website": true,
+        "Start Date": "2026-11-17",
+        "Format": "Virtual",
         "Programs": [
           "rech7dEY5PFO6Bwc3"
         ],
-        "Start Date": "2026-11-17",
-        "End Date": "2026-11-18",
+        "Instance Name": "HR Law Fundamentals - Nov 2026",
         "Duration (Days)": [
           2
         ],
-        "Format": "Virtual",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=virtual&program=strategic-hr&blocks=1",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
@@ -3033,9 +3036,6 @@
         ],
         "Price Virtual (from PROGRAMS)": [
           1375
-        ],
-        "Min. Capacity": [
-          6
         ],
         "Registration Deadline": "2026-11-17T00:00:00.000Z",
         "Program Name": [
@@ -3048,20 +3048,23 @@
       "createdTime": "2025-12-15T19:57:08.000Z",
       "fields": {
         "Instance ID": 78,
-        "Instance Name": "Strategic HR Management - Dec 2026",
+        "Registration URL": "https://iaml.com/register.html?format=virtual&program=strategic-hr&blocks=2",
+        "End Date": "2026-12-09",
+        "Show on Website": true,
+        "Start Date": "2026-12-08",
+        "Format": "Virtual",
         "Programs": [
           "recU3GZdrPt28Fvev"
         ],
-        "Start Date": "2026-12-08",
-        "End Date": "2026-12-09",
+        "Instance Name": "Strategic HR Management - Dec 2026",
         "Duration (Days)": [
           2.5
         ],
-        "Format": "Virtual",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=virtual&program=strategic-hr&blocks=2",
         "Created Date": "2025-12-15T19:57:08.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -3075,9 +3078,6 @@
         "Price Virtual (from PROGRAMS)": [
           1575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-12-08T00:00:00.000Z",
         "Program Name": [
           "Strategic HR Management"
@@ -3089,20 +3089,23 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 47,
-        "Instance Name": "Certificate in Workplace Investigations - Dec 2026",
+        "Registration URL": "https://iaml.com/register.html?format=virtual&program=workplace-investigations",
+        "End Date": "2026-12-16",
+        "Show on Website": true,
+        "Start Date": "2026-12-15",
+        "Format": "Virtual",
         "Programs": [
           "rec0VL17lJoFx3YbJ"
         ],
-        "Start Date": "2026-12-15",
-        "End Date": "2026-12-16",
+        "Instance Name": "Certificate in Workplace Investigations - Dec 2026",
         "Duration (Days)": [
           2
         ],
-        "Format": "Virtual",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=virtual&program=workplace-investigations",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
@@ -3115,9 +3118,6 @@
         ],
         "Price Virtual (from PROGRAMS)": [
           1575
-        ],
-        "Min. Capacity": [
-          6
         ],
         "Registration Deadline": "2026-12-15T00:00:00.000Z",
         "Program Name": [

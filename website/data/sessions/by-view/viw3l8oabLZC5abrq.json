@@ -1,5 +1,5 @@
 {
-  "generated": "2026-04-20T09:50:25.338Z",
+  "generated": "2026-04-21T09:16:03.192Z",
   "viewId": "viw3l8oabLZC5abrq",
   "usedBy": [
     {
@@ -14,23 +14,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 20,
-        "Instance Name": "Certificate in Workplace Investigations - Apr 2026 - Atlanta",
+        "State/Province": "Georgia",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=workplace-investigations",
+        "End Date": "2026-04-21",
+        "Show on Website": true,
+        "Start Date": "2026-04-20",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4530190af72b8821455.jpg",
         "Programs": [
           "rec0VL17lJoFx3YbJ"
         ],
-        "Start Date": "2026-04-20",
-        "End Date": "2026-04-21",
+        "City": "Atlanta",
+        "Instance Name": "Certificate in Workplace Investigations - Apr 2026 - Atlanta",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Atlanta",
-        "State/Province": "Georgia",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Closed",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=workplace-investigations",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:57:56.000Z",
         "Created By": {
@@ -44,11 +48,7 @@
         "Price Virtual (from PROGRAMS)": [
           1575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-04-20T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4530190af72b8821455.jpg",
         "Program Name": [
           "Certificate in Workplace Investigations"
         ]
@@ -59,23 +59,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 21,
-        "Instance Name": "Certificate in Workplace Investigations - Jul 2026 - Orlando",
+        "State/Province": "Florida",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=workplace-investigations",
+        "End Date": "2026-07-14",
+        "Show on Website": true,
+        "Start Date": "2026-07-13",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c51654328228ad15d3be.jpg",
         "Programs": [
           "rec0VL17lJoFx3YbJ"
         ],
-        "Start Date": "2026-07-13",
-        "End Date": "2026-07-14",
+        "City": "Orlando",
+        "Instance Name": "Certificate in Workplace Investigations - Jul 2026 - Orlando",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Orlando",
-        "State/Province": "Florida",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=workplace-investigations",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:23.000Z",
         "Created By": {
@@ -89,11 +93,7 @@
         "Price Virtual (from PROGRAMS)": [
           1575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-07-13T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c51654328228ad15d3be.jpg",
         "Program Name": [
           "Certificate in Workplace Investigations"
         ]
@@ -104,23 +104,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 22,
-        "Instance Name": "Certificate in Workplace Investigations - Oct 2026 - Las Vegas",
+        "State/Province": "Nevada",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=workplace-investigations",
+        "End Date": "2026-10-06",
+        "Show on Website": true,
+        "Start Date": "2026-10-05",
+        "Time Zone": "Pacific (PT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc59a0a606ca77df9b.jpg",
         "Programs": [
           "rec0VL17lJoFx3YbJ"
         ],
-        "Start Date": "2026-10-05",
-        "End Date": "2026-10-06",
+        "City": "Las Vegas",
+        "Instance Name": "Certificate in Workplace Investigations - Oct 2026 - Las Vegas",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Las Vegas",
-        "State/Province": "Nevada",
-        "Time Zone": "Pacific (PT)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=workplace-investigations",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:57:56.000Z",
         "Created By": {
@@ -134,11 +138,7 @@
         "Price Virtual (from PROGRAMS)": [
           1575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-10-05T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc59a0a606ca77df9b.jpg",
         "Program Name": [
           "Certificate in Workplace Investigations"
         ]

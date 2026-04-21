@@ -1,5 +1,5 @@
 {
-  "generated": "2026-04-20T09:50:25.338Z",
+  "generated": "2026-04-21T09:16:03.192Z",
   "viewId": "viwa8yRYP99luXOQc",
   "usedBy": [
     {
@@ -14,23 +14,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 42,
-        "Instance Name": "Welfare Benefits Plan Issues - Apr 2026 - Atlanta",
+        "State/Province": "Georgia",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-benefits-law&blocks=3",
+        "End Date": "2026-04-24",
+        "Show on Website": true,
+        "Start Date": "2026-04-23",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4530190afcbbd821451.jpg",
         "Programs": [
           "recB2OKzGP1JWClv4"
         ],
-        "Start Date": "2026-04-23",
-        "End Date": "2026-04-24",
+        "City": "Atlanta",
+        "Instance Name": "Welfare Benefits Plan Issues - Apr 2026 - Atlanta",
         "Duration (Days)": [
           1.5
         ],
-        "Format": "In-Person",
-        "City": "Atlanta",
-        "State/Province": "Georgia",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          4
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-benefits-law&blocks=3",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:23.000Z",
         "Created By": {
@@ -44,11 +48,7 @@
         "Price Virtual (from PROGRAMS)": [
           975
         ],
-        "Min. Capacity": [
-          4
-        ],
         "Registration Deadline": "2026-04-23T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4530190afcbbd821451.jpg",
         "Program Name": [
           "Welfare Benefits Plan Issues"
         ]
@@ -59,23 +59,27 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 43,
-        "Instance Name": "Welfare Benefits Plan Issues - Sep 2026 - Austin",
+        "State/Province": "Texas",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-benefits-law&blocks=3",
+        "End Date": "2026-09-18",
+        "Show on Website": true,
+        "Start Date": "2026-09-17",
+        "Time Zone": "Central (CT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c471543282821a15bb9e.jpg",
         "Programs": [
           "recB2OKzGP1JWClv4"
         ],
-        "Start Date": "2026-09-17",
-        "End Date": "2026-09-18",
+        "City": "Austin",
+        "Instance Name": "Welfare Benefits Plan Issues - Sep 2026 - Austin",
         "Duration (Days)": [
           1.5
         ],
-        "Format": "In-Person",
-        "City": "Austin",
-        "State/Province": "Texas",
-        "Time Zone": "Central (CT)",
+        "Min. Capacity": [
+          4
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-benefits-law&blocks=3",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -89,11 +93,7 @@
         "Price Virtual (from PROGRAMS)": [
           975
         ],
-        "Min. Capacity": [
-          4
-        ],
         "Registration Deadline": "2026-09-17T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c471543282821a15bb9e.jpg",
         "Program Name": [
           "Welfare Benefits Plan Issues"
         ]

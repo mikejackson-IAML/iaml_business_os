@@ -1,5 +1,5 @@
 {
-  "generated": "2026-04-20T09:50:25.338Z",
+  "generated": "2026-04-21T09:16:03.192Z",
   "viewId": "viwlzVMIk78qDmL2W",
   "usedBy": [
     {
@@ -14,23 +14,27 @@
       "createdTime": "2025-12-15T19:35:27.000Z",
       "fields": {
         "Instance ID": 2,
-        "Instance Name": "Advanced Certificate in Employee Benefits Law - Oct 2026 - Las Vegas",
+        "State/Province": "Nevada",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=advanced-benefits-law",
+        "End Date": "2026-10-06",
+        "Show on Website": true,
+        "Start Date": "2026-10-05",
+        "Time Zone": "Pacific (PT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc2c8abeb190c41d25.jpeg",
         "Programs": [
           "recG7N84DEwcrXPex"
         ],
-        "Start Date": "2026-10-05",
-        "End Date": "2026-10-06",
+        "City": "Las Vegas",
+        "Instance Name": "Advanced Certificate in Employee Benefits Law - Oct 2026 - Las Vegas",
         "Duration (Days)": [
           2
         ],
-        "Format": "In-Person",
-        "City": "Las Vegas",
-        "State/Province": "Nevada",
-        "Time Zone": "Pacific (PT)",
+        "Min. Capacity": [
+          4
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=advanced-benefits-law",
         "Created Date": "2025-12-15T19:35:27.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -44,11 +48,7 @@
         "Price Virtual (from PROGRAMS)": [
           1575
         ],
-        "Min. Capacity": [
-          4
-        ],
         "Registration Deadline": "2026-10-05T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc2c8abeb190c41d25.jpeg",
         "Program Name": [
           "Advanced Certificate in Employee Benefits Law"
         ]

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-04-20T09:50:25.338Z",
+  "generated": "2026-04-21T09:16:03.192Z",
   "viewId": "viw2IfjMXttng3xlW",
   "usedBy": [
     {
@@ -14,23 +14,27 @@
       "createdTime": "2025-12-18T22:33:10.000Z",
       "fields": {
         "Instance ID": 85,
-        "Instance Name": "Special Issues in Employment Law - Apr 2026 - Atlanta",
+        "State/Province": "Georgia",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=3",
+        "End Date": "2026-04-24",
+        "Show on Website": true,
+        "Start Date": "2026-04-24",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c454ca7298b50b678d83.jpg",
         "Programs": [
           "recYXtvOXU1LaSJBl"
         ],
-        "Start Date": "2026-04-24",
-        "End Date": "2026-04-24",
+        "City": "Atlanta",
+        "Instance Name": "Special Issues in Employment Law - Apr 2026 - Atlanta",
         "Duration (Days)": [
           0.5
         ],
-        "Format": "In-Person",
-        "City": "Atlanta",
-        "State/Province": "Georgia",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=3",
         "Created Date": "2025-12-18T22:33:10.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -41,11 +45,7 @@
         "Price In-Person (from PROGRAMS)": [
           575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-04-24T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c454ca7298b50b678d83.jpg",
         "Program Name": [
           "Special Issues in Employment Law"
         ]
@@ -56,23 +56,27 @@
       "createdTime": "2025-12-18T22:33:15.000Z",
       "fields": {
         "Instance ID": 86,
-        "Instance Name": "Special Issues in Employment Law - Aug 2026 - Nashville",
+        "State/Province": "Tennessee",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=3",
+        "End Date": "2026-08-14",
+        "Show on Website": true,
+        "Start Date": "2026-08-14",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4d7d7ebf232b964bb15.jpg",
         "Programs": [
           "recYXtvOXU1LaSJBl"
         ],
-        "Start Date": "2026-08-14",
-        "End Date": "2026-08-14",
+        "City": "Nashville",
+        "Instance Name": "Special Issues in Employment Law - Aug 2026 - Nashville",
         "Duration (Days)": [
           0.5
         ],
-        "Format": "In-Person",
-        "City": "Nashville",
-        "State/Province": "Tennessee",
-        "Time Zone": "Eastern (ET)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=3",
         "Created Date": "2025-12-18T22:33:15.000Z",
         "Last Modified": "2026-01-18T16:04:45.000Z",
         "Created By": {
@@ -83,11 +87,7 @@
         "Price In-Person (from PROGRAMS)": [
           575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-08-14T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4d7d7ebf232b964bb15.jpg",
         "Program Name": [
           "Special Issues in Employment Law"
         ]
@@ -98,23 +98,27 @@
       "createdTime": "2025-12-18T22:33:15.000Z",
       "fields": {
         "Instance ID": 87,
-        "Instance Name": "Special Issues in Employment Law - Jun 2026 - Austin",
+        "State/Province": "Texas",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=3",
+        "End Date": "2026-06-12",
+        "Show on Website": true,
+        "Start Date": "2026-06-12",
+        "Time Zone": "Central (CT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4719a634f6065ac7644.jpg",
         "Programs": [
           "recYXtvOXU1LaSJBl"
         ],
-        "Start Date": "2026-06-12",
-        "End Date": "2026-06-12",
+        "City": "Austin",
+        "Instance Name": "Special Issues in Employment Law - Jun 2026 - Austin",
         "Duration (Days)": [
           0.5
         ],
-        "Format": "In-Person",
-        "City": "Austin",
-        "State/Province": "Texas",
-        "Time Zone": "Central (CT)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=3",
         "Created Date": "2025-12-18T22:33:15.000Z",
         "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
@@ -125,11 +129,7 @@
         "Price In-Person (from PROGRAMS)": [
           575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-06-12T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4719a634f6065ac7644.jpg",
         "Program Name": [
           "Special Issues in Employment Law"
         ]
@@ -140,22 +140,26 @@
       "createdTime": "2025-12-18T22:33:15.000Z",
       "fields": {
         "Instance ID": 88,
-        "Instance Name": "Special Issues in Employment Law - Jun 2026 - Scottsdale",
+        "State/Province": "Arizona",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=3",
+        "End Date": "2026-06-05",
+        "Show on Website": true,
+        "Start Date": "2026-06-05",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c539d7ebf250f264ca1d.jpg",
         "Programs": [
           "recYXtvOXU1LaSJBl"
         ],
-        "Start Date": "2026-06-05",
-        "End Date": "2026-06-05",
+        "City": "Scottsdale",
+        "Instance Name": "Special Issues in Employment Law - Jun 2026 - Scottsdale",
         "Duration (Days)": [
           0.5
         ],
-        "Format": "In-Person",
-        "City": "Scottsdale",
-        "State/Province": "Arizona",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=3",
         "Created Date": "2025-12-18T22:33:15.000Z",
         "Last Modified": "2026-01-18T15:59:23.000Z",
         "Created By": {
@@ -166,11 +170,7 @@
         "Price In-Person (from PROGRAMS)": [
           575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-06-05T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c539d7ebf250f264ca1d.jpg",
         "Program Name": [
           "Special Issues in Employment Law"
         ]
@@ -181,23 +181,27 @@
       "createdTime": "2025-12-18T22:33:15.000Z",
       "fields": {
         "Instance ID": 89,
-        "Instance Name": "Special Issues in Employment Law - Oct 2026 - Las Vegas",
+        "State/Province": "Nevada",
+        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=3",
+        "End Date": "2026-10-09",
+        "Show on Website": true,
+        "Start Date": "2026-10-09",
+        "Time Zone": "Pacific (PT)",
+        "Format": "In-Person",
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc3bbe750223056d60.jpg",
         "Programs": [
           "recYXtvOXU1LaSJBl"
         ],
-        "Start Date": "2026-10-09",
-        "End Date": "2026-10-09",
+        "City": "Las Vegas",
+        "Instance Name": "Special Issues in Employment Law - Oct 2026 - Las Vegas",
         "Duration (Days)": [
           0.5
         ],
-        "Format": "In-Person",
-        "City": "Las Vegas",
-        "State/Province": "Nevada",
-        "Time Zone": "Pacific (PT)",
+        "Min. Capacity": [
+          6
+        ],
         "Current Enrolled": 0,
         "Enrollment Status": "Low Enrollment",
-        "Show on Website": true,
-        "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-relations-law&blocks=3",
         "Created Date": "2025-12-18T22:33:15.000Z",
         "Last Modified": "2026-01-18T15:57:56.000Z",
         "Created By": {
@@ -208,11 +212,7 @@
         "Price In-Person (from PROGRAMS)": [
           575
         ],
-        "Min. Capacity": [
-          6
-        ],
         "Registration Deadline": "2026-10-09T00:00:00.000Z",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc3bbe750223056d60.jpg",
         "Program Name": [
           "Special Issues in Employment Law"
         ]
