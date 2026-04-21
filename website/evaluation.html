@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Program Evaluation | IAML</title>
+  <meta name="description" content="Share your feedback on your IAML program.">
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+  <link href="https://api.fontshare.com/v2/css?f[]=gambarino@400&f[]=switzer@300,400,500,600,700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/1-variables.css">
+  <link rel="stylesheet" href="css/2-base.css">
+  <link rel="stylesheet" href="css/3-components.css">
+  <link rel="stylesheet" href="css/4-layout.css">
+  <link rel="stylesheet" href="css/5-pages.css">
+
+  <style>
+    .eval-page {
+      min-height: 100vh;
+      padding: 2rem 1rem;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      font-family: 'Switzer', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: #1a1a2e;
+    }
+
+    .eval-shell {
+      max-width: 720px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 2.5rem 2rem;
+    }
+
+    .eval-header {
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 1.25rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .eval-eyebrow {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #6b7280;
+      margin-bottom: 0.35rem;
+    }
+
+    .eval-program-name {
+      font-family: 'Gambarino', Georgia, serif;
+      font-size: 1.6rem;
+      line-height: 1.2;
+      color: #1a1a2e;
+      margin: 0 0 0.35rem;
+    }
+
+    .eval-instance {
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+
+    .eval-progress {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .eval-progress-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
+    .eval-progress-bar {
+      flex: 1;
+      height: 6px;
+      background: #e5e7eb;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .eval-progress-fill {
+      height: 100%;
+      background: #188BF6;
+      border-radius: 999px;
+      transition: width 0.3s ease;
+    }
+
+    .eval-phase-title {
+      font-family: 'Gambarino', Georgia, serif;
+      font-size: 1.35rem;
+      margin: 0 0 0.5rem;
+    }
+
+    .eval-phase-blurb {
+      color: #6b7280;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .eval-question {
+      padding: 1.5rem 0;
+      border-top: 1px solid #f1f3f5;
+    }
+
+    .eval-question:first-of-type { border-top: 0; padding-top: 0; }
+
+    .eval-question-prompt {
+      font-size: 1.05rem;
+      font-weight: 500;
+      line-height: 1.4;
+      margin: 0 0 1rem;
+      color: #1a1a2e;
+    }
+
+    .eval-question-required::after {
+      content: ' *';
+      color: #dc2626;
+    }
+
+    .eval-question-helper {
+      margin: -0.5rem 0 1rem;
+      font-size: 0.85rem;
+      color: #6b7280;
+      line-height: 1.4;
+    }
+
+    .eval-question-hidden {
+      display: none;
+    }
+
+    /* Open text */
+    .eval-textarea {
+      width: 100%;
+      min-height: 110px;
+      padding: 0.85rem 1rem;
+      border: 1.5px solid #d1d5db;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      color: #1a1a2e;
+      line-height: 1.5;
+      resize: vertical;
+      transition: border-color 0.12s ease;
+      background: white;
+    }
+
+    .eval-textarea:focus {
+      outline: none;
+      border-color: #188BF6;
+      box-shadow: 0 0 0 3px rgba(24, 139, 246, 0.12);
+    }
+
+    .eval-textarea::placeholder {
+      color: #9ca3af;
+    }
+
+    .eval-textarea-counter {
+      margin-top: 0.35rem;
+      font-size: 0.75rem;
+      color: #9ca3af;
+      text-align: right;
+    }
+
+    /* Matrix (rows × scale) */
+    .eval-matrix {
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .eval-matrix-header {
+      display: grid;
+      grid-template-columns: minmax(140px, 1.8fr) repeat(var(--eval-matrix-cols, 5), 1fr);
+      background: #f8f9fa;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 0.5rem 0;
+    }
+
+    .eval-matrix-col-label {
+      text-align: center;
+      padding: 0.25rem 0.25rem;
+    }
+
+    .eval-matrix-col-num {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #1a1a2e;
+    }
+
+    .eval-matrix-col-text {
+      font-size: 0.65rem;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      line-height: 1.2;
+    }
+
+    .eval-matrix-row {
+      display: grid;
+      grid-template-columns: minmax(140px, 1.8fr) repeat(var(--eval-matrix-cols, 5), 1fr);
+      align-items: center;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid #f1f3f5;
+    }
+
+    .eval-matrix-row:last-child {
+      border-bottom: 0;
+    }
+
+    .eval-matrix-row-label {
+      padding: 0 0.75rem 0 1rem;
+      font-size: 0.9rem;
+      color: #1a1a2e;
+      line-height: 1.35;
+    }
+
+    .eval-matrix-cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .eval-matrix-cell input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .eval-matrix-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 1.5px solid #d1d5db;
+      background: white;
+      transition: all 0.12s ease;
+      display: inline-block;
+    }
+
+    .eval-matrix-cell:hover .eval-matrix-dot {
+      border-color: #188BF6;
+    }
+
+    .eval-matrix-cell.selected .eval-matrix-dot {
+      border-color: #188BF6;
+      background: #188BF6;
+      box-shadow: inset 0 0 0 3px white;
+    }
+
+    .eval-matrix-mobile-label {
+      display: none;
+    }
+
+    /* Repeatable block (contact-card list) */
+    .eval-repeatable {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .eval-repeatable-entry {
+      position: relative;
+      padding: 1rem 2.75rem 1rem 1rem;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 10px;
+      background: #fafbfc;
+    }
+
+    .eval-repeatable-fields {
+      display: grid;
+      gap: 0.6rem;
+      grid-template-columns: 1fr;
+    }
+
+    @media (min-width: 620px) {
+      .eval-repeatable-fields {
+        grid-template-columns: 1fr 1fr;
+      }
+      .eval-repeatable-field:last-child {
+        grid-column: 1 / -1;
+      }
+    }
+
+    .eval-repeatable-field {
+      display: grid;
+      gap: 0.25rem;
+    }
+
+    .eval-repeatable-field-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .eval-repeatable-field input {
+      padding: 0.6rem 0.75rem;
+      border: 1.5px solid #d1d5db;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      color: #1a1a2e;
+      background: white;
+      transition: all 0.12s ease;
+    }
+
+    .eval-repeatable-field input:focus {
+      outline: none;
+      border-color: #188BF6;
+      box-shadow: 0 0 0 3px rgba(24, 139, 246, 0.12);
+    }
+
+    .eval-repeatable-remove {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 0;
+      background: #f1f3f5;
+      color: #6b7280;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.12s ease;
+      line-height: 1;
+    }
+
+    .eval-repeatable-remove:hover {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    .eval-repeatable-add {
+      margin-top: 0.6rem;
+      padding: 0.7rem 1rem;
+      border: 1.5px dashed #d1d5db;
+      border-radius: 10px;
+      background: white;
+      color: #188BF6;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.12s ease;
+      width: 100%;
+    }
+
+    .eval-repeatable-add:hover:not(:disabled) {
+      border-color: #188BF6;
+      background: #f0f7ff;
+    }
+
+    .eval-repeatable-add:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Multi-select (checkbox list) */
+    .eval-multi-choices {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .eval-multi-choice {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      grid-template-areas:
+        "check label"
+        ".     freetext";
+      align-items: center;
+      gap: 0.2rem 0.75rem;
+      padding: 0.8rem 1rem;
+      border: 1.5px solid #d1d5db;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: border-color 0.12s ease, background 0.12s ease;
+      font-size: 0.95rem;
+      position: relative;
+    }
+
+    .eval-multi-choice:hover {
+      border-color: #188BF6;
+    }
+
+    .eval-multi-choice.selected {
+      border-color: #188BF6;
+      background: #f0f7ff;
+    }
+
+    .eval-multi-choice input[type="checkbox"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .eval-multi-checkbox {
+      grid-area: check;
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      border: 1.5px solid #d1d5db;
+      background: white;
+      display: inline-block;
+      position: relative;
+      transition: all 0.12s ease;
+    }
+
+    .eval-multi-choice.selected .eval-multi-checkbox {
+      background: #188BF6;
+      border-color: #188BF6;
+    }
+
+    .eval-multi-choice.selected .eval-multi-checkbox::after {
+      content: '';
+      position: absolute;
+      left: 5px;
+      top: 1px;
+      width: 5px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    .eval-multi-label {
+      grid-area: label;
+      color: #1a1a2e;
+      line-height: 1.35;
+    }
+
+    .eval-multi-free-text {
+      grid-area: freetext;
+      margin-top: 0.5rem;
+      padding: 0.55rem 0.75rem;
+      border: 1.5px solid #d1d5db;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      color: #1a1a2e;
+      background: white;
+      transition: all 0.12s ease;
+    }
+
+    .eval-multi-free-text:focus {
+      outline: none;
+      border-color: #188BF6;
+      box-shadow: 0 0 0 3px rgba(24, 139, 246, 0.12);
+    }
+
+    .eval-multi-free-text:disabled {
+      display: none;
+    }
+
+    @media (max-width: 620px) {
+      .eval-matrix-header { display: none; }
+      .eval-matrix-row {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+        padding: 1rem;
+      }
+      .eval-matrix-row-label {
+        padding: 0;
+        font-weight: 600;
+      }
+      .eval-matrix-cell {
+        justify-content: flex-start;
+        gap: 0.6rem;
+        padding: 0.5rem 0.75rem;
+        border: 1.5px solid #e5e7eb;
+        border-radius: 8px;
+      }
+      .eval-matrix-cell.selected {
+        border-color: #188BF6;
+        background: #f0f7ff;
+      }
+      .eval-matrix-mobile-label {
+        display: inline;
+        font-size: 0.9rem;
+        color: #1a1a2e;
+      }
+    }
+
+    /* NPS scale (0–10) */
+    .eval-nps-scale {
+      display: grid;
+      grid-template-columns: repeat(11, 1fr);
+      gap: 0.4rem;
+    }
+
+    .eval-nps-btn {
+      appearance: none;
+      border: 1.5px solid #d1d5db;
+      background: white;
+      color: #1a1a2e;
+      border-radius: 8px;
+      padding: 0.65rem 0;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.12s ease;
+      font-size: 0.95rem;
+      font-family: inherit;
+    }
+
+    .eval-nps-btn:hover {
+      border-color: #188BF6;
+      color: #188BF6;
+    }
+
+    .eval-nps-btn.selected {
+      background: #188BF6;
+      border-color: #188BF6;
+      color: white;
+    }
+
+    .eval-nps-legend {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: #6b7280;
+      margin-top: 0.5rem;
+    }
+
+    /* Enum (radio) choices */
+    .eval-enum-choices {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .eval-enum-choice {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.85rem 1rem;
+      border: 1.5px solid #d1d5db;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.12s ease;
+      font-size: 0.95rem;
+    }
+
+    .eval-enum-choice:hover {
+      border-color: #188BF6;
+    }
+
+    .eval-enum-choice input[type="radio"] {
+      accent-color: #188BF6;
+      width: 18px;
+      height: 18px;
+    }
+
+    .eval-enum-choice.selected {
+      border-color: #188BF6;
+      background: #f0f7ff;
+    }
+
+    /* Actions */
+    .eval-actions {
+      margin-top: 2rem;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+
+    .eval-btn {
+      padding: 0.85rem 1.75rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: 0;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s ease;
+    }
+
+    .eval-btn-primary {
+      background: #188BF6;
+      color: white;
+    }
+
+    .eval-btn-primary:hover:not(:disabled) {
+      background: #1476d4;
+    }
+
+    .eval-btn-primary:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+    }
+
+    /* States */
+    .eval-state-hidden { display: none; }
+
+    .eval-loading,
+    .eval-placeholder,
+    .eval-complete,
+    .eval-error {
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+
+    .eval-loading-spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid #e5e7eb;
+      border-top-color: #188BF6;
+      border-radius: 50%;
+      animation: eval-spin 0.9s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes eval-spin { to { transform: rotate(360deg); } }
+
+    .eval-complete-icon {
+      width: 72px;
+      height: 72px;
+      background: #22c55e;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.25rem;
+      color: white;
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    .eval-state-title {
+      font-family: 'Gambarino', Georgia, serif;
+      font-size: 1.5rem;
+      margin: 0 0 0.5rem;
+    }
+
+    .eval-state-body {
+      color: #6b7280;
+      font-size: 0.95rem;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .eval-inline-error {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 520px) {
+      .eval-shell { padding: 1.75rem 1.25rem; }
+      .eval-program-name { font-size: 1.35rem; }
+      .eval-nps-scale { grid-template-columns: repeat(6, 1fr); }
+      .eval-actions { justify-content: stretch; }
+      .eval-btn { width: 100%; }
+    }
+  </style>
+</head>
+<body class="eval-page">
+
+  <main class="eval-shell" id="evalShell" aria-live="polite">
+    <!-- Loading -->
+    <div id="evalLoading" class="eval-loading">
+      <div class="eval-loading-spinner" aria-hidden="true"></div>
+      <p class="eval-state-body">Loading your evaluation&hellip;</p>
+    </div>
+
+    <!-- Form phase -->
+    <div id="evalForm" class="eval-state-hidden">
+      <header class="eval-header">
+        <div class="eval-eyebrow">Post-Program Evaluation</div>
+        <h1 class="eval-program-name" id="evalProgramName">IAML Program</h1>
+        <div class="eval-instance" id="evalInstanceName"></div>
+        <div class="eval-progress">
+          <span class="eval-progress-label" id="evalProgressLabel">Step 1 of 5</span>
+          <div class="eval-progress-bar" aria-hidden="true">
+            <div class="eval-progress-fill" id="evalProgressFill" style="width: 20%"></div>
+          </div>
+        </div>
+      </header>
+
+      <h2 class="eval-phase-title" id="evalPhaseTitle">Quick pulse</h2>
+      <p class="eval-phase-blurb" id="evalPhaseBlurb">Two quick questions to get started.</p>
+
+      <form id="evalPhaseForm" novalidate>
+        <div id="evalQuestions"></div>
+
+        <div id="evalInlineError" class="eval-inline-error eval-state-hidden" role="alert"></div>
+
+        <div class="eval-actions">
+          <button type="submit" class="eval-btn eval-btn-primary" id="evalSubmitBtn">Next</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Placeholder for phases that aren't built yet -->
+    <div id="evalPlaceholder" class="eval-state-hidden eval-placeholder">
+      <h2 class="eval-state-title">Thanks &mdash; your responses are saved.</h2>
+      <p class="eval-state-body">
+        The remaining sections of the evaluation will arrive here shortly.
+      </p>
+    </div>
+
+    <!-- Already complete -->
+    <div id="evalComplete" class="eval-state-hidden eval-complete">
+      <div class="eval-complete-icon" aria-hidden="true">&#10003;</div>
+      <h2 class="eval-state-title">Thank you &mdash; we&rsquo;ve got your response.</h2>
+      <p class="eval-state-body">Your evaluation has been submitted. The IAML team will be in touch if there&rsquo;s anything to follow up on.</p>
+    </div>
+
+    <!-- Hard error -->
+    <div id="evalError" class="eval-state-hidden eval-error">
+      <h2 class="eval-state-title">We couldn&rsquo;t load this evaluation.</h2>
+      <p class="eval-state-body" id="evalErrorBody">
+        This link may be invalid or expired. Please contact <a href="mailto:info@iaml.com">info@iaml.com</a> and we&rsquo;ll sort it out.
+      </p>
+    </div>
+  </main>
+
+  <script src="js/evaluation.js" defer></script>
+</body>
+</html>

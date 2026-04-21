@@ -1,0 +1,168 @@
+{
+  "name": "Eval Email Sender",
+  "active": false,
+  "meta": {
+    "description": "Hourly cron. For every IAML program instance whose '4 PM local on end_date' has passed, mints evaluation rows for each confirmed registrant and emails them the evaluation link via SendGrid. Idempotent — safe to re-run.",
+    "templateCredsSetupCompleted": false
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 * * * *"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Hourly",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0],
+      "notes": "Fires at minute 0 of every hour. The DB RPC filters by program-instance local timezone."
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "eval-email-run",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 180],
+      "webhookId": "eval-email-run",
+      "notes": "POST to /webhook/eval-email-run to fire on-demand (useful for manual first-send after end_date)."
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM public.eval_get_ready_to_send(100);",
+        "options": {}
+      },
+      "id": "get-queue",
+      "name": "Get Send Queue",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [224, 90],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "notes": "Mints evals for any newly-eligible instance and returns unsent queue (max 100 per run)."
+    },
+    {
+      "parameters": {
+        "jsCode": "// One item per eval in the queue. Composes the SendGrid payload in Phoebe Harper's\n// voice (IAML Director of Operations). Mentions the program's city and the\n// Block 1 instructor's first name so every message references the specific cohort.\nconst items = $input.all();\n\nfunction escapeHtml(s) {\n  return String(s == null ? '' : s)\n    .replace(/&/g, '&amp;')\n    .replace(/</g, '&lt;')\n    .replace(/>/g, '&gt;')\n    .replace(/\"/g, '&quot;')\n    .replace(/'/g, '&#39;');\n}\n\nfunction buildSignatureHtml() {\n  // Template provided by Mike, with name + title swapped for Phoebe.\n  return `\n<main style=\"font-family: Inter, Arial, sans-serif; font-size: 16px;\">\n  <table style=\"padding:0px;margin:10px 0;border:none\">\n    <tbody><tr>\n      <td colspan=\"1\" rowspan=\"1\" style=\"vertical-align:middle;padding:10px 7px 0 0\">\n        <p style=\"line-height: 1.5;padding-left: 0px!important;\">\n          <img style=\"height: 75px;width: 75px;clear: both;\" alt=\"Company logo\" height=\"75\"\n               src=\"https://storage.googleapis.com/signaturesatori/customer-C043gkzsd/images/companyLogo/KBouH.png\"\n               width=\"75\" title=\"Company logo\">\n        </p>\n      </td>\n      <td colspan=\"1\" rowspan=\"1\" style=\"border-left:3px solid #dddddd;padding:7px 0px 0px 10px;font-family:'arial','helvetica',sans-serif;font-size:12px;line-height:14px;color:#555555\">\n        <div style=\"padding-left:0px!important;margin-bottom:10px\">\n          <p style=\"line-height: 1.5;padding-left: 0px!important;\">\n            <strong><span style=\"font-size: 14px; color: rgb(255, 152, 0)\">Phoebe</span> <span style=\"font-size: 14px; color: rgb(255, 152, 0)\">Harper</span></strong><br>\n            Director of Operations\n          </p>\n        </div>\n        <div style=\"padding-left:0px!important;margin-bottom:10px\">\n          <p style=\"line-height: 1.5;padding-left: 0px!important;\">\n            <span style=\"color: rgb(0, 102, 255)\">Phone: (949) 760-1700</span>\n          </p>\n        </div>\n        <div style=\"padding-left:0px!important;margin-bottom:10px\">\n          <p style=\"line-height: 1.5;padding-left: 0px!important;\">\n            <strong>Institute for Applied Management &amp; Law, Inc.</strong><br>\n            1024 Bayside Dr., Suite 172<br>\n            Newport Beach, CA 92660<br>\n            <a target=\"_blank\" rel=\"noopener noreferrer nofollow\" href=\"https://www.iaml.com\">\n              <span style=\"color: rgb(0, 102, 255)\">www.iaml.com</span>\n            </a>\n          </p>\n        </div>\n      </td>\n    </tr></tbody>\n  </table>\n</main>`;\n}\n\nfunction buildSignatureText() {\n  return [\n    '',\n    'Phoebe Harper',\n    'Director of Operations',\n    'Phone: (949) 760-1700',\n    'Institute for Applied Management & Law, Inc.',\n    '1024 Bayside Dr., Suite 172',\n    'Newport Beach, CA 92660',\n    'www.iaml.com'\n  ].join('\\n');\n}\n\nreturn items.map(({ json: row }) => {\n  const firstName      = (row.first_name || '').trim() || 'there';\n  const programName    = row.program_name || 'your IAML program';\n  const city           = (row.city || '').trim();\n  const instructorFirst = (row.instructor_first_name || '').trim();\n  const url            = `https://iaml.com/evaluation.html?token=${row.resume_token}`;\n  const subject        = city\n    ? `Your feedback on this week's program in ${city}`\n    : `Your ${programName} evaluation`;\n\n  // Build the \"with John in Atlanta\" clause conditionally so missing data\n  // degrades cleanly.\n  let contextClause;\n  if (instructorFirst && city) {\n    contextClause = `${programName} with ${instructorFirst} in ${city}`;\n  } else if (city) {\n    contextClause = `${programName} in ${city}`;\n  } else if (instructorFirst) {\n    contextClause = `${programName} with ${instructorFirst}`;\n  } else {\n    contextClause = programName;\n  }\n\n  const text = [\n    `Hi ${firstName},`,\n    '',\n    `Now that you've wrapped up ${contextClause}, I'd appreciate your feedback on the program. Takes about five minutes.`,\n    '',\n    `Open your evaluation:`,\n    url,\n    '',\n    'Your responses shape how we teach the next cohort, and flag anything our team should follow up on with you. The link is unique to you and saves as you go, so pause and return whenever works.',\n    '',\n    'Thanks,',\n    buildSignatureText()\n  ].join('\\n');\n\n  const html = `\n<div style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #1a1a2e; padding: 24px; line-height: 1.55;\">\n  <p style=\"font-size: 16px; margin: 0 0 16px;\">Hi ${escapeHtml(firstName)},</p>\n  <p style=\"font-size: 16px; margin: 0 0 16px;\">Now that you&rsquo;ve wrapped up <strong>${escapeHtml(contextClause)}</strong>, I&rsquo;d appreciate your feedback on the program. Takes about five minutes.</p>\n  <p style=\"margin: 24px 0;\">\n    <a href=\"${escapeHtml(url)}\" style=\"display: inline-block; padding: 13px 24px; background: #188BF6; color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 15px;\">Open your evaluation</a>\n  </p>\n  <p style=\"font-size: 16px; margin: 0 0 16px;\">Your responses shape how we teach the next cohort, and flag anything our team should follow up on with you. The link is unique to you and saves as you go, so pause and return whenever works.</p>\n  <p style=\"font-size: 16px; margin: 0 0 8px;\">Thanks,</p>\n  ${buildSignatureHtml()}\n</div>`;\n\n  return {\n    json: {\n      evaluation_id: row.evaluation_id,\n      resume_token: row.resume_token,\n      email: row.email,\n      first_name: row.first_name,\n      last_name: row.last_name,\n      program_name: row.program_name,\n      instance_name: row.instance_name,\n      city: row.city,\n      instructor_first_name: row.instructor_first_name,\n      subject,\n      text,\n      html\n    }\n  };\n});"
+      },
+      "id": "compose-email",
+      "name": "Compose Email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [448, 90],
+      "notes": "Per-item. Produces subject/text/html for the SendGrid call. Phoebe Harper voice; mentions program city + Block 1 instructor first name."
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.sendgrid.com/v3/mail/send",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"personalizations\": [\n    {\n      \"to\": [{\n        \"email\": {{ JSON.stringify($json.email) }},\n        \"name\": {{ JSON.stringify(($json.first_name || '') + ($json.last_name ? ' ' + $json.last_name : '')) }}\n      }]\n    }\n  ],\n  \"from\": {\"email\": \"phoebe.harper@iaml.com\", \"name\": \"Phoebe Harper\"},\n  \"reply_to\": {\"email\": \"phoebe.harper@iaml.com\", \"name\": \"Phoebe Harper\"},\n  \"subject\": {{ JSON.stringify($json.subject) }},\n  \"content\": [\n    {\"type\": \"text/plain\", \"value\": {{ JSON.stringify($json.text) }}},\n    {\"type\": \"text/html\",  \"value\": {{ JSON.stringify($json.html) }}}\n  ],\n  \"categories\": [\"eval\", \"clr-block1\"],\n  \"custom_args\": {\n    \"evaluation_id\": {{ JSON.stringify($json.evaluation_id) }}\n  }\n}",
+        "options": {}
+      },
+      "id": "send-email",
+      "name": "Send via SendGrid",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [672, 90],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "SENDGRID_CREDENTIAL_ID",
+          "name": "SendGrid API"
+        }
+      },
+      "onError": "continueErrorOutput",
+      "notes": "Success → Mark Sent. Failure → Mark Failed (records error, attempt counter increments; row retries until attempts >= 3)."
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT public.eval_mark_email_sent('{{ $json.evaluation_id }}'::uuid, TRUE, NULL);",
+        "options": {}
+      },
+      "id": "mark-sent",
+      "name": "Mark Sent",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [896, 20],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT public.eval_mark_email_sent(\n  '{{ $('Compose Email').item.json.evaluation_id }}'::uuid,\n  FALSE,\n  $err${{ $json.error?.message || $json.error || 'SendGrid call failed' }}$err$::text\n);",
+        "options": {}
+      },
+      "id": "mark-failed",
+      "name": "Mark Failed",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [896, 180],
+      "credentials": {
+        "postgres": {
+          "id": "EgmvZHbvINHsh6PR",
+          "name": "Supabase Postgres"
+        }
+      },
+      "notes": "Increments email_send_attempts and stores the error. Row will fall out of the queue once attempts >= 3."
+    }
+  ],
+  "connections": {
+    "Hourly": {
+      "main": [[{ "node": "Get Send Queue", "type": "main", "index": 0 }]]
+    },
+    "Manual Trigger": {
+      "main": [[{ "node": "Get Send Queue", "type": "main", "index": 0 }]]
+    },
+    "Get Send Queue": {
+      "main": [[{ "node": "Compose Email", "type": "main", "index": 0 }]]
+    },
+    "Compose Email": {
+      "main": [[{ "node": "Send via SendGrid", "type": "main", "index": 0 }]]
+    },
+    "Send via SendGrid": {
+      "main": [
+        [{ "node": "Mark Sent", "type": "main", "index": 0 }],
+        [{ "node": "Mark Failed", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "staticData": null,
+  "tags": [
+    { "name": "evaluations" },
+    { "name": "email" },
+    { "name": "scheduled" }
+  ],
+  "triggerCount": 2,
+  "pinData": {}
+}
