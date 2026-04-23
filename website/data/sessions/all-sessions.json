@@ -1,5 +1,5 @@
 {
-  "generated": "2026-04-22T09:10:22.232Z",
+  "generated": "2026-04-23T09:17:15.134Z",
   "version": "1.0.0",
   "source": "airtable",
   "recordCount": 70,
@@ -661,7 +661,7 @@
           4
         ],
         "Current Enrolled": 0,
-        "Enrollment Status": "Low Enrollment",
+        "Enrollment Status": "Closed",
         "Created Date": "2025-12-15T19:35:44.000Z",
         "Last Modified": "2026-01-18T15:59:23.000Z",
         "Created By": {
