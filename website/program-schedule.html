@@ -3435,13 +3435,25 @@
         // Transform all records
         const allTransformed = records.map(transformRecord);
 
+        // Hide programs whose end date is before today (keep undated cert containers and any ongoing programs)
+        const todayIso = new Date().toISOString().slice(0, 10);
+        const isCurrentOrFuture = p => !p.rawEndDate || p.rawEndDate >= todayIso;
+
+        // Hide May 2026 Chicago in-person sessions
+        const isMay2026Chicago = p =>
+          p.rawStartDate && p.rawStartDate.startsWith('2026-05') &&
+          (p.location || '').toLowerCase().includes('chicago');
+        const isShown = p => isCurrentOrFuture(p) && !isMay2026Chicago(p);
+
         // Filter regular certificate programs (all formats including on-demand)
         allPrograms = allTransformed
-          .filter(p => ALLOWED_PROGRAMS.includes(p.title));
+          .filter(p => ALLOWED_PROGRAMS.includes(p.title))
+          .filter(isShown);
 
         // Get virtual component sessions for building virtual certificate pairs
         const virtualComponents = allTransformed
-          .filter(p => VIRTUAL_COMPONENT_PROGRAMS.includes(p.title) && p.format === 'virtual');
+          .filter(p => VIRTUAL_COMPONENT_PROGRAMS.includes(p.title) && p.format === 'virtual')
+          .filter(isShown);
 
         // Build virtual certificate pairs and add to allPrograms
         const virtualCertificates = buildVirtualCertificatePairs(virtualComponents);
