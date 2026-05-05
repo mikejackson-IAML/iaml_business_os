@@ -4,3 +4,7 @@
 .gitignore
 README.md
 node_modules
+* 2.*
+* 3.*
+**/* 2.*
+**/* 3.*
