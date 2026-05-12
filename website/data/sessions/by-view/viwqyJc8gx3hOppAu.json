@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-11T10:51:21.699Z",
+  "generated": "2026-05-12T10:22:29.019Z",
   "viewId": "viwqyJc8gx3hOppAu",
   "usedBy": [
     {
@@ -14,44 +14,44 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 3,
+        "Last Modified": "2026-01-18T15:59:23.000Z",
         "State/Province": "Illinois",
         "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-employment-law",
+        "Program Name": [
+          "Advanced Certificate in Strategic Employment Law"
+        ],
+        "Current Enrolled": 0,
         "End Date": "2026-05-05",
         "Show on Website": true,
-        "Start Date": "2026-05-04",
-        "Time Zone": "Central (CT)",
-        "Format": "In-Person",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4900d2b4852ad935a96.jpg",
-        "Programs": [
-          "recB6IPkkDoxoYabU"
-        ],
-        "City": "Chicago",
-        "Instance Name": "Advanced Certificate in Strategic Employment Law - May 2026 - Chicago",
-        "Duration (Days)": [
-          2
+        "Price Virtual (from PROGRAMS)": [
+          1575
         ],
         "Min. Capacity": [
           6
         ],
-        "Current Enrolled": 0,
-        "Enrollment Status": "Closed",
-        "Created Date": "2025-12-15T19:35:44.000Z",
-        "Last Modified": "2026-01-18T15:59:23.000Z",
         "Created By": {
           "id": "usrSAo8TcudAuSfA4",
           "email": "mike.jackson@re-vitalized.com",
           "name": "Mike Jackson"
         },
+        "Registration Deadline": "2026-05-04T00:00:00.000Z",
         "Price In-Person (from PROGRAMS)": [
           1575
         ],
-        "Price Virtual (from PROGRAMS)": [
-          1575
+        "Start Date": "2026-05-04",
+        "Time Zone": "Central (CT)",
+        "Format": "In-Person",
+        "Duration (Days)": [
+          2
         ],
-        "Registration Deadline": "2026-05-04T00:00:00.000Z",
-        "Program Name": [
-          "Advanced Certificate in Strategic Employment Law"
-        ]
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4900d2b4852ad935a96.jpg",
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Programs": [
+          "recB6IPkkDoxoYabU"
+        ],
+        "Instance Name": "Advanced Certificate in Strategic Employment Law - May 2026 - Chicago",
+        "City": "Chicago",
+        "Enrollment Status": "Closed"
       }
     },
     {
@@ -59,43 +59,43 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 4,
+        "Last Modified": "2026-01-18T15:59:22.000Z",
         "State/Province": "Arizona",
         "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-employment-law",
+        "Program Name": [
+          "Advanced Certificate in Strategic Employment Law"
+        ],
+        "Current Enrolled": 0,
         "End Date": "2026-06-02",
         "Show on Website": true,
-        "Start Date": "2026-06-01",
-        "Format": "In-Person",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c5393bbe752f6f05808f.jpg",
-        "Programs": [
-          "recB6IPkkDoxoYabU"
-        ],
-        "City": "Scottsdale",
-        "Instance Name": "Advanced Certificate in Strategic Employment Law - Jun 2026 - Scottsdale",
-        "Duration (Days)": [
-          2
+        "Price Virtual (from PROGRAMS)": [
+          1575
         ],
         "Min. Capacity": [
           6
         ],
-        "Current Enrolled": 0,
-        "Enrollment Status": "Low Enrollment",
-        "Created Date": "2025-12-15T19:35:44.000Z",
-        "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
           "id": "usrSAo8TcudAuSfA4",
           "email": "mike.jackson@re-vitalized.com",
           "name": "Mike Jackson"
         },
+        "Registration Deadline": "2026-06-01T00:00:00.000Z",
         "Price In-Person (from PROGRAMS)": [
           1575
         ],
-        "Price Virtual (from PROGRAMS)": [
-          1575
+        "Start Date": "2026-06-01",
+        "Format": "In-Person",
+        "Duration (Days)": [
+          2
         ],
-        "Registration Deadline": "2026-06-01T00:00:00.000Z",
-        "Program Name": [
-          "Advanced Certificate in Strategic Employment Law"
-        ]
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c5393bbe752f6f05808f.jpg",
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Programs": [
+          "recB6IPkkDoxoYabU"
+        ],
+        "Instance Name": "Advanced Certificate in Strategic Employment Law - Jun 2026 - Scottsdale",
+        "City": "Scottsdale",
+        "Enrollment Status": "Low Enrollment"
       }
     },
     {
@@ -103,44 +103,44 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 5,
+        "Last Modified": "2026-01-18T15:59:22.000Z",
         "State/Province": "Tennessee",
         "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-employment-law",
+        "Program Name": [
+          "Advanced Certificate in Strategic Employment Law"
+        ],
+        "Current Enrolled": 0,
         "End Date": "2026-08-11",
         "Show on Website": true,
-        "Start Date": "2026-08-10",
-        "Time Zone": "Eastern (ET)",
-        "Format": "In-Person",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4d73bbe75e604057064.jpg",
-        "Programs": [
-          "recB6IPkkDoxoYabU"
-        ],
-        "City": "Nashville",
-        "Instance Name": "Advanced Certificate in Strategic Employment Law - Aug 2026 - Nashville",
-        "Duration (Days)": [
-          2
+        "Price Virtual (from PROGRAMS)": [
+          1575
         ],
         "Min. Capacity": [
           6
         ],
-        "Current Enrolled": 0,
-        "Enrollment Status": "Low Enrollment",
-        "Created Date": "2025-12-15T19:35:44.000Z",
-        "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
           "id": "usrSAo8TcudAuSfA4",
           "email": "mike.jackson@re-vitalized.com",
           "name": "Mike Jackson"
         },
+        "Registration Deadline": "2026-08-10T00:00:00.000Z",
         "Price In-Person (from PROGRAMS)": [
           1575
         ],
-        "Price Virtual (from PROGRAMS)": [
-          1575
+        "Start Date": "2026-08-10",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Duration (Days)": [
+          2
         ],
-        "Registration Deadline": "2026-08-10T00:00:00.000Z",
-        "Program Name": [
-          "Advanced Certificate in Strategic Employment Law"
-        ]
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4d73bbe75e604057064.jpg",
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Programs": [
+          "recB6IPkkDoxoYabU"
+        ],
+        "Instance Name": "Advanced Certificate in Strategic Employment Law - Aug 2026 - Nashville",
+        "City": "Nashville",
+        "Enrollment Status": "Low Enrollment"
       }
     },
     {
@@ -148,44 +148,44 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 6,
+        "Last Modified": "2026-01-18T15:59:21.000Z",
         "State/Province": "D.C.",
         "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-employment-law",
+        "Program Name": [
+          "Advanced Certificate in Strategic Employment Law"
+        ],
+        "Current Enrolled": 0,
         "End Date": "2026-11-10",
         "Show on Website": true,
-        "Start Date": "2026-11-09",
-        "Time Zone": "Eastern (ET)",
-        "Format": "In-Person",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c5513bbe7570830583d7.jpg",
-        "Programs": [
-          "recB6IPkkDoxoYabU"
-        ],
-        "City": "Washington",
-        "Instance Name": "Advanced Certificate in Strategic Employment Law - Nov 2026 - Washington",
-        "Duration (Days)": [
-          2
+        "Price Virtual (from PROGRAMS)": [
+          1575
         ],
         "Min. Capacity": [
           6
         ],
-        "Current Enrolled": 0,
-        "Enrollment Status": "Low Enrollment",
-        "Created Date": "2025-12-15T19:35:44.000Z",
-        "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
           "id": "usrSAo8TcudAuSfA4",
           "email": "mike.jackson@re-vitalized.com",
           "name": "Mike Jackson"
         },
+        "Registration Deadline": "2026-11-09T00:00:00.000Z",
         "Price In-Person (from PROGRAMS)": [
           1575
         ],
-        "Price Virtual (from PROGRAMS)": [
-          1575
+        "Start Date": "2026-11-09",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Duration (Days)": [
+          2
         ],
-        "Registration Deadline": "2026-11-09T00:00:00.000Z",
-        "Program Name": [
-          "Advanced Certificate in Strategic Employment Law"
-        ]
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c5513bbe7570830583d7.jpg",
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Programs": [
+          "recB6IPkkDoxoYabU"
+        ],
+        "Instance Name": "Advanced Certificate in Strategic Employment Law - Nov 2026 - Washington",
+        "City": "Washington",
+        "Enrollment Status": "Low Enrollment"
       }
     }
   ]

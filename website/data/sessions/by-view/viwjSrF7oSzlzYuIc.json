@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-11T10:51:21.699Z",
+  "generated": "2026-05-12T10:22:29.019Z",
   "viewId": "viwjSrF7oSzlzYuIc",
   "usedBy": [
     {
@@ -13,114 +13,114 @@
       "id": "recu2mfHbANqF5R0k",
       "createdTime": "2025-12-15T19:56:06.000Z",
       "fields": {
+        "Room Service (from Venue)": [
+          true
+        ],
         "Instance ID": 67,
+        "Last Modified": "2026-01-18T15:59:23.000Z",
         "Room Block Booking Link": "www.espn.com",
         "State/Province": "Illinois",
+        "Restaurant On-Site (from Venue)": [
+          true
+        ],
+        "Phone Number (from Venue)": [
+          "(702) 733-3111"
+        ],
         "Venue": [
           "recPjG9qEaHDQ8fST"
         ],
         "Block 2 Instructor": [
           "recrHAK0n4YDIMthb"
         ],
+        "Website (from Venue)": [
+          "https://www.caesars.com/flamingo-las-vegas"
+        ],
         "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr",
+        "Program Name": [
+          "Certificate in Strategic HR Leadership"
+        ],
+        "Street Address (from Venue)": [
+          "3555 Las Vegas Blvd S"
+        ],
+        "Parking Available (from Venue)": [
+          true
+        ],
+        "Current Enrolled": 0,
         "WiFi Cost": 0,
         "Group Rate Cutoff Date": "2026-02-03",
         "End Date": "2026-05-08",
         "Resort Fee": 35,
+        "City (from Venue)": [
+          "Las Vegas"
+        ],
         "Block 1 Instructor": [
           "rech00qD2rjunIoGX"
         ],
         "Block 1 Title": "HR Law Fundamentals",
         "Hotel Booking Link": "https://www.caesars.com/book/hotel-calendar?dateSearchFormat=flexible-dates&flexibleMonth=January&propCode=flv",
-        "Show on Website": true,
-        "Room Rate": 298,
-        "Parking Fee": 50,
-        "Start Date": "2026-05-04",
-        "Time Zone": "Central (CT)",
-        "Format": "In-Person",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4903bbe756ba905677a.jpg",
-        "Block 2 Title": "Strategic HR Management",
-        "Programs": [
-          "recDaCk38nQE9NZaw"
-        ],
-        "City": "Chicago",
-        "Instance Name": "Certificate in Strategic HR Leadership - May 2026 - Chicago",
-        "Duration (Days)": [
-          4.5
-        ],
-        "Min. Capacity": [
-          6
-        ],
-        "Current Enrolled": 0,
-        "Enrollment Status": "Closed",
-        "Created Date": "2025-12-15T19:56:06.000Z",
-        "Last Modified": "2026-01-18T15:59:23.000Z",
-        "Created By": {
-          "id": "usrSAo8TcudAuSfA4",
-          "email": "mike.jackson@re-vitalized.com",
-          "name": "Mike Jackson"
-        },
-        "Full Name with Credentials (from Block 1 Instructor)": [
-          "John Wymer, Esq."
-        ],
-        "Full Name with Credentials (from Block 2 Instructor)": [
-          "Ray Deeny, Esq."
-        ],
-        "Price In-Person (from PROGRAMS)": [
-          2375
-        ],
-        "Price Virtual (from PROGRAMS)": [
-          2375
-        ],
-        "Registration Deadline": "2026-05-04T00:00:00.000Z",
-        "Room Service (from Venue)": [
-          true
-        ],
-        "Restaurant On-Site (from Venue)": [
-          true
-        ],
-        "Fitness Center (from Venue)": [
-          true
-        ],
         "Business Center (from Venue)": [
-          true
-        ],
-        "WiFi Available (from Venue)": [
           true
         ],
         "Parking Type (from Venue)": [
           "Free"
         ],
-        "Parking Available (from Venue)": [
+        "Description (from Venue)": [
+          "Stay and play in classic Vegas style at the center of The Strip. Your fabulous home away from home features everything from the all new Go Pool to a bustling casino and one-of-a-kind dining with Lisa Vanderpump and Gordon Ramsay. Flamingo gives each guest excitement, hospitality and a true Vegas experience that is Forever Fabulous"
+        ],
+        "Show on Website": true,
+        "Price Virtual (from PROGRAMS)": [
+          2375
+        ],
+        "Full Name with Credentials (from Block 1 Instructor)": [
+          "John Wymer, Esq."
+        ],
+        "Room Rate": 298,
+        "Full Name with Credentials (from Block 2 Instructor)": [
+          "Ray Deeny, Esq."
+        ],
+        "WiFi Available (from Venue)": [
           true
         ],
-        "Website (from Venue)": [
-          "https://www.caesars.com/flamingo-las-vegas"
+        "Min. Capacity": [
+          6
         ],
-        "Phone Number (from Venue)": [
-          "(702) 733-3111"
-        ],
+        "Created By": {
+          "id": "usrSAo8TcudAuSfA4",
+          "email": "mike.jackson@re-vitalized.com",
+          "name": "Mike Jackson"
+        },
         "ZIP Code (from Venue)": [
           "89109"
-        ],
-        "State (from Venue)": [
-          "NV"
-        ],
-        "City (from Venue)": [
-          "Las Vegas"
-        ],
-        "Street Address (from Venue)": [
-          "3555 Las Vegas Blvd S"
         ],
         "Venue Name (from Venue)": [
           "Flamingo Las Vegas"
         ],
-        "Description (from Venue)": [
-          "Stay and play in classic Vegas style at the center of The Strip. Your fabulous home away from home features everything from the all new Go Pool to a bustling casino and one-of-a-kind dining with Lisa Vanderpump and Gordon Ramsay. Flamingo gives each guest excitement, hospitality and a true Vegas experience that is Forever Fabulous"
+        "Registration Deadline": "2026-05-04T00:00:00.000Z",
+        "Price In-Person (from PROGRAMS)": [
+          2375
         ],
-        "Program Name": [
-          "Certificate in Strategic HR Leadership"
-        ]
+        "Parking Fee": 50,
+        "Start Date": "2026-05-04",
+        "State (from Venue)": [
+          "NV"
+        ],
+        "Time Zone": "Central (CT)",
+        "Format": "In-Person",
+        "Duration (Days)": [
+          4.5
+        ],
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4903bbe756ba905677a.jpg",
+        "Block 2 Title": "Strategic HR Management",
+        "Created Date": "2025-12-15T19:56:06.000Z",
+        "Programs": [
+          "recDaCk38nQE9NZaw"
+        ],
+        "Instance Name": "Certificate in Strategic HR Leadership - May 2026 - Chicago",
+        "City": "Chicago",
+        "Fitness Center (from Venue)": [
+          true
+        ],
+        "Enrollment Status": "Closed"
       }
     },
     {
@@ -128,46 +128,46 @@
       "createdTime": "2025-12-15T19:56:06.000Z",
       "fields": {
         "Instance ID": 68,
+        "Last Modified": "2026-01-18T15:59:22.000Z",
         "State/Province": "Florida",
         "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr",
+        "Program Name": [
+          "Certificate in Strategic HR Leadership"
+        ],
+        "Current Enrolled": 0,
         "End Date": "2026-07-17",
         "Block 1 Title": "HR Law Fundamentals",
         "Show on Website": true,
-        "Start Date": "2026-07-13",
-        "Time Zone": "Eastern (ET)",
-        "Format": "In-Person",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c517d7ebf2abd764c4fd.jpg",
-        "Block 2 Title": "Strategic HR Management",
-        "Programs": [
-          "recDaCk38nQE9NZaw"
-        ],
-        "City": "Orlando",
-        "Instance Name": "Certificate in Strategic HR Leadership - Jul 2026 - Orlando",
-        "Duration (Days)": [
-          4.5
+        "Price Virtual (from PROGRAMS)": [
+          2375
         ],
         "Min. Capacity": [
           6
         ],
-        "Current Enrolled": 0,
-        "Enrollment Status": "Low Enrollment",
-        "Created Date": "2025-12-15T19:56:06.000Z",
-        "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
           "id": "usrSAo8TcudAuSfA4",
           "email": "mike.jackson@re-vitalized.com",
           "name": "Mike Jackson"
         },
+        "Registration Deadline": "2026-07-13T00:00:00.000Z",
         "Price In-Person (from PROGRAMS)": [
           2375
         ],
-        "Price Virtual (from PROGRAMS)": [
-          2375
+        "Start Date": "2026-07-13",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Duration (Days)": [
+          4.5
         ],
-        "Registration Deadline": "2026-07-13T00:00:00.000Z",
-        "Program Name": [
-          "Certificate in Strategic HR Leadership"
-        ]
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c517d7ebf2abd764c4fd.jpg",
+        "Block 2 Title": "Strategic HR Management",
+        "Created Date": "2025-12-15T19:56:06.000Z",
+        "Programs": [
+          "recDaCk38nQE9NZaw"
+        ],
+        "Instance Name": "Certificate in Strategic HR Leadership - Jul 2026 - Orlando",
+        "City": "Orlando",
+        "Enrollment Status": "Low Enrollment"
       }
     },
     {
@@ -175,46 +175,46 @@
       "createdTime": "2025-12-15T19:56:06.000Z",
       "fields": {
         "Instance ID": 69,
+        "Last Modified": "2026-01-18T15:59:23.000Z",
         "State/Province": "Texas",
         "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr",
+        "Program Name": [
+          "Certificate in Strategic HR Leadership"
+        ],
+        "Current Enrolled": 0,
         "End Date": "2026-09-18",
         "Block 1 Title": "HR Law Fundamentals",
         "Show on Website": true,
-        "Start Date": "2026-09-14",
-        "Time Zone": "Central (CT)",
-        "Format": "In-Person",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4719a634f30fdac7643.jpg",
-        "Block 2 Title": "Strategic HR Management",
-        "Programs": [
-          "recDaCk38nQE9NZaw"
-        ],
-        "City": "Austin",
-        "Instance Name": "Certificate in Strategic HR Leadership - Sep 2026 - Austin",
-        "Duration (Days)": [
-          4.5
+        "Price Virtual (from PROGRAMS)": [
+          2375
         ],
         "Min. Capacity": [
           6
         ],
-        "Current Enrolled": 0,
-        "Enrollment Status": "Low Enrollment",
-        "Created Date": "2025-12-15T19:56:06.000Z",
-        "Last Modified": "2026-01-18T15:59:23.000Z",
         "Created By": {
           "id": "usrSAo8TcudAuSfA4",
           "email": "mike.jackson@re-vitalized.com",
           "name": "Mike Jackson"
         },
+        "Registration Deadline": "2026-09-14T00:00:00.000Z",
         "Price In-Person (from PROGRAMS)": [
           2375
         ],
-        "Price Virtual (from PROGRAMS)": [
-          2375
+        "Start Date": "2026-09-14",
+        "Time Zone": "Central (CT)",
+        "Format": "In-Person",
+        "Duration (Days)": [
+          4.5
         ],
-        "Registration Deadline": "2026-09-14T00:00:00.000Z",
-        "Program Name": [
-          "Certificate in Strategic HR Leadership"
-        ]
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4719a634f30fdac7643.jpg",
+        "Block 2 Title": "Strategic HR Management",
+        "Created Date": "2025-12-15T19:56:06.000Z",
+        "Programs": [
+          "recDaCk38nQE9NZaw"
+        ],
+        "Instance Name": "Certificate in Strategic HR Leadership - Sep 2026 - Austin",
+        "City": "Austin",
+        "Enrollment Status": "Low Enrollment"
       }
     },
     {
@@ -222,46 +222,46 @@
       "createdTime": "2025-12-15T19:56:06.000Z",
       "fields": {
         "Instance ID": 70,
+        "Last Modified": "2026-01-18T15:59:21.000Z",
         "State/Province": "D.C.",
         "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr",
+        "Program Name": [
+          "Certificate in Strategic HR Leadership"
+        ],
+        "Current Enrolled": 0,
         "End Date": "2026-11-13",
         "Block 1 Title": "HR Law Fundamentals",
         "Show on Website": true,
-        "Start Date": "2026-11-09",
-        "Time Zone": "Eastern (ET)",
-        "Format": "In-Person",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c5513bbe75c4290583d8.jpg",
-        "Block 2 Title": "Strategic HR Management",
-        "Programs": [
-          "recDaCk38nQE9NZaw"
-        ],
-        "City": "Washington",
-        "Instance Name": "Certificate in Strategic HR Leadership - Nov 2026 - Washington",
-        "Duration (Days)": [
-          4.5
+        "Price Virtual (from PROGRAMS)": [
+          2375
         ],
         "Min. Capacity": [
           6
         ],
-        "Current Enrolled": 0,
-        "Enrollment Status": "Low Enrollment",
-        "Created Date": "2025-12-15T19:56:06.000Z",
-        "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
           "id": "usrSAo8TcudAuSfA4",
           "email": "mike.jackson@re-vitalized.com",
           "name": "Mike Jackson"
         },
+        "Registration Deadline": "2026-11-09T00:00:00.000Z",
         "Price In-Person (from PROGRAMS)": [
           2375
         ],
-        "Price Virtual (from PROGRAMS)": [
-          2375
+        "Start Date": "2026-11-09",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Duration (Days)": [
+          4.5
         ],
-        "Registration Deadline": "2026-11-09T00:00:00.000Z",
-        "Program Name": [
-          "Certificate in Strategic HR Leadership"
-        ]
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c5513bbe75c4290583d8.jpg",
+        "Block 2 Title": "Strategic HR Management",
+        "Created Date": "2025-12-15T19:56:06.000Z",
+        "Programs": [
+          "recDaCk38nQE9NZaw"
+        ],
+        "Instance Name": "Certificate in Strategic HR Leadership - Nov 2026 - Washington",
+        "City": "Washington",
+        "Enrollment Status": "Low Enrollment"
       }
     }
   ]

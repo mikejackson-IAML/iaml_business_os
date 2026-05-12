@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-11T10:51:21.699Z",
+  "generated": "2026-05-12T10:22:29.019Z",
   "viewId": "viwOR51HSgvqnvvtM",
   "usedBy": [
     {
@@ -14,44 +14,44 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 32,
+        "Last Modified": "2026-01-18T15:59:22.000Z",
         "State/Province": "D.C.",
         "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr&blocks=1",
+        "Program Name": [
+          "HR Law Fundamentals"
+        ],
+        "Current Enrolled": 0,
         "End Date": "2026-11-10",
         "Show on Website": true,
-        "Start Date": "2026-11-09",
-        "Time Zone": "Eastern (ET)",
-        "Format": "In-Person",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c5513bbe75c4290583d8.jpg",
-        "Programs": [
-          "rech7dEY5PFO6Bwc3"
-        ],
-        "City": "Washington",
-        "Instance Name": "HR Law Fundamentals - Nov 2026 - Washington",
-        "Duration (Days)": [
-          2
+        "Price Virtual (from PROGRAMS)": [
+          1375
         ],
         "Min. Capacity": [
           6
         ],
-        "Current Enrolled": 0,
-        "Enrollment Status": "Low Enrollment",
-        "Created Date": "2025-12-15T19:35:44.000Z",
-        "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
           "id": "usrSAo8TcudAuSfA4",
           "email": "mike.jackson@re-vitalized.com",
           "name": "Mike Jackson"
         },
+        "Registration Deadline": "2026-11-09T00:00:00.000Z",
         "Price In-Person (from PROGRAMS)": [
           1375
         ],
-        "Price Virtual (from PROGRAMS)": [
-          1375
+        "Start Date": "2026-11-09",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Duration (Days)": [
+          2
         ],
-        "Registration Deadline": "2026-11-09T00:00:00.000Z",
-        "Program Name": [
-          "HR Law Fundamentals"
-        ]
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c5513bbe75c4290583d8.jpg",
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Programs": [
+          "rech7dEY5PFO6Bwc3"
+        ],
+        "Instance Name": "HR Law Fundamentals - Nov 2026 - Washington",
+        "City": "Washington",
+        "Enrollment Status": "Low Enrollment"
       }
     },
     {
@@ -59,44 +59,44 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 33,
+        "Last Modified": "2026-01-18T15:57:56.000Z",
         "State/Province": "Texas",
         "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr&blocks=1",
+        "Program Name": [
+          "HR Law Fundamentals"
+        ],
+        "Current Enrolled": 0,
         "End Date": "2026-09-15",
         "Show on Website": true,
-        "Start Date": "2026-09-14",
-        "Time Zone": "Central (CT)",
-        "Format": "In-Person",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4719a634f30fdac7643.jpg",
-        "Programs": [
-          "rech7dEY5PFO6Bwc3"
-        ],
-        "City": "Austin",
-        "Instance Name": "HR Law Fundamentals - Sep 2026 - Austin",
-        "Duration (Days)": [
-          2
+        "Price Virtual (from PROGRAMS)": [
+          1375
         ],
         "Min. Capacity": [
           6
         ],
-        "Current Enrolled": 0,
-        "Enrollment Status": "Low Enrollment",
-        "Created Date": "2025-12-15T19:35:44.000Z",
-        "Last Modified": "2026-01-18T15:57:56.000Z",
         "Created By": {
           "id": "usrSAo8TcudAuSfA4",
           "email": "mike.jackson@re-vitalized.com",
           "name": "Mike Jackson"
         },
+        "Registration Deadline": "2026-09-14T00:00:00.000Z",
         "Price In-Person (from PROGRAMS)": [
           1375
         ],
-        "Price Virtual (from PROGRAMS)": [
-          1375
+        "Start Date": "2026-09-14",
+        "Time Zone": "Central (CT)",
+        "Format": "In-Person",
+        "Duration (Days)": [
+          2
         ],
-        "Registration Deadline": "2026-09-14T00:00:00.000Z",
-        "Program Name": [
-          "HR Law Fundamentals"
-        ]
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4719a634f30fdac7643.jpg",
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Programs": [
+          "rech7dEY5PFO6Bwc3"
+        ],
+        "Instance Name": "HR Law Fundamentals - Sep 2026 - Austin",
+        "City": "Austin",
+        "Enrollment Status": "Low Enrollment"
       }
     },
     {
@@ -104,44 +104,44 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 34,
+        "Last Modified": "2026-01-18T15:57:56.000Z",
         "State/Province": "Florida",
         "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr&blocks=1",
+        "Program Name": [
+          "HR Law Fundamentals"
+        ],
+        "Current Enrolled": 0,
         "End Date": "2026-07-14",
         "Show on Website": true,
-        "Start Date": "2026-07-13",
-        "Time Zone": "Eastern (ET)",
-        "Format": "In-Person",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c517d7ebf2abd764c4fd.jpg",
-        "Programs": [
-          "rech7dEY5PFO6Bwc3"
-        ],
-        "City": "Orlando",
-        "Instance Name": "HR Law Fundamentals - Jul 2026 - Orlando",
-        "Duration (Days)": [
-          2
+        "Price Virtual (from PROGRAMS)": [
+          1375
         ],
         "Min. Capacity": [
           6
         ],
-        "Current Enrolled": 0,
-        "Enrollment Status": "Low Enrollment",
-        "Created Date": "2025-12-15T19:35:44.000Z",
-        "Last Modified": "2026-01-18T15:57:56.000Z",
         "Created By": {
           "id": "usrSAo8TcudAuSfA4",
           "email": "mike.jackson@re-vitalized.com",
           "name": "Mike Jackson"
         },
+        "Registration Deadline": "2026-07-13T00:00:00.000Z",
         "Price In-Person (from PROGRAMS)": [
           1375
         ],
-        "Price Virtual (from PROGRAMS)": [
-          1375
+        "Start Date": "2026-07-13",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Duration (Days)": [
+          2
         ],
-        "Registration Deadline": "2026-07-13T00:00:00.000Z",
-        "Program Name": [
-          "HR Law Fundamentals"
-        ]
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c517d7ebf2abd764c4fd.jpg",
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Programs": [
+          "rech7dEY5PFO6Bwc3"
+        ],
+        "Instance Name": "HR Law Fundamentals - Jul 2026 - Orlando",
+        "City": "Orlando",
+        "Enrollment Status": "Low Enrollment"
       }
     },
     {
@@ -149,44 +149,44 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 35,
+        "Last Modified": "2026-01-18T15:59:21.000Z",
         "State/Province": "Illinois",
         "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr&blocks=1",
+        "Program Name": [
+          "HR Law Fundamentals"
+        ],
+        "Current Enrolled": 0,
         "End Date": "2026-05-05",
         "Show on Website": true,
-        "Start Date": "2026-05-04",
-        "Time Zone": "Central (CT)",
-        "Format": "In-Person",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4903bbe756ba905677a.jpg",
-        "Programs": [
-          "rech7dEY5PFO6Bwc3"
-        ],
-        "City": "Chicago",
-        "Instance Name": "HR Law Fundamentals - May 2026 - Chicago",
-        "Duration (Days)": [
-          2
+        "Price Virtual (from PROGRAMS)": [
+          1375
         ],
         "Min. Capacity": [
           6
         ],
-        "Current Enrolled": 0,
-        "Enrollment Status": "Closed",
-        "Created Date": "2025-12-15T19:35:44.000Z",
-        "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
           "id": "usrSAo8TcudAuSfA4",
           "email": "mike.jackson@re-vitalized.com",
           "name": "Mike Jackson"
         },
+        "Registration Deadline": "2026-05-04T00:00:00.000Z",
         "Price In-Person (from PROGRAMS)": [
           1375
         ],
-        "Price Virtual (from PROGRAMS)": [
-          1375
+        "Start Date": "2026-05-04",
+        "Time Zone": "Central (CT)",
+        "Format": "In-Person",
+        "Duration (Days)": [
+          2
         ],
-        "Registration Deadline": "2026-05-04T00:00:00.000Z",
-        "Program Name": [
-          "HR Law Fundamentals"
-        ]
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4903bbe756ba905677a.jpg",
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Programs": [
+          "rech7dEY5PFO6Bwc3"
+        ],
+        "Instance Name": "HR Law Fundamentals - May 2026 - Chicago",
+        "City": "Chicago",
+        "Enrollment Status": "Closed"
       }
     }
   ]

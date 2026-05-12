@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-11T10:51:21.699Z",
+  "generated": "2026-05-12T10:22:29.019Z",
   "viewId": "viwlzVMIk78qDmL2W",
   "usedBy": [
     {
@@ -14,44 +14,44 @@
       "createdTime": "2025-12-15T19:35:27.000Z",
       "fields": {
         "Instance ID": 2,
+        "Last Modified": "2026-01-18T15:59:22.000Z",
         "State/Province": "Nevada",
         "Registration URL": "https://iaml.com/register.html?format=in-person&program=advanced-benefits-law",
+        "Program Name": [
+          "Advanced Certificate in Employee Benefits Law"
+        ],
+        "Current Enrolled": 0,
         "End Date": "2026-10-06",
         "Show on Website": true,
-        "Start Date": "2026-10-05",
-        "Time Zone": "Pacific (PT)",
-        "Format": "In-Person",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc2c8abeb190c41d25.jpeg",
-        "Programs": [
-          "recG7N84DEwcrXPex"
-        ],
-        "City": "Las Vegas",
-        "Instance Name": "Advanced Certificate in Employee Benefits Law - Oct 2026 - Las Vegas",
-        "Duration (Days)": [
-          2
+        "Price Virtual (from PROGRAMS)": [
+          1575
         ],
         "Min. Capacity": [
           4
         ],
-        "Current Enrolled": 0,
-        "Enrollment Status": "Low Enrollment",
-        "Created Date": "2025-12-15T19:35:27.000Z",
-        "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
           "id": "usrSAo8TcudAuSfA4",
           "email": "mike.jackson@re-vitalized.com",
           "name": "Mike Jackson"
         },
+        "Registration Deadline": "2026-10-05T00:00:00.000Z",
         "Price In-Person (from PROGRAMS)": [
           1575
         ],
-        "Price Virtual (from PROGRAMS)": [
-          1575
+        "Start Date": "2026-10-05",
+        "Time Zone": "Pacific (PT)",
+        "Format": "In-Person",
+        "Duration (Days)": [
+          2
         ],
-        "Registration Deadline": "2026-10-05T00:00:00.000Z",
-        "Program Name": [
-          "Advanced Certificate in Employee Benefits Law"
-        ]
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4bc2c8abeb190c41d25.jpeg",
+        "Created Date": "2025-12-15T19:35:27.000Z",
+        "Programs": [
+          "recG7N84DEwcrXPex"
+        ],
+        "Instance Name": "Advanced Certificate in Employee Benefits Law - Oct 2026 - Las Vegas",
+        "City": "Las Vegas",
+        "Enrollment Status": "Low Enrollment"
       }
     }
   ]

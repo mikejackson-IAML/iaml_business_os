@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-11T10:51:21.699Z",
+  "generated": "2026-05-12T10:22:29.019Z",
   "viewId": "viwVZQi5IShScOoOP",
   "usedBy": [
     {
@@ -14,44 +14,44 @@
       "createdTime": "2025-12-15T19:56:06.000Z",
       "fields": {
         "Instance ID": 71,
+        "Last Modified": "2026-01-18T15:59:22.000Z",
         "State/Province": "Illinois",
         "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr&blocks=2",
+        "Program Name": [
+          "Strategic HR Management"
+        ],
+        "Current Enrolled": 0,
         "End Date": "2026-05-08",
         "Show on Website": true,
-        "Start Date": "2026-05-06",
-        "Time Zone": "Central (CT)",
-        "Format": "In-Person",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4903bbe756ba905677a.jpg",
-        "Programs": [
-          "recU3GZdrPt28Fvev"
-        ],
-        "City": "Chicago",
-        "Instance Name": "Strategic HR Management - May 2026 - Chicago",
-        "Duration (Days)": [
-          2.5
+        "Price Virtual (from PROGRAMS)": [
+          1575
         ],
         "Min. Capacity": [
           6
         ],
-        "Current Enrolled": 0,
-        "Enrollment Status": "Closed",
-        "Created Date": "2025-12-15T19:56:06.000Z",
-        "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
           "id": "usrSAo8TcudAuSfA4",
           "email": "mike.jackson@re-vitalized.com",
           "name": "Mike Jackson"
         },
+        "Registration Deadline": "2026-05-06T00:00:00.000Z",
         "Price In-Person (from PROGRAMS)": [
           1575
         ],
-        "Price Virtual (from PROGRAMS)": [
-          1575
+        "Start Date": "2026-05-06",
+        "Time Zone": "Central (CT)",
+        "Format": "In-Person",
+        "Duration (Days)": [
+          2.5
         ],
-        "Registration Deadline": "2026-05-06T00:00:00.000Z",
-        "Program Name": [
-          "Strategic HR Management"
-        ]
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4903bbe756ba905677a.jpg",
+        "Created Date": "2025-12-15T19:56:06.000Z",
+        "Programs": [
+          "recU3GZdrPt28Fvev"
+        ],
+        "Instance Name": "Strategic HR Management - May 2026 - Chicago",
+        "City": "Chicago",
+        "Enrollment Status": "Closed"
       }
     },
     {
@@ -59,44 +59,44 @@
       "createdTime": "2025-12-15T19:56:06.000Z",
       "fields": {
         "Instance ID": 72,
+        "Last Modified": "2026-01-18T15:59:21.000Z",
         "State/Province": "Florida",
         "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr&blocks=2",
+        "Program Name": [
+          "Strategic HR Management"
+        ],
+        "Current Enrolled": 0,
         "End Date": "2026-07-17",
         "Show on Website": true,
-        "Start Date": "2026-07-15",
-        "Time Zone": "Eastern (ET)",
-        "Format": "In-Person",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c517d7ebf2abd764c4fd.jpg",
-        "Programs": [
-          "recU3GZdrPt28Fvev"
-        ],
-        "City": "Orlando",
-        "Instance Name": "Strategic HR Management - Jul 2026 - Orlando",
-        "Duration (Days)": [
-          2.5
+        "Price Virtual (from PROGRAMS)": [
+          1575
         ],
         "Min. Capacity": [
           6
         ],
-        "Current Enrolled": 0,
-        "Enrollment Status": "Low Enrollment",
-        "Created Date": "2025-12-15T19:56:06.000Z",
-        "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
           "id": "usrSAo8TcudAuSfA4",
           "email": "mike.jackson@re-vitalized.com",
           "name": "Mike Jackson"
         },
+        "Registration Deadline": "2026-07-15T00:00:00.000Z",
         "Price In-Person (from PROGRAMS)": [
           1575
         ],
-        "Price Virtual (from PROGRAMS)": [
-          1575
+        "Start Date": "2026-07-15",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Duration (Days)": [
+          2.5
         ],
-        "Registration Deadline": "2026-07-15T00:00:00.000Z",
-        "Program Name": [
-          "Strategic HR Management"
-        ]
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c517d7ebf2abd764c4fd.jpg",
+        "Created Date": "2025-12-15T19:56:06.000Z",
+        "Programs": [
+          "recU3GZdrPt28Fvev"
+        ],
+        "Instance Name": "Strategic HR Management - Jul 2026 - Orlando",
+        "City": "Orlando",
+        "Enrollment Status": "Low Enrollment"
       }
     },
     {
@@ -104,44 +104,44 @@
       "createdTime": "2025-12-15T19:56:06.000Z",
       "fields": {
         "Instance ID": 73,
+        "Last Modified": "2026-01-18T15:59:23.000Z",
         "State/Province": "Texas",
         "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr&blocks=2",
+        "Program Name": [
+          "Strategic HR Management"
+        ],
+        "Current Enrolled": 0,
         "End Date": "2026-09-18",
         "Show on Website": true,
-        "Start Date": "2026-09-16",
-        "Time Zone": "Central (CT)",
-        "Format": "In-Person",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4719a634f30fdac7643.jpg",
-        "Programs": [
-          "recU3GZdrPt28Fvev"
-        ],
-        "City": "Austin",
-        "Instance Name": "Strategic HR Management - Sep 2026 - Austin",
-        "Duration (Days)": [
-          2.5
+        "Price Virtual (from PROGRAMS)": [
+          1575
         ],
         "Min. Capacity": [
           6
         ],
-        "Current Enrolled": 0,
-        "Enrollment Status": "Low Enrollment",
-        "Created Date": "2025-12-15T19:56:06.000Z",
-        "Last Modified": "2026-01-18T15:59:23.000Z",
         "Created By": {
           "id": "usrSAo8TcudAuSfA4",
           "email": "mike.jackson@re-vitalized.com",
           "name": "Mike Jackson"
         },
+        "Registration Deadline": "2026-09-16T00:00:00.000Z",
         "Price In-Person (from PROGRAMS)": [
           1575
         ],
-        "Price Virtual (from PROGRAMS)": [
-          1575
+        "Start Date": "2026-09-16",
+        "Time Zone": "Central (CT)",
+        "Format": "In-Person",
+        "Duration (Days)": [
+          2.5
         ],
-        "Registration Deadline": "2026-09-16T00:00:00.000Z",
-        "Program Name": [
-          "Strategic HR Management"
-        ]
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4719a634f30fdac7643.jpg",
+        "Created Date": "2025-12-15T19:56:06.000Z",
+        "Programs": [
+          "recU3GZdrPt28Fvev"
+        ],
+        "Instance Name": "Strategic HR Management - Sep 2026 - Austin",
+        "City": "Austin",
+        "Enrollment Status": "Low Enrollment"
       }
     },
     {
@@ -149,44 +149,44 @@
       "createdTime": "2025-12-15T19:56:06.000Z",
       "fields": {
         "Instance ID": 74,
+        "Last Modified": "2026-01-18T15:59:22.000Z",
         "State/Province": "D.C.",
         "Registration URL": "https://iaml.com/register.html?format=in-person&program=strategic-hr&blocks=2",
+        "Program Name": [
+          "Strategic HR Management"
+        ],
+        "Current Enrolled": 0,
         "End Date": "2026-11-13",
         "Show on Website": true,
-        "Start Date": "2026-11-11",
-        "Time Zone": "Eastern (ET)",
-        "Format": "In-Person",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c5513bbe75c4290583d8.jpg",
-        "Programs": [
-          "recU3GZdrPt28Fvev"
-        ],
-        "City": "Washington",
-        "Instance Name": "Strategic HR Management - Nov 2026 - Washington",
-        "Duration (Days)": [
-          2.5
+        "Price Virtual (from PROGRAMS)": [
+          1575
         ],
         "Min. Capacity": [
           6
         ],
-        "Current Enrolled": 0,
-        "Enrollment Status": "Low Enrollment",
-        "Created Date": "2025-12-15T19:56:06.000Z",
-        "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
           "id": "usrSAo8TcudAuSfA4",
           "email": "mike.jackson@re-vitalized.com",
           "name": "Mike Jackson"
         },
+        "Registration Deadline": "2026-11-11T00:00:00.000Z",
         "Price In-Person (from PROGRAMS)": [
           1575
         ],
-        "Price Virtual (from PROGRAMS)": [
-          1575
+        "Start Date": "2026-11-11",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Duration (Days)": [
+          2.5
         ],
-        "Registration Deadline": "2026-11-11T00:00:00.000Z",
-        "Program Name": [
-          "Strategic HR Management"
-        ]
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c5513bbe75c4290583d8.jpg",
+        "Created Date": "2025-12-15T19:56:06.000Z",
+        "Programs": [
+          "recU3GZdrPt28Fvev"
+        ],
+        "Instance Name": "Strategic HR Management - Nov 2026 - Washington",
+        "City": "Washington",
+        "Enrollment Status": "Low Enrollment"
       }
     }
   ]

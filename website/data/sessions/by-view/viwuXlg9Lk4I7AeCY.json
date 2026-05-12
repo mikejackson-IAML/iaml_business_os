@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-11T10:51:21.699Z",
+  "generated": "2026-05-12T10:22:29.019Z",
   "viewId": "viwuXlg9Lk4I7AeCY",
   "usedBy": [
     {
@@ -14,44 +14,44 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 36,
+        "Last Modified": "2026-01-18T15:59:23.000Z",
         "State/Province": "Georgia",
         "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-benefits-law&blocks=1",
+        "Program Name": [
+          "Retirement Plans"
+        ],
+        "Current Enrolled": 0,
         "End Date": "2026-04-21",
         "Show on Website": true,
-        "Start Date": "2026-04-20",
-        "Time Zone": "Eastern (ET)",
-        "Format": "In-Person",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4530190afcbbd821451.jpg",
-        "Programs": [
-          "recYxLoPK96olFjUN"
-        ],
-        "City": "Atlanta",
-        "Instance Name": "Retirement Plans - Apr 2026 - Atlanta",
-        "Duration (Days)": [
-          2
+        "Price Virtual (from PROGRAMS)": [
+          1375
         ],
         "Min. Capacity": [
           4
         ],
-        "Current Enrolled": 0,
-        "Enrollment Status": "Closed",
-        "Created Date": "2025-12-15T19:35:44.000Z",
-        "Last Modified": "2026-01-18T15:59:23.000Z",
         "Created By": {
           "id": "usrSAo8TcudAuSfA4",
           "email": "mike.jackson@re-vitalized.com",
           "name": "Mike Jackson"
         },
+        "Registration Deadline": "2026-04-20T00:00:00.000Z",
         "Price In-Person (from PROGRAMS)": [
           1375
         ],
-        "Price Virtual (from PROGRAMS)": [
-          1375
+        "Start Date": "2026-04-20",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Duration (Days)": [
+          2
         ],
-        "Registration Deadline": "2026-04-20T00:00:00.000Z",
-        "Program Name": [
-          "Retirement Plans"
-        ]
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4530190afcbbd821451.jpg",
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Programs": [
+          "recYxLoPK96olFjUN"
+        ],
+        "Instance Name": "Retirement Plans - Apr 2026 - Atlanta",
+        "City": "Atlanta",
+        "Enrollment Status": "Closed"
       }
     },
     {
@@ -59,44 +59,44 @@
       "createdTime": "2025-12-15T19:35:44.000Z",
       "fields": {
         "Instance ID": 37,
+        "Last Modified": "2026-01-18T15:59:21.000Z",
         "State/Province": "Texas",
         "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-benefits-law&blocks=1",
+        "Program Name": [
+          "Retirement Plans"
+        ],
+        "Current Enrolled": 0,
         "End Date": "2026-09-15",
         "Show on Website": true,
-        "Start Date": "2026-09-14",
-        "Time Zone": "Central (CT)",
-        "Format": "In-Person",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c471543282821a15bb9e.jpg",
-        "Programs": [
-          "recYxLoPK96olFjUN"
-        ],
-        "City": "Austin",
-        "Instance Name": "Retirement Plans - Sep 2026 - Austin",
-        "Duration (Days)": [
-          2
+        "Price Virtual (from PROGRAMS)": [
+          1375
         ],
         "Min. Capacity": [
           4
         ],
-        "Current Enrolled": 0,
-        "Enrollment Status": "Low Enrollment",
-        "Created Date": "2025-12-15T19:35:44.000Z",
-        "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
           "id": "usrSAo8TcudAuSfA4",
           "email": "mike.jackson@re-vitalized.com",
           "name": "Mike Jackson"
         },
+        "Registration Deadline": "2026-09-14T00:00:00.000Z",
         "Price In-Person (from PROGRAMS)": [
           1375
         ],
-        "Price Virtual (from PROGRAMS)": [
-          1375
+        "Start Date": "2026-09-14",
+        "Time Zone": "Central (CT)",
+        "Format": "In-Person",
+        "Duration (Days)": [
+          2
         ],
-        "Registration Deadline": "2026-09-14T00:00:00.000Z",
-        "Program Name": [
-          "Retirement Plans"
-        ]
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c471543282821a15bb9e.jpg",
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Programs": [
+          "recYxLoPK96olFjUN"
+        ],
+        "Instance Name": "Retirement Plans - Sep 2026 - Austin",
+        "City": "Austin",
+        "Enrollment Status": "Low Enrollment"
       }
     }
   ]

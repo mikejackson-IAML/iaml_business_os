@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-11T10:51:21.699Z",
+  "generated": "2026-05-12T10:22:29.019Z",
   "viewId": "viwui1caJxkkGKXiO",
   "usedBy": [
     {
@@ -15,46 +15,46 @@
       "fields": {
         "Block 3 Title": "Welfare Benefits Plan Issues",
         "Instance ID": 9,
+        "Last Modified": "2026-01-18T15:59:21.000Z",
         "State/Province": "Georgia",
         "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-benefits-law",
+        "Program Name": [
+          "Certificate in Employee Benefits Law"
+        ],
+        "Current Enrolled": 0,
         "End Date": "2026-04-24",
         "Block 1 Title": "Retirement Plans",
         "Show on Website": true,
-        "Start Date": "2026-04-20",
-        "Time Zone": "Eastern (ET)",
-        "Format": "In-Person",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4530190afcbbd821451.jpg",
-        "Block 2 Title": "Benefit Plan Claims, Appeals & Litigation",
-        "Programs": [
-          "rec87u6ENaVT3rTcF"
-        ],
-        "City": "Atlanta",
-        "Instance Name": "Certificate in Employee Benefits Law - Apr 2026 - Atlanta",
-        "Duration (Days)": [
-          4.5
+        "Price Virtual (from PROGRAMS)": [
+          2375
         ],
         "Min. Capacity": [
           4
         ],
-        "Current Enrolled": 0,
-        "Enrollment Status": "Closed",
-        "Created Date": "2025-12-15T19:35:44.000Z",
-        "Last Modified": "2026-01-18T15:59:21.000Z",
         "Created By": {
           "id": "usrSAo8TcudAuSfA4",
           "email": "mike.jackson@re-vitalized.com",
           "name": "Mike Jackson"
         },
+        "Registration Deadline": "2026-04-20T00:00:00.000Z",
         "Price In-Person (from PROGRAMS)": [
           2375
         ],
-        "Price Virtual (from PROGRAMS)": [
-          2375
+        "Start Date": "2026-04-20",
+        "Time Zone": "Eastern (ET)",
+        "Format": "In-Person",
+        "Duration (Days)": [
+          4.5
         ],
-        "Registration Deadline": "2026-04-20T00:00:00.000Z",
-        "Program Name": [
-          "Certificate in Employee Benefits Law"
-        ]
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c4530190afcbbd821451.jpg",
+        "Block 2 Title": "Benefit Plan Claims, Appeals & Litigation",
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Programs": [
+          "rec87u6ENaVT3rTcF"
+        ],
+        "Instance Name": "Certificate in Employee Benefits Law - Apr 2026 - Atlanta",
+        "City": "Atlanta",
+        "Enrollment Status": "Closed"
       }
     },
     {
@@ -63,46 +63,46 @@
       "fields": {
         "Block 3 Title": "Welfare Benefits Plan Issues",
         "Instance ID": 10,
+        "Last Modified": "2026-01-18T15:59:22.000Z",
         "State/Province": "Texas",
         "Registration URL": "https://iaml.com/register.html?format=in-person&program=employee-benefits-law",
+        "Program Name": [
+          "Certificate in Employee Benefits Law"
+        ],
+        "Current Enrolled": 0,
         "End Date": "2026-09-18",
         "Block 1 Title": "Retirement Plans",
         "Show on Website": true,
-        "Start Date": "2026-09-14",
-        "Time Zone": "Central (CT)",
-        "Format": "In-Person",
-        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c471543282821a15bb9e.jpg",
-        "Block 2 Title": "Benefit Plan Claims, Appeals & Litigation",
-        "Programs": [
-          "rec87u6ENaVT3rTcF"
-        ],
-        "City": "Austin",
-        "Instance Name": "Certificate in Employee Benefits Law - Sep 2026 - Austin",
-        "Duration (Days)": [
-          4.5
+        "Price Virtual (from PROGRAMS)": [
+          2375
         ],
         "Min. Capacity": [
           4
         ],
-        "Current Enrolled": 0,
-        "Enrollment Status": "Low Enrollment",
-        "Created Date": "2025-12-15T19:35:44.000Z",
-        "Last Modified": "2026-01-18T15:59:22.000Z",
         "Created By": {
           "id": "usrSAo8TcudAuSfA4",
           "email": "mike.jackson@re-vitalized.com",
           "name": "Mike Jackson"
         },
+        "Registration Deadline": "2026-09-14T00:00:00.000Z",
         "Price In-Person (from PROGRAMS)": [
           2375
         ],
-        "Price Virtual (from PROGRAMS)": [
-          2375
+        "Start Date": "2026-09-14",
+        "Time Zone": "Central (CT)",
+        "Format": "In-Person",
+        "Duration (Days)": [
+          4.5
         ],
-        "Registration Deadline": "2026-09-14T00:00:00.000Z",
-        "Program Name": [
-          "Certificate in Employee Benefits Law"
-        ]
+        "Hero Image URL": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/6942c471543282821a15bb9e.jpg",
+        "Block 2 Title": "Benefit Plan Claims, Appeals & Litigation",
+        "Created Date": "2025-12-15T19:35:44.000Z",
+        "Programs": [
+          "rec87u6ENaVT3rTcF"
+        ],
+        "Instance Name": "Certificate in Employee Benefits Law - Sep 2026 - Austin",
+        "City": "Austin",
+        "Enrollment Status": "Low Enrollment"
       }
     }
   ]
