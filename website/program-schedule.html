@@ -3435,9 +3435,9 @@
         // Transform all records
         const allTransformed = records.map(transformRecord);
 
-        // Hide programs whose end date is before today (keep undated cert containers and any ongoing programs)
+        // Hide programs whose start date has already passed (keep undated cert containers for on-demand)
         const todayIso = new Date().toISOString().slice(0, 10);
-        const isCurrentOrFuture = p => !p.rawEndDate || p.rawEndDate >= todayIso;
+        const isCurrentOrFuture = p => !p.rawStartDate || p.rawStartDate >= todayIso;
 
         // Hide May 2026 Chicago in-person sessions
         const isMay2026Chicago = p =>
