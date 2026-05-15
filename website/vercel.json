@@ -1,6 +1,19 @@
 {
   "version": 2,
   "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.iaml.com"
+        }
+      ],
+      "destination": "https://iaml.com/:path*",
+      "permanent": true
+    }
+  ],
   "crons": [
     {
       "path": "/api/eval-morning-digest",
