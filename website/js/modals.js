@@ -4,13 +4,16 @@
 // ===== CONTACT MODAL (Connect Popup) =====
 const GHL_WEBHOOK = '/api/ghl-webhook';
 const CONNECT_TIMEOUT_MS = 20000;
+const MANAGERS_SUPERVISORS_SLUG = 'managers-supervisors-employment-law-training';
 
 let connectTimeoutHandle = null;
 let countdownInterval = null;
-let lastSubmission = { firstName: '', phone: '' };
+let activeConnectContext = {};
+let lastSubmission = { firstName: '', lastName: '', email: '', phone: '', company: '', title: '', intent: '', question: '' };
 
 // Open/Close Functions
-function connectPopup_open() {
+function connectPopup_open(context = {}) {
+  activeConnectContext = normalizeConnectContext(context);
   const modal = document.getElementById('connectPopup_Modal');
   if (modal) {
     modal.classList.add('active');
@@ -65,20 +68,160 @@ function startCountdown() {
   }, 1000);
 }
 
+// Program/context helpers
+function isManagersSupervisorsPage() {
+  return Boolean(window.location.pathname.match(/managers-supervisors-employment-law-training(?:\.html)?\/?$/));
+}
+
+function normalizeConnectContext(context = {}) {
+  const currentUrl = new URL(window.location.href);
+  const params = currentUrl.searchParams;
+  const isManagersPage = isManagersSupervisorsPage();
+  const ctaLabel = context.ctaLabel || 'Request Program Details';
+
+  if (!isManagersPage && !context.programSlug) {
+    return {
+      ctaLabel,
+      ctaLocation: context.ctaLocation || 'site_contact_modal',
+      pageUrl: currentUrl.href,
+      pagePath: currentUrl.pathname,
+      referrer: document.referrer || '',
+      utmSource: params.get('utm_source') || '',
+      utmMedium: params.get('utm_medium') || '',
+      utmCampaign: params.get('utm_campaign') || '',
+      utmTerm: params.get('utm_term') || '',
+      utmContent: params.get('utm_content') || ''
+    };
+  }
+
+  return {
+    programName: context.programName || 'Managers & Supervisors Employment Law Training',
+    programSlug: context.programSlug || MANAGERS_SUPERVISORS_SLUG,
+    inquiryType: context.inquiryType || 'request_program_details',
+    ctaLabel,
+    ctaLocation: context.ctaLocation || 'program_page_unknown',
+    pageUrl: currentUrl.href,
+    pagePath: currentUrl.pathname,
+    referrer: document.referrer || '',
+    utmSource: params.get('utm_source') || '',
+    utmMedium: params.get('utm_medium') || '',
+    utmCampaign: params.get('utm_campaign') || '',
+    utmTerm: params.get('utm_term') || '',
+    utmContent: params.get('utm_content') || ''
+  };
+}
+
+function getLeadCaptureTags(stage) {
+  const tags = ['source_iaml_website', stage];
+  if (activeConnectContext.programSlug === MANAGERS_SUPERVISORS_SLUG) {
+    tags.push(
+      'program_interest_managers_supervisors',
+      'inquiry_request_program_details',
+      'web_form_managers_supervisors_info_request'
+    );
+  }
+  return tags;
+}
+
+function buildProgramInquiryPayload(formData, stage) {
+  const intent = (formData.get('intent') || '').toString().trim();
+  const question = (formData.get('question') || '').toString().trim();
+  const payload = {
+    firstName: (formData.get('firstName') || '').toString().trim(),
+    lastName: (formData.get('lastName') || '').toString().trim(),
+    email: (formData.get('email') || '').toString().trim(),
+    phone: (formData.get('phone') || '').toString().trim(),
+    company: (formData.get('company') || '').toString().trim(),
+    title: (formData.get('title') || '').toString().trim(),
+    question,
+    intent,
+    inquiryType: activeConnectContext.inquiryType || 'contact',
+    programName: activeConnectContext.programName || '',
+    programSlug: activeConnectContext.programSlug || '',
+    ctaLabel: activeConnectContext.ctaLabel || '',
+    ctaLocation: activeConnectContext.ctaLocation || '',
+    pageUrl: activeConnectContext.pageUrl || window.location.href,
+    pagePath: activeConnectContext.pagePath || window.location.pathname,
+    referrer: activeConnectContext.referrer || document.referrer || '',
+    utmSource: activeConnectContext.utmSource || '',
+    utmMedium: activeConnectContext.utmMedium || '',
+    utmCampaign: activeConnectContext.utmCampaign || '',
+    utmTerm: activeConnectContext.utmTerm || '',
+    utmContent: activeConnectContext.utmContent || '',
+    tags: getLeadCaptureTags(stage),
+    source: activeConnectContext.programSlug ? 'IAML Website Program Inquiry' : 'Website Contact Form',
+    contactType: 'lead'
+  };
+
+  lastSubmission = {
+    firstName: payload.firstName,
+    lastName: payload.lastName,
+    email: payload.email,
+    phone: payload.phone,
+    company: payload.company,
+    title: payload.title,
+    intent,
+    question
+  };
+
+  return payload;
+}
+
 // Step Renderer
 function renderStep(step, payload = {}) {
   const root = document.getElementById('connectPopup_Content');
   if (!root) return;
   
   if (step === 'form') {
+    const isProgramInquiry = activeConnectContext.programSlug === MANAGERS_SUPERVISORS_SLUG;
     root.innerHTML = `
-      <p>We'll connect you with one of our program coordinators who can answer your questions and get you exactly what you need.</p>
+      <p>${isProgramInquiry ? 'Send us a few details and an IAML program coordinator can send Managers & Supervisors program details, dates, and small-group options.' : "We'll connect you with one of our program coordinators who can answer your questions and get you exactly what you need."}</p>
       <form class="connectPopup-form" id="connectPopup_Form">
-        <div class="connectPopup-group">
-          <label for="connectPopup_phone">Phone Number *</label>
-          <input type="tel" id="connectPopup_phone" name="phone" placeholder="(555) 555-5555" required />
+        <div class="connectPopup-row" style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div class="connectPopup-group">
+            <label for="connectPopup_firstName">First Name *</label>
+            <input type="text" id="connectPopup_firstName" name="firstName" autocomplete="given-name" required />
+          </div>
+          <div class="connectPopup-group">
+            <label for="connectPopup_lastName">Last Name *</label>
+            <input type="text" id="connectPopup_lastName" name="lastName" autocomplete="family-name" required />
+          </div>
         </div>
-        <button type="submit" class="connectPopup-submitBtn">CONNECT</button>
+        <div class="connectPopup-group">
+          <label for="connectPopup_email">Work Email *</label>
+          <input type="email" id="connectPopup_email" name="email" placeholder="you@company.com" autocomplete="email" required />
+        </div>
+        <div class="connectPopup-group">
+          <label for="connectPopup_company">Company *</label>
+          <input type="text" id="connectPopup_company" name="company" autocomplete="organization" required />
+        </div>
+        <div class="connectPopup-row" style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div class="connectPopup-group">
+            <label for="connectPopup_phone">Phone <span class="muted">(optional)</span></label>
+            <input type="tel" id="connectPopup_phone" name="phone" placeholder="(555) 555-5555" autocomplete="tel" />
+          </div>
+          <div class="connectPopup-group">
+            <label for="connectPopup_title">Title <span class="muted">(optional)</span></label>
+            <input type="text" id="connectPopup_title" name="title" autocomplete="organization-title" />
+          </div>
+        </div>
+        ${isProgramInquiry ? `
+        <div class="connectPopup-group">
+          <label for="connectPopup_intent">What would you like us to send? *</label>
+          <select id="connectPopup_intent" name="intent" required>
+            <option value="">Select one</option>
+            <option value="program_details">Program details</option>
+            <option value="upcoming_dates">Upcoming dates</option>
+            <option value="small_group_option">Small-group option</option>
+            <option value="past_participant_pricing_question">Special pricing eligibility</option>
+            <option value="other_question">Other question</option>
+          </select>
+        </div>` : ''}
+        <div class="connectPopup-group">
+          <label for="connectPopup_question">Question <span class="muted">(optional)</span></label>
+          <textarea rows="4" id="connectPopup_question" name="question" placeholder="Anything specific you want us to know?"></textarea>
+        </div>
+        <button type="submit" class="connectPopup-submitBtn">${isProgramInquiry ? 'SEND PROGRAM DETAILS REQUEST' : 'CONNECT'}</button>
       </form>
     `;
     document.getElementById('connectPopup_Form').addEventListener('submit', connectPopup_submit);
@@ -174,14 +317,19 @@ function renderStep(step, payload = {}) {
 async function connectPopup_submit(e) {
   e.preventDefault();
   const formData = new FormData(e.target);
-  const firstName = (formData.get('firstName') || '').toString().trim();
-  const phone = (formData.get('phone') || '').toString().trim();
-  lastSubmission = { firstName, phone };
+  const payload = buildProgramInquiryPayload(formData, 'contact_button_initiated');
+  const isProgramInquiry = activeConnectContext.programSlug === MANAGERS_SUPERVISORS_SLUG;
+  const btn = e.target.querySelector('.connectPopup-submitBtn');
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = isProgramInquiry ? 'Sending request...' : 'Connecting...';
+  }
   
-  renderStep('connecting');
-  
-  clearTimeout(connectTimeoutHandle);
-  connectTimeoutHandle = setTimeout(() => renderStep('email-fallback'), CONNECT_TIMEOUT_MS);
+  if (!isProgramInquiry) {
+    renderStep('connecting');
+    clearTimeout(connectTimeoutHandle);
+    connectTimeoutHandle = setTimeout(() => renderStep('email-fallback'), CONNECT_TIMEOUT_MS);
+  }
   
   try {
     const res = await fetch(GHL_WEBHOOK, {
@@ -189,38 +337,40 @@ async function connectPopup_submit(e) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         type: 'contact',
-        data: {
-          firstName,
-          phone,
-          tags: 'contact_button_initiated',
-          source: 'Website Contact Form',
-          contactType: 'lead'
-        }
+        data: payload
       })
     });
     
     if (!res.ok) {
       const result = await safeJson(res);
-      throw new Error(result?.message || `Request failed (${res.status})`);
+      throw new Error(result?.message || result?.error || `Request failed (${res.status})`);
     }
     
     if (typeof gtag !== 'undefined') {
       gtag('event', 'form_submit', {
-        event_category: 'Contact',
-        event_label: 'Connect Modal Success'
+        event_category: isProgramInquiry ? 'Program Inquiry' : 'Contact',
+        event_label: isProgramInquiry ? 'Managers Supervisors Request Details Success' : 'Connect Modal Success'
       });
+    }
+
+    if (isProgramInquiry) {
+      renderStep('success', { firstName: lastSubmission.firstName });
     }
   } catch (err) {
     console.error('Webhook error:', err);
     if (typeof gtag !== 'undefined') {
       gtag('event', 'form_error', {
-        event_category: 'Contact',
-        event_label: 'Connect Modal Error',
+        event_category: isProgramInquiry ? 'Program Inquiry' : 'Contact',
+        event_label: isProgramInquiry ? 'Managers Supervisors Request Details Error' : 'Connect Modal Error',
         error_message: String(err?.message || err)
       });
     }
     clearTimeout(connectTimeoutHandle);
-    renderStep('email-fallback');
+    if (isProgramInquiry) {
+      renderStep('error', { message: "We couldn't send your request just now. Please try again." });
+    } else {
+      renderStep('email-fallback');
+    }
   }
 }
 
@@ -242,10 +392,28 @@ async function connectPopup_submitEmailFallback(e) {
         type: 'contact',
         data: {
           firstName: lastSubmission.firstName,
+          lastName: lastSubmission.lastName,
           phone: lastSubmission.phone,
           email,
-          tags: 'contact_button_email_fallback',
-          source: 'Website Contact Form',
+          company: lastSubmission.company,
+          title: lastSubmission.title,
+          question: (fd.get('question') || lastSubmission.question || '').toString().trim(),
+          intent: lastSubmission.intent,
+          inquiryType: activeConnectContext.inquiryType || 'contact',
+          programName: activeConnectContext.programName || '',
+          programSlug: activeConnectContext.programSlug || '',
+          ctaLabel: activeConnectContext.ctaLabel || '',
+          ctaLocation: activeConnectContext.ctaLocation || '',
+          pageUrl: activeConnectContext.pageUrl || window.location.href,
+          pagePath: activeConnectContext.pagePath || window.location.pathname,
+          referrer: activeConnectContext.referrer || document.referrer || '',
+          utmSource: activeConnectContext.utmSource || '',
+          utmMedium: activeConnectContext.utmMedium || '',
+          utmCampaign: activeConnectContext.utmCampaign || '',
+          utmTerm: activeConnectContext.utmTerm || '',
+          utmContent: activeConnectContext.utmContent || '',
+          tags: getLeadCaptureTags('contact_button_email_fallback'),
+          source: activeConnectContext.programSlug ? 'IAML Website Program Inquiry' : 'Website Contact Form',
           contactType: 'lead'
         }
       })
@@ -451,6 +619,8 @@ if (typeof window !== 'undefined') {
   window.connectPopup_close = connectPopup_close;
   window.connectPopup_closeOnOverlay = connectPopup_closeOnOverlay;
   window.renderStep = renderStep;
+  window.normalizeConnectContext = normalizeConnectContext;
+  window.buildProgramInquiryPayload = buildProgramInquiryPayload;
   window.closeModal = closeModal;
   window.closeFirstVisitPopup = closeFirstVisitPopup;
   window.closeFirstVisitPopupOnOverlay = closeFirstVisitPopupOnOverlay;
