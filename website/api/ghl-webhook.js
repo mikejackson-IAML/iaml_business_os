@@ -2,7 +2,7 @@
 // Accepts POST requests with type (registration or contact) and data payload
 
 // Load environment variables from .env.local if not already set (for local development)
-if (!process.env.GHL_REGISTRATION_WEBHOOK && process.env.NODE_ENV !== 'production') {
+if (!(process.env.GHL_REGISTRATION_WEBHOOK || process.env.GHL_CONTACT_US_WEBHOOK || process.env.GHL_CONTACT_WEBHOOK) && process.env.NODE_ENV !== 'production') {
   try {
     const fs = require('fs');
     const path = require('path');
@@ -10,9 +10,12 @@ if (!process.env.GHL_REGISTRATION_WEBHOOK && process.env.NODE_ENV !== 'productio
     if (fs.existsSync(envPath)) {
       const envContent = fs.readFileSync(envPath, 'utf-8');
       envContent.split('\n').forEach(line => {
-        const [key, value] = line.split('=');
-        if (key && value) {
-          process.env[key.trim()] = value.trim();
+        const match = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/);
+        if (match) {
+          const [, key, rawValue] = match;
+          if (!process.env[key]) {
+            process.env[key] = rawValue.replace(/^["']|["']$/g, '');
+          }
         }
       });
     }
@@ -42,7 +45,7 @@ module.exports = async function handler(req, res) {
       body = JSON.parse(body);
     }
 
-    const { type, data } = body;
+    const { type, data, dryRun } = body;
 
     // Validate request body
     if (!type || !data) {
@@ -62,7 +65,18 @@ module.exports = async function handler(req, res) {
     if (type === 'registration') {
       webhookUrl = process.env.GHL_REGISTRATION_WEBHOOK;
     } else if (type === 'contact') {
-      webhookUrl = process.env.GHL_CONTACT_US_WEBHOOK;
+      webhookUrl = process.env.GHL_CONTACT_US_WEBHOOK || process.env.GHL_CONTACT_WEBHOOK || process.env.GHL_CONTACT_WEBHOOK_URL;
+    }
+
+    const isDryRun = Boolean(dryRun) && process.env.NODE_ENV !== 'production';
+    if (isDryRun) {
+      return res.status(200).json({
+        success: true,
+        dryRun: true,
+        type,
+        payloadPreview: data,
+        webhookConfigured: Boolean(webhookUrl)
+      });
     }
 
     // Validate webhook URL is configured
