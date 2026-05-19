@@ -91,8 +91,8 @@ const generateSchemaJsonLd = (data) => {
     "@type": "Course",
     "name": data.programName,
     "description": data.meta.description,
-    "url": data.seo?.canonicalUrl || `https://iaml.com/programs/${data.programSlug}`,
-    "image": data.meta.ogImage || "https://iaml.com/images/og-image.jpg",
+    "url": data.seo?.canonicalUrl || `https://www.iaml.com/programs/${data.programSlug}`,
+    "image": data.meta.ogImage || "https://www.iaml.com/images/og-image.jpg",
     "provider": {
       "@type": "Organization",
       "name": "Institute for Applied Management & Law",
@@ -220,12 +220,12 @@ template = template.replace(/employee relations law, employment law training, HR
 // OG and Twitter meta
 template = template.replace(/<meta property="og:title" content="[^"]*">/g, `<meta property="og:title" content="${escapeHtml(data.meta.title)}">`);
 template = template.replace(/<meta property="og:description" content="[^"]*">/g, `<meta property="og:description" content="${escapeHtml(data.meta.description)}">`);
-template = template.replace(/<meta property="og:url" content="[^"]*">/g, `<meta property="og:url" content="https://iaml.com/programs/${data.programSlug}">`);
+template = template.replace(/<meta property="og:url" content="[^"]*">/g, `<meta property="og:url" content="https://www.iaml.com/programs/${data.programSlug}">`);
 template = template.replace(/<meta name="twitter:title" content="[^"]*">/g, `<meta name="twitter:title" content="${escapeHtml(data.meta.title)}">`);
 template = template.replace(/<meta name="twitter:description" content="[^"]*">/g, `<meta name="twitter:description" content="${escapeHtml(data.meta.description)}">`);
 
 // Canonical URL
-template = template.replace(/<link rel="canonical" href="[^"]*">/g, `<link rel="canonical" href="https://iaml.com/programs/${data.programSlug}">`);
+template = template.replace(/<link rel="canonical" href="[^"]*">/g, `<link rel="canonical" href="https://www.iaml.com/programs/${data.programSlug}">`);
 
 // Page title
 template = template.replace(/<title>[^<]*<\/title>/g, `<title>${escapeHtml(data.meta.title)}</title>`);

@@ -15,12 +15,12 @@ const PAGES = [
   // Homepage
   { name: 'homepage', path: '/' },
 
-  // Pages folder
-  { name: 'about-us', path: '/pages/about-us.html' },
-  { name: 'featured-programs', path: '/pages/featured-programs.html' },
-  { name: 'corporate-training', path: '/pages/corporate-training.html' },
-  { name: 'faculty', path: '/pages/faculty.html' },
-  { name: 'program-schedule', path: '/pages/program-schedule.html' },
+  // Top-level pages
+  { name: 'about-us', path: '/about-us' },
+  { name: 'featured-programs', path: '/featured-programs' },
+  { name: 'corporate-training', path: '/corporate-training' },
+  { name: 'faculty', path: '/faculty' },
+  { name: 'program-schedule', path: '/program-schedule' },
 
   // Program pages
   { name: 'program-employee-relations-law', path: '/programs/employee-relations-law.html' },
@@ -110,7 +110,7 @@ test.describe('Critical Component Screenshots', () => {
   });
 
   test('Glass buttons', async ({ page }) => {
-    await page.goto('/pages/about-us.html');
+    await page.goto('/about-us');
     await page.waitForLoadState('networkidle');
 
     // Capture hero buttons
@@ -119,7 +119,7 @@ test.describe('Critical Component Screenshots', () => {
   });
 
   test('Benefit cards', async ({ page }) => {
-    await page.goto('/pages/corporate-training.html');
+    await page.goto('/corporate-training');
     await page.waitForLoadState('networkidle');
 
     const benefitCard = page.locator('.ct-benefit-card').first();
