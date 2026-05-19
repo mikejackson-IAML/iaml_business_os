@@ -227,7 +227,7 @@ const getFooterHTML = () => `
                 <h3>Support</h3>
                 <ul class="list" aria-label="Support">
                     <li><a href="/faq">FAQ</a></li>
-                    <li><a href="/contact-us.html">Contact</a></li>
+                    <li><a href="/contact-us">Contact</a></li>
                 </ul>
             </section>
         </nav>
