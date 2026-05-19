@@ -48,7 +48,7 @@
         "canonicalUrl": {
           "type": "string",
           "format": "uri",
-          "description": "Canonical URL for this page (e.g., 'https://iaml.com/programs/employee-relations-law')"
+          "description": "Canonical URL for this page (e.g., 'https://www.iaml.com/programs/employee-relations-law')"
         },
         "robots": {
           "type": "string",

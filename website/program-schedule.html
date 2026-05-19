@@ -4458,22 +4458,22 @@
 
     // Program URL mapping
     const quizModal_programUrls = {
-      'Certificate in Employee Relations Law Seminar': '/programs/employee-relations-law.html',
-      'Advanced Certificate in Strategic Employment Law': '/programs/advanced-employment-law.html',
-      'Certificate in Conducting Workplace Investigations': '/programs/workplace-investigations.html',
-      'Certificate in Strategic HR Leadership': '/programs/strategic-hr-leadership.html',
-      'Certificate in Strategic HR Management': '/programs/strategic-hr-leadership.html',
-      'Certificate in Employee Benefits Law': '/programs/employee-benefits-law.html',
-      'Advanced Certificate in Employee Benefits Law': '/programs/advanced-employee-benefits-law.html',
-      'Certificate in HR Law Fundamentals': '/programs/employee-relations-law.html',
-      'Certificate in Labor Law Mastery': '/programs/employee-relations-law.html',
-      'Certificate in Discrimination Prevention & Defense': '/programs/employee-relations-law.html'
+      'Certificate in Employee Relations Law Seminar': '/programs/employee-relations-law',
+      'Advanced Certificate in Strategic Employment Law': '/programs/advanced-employment-law',
+      'Certificate in Conducting Workplace Investigations': '/programs/workplace-investigations',
+      'Certificate in Strategic HR Leadership': '/programs/strategic-hr-leadership',
+      'Certificate in Strategic HR Management': '/programs/strategic-hr-leadership',
+      'Certificate in Employee Benefits Law': '/programs/employee-benefits-law',
+      'Advanced Certificate in Employee Benefits Law': '/programs/advanced-employee-benefits-law',
+      'Certificate in HR Law Fundamentals': '/programs/employee-relations-law',
+      'Certificate in Labor Law Mastery': '/programs/employee-relations-law',
+      'Certificate in Discrimination Prevention & Defense': '/programs/employee-relations-law'
     };
 
     // Submit action (register or info)
     function quizModal_submitAction(action) {
       const rec = quizModal_currentRecommendation;
-      const programUrl = quizModal_programUrls[rec?.title] || '/programs/employee-relations-law.html';
+      const programUrl = quizModal_programUrls[rec?.title] || '/programs/employee-relations-law';
 
       if (action === 'register') {
         // Navigate to the program page for registration

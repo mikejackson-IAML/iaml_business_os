@@ -92,11 +92,11 @@ const generateSchemaJsonLd = (data) => {
     "name": data.programName,
     "description": data.meta.description,
     "url": data.seo?.canonicalUrl || `https://www.iaml.com/programs/${data.programSlug}`,
-    "image": data.meta.ogImage || "https://www.iaml.com/images/og-image.jpg",
+    "image": data.meta.ogImage || "https://iaml.com/images/og-image.jpg",
     "provider": {
       "@type": "Organization",
       "name": "Institute for Applied Management & Law",
-      "url": "https://iaml.com",
+      "url": "https://www.iaml.com",
       "logo": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69042ba0346960d8775fb4a4.svg"
     },
     "educationalLevel": data.seo?.schema?.educationalLevel || "intermediate",
