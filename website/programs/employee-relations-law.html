@@ -561,22 +561,41 @@
       }
 
       .erl-evidence-heading {
-        max-width: 27rem;
+        max-width: none;
         color: rgba(255, 255, 255, 0.92);
         font-family: 'Gambarino', Georgia, serif;
-        font-size: clamp(1.7rem, 2.4vw, 2.35rem);
+        font-size: clamp(1.55rem, 2vw, 2rem);
         font-weight: 400;
-        line-height: 1.17;
+        line-height: 1.12;
         letter-spacing: -0.03em;
-        margin: 0 0 2.5rem;
-        text-wrap: pretty;
+        margin: 0 0 2rem;
+        white-space: nowrap;
+      }
+
+      .erl-evidence-marquee {
+        position: relative;
+        z-index: 1;
+        max-height: 725px;
+        overflow: hidden;
+        padding-right: 0.35rem;
+        mask-image: linear-gradient(to bottom, transparent 0, #000 7%, #000 91%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 7%, #000 91%, transparent 100%);
       }
 
       .erl-evidence-cards {
-        position: relative;
-        z-index: 1;
         display: grid;
         gap: 1rem;
+        will-change: transform;
+        animation: erlEvidenceScroll 92s linear infinite;
+      }
+
+      .erl-evidence-marquee:hover .erl-evidence-cards {
+        animation-play-state: paused;
+      }
+
+      @keyframes erlEvidenceScroll {
+        from { transform: translateY(0); }
+        to { transform: translateY(-50%); }
       }
 
       .erl-evidence-card {
@@ -586,7 +605,7 @@
         border: 1px solid rgba(255, 255, 255, 0.11);
         border-radius: 22px;
         padding: 1.55rem 1.75rem;
-        transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+        transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
       }
 
       .erl-evidence-card:nth-child(even) {
@@ -594,39 +613,19 @@
         border-color: rgba(255, 255, 255, 0.15);
       }
 
-      .erl-evidence-card::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: linear-gradient(90deg, #FF6A00 0%, rgba(255, 106, 0, 0) 100%);
-        opacity: 0;
-        transition: opacity 0.25s ease;
-      }
-
       .erl-evidence-card:hover {
         transform: translateY(-2px);
         background: rgba(255, 255, 255, 0.085);
-        border-color: rgba(255, 106, 0, 0.38);
-      }
-
-      .erl-evidence-card:hover::before {
-        opacity: 1;
+        border-color: rgba(255, 106, 0, 0.28);
+        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
       }
 
       .erl-evidence-stars {
-        display: flex;
-        gap: 0.25rem;
+        color: #FF6A00;
+        font-size: 0.82rem;
+        letter-spacing: 0.08em;
+        line-height: 1;
         margin-bottom: 0.9rem;
-      }
-
-      .erl-evidence-stars span {
-        width: 0.52rem;
-        height: 0.52rem;
-        background: #FF6A00;
-        border-radius: 999px;
       }
 
       .erl-evidence-quote {
@@ -719,18 +718,17 @@
         border-radius: 999px;
         background: #172033;
         position: relative;
+        display: grid;
+        place-items: center;
       }
 
       .erl-evidence-check::after {
         content: "";
-        position: absolute;
-        left: 0.39rem;
-        top: 0.34rem;
-        width: 0.42rem;
-        height: 0.24rem;
+        width: 0.44rem;
+        height: 0.26rem;
         border-left: 2px solid #fff;
         border-bottom: 2px solid #fff;
-        transform: rotate(-45deg);
+        transform: translateY(-0.04rem) rotate(-45deg);
       }
 
       .erl-evidence-benefit-text {
@@ -797,6 +795,10 @@
       }
 
       @media (prefers-reduced-motion: reduce) {
+        .erl-evidence-cards {
+          animation: none;
+        }
+
         .erl-evidence-card,
         .erl-evidence-cta {
           transition: none;
@@ -817,6 +819,14 @@
           border-left: 0;
           border-top: 1px solid rgba(23, 32, 51, 0.15);
           padding: 3.25rem 1.5rem;
+        }
+
+        .erl-evidence-heading {
+          white-space: normal;
+        }
+
+        .erl-evidence-marquee {
+          max-height: 640px;
         }
 
         .erl-evidence-stat-strip {
@@ -917,34 +927,8 @@
           <p class="erl-evidence-eyebrow">From participants to practice</p>
           <h2 id="erl-evidence-heading" class="erl-evidence-heading">What HR professionals say after 4½ days with us</h2>
 
-          <div class="erl-evidence-cards" aria-label="Participant testimonials">
-            <article class="erl-evidence-card">
-              <div class="erl-evidence-stars" aria-label="5 star rating"><span></span><span></span><span></span><span></span><span></span></div>
-              <p class="erl-evidence-quote">“This was by far, the best seminar I've ever attended! The materials provided are a great resource and the instructors did a great job of presenting the information.”</p>
-              <div class="erl-evidence-author">Sylvia Ayala</div>
-              <div class="erl-evidence-meta">Vice President, Human Resources · Gladney Center for Adoption</div>
-            </article>
-
-            <article class="erl-evidence-card">
-              <div class="erl-evidence-stars" aria-label="5 star rating"><span></span><span></span><span></span><span></span><span></span></div>
-              <p class="erl-evidence-quote">“The presenters made a rather intensive 5 days not only educational and instructional but interesting and enjoyable as well. Best seminar in HR I've ever attended.”</p>
-              <div class="erl-evidence-author">Diane Altaffer</div>
-              <div class="erl-evidence-meta">Director of Human Resources · Blackstone</div>
-            </article>
-
-            <article class="erl-evidence-card">
-              <div class="erl-evidence-stars" aria-label="5 star rating"><span></span><span></span><span></span><span></span><span></span></div>
-              <p class="erl-evidence-quote">“The classroom participation was excellent and allowed us to share situations and get other perspectives in a safe space. This was the best employee relations seminar that I've ever attended.”</p>
-              <div class="erl-evidence-author">JoAnne Guerrant</div>
-              <div class="erl-evidence-meta">Employee Relations Manager · Delta Community Credit Union</div>
-            </article>
-
-            <article class="erl-evidence-card">
-              <div class="erl-evidence-stars" aria-label="5 star rating"><span></span><span></span><span></span><span></span><span></span></div>
-              <p class="erl-evidence-quote">“The seminar was excellent. The instructors were extremely knowledgeable and made a point of allowing the class to interact. This one week not only provided me with knowledge I did not have, it also gave me a new appreciation for what I do.”</p>
-              <div class="erl-evidence-author">Angelique Anderson</div>
-              <div class="erl-evidence-meta">Executive Director, Strategic HR Business Partnerships · Catalina Marketing</div>
-            </article>
+          <div class="erl-evidence-marquee" aria-label="Continuously scrolling participant testimonials">
+            <div class="erl-evidence-cards" data-evidence-testimonials></div>
           </div>
         </div>
 
@@ -1028,7 +1012,6 @@
       (function(){
         const track = document.querySelector(".testimonial-track");
         const contentSection = document.querySelector(".content-section");
-        if(!track) return;
         let isScrolling = false;
 
         function escapeHtml(text){
@@ -1051,6 +1034,28 @@
               </footer>
             </article>`;
         }
+
+        function renderEvidenceCard(t){
+          const meta = [t.title, t.company].filter(Boolean).map(escapeHtml).join(' · ');
+          return `
+            <article class="erl-evidence-card">
+              <div class="erl-evidence-stars" aria-label="5 star rating">★★★★★</div>
+              <p class="erl-evidence-quote">“${escapeHtml(t.quote)}”</p>
+              <div class="erl-evidence-author">${escapeHtml(t.name)}</div>
+              ${meta ? `<div class="erl-evidence-meta">${meta}</div>` : ''}
+            </article>`;
+        }
+
+        function buildEvidenceLoop(){
+          const evidenceTrack = document.querySelector('[data-evidence-testimonials]');
+          if(!evidenceTrack) return;
+          const featured = TESTIMONIALS_DATA.slice(0, 18);
+          const cards = featured.map(renderEvidenceCard).join('');
+          evidenceTrack.innerHTML = cards + cards;
+        }
+
+        buildEvidenceLoop();
+        if(!track) return;
 
         function buildLoop(){
           const A = TESTIMONIALS_DATA.map(renderCard).join("");
