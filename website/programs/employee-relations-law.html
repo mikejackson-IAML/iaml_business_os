@@ -440,6 +440,74 @@
         line-height: 1.55;
       }
 
+      .erl-proof-card-section {
+        background: #f6f7f4;
+        border: 0;
+        padding: 0 1.5rem 5rem;
+      }
+
+      .erl-proof-cards {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.125rem;
+        align-items: stretch;
+      }
+
+      .erl-proof-card {
+        position: relative;
+        background: #ffffff;
+        border: 1px solid #dfe5dc;
+        border-radius: 26px;
+        box-shadow: 0 14px 38px rgba(15, 23, 42, 0.08);
+        min-height: 176px;
+        padding: 3rem 1.875rem 1.75rem;
+        text-align: left;
+        align-items: flex-start;
+        justify-content: flex-start;
+        flex: none;
+        width: auto;
+        max-width: none;
+      }
+
+      .erl-proof-card::before {
+        content: "";
+        position: absolute;
+        top: 1.5rem;
+        left: 1.875rem;
+        width: 34px;
+        height: 3px;
+        background: #FF6A00;
+        border-radius: 999px;
+      }
+
+      .erl-proof-card .proof-number {
+        color: #172033;
+        font-family: 'Gambarino', Georgia, serif;
+        font-size: clamp(1.9rem, 3vw, 2.375rem);
+        line-height: 1;
+        letter-spacing: -0.04em;
+        margin-bottom: 0.6rem;
+        text-transform: none;
+      }
+
+      .erl-proof-card .proof-label {
+        color: #172033;
+        font-size: 1rem;
+        font-weight: 850;
+        letter-spacing: -0.01em;
+        text-transform: none;
+        margin-bottom: 0.625rem;
+      }
+
+      .erl-proof-description {
+        color: #5d6575;
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+
       @media (max-width: 860px) {
         .erl-answer-bridge {
           background: #f6f7f4;
@@ -452,8 +520,19 @@
         }
 
         .erl-answer-grid,
-        .erl-scenario-row {
+        .erl-scenario-row,
+        .erl-proof-cards {
           grid-template-columns: 1fr;
+        }
+
+        .erl-proof-card-section {
+          padding: 0 1rem 4rem;
+        }
+
+        .erl-proof-card {
+          border-bottom: 1px solid #dfe5dc;
+          max-width: none;
+          width: auto;
         }
 
         .erl-scenario-row {
@@ -490,27 +569,26 @@
       </div>
     </section>
 
-    <!-- Social Proof Banner -->
-    <section class="social-proof-banner">
-      <div class="proof-container">
+    <!-- Social Proof Cards -->
+    <section class="social-proof-banner erl-proof-card-section" aria-label="IAML credibility">
+      <div class="proof-container erl-proof-cards">
 
-        <div class="proof-item">
-          <div class="proof-number">45+ YEARS</div>
-          <div class="proof-label">Trusted Since 1979</div>
+        <div class="proof-item erl-proof-card">
+          <div class="proof-number">45+ years</div>
+          <div class="proof-label">Trusted since 1979</div>
+          <div class="erl-proof-description">Employment law training for HR and legal professionals across decades of workplace change.</div>
         </div>
 
-        <div class="proof-divider">|</div>
-
-        <div class="proof-item">
+        <div class="proof-item erl-proof-card">
           <div class="proof-number">80,000+</div>
-          <div class="proof-label">Certificates Earned</div>
+          <div class="proof-label">Certificates earned</div>
+          <div class="erl-proof-description">Practical training completed by professionals nationwide.</div>
         </div>
 
-        <div class="proof-divider">|</div>
-
-        <div class="proof-item">
-          <div class="proof-number">PRACTICING ATTORNEYS</div>
-          <div class="proof-label">Not Academics</div>
+        <div class="proof-item erl-proof-card">
+          <div class="proof-number">Attorney-led</div>
+          <div class="proof-label">Practitioners, not theorists</div>
+          <div class="erl-proof-description">Real-world guidance from practicing employment law counsel.</div>
         </div>
 
       </div>
