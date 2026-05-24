@@ -508,7 +508,322 @@
         line-height: 1.5;
       }
 
+
+      .erl-evidence-section {
+        background: #172033;
+        padding: 0 !important;
+        width: 100vw;
+        position: relative;
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw;
+        margin-right: -50vw;
+      }
+
+      .erl-evidence-shell {
+        max-width: 1280px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(380px, 440px);
+        min-height: 700px;
+      }
+
+      .erl-evidence-left {
+        position: relative;
+        overflow: hidden;
+        background: #172033;
+        padding: 4.5rem 4rem 4rem;
+      }
+
+      .erl-evidence-left::after {
+        content: "";
+        position: absolute;
+        right: -7rem;
+        bottom: -7rem;
+        width: 26rem;
+        height: 26rem;
+        border-radius: 999px;
+        background: radial-gradient(circle, rgba(255, 106, 0, 0.09) 0%, rgba(255, 106, 0, 0) 70%);
+        pointer-events: none;
+      }
+
+      .erl-evidence-eyebrow,
+      .erl-evidence-content-eyebrow {
+        color: #FF6A00;
+        font-size: 0.68rem;
+        font-weight: 850;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .erl-evidence-eyebrow {
+        margin-bottom: 1rem;
+      }
+
+      .erl-evidence-heading {
+        max-width: 27rem;
+        color: rgba(255, 255, 255, 0.92);
+        font-family: 'Gambarino', Georgia, serif;
+        font-size: clamp(1.7rem, 2.4vw, 2.35rem);
+        font-weight: 400;
+        line-height: 1.17;
+        letter-spacing: -0.03em;
+        margin: 0 0 2.5rem;
+        text-wrap: pretty;
+      }
+
+      .erl-evidence-cards {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        gap: 1rem;
+      }
+
+      .erl-evidence-card {
+        position: relative;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.052);
+        border: 1px solid rgba(255, 255, 255, 0.11);
+        border-radius: 22px;
+        padding: 1.55rem 1.75rem;
+        transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+      }
+
+      .erl-evidence-card:nth-child(even) {
+        background: #2a3a54;
+        border-color: rgba(255, 255, 255, 0.15);
+      }
+
+      .erl-evidence-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #FF6A00 0%, rgba(255, 106, 0, 0) 100%);
+        opacity: 0;
+        transition: opacity 0.25s ease;
+      }
+
+      .erl-evidence-card:hover {
+        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.085);
+        border-color: rgba(255, 106, 0, 0.38);
+      }
+
+      .erl-evidence-card:hover::before {
+        opacity: 1;
+      }
+
+      .erl-evidence-stars {
+        display: flex;
+        gap: 0.25rem;
+        margin-bottom: 0.9rem;
+      }
+
+      .erl-evidence-stars span {
+        width: 0.52rem;
+        height: 0.52rem;
+        background: #FF6A00;
+        border-radius: 999px;
+      }
+
+      .erl-evidence-quote {
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 0.9rem;
+        line-height: 1.62;
+        margin: 0 0 1.25rem;
+      }
+
+      .erl-evidence-author {
+        color: rgba(255, 255, 255, 0.96);
+        font-size: 0.86rem;
+        font-weight: 800;
+      }
+
+      .erl-evidence-meta {
+        color: rgba(255, 255, 255, 0.62);
+        font-size: 0.78rem;
+        line-height: 1.45;
+        margin-top: 0.25rem;
+      }
+
+      .erl-evidence-right {
+        background: #f6f7f4;
+        border-left: 1px solid rgba(23, 32, 51, 0.15);
+        padding: 4.5rem 3rem 4rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .erl-evidence-content-eyebrow {
+        margin-bottom: 0.875rem;
+      }
+
+      .erl-evidence-right h2 {
+        color: #172033;
+        font-size: clamp(2rem, 3vw, 2.8rem);
+        line-height: 1.03;
+        letter-spacing: -0.04em;
+        margin-bottom: 1.125rem;
+        text-wrap: pretty;
+      }
+
+      .erl-evidence-lead {
+        color: #5d6575;
+        font-size: 0.98rem;
+        line-height: 1.72;
+        padding-bottom: 1.75rem;
+        border-bottom: 2px solid #dfe5dc;
+        margin-bottom: 1.6rem;
+      }
+
+      .erl-evidence-lead strong {
+        color: #FF6A00;
+        font-weight: 850;
+      }
+
+      .erl-evidence-apart {
+        color: #7a8290;
+        font-size: 0.68rem;
+        font-weight: 850;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+      }
+
+      .erl-evidence-benefits {
+        display: grid;
+        margin-bottom: 2rem;
+      }
+
+      .erl-evidence-benefit {
+        display: flex;
+        gap: 0.75rem;
+        align-items: flex-start;
+        padding: 0.84rem 0;
+        border-bottom: 1px solid #dfe5dc;
+      }
+
+      .erl-evidence-benefit:last-child {
+        border-bottom: 0;
+      }
+
+      .erl-evidence-check {
+        flex: 0 0 auto;
+        width: 1.25rem;
+        height: 1.25rem;
+        margin-top: 0.05rem;
+        border-radius: 999px;
+        background: #172033;
+        position: relative;
+      }
+
+      .erl-evidence-check::after {
+        content: "";
+        position: absolute;
+        left: 0.39rem;
+        top: 0.34rem;
+        width: 0.42rem;
+        height: 0.24rem;
+        border-left: 2px solid #fff;
+        border-bottom: 2px solid #fff;
+        transform: rotate(-45deg);
+      }
+
+      .erl-evidence-benefit-text {
+        color: #5d6575;
+        font-size: 0.86rem;
+        line-height: 1.55;
+      }
+
+      .erl-evidence-benefit-text strong {
+        color: #172033;
+        font-weight: 800;
+      }
+
+      .erl-evidence-stat-strip {
+        display: flex;
+        border-top: 1px solid #dfe5dc;
+        padding-top: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .erl-evidence-stat {
+        flex: 1;
+        text-align: center;
+        padding: 0 0.75rem;
+        border-right: 1px solid #dfe5dc;
+      }
+
+      .erl-evidence-stat:last-child {
+        border-right: 0;
+      }
+
+      .erl-evidence-stat-number {
+        color: #172033;
+        font-size: 0.98rem;
+        font-weight: 900;
+        letter-spacing: 0.02em;
+      }
+
+      .erl-evidence-stat-label {
+        color: #7a8290;
+        font-size: 0.7rem;
+        line-height: 1.3;
+        margin-top: 0.2rem;
+      }
+
+      .erl-evidence-cta {
+        display: block;
+        background: #FF6A00;
+        color: #fff;
+        border-radius: 12px;
+        padding: 0.95rem 1.5rem;
+        text-align: center;
+        text-decoration: none;
+        font-size: 0.78rem;
+        font-weight: 850;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        transition: background 0.2s ease, transform 0.2s ease;
+      }
+
+      .erl-evidence-cta:hover {
+        background: #ff7f24;
+        transform: translateY(-1px);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .erl-evidence-card,
+        .erl-evidence-cta {
+          transition: none;
+        }
+      }
+
       @media (max-width: 860px) {
+        .erl-evidence-shell {
+          grid-template-columns: 1fr;
+          min-height: 0;
+        }
+
+        .erl-evidence-left {
+          padding: 3.25rem 1.5rem 2.5rem;
+        }
+
+        .erl-evidence-right {
+          border-left: 0;
+          border-top: 1px solid rgba(23, 32, 51, 0.15);
+          padding: 3.25rem 1.5rem;
+        }
+
+        .erl-evidence-stat-strip {
+          flex-wrap: wrap;
+          row-gap: 1rem;
+        }
+
         .erl-answer-bridge {
           background: #f6f7f4;
           margin-top: 0;
@@ -594,41 +909,71 @@
       </div>
     </section>
 
-    <!-- Testimonials Section with Infinite Scroll -->
-    <section class="testimonials-scroll-section" style="background: #ebebeb;">
-      <div class="container">
-        <div class="scroll-grid">
+    <!-- Testimonials Evidence Panel -->
+    <section class="testimonials-scroll-section erl-evidence-section" aria-labelledby="erl-evidence-heading">
+      <div class="erl-evidence-shell">
 
-          <!-- Left Column: Scrolling Testimonials -->
-          <aside class="testimonial-scroller">
-            <div class="top-fade"></div>
-            <div class="left-fade"></div>
-            <div class="testimonial-track" role="list" aria-label="Customer testimonials"></div>
-            <div class="bottom-fade"></div>
-            <div class="scroll-hint">Scroll to see more ↓</div>
-          </aside>
+        <div class="erl-evidence-left">
+          <p class="erl-evidence-eyebrow">From participants to practice</p>
+          <h2 id="erl-evidence-heading" class="erl-evidence-heading">What HR professionals say after 4½ days with us</h2>
 
-          <!-- Right Column: Static Content -->
-          <article class="content-section">
-            <h2 class="font-display text-display text-primary">Gain Confidence to Handle Complex Situations</h2>
-            <p class="text-large text-secondary">
-              The Certificate in Employee Relations Law is <span style="color: #FF6A00; font-weight: 700;">4.5 intensive days</span> where you'll build practical employment law expertise with experienced attorneys - working through real workplace scenarios, not theoretical lectures.
-            </p>
-            <hr class="separator"/>
-            <div class="benefits-section benefits-section--gradient benefits-section--card">
-              <h3 class="font-display">What Sets This Program Apart</h3>
-              <ul class="benefits-list">
-                <li><strong>Practicing attorneys, not academics</strong> – Your instructors handle employment law cases daily at firms like Taft, Thompson Hine, and Barnes & Thornburg. They teach from real courtrooms and boardrooms, not textbooks.</li>
-                <li><strong>Comprehensive depth, not surface overviews</strong> – 4½ days of intensive coverage you cannot get from conference sessions, law firm CLEs, or online searches. This is the formal training most HR professionals lack.</li>
-                <li><strong>Peer learning with HR professionals nationwide</strong> – Discussions with peers facing similar challenges provide insights you cannot find anywhere else.</li>
-                <li><strong>A credential that advances your career</strong> – Join 80,000+ professionals who earned the IAML certificate. It demonstrates your expertise to employers and serves as evidence your organization takes employment law seriously.</li>
-                <li><strong>Support that continues after you leave</strong> – 12 months of quarterly employment law updates, alumni resources, and faculty access keep you current as regulations change. <a href="#benefitSteps" style="text-decoration: underline;">View all participant benefits →</a></li>
-              </ul>
-              <a href="#all-programs" class="btn btn-primary">VIEW UPCOMING PROGRAMS</a>
-            </div>
-          </article>
+          <div class="erl-evidence-cards" aria-label="Participant testimonials">
+            <article class="erl-evidence-card">
+              <div class="erl-evidence-stars" aria-label="5 star rating"><span></span><span></span><span></span><span></span><span></span></div>
+              <p class="erl-evidence-quote">“This was by far, the best seminar I've ever attended! The materials provided are a great resource and the instructors did a great job of presenting the information.”</p>
+              <div class="erl-evidence-author">Sylvia Ayala</div>
+              <div class="erl-evidence-meta">Vice President, Human Resources · Gladney Center for Adoption</div>
+            </article>
 
+            <article class="erl-evidence-card">
+              <div class="erl-evidence-stars" aria-label="5 star rating"><span></span><span></span><span></span><span></span><span></span></div>
+              <p class="erl-evidence-quote">“The presenters made a rather intensive 5 days not only educational and instructional but interesting and enjoyable as well. Best seminar in HR I've ever attended.”</p>
+              <div class="erl-evidence-author">Diane Altaffer</div>
+              <div class="erl-evidence-meta">Director of Human Resources · Blackstone</div>
+            </article>
+
+            <article class="erl-evidence-card">
+              <div class="erl-evidence-stars" aria-label="5 star rating"><span></span><span></span><span></span><span></span><span></span></div>
+              <p class="erl-evidence-quote">“The classroom participation was excellent and allowed us to share situations and get other perspectives in a safe space. This was the best employee relations seminar that I've ever attended.”</p>
+              <div class="erl-evidence-author">JoAnne Guerrant</div>
+              <div class="erl-evidence-meta">Employee Relations Manager · Delta Community Credit Union</div>
+            </article>
+
+            <article class="erl-evidence-card">
+              <div class="erl-evidence-stars" aria-label="5 star rating"><span></span><span></span><span></span><span></span><span></span></div>
+              <p class="erl-evidence-quote">“The seminar was excellent. The instructors were extremely knowledgeable and made a point of allowing the class to interact. This one week not only provided me with knowledge I did not have, it also gave me a new appreciation for what I do.”</p>
+              <div class="erl-evidence-author">Angelique Anderson</div>
+              <div class="erl-evidence-meta">Executive Director, Strategic HR Business Partnerships · Catalina Marketing</div>
+            </article>
+          </div>
         </div>
+
+        <article class="erl-evidence-right content-section">
+          <div>
+            <p class="erl-evidence-content-eyebrow">Why this program</p>
+            <h2 class="font-display">Gain Confidence to Handle Complex Situations</h2>
+            <p class="erl-evidence-lead"><strong>4½ intensive days</strong> with experienced attorneys — working through real workplace scenarios, not theoretical lectures.</p>
+
+            <div class="erl-evidence-apart">What Sets This Program Apart</div>
+            <div class="erl-evidence-benefits">
+              <div class="erl-evidence-benefit"><span class="erl-evidence-check" aria-hidden="true"></span><div class="erl-evidence-benefit-text"><strong>Practicing attorneys, not academics</strong> — instructors handle employment law cases daily at firms like Taft, Thompson Hine, and Barnes & Thornburg.</div></div>
+              <div class="erl-evidence-benefit"><span class="erl-evidence-check" aria-hidden="true"></span><div class="erl-evidence-benefit-text"><strong>Comprehensive depth, not surface overviews</strong> — intensive coverage you cannot get from conference sessions, CLEs, or online searches.</div></div>
+              <div class="erl-evidence-benefit"><span class="erl-evidence-check" aria-hidden="true"></span><div class="erl-evidence-benefit-text"><strong>Peer learning with HR professionals nationwide</strong> — discussions with peers facing similar challenges.</div></div>
+              <div class="erl-evidence-benefit"><span class="erl-evidence-check" aria-hidden="true"></span><div class="erl-evidence-benefit-text"><strong>A credential that advances your career</strong> — join 80,000+ professionals who earned the IAML certificate.</div></div>
+              <div class="erl-evidence-benefit"><span class="erl-evidence-check" aria-hidden="true"></span><div class="erl-evidence-benefit-text"><strong>Support that continues after you leave</strong> — 12 months of quarterly employment law updates and alumni access.</div></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="erl-evidence-stat-strip" aria-label="Program credibility summary">
+              <div class="erl-evidence-stat"><div class="erl-evidence-stat-number">45+</div><div class="erl-evidence-stat-label">Years running</div></div>
+              <div class="erl-evidence-stat"><div class="erl-evidence-stat-number">80K+</div><div class="erl-evidence-stat-label">Certificates earned</div></div>
+              <div class="erl-evidence-stat"><div class="erl-evidence-stat-number">4½</div><div class="erl-evidence-stat-label">Intensive days</div></div>
+            </div>
+            <a href="#all-programs" class="erl-evidence-cta">View Upcoming Programs</a>
+          </div>
+        </article>
+
       </div>
     </section>
 
@@ -683,6 +1028,7 @@
       (function(){
         const track = document.querySelector(".testimonial-track");
         const contentSection = document.querySelector(".content-section");
+        if(!track) return;
         let isScrolling = false;
 
         function escapeHtml(text){
