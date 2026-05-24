@@ -742,36 +742,45 @@
         font-weight: 800;
       }
 
-      .erl-evidence-stat-strip {
-        display: flex;
+      .erl-evidence-cta-footer {
         border-top: 1px solid #dfe5dc;
-        padding-top: 1rem;
+        padding-top: 1.15rem;
+      }
+
+      .erl-evidence-next-label {
+        color: #FF6A00;
+        font-size: 0.64rem;
+        font-weight: 850;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        margin: 0 0 0.48rem;
+      }
+
+      .erl-evidence-next-copy {
+        color: #4d5565;
+        font-size: 0.88rem;
+        line-height: 1.5;
+        margin: 0 0 0.95rem;
+      }
+
+      .erl-evidence-format-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
         margin-bottom: 1rem;
       }
 
-      .erl-evidence-stat {
-        flex: 1;
-        text-align: center;
-        padding: 0 0.75rem;
-        border-right: 1px solid #dfe5dc;
-      }
-
-      .erl-evidence-stat:last-child {
-        border-right: 0;
-      }
-
-      .erl-evidence-stat-number {
+      .erl-evidence-format-chip {
         color: #172033;
-        font-size: 0.98rem;
-        font-weight: 900;
-        letter-spacing: 0.02em;
-      }
-
-      .erl-evidence-stat-label {
-        color: #7a8290;
-        font-size: 0.7rem;
-        line-height: 1.3;
-        margin-top: 0.2rem;
+        background: #fff;
+        border: 1px solid #dfe5dc;
+        border-radius: 999px;
+        padding: 0.44rem 0.7rem;
+        font-size: 0.68rem;
+        font-weight: 850;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        box-shadow: 0 8px 22px rgba(23, 32, 51, 0.05);
       }
 
       .erl-evidence-cta {
@@ -829,9 +838,8 @@
           max-height: 640px;
         }
 
-        .erl-evidence-stat-strip {
-          flex-wrap: wrap;
-          row-gap: 1rem;
+        .erl-evidence-format-chips {
+          gap: 0.45rem;
         }
 
         .erl-answer-bridge {
@@ -948,11 +956,13 @@
             </div>
           </div>
 
-          <div>
-            <div class="erl-evidence-stat-strip" aria-label="Program credibility summary">
-              <div class="erl-evidence-stat"><div class="erl-evidence-stat-number">45+</div><div class="erl-evidence-stat-label">Years running</div></div>
-              <div class="erl-evidence-stat"><div class="erl-evidence-stat-number">80K+</div><div class="erl-evidence-stat-label">Certificates earned</div></div>
-              <div class="erl-evidence-stat"><div class="erl-evidence-stat-number">4½</div><div class="erl-evidence-stat-label">Intensive days</div></div>
+          <div class="erl-evidence-cta-footer">
+            <p class="erl-evidence-next-label">Next step</p>
+            <p class="erl-evidence-next-copy">Choose an upcoming program date or delivery format that works for you or your team.</p>
+            <div class="erl-evidence-format-chips" aria-label="Available delivery formats">
+              <span class="erl-evidence-format-chip">In person</span>
+              <span class="erl-evidence-format-chip">Live virtual</span>
+              <span class="erl-evidence-format-chip">On demand</span>
             </div>
             <a href="#all-programs" class="erl-evidence-cta">View Upcoming Programs</a>
           </div>
