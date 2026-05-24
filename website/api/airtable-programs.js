@@ -38,17 +38,20 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const { table, recordId, filterByFormula, maxRecords, view } = req.query;
+    const { table, recordId, filterByFormula, maxRecords, view, pageSize, offset } = req.query;
 
     // Validate required parameters
     if (!table) {
       return res.status(400).json({ error: 'table parameter is required' });
     }
 
-    const BASE_ID = process.env.AIRTABLE_BASE_ID;
-    const API_KEY = process.env.AIRTABLE_PROGRAMS_API_KEY;
+    // Program schedule data currently lives in the IAML Airtable base. Keep the
+    // base ID as a safe fallback so the public schedule endpoint does not fail
+    // if Vercel is missing AIRTABLE_BASE_ID, while still allowing env override.
+    const BASE_ID = process.env.AIRTABLE_BASE_ID || 'applWPVmMkgMWoZIC';
+    const API_KEY = process.env.AIRTABLE_PROGRAMS_API_KEY || process.env.AIRTABLE_API_KEY || process.env.AIRTABLE_QUIZ_API_KEY;
 
-    // Debug logging
+    // Debug logging (never log the full token)
     console.log('BASE_ID:', BASE_ID ? `${BASE_ID.substring(0, 8)}...` : 'MISSING');
     console.log('API_KEY:', API_KEY ? `${API_KEY.substring(0, 10)}...` : 'MISSING');
 
@@ -69,6 +72,8 @@ module.exports = async function handler(req, res) {
     const params = new URLSearchParams();
     if (filterByFormula) params.append('filterByFormula', filterByFormula);
     if (maxRecords) params.append('maxRecords', maxRecords);
+    if (pageSize) params.append('pageSize', pageSize);
+    if (offset) params.append('offset', offset);
     if (view) params.append('view', view);
 
     // Parse sort array from query string (sort[0][field], sort[0][direction], etc.)

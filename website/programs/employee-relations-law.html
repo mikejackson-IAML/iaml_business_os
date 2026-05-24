@@ -9566,7 +9566,10 @@ button#prev-btn {
     // Fetch next program from Airtable via proxy
     async function fetchNextProgram() {
       try {
-        const url = `${API_BASE}/api/airtable-programs?table=${encodeURIComponent(NEXT_PROGRAM_CONFIG.tableId)}&view=${encodeURIComponent(NEXT_PROGRAM_CONFIG.viewId)}&maxRecords=1`;
+        // Fetch enough records to skip past/closed sessions in date-sorted Airtable views.
+        // maxRecords=1 can return the most recent past session and incorrectly show
+        // "dates coming soon" even when future sessions are available.
+        const url = `${API_BASE}/api/airtable-programs?table=${encodeURIComponent(NEXT_PROGRAM_CONFIG.tableId)}&view=${encodeURIComponent(NEXT_PROGRAM_CONFIG.viewId)}&maxRecords=100`;
 
         const response = await fetch(url, {
           method: 'GET',
