@@ -1165,46 +1165,292 @@
       })();
     </script>
 
-    <!-- Who Should Attend Section -->
-    <section class="who-should-attend-section theme-light py-5xl">
-      <div class="container container-lg mx-auto">
-        <header>
-          <h2>Who Should Attend</h2>
-          <p>This program is designed for professionals who navigate labor relations, workplace investigations, and discrimination compliance</p>
-        </header>
+    <!-- Who Should Attend Section - Option 3B Light Premium Split Panel -->
+    <style>
+      .erl-audience-section {
+        background: #f6f7f4;
+        padding: 5.5rem 0 6rem;
+        position: relative;
+      }
 
-        <div class="audience-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+      .erl-audience-shell {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+      }
 
-          <div class="audience-card" style="background: #fff; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-            <h3 style="color: #3B5998; font-size: 1.25rem; margin-bottom: 1rem;">HR Managers & Generalists</h3>
-            <p style="color: #666; line-height: 1.6;">You handle union concerns, employee complaints, and workplace investigations but never received formal labor law training. This program builds the comprehensive foundation to navigate NLRA issues, conduct defensible investigations, and handle discrimination claims with confidence.</p>
+      .erl-audience-layout {
+        display: grid;
+        grid-template-columns: minmax(320px, 0.82fr) minmax(0, 1.18fr);
+        gap: 1.75rem;
+        align-items: stretch;
+      }
+
+      .erl-audience-intro {
+        background: linear-gradient(180deg, #fffaf3 0%, #ffffff 100%);
+        border: 1px solid #eadfcf;
+        border-radius: 32px;
+        padding: 2.4rem;
+        box-shadow: 0 24px 70px rgba(23, 32, 51, 0.12);
+        min-height: 610px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .erl-audience-kicker {
+        color: #FF6A00;
+        font-size: 0.68rem;
+        font-weight: 900;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        margin: 0 0 0.85rem;
+      }
+
+      .erl-audience-title {
+        color: #172033;
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: clamp(2.35rem, 4vw, 4.2rem);
+        line-height: 0.98;
+        letter-spacing: -0.045em;
+        font-weight: 400;
+        margin: 0;
+      }
+
+      .erl-audience-accent {
+        width: 54px;
+        height: 3px;
+        border-radius: 999px;
+        background: #FF6A00;
+        margin: 1.45rem 0 1.35rem;
+      }
+
+      .erl-audience-lead {
+        color: #5d6575;
+        font-size: 1.02rem;
+        line-height: 1.65;
+        margin: 0;
+      }
+
+      .erl-audience-stamp {
+        display: inline-flex;
+        width: fit-content;
+        margin-top: 1.8rem;
+        border: 1px solid #dfe5dc;
+        border-radius: 999px;
+        padding: 0.55rem 0.8rem;
+        color: #172033;
+        background: #ffffff;
+        font-weight: 850;
+        font-size: 0.72rem;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+      }
+
+      .erl-audience-note {
+        margin-top: 2rem;
+        border-top: 1px solid rgba(23, 32, 51, 0.12);
+        padding-top: 1.3rem;
+        color: #616b77;
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+
+      .erl-audience-note strong {
+        color: #172033;
+      }
+
+      .erl-audience-cards {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+      }
+
+      .erl-audience-card {
+        background: #ffffff;
+        border: 1px solid #dfe5dc;
+        border-radius: 26px;
+        padding: 1.5rem;
+        min-height: 184px;
+        box-shadow: 0 14px 38px rgba(23, 32, 51, 0.08);
+        transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
+      }
+
+      .erl-audience-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 20px 48px rgba(23, 32, 51, 0.11);
+        border-color: #cfdbd1;
+      }
+
+      .erl-audience-card-featured {
+        background: #fffaf3;
+        border-color: #f0d8bd;
+      }
+
+      .erl-audience-card-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: flex-start;
+        margin-bottom: 0.8rem;
+      }
+
+      .erl-audience-label {
+        color: #FF6A00;
+        font-size: 0.66rem;
+        font-weight: 900;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+      }
+
+      .erl-audience-role {
+        color: #172033;
+        font-size: 1.05rem;
+        font-weight: 850;
+        line-height: 1.2;
+        margin: 0;
+      }
+
+      .erl-audience-check {
+        flex: 0 0 auto;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: #fff3ea;
+        color: #FF6A00;
+        font-weight: 900;
+        line-height: 1;
+      }
+
+      .erl-audience-card-featured .erl-audience-check {
+        background: #FF6A00;
+        color: #ffffff;
+      }
+
+      .erl-audience-fit {
+        color: #68717f;
+        font-size: 0.92rem;
+        line-height: 1.58;
+        margin: 0;
+      }
+
+      .erl-audience-fit strong {
+        color: #172033;
+      }
+
+      @media (max-width: 980px) {
+        .erl-audience-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .erl-audience-intro {
+          min-height: auto;
+        }
+      }
+
+      @media (max-width: 680px) {
+        .erl-audience-section {
+          padding: 4rem 0;
+        }
+
+        .erl-audience-shell {
+          padding: 0 1rem;
+        }
+
+        .erl-audience-intro {
+          border-radius: 24px;
+          padding: 1.75rem;
+        }
+
+        .erl-audience-cards {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+    <section class="erl-audience-section" aria-labelledby="erl-audience-heading">
+      <div class="erl-audience-shell">
+        <div class="erl-audience-layout">
+          <aside class="erl-audience-intro">
+            <div>
+              <p class="erl-audience-kicker">Who should attend</p>
+              <h2 id="erl-audience-heading" class="erl-audience-title">Designed for the people closest to workplace risk.</h2>
+              <div class="erl-audience-accent" aria-hidden="true"></div>
+              <p class="erl-audience-lead">If your role touches complaints, discipline, documentation, union activity, accommodations, or manager guidance, this program gives you a practical legal framework for the moments that matter.</p>
+              <span class="erl-audience-stamp">Built for practical HR judgment</span>
+            </div>
+            <p class="erl-audience-note"><strong>Why this matters:</strong> workplace issues rarely arrive as clean legal categories. The right training helps HR, ER, legal, and labor professionals recognize risk earlier and ask better questions before decisions harden.</p>
+          </aside>
+
+          <div class="erl-audience-cards" aria-label="Professional roles this program is designed for">
+            <article class="erl-audience-card erl-audience-card-featured">
+              <div class="erl-audience-card-top">
+                <div>
+                  <div class="erl-audience-label">Daily response</div>
+                  <h3 class="erl-audience-role">HR Managers &amp; Generalists</h3>
+                </div>
+                <div class="erl-audience-check" aria-hidden="true">✓</div>
+              </div>
+              <p class="erl-audience-fit"><strong>Best fit when:</strong> you are expected to handle complaints, investigations, leave, discipline, and manager questions with practical confidence.</p>
+            </article>
+
+            <article class="erl-audience-card">
+              <div class="erl-audience-card-top">
+                <div>
+                  <div class="erl-audience-label">Case ownership</div>
+                  <h3 class="erl-audience-role">Employee Relations Specialists</h3>
+                </div>
+                <div class="erl-audience-check" aria-hidden="true">✓</div>
+              </div>
+              <p class="erl-audience-fit"><strong>Best fit when:</strong> the hardest matters land on your desk and you need more legal structure behind investigations and documentation.</p>
+            </article>
+
+            <article class="erl-audience-card">
+              <div class="erl-audience-card-top">
+                <div>
+                  <div class="erl-audience-label">Strategic oversight</div>
+                  <h3 class="erl-audience-role">HR Directors &amp; Senior Managers</h3>
+                </div>
+                <div class="erl-audience-check" aria-hidden="true">✓</div>
+              </div>
+              <p class="erl-audience-fit"><strong>Best fit when:</strong> you advise leadership, set policy, and need to reduce preventable exposure across managers and business units.</p>
+            </article>
+
+            <article class="erl-audience-card">
+              <div class="erl-audience-card-top">
+                <div>
+                  <div class="erl-audience-label">Labor environment</div>
+                  <h3 class="erl-audience-role">Labor Relations Professionals</h3>
+                </div>
+                <div class="erl-audience-check" aria-hidden="true">✓</div>
+              </div>
+              <p class="erl-audience-fit"><strong>Best fit when:</strong> union activity, bargaining, handbook compliance, or organizing risk are part of your operating reality.</p>
+            </article>
+
+            <article class="erl-audience-card">
+              <div class="erl-audience-card-top">
+                <div>
+                  <div class="erl-audience-label">Legal partner</div>
+                  <h3 class="erl-audience-role">In-House Employment Counsel</h3>
+                </div>
+                <div class="erl-audience-check" aria-hidden="true">✓</div>
+              </div>
+              <p class="erl-audience-fit"><strong>Best fit when:</strong> you want HR’s practical view of how legal advice becomes documentation, accommodation, separation, and policy decisions.</p>
+            </article>
+
+            <article class="erl-audience-card">
+              <div class="erl-audience-card-top">
+                <div>
+                  <div class="erl-audience-label">Business guidance</div>
+                  <h3 class="erl-audience-role">HR Business Partners</h3>
+                </div>
+                <div class="erl-audience-check" aria-hidden="true">✓</div>
+              </div>
+              <p class="erl-audience-fit"><strong>Best fit when:</strong> operations leaders need clear guidance before performance, discipline, accommodation, or escalation decisions.</p>
+            </article>
           </div>
-
-          <div class="audience-card" style="background: #fff; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-            <h3 style="color: #3B5998; font-size: 1.25rem; margin-bottom: 1rem;">Employee Relations Specialists</h3>
-            <p style="color: #666; line-height: 1.6;">Deepen your expertise with advanced strategies for your most complex situations. From NLRB election campaigns to harassment investigations to managing difficult terminations, gain the legal knowledge and practical frameworks that distinguish ER experts from generalists.</p>
-          </div>
-
-          <div class="audience-card" style="background: #fff; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-            <h3 style="color: #3B5998; font-size: 1.25rem; margin-bottom: 1rem;">HR Directors & Senior Managers</h3>
-            <p style="color: #666; line-height: 1.6;">Build the comprehensive labor relations and discrimination expertise that protects your organization. Learn to advise executives on union vulnerability, structure compliant policies post-Stericycle, and develop strategies that prevent claims before they start.</p>
-          </div>
-
-          <div class="audience-card" style="background: #fff; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-            <h3 style="color: #3B5998; font-size: 1.25rem; margin-bottom: 1rem;">Labor Relations Professionals</h3>
-            <p style="color: #666; line-height: 1.6;">Whether you're in a union environment or assessing organizing risk, this program delivers current NLRB guidance, collective bargaining strategies, and handbook compliance. Get practical approaches from attorneys who negotiate and arbitrate daily.</p>
-          </div>
-
-          <div class="audience-card" style="background: #fff; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-            <h3 style="color: #3B5998; font-size: 1.25rem; margin-bottom: 1rem;">In-House Employment Counsel</h3>
-            <p style="color: #666; line-height: 1.6;">Complement your legal training with practical HR perspective. Learn how HR actually implements accommodations, conducts investigations, and manages separations—so your advice works in the real world, not just in theory.</p>
-          </div>
-
-          <div class="audience-card" style="background: #fff; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-            <h3 style="color: #3B5998; font-size: 1.25rem; margin-bottom: 1rem;">HR Business Partners</h3>
-            <p style="color: #666; line-height: 1.6;">Strengthen your ability to advise operations leaders on labor relations and discrimination risk. Build the expertise to confidently address union questions, ADA accommodations, and performance management without always escalating to legal.</p>
-          </div>
-
         </div>
       </div>
     </section>
