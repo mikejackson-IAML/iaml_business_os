@@ -1455,42 +1455,388 @@
       </div>
     </section>
 
+    <style>
+      .curriculum-section {
+        background: linear-gradient(180deg, #f6f7f4 0%, #ffffff 100%) !important;
+        padding: 6rem 0 !important;
+      }
+
+      .curriculum-section .container-lg {
+        max-width: 1180px;
+      }
+
+      .curriculum-header {
+        max-width: 860px;
+        margin: 0 auto 2.5rem !important;
+        text-align: center;
+      }
+
+      .curriculum-kicker {
+        color: #FF6A00;
+        font-size: 0.68rem;
+        font-weight: 900;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        margin: 0 0 0.9rem;
+      }
+
+      .curriculum-header h2 {
+        color: #172033 !important;
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: clamp(2.65rem, 5vw, 4.6rem) !important;
+        line-height: 0.98;
+        letter-spacing: -0.045em;
+        font-weight: 400;
+        margin-bottom: 1.05rem !important;
+      }
+
+      .curriculum-bridge {
+        color: #5d6575 !important;
+        font-size: 1.02rem !important;
+        line-height: 1.62 !important;
+        max-width: 760px !important;
+        margin: 0 auto 1rem !important;
+      }
+
+      .curriculum-header > p:not(.curriculum-kicker):not(.curriculum-bridge) {
+        color: #4f5a68 !important;
+        font-size: 1.12rem !important;
+        line-height: 1.65 !important;
+        max-width: 800px !important;
+      }
+
+      .curriculum-outcome-chips {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.55rem;
+        margin-top: 1.45rem;
+      }
+
+      .curriculum-outcome-chip {
+        border: 1px solid #dfe5dc;
+        background: #ffffff;
+        color: #172033;
+        border-radius: 999px;
+        padding: 0.54rem 0.78rem;
+        font-size: 0.76rem;
+        font-weight: 850;
+        letter-spacing: 0.035em;
+      }
+
+      .curriculum-explorer-frame {
+        background: rgba(255, 255, 255, 0.82);
+        border: 1px solid #e2e7df;
+        border-radius: 34px;
+        padding: 1.4rem;
+        box-shadow: 0 26px 80px rgba(23, 32, 51, 0.10);
+      }
+
+      .curriculum-nav {
+        gap: 1rem !important;
+        margin-bottom: 1.2rem !important;
+      }
+
+      .curriculum-nav-card {
+        position: relative;
+        border: 1px solid #dfe5dc !important;
+        border-radius: 26px !important;
+        padding: 1.45rem !important;
+        background: #ffffff !important;
+        box-shadow: 0 12px 34px rgba(23, 32, 51, 0.075);
+        transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
+        overflow: hidden;
+      }
+
+      .curriculum-nav-card:hover {
+        transform: translateY(-3px);
+        border-color: #cfdbd1 !important;
+        box-shadow: 0 18px 44px rgba(23, 32, 51, 0.11) !important;
+      }
+
+      .curriculum-nav-card.active {
+        background: linear-gradient(180deg, #fffaf3 0%, #ffffff 100%) !important;
+        border-color: #f0d8bd !important;
+        box-shadow: 0 22px 54px rgba(23, 32, 51, 0.12) !important;
+      }
+
+      .curriculum-nav-card.active::before {
+        content: "Currently viewing";
+        display: inline-flex;
+        margin-bottom: 0.75rem;
+        border-radius: 999px;
+        background: #FF6A00;
+        color: #ffffff;
+        padding: 0.38rem 0.62rem;
+        font-size: 0.64rem;
+        font-weight: 900;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+      }
+
+      .curriculum-nav-card::after {
+        content: "View topics →";
+        display: block;
+        color: #172033;
+        font-size: 0.78rem;
+        font-weight: 900;
+        margin-top: 1rem;
+      }
+
+      .curriculum-nav-card .block-label {
+        color: #FF6A00 !important;
+        background: transparent !important;
+        padding: 0 !important;
+        letter-spacing: 0.13em !important;
+      }
+
+      .curriculum-nav-card h3 {
+        color: #172033 !important;
+        line-height: 1.18 !important;
+      }
+
+      .curriculum-nav-card p {
+        color: #647080 !important;
+        line-height: 1.55 !important;
+      }
+
+      .curriculum-price {
+        color: #172033 !important;
+        font-weight: 900 !important;
+      }
+
+      .curriculum-content {
+        background: #f8faf6;
+        border: 1px solid #e2e7df;
+        border-radius: 28px;
+        padding: 1rem;
+      }
+
+      .competency-group {
+        border: 1px solid #dfe5dc !important;
+        border-radius: 22px !important;
+        overflow: hidden;
+        background: #ffffff;
+        box-shadow: 0 8px 24px rgba(23, 32, 51, 0.055);
+      }
+
+      .competency-group + .competency-group {
+        margin-top: 0.8rem !important;
+      }
+
+      .competency-header {
+        background: #ffffff !important;
+        color: #172033 !important;
+        padding: 1.15rem 1.3rem !important;
+        border-bottom: 0 !important;
+        transition: background 180ms ease, color 180ms ease, box-shadow 180ms ease;
+      }
+
+      .competency-header:hover {
+        background: #fffaf3 !important;
+      }
+
+      .competency-group.active .competency-header {
+        background: #172033 !important;
+        color: #ffffff !important;
+      }
+
+      .competency-header h3 {
+        color: inherit !important;
+        font-size: 1.18rem !important;
+        font-family: Georgia, 'Times New Roman', serif !important;
+        letter-spacing: -0.01em;
+      }
+
+      .competency-header p {
+        color: #66717f !important;
+        font-size: 0.95rem !important;
+        line-height: 1.45 !important;
+      }
+
+      .competency-group.active .competency-header p {
+        color: rgba(255, 255, 255, 0.76) !important;
+      }
+
+      .competency-toggle::before {
+        content: "+" !important;
+        color: #FF6A00 !important;
+        font-size: 1.7rem !important;
+        font-weight: 700;
+      }
+
+      .competency-group.active .competency-toggle::before {
+        content: "−" !important;
+        color: #ffffff !important;
+      }
+
+      .competency-content {
+        background: #ffffff !important;
+      }
+
+      .competency-list {
+        padding: 1.4rem !important;
+      }
+
+      .competency-list::before {
+        content: "You'll learn to:";
+        display: block;
+        color: #172033;
+        font-size: 0.78rem;
+        font-weight: 900;
+        letter-spacing: 0.11em;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+      }
+
+      .competency-item {
+        align-items: flex-start !important;
+        gap: 1rem !important;
+        padding: 1rem 0 !important;
+      }
+
+      .competency-item:first-child {
+        padding-top: 0 !important;
+      }
+
+      .competency-text h4 {
+        color: #172033 !important;
+        font-size: 1rem !important;
+        margin-bottom: 0.35rem !important;
+      }
+
+      .competency-text p {
+        color: #5d6575 !important;
+        font-size: 0.97rem !important;
+        line-height: 1.58 !important;
+      }
+
+      .curriculum-cta-band {
+        margin-top: 1rem;
+        border-radius: 26px;
+        background: #172033;
+        color: #ffffff;
+        padding: 1.45rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      .curriculum-cta-band p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.78);
+        line-height: 1.45;
+      }
+
+      .curriculum-cta-band strong {
+        display: block;
+        color: #ffffff;
+        font-size: 1.08rem;
+        margin-bottom: 0.2rem;
+      }
+
+      .curriculum-cta-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+        justify-content: flex-end;
+      }
+
+      .curriculum-cta-actions a {
+        border-radius: 999px;
+        padding: 0.78rem 1rem;
+        font-weight: 900;
+        font-size: 0.78rem;
+        letter-spacing: 0.055em;
+        text-transform: uppercase;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+
+      .curriculum-cta-primary {
+        background: #FF6A00;
+        color: #ffffff;
+      }
+
+      .curriculum-cta-secondary {
+        background: rgba(255, 255, 255, 0.09);
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+      }
+
+      @media (max-width: 768px) {
+        .curriculum-section {
+          padding: 4rem 0 !important;
+        }
+
+        .curriculum-explorer-frame {
+          border-radius: 24px;
+          padding: 0.85rem;
+        }
+
+        .curriculum-content {
+          padding: 0.65rem;
+        }
+
+        .curriculum-cta-band {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .curriculum-cta-actions {
+          justify-content: flex-start;
+          width: 100%;
+        }
+      }
+    </style>
     <!-- Curriculum Section -->
     <section class="curriculum-section theme-light py-5xl">
       <div class="container container-lg mx-auto">
 
         <!-- Section Header -->
         <header class="curriculum-header">
+          <p class="curriculum-kicker">Live curriculum</p>
           <h2>What You'll Master in 4½ Days</h2>
-          <p>Build comprehensive expertise in labor relations, discrimination defense, and employment law compliance. Each block delivers practical strategies from practicing attorneys you can apply to your most pressing challenges the following week.</p>
+          <p class="curriculum-bridge">Once you know the program is built for your role, the next question is simple: what will you actually be able to handle after 4½ days?</p>
+          <p>Build a practical, attorney-led roadmap for union activity, discrimination claims, workplace investigations, bargaining, discipline, accommodation, and high-risk employee relations decisions.</p>
+          <div class="curriculum-outcome-chips" aria-label="Curriculum focus areas">
+            <span class="curriculum-outcome-chip">Labor relations</span>
+            <span class="curriculum-outcome-chip">Investigations</span>
+            <span class="curriculum-outcome-chip">Discrimination defense</span>
+            <span class="curriculum-outcome-chip">Accommodation</span>
+            <span class="curriculum-outcome-chip">Bargaining</span>
+            <span class="curriculum-outcome-chip">Wage &amp; hour</span>
+          </div>
         </header>
 
+        <div class="curriculum-explorer-frame">
         <!-- Block Navigation -->
         <div class="curriculum-nav">
 
           <!-- Block I Card -->
-          <div class="curriculum-nav-card active" data-target="block1" tabindex="0" role="tab" aria-selected="true" aria-controls="block1">
+          <div id="nav-block1" class="curriculum-nav-card active" data-target="block1" tabindex="0" role="tab" aria-selected="true" aria-controls="block1">
             <div class="block-label">Block I</div>
             <h3>Comprehensive Labor Relations</h3>
-            <p>Navigate the complex terrain of organizing risk, employee handbooks, union elections, and collective bargaining with proven strategies that protect your workforce while maintaining compliance.</p>
+            <p>Understand union organizing, NLRB risk, campaign rules, bargaining obligations, and how to stay lawful before issues escalate.</p>
             <div class="curriculum-price">$1,375</div>
             <div class="curriculum-availability">Available individually</div>
           </div>
 
           <!-- Block II Card -->
-          <div class="curriculum-nav-card" data-target="block2" tabindex="-1" role="tab" aria-selected="false" aria-controls="block2">
+          <div id="nav-block2" class="curriculum-nav-card" data-target="block2" tabindex="-1" role="tab" aria-selected="false" aria-controls="block2">
             <div class="block-label">Block II</div>
             <h3>Discrimination Prevention & Defense</h3>
-            <p>Master discrimination law fundamentals across all protected classes. Learn how to identify workplace practices that expose your company to liability and implement preventive measures that strengthen your defense.</p>
+            <p>Learn how to make defensible decisions around accommodation, leave, performance, investigations, and retaliation risk.</p>
             <div class="curriculum-price">$1,375</div>
             <div class="curriculum-availability">Available individually</div>
           </div>
 
           <!-- Block III Card -->
-          <div class="curriculum-nav-card" data-target="block3" tabindex="-1" role="tab" aria-selected="false" aria-controls="block3">
+          <div id="nav-block3" class="curriculum-nav-card" data-target="block3" tabindex="-1" role="tab" aria-selected="false" aria-controls="block3">
             <div class="block-label">Block III</div>
             <h3>Special Issues & Advanced Topics</h3>
-            <p>Deep dive into complex employment law issues including executive employment agreements, trade secrets, non-competes, and remote work considerations that shape modern HR strategy.</p>
+            <p>Handle wage/hour exposure, complex employee relations scenarios, and emerging compliance risks with attorney-led frameworks.</p>
             <div class="curriculum-price">$575</div>
             <div class="curriculum-availability">Available individually</div>
           </div>
@@ -2280,6 +2626,15 @@
 
           </div>
 
+        </div>
+
+        <div class="curriculum-cta-band">
+          <p><strong>Want the full agenda and upcoming dates?</strong> Review delivery options, program timing, and the full registration details in one place.</p>
+          <div class="curriculum-cta-actions">
+            <a class="curriculum-cta-primary" href="#all-programs">View Upcoming Programs</a>
+            <a class="curriculum-cta-secondary" href="/register.html?program=employee-relations-law">Get Program Details</a>
+          </div>
+        </div>
         </div>
 
       </div>
