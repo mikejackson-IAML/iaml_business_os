@@ -928,6 +928,172 @@ h1,h2,h3{margin:0;text-wrap:pretty;color:var(--ink)}h1{font-family:var(--serif);
 <section class="section mist home-faq-section" id="faq"><div class="wrap"><div class="home-faq-panel"><div class="home-faq-intro"><div class="eyebrow">Quick answers</div><h2>A few answers before you choose.</h2><p class="lead">Use these to decide whether to start with a program, a team training conversation, or the finder.</p><div class="home-faq-note"><p>If you are choosing for yourself, start with the finder. If you are choosing for others, start with team training.</p></div><div aria-label="Choose your next step" class="home-faq-guide"><a class="primary" href="#finder"><span>Choosing for myself</span><strong>Find my program</strong></a><a href="#programs"><span>Comparing options</span><strong>Browse programs</strong></a><a href="#team"><span>Planning for a group</span><strong>Plan Team Training</strong></a></div></div><div class="home-faq-list"><details open=""><summary><span>I’m not sure which program fits. Where should I start?</span><i aria-hidden="true"></i></summary><p>Use the <a href="#finder">Program Finder</a> for a quick recommendation. If you already know the workplace issue, <a href="#programs">browse by need</a>. If you are planning for more than one person, start with <a href="#team">Team Training</a>.</p></details><details><summary><span>Can I send more than one person?</span><i aria-hidden="true"></i></summary><p>Yes. IAML can help with individual seats, multiple participants, reserved group seats, and team training options.</p></details><details><summary><span>Are programs available for individual seats, virtual delivery, or private training?</span><i aria-hidden="true"></i></summary><p>Some programs may be available as private training delivered virtually or at your location, depending on the audience, timing, and training need.</p></details><details><summary><span>Who are IAML programs designed for?</span><i aria-hidden="true"></i></summary><p>IAML programs support HR, employee relations, benefits, legal, compliance, workplace investigation, managers and supervisors, and other management professionals.</p></details><details><summary><span>Are programs attorney-led?</span><i aria-hidden="true"></i></summary><p>Yes. IAML programs are led by practicing attorneys and focus on practical workplace law judgment, not abstract legal theory.</p></details><details><summary><span>Can participants receive professional credit?</span><i aria-hidden="true"></i></summary><p>SHRM, HRCI, CLE, and CE pathways are available for qualifying programs.</p></details></div></div></div></section>
 <section class="footercta" id="next"><div class="wrap"><div class="eyebrow">Next step</div><h2>Start with the decision you need to improve.</h2><p class="lead">Get a recommendation, compare program paths, or plan training for a group.</p><div class="btns" style="justify-content:center"><a class="btn primary" href="#finder">Find My Program</a><a class="btn light" href="#programs">Compare Programs</a><a class="btn dark" href="#team" style="border-color:white">Plan Team Training</a></div></div></section>
 </main>
+<footer class="iaml-footer" role="contentinfo">
+  <style>
+    .iaml-footer{
+      --footer-navy:#0d2138;
+      --footer-ink:#142235;
+      --footer-muted:#5d7083;
+      --footer-line:#d9e3ed;
+      --footer-paper:#f8fbff;
+      --footer-card:#ffffff;
+      --footer-orange:#f1682f;
+      --footer-blue:#18375e;
+      background:linear-gradient(180deg,#fbfdff 0%,var(--footer-paper) 100%);
+      border-top:1px solid var(--footer-line);
+      color:var(--footer-ink);
+      font-family:Switzer,Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    .iaml-footer *{box-sizing:border-box}
+    .iaml-footer a{color:inherit;text-decoration:none}
+    .iaml-footer a:hover{color:var(--footer-orange)}
+    .iaml-footer a:focus-visible{outline:2px solid var(--footer-orange);outline-offset:4px;border-radius:8px}
+    .iaml-footer__wrap{width:min(1180px,calc(100vw - 48px));margin:0 auto}
+    .iaml-footer__top{
+      display:grid;
+      grid-template-columns:minmax(280px,1.05fr) minmax(0,2.25fr);
+      gap:54px;
+      align-items:start;
+      padding:54px 0 42px;
+    }
+    .iaml-footer__brand-card{
+      padding:28px;
+      border:1px solid rgba(217,227,237,.92);
+      border-radius:28px;
+      background:rgba(255,255,255,.72);
+      box-shadow:0 18px 46px rgba(17,35,60,.055);
+    }
+    .iaml-footer__logo{display:inline-flex;align-items:center;margin-bottom:20px}
+    .iaml-footer__logo img{display:block;width:76px;height:76px;object-fit:contain}
+    .iaml-footer__brand-card p{margin:0;color:var(--footer-muted);font-size:15.5px;line-height:1.64}
+    .iaml-footer__proof{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+      margin-top:24px;
+      padding-top:22px;
+      border-top:1px solid var(--footer-line);
+    }
+    .iaml-footer__proof strong{display:block;color:var(--footer-navy);font-family:Gambarino,Georgia,serif;font-size:30px;font-weight:500;line-height:1;letter-spacing:-.02em}
+    .iaml-footer__proof span{display:block;margin-top:7px;color:#687a8a;font-size:10.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;line-height:1.25}
+    .iaml-footer__utility{
+      display:block;
+      margin-bottom:30px;
+      padding:0 0 24px;
+      border-bottom:1px solid var(--footer-line);
+    }
+    .iaml-footer__utility p{max-width:760px;margin:0;color:var(--footer-muted);font-size:15.5px;line-height:1.58}
+    .iaml-footer__utility strong{display:block;margin-bottom:7px;color:var(--footer-navy);font-size:13px;font-weight:900;letter-spacing:.13em;text-transform:uppercase}
+    .iaml-footer__actions{max-width:760px;margin-top:8px;color:var(--footer-muted);font-size:14.5px;line-height:1.6;text-align:left}
+    .iaml-footer__actions a{color:var(--footer-navy);font-weight:800;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+    .iaml-footer__actions a:hover{color:var(--footer-orange)}
+    .iaml-footer__links-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px}
+    .iaml-footer__col h3{margin:0 0 15px;color:var(--footer-navy);font-size:11px;font-weight:900;letter-spacing:.15em;text-transform:uppercase}
+    .iaml-footer__links{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+    .iaml-footer__links a{color:#40556a;font-size:15px;line-height:1.35}
+    .iaml-footer__links a strong{color:var(--footer-navy);font-weight:780}
+    .iaml-footer__note{margin:17px 0 0;color:var(--footer-muted);font-size:13.5px;line-height:1.56}
+    .iaml-footer__bottom{
+      display:flex;
+      justify-content:space-between;
+      gap:24px;
+      align-items:center;
+      flex-wrap:wrap;
+      padding:24px 0 30px;
+      border-top:1px solid var(--footer-line);
+      color:#607386;
+      font-size:13.25px;
+    }
+    .iaml-footer__legal{display:flex;gap:18px;flex-wrap:wrap}
+    .iaml-footer__legal a{color:#607386}
+    @media(max-width:1040px){
+      .iaml-footer__top{grid-template-columns:1fr;gap:34px}
+      .iaml-footer__brand-card{max-width:none}
+      .iaml-footer__utility{align-items:flex-start;flex-direction:column}
+      .iaml-footer__actions{max-width:none;text-align:left}
+    }
+    @media(max-width:760px){
+      .iaml-footer__wrap{width:min(100% - 34px,620px)}
+      .iaml-footer__top{padding:38px 0 34px}
+      .iaml-footer__brand-card{padding:24px;border-radius:24px}
+      .iaml-footer__links-grid{grid-template-columns:1fr;gap:30px}
+      .iaml-footer__actions{max-width:none;text-align:left}
+      .iaml-footer__proof{grid-template-columns:1fr 1fr}
+      .iaml-footer__bottom{display:block}
+      .iaml-footer__legal{margin-top:14px}
+    }
+  </style>
+  <div class="iaml-footer__wrap">
+    <div class="iaml-footer__top">
+      <section class="iaml-footer__brand-card" aria-label="Institute for Applied Management and Law">
+        <a class="iaml-footer__logo" href="/" aria-label="IAML home"><img src="/images/iaml-logo.svg" alt="IAML"></a>
+        <p>Attorney-led workplace law training for HR, employee relations, benefits, legal, compliance, manager, and supervisor audiences.</p>
+        <div class="iaml-footer__proof" aria-label="IAML proof points">
+          <div><strong>1979</strong><span>Training since</span></div>
+          <div><strong>80k+</strong><span>Professionals trained</span></div>
+        </div>
+      </section>
+
+      <nav class="iaml-footer__nav" aria-label="Footer navigation">
+        <section class="iaml-footer__utility" aria-label="Footer assistance">
+          <p><strong>Need help choosing?</strong></p>
+          <p class="iaml-footer__actions" aria-label="Footer assistance links">
+            <a href="/programs/index.html?source=global-footer">Compare programs</a>,
+            <a href="/program-schedule.html?source=global-footer">check dates</a>, or
+            <a href="/contact-us.html?topic=program-fit&source=global-footer">ask for a short recommendation</a> before you register or plan training for a team.
+          </p>
+        </section>
+
+        <div class="iaml-footer__links-grid">
+          <section class="iaml-footer__col" aria-labelledby="footer-programs-heading">
+            <h3 id="footer-programs-heading">Programs</h3>
+            <ul class="iaml-footer__links">
+              <li><a href="/programs/index.html"><strong>Compare all programs</strong></a></li>
+              <li><a href="/programs/employee-relations-law.html">Employee Relations Law</a></li>
+              <li><a href="/programs/workplace-investigations.html">Workplace Investigations</a></li>
+              <li><a href="/programs/managers-supervisors-employment-law-training.html">Managers &amp; Supervisors</a></li>
+              <li><a href="/programs/advanced-employment-law.html">Advanced Employment Law</a></li>
+              <li><a href="/programs/employee-benefits-law.html">Employee Benefits Law</a></li>
+            </ul>
+          </section>
+
+          <section class="iaml-footer__col" aria-labelledby="footer-buyer-heading">
+            <h3 id="footer-buyer-heading">Find your path</h3>
+            <ul class="iaml-footer__links">
+              <li><a href="/program-schedule.html"><strong>Schedule and locations</strong></a></li>
+              <li><a href="/contact-us.html?topic=program-details&source=global-footer">Request program details</a></li>
+              <li><a href="/contact-us.html?topic=dates-pricing-credits&source=global-footer">Ask about dates, pricing, or credit</a></li>
+              <li><a href="/corporate-training.html">Private team training</a></li>
+              <li><a href="/contact-us.html?topic=team-training&source=global-footer">Plan training for a group</a></li>
+              <li><a href="/faq.html">Registration FAQ</a></li>
+            </ul>
+          </section>
+
+          <section class="iaml-footer__col" aria-labelledby="footer-company-heading">
+            <h3 id="footer-company-heading">About IAML</h3>
+            <ul class="iaml-footer__links">
+              <li><a href="/about-us.html">About IAML</a></li>
+              <li><a href="/faculty.html">Faculty</a></li>
+              <li><a href="/participating-organizations.html">Participating organizations</a></li>
+              <li><a href="/contact-us.html?source=global-footer">Contact IAML</a></li>
+            </ul>
+            <p class="iaml-footer__note">Questions? Ask about program fit, internal overview details, continuing credit, or team training.</p>
+          </section>
+        </div>
+      </nav>
+    </div>
+
+    <div class="iaml-footer__bottom">
+      <div>© <span data-iaml-year>2026</span> Institute for Applied Management &amp; Law. Workplace law training for HR, benefits, legal, compliance, and management teams.</div>
+      <div class="iaml-footer__legal" aria-label="Legal links">
+        <a href="/privacy-policy.html">Privacy Policy</a>
+        <a href="/sitemap.xml">Sitemap</a>
+      </div>
+    </div>
+  </div>
+  <script>document.querySelectorAll('[data-iaml-year]').forEach(function(el){el.textContent=new Date().getFullYear();});</script>
+</footer>
+
 <div class="connectPopup-overlay" id="connectPopup_Modal" onclick="connectPopup_closeOnOverlay(event)"><div class="connectPopup-modal" onclick="event.stopPropagation();"><div class="connectPopup-header"><h3>Connect with us in 20 seconds or less</h3><button aria-label="Close" class="connectPopup-closeBtn" onclick="connectPopup_close()">×</button></div><div class="connectPopup-body" id="connectPopup_Content"></div></div></div>
 <script src="js/modals.js"></script>
 <script>
@@ -976,10 +1142,10 @@ h1,h2,h3{margin:0;text-wrap:pretty;color:var(--ink)}h1{font-family:var(--serif);
     employee_relations: {slug:'employee-relations-law', title:'Employee Relations Law', track:'HR / ER', body:'Best fit for HR, employee relations, legal-adjacent professionals, and manager advisors handling complaints, discipline, documentation, accommodations, retaliation, and escalation.', href:'/programs/employee-relations-law/', reason:'This path focuses on practical HR and employee-relations judgment before workplace issues become claims.'},
     strategic_hr_leadership: {slug:'strategic-hr-leadership', title:'Strategic HR Leadership', track:'Strategic HR', body:'Best fit for newer HR professionals or emerging HR leaders who need a practical foundation for credibility, judgment, and strategic influence.', href:'/programs/strategic-hr-leadership/', reason:'This path helps newer HR professionals build leadership confidence and practical judgment before moving into more specialized employee-relations or legal topics.'},
     investigations: {slug:'workplace-investigations', title:'Workplace Investigations', track:'Investigations', body:'Best fit when the need is defensible intake, interviewing, evidence review, credibility analysis, findings, and written reports.', href:'/programs/workplace-investigations/', reason:'This path focuses on the investigation workflow from intake through written findings, helping teams make defensible, well-documented decisions.'},
-    manager_training: {slug:'managers-supervisors', title:'Managers & Supervisors', track:'Manager training', body:'Best fit for supervisor groups that need practical guidance on issue spotting, documentation, retaliation awareness, and HR escalation.', href:'/programs/managers-supervisors-employment-law-training', reason:'This path helps supervisors recognize risk, document clearly, avoid retaliation problems, and know when to involve HR.'},
-    benefits_law: {slug:'employee-benefits-law.html', title:'Benefits Law', track:'Benefits law', body:'Best fit for benefits professionals who need grounding in ERISA, health and welfare, retirement, fiduciary, administration, and compliance topics.', href:'/programs/employee-benefits-law', reason:'This path builds the benefits-law foundation needed for plan administration, fiduciary responsibilities, ERISA, and compliance decisions.'},
-    advanced_law: {slug:'advanced-strategic-employment-law', title:'Advanced Strategic Employment Law', track:'Advanced law', body:'Best fit for experienced HR, legal, compliance, or senior leaders dealing with higher-stakes employment-law judgment.', href:'/programs/advanced-employment-law', reason:'This path is designed for more experienced leaders handling higher-stakes employment-law strategy and judgment calls.'},
-    team_training: {slug:'team training', title:'Team Training Conversation', track:'Team training', body:'Best fit when a group, manager population, or private internal training path may be more useful than a single public seat.', href:'#team', reason:'This path is better when the training need involves a group, department, manager population, or private training conversation.'}
+    manager_training: {slug:'managers-supervisors-employment-law-training', title:'Managers & Supervisors', track:'Manager training', body:'Best fit for supervisor groups that need practical guidance on issue spotting, documentation, retaliation awareness, and HR escalation.', href:'/programs/managers-supervisors-employment-law-training', reason:'This path helps supervisors recognize risk, document clearly, avoid retaliation problems, and know when to involve HR.'},
+    benefits_law: {slug:'employee-benefits-law', title:'Benefits Law', track:'Benefits law', body:'Best fit for benefits professionals who need grounding in ERISA, health and welfare, retirement, fiduciary, administration, and compliance topics.', href:'/programs/employee-benefits-law', reason:'This path builds the benefits-law foundation needed for plan administration, fiduciary responsibilities, ERISA, and compliance decisions.'},
+    advanced_law: {slug:'advanced-employment-law', title:'Advanced Strategic Employment Law', track:'Advanced law', body:'Best fit for experienced HR, legal, compliance, or senior leaders dealing with higher-stakes employment-law judgment.', href:'/programs/advanced-employment-law', reason:'This path is designed for more experienced leaders handling higher-stakes employment-law strategy and judgment calls.'},
+    team_training: {slug:'team-training', title:'Team Training Conversation', track:'Team training', body:'Best fit when a group, manager population, or private internal training path may be more useful than a single public seat.', href:'#team', reason:'This path is better when the training need involves a group, department, manager population, or private training conversation.'}
   };
 
   function uuid(){ if (window.crypto && crypto.randomUUID) return crypto.randomUUID(); return 'anon-' + Date.now() + '-' + Math.random().toString(16).slice(2); }
@@ -1056,10 +1222,10 @@ h1,h2,h3{margin:0;text-wrap:pretty;color:var(--ink)}h1{font-family:var(--serif);
       document.getElementById('resultCard').innerHTML = '';
       return;
     }
-    var supportCta = (rec.slug === 'team training') ? '<a class="btn primary small" href="#team">Ask about team training</a>' : '<a class="btn light small" href="/contact-us?interest=program-details">Send program details</a>';
+    var supportCta = (rec.slug === 'team-training') ? '<a class="btn primary small" href="#team">Ask about team training</a>' : '<a class="btn light small" href="/contact-us?interest=program-details">Send program details</a>';
     var primaryHref = rec.href;
-    var primaryText = (rec.slug === 'team training') ? 'View team options' : 'View recommendation';
-    var also = (rec.slug !== 'team training' && answers.issue === 'investigations' && rec.title !== 'Workplace Investigations') ? '<div><b>Also consider</b><span>Workplace Investigations if fact-finding is the central need.</span></div>' : '';
+    var primaryText = (rec.slug === 'team-training') ? 'View team options' : 'View recommendation';
+    var also = (rec.slug !== 'team-training' && answers.issue === 'investigations' && rec.title !== 'Workplace Investigations') ? '<div><b>Also consider</b><span>Workplace Investigations if fact-finding is the central need.</span></div>' : '';
     document.getElementById('recTitle').textContent = 'Recommended path: ' + rec.title;
     document.getElementById('recBody').textContent = rec.body;
     document.getElementById('recCardTitle').textContent = 'Why this path fits';
@@ -1068,8 +1234,9 @@ h1,h2,h3{margin:0;text-wrap:pretty;color:var(--ink)}h1{font-family:var(--serif);
   }
 
   document.getElementById('quizContinue').addEventListener('click', function(){
-    var selected = document.querySelector('.answer.selected'); if (selected) selectAnswer(selected);
+    var selected = document.querySelector('.answer.selected');
     var q = questions[currentStep-1];
+    if (selected && !answers[q.key]) selectAnswer(selected);
     if (!answers[q.key]) { document.getElementById('quizQuestion').focus && document.getElementById('quizQuestion').focus(); return; }
     if (currentStep < questions.length) { currentStep += 1; finalShown = false; renderQuestion(); return; }
     finalShown = true;
@@ -1079,7 +1246,7 @@ h1,h2,h3{margin:0;text-wrap:pretty;color:var(--ink)}h1{font-family:var(--serif);
   });
   document.getElementById('quizBack').addEventListener('click', function(){ if (currentStep > 1) { currentStep -= 1; finalShown = false; renderQuestion(); } });
 
-  document.querySelectorAll('.route-tile').forEach(function(link){ link.addEventListener('click', function(){ var key = link.dataset.routeKey || 'unknown'; var strong = link.querySelector('strong'); post({event_type:'route_click', session_id:sessionStorage.getItem(sessionKey) || null, route_key:key, route_label:strong ? strong.textContent.trim() : link.textContent.trim(), destination_url:link.getAttribute('href')}); }); });
+  document.querySelectorAll('[data-route-key]').forEach(function(link){ link.addEventListener('click', function(){ var key = link.dataset.routeKey || 'unknown'; var strong = link.querySelector('strong'); post({event_type:'route_click', session_id:sessionStorage.getItem(sessionKey) || null, route_key:key, route_label:strong ? strong.textContent.trim() : link.textContent.trim(), destination_url:link.getAttribute('href')}); }); });
   var finder = document.getElementById('finder'); if (finder && 'IntersectionObserver' in window) { var seen = false; var observer = new IntersectionObserver(function(entries){ entries.forEach(function(entry){ if (!seen && entry.isIntersecting) { seen = true; ensureQuizSession(); observer.disconnect(); } }); }, {threshold:.35}); observer.observe(finder); }
   renderQuestion();
 })();
