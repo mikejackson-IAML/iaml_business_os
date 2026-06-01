@@ -174,8 +174,8 @@ function renderStep(step, payload = {}) {
   
   if (step === 'form') {
     const isProgramInquiry = activeConnectContext.programSlug === MANAGERS_SUPERVISORS_SLUG;
-    root.innerHTML = `
-      <p>${isProgramInquiry ? 'Send us a few details and an IAML program coordinator can send Managers & Supervisors program details, dates, and small-group options.' : "We'll connect you with one of our program coordinators who can answer your questions and get you exactly what you need."}</p>
+    root.innerHTML = isProgramInquiry ? `
+      <p>Send us a few details and an IAML program coordinator can send Managers & Supervisors program details, dates, and small-group options.</p>
       <form class="connectPopup-form" id="connectPopup_Form">
         <div class="connectPopup-row" style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
           <div class="connectPopup-group">
@@ -205,7 +205,6 @@ function renderStep(step, payload = {}) {
             <input type="text" id="connectPopup_title" name="title" autocomplete="organization-title" />
           </div>
         </div>
-        ${isProgramInquiry ? `
         <div class="connectPopup-group">
           <label for="connectPopup_intent">What would you like us to send? *</label>
           <select id="connectPopup_intent" name="intent" required>
@@ -216,12 +215,32 @@ function renderStep(step, payload = {}) {
             <option value="past_participant_pricing_question">Special pricing eligibility</option>
             <option value="other_question">Other question</option>
           </select>
-        </div>` : ''}
+        </div>
         <div class="connectPopup-group">
           <label for="connectPopup_question">Question <span class="muted">(optional)</span></label>
           <textarea rows="4" id="connectPopup_question" name="question" placeholder="Anything specific you want us to know?"></textarea>
         </div>
-        <button type="submit" class="connectPopup-submitBtn">${isProgramInquiry ? 'SEND PROGRAM DETAILS REQUEST' : 'CONNECT'}</button>
+        <button type="submit" class="connectPopup-submitBtn">SEND PROGRAM DETAILS REQUEST</button>
+      </form>
+    ` : `
+      <p>Share the number where we can reach you. We'll use it only to follow up on your IAML program question.</p>
+      <form class="connectPopup-form connectPopup-phoneOnly" id="connectPopup_Form">
+        <div class="connectPopup-group">
+          <label for="connectPopup_phone">Phone number *</label>
+          <input type="tel" id="connectPopup_phone" name="phone" placeholder="(555) 555-5555" autocomplete="tel" inputmode="tel" required />
+        </div>
+        <fieldset class="connectPopup-choiceGroup">
+          <legend>What can we help with? <span class="muted">(optional)</span></legend>
+          <div class="connectPopup-choiceGrid">
+            <label><input type="radio" name="intent" value="program_recommendation" /> <span>Find the right program</span></label>
+            <label><input type="radio" name="intent" value="schedule_dates" /> <span>Schedule or dates</span></label>
+            <label><input type="radio" name="intent" value="team_training" /> <span>Team training</span></label>
+            <label><input type="radio" name="intent" value="continuing_credit" /> <span>Continuing credit</span></label>
+            <label><input type="radio" name="intent" value="not_sure" /> <span>Not sure yet</span></label>
+          </div>
+        </fieldset>
+        <button type="submit" class="connectPopup-submitBtn">REQUEST A CALL</button>
+        <p class="connectPopup-privacyNote">No mailing list. No extra form. Just a callback about your program question.</p>
       </form>
     `;
     document.getElementById('connectPopup_Form').addEventListener('submit', connectPopup_submit);

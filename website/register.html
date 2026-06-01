@@ -17,9 +17,65 @@
   <link rel="stylesheet" href="css/3-components.css">
   <link rel="stylesheet" href="css/4-layout.css">
   <link rel="stylesheet" href="css/5-pages.css">
+  <style>
+    /* IAML B2B registration refresh: local overrides only */
+    :root{
+      --reg-navy:#0f2947;
+      --reg-blue:#18375e;
+      --reg-blue-2:#11233c;
+      --reg-ink:#0b2239;
+      --reg-steel:#51697d;
+      --reg-muted:#718296;
+      --reg-mist:#eef4f8;
+      --reg-ivory:#fff8f2;
+      --reg-line:rgba(12,36,54,.12);
+      --reg-orange:#ef6a32;
+      --reg-orange-soft:#fff1e8;
+      --reg-serif:'Gambarino','Playfair Display',Georgia,'Times New Roman',serif;
+      --reg-sans:'Switzer',Inter,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    }
+    html{background:var(--reg-mist)}
+    body.register-page{min-height:100vh;background:radial-gradient(circle at 18% 12%,rgba(239,106,50,.10),transparent 25%),linear-gradient(180deg,#f8fbfd 0%,#edf4f8 100%);font-family:var(--reg-sans);color:var(--reg-ink)}
+    .register-main{min-height:100vh;position:relative;overflow:hidden}.register-main:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.55) 0%,rgba(255,255,255,.12) 45%,rgba(255,255,255,.72) 100%);pointer-events:none}.register-split-container{position:relative;z-index:1;min-height:100vh;display:grid;grid-template-columns:minmax(380px,.9fr) minmax(520px,1.1fr);gap:0;width:100%}
+    .register-left-panel{min-height:100vh;height:auto;display:flex;align-items:center;justify-content:flex-start;padding:70px clamp(34px,6vw,96px);background:transparent;color:var(--reg-ink);position:relative}.register-left-panel:before{content:"IAML Registration";position:absolute;top:34px;left:clamp(34px,6vw,96px);color:var(--reg-orange);font-size:11px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}.left-panel-content{max-width:520px;width:100%;animation:fadeIn .35s ease}.panel-logo{justify-content:flex-start;margin-bottom:34px}.panel-logo img{height:64px!important;width:auto;padding:12px;border-radius:20px;background:white;border:1px solid var(--reg-line);box-shadow:0 18px 48px rgba(12,36,54,.08)}
+    .panel-headline,.panel-quote{font-family:var(--reg-serif);font-size:clamp(42px,5.4vw,76px);line-height:.94;letter-spacing:-.055em;font-weight:500;color:var(--reg-navy);text-align:left;margin:0 0 24px}.panel-quote{font-style:normal}.panel-subtext{max-width:470px;font-size:18px;line-height:1.62;color:var(--reg-steel);margin:0}.quote-attribution{align-items:flex-start;text-align:left;margin-top:22px}.attribution-name{color:var(--reg-navy);font-weight:850}.attribution-title,.attribution-company{color:var(--reg-muted)}
+    .panel-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:34px}.stat-item{padding:18px 16px;background:rgba(255,255,255,.72);border:1px solid var(--reg-line);border-radius:22px;box-shadow:0 18px 42px rgba(12,36,54,.06)}.stat-number{font-family:var(--reg-serif);font-size:clamp(34px,3vw,46px);font-weight:500;letter-spacing:-.04em;color:var(--reg-navy)}.stat-label{font-size:10px;font-weight:900;letter-spacing:.12em;color:var(--reg-steel);line-height:1.2}.value-stack{gap:13px;margin-top:28px}.value-item{align-items:flex-start;gap:12px;padding:14px 0;border-bottom:1px solid rgba(12,36,54,.10)}.value-icon{width:24px;height:24px;background:linear-gradient(180deg,var(--reg-blue) 0%,var(--reg-blue-2) 100%);color:white;box-shadow:0 10px 22px rgba(24,55,94,.16)}.value-text{color:var(--reg-steel);line-height:1.5}
+    .register-right-panel{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:56px clamp(28px,5vw,78px);background:transparent}.register-form-card{width:100%;max-width:720px;background:linear-gradient(180deg,#fffdfb 0%,#ffffff 100%);border:1px solid rgba(12,36,54,.10);border-radius:32px;padding:34px 34px 30px;box-shadow:0 38px 100px rgba(12,36,54,.16),0 1px 0 rgba(255,255,255,.85) inset}.register-form-card .register-stepper{justify-content:flex-start;margin-bottom:30px;padding:0}.register-form-card .stepper-list{gap:0;overflow:visible}.register-form-card .stepper-item{opacity:1}.register-form-card .stepper-number{width:10px;height:10px;border-radius:999px;background:#cad5df;border:0;font-size:0}.register-form-card .stepper-item.active .stepper-number{width:13px;height:13px;background:var(--reg-blue);box-shadow:0 0 0 5px rgba(24,55,94,.09)}.register-form-card .stepper-item.completed .stepper-number{background:var(--reg-orange)}.register-form-card .stepper-item:not(:last-child)::after{width:42px;height:2px;background:#d6e0e8;margin:0 7px}.register-form-card .stepper-item.completed:not(:last-child)::after{background:rgba(239,106,50,.45)}
+    .register-form-card .register-step{background:transparent;border-radius:0;box-shadow:none;padding:0}.step-title{font-family:var(--reg-serif);font-size:clamp(34px,3.2vw,48px);line-height:1;letter-spacing:-.045em;font-weight:500;color:var(--reg-navy);margin:0 0 12px}.step-subtitle{max-width:560px;font-size:16px;line-height:1.55;color:var(--reg-steel);margin:0 0 28px}.step-subtitle:after{content:"";display:block;width:56px;height:2px;margin-top:18px;background:var(--reg-orange)}
+    .format-options,.program-options,.session-list,.blocks-options,.payment-method-options{display:grid;gap:14px;margin:0 0 24px}.format-options,.payment-method-options{grid-template-columns:1fr}.format-option,.program-option,.session-card,.block-option,.payment-method-option{position:relative;border:1px solid var(--reg-line);border-radius:20px;background:#fff;box-shadow:0 12px 34px rgba(12,36,54,.055);transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease,background .18s ease;cursor:pointer}.format-option,.program-option{display:flex;align-items:center;gap:16px;padding:18px 20px}.format-option:hover,.program-option:hover,.session-card:hover,.block-option:hover,.payment-method-option:hover{transform:translateY(-1px);border-color:rgba(24,55,94,.32);box-shadow:0 18px 46px rgba(12,36,54,.09)}.format-option:has(input:checked),.program-option:has(input:checked),.session-card.selected,.block-option.selected,.payment-method-option:has(input:checked){background:linear-gradient(180deg,#fff7f1 0%,#fffdfb 100%);border-color:rgba(239,106,50,.42);box-shadow:0 0 0 4px rgba(239,106,50,.10),0 18px 46px rgba(12,36,54,.08)}.format-option input[type="radio"],.program-option input[type="radio"],.payment-method-option input[type="radio"]{appearance:none;width:24px;height:24px;flex:0 0 24px;border-radius:999px;border:2px solid #c9d5df;background:white;margin:0;display:grid;place-items:center}.format-option input[type="radio"]:checked,.program-option input[type="radio"]:checked,.payment-method-option input[type="radio"]:checked{border-color:var(--reg-blue);background:radial-gradient(circle at center,var(--reg-blue) 0 37%,transparent 39%)}.program-name,.format-info strong,.payment-title{display:block;font-size:17px;font-weight:850;color:var(--reg-ink);line-height:1.25}.format-info span,.payment-description{display:block!important;margin-top:4px;color:var(--reg-steel);font-size:14px;line-height:1.4}.format-option .format-info{display:block!important;min-width:0}.format-option .format-icon{display:grid!important;place-items:center;flex:0 0 44px}.format-card,.payment-method-card{display:flex;align-items:center;gap:14px;width:100%;background:transparent!important;border:0!important;padding:0!important;box-shadow:none!important}.format-icon,.payment-icon{width:44px;height:44px;margin:0;border-radius:16px;background:var(--reg-orange-soft);color:var(--reg-orange);font-size:22px}.session-card{padding:18px 20px;border-width:1px}.session-date{font-weight:850;color:var(--reg-ink)}.session-time,.session-location{color:var(--reg-steel)}.session-availability{background:#edf7f2;color:#1f6b4f;border-radius:999px;font-weight:850}.sessions-empty{border:1px dashed rgba(24,55,94,.22);border-radius:20px;background:#fbfcfe;color:var(--reg-steel)}
+    .form-row{gap:16px}.form-field{gap:7px}.form-field label,.form-section-title{color:#30475c;font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}.form-field input,.form-field select,.form-field textarea,#card-element{min-height:48px;border:1px solid var(--reg-line);border-radius:16px;background:#fbfcfe;color:var(--reg-ink);font-family:var(--reg-sans);font-size:15px;padding:12px 15px}.form-field input:focus,.form-field select:focus,.form-field textarea:focus{outline:none;border-color:rgba(24,55,94,.42);box-shadow:0 0 0 4px rgba(24,55,94,.10);background:white}.required{color:var(--reg-orange)}.optional{color:var(--reg-muted);font-weight:700;letter-spacing:0;text-transform:none}.coupon-input-row{display:flex;gap:10px}.btn-coupon{border:1px solid rgba(24,55,94,.16);background:white;color:var(--reg-blue);border-radius:999px;padding:0 18px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+    .order-summary,.invoice-form,.confirmation-summary-box,.confirmation-next-steps{border:1px solid var(--reg-line);background:#fbfcfe;border-radius:24px;box-shadow:none}.order-summary{padding:22px;margin-bottom:26px}.order-summary-title,.confirmation-summary-header h3,.confirmation-next-steps h3{font-family:var(--reg-serif);font-size:28px;line-height:1.05;font-weight:500;letter-spacing:-.03em;color:var(--reg-navy)}.order-label{color:var(--reg-steel);font-weight:800}.order-value{color:var(--reg-ink)}.total-row .order-value,.order-value.total{color:var(--reg-navy);font-weight:900}
+    .register-form-card .register-nav{margin-top:30px;padding-top:24px;border-top:1px solid var(--reg-line);display:flex;align-items:center;gap:14px}.btn.btn-primary,.btn-next,.btn-submit{min-height:50px;border:1px solid rgba(24,55,94,.82);border-radius:999px;background:linear-gradient(180deg,var(--reg-blue) 0%,var(--reg-blue-2) 100%);color:#fff;font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;box-shadow:0 14px 32px rgba(24,55,94,.22);padding:0 24px}.btn.btn-primary:hover,.btn-next:hover,.btn-submit:hover{transform:translateY(-1px);background:linear-gradient(180deg,#24496f 0%,#10243b 100%);box-shadow:0 18px 36px rgba(17,35,60,.28)}.btn.btn-secondary,.btn-back{min-height:50px;border:1px solid rgba(12,36,54,.14);border-radius:999px;background:white;color:var(--reg-blue);font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;padding:0 20px}.btn:disabled,.btn-next:disabled,.btn-submit:disabled{background:#d6dee7;color:#718296;border-color:#d6dee7;box-shadow:none;transform:none}
+    .error-banner{background:#fff7f1;border:1px solid rgba(239,106,50,.32);color:var(--reg-ink);border-radius:18px;box-shadow:0 18px 44px rgba(12,36,54,.12)}.loading-box,.loading-spinner{border-radius:24px}.confirmation-content{text-align:left;padding:16px 0}.confirmation-icon-success{background:linear-gradient(180deg,var(--reg-blue),var(--reg-blue-2));box-shadow:0 18px 42px rgba(24,55,94,.18);margin-left:0}.confirmation-title{font-family:var(--reg-serif);font-weight:500;letter-spacing:-.04em;color:var(--reg-navy)}.confirmation-subtitle{color:var(--reg-steel)}
+    .payment-badge{display:inline-flex;align-items:center;margin-left:8px;padding:4px 8px;border-radius:999px;background:rgba(239,106,50,.11);color:var(--reg-orange);font-family:var(--reg-sans);font-size:10px;font-weight:900;letter-spacing:.11em;text-transform:uppercase;vertical-align:middle}.payment-method-primary .payment-method-card{border-color:rgba(24,55,94,.24);box-shadow:0 18px 46px rgba(24,55,94,.09)}
+    @media(max-width:1024px){.register-split-container{grid-template-columns:1fr}.register-left-panel,.register-right-panel{min-height:auto}.register-left-panel{padding:78px 28px 24px}.register-left-panel:before{left:28px}.left-panel-content{max-width:760px}.panel-stats{grid-template-columns:repeat(3,1fr)}.register-right-panel{padding:24px 18px 42px}.register-form-card{max-width:760px}}
+    @media(max-width:680px){.register-left-panel{padding-top:68px}.panel-logo{margin-bottom:22px}.panel-logo img{height:50px!important}.panel-headline,.panel-quote{font-size:40px}.panel-stats{grid-template-columns:1fr}.register-form-card{border-radius:24px;padding:24px 20px}.form-row{grid-template-columns:1fr}.register-form-card .stepper-item:not(:last-child)::after{width:22px}.step-title{font-size:34px}.format-option,.program-option,.session-card{padding:16px}.register-form-card .register-nav{display:grid;grid-template-columns:1fr}.nav-spacer{display:none}.btn.btn-primary,.btn.btn-secondary{width:100%}}
+  </style>
+  <style>
+    /* Extra registration-step overrides for generated block/payment controls */
+    .block-selection-radio input[type="radio"]:checked + .full-program-card,
+    .individual-block-label input[type="checkbox"]:checked + .individual-block-card{
+      border-color:rgba(239,106,50,.42)!important;
+      background:linear-gradient(180deg,#fff7f1 0%,#fffdfb 100%)!important;
+      box-shadow:0 0 0 4px rgba(239,106,50,.10),0 18px 46px rgba(12,36,54,.08)!important;
+    }
+    .full-program-card,.individual-block-card{
+      border:1px solid var(--reg-line)!important;
+      border-radius:20px!important;
+      background:#fff!important;
+      box-shadow:0 12px 34px rgba(12,36,54,.055)!important;
+      padding:18px 20px!important;
+      transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease,background .18s ease!important;
+    }
+    .full-program-card:hover,.individual-block-card:hover{transform:translateY(-1px);border-color:rgba(24,55,94,.32)!important;box-shadow:0 18px 46px rgba(12,36,54,.09)!important}
+    .block-selection-indicator,.individual-block-checkbox{border-color:#c9d5df!important;background:#fff!important;border-radius:999px!important}
+    .block-selection-radio input[type="radio"]:checked + .full-program-card .block-selection-indicator{border-color:var(--reg-blue)!important;background:radial-gradient(circle at center,var(--reg-blue) 0 37%,transparent 39%)!important}
+    .block-selection-radio input[type="radio"]:checked + .full-program-card .block-selection-indicator::after{display:none!important}
+    .individual-block-label input[type="checkbox"]:checked + .individual-block-card .individual-block-checkbox{border-color:var(--reg-blue)!important;background:var(--reg-blue)!important;border-radius:7px!important}
+    .block-selection-title,.individual-block-name{color:var(--reg-ink)!important;font-weight:850!important}.block-selection-meta,.individual-block-order{color:var(--reg-steel)!important}.block-selection-price,.individual-block-price{color:var(--reg-blue)!important;font-weight:900!important}.block-selection-badge{background:var(--reg-orange-soft)!important;color:var(--reg-orange)!important;border-radius:999px!important;font-weight:900!important}.block-selection-divider span{color:var(--reg-steel)!important}.block-selection-divider::before,.block-selection-divider::after{background:var(--reg-line)!important}
+  </style>
 
   <!-- Environment Configuration -->
-  <script src="js/env-config.local.js"></script>
   <script src="js/env-config.js"></script>
   <script>
     if (typeof ENV_CONFIG === 'undefined') {
@@ -214,9 +270,22 @@
             </div>
 
             <h2 id="step-payment-method-title" class="step-title">Payment Method</h2>
-            <p class="step-subtitle">Choose how you'd like to pay</p>
+            <p class="step-subtitle">Card payment is the fastest path. Invoice is available when an employer needs a PO or internal approval.</p>
 
             <div class="payment-method-options">
+              <label class="payment-method-option payment-method-primary">
+                <input type="radio" name="paymentMethod" value="stripe" checked>
+                <div class="payment-method-card">
+                  <div class="payment-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                      <line x1="1" y1="10" x2="23" y2="10"></line>
+                    </svg>
+                  </div>
+                  <strong class="payment-title">Pay securely by card <span class="payment-badge">Recommended</span></strong>
+                  <span class="payment-description">Immediate secure checkout through Stripe. Your registration intent is saved before you leave this page.</span>
+                </div>
+              </label>
               <label class="payment-method-option">
                 <input type="radio" name="paymentMethod" value="invoice">
                 <div class="payment-method-card">
@@ -229,21 +298,8 @@
                       <polyline points="10 9 9 9 8 9"></polyline>
                     </svg>
                   </div>
-                  <strong class="payment-title">Request Invoice</strong>
-                  <span class="payment-description">We'll send you an invoice within 24 hours</span>
-                </div>
-              </label>
-              <label class="payment-method-option">
-                <input type="radio" name="paymentMethod" value="stripe">
-                <div class="payment-method-card">
-                  <div class="payment-icon">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                      <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-                      <line x1="1" y1="10" x2="23" y2="10"></line>
-                    </svg>
-                  </div>
-                  <strong class="payment-title">Pay Now with Card</strong>
-                  <span class="payment-description">Secure checkout powered by Stripe</span>
+                  <strong class="payment-title">Request invoice</strong>
+                  <span class="payment-description">Use this if your employer needs invoice review, a purchase order, or approval before card payment.</span>
                 </div>
               </label>
             </div>

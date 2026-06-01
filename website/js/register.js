@@ -85,6 +85,26 @@
       duration: '2 days',
       price: 1575
       // No blocks for any format
+    },
+    'Managers & Supervisors Employment Law Training': {
+      code: 'MS',
+      duration: '4 hours',
+      price: 197,
+      sessions: [
+        {
+          id: 'manual-ms-2026-07-29',
+          fields: {
+            'Start Date': '2026-07-29',
+            'End Date': '2026-07-29',
+            'Virtual Platform': 'Live Virtual',
+            'City': '',
+            'State/Province': '',
+            'Venue Name': '',
+            'Program Name': 'Managers & Supervisors Employment Law Training'
+          }
+        }
+      ]
+      // No blocks; public live virtual manager training
     }
   };
 
@@ -95,7 +115,8 @@
     'Certificate in Workplace Investigations',
     'Certificate in Strategic HR Leadership',
     'Certificate in Employee Benefits Law',
-    'Advanced Certificate in Employee Benefits Law'
+    'Advanced Certificate in Employee Benefits Law',
+    'Managers & Supervisors Employment Law Training'
   ];
 
   // Map URL slugs to full program names for deep linking
@@ -105,7 +126,9 @@
     'strategic-hr': 'Certificate in Strategic HR Leadership',
     'workplace-investigations': 'Certificate in Workplace Investigations',
     'employee-benefits-law': 'Certificate in Employee Benefits Law',
-    'advanced-benefits-law': 'Advanced Certificate in Employee Benefits Law'
+    'advanced-benefits-law': 'Advanced Certificate in Employee Benefits Law',
+    'managers-supervisors': 'Managers & Supervisors Employment Law Training',
+    'managers-supervisors-employment-law-training': 'Managers & Supervisors Employment Law Training'
   };
 
   // Standalone block programs (available for individual registration)
@@ -215,6 +238,9 @@
     },
     'Advanced Certificate in Employee Benefits Law': {
       'in-person': 'viwlzVMIk78qDmL2W'
+    },
+    'Managers & Supervisors Employment Law Training': {
+      'virtual': 'manual-ms-2026-07-29'
     },
 
     // Individual block views (for partial attendance)
@@ -466,7 +492,7 @@
     contactCompany: '',
 
     // Payment
-    paymentMethod: '', // 'invoice' or 'stripe'
+    paymentMethod: 'stripe', // 'invoice' or 'stripe'
 
     // Billing (Invoice Only)
     billingContactName: '',
@@ -483,6 +509,7 @@
     contactRecordId: '',
     companyRecordId: '',
     registrationRecordId: '',
+    registrationPayloadSignature: '',
 
     // Session Metadata
     city: '',
@@ -603,6 +630,19 @@
 
     // Different years: "December 28, 2026 - January 2, 2027"
     return `${startMonth} ${startDay}, ${startYear} - ${endMonth} ${endDay}, ${endYear}`;
+  }
+
+  function isSessionInFuture(session) {
+    const startDate = session?.fields?.['Start Date'];
+    if (!startDate) return false;
+
+    const [year, month, day] = startDate.split('-').map(Number);
+    const sessionStart = new Date(year, month - 1, day);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Show sessions that start today or later. Hide anything already in the past.
+    return sessionStart >= today;
   }
 
   function formatCurrency(amount) {
@@ -1129,7 +1169,11 @@
 
     // Update order summary when showing payment step
     if (stepName === 'payment-method') {
+      if (!state.paymentMethod) state.paymentMethod = 'stripe';
+      const selectedPayment = qs(`input[name="paymentMethod"][value="${state.paymentMethod}"]`);
+      if (selectedPayment) selectedPayment.checked = true;
       updateOrderSummary();
+      updateNavigationButtons();
     }
 
     // Show pre-selection summary on contact step if came from URL deep link
@@ -1240,7 +1284,11 @@
 
     // Update next button text
     const isLastStep = currentIndex === state.steps.length - 1;
-    nextBtn.textContent = isLastStep ? 'Complete Registration' : 'Next →';
+    if (state.currentStep === 'payment-method') {
+      nextBtn.textContent = state.paymentMethod === 'invoice' ? 'Request Invoice' : 'Pay securely by card';
+    } else {
+      nextBtn.textContent = isLastStep ? 'Complete Registration' : 'Next →';
+    }
 
     // Update button visibility
     updateNextButtonVisibility();
@@ -1652,6 +1700,7 @@
     qsa('input[name="paymentMethod"]').forEach(input => {
       input.addEventListener('change', (e) => {
         state.paymentMethod = e.target.value;
+        updateNavigationButtons();
         const invoiceForm = qs('#invoiceForm');
         const stripeForm = qs('#stripePaymentForm');
 
@@ -1835,16 +1884,18 @@
         viewId: viewId
       });
 
-      if (!viewId) {
+      let data;
+      const programDataForSessions = PROGRAM_DATA[state.program];
+      if (programDataForSessions?.sessions?.length) {
+        data = { records: programDataForSessions.sessions };
+      } else if (!viewId) {
         const programName = state.isStandaloneBlock ? state.standaloneBlockName : state.program;
         console.error(`No view configured for ${programName} / ${state.format}`);
         throw new Error('Session configuration not available');
       }
 
-      let data;
-
       // Try static cache first for faster loading
-      try {
+      if (!data) try {
         const cacheResponse = await fetch(`${SESSION_CACHE_BASE}/${viewId}.json`);
         if (cacheResponse.ok) {
           data = await cacheResponse.json();
@@ -1865,7 +1916,7 @@
         data = await response.json();
       }
 
-      const sessions = data.records || [];
+      const sessions = (data.records || []).filter(isSessionInFuture);
 
       loadingDiv.classList.add('hidden');
 
@@ -2395,6 +2446,25 @@
     }
   }
 
+  function buildCustomLineItemDescription() {
+    const formatName = FORMAT_MAP[state.format] || state.format;
+    const attendance = state.blockSelectionType === 'Partial' && state.selectedBlocks.length
+      ? `Individual blocks: ${state.selectedBlocks.join(', ')}`
+      : 'Full program';
+    return `${state.program} - ${formatName} - ${attendance}`;
+  }
+
+  function buildCustomStripeLineItem() {
+    return {
+      priceData: {
+        currency: 'usd',
+        productName: state.program,
+        unitAmount: Math.max(0, Math.round((state.finalPrice || state.listPrice || 0) * 100))
+      },
+      quantity: 1
+    };
+  }
+
   // Build line items for Stripe Invoice
   function buildInvoiceLineItems() {
     if (typeof window.STRIPE_PRODUCTS === 'undefined') {
@@ -2644,6 +2714,8 @@
       const product = window.STRIPE_PRODUCTS[programCode];
       if (product) {
         lineItems.push({ priceId: product.priceId, quantity: 1 });
+      } else {
+        lineItems.push(buildCustomStripeLineItem());
       }
       return lineItems.length > 0 ? lineItems : null;
     }
@@ -2685,7 +2757,7 @@
       return [{ priceId: certificateProduct.priceId, quantity: 1 }];
     }
 
-    return blockLineItems.length > 0 ? blockLineItems : null;
+    return blockLineItems.length > 0 ? blockLineItems : [buildCustomStripeLineItem()];
   }
 
   async function findOrCreateContact() {
@@ -2767,6 +2839,13 @@
     // Generate registration code prefix (server adds sequence number)
     const registrationCodePrefix = generateRegistrationCodePrefix();
 
+    const sessionFields = state.sessionRecord?.fields || {};
+    const startDate = state.dynamicStartDate || sessionFields['Start Date'] || null;
+    const endDate = state.dynamicEndDate || sessionFields['End Date'] || null;
+    const selectedLocation = state.format === 'in-person'
+      ? [state.city || sessionFields['City'], state.stateProvince || sessionFields['State/Province']].filter(Boolean).join(', ')
+      : (state.format === 'virtual' ? (sessionFields['Virtual Platform'] || 'Virtual Classroom') : 'Online (Self-Paced)');
+
     const registrationData = {
       first_name: state.contactFirstName,
       last_name: state.contactLastName,
@@ -2775,6 +2854,11 @@
       job_title: state.contactTitle || null,
       company_name: state.contactCompany || null,
       session_id: state.sessionId,
+      program_name: state.program,
+      program_format: FORMAT_MAP[state.format] || state.format,
+      session_start_date: startDate,
+      session_end_date: endDate,
+      session_location: selectedLocation,
       registration_code_prefix: registrationCodePrefix,
       list_price: state.listPrice,
       discount_amount: state.couponDiscount || 0,
@@ -2792,6 +2876,20 @@
       utm_term: trackingData.utm_term || null
     };
 
+    const payloadSignature = JSON.stringify({
+      email: registrationData.email,
+      session_id: registrationData.session_id,
+      program_name: registrationData.program_name,
+      attendance_type: registrationData.attendance_type,
+      selected_blocks: registrationData.selected_blocks,
+      final_price: registrationData.final_price,
+      payment_method: registrationData.payment_method
+    });
+
+    if (state.registrationRecordId && state.registrationPayloadSignature === payloadSignature) {
+      return { id: state.registrationRecordId, registration_code: state.registrationCode };
+    }
+
     const response = await fetch('/api/supabase-registration', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -2804,6 +2902,7 @@
 
     const registration = await response.json();
     state.registrationRecordId = registration.id;
+    state.registrationPayloadSignature = payloadSignature;
     state.registrationCode = registration.registration_code; // Store full code from server
     return registration;
   }
@@ -2864,7 +2963,7 @@
       discount_amount: state.couponDiscount || 0,
       registration_code: state.registrationCode,
       amount_due: state.finalPrice,
-      payment_status: state.paymentMethod === 'invoice' ? 'Pending Payment' : 'Paid',
+      payment_status: 'Pending Payment',
       registration_status: 'Confirmed',
       registration_date: new Date().toISOString().split('T')[0],
       tags: ['new_registration', 'website']

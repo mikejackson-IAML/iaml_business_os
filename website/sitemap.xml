@@ -2,49 +2,49 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Homepage -->
   <url>
-    <loc>https://www.iaml.com/</loc>
+    <loc>https://iaml.com/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
   <!-- Program Pages -->
   <url>
-    <loc>https://www.iaml.com/programs/advanced-employee-benefits-law</loc>
+    <loc>https://iaml.com/programs/advanced-employee-benefits-law</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.iaml.com/programs/advanced-employment-law</loc>
+    <loc>https://iaml.com/programs/advanced-employment-law</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.iaml.com/programs/benefit-plan-claims-appeals-litigation</loc>
+    <loc>https://iaml.com/programs/benefit-plan-claims-appeals-litigation</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.iaml.com/programs/comprehensive-labor-relations</loc>
+    <loc>https://iaml.com/programs/comprehensive-labor-relations</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.iaml.com/programs/discrimination-prevention-defense</loc>
+    <loc>https://iaml.com/programs/discrimination-prevention-defense</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.iaml.com/programs/employee-benefits-law</loc>
+    <loc>https://iaml.com/programs/employee-benefits-law</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.iaml.com/programs/employee-relations-law</loc>
+    <loc>https://iaml.com/programs/employee-relations-law</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.iaml.com/programs/hr-law-fundamentals</loc>
+    <loc>https://iaml.com/programs/hr-law-fundamentals</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -54,76 +54,77 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.iaml.com/programs/retirement-plans</loc>
+    <loc>https://iaml.com/programs/retirement-plans</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.iaml.com/programs/special-issues-employment-law</loc>
+    <loc>https://iaml.com/programs/special-issues-employment-law</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.iaml.com/programs/strategic-hr-leadership</loc>
+    <loc>https://iaml.com/programs/strategic-hr-leadership</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.iaml.com/programs/strategic-hr-management</loc>
+    <loc>https://iaml.com/programs/strategic-hr-management</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.iaml.com/programs/welfare-benefits-plan-issues</loc>
+    <loc>https://iaml.com/programs/welfare-benefits-plan-issues</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.iaml.com/programs/workplace-investigations</loc>
+    <loc>https://iaml.com/programs/workplace-investigations</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <!-- Static Pages -->
   <url>
-    <loc>https://www.iaml.com/about-us</loc>
+    <loc>https://iaml.com/about-us</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.iaml.com/corporate-training</loc>
+    <loc>https://iaml.com/corporate-training</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.iaml.com/faculty</loc>
+    <loc>https://iaml.com/faculty</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.iaml.com/featured-programs</loc>
+    <loc>https://iaml.com/featured-programs</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.iaml.com/program-schedule</loc>
+    <loc>https://iaml.com/program-schedule/</loc>
+    <lastmod>2026-06-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.iaml.com/register</loc>
+    <loc>https://iaml.com/register</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- Legal Pages -->
   <url>
-    <loc>https://www.iaml.com/privacy-policy</loc>
+    <loc>https://iaml.com/privacy-policy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://www.iaml.com/terms-and-conditions</loc>
+    <loc>https://iaml.com/terms-and-conditions</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
