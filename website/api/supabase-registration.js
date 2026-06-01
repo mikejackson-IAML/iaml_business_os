@@ -79,6 +79,11 @@ module.exports = async function handler(req, res) {
       job_title: registration.job_title || null,
       company_name: registration.company_name || null,
       program_instance_airtable_id: registration.session_id || null,
+      program_name_snapshot: registration.program_name || null,
+      program_format_snapshot: registration.program_format || null,
+      session_start_date_snapshot: registration.session_start_date || null,
+      session_end_date_snapshot: registration.session_end_date || null,
+      session_location_snapshot: registration.session_location || null,
       registration_date: new Date().toISOString(),
       registration_source: 'Website',
       registration_status: 'Confirmed',
@@ -99,8 +104,9 @@ module.exports = async function handler(req, res) {
       utm_term: registration.utm_term || null
     };
 
-    // Insert into Supabase
-    const response = await fetch(`${SUPABASE_URL}/rest/v1/registrations`, {
+    // Insert into Supabase. If the dashboard snapshot migration has not been applied
+    // yet, retry without those optional columns so registration capture still works.
+    const insertRecord = async (payload) => fetch(`${SUPABASE_URL}/rest/v1/registrations`, {
       method: 'POST',
       headers: {
         'apikey': SUPABASE_SERVICE_KEY,
@@ -108,13 +114,30 @@ module.exports = async function handler(req, res) {
         'Content-Type': 'application/json',
         'Prefer': 'return=representation'
       },
-      body: JSON.stringify(record)
+      body: JSON.stringify(payload)
     });
+
+    let response = await insertRecord(record);
 
     if (!response.ok) {
       const error = await response.text();
-      console.error('Supabase POST error:', error);
-      return res.status(response.status).json({ error: 'Failed to create registration', details: error });
+      const mentionsSnapshotColumn = /program_name_snapshot|program_format_snapshot|session_start_date_snapshot|session_end_date_snapshot|session_location_snapshot/i.test(error);
+
+      if (mentionsSnapshotColumn) {
+        const fallbackRecord = { ...record };
+        delete fallbackRecord.program_name_snapshot;
+        delete fallbackRecord.program_format_snapshot;
+        delete fallbackRecord.session_start_date_snapshot;
+        delete fallbackRecord.session_end_date_snapshot;
+        delete fallbackRecord.session_location_snapshot;
+        response = await insertRecord(fallbackRecord);
+      }
+
+      if (!response.ok) {
+        const finalError = await response.text();
+        console.error('Supabase POST error:', finalError || error);
+        return res.status(response.status).json({ error: 'Failed to create registration', details: finalError || error });
+      }
     }
 
     const data = await response.json();

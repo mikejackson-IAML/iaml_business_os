@@ -16,6 +16,7 @@
     email: { required: true, type: 'email' },
     jobTitle: { required: false },
     company: { required: true, minLength: 1 },
+    phone: { required: false },
     inquiryType: { required: true },
     message: { required: true, minLength: 10 }
   };
@@ -143,6 +144,15 @@
     data.submittedAt = new Date().toISOString();
     data.source = 'Website - Contact Form';
     data.pageUrl = window.location.href;
+    data.referrer = document.referrer || '';
+
+    // Add routing context so form submissions retain the CTA intent that
+    // brought the visitor to the contact page.
+    const params = new URLSearchParams(window.location.search);
+    data.contactTopic = params.get('topic') || '';
+    data.contactInterest = params.get('interest') || '';
+    data.ctaSource = params.get('source') || params.get('cta') || '';
+    data.pageHash = window.location.hash || '';
 
     return data;
   }

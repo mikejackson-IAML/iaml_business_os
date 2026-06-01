@@ -4,26 +4,26 @@
   <!-- Meta Tags -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Build advanced employment law strategy with practical attorney-led training on workplace risk, compliance, and executive-level HR decisions.">
+  <meta name="description" content="Advanced Certificate in Strategic Employment Law | IAML. Master advanced employment law strategies in 2 intensive days. Earn SHRM/HRCI credits. Taught by practicing attorneys. Real cases, executive-level frameworks.">
   <meta name="keywords" content="advanced employment law, strategic employment law, employment law certification, HR law training, SHRM credits employment law, HRCI recertification, employment law certificate, HR compliance training">
   <meta name="author" content="Institute for Applied Management & Law">
 
   <!-- Open Graph / Social Media -->
   <meta property="og:title" content="Advanced Certificate in Strategic Employment Law | IAML">
-  <meta property="og:description" content="Build advanced employment law strategy with practical attorney-led training on workplace risk, compliance, and executive-level HR decisions.">
+  <meta property="og:description" content="Master advanced employment law strategies in 2 intensive days. Earn SHRM/HRCI credits. Taught by practicing attorneys. Real cases, executive-level frameworks.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://www.iaml.com/programs/advanced-employment-law">
-  <meta property="og:image" content="https://www.iaml.com/images/og-image.jpg">
+  <meta property="og:url" content="https://iaml.com/programs/advanced-employment-law">
+  <meta property="og:image" content="https://iaml.com/images/og-image.jpg">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@IAMLTraining">
   <meta name="twitter:title" content="Advanced Certificate in Strategic Employment Law | IAML">
-  <meta name="twitter:description" content="Build advanced employment law strategy with practical attorney-led training on workplace risk, compliance, and executive-level HR decisions.">
-  <meta name="twitter:image" content="https://www.iaml.com/images/og-image.jpg">
+  <meta name="twitter:description" content="Master advanced employment law strategies in 2 intensive days. Earn SHRM/HRCI credits. Taught by practicing attorneys. Real cases, executive-level frameworks.">
+  <meta name="twitter:image" content="https://iaml.com/images/og-image.jpg">
 
   <!-- SEO Directives -->
-  <link rel="canonical" href="https://www.iaml.com/programs/advanced-employment-law">
+  <link rel="canonical" href="https://iaml.com/programs/advanced-employment-law">
   <meta name="robots" content="index, follow">
 
   <!-- Favicon -->
@@ -34,7 +34,7 @@
 
   <!-- Global API Configuration - accessible to all scripts -->
   <script>
-    window.API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:3001' : '';
+    window.API_BASE = /(^|\.)iaml\.com$/.test(window.location.hostname) ? '' : 'https://www.iaml.com';
   </script>
 
   <!-- Google Fonts - Preconnect -->
@@ -80,12 +80,12 @@
   "@type": "Course",
   "name": "Advanced Certificate in Strategic Employment Law",
   "description": "Master advanced employment law strategies in 2 intensive days. Earn SHRM/HRCI credits. Taught by practicing attorneys. Real cases, executive-level frameworks.",
-  "url": "https://www.iaml.com/programs/advanced-employment-law",
-  "image": "https://www.iaml.com/images/og-image.jpg",
+  "url": "https://iaml.com/programs/advanced-employment-law",
+  "image": "https://iaml.com/images/og-image.jpg",
   "provider": {
     "@type": "Organization",
     "name": "Institute for Applied Management & Law",
-    "url": "https://www.iaml.com",
+    "url": "https://iaml.com",
     "logo": "https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69042ba0346960d8775fb4a4.svg"
   },
   "educationalLevel": "advanced",
@@ -227,19 +227,19 @@
       "@type": "ListItem",
       "position": 1,
       "name": "Home",
-      "item": "https://www.iaml.com/"
+      "item": "https://iaml.com/"
     },
     {
       "@type": "ListItem",
       "position": 2,
       "name": "Programs",
-      "item": "https://www.iaml.com/featured-programs"
+      "item": "https://iaml.com/featured-programs"
     },
     {
       "@type": "ListItem",
       "position": 3,
       "name": "Advanced Certificate in Strategic Employment Law",
-      "item": "https://www.iaml.com/programs/advanced-employment-law"
+      "item": "https://iaml.com/programs/advanced-employment-law"
     }
   ]
 }
@@ -279,7 +279,7 @@
             </p>
 
             <a id="openModalBtn-relations-law" class="btn btn-register btn-lg" href="/register.html?program=strategic-employment-law">
-              Register Now: $1,575
+              View Dates & Program Details
             </a>
 
             <div class="delivery-options">
@@ -545,9 +545,6 @@
         function renderCard(t){
           return `
             <article class="testimonial-card" role="listitem">
-              <div class="star-wrapper">
-                <img src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/68d667936fe1a53fe6603670.png" alt="5 star rating" class="star-image">
-              </div>
               <blockquote>"${escapeHtml(t.quote)}"</blockquote>
               <footer>
                 <div class="author-name">${escapeHtml(t.name)}</div>
@@ -1911,7 +1908,7 @@
             Every IAML registration includes a complimentary 15-minute consultation with our program team. Tell us what's keeping you up at night, the termination you're worried might turn into a lawsuit.<br><br>
             We brief your instructor on the issues participants are facing. Your real-world scenarios become teaching examples. You leave with strategies for YOUR situations, not theoretical exercises.
           </p>
-          <a href="/register.html?program=strategic-employment-law" class="btn btn-register">REGISTER NOW</a>
+          <a href="/register.html?program=strategic-employment-law" class="btn btn-register">View Dates & Program Details</a>
         </div>
 
         <!-- Right Column: Steps -->
@@ -3959,12 +3956,6 @@ button#prev-btn {
       min-height: 0 !important;
     }
 
-    .testimonial-card .star-wrapper {
-      flex-shrink: 0;
-      margin-bottom: 0 !important;
-      margin-top: 0 !important;
-    }
-
     .testimonial-card blockquote {
       flex: 1 1 auto !important;
       margin: 0 !important;
@@ -4878,9 +4869,9 @@ button#prev-btn {
 
         const response = await fetch(url);
         if(!response.ok) {
-          console.error('API Response Error:', response.status, response.statusText);
+          console.warn('API response unavailable:', response.status, response.statusText);
           const errorText = await response.text();
-          console.error('Error details:', errorText);
+          console.warn('API details:', errorText);
           throw new Error(`Airtable API error: ${response.status}`);
         }
         const data = await response.json();
@@ -5046,9 +5037,9 @@ button#prev-btn {
 
         const response = await fetch(url);
         if(!response.ok) {
-          console.error('Virtual components API Error:', response.status, response.statusText);
+          console.warn('Virtual components unavailable:', response.status, response.statusText);
           const errorText = await response.text();
-          console.error('Error details:', errorText);
+          console.warn('API details:', errorText);
           throw new Error(`Airtable API error: ${response.status}`);
         }
         const data = await response.json();
@@ -5357,7 +5348,7 @@ button#prev-btn {
         const [programsData, virtualComponents, instructorsData] = await Promise.all([
           fetchProgramsData(),
           fetchVirtualComponents().catch(err => {
-            console.error('Virtual components fetch error:', err);
+            console.warn('Virtual components unavailable:', err);
             return [];
           }),
           fetchInstructorsData().catch(err => {
@@ -5727,7 +5718,7 @@ button#prev-btn {
                 ${program.venueName && formatKey!=='on-demand' ? `<div class="session-venue">${program.venueName}</div>` : ''}
                 ${program.venueName && formatKey!=='virtual' && formatKey!=='on-demand' ? `<div class="hotel-details-link" data-venue-action="show-modal" data-session-id="${program.id}" data-venue-name="${program.venueName}">(view hotel details)</div>` : ''}
                 ${formatKey==='on-demand' && program.price ? `<div class="session-price">$${program.price.toLocaleString()}</div>` : ''}
-                <a href="#" class="btn btn-register reserve-btn"
+                <a href="/contact-us.html?interest=program-details&source=session-card" class="btn btn-register reserve-btn"
                    data-section="employee-relations-law"
                    data-format="${format}"
                    data-program="${program.program}"
@@ -6227,7 +6218,7 @@ button#prev-btn {
           console.log('✅ Airtable connection test successful');
           return true;
         } else {
-          console.error('❌ Airtable connection test failed:', response.status);
+          console.warn('Airtable connection test unavailable:', response.status);
           return false;
         }
       } catch (error) {
@@ -9978,9 +9969,7 @@ button#prev-btn {
             <button class="btn btn-primary hover-lift" id="openContactModal" aria-label="Open contact form" onclick="connectPopup_open()">
               LET'S TALK
             </button>
-            <a href="https://iaml.com/register.html" class="btn btn-register hover-lift" aria-label="Register now">
-              REGISTER NOW
-            </a>
+            <a href="https://iaml.com/register.html" class="btn btn-register hover-lift" aria-label="View dates and program details">View Dates & Program Details</a>
           </div>
         </div>
       </div>
@@ -9989,10 +9978,175 @@ button#prev-btn {
   </main>
 
   <!-- ===== FOOTER ===== -->
-  <!-- Footer placeholder (loaded by components.js) -->
-  <div id="footer-placeholder"></div>
+<footer class="iaml-footer" role="contentinfo">
+  <style>
+    .iaml-footer{
+      --footer-navy:#0d2138;
+      --footer-ink:#142235;
+      --footer-muted:#5d7083;
+      --footer-line:#d9e3ed;
+      --footer-paper:#f8fbff;
+      --footer-card:#ffffff;
+      --footer-orange:#f1682f;
+      --footer-blue:#18375e;
+      background:linear-gradient(180deg,#fbfdff 0%,var(--footer-paper) 100%);
+      border-top:1px solid var(--footer-line);
+      color:var(--footer-ink);
+      font-family:Switzer,Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    .iaml-footer *{box-sizing:border-box}
+    .iaml-footer a{color:inherit;text-decoration:none}
+    .iaml-footer a:hover{color:var(--footer-orange)}
+    .iaml-footer a:focus-visible{outline:2px solid var(--footer-orange);outline-offset:4px;border-radius:8px}
+    .iaml-footer__wrap{width:min(1180px,calc(100vw - 48px));margin:0 auto}
+    .iaml-footer__top{
+      display:grid;
+      grid-template-columns:minmax(280px,1.05fr) minmax(0,2.25fr);
+      gap:54px;
+      align-items:start;
+      padding:54px 0 42px;
+    }
+    .iaml-footer__brand-card{
+      padding:28px;
+      border:1px solid rgba(217,227,237,.92);
+      border-radius:28px;
+      background:rgba(255,255,255,.72);
+      box-shadow:0 18px 46px rgba(17,35,60,.055);
+    }
+    .iaml-footer__logo{display:inline-flex;align-items:center;margin-bottom:20px}
+    .iaml-footer__logo img{display:block;width:76px;height:76px;object-fit:contain}
+    .iaml-footer__brand-card p{margin:0;color:var(--footer-muted);font-size:15.5px;line-height:1.64}
+    .iaml-footer__proof{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+      margin-top:24px;
+      padding-top:22px;
+      border-top:1px solid var(--footer-line);
+    }
+    .iaml-footer__proof strong{display:block;color:var(--footer-navy);font-family:Gambarino,Georgia,serif;font-size:30px;font-weight:500;line-height:1;letter-spacing:-.02em}
+    .iaml-footer__proof span{display:block;margin-top:7px;color:#687a8a;font-size:10.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;line-height:1.25}
+    .iaml-footer__utility{
+      display:flex;
+      justify-content:space-between;
+      gap:24px;
+      align-items:center;
+      margin-bottom:30px;
+      padding:0 0 24px;
+      border-bottom:1px solid var(--footer-line);
+    }
+    .iaml-footer__utility p{max-width:620px;margin:0;color:var(--footer-muted);font-size:15.5px;line-height:1.58}
+    .iaml-footer__utility strong{display:block;margin-bottom:4px;color:var(--footer-navy);font-size:13px;font-weight:900;letter-spacing:.13em;text-transform:uppercase}
+    .iaml-footer__actions{max-width:390px;color:var(--footer-muted);font-size:14.5px;line-height:1.55;text-align:right}
+    .iaml-footer__actions a{color:var(--footer-navy);font-weight:800;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+    .iaml-footer__actions a:hover{color:var(--footer-orange)}
+    .iaml-footer__links-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px}
+    .iaml-footer__col h3{margin:0 0 15px;color:var(--footer-navy);font-size:11px;font-weight:900;letter-spacing:.15em;text-transform:uppercase}
+    .iaml-footer__links{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+    .iaml-footer__links a{color:#40556a;font-size:15px;line-height:1.35}
+    .iaml-footer__links a strong{color:var(--footer-navy);font-weight:780}
+    .iaml-footer__note{margin:17px 0 0;color:var(--footer-muted);font-size:13.5px;line-height:1.56}
+    .iaml-footer__bottom{
+      display:flex;
+      justify-content:space-between;
+      gap:24px;
+      align-items:center;
+      flex-wrap:wrap;
+      padding:24px 0 30px;
+      border-top:1px solid var(--footer-line);
+      color:#607386;
+      font-size:13.25px;
+    }
+    .iaml-footer__legal{display:flex;gap:18px;flex-wrap:wrap}
+    .iaml-footer__legal a{color:#607386}
+    @media(max-width:1040px){
+      .iaml-footer__top{grid-template-columns:1fr;gap:34px}
+      .iaml-footer__brand-card{max-width:none}
+      .iaml-footer__utility{align-items:flex-start;flex-direction:column}
+      .iaml-footer__actions{max-width:none;text-align:left}
+    }
+    @media(max-width:760px){
+      .iaml-footer__wrap{width:min(100% - 34px,620px)}
+      .iaml-footer__top{padding:38px 0 34px}
+      .iaml-footer__brand-card{padding:24px;border-radius:24px}
+      .iaml-footer__links-grid{grid-template-columns:1fr;gap:30px}
+      .iaml-footer__actions{max-width:none;text-align:left}
+      .iaml-footer__proof{grid-template-columns:1fr 1fr}
+      .iaml-footer__bottom{display:block}
+      .iaml-footer__legal{margin-top:14px}
+    }
+  </style>
+  <div class="iaml-footer__wrap">
+    <div class="iaml-footer__top">
+      <section class="iaml-footer__brand-card" aria-label="Institute for Applied Management and Law">
+        <a class="iaml-footer__logo" href="/" aria-label="IAML home"><img src="/images/iaml-logo.svg" alt="IAML"></a>
+        <p>Attorney-led workplace law training for HR, employee relations, benefits, legal, compliance, manager, and supervisor audiences.</p>
+        <div class="iaml-footer__proof" aria-label="IAML proof points">
+          <div><strong>1979</strong><span>Training since</span></div>
+          <div><strong>80k+</strong><span>Professionals trained</span></div>
+        </div>
+      </section>
 
-  <!-- ===== MODALS ===== -->
+      <nav class="iaml-footer__nav" aria-label="Footer navigation">
+        <section class="iaml-footer__utility" aria-label="Footer assistance">
+          <p><strong>Need help choosing?</strong> Compare programs, check dates, or ask for a short recommendation before you register or plan training for a team.</p>
+          <p class="iaml-footer__actions" aria-label="Footer assistance links">
+            <a href="/contact-us.html?topic=program-fit&source=global-footer">Ask for best fit</a>,
+            <a href="/program-schedule.html?source=global-footer">view the schedule</a>, or
+            <a href="/programs/index.html?source=global-footer">compare programs</a>.
+          </p>
+        </section>
+
+        <div class="iaml-footer__links-grid">
+          <section class="iaml-footer__col" aria-labelledby="footer-programs-heading">
+            <h3 id="footer-programs-heading">Programs</h3>
+            <ul class="iaml-footer__links">
+              <li><a href="/programs/index.html"><strong>Compare all programs</strong></a></li>
+              <li><a href="/programs/employee-relations-law.html">Employee Relations Law</a></li>
+              <li><a href="/programs/workplace-investigations.html">Workplace Investigations</a></li>
+              <li><a href="/programs/managers-supervisors-employment-law-training.html">Managers &amp; Supervisors</a></li>
+              <li><a href="/programs/advanced-employment-law.html">Advanced Employment Law</a></li>
+              <li><a href="/programs/employee-benefits-law.html">Employee Benefits Law</a></li>
+            </ul>
+          </section>
+
+          <section class="iaml-footer__col" aria-labelledby="footer-buyer-heading">
+            <h3 id="footer-buyer-heading">Find your path</h3>
+            <ul class="iaml-footer__links">
+              <li><a href="/program-schedule.html"><strong>Schedule and locations</strong></a></li>
+              <li><a href="/contact-us.html?topic=program-details&source=global-footer">Request program details</a></li>
+              <li><a href="/contact-us.html?topic=dates-pricing-credits&source=global-footer">Ask about dates, pricing, or credit</a></li>
+              <li><a href="/corporate-training.html">Private team training</a></li>
+              <li><a href="/contact-us.html?topic=team-training&source=global-footer">Plan training for a group</a></li>
+              <li><a href="/faq.html">Registration FAQ</a></li>
+            </ul>
+          </section>
+
+          <section class="iaml-footer__col" aria-labelledby="footer-company-heading">
+            <h3 id="footer-company-heading">About IAML</h3>
+            <ul class="iaml-footer__links">
+              <li><a href="/about-us.html">About IAML</a></li>
+              <li><a href="/faculty.html">Faculty</a></li>
+              <li><a href="/participating-organizations.html">Participating organizations</a></li>
+              <li><a href="/contact-us.html?source=global-footer">Contact IAML</a></li>
+            </ul>
+            <p class="iaml-footer__note">Questions? Ask about program fit, internal overview details, continuing credit, or team training.</p>
+          </section>
+        </div>
+      </nav>
+    </div>
+
+    <div class="iaml-footer__bottom">
+      <div>© <span data-iaml-year>2026</span> Institute for Applied Management &amp; Law. Workplace law training for HR, benefits, legal, compliance, and management teams.</div>
+      <div class="iaml-footer__legal" aria-label="Legal links">
+        <a href="/privacy-policy.html">Privacy Policy</a>
+        <a href="/sitemap.xml">Sitemap</a>
+      </div>
+    </div>
+  </div>
+  <script>document.querySelectorAll('[data-iaml-year]').forEach(function(el){el.textContent=new Date().getFullYear();});</script>
+</footer>
+<!-- ===== MODALS ===== -->
 
   <!-- Connect Modal -->
   <div class="connectPopup-overlay" id="connectPopup_Modal" onclick="connectPopup_closeOnOverlay(event)">
@@ -10061,7 +10215,7 @@ button#prev-btn {
         });
 
         if (!response.ok) {
-          console.error('API Response Error:', response.status, response.statusText);
+          console.warn('API response unavailable:', response.status, response.statusText);
           throw new Error(`Failed to fetch data: ${response.status}`);
         }
 
@@ -10092,8 +10246,8 @@ button#prev-btn {
         }
 
       } catch (error) {
-        console.error('Error fetching next program:', error);
-        console.error('Error details:', error.message);
+        console.warn('Next program unavailable:', error);
+        console.warn('Next program details:', error.message);
 
         // Show error message instead of hiding
         document.getElementById('nextProgramCard').innerHTML = `

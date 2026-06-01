@@ -6,236 +6,215 @@
  */
 
 const getHeaderHTML = () => `
-  <header class="header" id="header">
-    <a href="/" class="header-logo">
-        <img src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69042ba0346960d8775fb4a4.svg" alt="IAML Logo" fetchpriority="high" decoding="async">
-    </a>
-    <div class="header-right">
-        <nav class="mega-nav">
-            <ul class="header-nav">
-                <li class="mega-nav-item" data-menu="programs">
-                    <button class="mega-nav-trigger" aria-expanded="false" aria-haspopup="true">Programs<svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-                </li>
-                <li class="mega-nav-item" data-menu="corporate">
-                    <button class="mega-nav-trigger" aria-expanded="false" aria-haspopup="true">Corporate Training<svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-                </li>
-                <li class="mega-nav-item" data-menu="why-iaml">
-                    <button class="mega-nav-trigger" aria-expanded="false" aria-haspopup="true">Why IAML<svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-                </li>
-            </ul>
-        </nav>
-        <a href="#" class="header-cta" onclick="connectPopup_open(); return false;">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 0 0-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
-            CONNECT WITH US
-        </a>
+<header class="iaml-site-header top" role="banner">
+  <style>
+    .iaml-site-header{--iaml-header-navy:#0d2138;--iaml-header-blue:#18375e;--iaml-header-blue-2:#244f7d;--iaml-header-orange:#ef6a32;--iaml-header-line:#d9e3ee;--iaml-header-paper:rgba(251,252,255,.96);position:sticky;top:0;z-index:60;background:var(--iaml-header-paper);backdrop-filter:blur(16px);border-bottom:1px solid var(--iaml-header-line);font-family:Switzer,Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    .iaml-site-header *{box-sizing:border-box}
+    .iaml-site-header__bar{width:min(1180px,calc(100vw - 48px));height:76px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:26px}
+    .iaml-site-header__logo{display:inline-flex;align-items:center;text-decoration:none;color:var(--iaml-header-navy)}
+    .iaml-site-header__logo img{display:block;width:42px;height:42px;object-fit:contain}
+    .iaml-site-header__nav-wrap{display:flex;align-items:center;gap:18px;margin-left:auto}
+    .iaml-site-header__nav{display:flex;gap:23px;align-items:center}
+    .iaml-site-header__nav a{font-size:11px;text-transform:uppercase;letter-spacing:.11em;font-weight:850;color:#344054;text-decoration:none;transition:color .18s ease;white-space:nowrap}
+    .iaml-site-header__nav a:hover,.iaml-site-header__nav a[aria-current="page"]{color:var(--iaml-header-orange);text-decoration:none}
+    .iaml-call-connect{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:42px;padding:0 17px;border-radius:999px;background:var(--iaml-header-blue);border:1px solid var(--iaml-header-blue);color:#fff;font-size:11px;text-transform:uppercase;letter-spacing:.1em;font-weight:900;box-shadow:0 12px 26px rgba(24,55,94,.22);white-space:nowrap;cursor:pointer;text-decoration:none;transition:background .18s ease,transform .18s ease,box-shadow .18s ease}
+    .iaml-call-connect:hover{background:var(--iaml-header-blue-2);border-color:var(--iaml-header-blue-2);transform:translateY(-1px);box-shadow:0 16px 30px rgba(24,55,94,.26);text-decoration:none;color:#fff}
+    .iaml-call-connect__icon{width:15px;height:15px;color:#8ee6ff;filter:drop-shadow(0 0 5px rgba(142,230,255,.88));animation:iamlCallBlink 1.15s ease-in-out infinite;transform-origin:center}
+    @keyframes iamlCallBlink{0%,100%{opacity:1;transform:scale(1);filter:drop-shadow(0 0 5px rgba(142,230,255,.88))}45%{opacity:.32;transform:scale(.86);filter:drop-shadow(0 0 0 rgba(142,230,255,0))}68%{opacity:1;transform:scale(1.12);filter:drop-shadow(0 0 9px rgba(142,230,255,1))}}
+    @media(max-width:1100px){.iaml-site-header__nav{display:none}.iaml-site-header__bar{width:min(100% - 34px,820px)}}
+    @media(max-width:720px){.iaml-site-header{position:static}.iaml-site-header__bar{height:auto;min-height:64px;padding:12px 0}.iaml-site-header__logo img{width:34px;height:34px}.iaml-call-connect{min-height:38px;padding:0 14px;font-size:10px}}
+    @media(prefers-reduced-motion:reduce){.iaml-call-connect__icon{animation:none}}
+    .connectPopup-overlay{position:fixed;inset:0;z-index:9998;display:none;align-items:center;justify-content:center;background:rgba(8,20,35,.64);backdrop-filter:blur(8px);padding:22px}.connectPopup-overlay.active{display:flex}.connectPopup-modal{width:min(560px,100%);max-height:min(92vh,760px);overflow:auto;background:#fff;border-radius:24px;box-shadow:0 28px 80px rgba(8,20,35,.32);border:1px solid rgba(217,227,237,.8)}.connectPopup-header{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:22px 24px;border-bottom:1px solid #d9e3ee;background:#f8fbff}.connectPopup-header h3{margin:0;color:#10243b;font-family:Switzer,Inter,system-ui,sans-serif;font-size:20px;line-height:1.25}.connectPopup-closeBtn{width:36px;height:36px;border-radius:999px;border:1px solid #d9e3ee;background:#fff;color:#10243b;font-size:24px;line-height:1;cursor:pointer}.connectPopup-body{padding:24px}.connectPopup-body p{color:#526879;line-height:1.55}.connectPopup-form{display:grid;gap:14px}.connectPopup-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.connectPopup-group{display:grid;gap:7px}.connectPopup-group label,.connectPopup-choiceGroup legend{font-size:13px;font-weight:800;color:#10243b}.connectPopup-group input,.connectPopup-group textarea,.connectPopup-group select{width:100%;border:1px solid #cdd9e5;border-radius:12px;padding:12px 13px;font:inherit;color:#10243b;background:#fff}.connectPopup-group input:focus,.connectPopup-group textarea:focus,.connectPopup-group select:focus{outline:2px solid rgba(24,55,94,.22);border-color:#18375e}.connectPopup-choiceGroup{border:0;margin:0;padding:0}.connectPopup-choiceGrid{display:grid;gap:8px}.connectPopup-choiceGrid label{display:flex;gap:8px;align-items:center;color:#334b5f;font-size:14px}.connectPopup-submitBtn{min-height:44px;border:0;border-radius:999px;background:#18375e;color:#fff;font-weight:900;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}.connectPopup-submitBtn:hover{background:#244f7d}.connectPopup-privacyNote{font-size:13px!important;margin:0!important}.muted{color:#718195;font-weight:500}@media(max-width:560px){.connectPopup-row{grid-template-columns:1fr}.connectPopup-body{padding:20px}.connectPopup-header{padding:18px}}
+  </style>
+  <div class="iaml-site-header__bar">
+    <a class="iaml-site-header__logo" href="/" aria-label="IAML home"><img src="/images/iaml-logo.svg" alt="IAML"></a>
+    <div class="iaml-site-header__nav-wrap">
+      <nav class="iaml-site-header__nav" aria-label="Primary">
+        <a href="/programs/">Programs</a>
+        <a href="/corporate-training.html">Team Training</a>
+        <a href="/program-schedule.html">Schedule</a>
+        <a href="/faculty.html">Faculty</a>
+        <a href="/about-us.html">About IAML</a>
+        <a href="/contact-us.html">Contact</a>
+      </nav>
+      <button class="iaml-call-connect" type="button" onclick="connectPopup_open({ctaLabel:'Call Connect',ctaLocation:'global_header'}); return false;">
+        <svg class="iaml-call-connect__icon" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.98.98 0 0 0-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02A11.36 11.36 0 0 1 8.63 4c0-.54-.45-1-.99-1H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
+        <span>Call Connect</span>
+      </button>
     </div>
-    <button class="hamburger" id="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
-  </header>
-
-  <div class="mega-menu-backdrop" id="megaMenuBackdrop"></div>
-
-  <div class="mega-menu" id="mega-menu-programs" role="menu" aria-label="Programs menu">
-      <div class="mega-menu-container">
-          <div class="mega-menu-column">
-              <h3 class="mega-menu-heading">Foundation Certificates</h3>
-              <ul class="mega-menu-list">
-                  <li><a href="/programs/employee-relations-law" class="mega-menu-link"><span class="mega-menu-link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span><span>Employee Relations Law</span></a></li>
-                  <li><a href="/programs/workplace-investigations" class="mega-menu-link"><span class="mega-menu-link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span><span>Workplace Investigations</span></a></li>
-                  <li><a href="/programs/strategic-hr-leadership" class="mega-menu-link"><span class="mega-menu-link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span><span>Strategic HR Leadership</span></a></li>
-                  <li><a href="/programs/employee-benefits-law" class="mega-menu-link"><span class="mega-menu-link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span><span>Employee Benefits Law</span></a></li>
-              </ul>
-          </div>
-          <div class="mega-menu-column">
-              <h3 class="mega-menu-heading">Advanced Certificates</h3>
-              <ul class="mega-menu-list">
-                  <li><a href="/programs/advanced-employment-law" class="mega-menu-link"><span class="mega-menu-link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span><span>Advanced Employment Law</span></a></li>
-                  <li><a href="/programs/advanced-employee-benefits-law" class="mega-menu-link"><span class="mega-menu-link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span><span>Advanced Benefits Law</span></a></li>
-              </ul>
-              <h3 class="mega-menu-heading" style="margin-top: 24px;">Format</h3>
-              <div class="mega-menu-formats">
-                  <a href="/program-schedule?format=in-person" class="format-pill">In-Person</a>
-                  <a href="/program-schedule?format=virtual" class="format-pill">Virtual</a>
-                  <a href="/program-schedule?format=on-demand" class="format-pill">On-Demand</a>
-              </div>
-          </div>
-          <div class="mega-menu-column mega-menu-spotlight">
-              <div class="spotlight-label">Upcoming<span class="spotlight-format-badge" id="spotlight-format">In-Person</span></div>
-              <div class="spotlight-card" id="programs-spotlight">
-                  <div class="spotlight-image"><img src="/images/programs/employee-relations-law-hero.jpg" alt="Program" loading="lazy"></div>
-                  <div class="spotlight-content">
-                      <h4 class="spotlight-title">Employee Relations Law</h4>
-                      <p class="spotlight-location">Atlanta, Georgia</p>
-                      <p class="spotlight-date">Apr 20-21, 2026</p>
-                      <p class="spotlight-details">2 days · $1,575</p>
-                      <a href="/programs/employee-relations-law" class="spotlight-cta">Learn More</a>
-                  </div>
-              </div>
-          </div>
-          <div class="mega-menu-promo-row">
-              <a href="/programs/quarterly-updates" class="promo-box">
-                  <svg class="promo-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                  <div class="promo-icon promo-icon--gold"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-                  <h4 class="promo-title">Quarterly Employment Law Update</h4>
-                  <p class="promo-description">90-minute sessions covering the latest NLRB rulings, discrimination law, ADA/FMLA updates, and compliance issues.</p>
-                  <p class="promo-date" id="elu-promo-date"></p>
-              </a>
-              <a href="/program-schedule" class="promo-box">
-                  <svg class="promo-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                  <div class="promo-icon promo-icon--blue"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
-                  <h4 class="promo-title">View Upcoming Programs</h4>
-                  <p class="promo-description">Find your perfect session. Browse dates, locations, and formats for all certificate programs.</p>
-              </a>
-          </div>
-      </div>
   </div>
-
-  <div class="mega-menu" id="mega-menu-corporate" role="menu" aria-label="Corporate Training menu">
-      <div class="mega-menu-container mega-menu-container--corporate">
-          <div class="mega-menu-column">
-              <h3 class="mega-menu-heading">Training Solutions</h3>
-              <ul class="mega-menu-list mega-menu-list-detailed">
-                  <li><a href="/corporate-training" class="mega-menu-link"><span class="mega-menu-link-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span><div><span class="mega-menu-link-title">Custom Programs</span><span class="mega-menu-link-desc">Tailored to your policies</span></div></a></li>
-                  <li><a href="/corporate-training" class="mega-menu-link"><span class="mega-menu-link-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span><div><span class="mega-menu-link-title">On-Site Training</span><span class="mega-menu-link-desc">We come to you</span></div></a></li>
-                  <li><a href="/corporate-training" class="mega-menu-link"><span class="mega-menu-link-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span><div><span class="mega-menu-link-title">Virtual Group Training</span><span class="mega-menu-link-desc">Live online for distributed teams</span></div></a></li>
-              </ul>
-          </div>
-          <div class="mega-menu-column">
-              <h3 class="mega-menu-heading">Popular for Teams</h3>
-              <ul class="mega-menu-list">
-                  <li><a href="/corporate-training" class="mega-menu-link"><span class="mega-menu-link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span><span>Employee Relations Law</span></a></li>
-                  <li><a href="/corporate-training" class="mega-menu-link"><span class="mega-menu-link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span><span>Workplace Investigations</span></a></li>
-                  <li><a href="/corporate-training" class="mega-menu-link"><span class="mega-menu-link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span><span>Strategic HR Leadership</span></a></li>
-              </ul>
-          </div>
-          <div class="mega-menu-column mega-menu-cta-panel">
-              <div class="cta-panel-image"><img src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/695d44c4a8a91c0bb970611d.svg" alt="Corporate training" loading="lazy"></div>
-              <div class="cta-panel-content">
-                  <p class="cta-panel-headline">Build your team's employment law expertise with on-site training</p>
-                  <a href="#" class="cta-panel-button" onclick="openBookingModal(); closeMegaMenu(); return false;">Schedule a Consultation<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-              </div>
-              <blockquote class="testimonial-panel-quote"><p>"The opportunity to interact through role playing and ask questions specific to our business was very helpful."</p><cite><strong>Coreen Oradee</strong><span>Employee Relations Specialist</span><span>American Family Insurance</span></cite></blockquote>
-          </div>
-          <div class="ct-benefits-row">
-              <h3 class="mega-menu-heading">Why Teams Choose Us</h3>
-              <ul class="ct-benefits-grid">
-                  <li><span class="ct-benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="ct-benefit-content"><span class="ct-benefit-title">45 Years of Expertise, Your Location</span><span class="ct-benefit-subtitle">The same intensive programs, delivered at your facility</span></span></li>
-                  <li><span class="ct-benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="ct-benefit-content"><span class="ct-benefit-title">Tailored to Your Specific Risks</span><span class="ct-benefit-subtitle">Scenarios built from your industry and policies</span></span></li>
-                  <li><span class="ct-benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="ct-benefit-content"><span class="ct-benefit-title">Confidential Case Consultations</span><span class="ct-benefit-subtitle">Get answers to the questions you can't ask elsewhere</span></span></li>
-                  <li><span class="ct-benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span><span class="ct-benefit-content"><span class="ct-benefit-title">Invest in Your HR Function</span><span class="ct-benefit-subtitle">Group rates that build the capability to handle issues in-house</span></span></li>
-              </ul>
-          </div>
-      </div>
-  </div>
-
-  <div class="mega-menu" id="mega-menu-why-iaml" role="menu" aria-label="Why IAML menu">
-      <div class="mega-menu-container">
-          <div class="mega-menu-column">
-              <h3 class="mega-menu-heading">About</h3>
-              <ul class="mega-menu-list mega-menu-list-detailed">
-                  <li><a href="/about-us" class="mega-menu-link"><span class="mega-menu-link-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span><div><span class="mega-menu-link-title">Why IAML</span><span class="mega-menu-link-desc">45 years of trusted expertise</span></div></a></li>
-                  <li><a href="/faculty" class="mega-menu-link"><span class="mega-menu-link-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><div><span class="mega-menu-link-title">Our Faculty</span><span class="mega-menu-link-desc">Practicing attorneys from top firms</span></div></a></li>
-                  <li><a href="/testimonials" class="mega-menu-link"><span class="mega-menu-link-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><div><span class="mega-menu-link-title">Testimonials</span><span class="mega-menu-link-desc">Hear from our alumni</span></div></a></li>
-                  <li><a href="/participating-organizations" class="mega-menu-link"><span class="mega-menu-link-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span><div><span class="mega-menu-link-title">Participating Organizations</span><span class="mega-menu-link-desc">Companies who trust IAML</span></div></a></li>
-              </ul>
-              <h3 class="mega-menu-heading" style="margin-top: 24px;">Resources</h3>
-              <ul class="mega-menu-list">
-                  <li><a href="/faq" class="mega-menu-link"><span class="mega-menu-link-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span><span>FAQ</span></a></li>
-              </ul>
-          </div>
-          <div class="mega-menu-column">
-              <h3 class="mega-menu-heading">Included With Every Program</h3>
-              <ul class="mega-menu-benefits-detailed">
-                  <li><div class="benefit-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><div><strong>Pre-Program Consultation</strong><span>We customize training to YOUR questions</span></div></li>
-                  <li><div class="benefit-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><div><strong>12 Months of Legal Updates</strong><span>Free quarterly webinars to keep you current</span></div></li>
-                  <li><div class="benefit-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><div><strong>Lifetime Alumni Discounts</strong><span>For you and your colleagues</span></div></li>
-              </ul>
-              <h3 class="mega-menu-heading" style="margin-top: 24px;">Credentials</h3>
-              <ul class="mega-menu-benefits-detailed">
-                  <li><div class="benefit-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><div><strong>SHRM &amp; HRCI Credits</strong><span>Recertification credits included</span></div></li>
-                  <li><div class="benefit-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><div><strong>CLE Credits</strong><span>Attorneys earn CLE alongside HR</span></div></li>
-              </ul>
-          </div>
-          <div class="mega-menu-column mega-menu-testimonial-panel">
-              <div class="testimonial-panel-image"><img src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/695d3e12d5b4831a4fc4c08a.png" alt="IAML faculty" loading="lazy"></div>
-              <blockquote class="testimonial-panel-quote"><p>"I have never walked out of an IAML program without learning something I could apply immediately. Hands-down the best value for your money."</p><cite><strong>Laura Massa</strong><span>SVP, Human Resources</span><span>Sun Communities &amp; Sun RV Resorts</span></cite></blockquote>
-              <a href="/testimonials" class="testimonial-panel-link">Read More Testimonials<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-          </div>
-      </div>
-  </div>
-
-  <div class="mobile-backdrop" id="mobileBackdrop"></div>
-  <nav class="mobile-menu" id="mobileMenu">
-      <div class="mobile-accordion">
-          <button class="mobile-accordion-trigger" aria-expanded="false">Programs<svg class="accordion-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
-          <div class="mobile-accordion-content">
-              <div class="mobile-accordion-section"><span class="mobile-section-label">Foundation</span><a href="/programs/employee-relations-law">Employee Relations Law</a><a href="/programs/strategic-hr-leadership">Strategic HR Leadership</a><a href="/programs/employee-benefits-law">Employee Benefits Law</a><a href="/programs/workplace-investigations">Workplace Investigations</a></div>
-              <div class="mobile-accordion-section"><span class="mobile-section-label">Advanced</span><a href="/programs/advanced-employment-law">Advanced Employment Law</a><a href="/programs/advanced-employee-benefits-law">Advanced Benefits Law</a></div>
-              <a href="/program-schedule" class="mobile-view-all">View Full Schedule →</a>
-          </div>
-      </div>
-      <div class="mobile-accordion">
-          <button class="mobile-accordion-trigger" aria-expanded="false">Corporate Training<svg class="accordion-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
-          <div class="mobile-accordion-content"><a href="/corporate-training">Custom Programs</a><a href="/corporate-training">On-Site Training</a><a href="/corporate-training">Virtual Group Training</a></div>
-      </div>
-      <div class="mobile-accordion">
-          <button class="mobile-accordion-trigger" aria-expanded="false">Why IAML<svg class="accordion-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
-          <div class="mobile-accordion-content"><a href="/about-us">Why IAML</a><a href="/faculty">Our Faculty</a><a href="/testimonials">Testimonials</a><a href="/participating-organizations">Participating Organizations</a><a href="/faq">FAQ</a></div>
-      </div>
-      <a href="#" class="header-cta mobile-cta" onclick="connectPopup_open(); closeMobileMenu(); return false;">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 0 0-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
-          CONNECT WITH US
-      </a>
-  </nav>
-
-  <div class="booking-modal-overlay" id="bookingModal" onclick="closeBookingModal(event)">
-      <div class="booking-modal" onclick="event.stopPropagation();"><button class="booking-modal-close" onclick="closeBookingModal()" aria-label="Close">&times;</button><iframe src="https://api.leadconnectorhq.com/widget/booking/ulFTqVEuHLZH1iuq3XSt" style="width: 100%; height: 100%; border: none;" scrolling="yes" id="bookingIframe"></iframe></div>
-  </div>
+</header>
 `;
 
 const getFooterHTML = () => `
-  <footer class="footer" role="contentinfo">
-    <div class="wrap">
-        <nav class="grid" aria-label="Footer">
-            <section class="brand" aria-label="Organization">
-                <div class="logo">
-                    <img src="https://storage.googleapis.com/msgsndr/MjGEy0pobNT9su2YJqFI/media/69042ba0346960d8775fb4a4.svg" alt="IAML logo">
-                </div>
-            </section>
-            <section class="col">
-                <h3>Programs</h3>
-                <ul class="list" aria-label="Programs">
-                    <li><a href="/programs/employee-relations-law">Certificate in Employee Relations Law</a></li>
-                    <li><a href="/programs/advanced-employment-law">Advanced Certificate in Strategic Employment Law</a></li>
-                    <li><a href="/programs/workplace-investigations">Certificate in Workplace Investigations</a></li>
-                    <li><a href="/programs/strategic-hr-leadership">Certificate in Strategic HR Leadership</a></li>
-                    <li><a href="/programs/employee-benefits-law">Certificate in Employee Benefits Law</a></li>
-                    <li><a href="/programs/advanced-employee-benefits-law">Advanced Certificate in Employee Benefits Law</a></li>
-                </ul>
-            </section>
-            <section class="col">
-                <h3>Resources</h3>
-                <ul class="list" aria-label="Resources">
-                    <li><a href="/about-us">Why IAML</a></li>
-                    <li><a href="/faculty">Faculty</a></li>
-                    <li><a href="/participating-organizations">Participating Organizations</a></li>
-                    <li><a href="https://iaml.com/alumni-benefits" target="_blank">Alumni Benefits</a></li>
-                    <li><a href="/corporate-training">Corporate Training</a></li>
-                    <li><a href="/program-schedule">Schedule &amp; Locations</a></li>
-                </ul>
-            </section>
-            <section class="col">
-                <h3>Support</h3>
-                <ul class="list" aria-label="Support">
-                    <li><a href="/faq">FAQ</a></li>
-                    <li><a href="/contact-us">Contact</a></li>
-                </ul>
-            </section>
-        </nav>
-        <div class="bottom">
-            <div>© ${new Date().getFullYear()} Institute for Applied Management &amp; Law, Inc. All rights reserved.</div>
+<footer class="iaml-footer" role="contentinfo">
+  <style>
+    .iaml-footer{
+      --footer-navy:#0d2138;
+      --footer-ink:#142235;
+      --footer-muted:#5d7083;
+      --footer-line:#d9e3ed;
+      --footer-paper:#f8fbff;
+      --footer-card:#ffffff;
+      --footer-orange:#f1682f;
+      --footer-blue:#18375e;
+      background:linear-gradient(180deg,#fbfdff 0%,var(--footer-paper) 100%);
+      border-top:1px solid var(--footer-line);
+      color:var(--footer-ink);
+      font-family:Switzer,Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    .iaml-footer *{box-sizing:border-box}
+    .iaml-footer a{color:inherit;text-decoration:none}
+    .iaml-footer a:hover{color:var(--footer-orange)}
+    .iaml-footer a:focus-visible{outline:2px solid var(--footer-orange);outline-offset:4px;border-radius:8px}
+    .iaml-footer__wrap{width:min(1180px,calc(100vw - 48px));margin:0 auto}
+    .iaml-footer__top{
+      display:grid;
+      grid-template-columns:minmax(280px,1.05fr) minmax(0,2.25fr);
+      gap:54px;
+      align-items:start;
+      padding:54px 0 42px;
+    }
+    .iaml-footer__brand-card{
+      padding:28px;
+      border:1px solid rgba(217,227,237,.92);
+      border-radius:28px;
+      background:rgba(255,255,255,.72);
+      box-shadow:0 18px 46px rgba(17,35,60,.055);
+    }
+    .iaml-footer__logo{display:inline-flex;align-items:center;margin-bottom:20px}
+    .iaml-footer__logo img{display:block;width:76px;height:76px;object-fit:contain}
+    .iaml-footer__brand-card p{margin:0;color:var(--footer-muted);font-size:15.5px;line-height:1.64}
+    .iaml-footer__proof{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+      margin-top:24px;
+      padding-top:22px;
+      border-top:1px solid var(--footer-line);
+    }
+    .iaml-footer__proof strong{display:block;color:var(--footer-navy);font-family:Gambarino,Georgia,serif;font-size:30px;font-weight:500;line-height:1;letter-spacing:-.02em}
+    .iaml-footer__proof span{display:block;margin-top:7px;color:#687a8a;font-size:10.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;line-height:1.25}
+    .iaml-footer__utility{
+      display:flex;
+      justify-content:space-between;
+      gap:24px;
+      align-items:center;
+      margin-bottom:30px;
+      padding:0 0 24px;
+      border-bottom:1px solid var(--footer-line);
+    }
+    .iaml-footer__utility p{max-width:620px;margin:0;color:var(--footer-muted);font-size:15.5px;line-height:1.58}
+    .iaml-footer__utility strong{display:block;margin-bottom:4px;color:var(--footer-navy);font-size:13px;font-weight:900;letter-spacing:.13em;text-transform:uppercase}
+    .iaml-footer__actions{max-width:390px;color:var(--footer-muted);font-size:14.5px;line-height:1.55;text-align:right}
+    .iaml-footer__actions a{color:var(--footer-navy);font-weight:800;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+    .iaml-footer__actions a:hover{color:var(--footer-orange)}
+    .iaml-footer__links-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px}
+    .iaml-footer__col h3{margin:0 0 15px;color:var(--footer-navy);font-size:11px;font-weight:900;letter-spacing:.15em;text-transform:uppercase}
+    .iaml-footer__links{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+    .iaml-footer__links a{color:#40556a;font-size:15px;line-height:1.35}
+    .iaml-footer__links a strong{color:var(--footer-navy);font-weight:780}
+    .iaml-footer__note{margin:17px 0 0;color:var(--footer-muted);font-size:13.5px;line-height:1.56}
+    .iaml-footer__bottom{
+      display:flex;
+      justify-content:space-between;
+      gap:24px;
+      align-items:center;
+      flex-wrap:wrap;
+      padding:24px 0 30px;
+      border-top:1px solid var(--footer-line);
+      color:#607386;
+      font-size:13.25px;
+    }
+    .iaml-footer__legal{display:flex;gap:18px;flex-wrap:wrap}
+    .iaml-footer__legal a{color:#607386}
+    @media(max-width:1040px){
+      .iaml-footer__top{grid-template-columns:1fr;gap:34px}
+      .iaml-footer__brand-card{max-width:none}
+      .iaml-footer__utility{align-items:flex-start;flex-direction:column}
+      .iaml-footer__actions{max-width:none;text-align:left}
+    }
+    @media(max-width:760px){
+      .iaml-footer__wrap{width:min(100% - 34px,620px)}
+      .iaml-footer__top{padding:38px 0 34px}
+      .iaml-footer__brand-card{padding:24px;border-radius:24px}
+      .iaml-footer__links-grid{grid-template-columns:1fr;gap:30px}
+      .iaml-footer__actions{max-width:none;text-align:left}
+      .iaml-footer__proof{grid-template-columns:1fr 1fr}
+      .iaml-footer__bottom{display:block}
+      .iaml-footer__legal{margin-top:14px}
+    }
+  </style>
+  <div class="iaml-footer__wrap">
+    <div class="iaml-footer__top">
+      <section class="iaml-footer__brand-card" aria-label="Institute for Applied Management and Law">
+        <a class="iaml-footer__logo" href="/" aria-label="IAML home"><img src="/images/iaml-logo.svg" alt="IAML"></a>
+        <p>Attorney-led workplace law training for HR, employee relations, benefits, legal, compliance, manager, and supervisor audiences.</p>
+        <div class="iaml-footer__proof" aria-label="IAML proof points">
+          <div><strong>1979</strong><span>Training since</span></div>
+          <div><strong>80k+</strong><span>Professionals trained</span></div>
         </div>
+      </section>
+
+      <nav class="iaml-footer__nav" aria-label="Footer navigation">
+        <section class="iaml-footer__utility" aria-label="Footer assistance">
+          <p><strong>Need help choosing?</strong> Compare programs, check dates, or ask for a short recommendation before you register or plan training for a team.</p>
+          <p class="iaml-footer__actions" aria-label="Footer assistance links">
+            <a href="/contact-us.html?topic=program-fit&source=global-footer">Ask for best fit</a>,
+            <a href="/program-schedule.html?source=global-footer">view the schedule</a>, or
+            <a href="/programs/index.html?source=global-footer">compare programs</a>.
+          </p>
+        </section>
+
+        <div class="iaml-footer__links-grid">
+          <section class="iaml-footer__col" aria-labelledby="footer-programs-heading">
+            <h3 id="footer-programs-heading">Programs</h3>
+            <ul class="iaml-footer__links">
+              <li><a href="/programs/index.html"><strong>Compare all programs</strong></a></li>
+              <li><a href="/programs/employee-relations-law.html">Employee Relations Law</a></li>
+              <li><a href="/programs/workplace-investigations.html">Workplace Investigations</a></li>
+              <li><a href="/programs/managers-supervisors-employment-law-training.html">Managers &amp; Supervisors</a></li>
+              <li><a href="/programs/advanced-employment-law.html">Advanced Employment Law</a></li>
+              <li><a href="/programs/employee-benefits-law.html">Employee Benefits Law</a></li>
+            </ul>
+          </section>
+
+          <section class="iaml-footer__col" aria-labelledby="footer-buyer-heading">
+            <h3 id="footer-buyer-heading">Find your path</h3>
+            <ul class="iaml-footer__links">
+              <li><a href="/program-schedule.html"><strong>Schedule and locations</strong></a></li>
+              <li><a href="/contact-us.html?topic=program-details&source=global-footer">Request program details</a></li>
+              <li><a href="/contact-us.html?topic=dates-pricing-credits&source=global-footer">Ask about dates, pricing, or credit</a></li>
+              <li><a href="/corporate-training.html">Private team training</a></li>
+              <li><a href="/contact-us.html?topic=team-training&source=global-footer">Plan training for a group</a></li>
+              <li><a href="/faq.html">Registration FAQ</a></li>
+            </ul>
+          </section>
+
+          <section class="iaml-footer__col" aria-labelledby="footer-company-heading">
+            <h3 id="footer-company-heading">About IAML</h3>
+            <ul class="iaml-footer__links">
+              <li><a href="/about-us.html">About IAML</a></li>
+              <li><a href="/faculty.html">Faculty</a></li>
+              <li><a href="/participating-organizations.html">Participating organizations</a></li>
+              <li><a href="/contact-us.html?source=global-footer">Contact IAML</a></li>
+            </ul>
+            <p class="iaml-footer__note">Questions? Ask about program fit, internal overview details, continuing credit, or team training.</p>
+          </section>
+        </div>
+      </nav>
     </div>
-  </footer>
+
+    <div class="iaml-footer__bottom">
+      <div>© <span data-iaml-year>2026</span> Institute for Applied Management &amp; Law. Workplace law training for HR, benefits, legal, compliance, and management teams.</div>
+      <div class="iaml-footer__legal" aria-label="Legal links">
+        <a href="/privacy-policy.html">Privacy Policy</a>
+        <a href="/sitemap.xml">Sitemap</a>
+      </div>
+    </div>
+  </div>
+  <script>document.querySelectorAll('[data-iaml-year]').forEach(function(el){el.textContent=new Date().getFullYear();});</script>
+</footer>
 `;
 
 const loadComponents = () => {

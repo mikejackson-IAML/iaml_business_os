@@ -56,11 +56,33 @@ export default async function handler(req, res) {
     // Build line items
     let sessionLineItems;
     if (lineItems && Array.isArray(lineItems)) {
-      // Multiple items (e.g., multiple blocks)
-      sessionLineItems = lineItems.map(item => ({
-        price: item.priceId,
-        quantity: item.quantity || 1
-      }));
+      // Multiple items (e.g., multiple blocks) or one-time price_data items
+      sessionLineItems = lineItems.map(item => {
+        if (item.priceId) {
+          return { price: item.priceId, quantity: item.quantity || 1 };
+        }
+        if (item.priceData) {
+          return {
+            price_data: {
+              currency: item.priceData.currency || 'usd',
+              product_data: { name: item.priceData.productName || item.description || 'IAML Registration' },
+              unit_amount: item.priceData.unitAmount
+            },
+            quantity: item.quantity || 1
+          };
+        }
+        if (item.description && item.amount) {
+          return {
+            price_data: {
+              currency: 'usd',
+              product_data: { name: item.description },
+              unit_amount: Math.round(item.amount * 100)
+            },
+            quantity: item.quantity || 1
+          };
+        }
+        throw new Error('Invalid line item: priceId, priceData, or description/amount required');
+      });
     } else {
       // Single item
       sessionLineItems = [{
