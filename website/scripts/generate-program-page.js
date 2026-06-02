@@ -225,7 +225,7 @@ template = template.replace(/<meta name="twitter:title" content="[^"]*">/g, `<me
 template = template.replace(/<meta name="twitter:description" content="[^"]*">/g, `<meta name="twitter:description" content="${escapeHtml(data.meta.description)}">`);
 
 // Canonical URL
-template = template.replace(/<link rel="canonical" href="[^"]*">/g, `<link rel="canonical" href="https://www.iaml.com/programs/${data.programSlug}">`);
+template = template.replace(/<link rel="canonical" href="[^"]*">/g, `<link rel="canonical" href="/programs/${data.programSlug}.html.html">`);
 
 // Page title
 template = template.replace(/<title>[^<]*<\/title>/g, `<title>${escapeHtml(data.meta.title)}</title>`);

@@ -10,7 +10,8 @@
     "qa:visual:update": "npx playwright test visual-regression --update-snapshots",
     "qa:full": "npx playwright test",
     "qa:report": "npx playwright show-report",
-    "css:audit": "node qa/scripts/css-audit.js"
+    "css:audit": "node qa/scripts/css-audit.js",
+    "qa:links": "node qa/scripts/no-old-site-links.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.40.0",

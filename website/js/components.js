@@ -27,10 +27,10 @@ const getHeaderHTML = () => `
     .connectPopup-overlay{position:fixed;inset:0;z-index:9998;display:none;align-items:center;justify-content:center;background:rgba(8,20,35,.64);backdrop-filter:blur(8px);padding:22px}.connectPopup-overlay.active{display:flex}.connectPopup-modal{width:min(560px,100%);max-height:min(92vh,760px);overflow:auto;background:#fff;border-radius:24px;box-shadow:0 28px 80px rgba(8,20,35,.32);border:1px solid rgba(217,227,237,.8)}.connectPopup-header{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:22px 24px;border-bottom:1px solid #d9e3ee;background:#f8fbff}.connectPopup-header h3{margin:0;color:#10243b;font-family:Switzer,Inter,system-ui,sans-serif;font-size:20px;line-height:1.25}.connectPopup-closeBtn{width:36px;height:36px;border-radius:999px;border:1px solid #d9e3ee;background:#fff;color:#10243b;font-size:24px;line-height:1;cursor:pointer}.connectPopup-body{padding:24px}.connectPopup-body p{color:#526879;line-height:1.55}.connectPopup-form{display:grid;gap:14px}.connectPopup-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.connectPopup-group{display:grid;gap:7px}.connectPopup-group label,.connectPopup-choiceGroup legend{font-size:13px;font-weight:800;color:#10243b}.connectPopup-group input,.connectPopup-group textarea,.connectPopup-group select{width:100%;border:1px solid #cdd9e5;border-radius:12px;padding:12px 13px;font:inherit;color:#10243b;background:#fff}.connectPopup-group input:focus,.connectPopup-group textarea:focus,.connectPopup-group select:focus{outline:2px solid rgba(24,55,94,.22);border-color:#18375e}.connectPopup-choiceGroup{border:0;margin:0;padding:0}.connectPopup-choiceGrid{display:grid;gap:8px}.connectPopup-choiceGrid label{display:flex;gap:8px;align-items:center;color:#334b5f;font-size:14px}.connectPopup-submitBtn{min-height:44px;border:0;border-radius:999px;background:#18375e;color:#fff;font-weight:900;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}.connectPopup-submitBtn:hover{background:#244f7d}.connectPopup-privacyNote{font-size:13px!important;margin:0!important}.muted{color:#718195;font-weight:500}@media(max-width:560px){.connectPopup-row{grid-template-columns:1fr}.connectPopup-body{padding:20px}.connectPopup-header{padding:18px}}
   </style>
   <div class="iaml-site-header__bar">
-    <a class="iaml-site-header__logo" href="/" aria-label="IAML home"><img src="/images/iaml-logo.svg" alt="IAML"></a>
+    <a class="iaml-site-header__logo" href="/index.html" aria-label="IAML home"><img src="/images/iaml-logo.svg" alt="IAML"></a>
     <div class="iaml-site-header__nav-wrap">
       <nav class="iaml-site-header__nav" aria-label="Primary">
-        <a href="/programs/">Programs</a>
+        <a href="/programs/index.html">Programs</a>
         <a href="/corporate-training.html">Team Training</a>
         <a href="/program-schedule.html">Schedule</a>
         <a href="/faculty.html">Faculty</a>
@@ -145,7 +145,7 @@ const getFooterHTML = () => `
   <div class="iaml-footer__wrap">
     <div class="iaml-footer__top">
       <section class="iaml-footer__brand-card" aria-label="Institute for Applied Management and Law">
-        <a class="iaml-footer__logo" href="/" aria-label="IAML home"><img src="/images/iaml-logo.svg" alt="IAML"></a>
+        <a class="iaml-footer__logo" href="/index.html" aria-label="IAML home"><img src="/images/iaml-logo.svg" alt="IAML"></a>
         <p>Attorney-led workplace law training for HR, employee relations, benefits, legal, compliance, manager, and supervisor audiences.</p>
         <div class="iaml-footer__proof" aria-label="IAML proof points">
           <div><strong>1979</strong><span>Training since</span></div>

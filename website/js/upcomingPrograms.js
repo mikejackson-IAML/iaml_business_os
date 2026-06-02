@@ -325,7 +325,7 @@ const UpcomingPrograms = (() => {
             ${program.virtualComponents.map(comp => `
               <tr>
                 <td><span class="hp-upcoming-session-num">${comp.number}</span></td>
-                <td><a href="/programs/${COMPONENT_SLUG_MAP[comp.title] || '#'}">${comp.title}</a></td>
+                <td><a href="${COMPONENT_SLUG_MAP[comp.title] ? `/programs/${COMPONENT_SLUG_MAP[comp.title]}.html` : '#'}">${comp.title}</a></td>
                 <td>${comp.dates}</td>
               </tr>
             `).join('')}
@@ -350,7 +350,7 @@ const UpcomingPrograms = (() => {
             ${program.blocks.map(block => `
               <tr>
                 <td><span class="hp-upcoming-session-num">${block.number}</span></td>
-                <td><a href="/programs/${COMPONENT_SLUG_MAP[block.title] || '#'}">${block.title}</a></td>
+                <td><a href="${COMPONENT_SLUG_MAP[block.title] ? `/programs/${COMPONENT_SLUG_MAP[block.title]}.html` : '#'}">${block.title}</a></td>
                 <td>${block.days}</td>
               </tr>
             `).join('')}
@@ -373,7 +373,7 @@ const UpcomingPrograms = (() => {
           </div>
         </div>
         <div class="hp-upcoming-info-col">
-          <h3 class="hp-upcoming-program-title"><a href="/programs/${program.slug}">${program.title}</a></h3>
+          <h3 class="hp-upcoming-program-title"><a href="${program.slug ? `/programs/${program.slug}.html` : '#'}">${program.title}</a></h3>
           <div class="hp-upcoming-dates-location">
             <time datetime="${program.rawStartDate}">${formatDateRange(program.rawStartDate, program.rawEndDate)}</time>
             <span class="hp-upcoming-location">
@@ -383,7 +383,7 @@ const UpcomingPrograms = (() => {
           ${renderBlocksTable(program)}
         </div>
         <div class="hp-upcoming-action-col">
-          <a href="/programs/${program.slug}" class="hp-upcoming-learn-btn">
+          <a href="${program.slug ? `/programs/${program.slug}.html` : '#'}" class="hp-upcoming-learn-btn">
             Learn More
           </a>
         </div>
